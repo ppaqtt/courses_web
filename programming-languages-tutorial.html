@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>流行编程语言教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px 20px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .filter-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .lang-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lang-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .lang-header {
+            padding: 25px;
+            color: white;
+            position: relative;
+        }
+
+        .lang-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .lang-name {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .lang-rank {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .lang-body {
+            padding: 20px;
+        }
+
+        .lang-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .lang-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tag {
+            background: #f0f0f0;
+            color: #555;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .lang-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.85rem;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .popup-overlay.active {
+            display: flex;
+        }
+
+        .popup-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: white;
+            z-index: 10;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .popup-close:hover {
+            opacity: 1;
+        }
+
+        .popup-header {
+            padding: 40px;
+            color: white;
+        }
+
+        .popup-header .lang-icon {
+            font-size: 4rem;
+        }
+
+        .popup-header .lang-name {
+            font-size: 2.5rem;
+        }
+
+        .popup-section {
+            padding: 25px 40px;
+        }
+
+        .popup-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .popup-section p {
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-function { color: #dcdcaa; }
+        .code-comment { color: #6a9955; }
+        .code-number { color: #b5cea8; }
+
+        .learning-path {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        .step-content h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .step-content p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .languages-grid { grid-template-columns: 1fr; }
+            .popup-header, .popup-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 流行编程语言教程</h1>
+            <p>探索当今世界最受欢迎的编程语言，找到最适合你的那一个</p>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalLangs">0</div>
+                <div class="stat-label">收录语言</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">700+</div>
+                <div class="stat-label">已知编程语言</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">28M+</div>
+                <div class="stat-label">全球开发者</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">Top 10</div>
+                <div class="stat-label">热门语言</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="web">Web开发</button>
+            <button class="filter-btn" data-filter="mobile">移动开发</button>
+            <button class="filter-btn" data-filter="data">数据科学</button>
+            <button class="filter-btn" data-filter="system">系统编程</button>
+            <button class="filter-btn" data-filter="game">游戏开发</button>
+        </div>
+
+        <div class="languages-grid" id="languagesGrid"></div>
+
+        <footer>
+            <p>💡 点击任意语言卡片，了解更多详情和学习路径</p>
+        </footer>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content" id="popupContent"></div>
+    </div>
+
+    <script>
+        const languages = [
+            {
+                id: 1,
+                name: "Python",
+                icon: "🐍",
+                rank: 1,
+                color: "#3776AB",
+                category: ["data", "web", "system"],
+                year: 1991,
+                creator: "Guido van Rossum",
+                description: "Python 是一种高级、通用、解释型编程语言，以其简洁优雅的语法和强大的功能著称。",
+                features: [
+                    "简洁易读的语法，接近自然语言",
+                    "丰富的标准库和第三方库生态",
+                    "支持多种编程范式：面向对象、函数式、过程式",
+                    "跨平台，可在 Windows、macOS、Linux 上运行",
+                    "强大的数据科学和机器学习生态系统"
+                ],
+                codeExample: `# Python 示例：计算斐波那契数列
+def fibonacci(n):
+    """生成斐波那契数列的前n个数"""
+    fib_list = []
+    a, b = 0, 1
+    for _ in range(n):
+        fib_list.append(a)
+        a, b = b, a + b
+    return fib_list
+
+# 主程序
+if __name__ == "__main__":
+    result = fibonacci(10)
+    print(f"斐波那契数列前10项: {result}")
+    print(f"总数: {len(result)} 个数字")`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "函数与模块", desc: "函数定义、参数、返回值、模块导入" },
+                    { title: "面向对象编程", desc: "类、对象、继承、多态、封装" },
+                    { title: "数据结构", desc: "列表、字典、元组、集合" },
+                    { title: "文件与异常", desc: "文件读写、异常处理、上下文管理器" },
+                    { title: "实战项目", desc: "Web爬虫、数据分析、自动化脚本" }
+                ],
+                useCases: ["数据科学与机器学习", "Web后端开发", "自动化脚本", "科学计算", "人工智能"]
+            },
+            {
+                id: 2,
+                name: "JavaScript",
+                icon: "⚡",
+                rank: 2,
+                color: "#F7DF1E",
+                textColor: "#333",
+                category: ["web", "mobile", "game"],
+                year: 1995,
+                creator: "Brendan Eich",
+                description: "JavaScript 是一种高级、解释型编程语言，是Web开发的核心技术之一，支持前端和后端开发。",
+                features: [
+                    "Web前端开发的核心语言",
+                    "通过 Node.js 支持后端开发",
+                    "事件驱动和非阻塞I/O模型",
+                    "丰富的前端框架生态（React、Vue、Angular）",
+                    "支持函数式和面向对象编程"
+                ],
+                codeExample: `// JavaScript 示例：待办事项管理器
+class TodoManager {
+    constructor() {
+        this.todos = [];
+    }
+
+    addTodo(text) {
+        this.todos.push({
+            id: Date.now(),
+            text,
+            completed: false
+        });
+        console.log(\`已添加: \${text}\`);
+    }
+
+    toggleTodo(id) {
+        const todo = this.todos.find(t => t.id === id);
+        if (todo) {
+            todo.completed = !todo.completed;
+        }
+    }
+
+    getSummary() {
+        const total = this.todos.length;
+        const done = this.todos.filter(t => t.completed).length;
+        return \`完成进度: \${done}/\${total}\`;
+    }
+}
+
+const manager = new TodoManager();
+manager.addTodo("学习 JavaScript");
+manager.addTodo("做项目练习");
+console.log(manager.getSummary());`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "DOM操作", desc: "选择器、事件处理、元素操作" },
+                    { title: "异步编程", desc: "Promise、async/await、AJAX" },
+                    { title: "ES6+特性", desc: "箭头函数、解构、模板字符串、模块" },
+                    { title: "前端框架", desc: "React / Vue / Angular 选一深入" },
+                    { title: "Node.js后端", desc: "Express、数据库、REST API" }
+                ],
+                useCases: ["Web前端开发", "后端开发（Node.js）", "移动应用开发", "游戏开发", "桌面应用"]
+            },
+            {
+                id: 3,
+                name: "Java",
+                icon: "☕",
+                rank: 3,
+                color: "#ED8B00",
+                category: ["web", "mobile", "system"],
+                year: 1995,
+                creator: "James Gosling",
+                description: "Java 是一种广泛使用的高级、面向对象编程语言，以其'一次编写，到处运行'的特性闻名。",
+                features: [
+                    "平台独立性（JVM虚拟机）",
+                    "强类型和面向对象编程",
+                    "丰富的企业级生态系统",
+                    "自动垃圾回收机制",
+                    "大型社区和完善的文档"
+                ],
+                codeExample: `// Java 示例：用户管理系统
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserManager {
+    private List<User> users = new ArrayList<>();
+
+    public void addUser(String name, int age) {
+        users.add(new User(name, age));
+        System.out.println("已添加用户: " + name);
+    }
+
+    public void printAllUsers() {
+        for (User user : users) {
+            System.out.println(user);
+        }
+    }
+
+    public static void main(String[] args) {
+        UserManager manager = new UserManager();
+        manager.addUser("张三", 25);
+        manager.addUser("李四", 30);
+        manager.printAllUsers();
+    }
+}
+
+class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{name='" + name + "', age=" + age + "}";
+    }
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、对象、继承、接口、多态" },
+                    { title: "核心API", desc: "集合框架、IO、多线程、异常处理" },
+                    { title: "高级特性", desc: "泛型、Lambda、Stream API" },
+                    { title: "企业开发", desc: "Spring Boot、数据库、微服务" },
+                    { title: "安卓开发", desc: "Android Studio、UI开发、应用发布" }
+                ],
+                useCases: ["企业级应用开发", "Android移动开发", "大数据处理", "金融系统", "嵌入式设备"]
+            },
+            {
+                id: 4,
+                name: "C++",
+                icon: "⚙️",
+                rank: 4,
+                color: "#00599C",
+                category: ["system", "game"],
+                year: 1985,
+                creator: "Bjarne Stroustrup",
+                description: "C++ 是一种通用的高级编程语言，支持面向对象、泛型和过程式编程，以高性能和底层控制著称。",
+                features: [
+                    "高性能和底层内存控制",
+                    "支持多种编程范式",
+                    "丰富的标准模板库（STL）",
+                    "直接操作内存和硬件资源",
+                    "广泛用于游戏引擎和系统软件"
+                ],
+                codeExample: `// C++ 示例：向量运算
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class VectorMath {
+public:
+    static vector<int> add(const vector<int>& a, const vector<int>& b) {
+        vector<int> result(a.size());
+        for (size_t i = 0; i < a.size(); i++) {
+            result[i] = a[i] + b[i];
+        }
+        return result;
+    }
+
+    static int dotProduct(const vector<int>& a, const vector<int>& b) {
+        int sum = 0;
+        for (size_t i = 0; i < a.size(); i++) {
+            sum += a[i] * b[i];
+        }
+        return sum;
+    }
+};
+
+int main() {
+    vector<int> v1 = {1, 2, 3};
+    vector<int> v2 = {4, 5, 6};
+
+    vector<int> sum = VectorMath::add(v1, v2);
+    cout << "向量相加: ";
+    for (int n : sum) cout << n << " ";
+    cout << endl;
+
+    int dot = VectorMath::dotProduct(v1, v2);
+    cout << "点积: " << dot << endl;
+
+    return 0;
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "指针与内存", desc: "指针、引用、动态内存分配" },
+                    { title: "面向对象", desc: "类、继承、多态、虚函数" },
+                    { title: "STL模板库", desc: "容器、算法、迭代器" },
+                    { title: "高级特性", desc: "模板、异常、多线程" },
+                    { title: "实战项目", desc: "游戏引擎、操作系统、嵌入式" }
+                ],
+                useCases: ["游戏开发", "操作系统", "嵌入式系统", "图形渲染", "高性能计算"]
+            },
+            {
+                id: 5,
+                name: "C#",
+                icon: "🎯",
+                rank: 5,
+                color: "#512BD4",
+                category: ["web", "game", "system"],
+                year: 2000,
+                creator: "Microsoft",
+                description: "C# 是一种现代、面向对象的编程语言，由微软开发，广泛用于 .NET 平台和 Unity 游戏开发。",
+                features: [
+                    "类型安全和面向对象编程",
+                    "与 .NET 框架深度集成",
+                    "Unity 游戏引擎的主要语言",
+                    "支持 LINQ 查询和异步编程",
+                    "跨平台支持（.NET Core）"
+                ],
+                codeExample: `// C# 示例：图书管理系统
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+class Book {
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Year { get; set; }
+    public bool IsAvailable { get; set; } = true;
+}
+
+class Library {
+    private List<Book> books = new List<Book>();
+
+    public void AddBook(string title, string author, int year) {
+        books.Add(new Book { Title = title, Author = author, Year = year });
+        Console.WriteLine($"已添加: {title}");
+    }
+
+    public List<Book> FindByAuthor(string author) {
+        return books.Where(b => b.Author.Contains(author)).ToList();
+    }
+
+    public void PrintStats() {
+        var total = books.Count;
+        var available = books.Count(b => b.IsAvailable);
+        Console.WriteLine($"\n图书馆统计:");
+        Console.WriteLine($"总藏书: {total} 本");
+        Console.WriteLine($"可借阅: {available} 本");
+    }
+}
+
+class Program {
+    static void Main() {
+        var lib = new Library();
+        lib.AddBook("三体", "刘慈欣", 2008);
+        lib.AddBook("活着", "余华", 1993);
+        lib.PrintStats();
+    }
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、继承、接口、多态" },
+                    { title: ".NET基础", desc: "BCL、集合、LINQ、异步" },
+                    { title: "Web开发", desc: "ASP.NET Core、MVC、API" },
+                    { title: "游戏开发", desc: "Unity引擎、C#脚本" },
+                    { title: "桌面应用", desc: "WPF、WinUI、MAUI" }
+                ],
+                useCases: ["Web应用开发", "Unity游戏开发", "桌面应用", "移动应用", "云服务"]
+            },
+            {
+                id: 6,
+                name: "Go",
+                icon: "🔵",
+                rank: 6,
+                color: "#00ADD8",
+                category: ["system", "web"],
+                year: 2009,
+                creator: "Google",
+                description: "Go（又称Golang）是Google开发的一种静态强类型、编译型编程语言，以简洁高效和出色的并发支持著称。",
+                features: [
+                    "简洁的语法，学习曲线平缓",
+                    "原生支持并发编程（goroutine）",
+                    "编译速度快，生成单一可执行文件",
+                    "内置垃圾回收和丰富的标准库",
+                    "云原生和微服务开发的热门选择"
+                ],
+                codeExample: `// Go 示例：并发爬虫
+package main
+
+import (
+    "fmt"
+    "sync"
+    "time"
+)
+
+type Fetcher interface {
+    Fetch(url string) (body string, urls []string, err error)
+}
+
+type fakeFetcher map[string]*fakeResult
+
+type fakeResult struct {
+    body string
+    urls []string
+}
+
+func (f fakeFetcher) Fetch(url string) (string, []string, error) {
+    time.Sleep(50 * time.Millisecond)
+    if res, ok := f[url]; ok {
+        return res.body, res.urls, nil
+    }
+    return "", nil, fmt.Errorf("not found: %s", url)
+}
+
+type Crawler struct {
+    visited map[string]bool
+    mu      sync.Mutex
+    wg      sync.WaitGroup
+}
+
+func (c *Crawler) Crawl(url string, depth int, fetcher Fetcher) {
+    defer c.wg.Done()
+    if depth <= 0 {
+        return
+    }
+
+    c.mu.Lock()
+    if c.visited[url] {
+        c.mu.Unlock()
+        return
+    }
+    c.visited[url] = true
+    c.mu.Unlock()
+
+    body, urls, err := fetcher.Fetch(url)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    fmt.Printf("found: %s %q\\n", url, body)
+
+    for _, u := range urls {
+        c.wg.Add(1)
+        go c.Crawl(u, depth-1, fetcher)
+    }
+}
+
+func main() {
+    c := &Crawler{visited: make(map[string]bool)}
+    c.wg.Add(1)
+    go c.Crawl("https://golang.org/", 4, fetcher)
+    c.wg.Wait()
+}
+
+var fetcher = fakeFetcher{
+    "https://golang.org/": &fakeResult{
+        "The Go Programming Language",
+        []string{
+            "https://golang.org/pkg/",
+            "https://golang.org/cmd/",
+        },
+    },
+    "https://golang.org/pkg/": &fakeResult{
+        "Packages",
+        []string{
+            "https://golang.org/",
+            "https://golang.org/cmd/",
+        },
+    },
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "函数与包", desc: "函数定义、包管理、错误处理" },
+                    { title: "数据结构", desc: "结构体、接口、切片、映射" },
+                    { title: "并发编程", desc: "goroutine、channel、sync" },
+                    { title: "Web开发", desc: "Gin框架、REST API、数据库" },
+                    { title: "云原生", desc: "Docker、K8s、微服务" }
+                ],
+                useCases: ["云服务开发", "微服务架构", "DevOps工具", "网络编程", "区块链"]
+            },
+            {
+                id: 7,
+                name: "Rust",
+                icon: "🦀",
+                rank: 7,
+                color: "#DEA584",
+                category: ["system", "web"],
+                year: 2010,
+                creator: "Mozilla",
+                description: "Rust 是一种注重安全性、并发性和性能的系统编程语言，无需垃圾回收即可保证内存安全。",
+                features: [
+                    "内存安全，无需垃圾回收",
+                    "所有权系统和借用检查",
+                    "零成本抽象，性能媲美C/C++",
+                    "强大的类型系统和模式匹配",
+                    "现代化的工具链和包管理"
+                ],
+                codeExample: `// Rust 示例：所有权与借用
+use std::collections::HashMap;
+
+struct User {
+    name: String,
+    age: u32,
+    email: String,
+}
+
+impl User {
+    fn new(name: &str, age: u32, email: &str) -> Self {
+        User {
+            name: name.to_string(),
+            age,
+            email: email.to_string(),
+        }
+    }
+
+    fn greet(&self) -> String {
+        format!("你好，我是 {}，今年 {} 岁", self.name, self.age)
+    }
+}
+
+fn main() {
+    // 创建用户
+    let user1 = User::new("张三", 25, "zhangsan@example.com");
+    println!("{}", user1.greet());
+
+    // 向量迭代
+    let numbers = vec![1, 2, 3, 4, 5];
+    let sum: i32 = numbers.iter().sum();
+    println!("数字之和: {}", sum);
+
+    // HashMap 操作
+    let mut scores: HashMap<&str, i32> = HashMap::new();
+    scores.insert("数学", 95);
+    scores.insert("英语", 88);
+    scores.insert("编程", 100);
+
+    for (subject, score) in &scores {
+        println!("{}: {}", subject, score);
+    }
+
+    // 模式匹配
+    let grade = match scores.get("数学") {
+        Some(&score) if score >= 90 => "优秀",
+        Some(&score) if score >= 80 => "良好",
+        Some(&score) if score >= 60 => "及格",
+        Some(_) => "不及格",
+        None => "无成绩",
+    };
+    println!("数学评级: {}", grade);
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、函数、控制流" },
+                    { title: "所有权系统", desc: "所有权、借用、生命周期" },
+                    { title: "结构体与枚举", desc: "struct、enum、impl、模式匹配" },
+                    { title: "集合与错误", desc: "Vec、HashMap、Result、Option" },
+                    { title: "高级特性", desc: "泛型、trait、闭包、迭代器" },
+                    { title: "实战项目", desc: "CLI工具、WebAssembly、系统编程" }
+                ],
+                useCases: ["系统编程", "WebAssembly", "游戏引擎", "区块链", "操作系统"]
+            },
+            {
+                id: 8,
+                name: "TypeScript",
+                icon: "📘",
+                rank: 8,
+                color: "#3178C6",
+                category: ["web", "mobile"],
+                year: 2012,
+                creator: "Microsoft",
+                description: "TypeScript 是 JavaScript 的超集，添加了静态类型检查，使大型项目的开发更加安全和可维护。",
+                features: [
+                    "静态类型检查，提前发现错误",
+                    "支持最新的 JavaScript 特性",
+                    "优秀的 IDE 支持和代码提示",
+                    "更好的代码重构和可维护性",
+                    "渐进式采用，兼容现有JS代码"
+                ],
+                codeExample: `// TypeScript 示例：电商购物车
+interface Product {
+    id: number;
+    name: string;
+    price: number;
+    category: string;
+}
+
+interface CartItem {
+    product: Product;
+    quantity: number;
+}
+
+class ShoppingCart {
+    private items: CartItem[] = [];
+
+    addProduct(product: Product, quantity: number = 1): void {
+        const existing = this.items.find(
+            item => item.product.id === product.id
+        );
+
+        if (existing) {
+            existing.quantity += quantity;
+        } else {
+            this.items.push({ product, quantity });
+        }
+        console.log(\`已添加: \${product.name} x\${quantity}\`);
+    }
+
+    removeProduct(productId: number): void {
+        this.items = this.items.filter(
+            item => item.product.id !== productId
+        );
+    }
+
+    getTotal(): number {
+        return this.items.reduce(
+            (total, item) => total + item.product.price * item.quantity,
+            0
+        );
+    }
+
+    getSummary(): string {
+        const itemCount = this.items.reduce(
+            (sum, item) => sum + item.quantity, 0
+        );
+        return \`购物车: \${itemCount} 件商品, 总计 ¥\${this.getTotal().toFixed(2)}\`;
+    }
+}
+
+const products: Product[] = [
+    { id: 1, name: "笔记本电脑", price: 5999, category: "电子产品" },
+    { id: 2, name: "机械键盘", price: 399, category: "外设" },
+];
+
+const cart = new ShoppingCart();
+cart.addProduct(products[0]);
+cart.addProduct(products[1], 2);
+console.log(cart.getSummary());`,
+                learningPath: [
+                    { title: "JavaScript基础", desc: "先掌握JS核心概念" },
+                    { title: "TypeScript基础", desc: "类型注解、接口、类型推断" },
+                    { title: "高级类型", desc: "泛型、联合类型、交叉类型" },
+                    { title: "工具类型", desc: "Partial、Required、Pick、Omit" },
+                    { title: "与框架集成", desc: "React + TS / Vue + TS" },
+                    { title: "工程实践", desc: "tsconfig、类型声明、项目配置" }
+                ],
+                useCases: ["大型Web应用", "企业级前端开发", "Node.js后端", "全栈开发", "SaaS产品"]
+            },
+            {
+                id: 9,
+                name: "PHP",
+                icon: "🐘",
+                rank: 9,
+                color: "#777BB4",
+                category: ["web"],
+                year: 1995,
+                creator: "Rasmus Lerdorf",
+                description: "PHP 是一种专门用于Web开发的服务器端脚本语言，被广泛用于构建动态网站和Web应用。",
+                features: [
+                    "专为Web开发设计",
+                    "几乎支持所有主流数据库",
+                    "丰富的框架生态（Laravel、Symfony）",
+                    "部署简单，托管成本低",
+                    "WordPress等CMS的底层语言"
+                ],
+                codeExample: `<?php
+// PHP 示例：博客管理系统
+
+class Post {
+    public int $id;
+    public string $title;
+    public string $content;
+    public string $author;
+    public DateTime $createdAt;
+    public array $tags = [];
+
+    public function __construct(string $title, string $content, string $author) {
+        $this->title = $title;
+        $this->content = $content;
+        $this->author = $author;
+        $this->createdAt = new DateTime();
+    }
+
+    public function addTag(string $tag): self {
+        if (!in_array($tag, $this->tags)) {
+            $this->tags[] = $tag;
+        }
+        return $this;
+    }
+
+    public function getExcerpt(int $length = 100): string {
+        if (mb_strlen($this->content) <= $length) {
+            return $this->content;
+        }
+        return mb_substr($this->content, 0, $length) . '...';
+    }
+}
+
+class Blog {
+    private array $posts = [];
+
+    public function createPost(string $title, string $content, string $author): Post {
+        $post = new Post($title, $content, $author);
+        $post->id = count($this->posts) + 1;
+        $this->posts[] = $post;
+        return $post;
+    }
+
+    public function getPostsByTag(string $tag): array {
+        return array_filter($this->posts, function(Post $post) use ($tag) {
+            return in_array($tag, $post->tags);
+        });
+    }
+
+    public function printAllPosts(): void {
+        echo "=== 博客文章列表 ===\\n\\n";
+        foreach ($this->posts as $post) {
+            echo "#{$post->id} {$post->title}\\n";
+            echo "作者: {$post->author} | ";
+            echo "日期: {$post->createdAt->format('Y-m-d')}\\n";
+            echo "摘要: {$post->getExcerpt(50)}\\n";
+            echo "标签: " . implode(', ', $post->tags) . "\\n\\n";
+        }
+    }
+}
+
+$blog = new Blog();
+$post1 = $blog->createPost(
+    "PHP 入门指南",
+    "PHP 是一种强大的服务器端脚本语言，非常适合Web开发...",
+    "张三"
+);
+$post1->addTag("PHP")->addTag("教程");
+
+$post2 = $blog->createPost(
+    "Laravel 最佳实践",
+    "Laravel 是最流行的PHP框架，提供了优雅的语法和丰富的功能...",
+    "李四"
+);
+$post2->addTag("Laravel")->addTag("框架");
+
+$blog->printAllPosts();
+?>`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "函数与数组", desc: "函数定义、数组操作、字符串处理" },
+                    { title: "面向对象", desc: "类、继承、接口、命名空间" },
+                    { title: "数据库操作", desc: "MySQL、PDO、SQL语句" },
+                    { title: "Web开发", desc: "表单处理、Session、Cookie" },
+                    { title: "框架学习", desc: "Laravel / ThinkPHP 选一深入" }
+                ],
+                useCases: ["网站开发", "内容管理系统", "电商平台", "论坛社区", "企业官网"]
+            },
+            {
+                id: 10,
+                name: "Swift",
+                icon: "🍎",
+                rank: 10,
+                color: "#FA7343",
+                category: ["mobile", "system"],
+                year: 2014,
+                creator: "Apple",
+                description: "Swift 是 Apple 开发的一种强大而直观的编程语言，用于开发 iOS、macOS、watchOS 和 tvOS 应用。",
+                features: [
+                    "快速、安全、富有表现力",
+                    "与 Objective-C 兼容",
+                    "类型安全和内存安全设计",
+                    "Playground 交互式学习环境",
+                    "现代化的语法和功能特性"
+                ],
+                codeExample: `// Swift 示例：任务管理器
+import Foundation
+
+struct Task: Identifiable {
+    let id = UUID()
+    var title: String
+    var description: String
+    var isCompleted: Bool = false
+    var priority: Priority
+    let createdAt: Date = Date()
+    
+    enum Priority: String, CaseIterable {
+        case high = "高"
+        case medium = "中"
+        case low = "低"
+    }
+}
+
+class TaskManager {
+    private var tasks: [Task] = []
+    
+    func addTask(title: String, description: String, priority: Task.Priority = .medium) {
+        let task = Task(title: title, description: description, priority: priority)
+        tasks.append(task)
+        print("✅ 已添加任务: \\(title)")
+    }
+    
+    func completeTask(id: UUID) {
+        if let index = tasks.firstIndex(where: { $0.id == id }) {
+            tasks[index].isCompleted = true
+            print("🎉 完成任务: \\(tasks[index].title)")
+        }
+    }
+    
+    func tasksByPriority(_ priority: Task.Priority) -> [Task] {
+        return tasks.filter { $0.priority == priority }
+    }
+    
+    var progress: Double {
+        guard !tasks.isEmpty else { return 0 }
+        let completed = tasks.filter { $0.isCompleted }.count
+        return Double(completed) / Double(tasks.count)
+    }
+    
+    func printSummary() {
+        print("\\n📋 任务管理系统")
+        print(String(repeating: "-", count: 30))
+        print("总任务数: \\(tasks.count)")
+        print("完成进度: \\(Int(progress * 100))%")
+        print(String(repeating: "-", count: 30))
+        
+        for priority in Task.Priority.allCases {
+            let count = tasksByPriority(priority).count
+            print("\\(priority.rawValue)优先级: \\(count) 个")
+        }
+    }
+}
+
+let manager = TaskManager()
+manager.addTask(title: "学习 Swift", description: "掌握 Swift 基础语法", priority: .high)
+manager.addTask(title: "开发 iOS App", description: "创建第一个 iOS 应用", priority: .medium)
+manager.addTask(title: "学习 SwiftUI", description: "掌握声明式 UI 框架", priority: .high)
+
+if let firstTask = manager.tasks.first {
+    manager.completeTask(id: firstTask.id)
+}
+
+manager.printSummary()`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、控制流" },
+                    { title: "集合类型", desc: "数组、字典、集合、高阶函数" },
+                    { title: "面向对象", desc: "类、结构体、枚举、协议" },
+                    { title: "函数与闭包", desc: "函数定义、闭包、高阶函数" },
+                    { title: "iOS开发", desc: "UIKit / SwiftUI、Auto Layout" },
+                    { title: "实战项目", desc: "完整App开发、上架App Store" }
+                ],
+                useCases: ["iOS应用开发", "macOS应用开发", "watchOS应用", "tvOS应用", "服务端开发"]
+            }
+        ];
+
+        let grid = document.getElementById('languagesGrid');
+        const popupOverlay = document.getElementById('popupOverlay');
+        const popupContent = document.getElementById('popupContent');
+        const totalLangsEl = document.getElementById('totalLangs');
+
+        function renderLanguages(filter = 'all') {
+            const filtered = filter === 'all'
+                ? languages
+                : languages.filter(lang => lang.category.includes(filter));
+
+            grid.innerHTML = filtered.map(lang => `
+                <div class="lang-card" data-id="${lang.id}">
+                    <div class="lang-header" style="background: linear-gradient(135deg, ${lang.color}, ${adjustColor(lang.color, -30)})">
+                        <div class="lang-rank">#${lang.rank}</div>
+                        <div class="lang-icon">${lang.icon}</div>
+                        <div class="lang-name" style="color: ${lang.textColor || 'white'}">${lang.name}</div>
+                    </div>
+                    <div class="lang-body">
+                        <p class="lang-desc">${lang.description}</p>
+                        <div class="lang-tags">
+                            ${lang.useCases.slice(0, 3).map(uc => `<span class="tag">${uc}</span>`).join('')}
+                        </div>
+                        <div class="lang-meta">
+                            <span>📅 ${lang.year}年</span>
+                            <span>👤 ${lang.creator}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.lang-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = parseInt(card.dataset.id);
+                    showDetail(id);
+                });
+            });
+        }
+
+        function adjustColor(color, amount) {
+            const hex = color.replace('#', '');
+            const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
+            const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
+            const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
+            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+        }
+
+        function showDetail(id) {
+            const lang = languages.find(l => l.id === id);
+            if (!lang) return;
+
+            const highlightedCode = highlightCode(lang.codeExample, lang.name);
+
+            popupContent.innerHTML = `
+                <button class="popup-close" onclick="closePopup()">&times;</button>
+                <div class="popup-header" style="background: linear-gradient(135deg, ${lang.color}, ${adjustColor(lang.color, -30)})">
+                    <div class="lang-icon">${lang.icon}</div>
+                    <div class="lang-name" style="color: ${lang.textColor || 'white'}">${lang.name}</div>
+                    <p style="opacity: 0.9; color: ${lang.textColor || 'white'}; margin-top: 10px;">
+                        创建于 ${lang.year} 年 · 由 ${lang.creator} 开发
+                    </p>
+                </div>
+
+                <div class="popup-section">
+                    <h3>📖 简介</h3>
+                    <p>${lang.description}</p>
+                </div>
+
+                <div class="popup-section">
+                    <h3>✨ 核心特性</h3>
+                    <ul class="feature-list">
+                        ${lang.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="popup-section">
+                    <h3>💻 代码示例</h3>
+                    <pre class="code-block">${highlightedCode}</pre>
+                </div>
+
+                <div class="popup-section">
+                    <h3>📚 学习路径</h3>
+                    <div class="learning-path">
+                        ${lang.learningPath.map((step, i) => `
+                            <div class="step">
+                                <div class="step-number">${i + 1}</div>
+                                <div class="step-content">
+                                    <h4>${step.title}</h4>
+                                    <p>${step.desc}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div class="popup-section">
+                    <h3>🎯 应用领域</h3>
+                    <div class="lang-tags">
+                        ${lang.useCases.map(uc => `<span class="tag">${uc}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            popupOverlay.classList.add('active');
+        }
+
+        function highlightCode(code, langName) {
+            let escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            
+            if (langName === 'Python') {
+                escaped = escaped.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(def|class|if|else|elif|for|while|return|import|from|as|in|not|and|or|True|False|None|lambda|try|except|finally|with|yield|pass|break|continue|global|nonlocal)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'JavaScript' || langName === 'TypeScript') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(const|let|var|function|class|if|else|for|while|return|import|export|from|default|new|this|super|extends|interface|type|public|private|protected|readonly|as|void|null|undefined|true|false|async|await|try|catch|finally|throw)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'`])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b(\d+)\b/g, '<span class="code-number">$1</span>');
+            } else if (langName === 'Java') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(public|private|protected|class|interface|extends|implements|static|final|void|int|String|boolean|double|float|long|char|byte|short|if|else|for|while|return|new|this|super|import|package|null|true|false|try|catch|finally|throw|throws|abstract|enum)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'C++') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(int|char|float|double|void|bool|class|struct|public|private|protected|virtual|override|const|static|if|else|for|while|return|new|delete|this|namespace|using|include|template|typename|nullptr|true|false|try|catch|throw)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'C#') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(using|class|public|private|protected|static|void|int|string|bool|var|if|else|for|foreach|while|return|new|this|base|namespace|null|true|false|try|catch|finally|throw|interface|abstract|override|virtual)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Go') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(package|import|func|var|const|type|struct|interface|if|else|for|range|return|go|chan|defer|select|switch|case|default|break|continue|map|make|new|nil|true|false|string|int|float64|bool)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Rust') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(fn|let|mut|const|static|struct|enum|impl|trait|mod|use|pub|if|else|match|for|while|loop|return|break|continue|fn|self|Self|true|false|Some|None|Ok|Err|Vec|String|i32|u32|f64|bool|str|as|in|where|crate|super)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'PHP') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/(#.*$)/gm, '<span class="code-comment">$1</span>');
+                escaped = escaped.replace(/\b(class|public|private|protected|function|static|array|if|else|foreach|for|while|return|new|this|extends|implements|interface|abstract|null|true|false|try|catch|throw|echo|print|include|require|namespace|use|const)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Swift') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(let|var|func|class|struct|enum|protocol|extension|if|else|for|while|return|import|guard|defer|switch|case|default|break|continue|self|Self|true|false|nil|String|Int|Double|Bool|Array|Dictionary|Optional|some|any|async|await|throws|rethrows|try|catch)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            }
+            
+            return escaped;
+        }
+
+        function closePopup() {
+            popupOverlay.classList.remove('active');
+        }
+
+        popupOverlay.addEventListener('click', (e) => {
+            if (e.target === popupOverlay) {
+                closePopup();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePopup();
+            }
+        });
+
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderLanguages(btn.dataset.filter);
+            });
+        });
+
+        function animateNumber(el, target) {
+            let current = 0;
+            const increment = target / 30;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.textContent = Math.floor(current);
+            }, 30);
+        }
+
+        renderLanguages();
+        animateNumber(totalLangsEl, languages.length);
+    </script>
+</body>
+</html>
