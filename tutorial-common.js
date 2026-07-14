@@ -826,9 +826,8 @@ const ShareManager = {
         const title = encodeURIComponent(data.title || '');
         
         const urls = {
-            twitter: `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
-            facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-            linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
+            qq: `https://connect.qq.com/widget/shareqq/index.html?url=${url}&title=${title}&summary=${text}`,
+            zhihu: `https://www.zhihu.com/search?q=${text}`,
             weibo: `https://service.weibo.com/share/share.php?url=${url}&title=${title}`,
             wechat: '' // 微信需要特殊处理
         };
