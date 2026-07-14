@@ -6,6 +6,7 @@
     <title>学习中心 - 编程语言教程</title>
     <link rel="stylesheet" href="tutorial-style.css">
     <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
     <style>
         .hub-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -291,9 +292,18 @@
             <button class="hub-tab active" onclick="showTab('overview')">📊 概览</button>
             <button class="hub-tab" onclick="showTab('stats')">📈 统计</button>
             <button class="hub-tab" onclick="showTab('achievements')">🏆 成就</button>
-            <button class="hub-tab" onclick="showTab('paths')">🛤️ 学习路径</button>
-            <button class="hub-tab" onclick="showTab('snippets')">📋 代码片段</button>
-            <button class="hub-tab" onclick="showTab('leaderboard')">🏆 排行榜</button>
+            <button class="hub-tab" onclick="showTab('goals')">🎯 学习目标</button>
+            <button class="hub-tab" onclick="showTab('challenges')">⚡ 代码挑战</button>
+            <button class="hub-tab" onclick="showTab('templates')">📋 代码模板</button>
+            <button class="hub-tab" onclick="showTab('projects')">🏗️ 项目模板</button>
+            <button class="hub-tab" onclick="showTab('videos')">📹 视频教程</button>
+            <button class="hub-tab" onclick="showTab('api')">📖 API文档</button>
+            <button class="hub-tab" onclick="showTab('assignments')">📝 作业系统</button>
+            <button class="hub-tab" onclick="showTab('groups')">👥 学习小组</button>
+            <button class="hub-tab" onclick="showTab('review')">🔍 代码审查</button>
+            <button class="hub-tab" onclick="showTab('mastery')">🧠 知识点分析</button>
+            <button class="hub-tab" onclick="showTab('shortcuts')">⌨️ 快捷键</button>
+            <button class="hub-tab" onclick="showTab('themes')">🎨 主题</button>
         </div>
         
         <!-- 概览 -->
@@ -362,9 +372,70 @@
         <div id="leaderboard" class="hub-content">
             <div id="leaderboardContainer"></div>
         </div>
+        
+        <!-- 学习目标 -->
+        <div id="goals" class="hub-content">
+            <div id="goalsContainer"></div>
+        </div>
+        
+        <!-- 代码挑战 -->
+        <div id="challenges" class="hub-content">
+            <div id="challengesContainer"></div>
+        </div>
+        
+        <!-- 代码模板 -->
+        <div id="templates" class="hub-content">
+            <div id="templatesContainer"></div>
+        </div>
+        
+        <!-- 项目模板 -->
+        <div id="projects" class="hub-content">
+            <div id="projectsContainer"></div>
+        </div>
+        
+        <!-- 视频教程 -->
+        <div id="videos" class="hub-content">
+            <div id="videosContainer"></div>
+        </div>
+        
+        <!-- API文档 -->
+        <div id="api" class="hub-content">
+            <div id="apiDocsContainer"></div>
+        </div>
+        
+        <!-- 作业系统 -->
+        <div id="assignments" class="hub-content">
+            <div id="assignmentsContainer"></div>
+        </div>
+        
+        <!-- 学习小组 -->
+        <div id="groups" class="hub-content">
+            <div id="groupsContainer"></div>
+        </div>
+        
+        <!-- 代码审查 -->
+        <div id="review" class="hub-content">
+            <div id="reviewContainer"></div>
+        </div>
+        
+        <!-- 知识点分析 -->
+        <div id="mastery" class="hub-content">
+            <div id="masteryContainer"></div>
+        </div>
+        
+        <!-- 快捷键 -->
+        <div id="shortcuts" class="hub-content">
+            <div id="shortcutsContainer"></div>
+        </div>
+        
+        <!-- 主题 -->
+        <div id="themes" class="hub-content">
+            <div id="themesContainer"></div>
+        </div>
     </div>
     
     <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
     <script>
         // 页面初始化
         document.addEventListener('DOMContentLoaded', () => {
@@ -374,6 +445,22 @@
             renderSnippets();
             Leaderboard.render('leaderboardContainer');
             updateSharePreview();
+            initExtensions();
+            
+            LearningGoals.render('goalsContainer');
+            CodeChallenges.render('challengesContainer', 'all');
+            CodeTemplates.render('templatesContainer', 'python');
+            ProjectTemplates.render('projectsContainer', 'all');
+            VideoTutorials.render('videosContainer', 'python');
+            APIDocs.render('apiDocsContainer', 'python');
+            AssignmentSystem.render('assignmentsContainer', 'python');
+            StudyGroups.render('groupsContainer');
+            CodeReview.render('reviewContainer');
+            KnowledgeAnalysis.render('masteryContainer', 'python');
+            KeyboardShortcuts.render('shortcutsContainer');
+            CustomThemes.render('themesContainer');
+            
+            LearningAnalytics.renderBarChart('timeChart');
         });
         
         // 显示标签页
