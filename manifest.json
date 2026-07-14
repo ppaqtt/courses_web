@@ -1,0 +1,39 @@
+{
+    "name": "编程语言教程系统",
+    "short_name": "编程教程",
+    "description": "学习最流行的编程语言，从Python到Swift",
+    "start_url": "/programming-languages-tutorial.html",
+    "display": "standalone",
+    "background_color": "#667eea",
+    "theme_color": "#667eea",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "categories": ["education", "programming"],
+    "lang": "zh-CN",
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Python教程",
+            "url": "/tutorial-python.html",
+            "description": "学习Python编程语言"
+        },
+        {
+            "name": "JavaScript教程",
+            "url": "/tutorial-javascript.html",
+            "description": "学习JavaScript编程语言"
+        },
+        {
+            "name": "学习中心",
+            "url": "/tutorial-hub.html",
+            "description": "查看学习进度和成就"
+        }
+    ],
+    "related_applications": [],
+    "prefer_related_applications": false
+}

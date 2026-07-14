@@ -1,0 +1,1001 @@
+/**
+ * 编程语言教程系统 - 扩展功能样式
+ * 包含：视频教程、语音朗读、代码历史、调试器、作业系统、代码审查、
+ * 学习小组、知识点分析、学习曲线、推荐系统、API文档、代码模板、
+ * 键盘快捷键、代码折叠、项目模板、代码挑战、自定义主题、学习目标
+ */
+
+/* ==================== 视频教程样式 ==================== */
+.video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.video-card {
+    display: flex;
+    gap: 15px;
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.video-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-md);
+}
+
+.video-thumbnail {
+    width: 120px;
+    height: 70px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.play-icon {
+    font-size: 2rem;
+    color: white;
+}
+
+.video-duration {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+.video-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.video-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.video-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 5px;
+}
+
+.video-modal {
+    max-width: 700px;
+}
+
+.video-player {
+    background: #1a1a2e;
+    border-radius: 10px;
+    padding: 40px;
+    margin: 20px 0;
+}
+
+.video-placeholder {
+    text-align: center;
+    color: #d4d4d4;
+}
+
+.big-play-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.video-url {
+    font-size: 0.85rem;
+    color: #667eea;
+    margin-top: 10px;
+}
+
+/* ==================== 语音朗读按钮 ==================== */
+.speak-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.speak-btn:hover {
+    transform: scale(1.05);
+}
+
+/* ==================== 代码执行历史 ==================== */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.history-item {
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.history-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.history-lang {
+    background: var(--accent-color);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.history-time {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.history-code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 10px;
+    border-radius: 6px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    max-height: 100px;
+    overflow-y: auto;
+}
+
+.history-output {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+}
+
+/* ==================== 代码调试器 ==================== */
+.debugger-panel {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.debugger-controls {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.debug-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.debug-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.breakpoints-section, .variables-section {
+    margin-top: 20px;
+}
+
+.breakpoints-section h4, .variables-section h4 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.breakpoints-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.breakpoint-item {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.breakpoint-item button {
+    margin-left: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--error-color);
+}
+
+.variables-list {
+    background: var(--bg-secondary);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.variables-list div {
+    padding: 5px 0;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+}
+
+/* ==================== 作业系统 ==================== */
+.assignments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.assignment-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.assignment-card.completed {
+    border-left-color: var(--success-color);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.assignment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.assignment-header h4 {
+    color: var(--text-primary);
+}
+
+.assignment-points {
+    background: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.assignment-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+/* ==================== 代码审查 ==================== */
+.review-form {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.review-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.review-lang {
+    background: var(--accent-color);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.review-time {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.review-code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    margin-bottom: 15px;
+}
+
+.review-comments {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    color: var(--text-primary);
+}
+
+/* ==================== 学习小组 ==================== */
+.groups-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.group-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.group-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.group-header h4 {
+    color: var(--text-primary);
+}
+
+.group-members {
+    background: var(--bg-secondary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* ==================== 知识点掌握度 ==================== */
+.mastery-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mastery-item {
+    background: var(--bg-card);
+    padding: 15px 20px;
+    border-radius: 10px;
+}
+
+.mastery-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.mastery-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.mastery-value {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.mastery-bar {
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.mastery-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.mastery-level {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==================== 学习曲线图表 ==================== */
+.chart-container {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.chart-container h4 {
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 200px;
+    padding: 20px 0;
+}
+
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 8px 8px 0 0;
+    position: relative;
+    transition: height 0.5s;
+}
+
+.bar-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    color: var(--text-primary);
+}
+
+.bar-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.line-chart {
+    padding: 20px 0;
+}
+
+.chart-svg {
+    width: 100%;
+    height: auto;
+}
+
+/* ==================== 推荐系统 ==================== */
+.recommendations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.recommendation-card {
+    display: flex;
+    gap: 15px;
+    background: var(--bg-card);
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.recommendation-card:hover {
+    transform: translateX(5px);
+    box-shadow: var(--shadow-sm);
+}
+
+.rec-icon {
+    font-size: 1.5rem;
+}
+
+.rec-content h4 {
+    color: var(--text-primary);
+    margin-bottom: 5px;
+}
+
+.rec-content p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* ==================== API文档 ==================== */
+.api-search {
+    margin-bottom: 20px;
+}
+
+.api-search input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.api-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.api-category {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.api-category h4 {
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+.api-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.api-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+}
+
+.api-name {
+    font-weight: 600;
+    color: var(--accent-color);
+    font-family: 'Consolas', monospace;
+}
+
+.api-usage {
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.api-desc {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* ==================== 代码模板 ==================== */
+.templates-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.template-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.template-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.template-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.template-code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+}
+
+/* ==================== 键盘快捷键 ==================== */
+.shortcuts-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.shortcut-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 15px 25px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    min-width: 140px;
+}
+
+.shortcut-key {
+    background: var(--bg-secondary);
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.shortcut-action {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==================== 代码折叠 ==================== */
+.fold-btn {
+    background: var(--bg-secondary);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+}
+
+.code-block.collapsed {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+}
+
+.code-block.collapsed::after {
+    content: '...点击展开';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+/* ==================== 项目模板 ==================== */
+.project-templates {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.project-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.project-header h4 {
+    color: var(--text-primary);
+}
+
+.project-difficulty {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.project-difficulty.beginner {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+.project-difficulty.intermediate {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.project-difficulty.advanced {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+}
+
+.project-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.feature-tag {
+    background: var(--bg-secondary);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+/* ==================== 代码挑战 ==================== */
+.challenges-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.challenge-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.challenge-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.challenge-header h4 {
+    color: var(--text-primary);
+}
+
+.challenge-difficulty {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+.challenge-difficulty.easy {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+.challenge-difficulty.medium {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.challenge-difficulty.hard {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+}
+
+.challenge-modal {
+    max-width: 600px;
+}
+
+.test-cases {
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.test-case {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.test-case:last-child {
+    border-bottom: none;
+}
+
+.code-editor-small textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+}
+
+.challenge-result {
+    margin-top: 15px;
+}
+
+/* ==================== 自定义主题 ==================== */
+.theme-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.theme-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    background: var(--bg-card);
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.theme-card:hover {
+    border-color: var(--border-color);
+}
+
+.theme-card.active {
+    border-color: var(--accent-color);
+}
+
+.theme-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+/* ==================== 学习目标 ==================== */
+.goals-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.goal-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-color);
+}
+
+.goal-card.completed {
+    border-left-color: var(--success-color);
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.goal-header h4 {
+    color: var(--text-primary);
+}
+
+.goal-status {
+    font-size: 0.85rem;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.goal-card .goal-status {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.goal-card.completed .goal-status {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+.goal-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.goal-progress {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.goal-progress .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--bg-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.goal-progress .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 4px;
+}
+
+.goal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    .video-card {
+        flex-direction: column;
+    }
+    
+    .video-thumbnail {
+        width: 100%;
+        height: 150px;
+    }
+    
+    .groups-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .templates-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-templates {
+        grid-template-columns: 1fr;
+    }
+    
+    .challenges-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .shortcuts-list {
+        justify-content: center;
+    }
+    
+    .api-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

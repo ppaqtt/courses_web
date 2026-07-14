@@ -1,0 +1,995 @@
+/**
+ * 编程语言教程系统 - 功能模块样式
+ * 包含：代码编辑器、成就系统、讨论区、排行榜等所有新功能样式
+ */
+
+/* ==================== 成就系统样式 ==================== */
+.achievement-notification {
+    position: fixed;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10000;
+    transition: top 0.5s ease;
+}
+
+.achievement-notification.show {
+    top: 20px;
+}
+
+.achievement-notification .achievement-icon {
+    font-size: 3rem;
+    animation: bounce 0.5s ease infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: scale(1); }
+    to { transform: scale(1.2); }
+}
+
+.achievement-notification .achievement-title {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.achievement-notification .achievement-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 3px 0;
+}
+
+.achievement-notification .achievement-desc {
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+.achievement-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.achievement-card.unlocked {
+    border-color: #f59e0b;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent);
+}
+
+.achievement-card.locked {
+    opacity: 0.6;
+}
+
+.achievement-card .achievement-icon {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+}
+
+.achievement-card.unlocked .achievement-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+.achievement-card .achievement-info {
+    flex: 1;
+}
+
+.achievement-card .achievement-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text-primary);
+}
+
+.achievement-card .achievement-desc {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.achievement-badge {
+    background: #22c55e;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+}
+
+/* ==================== 代码编辑器样式 ==================== */
+.code-editor {
+    background: var(--bg-card);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin: 20px 0;
+}
+
+.editor-header {
+    background: var(--bg-secondary);
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.editor-lang {
+    font-weight: 600;
+    color: var(--accent-color);
+    font-size: 0.9rem;
+}
+
+.editor-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.editor-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.2s;
+}
+
+.editor-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.editor-btn.run-btn {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.editor-btn.run-btn:hover {
+    background: var(--accent-hover);
+}
+
+.editor-body {
+    position: relative;
+}
+
+.editor-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 20px;
+    border: none;
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+}
+
+.editor-textarea:focus {
+    box-shadow: inset 0 0 0 2px var(--accent-color);
+}
+
+.editor-output {
+    background: #1a1a2e;
+    border-top: 1px solid var(--border-color);
+}
+
+.output-header {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.output-content {
+    padding: 15px 20px;
+    color: #d4d4d4;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+.output-content.success {
+    color: #4ade80;
+}
+
+.output-content.error {
+    color: #f87171;
+}
+
+.output-running {
+    color: #fbbf24;
+}
+
+/* ==================== 模态框样式 ==================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-content h3 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1rem;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+/* ==================== 按钮样式 ==================== */
+.btn-primary {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: var(--border-color);
+}
+
+.btn-danger {
+    background: var(--error-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+/* ==================== Toast提示 ==================== */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    padding: 15px 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ==================== 讨论区样式 ==================== */
+.discussion-section {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: var(--shadow-md);
+}
+
+.discussion-section h3 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.comment-form {
+    margin-bottom: 25px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comment {
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.comment.reply {
+    margin-left: 30px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+.comment-time {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.comment-content {
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+.comment-actions {
+    margin-top: 10px;
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+
+.action-btn:hover {
+    color: var(--accent-color);
+}
+
+.reply-form {
+    margin-top: 15px;
+    padding-top: 15px;
+}
+
+.reply-form textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.no-comments {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 20px;
+}
+
+/* ==================== 学习路径样式 ==================== */
+.path-card {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 25px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: var(--shadow-md);
+}
+
+.path-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.path-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.path-header h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+}
+
+.path-progress {
+    background: var(--accent-color);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.path-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.path-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    flex: 1;
+    min-width: 150px;
+}
+
+.step-indicator.completed {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.step-lang {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.step-progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.step-progress-fill {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+.path-detail-modal {
+    max-width: 600px;
+}
+
+.path-detail-progress {
+    margin: 20px 0;
+}
+
+.overall-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.progress-value {
+    font-weight: bold;
+    color: var(--accent-color);
+    font-size: 1.2rem;
+}
+
+.path-steps-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.step-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.step-card:hover {
+    background: var(--border-color);
+}
+
+.step-card.completed {
+    border-left: 4px solid var(--success-color);
+}
+
+.step-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.step-number {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.step-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.step-progress-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.mini-progress {
+    width: 60px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.mini-progress div {
+    height: 100%;
+    background: var(--accent-color);
+    border-radius: 2px;
+}
+
+.required-badge {
+    background: var(--error-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+}
+
+/* ==================== 排行榜样式 ==================== */
+.leaderboard-section {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: var(--shadow-md);
+}
+
+.leaderboard-section h3 {
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+.user-rank-card {
+    background: linear-gradient(135deg, var(--accent-color), #764ba2);
+    color: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.your-rank {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.rank-score {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.rank-details {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 0.9rem;
+}
+
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+}
+
+.rank-number {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--border-color);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.rank-number.top-1 {
+    background: #ffd700;
+    color: white;
+}
+
+.rank-number.top-2 {
+    background: #c0c0c0;
+    color: white;
+}
+
+.rank-number.top-3 {
+    background: #cd7f32;
+    color: white;
+}
+
+.leaderboard-item .avatar {
+    font-size: 1.5rem;
+}
+
+.leaderboard-item .name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.leaderboard-item .stats {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==================== 提醒设置样式 ==================== */
+.reminder-modal {
+    text-align: center;
+}
+
+.time-picker input {
+    font-size: 1.5rem;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* ==================== 分享模态框 ==================== */
+.share-modal {
+    text-align: center;
+}
+
+.share-qrcode {
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    display: inline-block;
+    border-radius: 10px;
+}
+
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.share-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.share-btn.twitter { background: #1da1f2; color: white; }
+.share-btn.facebook { background: #1877f2; color: white; }
+.share-btn.weibo { background: #e6162d; color: white; }
+.share-btn.wechat { background: #07c160; color: white; }
+.share-btn.copy { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); }
+
+/* ==================== PWA安装横幅 ==================== */
+.install-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    z-index: 9998;
+    animation: slideUpBanner 0.5s ease;
+}
+
+@keyframes slideUpBanner {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.install-banner button:first-of-type {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.install-banner button:last-of-type {
+    background: none;
+    border: 1px solid white;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* ==================== 评测结果样式 ==================== */
+.quiz-result {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.quiz-result.correct {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success-color);
+}
+
+.quiz-result.incorrect {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error-color);
+}
+
+.result-icon {
+    font-size: 1.5rem;
+}
+
+/* ==================== 代码片段样式 ==================== */
+.snippet-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-sm);
+}
+
+.snippet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.snippet-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.snippet-lang {
+    background: var(--accent-color);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.snippet-code {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.85rem;
+    overflow-x: auto;
+    margin-bottom: 15px;
+}
+
+.snippet-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.snippet-date {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ==================== 统计图表容器 ==================== */
+.stats-chart-container {
+    background: var(--bg-card);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.chart-title {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.chart-placeholder {
+    height: 200px;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+/* ==================== 响应式设计 ==================== */
+@media (max-width: 768px) {
+    .achievement-notification {
+        left: 10px;
+        right: 10px;
+        transform: none;
+    }
+    
+    .achievement-notification.show {
+        top: 10px;
+    }
+    
+    .path-steps {
+        flex-direction: column;
+    }
+    
+    .step-indicator {
+        min-width: 100%;
+    }
+    
+    .share-buttons {
+        flex-direction: column;
+    }
+    
+    .share-btn {
+        width: 100%;
+    }
+    
+    .leaderboard-item {
+        flex-wrap: wrap;
+    }
+    
+    .install-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+}
