@@ -1,0 +1,2241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust语言教程</title>
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-primary: #0ea5e9;
+            --accent-secondary: #0284c7;
+            --border-color: #e2e8f0;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --code-bg: #1e293b;
+            --code-text: #e2e8f0;
+            --code-keyword: #f472b6;
+            --code-string: #a7f3d0;
+            --code-number: #fbbf24;
+            --code-function: #60a5fa;
+            --sidebar-width: 280px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-primary: #38bdf8;
+            --accent-secondary: #0ea5e9;
+            --border-color: #334155;
+            --code-bg: #0f172a;
+            --code-text: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            width: 200px;
+            outline: none;
+            transition: width 0.3s;
+        }
+
+        .search-box:focus {
+            width: 250px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--accent-primary);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-container {
+            background: var(--bg-secondary);
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .progress-bar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .progress-fill {
+            flex: 1;
+            height: 10px;
+            background: var(--bg-card);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill > div {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-primary), var(--success-color));
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .main-content {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            gap: 30px;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .chapter-item:hover {
+            background: var(--bg-card);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .chapter-item.completed {
+            color: var(--success-color);
+        }
+
+        .chapter-item.active.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .chapter-icon {
+            font-size: 12px;
+        }
+
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chapter-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .chapter-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chapter-section h2 {
+            font-size: 28px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .bookmark-btn.bookmarked {
+            color: var(--warning-color);
+        }
+
+        .section-content {
+            margin-bottom: 25px;
+        }
+
+        .section-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .section-content p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .section-content ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .code-lang {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .code-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--code-text);
+        }
+
+        .code-block pre {
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: var(--code-text);
+        }
+
+        .code-block .keyword { color: var(--code-keyword); }
+        .code-block .string { color: var(--code-string); }
+        .code-block .number { color: var(--code-number); }
+        .code-block .function { color: var(--code-function); }
+
+        .error-block {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--error-color);
+            padding: 15px 20px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 25px;
+        }
+
+        .error-block h4 {
+            color: var(--error-color);
+            margin-bottom: 10px;
+        }
+
+        .error-block p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .practice-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .practice-section h4 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .question {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .answer-input, .answer-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .answer-input:focus, .answer-textarea:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .answer-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px 15px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .option-label input[type="radio"] {
+            accent-color: var(--accent-primary);
+        }
+
+        .quiz-result {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .quiz-result.correct {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .result-icon {
+            font-size: 16px;
+        }
+
+        .show-answer-btn {
+            background: none;
+            border: none;
+            color: var(--accent-primary);
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+            padding: 5px 0;
+            text-decoration: underline;
+        }
+
+        .show-answer-btn:hover {
+            color: var(--accent-secondary);
+        }
+
+        .answer-box {
+            display: none;
+            background: rgba(14, 165, 233, 0.1);
+            border-left: 4px solid var(--accent-primary);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .note-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .note-section h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .note-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .note-textarea:focus {
+            border-color: var(--accent-primary);
+        }
+
+        .save-note-btn {
+            margin-top: 10px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .save-note-btn:hover {
+            background: var(--accent-secondary);
+        }
+
+        .completion-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+        }
+
+        .completion-btn:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .completion-btn.completed {
+            background: var(--text-muted);
+            cursor: default;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn-primary {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .nav-btn-primary:hover:not(:disabled) {
+            background: var(--accent-secondary);
+        }
+
+        .nav-btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+
+            .chapter-list {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .chapter-item {
+                font-size: 13px;
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .toolbar {
+                width: 100%;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .chapter-list {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .chapter-section h2 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>🦀 Rust语言教程</h1>
+            <div class="toolbar">
+                <input type="text" id="searchInput" class="search-box" placeholder="搜索教程内容..." onkeyup="searchTutorial()">
+                <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
+                <button class="btn btn-secondary" onclick="goToHub()">🏠 教程中心</button>
+                <button class="btn btn-primary" onclick="toggleTheme()">
+                    <span id="themeText">深色模式</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-info">
+                <span>已完成章节: <strong id="completedCount">0</strong>/10</span>
+                <span>进度: <strong id="progressPercent">0%</strong></span>
+                <span>收藏数: <strong id="bookmarkCount">0</strong></span>
+            </div>
+            <div class="progress-fill">
+                <div id="progressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="sidebar">
+            <h3>📚 章节列表</h3>
+            <ul class="chapter-list" id="chapterList"></ul>
+        </div>
+
+        <div class="content-area">
+            <div id="ch1" class="chapter-section active">
+                <h2>
+                    1. 入门介绍与环境搭建
+                    <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🌟 Rust的特点</h3>
+                    <p>Rust是一种系统级编程语言，由Mozilla开发，于2010年首次发布。它以内存安全、零成本抽象和并发安全著称。</p>
+                    <ul>
+                        <li><strong>内存安全：</strong>通过所有权系统保证内存安全，无需垃圾回收</li>
+                        <li><strong>零成本抽象：</strong>高级抽象不带来运行时开销</li>
+                        <li><strong>并发安全：</strong>编译时检查数据竞争</li>
+                        <li><strong>高性能：</strong>与C/C++相当的性能</li>
+                        <li><strong>跨平台：</strong>支持Windows、Mac、Linux等多种平台</li>
+                    </ul>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 安装Rust</h3>
+                    <p>使用rustup安装Rust工具链。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code1"><code># Linux/macOS
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# Windows
+# 下载并运行 https://win.rustup.rs/
+
+# 检查安装
+rustc --version
+cargo --version</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>👋 第一个Rust程序</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch1-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code2"><code>fn main() {
+    println!("Hello, Rust!");
+}</code></pre>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code3"><code># 创建新项目
+cargo new hello_rust
+cd hello_rust
+
+# 编译运行
+cargo run
+
+# 只编译
+cargo build
+
+# 编译发布版本
+cargo build --release</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记添加分号：Rust语句必须以分号结尾。</p>
+                    <p>大小写敏感：Rust区分大小写，<code>main</code> 和 <code>Main</code> 是不同的。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Rust的包管理器名称是什么？</div>
+                    <input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
+                    <div id="ch1-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 1)">查看答案</button>
+                    <div id="ch1-answer1" class="answer-box">cargo</div>
+
+                    <div class="question">2. 编写一个输出"Hello Rust"的程序</div>
+                    <textarea class="answer-textarea" id="ch1-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
+                    <div id="ch1-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 2)">查看答案</button>
+                    <div id="ch1-answer2" class="answer-box">fn main() {
+    println!("Hello Rust");
+}</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch2" class="chapter-section">
+                <h2>
+                    2. 基本语法
+                    <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📝 变量与常量</h3>
+                    <p>Rust使用 <code>let</code> 声明变量，<code>const</code> 声明常量。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch2-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code1"><code>fn main() {
+    let x = 5;
+    let mut y = 10;
+    y = 15;
+    
+    const MAX_POINTS: u32 = 100_000;
+    
+    let x: i32 = 5;
+    let y: f64 = 3.14;
+    
+    let z = x + 10;
+    println!("z = {}", z);
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>💬 字符串</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch2-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code2"><code>fn main() {
+    let s1 = "hello";
+    let s2 = String::from("world");
+    
+    let s3 = s1.to_string();
+    let s4 = format!("{} {}", s1, s2);
+    
+    println!("s1 length: {}", s1.len());
+    println!("s4: {}", s4);
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>修改不可变变量：<code>let x = 5; x = 10;</code> 会报错，需要用 <code>let mut</code>。</p>
+                    <p>类型不匹配：<code>let x: i32 = "hello";</code> 会报错，需要显式类型转换。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 以下哪个关键字用于声明可变变量？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="A"> A. var</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="B"> B. mutable</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="C"> C. mut</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="D"> D. change</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
+                    <div id="ch2-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 1)">查看答案</button>
+                    <div id="ch2-answer1" class="answer-box">C. mut</div>
+
+                    <div class="question">2. 计算表达式 2 + 1 * 3 的结果</div>
+                    <input type="text" class="answer-input" id="ch2-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
+                    <div id="ch2-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 2)">查看答案</button>
+                    <div id="ch2-answer2" class="answer-box">5</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch3" class="chapter-section">
+                <h2>
+                    3. 所有权系统
+                    <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔑 所有权规则</h3>
+                    <ul>
+                        <li>每个值都有一个<strong>所有者</strong></li>
+                        <li>值在任一时刻只能有一个所有者</li>
+                        <li>当所有者离开作用域，值将被丢弃</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code1"><code>fn main() {
+    let s1 = String::from("hello");
+    let s2 = s1;
+    
+    // println!("{}", s1); // 错误！s1的所有权已移动到s2
+    println!("{}", s2); // 正确
+    
+    let s3 = String::from("world");
+    let s4 = s3.clone();
+    
+    println!("{} {}", s3, s4); // 正确，clone创建了副本
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔗 借用与引用</h3>
+                    <p>借用允许你引用某些值而不获取其所有权。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code2"><code>fn calculate_length(s: &String) -> usize {
+    s.len()
+}
+
+fn main() {
+    let s1 = String::from("hello");
+    let len = calculate_length(&s1);
+    println!("'{}' 的长度是 {}", s1, len);
+    
+    let mut s2 = String::from("hello");
+    change(&mut s2);
+    println!("s2 = {}", s2);
+}
+
+fn change(s: &mut String) {
+    s.push_str(", world");
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>⏱️ 生命周期</h3>
+                    <p>生命周期确保引用在使用期间始终有效。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code3')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code3').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code3"><code>fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+fn main() {
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
+    
+    let result = longest(string1.as_str(), string2);
+    println!("最长的字符串是 {}", result);
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>使用已移动的值：<code>let s1 = s2; println!("{}", s2);</code> 会报错。</p>
+                    <p>可变引用与不可变引用冲突：同一时间只能有一个可变引用。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Rust中每个值有几个所有者？</div>
+                    <input type="text" class="answer-input" id="ch3-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
+                    <div id="ch3-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 1)">查看答案</button>
+                    <div id="ch3-answer1" class="answer-box">1个</div>
+
+                    <div class="question">2. 不获取所有权的情况下访问值的方式叫什么？</div>
+                    <input type="text" class="answer-input" id="ch3-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
+                    <div id="ch3-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 2)">查看答案</button>
+                    <div id="ch3-answer2" class="answer-box">借用</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch4" class="chapter-section">
+                <h2>
+                    4. 数据类型
+                    <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔢 标量类型</h3>
+                    <ul>
+                        <li><strong>整数类型：</strong>i8, i16, i32, i64, i128, u8, u16, u32, u64, u128</li>
+                        <li><strong>浮点类型：</strong>f32, f64</li>
+                        <li><strong>布尔类型：</strong>bool (true/false)</li>
+                        <li><strong>字符类型：</strong>char (Unicode标量值)</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch4-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code1"><code>fn main() {
+    let x: i32 = 42;
+    let y: u64 = 100;
+    let pi: f64 = 3.14159;
+    let is_active: bool = true;
+    let c: char = 'z';
+    
+    let a = 1_000_000;
+    let b = 0xff;
+    let c = 0o77;
+    let d = 0b1111;
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 复合类型</h3>
+                    <ul>
+                        <li><strong>元组：</strong>固定大小的多个值组合</li>
+                        <li><strong>数组：</strong>固定大小的相同类型元素集合</li>
+                        <li><strong>向量：</strong>可变大小的相同类型元素集合</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch4-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code2"><code>fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let (x, y, z) = tup;
+    println!("x = {}, y = {}, z = {}", x, y, z);
+    
+    let arr: [i32; 5] = [1, 2, 3, 4, 5];
+    let arr2 = [3; 5];
+    
+    let mut v: Vec<i32> = Vec::new();
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    
+    println!("向量长度: {}", v.len());
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>数组越界访问：<code>arr[10]</code> 会导致panic。</p>
+                    <p>类型不匹配：元组中的元素类型必须一致才能解构。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 默认整数类型是什么？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="A"> A. i8</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="B"> B. i32</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="C"> C. u32</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="D"> D. i64</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
+                    <div id="ch4-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 1)">查看答案</button>
+                    <div id="ch4-answer1" class="answer-box">B. i32</div>
+
+                    <div class="question">2. 创建一个包含5个元素的向量的宏是什么？</div>
+                    <input type="text" class="answer-input" id="ch4-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
+                    <div id="ch4-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 2)">查看答案</button>
+                    <div id="ch4-answer2" class="answer-box">vec!</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch5" class="chapter-section">
+                <h2>
+                    5. 流程控制
+                    <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔀 if-else表达式</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch5-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code1"><code>fn main() {
+    let number = 6;
+    
+    if number % 4 == 0 {
+        println!("能被4整除");
+    } else if number % 3 == 0 {
+        println!("能被3整除");
+    } else if number % 2 == 0 {
+        println!("能被2整除");
+    } else {
+        println!("不能被2、3、4整除");
+    }
+    
+    let condition = true;
+    let value = if condition { 5 } else { 6 };
+    println!("value = {}", value);
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 循环</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch5-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code2"><code>fn main() {
+    loop {
+        println!("无限循环");
+        break;
+    }
+    
+    let mut count = 0;
+    loop {
+        count += 1;
+        if count == 5 {
+            break count;
+        }
+    }
+    
+    for i in 1..=5 {
+        println!("i = {}", i);
+    }
+    
+    let a = [10, 20, 30, 40, 50];
+    for element in a.iter() {
+        println!("element = {}", element);
+    }
+    
+    let mut number = 3;
+    while number != 0 {
+        println!("{}!", number);
+        number -= 1;
+    }
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>if后面的条件不需要括号：<code>if (x > 0)</code> 会报错。</p>
+                    <p>while循环条件必须是bool类型：<code>while 1</code> 会报错。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 遍历1到10的数字用什么循环？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="A"> A. while</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="B"> B. loop</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="C"> C. for</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="D"> D. repeat</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
+                    <div id="ch5-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 1)">查看答案</button>
+                    <div id="ch5-answer1" class="answer-box">C. for</div>
+
+                    <div class="question">2. 无限循环用什么关键字？</div>
+                    <input type="text" class="answer-input" id="ch5-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
+                    <div id="ch5-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 2)">查看答案</button>
+                    <div id="ch5-answer2" class="answer-box">loop</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch6" class="chapter-section">
+                <h2>
+                    6. 模式匹配
+                    <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🎯 match表达式</h3>
+                    <p><code>match</code> 表达式用于模式匹配，类似于switch但更强大。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch6-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code1"><code>fn main() {
+    let x = 1;
+    
+    match x {
+        1 => println!("one"),
+        2 => println!("two"),
+        3 => println!("three"),
+        _ => println!("other"),
+    }
+    
+    let some_number = Some(5);
+    match some_number {
+        Some(i) => println!("value = {}", i),
+        None => println!("no value"),
+    }
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>💡 if let和while let</h3>
+                    <p><code>if let</code> 用于简化只关心一个模式的情况。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch6-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code2"><code>fn main() {
+    let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("最大值是 {}", max);
+    }
+    
+    let mut stack = Vec::new();
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    
+    while let Some(top) = stack.pop() {
+        println!("top = {}", top);
+    }
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>match缺少穷尽性：<code>match x { Some(i) => i + 1 }</code> 会报错，必须处理None情况。</p>
+                    <p>模式不匹配：<code>if let Some(3) = Some(5)</code> 不会报错，但不会执行。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 补全以下代码，处理Option<i32>的两种情况</div>
+                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 8px;">fn get_value(opt: Option<i32>) {
+    match opt {
+        ___ => println!("有值: {}", i),
+        ___ => println!("无值"),
+    }
+}</pre>
+                    <input type="text" class="answer-input" id="ch6-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
+                    <div id="ch6-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 1)">查看答案</button>
+                    <div id="ch6-answer1" class="answer-box">Some(i) 和 None</div>
+
+                    <div class="question">2. 使用if let简化以下match表达式</div>
+                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 8px;">match x {
+    Some(5) => println!("five"),
+    _ => (),
+}</pre>
+                    <textarea class="answer-textarea" id="ch6-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
+                    <div id="ch6-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 2)">查看答案</button>
+                    <div id="ch6-answer2" class="answer-box">if let Some(5) = x {
+    println!("five");
+}</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch7" class="chapter-section">
+                <h2>
+                    7. 结构体与枚举
+                    <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📦 结构体（Struct）</h3>
+                    <p>结构体用于组合多个相关值。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code1"><code>struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
+
+fn main() {
+    let user1 = User {
+        email: String::from("someone@example.com"),
+        username: String::from("someusername123"),
+        active: true,
+        sign_in_count: 1,
+    };
+    
+    let mut user3 = User {
+        email: String::from("mutable@example.com"),
+        username: String::from("mutableuser"),
+        active: true,
+        sign_in_count: 1,
+    };
+    user3.email = String::from("updated@example.com");
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔧 结构体方法</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code2"><code>struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+impl Rectangle {
+    fn square(size: u32) -> Self {
+        Self { width: size, height: size }
+    }
+    
+    fn area(&self) -> u32 {
+        self.width * self.height
+    }
+    
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+}
+
+fn main() {
+    let rect1 = Rectangle { width: 30, height: 50 };
+    println!("面积: {}", rect1.area());
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🎯 枚举（Enum）</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code3')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code3').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code3"><code>enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+let loopback = IpAddr::V6(String::from("::1"));
+
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+impl Message {
+    fn call(&self) {
+        println!("Message called");
+    }
+}
+
+let some_number = Some(5);
+let absent_number: Option<i32> = None;</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记导入枚举变体：<code>use IpAddr::*;</code> 可以避免每次都写 <code>IpAddr::V4</code>。</p>
+                    <p>在impl块中忘记使用self参数。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个Circle结构体，包含半径字段，并实现计算面积的方法</div>
+                    <textarea class="answer-textarea" id="ch7-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
+                    <div id="ch7-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 1)">查看答案</button>
+                    <div id="ch7-answer1" class="answer-box">struct Circle {
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&self) -> f64 {
+        std::f64::consts::PI * self.radius * self.radius
+    }
+}</div>
+
+                    <div class="question">2. Option<T>枚举有哪两个变体？</div>
+                    <input type="text" class="answer-input" id="ch7-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 2)">检查答案</button>
+                    <div id="ch7-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 2)">查看答案</button>
+                    <div id="ch7-answer2" class="answer-box">Some(T) 和 None</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch8" class="chapter-section">
+                <h2>
+                    8. 函数与闭包
+                    <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📝 函数定义</h3>
+                    <p>使用 <code>fn</code> 关键字定义函数。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch8-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code1"><code>fn greet() {
+    println!("Hello, Rust!");
+}
+
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn swap(a: i32, b: i32) -> (i32, i32) {
+    (b, a)
+}
+
+fn main() {
+    let (x, y) = swap(10, 20);
+    println!("x = {}, y = {}", x, y);
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>💡 闭包（Closure）</h3>
+                    <p>闭包是可以捕获其环境的匿名函数。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch8-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code2"><code>let add_one = |x: i32| -> i32 { x + 1 };
+let add_two = |x| x + 2;
+
+let x = 10;
+let multiply = |y| x * y;
+println!("10 * 5 = {}", multiply(5));
+
+fn apply<F>(f: F, value: i32) -> i32
+where
+    F: Fn(i32) -> i32,
+{
+    f(value)
+}
+
+fn main() {
+    let result = apply(add_one, 5);
+    println!("result = {}", result);
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>返回语句加了分号：<code>fn add(a, b) -> i32 { return a + b; }</code> 应该是 <code>fn add(a, b) -> i32 { a + b }</code>。</p>
+                    <p>闭包缺少类型标注：虽然可以省略，但在复杂场景下可能导致编译错误。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个函数，计算三个数的平均值</div>
+                    <textarea class="answer-textarea" id="ch8-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
+                    <div id="ch8-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 1)">查看答案</button>
+                    <div id="ch8-answer1" class="answer-box">fn average(a: f64, b: f64, c: f64) -> f64 {
+    (a + b + c) / 3.0
+}</div>
+
+                    <div class="question">2. 使用闭包过滤出大于5的元素</div>
+                    <input type="text" class="answer-input" id="ch8-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 2)">检查答案</button>
+                    <div id="ch8-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 2)">查看答案</button>
+                    <div id="ch8-answer2" class="answer-box">numbers.iter().filter(|&&x| x > 5).collect()</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch9" class="chapter-section">
+                <h2>
+                    9. 错误处理
+                    <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔴 panic! 宏</h3>
+                    <p><code>panic!</code> 用于不可恢复的错误，会导致程序崩溃。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code1')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code1').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code1"><code>panic!("发生了严重错误！");
+
+let v = vec![1, 2, 3];
+println!("{}", v[10]);
+
+fn divide(a: i32, b: i32) -> i32 {
+    debug_assert!(b != 0, "除数不能为零");
+    a / b
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔵 Result类型</h3>
+                    <p><code>Result<T, E></code> 用于可恢复的错误。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code2')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code2').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code2"><code>use std::fs::File;
+
+fn main() {
+    let file = File::open("hello.txt");
+    let file = match file {
+        Ok(f) => f,
+        Err(e) => {
+            println!("打开文件失败: {}", e);
+            return;
+        }
+    };
+    
+    let file = File::open("hello.txt").unwrap();
+    let file = File::open("hello.txt").expect("无法打开文件");
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>⚡ ? 操作符</h3>
+                    <p><code>?</code> 操作符是传播错误的便捷方式。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code3')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code3').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code3"><code>use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut f = File::open("username.txt")?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+}
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let username = read_username_from_file()?;
+    println!("username: {}", username);
+    Ok(())
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>在main函数中使用?：需要将返回类型改为 <code>Result&lt;(), E&gt;</code>。</p>
+                    <p>过度使用unwrap()：会导致程序在错误时直接panic。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Result<T, E>有哪两个变体？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="A"> A. Success和Failure</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="B"> B. Ok和Err</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="C"> C. Yes和No</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="D"> D. True和False</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
+                    <div id="ch9-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 1)">查看答案</button>
+                    <div id="ch9-answer1" class="answer-box">B. Ok和Err</div>
+
+                    <div class="question">2. 使用?操作符的条件是什么？</div>
+                    <input type="text" class="answer-input" id="ch9-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 2)">检查答案</button>
+                    <div id="ch9-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 2)">查看答案</button>
+                    <div id="ch9-answer2" class="answer-box">?操作符只能在返回Result或Option的函数中使用</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <div id="ch10" class="chapter-section">
+                <h2>
+                    10. 综合实战
+                    <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🎯 项目概述</h3>
+                    <p>创建一个简单的命令行待办事项应用，包含添加、删除、标记完成等功能。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code1"><code>cargo new todo_app
+cd todo_app
+cargo run -- --help</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 添加依赖</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">toml</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code2"><code>[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+structopt = "0.3"</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔧 实现代码</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">rust</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code3')">📋</button>
+                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch10-code3').textContent, 'rust')">💾</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code3"><code>use serde::{Deserialize, Serialize};
+use std::fs;
+use structopt::StructOpt;
+
+#[derive(Debug, StructOpt)]
+enum Command {
+    Add { task: String },
+    List,
+    Done { index: usize },
+    Remove { index: usize },
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Todo {
+    tasks: Vec<Task>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Task {
+    description: String,
+    completed: bool,
+}
+
+impl Todo {
+    fn load() -> Self {
+        if std::path::Path::new("todo.json").exists() {
+            let content = fs::read_to_string("todo.json").unwrap();
+            serde_json::from_str(&content).unwrap()
+        } else {
+            Todo { tasks: Vec::new() }
+        }
+    }
+    
+    fn save(&self) {
+        let content = serde_json::to_string_pretty(self).unwrap();
+        fs::write("todo.json", content).unwrap();
+    }
+    
+    fn add(&mut self, description: String) {
+        self.tasks.push(Task { description, completed: false });
+    }
+    
+    fn list(&self) {
+        for (i, task) in self.tasks.iter().enumerate() {
+            let status = if task.completed { "✓" } else { " " };
+            println!("{} [{}] {}", i + 1, status, task.description);
+        }
+    }
+    
+    fn done(&mut self, index: usize) {
+        if let Some(task) = self.tasks.get_mut(index) {
+            task.completed = true;
+        }
+    }
+    
+    fn remove(&mut self, index: usize) {
+        self.tasks.remove(index);
+    }
+}
+
+fn main() {
+    let command = Command::from_args();
+    let mut todo = Todo::load();
+    
+    match command {
+        Command::Add { task } => {
+            todo.add(task);
+            println!("添加成功");
+        }
+        Command::List => todo.list(),
+        Command::Done { index } => {
+            todo.done(index - 1);
+            println!("标记完成");
+        }
+        Command::Remove { index } => {
+            todo.remove(index - 1);
+            println!("删除成功");
+        }
+    }
+    
+    todo.save();
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🚀 使用示例</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code4')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code4"><code>cargo run -- add "学习Rust"
+cargo run -- list
+cargo run -- done 1
+cargo run -- remove 1</code></pre>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 为待办事项应用添加"清除已完成任务"的功能</div>
+                    <textarea class="answer-textarea" id="ch10-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
+                    <div id="ch10-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 1)">查看答案</button>
+                    <div id="ch10-answer1" class="answer-box">fn clear_completed(&mut self) {
+    self.tasks.retain(|task| !task.completed);
+}</div>
+
+                    <div class="question">2. 为Command枚举添加Clear变体</div>
+                    <input type="text" class="answer-input" id="ch10-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 2)">检查答案</button>
+                    <div id="ch10-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 2)">查看答案</button>
+                    <div id="ch10-answer2" class="answer-box">Clear,</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" disabled>完成学习</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const chapters = [
+            { id: 1, title: '入门介绍与环境搭建' },
+            { id: 2, title: '基本语法' },
+            { id: 3, title: '所有权系统' },
+            { id: 4, title: '数据类型' },
+            { id: 5, title: '流程控制' },
+            { id: 6, title: '模式匹配' },
+            { id: 7, title: '结构体与枚举' },
+            { id: 8, title: '函数与闭包' },
+            { id: 9, title: '错误处理' },
+            { id: 10, title: '综合实战' }
+        ];
+
+        const correctAnswers = {
+            1: { 1: 'cargo', 2: 'fn main()' },
+            2: { 1: 'c', 2: '5' },
+            3: { 1: '1', 2: '借用' },
+            4: { 1: 'b', 2: 'vec!' },
+            5: { 1: 'c', 2: 'loop' },
+            6: { 1: 'some(i)', 2: 'if let' },
+            7: { 1: 'struct', 2: 'some(t)' },
+            8: { 1: 'fn', 2: 'filter' },
+            9: { 1: 'b', 2: 'result' },
+            10: { 1: 'retain', 2: 'clear,' }
+        };
+
+        let currentChapter = 1;
+
+        function initChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map(ch => `
+                <li class="chapter-item" onclick="goToChapter(${ch.id})" id="chapterItem${ch.id}">
+                    <span>${ch.id}. ${ch.title}</span>
+                    <span class="chapter-icon" id="chapterIcon${ch.id}">📚</span>
+                </li>
+            `).join('');
+            updateChapterList();
+        }
+
+        function goToChapter(chapterId) {
+            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`ch${chapterId}`).classList.add('active');
+            currentChapter = chapterId;
+            updateChapterList();
+            updateProgress();
+            BookmarkManager.save('rust', chapterId);
+        }
+
+        function updateChapterList() {
+            const completed = getCompletedChapters();
+            chapters.forEach(ch => {
+                const item = document.getElementById(`chapterItem${ch.id}`);
+                const icon = document.getElementById(`chapterIcon${ch.id}`);
+                if (ch.id === currentChapter) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+                if (completed.includes(ch.id)) {
+                    item.classList.add('completed');
+                    icon.textContent = '✅';
+                } else {
+                    item.classList.remove('completed');
+                    icon.textContent = '📚';
+                }
+            });
+        }
+
+        function getCompletedChapters() {
+            const stored = localStorage.getItem('rust_completed_chapters');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function markCompleted(chapterId) {
+            let completed = getCompletedChapters();
+            if (!completed.includes(chapterId)) {
+                completed.push(chapterId);
+                localStorage.setItem('rust_completed_chapters', JSON.stringify(completed));
+                LearningStats.recordChapterCompletion('rust', chapterId);
+            }
+            const btn = document.getElementById(`completeBtn${chapterId}`);
+            btn.classList.add('completed');
+            btn.textContent = '✓ 已完成';
+            updateChapterList();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const completed = getCompletedChapters().length;
+            const total = chapters.length;
+            const percent = Math.round((completed / total) * 100);
+            
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('progressFill').style.width = `${percent}%`;
+        }
+
+        function toggleBookmark(chapterId) {
+            const bookmarks = getBookmarks();
+            const btn = document.getElementById(`bookmarkBtn${chapterId}`);
+            
+            if (bookmarks.includes(chapterId)) {
+                const newBookmarks = bookmarks.filter(b => b !== chapterId);
+                localStorage.setItem('rust_bookmarks', JSON.stringify(newBookmarks));
+                btn.classList.remove('bookmarked');
+            } else {
+                bookmarks.push(chapterId);
+                localStorage.setItem('rust_bookmarks', JSON.stringify(bookmarks));
+                btn.classList.add('bookmarked');
+            }
+            updateBookmarkCount();
+        }
+
+        function getBookmarks() {
+            const stored = localStorage.getItem('rust_bookmarks');
+            return stored ? JSON.parse(stored) : [];
+        }
+
+        function updateBookmarkCount() {
+            document.getElementById('bookmarkCount').textContent = getBookmarks().length;
+        }
+
+        function saveNote(chapterId) {
+            const note = document.getElementById(`ch${chapterId}-note`).value;
+            const notes = getNotes();
+            notes[chapterId] = note;
+            localStorage.setItem('rust_notes', JSON.stringify(notes));
+            SnippetManager.showToast('笔记已保存');
+        }
+
+        function getNotes() {
+            const stored = localStorage.getItem('rust_notes');
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        function loadNotes() {
+            const notes = getNotes();
+            chapters.forEach(ch => {
+                const textarea = document.getElementById(`ch${ch.id}-note`);
+                if (textarea && notes[ch.id]) {
+                    textarea.value = notes[ch.id];
+                }
+            });
+        }
+
+        function checkAnswer(chapterId, questionId) {
+            const answer = document.getElementById(`ch${chapterId}-q${questionId}`).value.toLowerCase().trim();
+            const correct = correctAnswers[chapterId][questionId];
+            const resultDiv = document.getElementById(`ch${chapterId}-result${questionId}`);
+            
+            if (answer.includes(correct)) {
+                resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">正确！</span>';
+                resultDiv.classList.add('correct');
+                resultDiv.classList.remove('incorrect');
+            } else {
+                resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">错误，请重试</span>';
+                resultDiv.classList.add('incorrect');
+                resultDiv.classList.remove('correct');
+            }
+        }
+
+        function toggleAnswer(chapterId, questionId) {
+            const answerBox = document.getElementById(`ch${chapterId}-answer${questionId}`);
+            answerBox.classList.toggle('show');
+        }
+
+        function copyCode(codeId) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                SnippetManager.showToast('代码已复制');
+            });
+        }
+
+        function searchTutorial() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            if (!query) {
+                chapters.forEach(ch => {
+                    document.getElementById(`ch${ch.id}`).style.display = '';
+                });
+                return;
+            }
+            
+            chapters.forEach(ch => {
+                const content = document.getElementById(`ch${ch.id}`).textContent.toLowerCase();
+                if (content.includes(query)) {
+                    document.getElementById(`ch${ch.id}`).style.display = '';
+                    goToChapter(ch.id);
+                } else {
+                    document.getElementById(`ch${ch.id}`).style.display = 'none';
+                }
+            });
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeText = document.getElementById('themeText');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeText.textContent = '深色模式';
+                localStorage.setItem('tutorial_theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeText.textContent = '浅色模式';
+                localStorage.setItem('tutorial_theme', 'dark');
+            }
+        }
+
+        function loadTheme() {
+            const theme = localStorage.getItem('tutorial_theme') || 'light';
+            if (theme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('themeText').textContent = '浅色模式';
+            }
+        }
+
+        function showStats() {
+            const stats = LearningStats.get();
+            alert(`学习统计：\n总学习时间：${Math.floor(stats.totalStudyTime / 60)}分钟\n完成章节：${getCompletedChapters().length}\n连续学习：${stats.dailyStreak}天`);
+        }
+
+        function goToHub() {
+            window.location.href = 'tutorial-hub.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChapterList();
+            updateProgress();
+            updateBookmarkCount();
+            loadNotes();
+            loadTheme();
+            BookmarkManager.restore('rust');
+            KeyboardShortcuts.init();
+        });
+    </script>
+</body>
+</html>

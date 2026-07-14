@@ -1,0 +1,2508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift教程 - 从零开始学习Swift编程</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-color: #667eea;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-color: #818cf8;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --danger-color: #f87171;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            align-items: center;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            width: 300px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 200px;
+            width: 250px;
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            overflow-y: auto;
+            max-height: calc(100vh - 220px);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chapter-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .chapter-item.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .chapter-item.active.completed {
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .chapter-icon {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+        }
+
+        .chapter-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .chapter-section.active {
+            display: block;
+        }
+
+        .chapter-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chapter-section h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .chapter-section h4 {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .section-content {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: inherit;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .code-lang {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .code-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .error-block {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .error-block code {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .practice-section {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .practice-section h4 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: inherit;
+            min-height: 100px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-label:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .option-label input[type="radio"] {
+            accent-color: var(--accent-color);
+        }
+
+        .quiz-result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-result.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .show-answer-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .show-answer-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .answer-box {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .note-section {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .note-section h4 {
+            color: var(--warning-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            min-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .save-note-btn {
+            background: var(--warning-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-note-btn:hover {
+            opacity: 0.9;
+        }
+
+        .bookmark-btn {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .bookmark-btn.bookmarked {
+            color: #f59e0b;
+        }
+
+        .completion-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .completion-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .completion-btn.completed {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .stats-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .nav-btn-primary:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .nav-btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn-secondary:hover:not(:disabled) {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background: rgba(14, 165, 233, 0.05);
+            border-left: 4px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                max-height: 200px;
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .progress-bar {
+                display: none;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🐦 Swift教程</h1>
+            <p>从入门到精通，系统学习Swift编程</p>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
+                <button class="btn btn-secondary" onclick="toggleTheme()">
+                    🌙 <span id="themeText">深色模式</span>
+                </button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
+                <button class="btn btn-primary" onclick="goToHub()">🏠 返回首页</button>
+            </div>
+        </div>
+
+        <!-- 进度统计 -->
+        <div class="stats-info" id="statsInfo">
+            <div class="stat-item">
+                <div class="stat-value" id="completedCount">0</div>
+                <div class="stat-label">已完成章节</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalCount">10</div>
+                <div class="stat-label">总章节数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="progressPercent">0%</div>
+                <div class="stat-label">学习进度</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="bookmarkCount">0</div>
+                <div class="stat-label">收藏章节</div>
+            </div>
+        </div>
+
+        <!-- 侧边栏导航 -->
+        <div class="sidebar">
+            <h3>📚 章节导航</h3>
+            <ul class="chapter-list" id="chapterList"></ul>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 章节1: 入门介绍与环境搭建 -->
+            <div id="ch1" class="chapter-section active">
+                <h2>
+                    1. 入门介绍与环境搭建
+                    <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <p>Swift是Apple公司于2014年推出的一种现代编程语言，用于开发iOS、macOS、watchOS和tvOS应用。它结合了C和Objective-C的优点，同时避免了它们的缺点，是一种类型安全、快速且易于学习的语言。</p>
+                    
+                    <h3>🌟 Swift的特点</h3>
+                    <ul>
+                        <li><strong>安全：</strong>类型安全，自动内存管理，避免空指针</li>
+                        <li><strong>快速：</strong>性能接近C语言</li>
+                        <li><strong>简洁：</strong>语法简洁，表达力强</li>
+                        <li><strong>现代：</strong>支持泛型、闭包、协议等现代特性</li>
+                        <li><strong>互操作性：</strong>与Objective-C无缝兼容</li>
+                    </ul>
+
+                    <h3>📦 开发环境搭建</h3>
+                    <p>要开发Swift应用，你需要安装Xcode，这是Apple官方的集成开发环境。</p>
+                    <ol>
+                        <li>打开Mac App Store，搜索并安装Xcode</li>
+                        <li>打开Xcode，同意许可协议</li>
+                        <li>安装Command Line Tools（可选）</li>
+                    </ol>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code1"><code># 检查Swift版本
+swift --version
+
+# 打开REPL（交互式环境）
+swift</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🚀 第一个Swift程序</h3>
+                    <p>打开Xcode，创建一个新的Command Line Tool项目，或者在终端中创建一个 <code>hello.swift</code> 文件：</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code2"><code>// 这是一个注释
+print("Hello, World!")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <p>在终端运行：</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code3"><code>swift hello.swift</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记括号：<code>print "Hello"</code> 会报错，函数调用必须使用括号。</p>
+                    <p>使用中文引号：<code>print("Hello“)</code> 会导致语法错误，必须使用英文引号。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Swift是哪家公司开发的？</div>
+                    <input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
+                    <div id="ch1-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 1)">查看答案</button>
+                    <div id="ch1-answer1" class="answer-box">Apple</div>
+
+                    <div class="question">2. 请写出打印"Hello Swift"的代码</div>
+                    <textarea class="answer-textarea" id="ch1-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
+                    <div id="ch1-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 2)">查看答案</button>
+                    <div id="ch1-answer2" class="answer-box">print("Hello Swift")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节2: 基本语法 -->
+            <div id="ch2" class="chapter-section">
+                <h2>
+                    2. 基本语法
+                    <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📝 注释</h3>
+                    <p>注释是代码中不会被执行的文本，用于解释代码。Swift支持单行注释和多行注释。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code1"><code>// 这是单行注释
+
+/* 这是
+   多行注释 */
+
+/// 文档注释（用于生成API文档）
+func greet() {
+    print("Hello")
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 变量与常量</h3>
+                    <p>使用 <code>let</code> 声明常量（不可变），使用 <code>var</code> 声明变量（可变）。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code2"><code>// 常量（值不可修改）
+let pi = 3.14159
+let name = "Alice"
+
+// 变量（值可以修改）
+var age = 25
+age = 26
+
+// 类型标注（可选）
+var score: Int = 100
+var greeting: String = "Hello"
+var isActive: Bool = true
+
+// 类型推断（Swift会自动推断类型）
+let x = 10          // Int
+let y = 3.14        // Double
+let z = "Swift"     // String</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📖 输出与输入</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code3"><code>// 基本输出
+print("Hello, World!")
+
+// 多个值输出
+print("Name:", "Alice", "Age:", 25)
+
+// 字符串插值
+let name = "Bob"
+let age = 30
+print("My name is \(name) and I'm \(age) years old")
+
+// 自定义分隔符和终止符
+print(1, 2, 3, separator: "-", terminator: "!\n")</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>修改常量：<code>let x = 10; x = 20</code> 会报错，常量不可修改。</p>
+                    <p>未初始化变量：<code>var x: Int; print(x)</code> 会报错，变量使用前必须初始化。</p>
+                </div>
+
+                <div class="tip-box">
+                    💡 <strong>提示：</strong>优先使用 <code>let</code> 声明常量，只有当值需要改变时才使用 <code>var</code>。
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 在Swift中，声明常量使用哪个关键字？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="A"> A. var</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="B"> B. let</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="C"> C. const</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="D"> D. constant</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
+                    <div id="ch2-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 1)">查看答案</button>
+                    <div id="ch2-answer1" class="answer-box">B. let</div>
+
+                    <div class="question">2. 使用字符串插值输出变量name和age的值</div>
+                    <input type="text" class="answer-input" id="ch2-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
+                    <div id="ch2-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 2)">查看答案</button>
+                    <div id="ch2-answer2" class="answer-box">print("\(name), \(age)")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节3: 数据类型 -->
+            <div id="ch3" class="chapter-section">
+                <h2>
+                    3. 数据类型
+                    <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📊 数值类型</h3>
+                    <p>Swift提供多种数值类型，包括整数和浮点数。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code1"><code>// 整数类型
+let age: Int = 25           // 64位整数
+let count: Int32 = 100      // 32位整数
+let byte: UInt8 = 255       // 无符号8位整数
+
+// 浮点数类型
+let pi: Double = 3.14159    // 64位浮点数
+let height: Float = 1.75    // 32位浮点数
+
+// 数值字面量
+let decimal = 10            // 十进制
+let binary = 0b1010         // 二进制
+let octal = 0o12            // 八进制
+let hex = 0xA               // 十六进制
+
+// 浮点数字面量
+let scientific = 1.23e5     // 123000
+let small = 1.23e-3         // 0.00123
+
+// 数值类型转换
+let integer = 10
+let floating: Double = Double(integer)
+let backToInt = Int(floating)</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📝 字符串类型</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code2"><code>// 字符串字面量
+let greeting = "Hello, Swift!"
+let multiLine = """
+    这是一段
+    多行字符串
+    """
+
+// 字符串拼接
+let firstName = "John"
+let lastName = "Doe"
+let fullName = firstName + " " + lastName
+
+// 字符串长度
+let length = greeting.count
+
+// 字符串比较
+let isEqual = greeting == "Hello, Swift!"
+
+// 字符串方法
+let uppercase = greeting.uppercased()
+let lowercase = greeting.lowercased()
+let hasPrefix = greeting.hasPrefix("Hello")
+let hasSuffix = greeting.hasSuffix("Swift!")
+
+// 字符
+let char: Character = "A"
+let chars: [Character] = ["H", "e", "l", "l", "o"]
+let fromChars = String(chars)</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔢 布尔类型</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code3"><code>// 布尔值
+let isTrue = true
+let isFalse = false
+
+// 比较运算
+let a = 10
+let b = 20
+let greater = a > b         // false
+let less = a < b            // true
+let equal = a == b          // false
+let notEqual = a != b       // true
+
+// 逻辑运算
+let and = true && false     // false
+let or = true || false      // true
+let not = !true             // false
+
+// 空值类型
+var name: String? = "Alice"
+name = nil                  // 设置为空
+
+// 可选绑定
+if let unwrapped = name {
+    print("Name: \(unwrapped)")
+} else {
+    print("Name is nil")
+}
+
+// 强制解包（谨慎使用）
+let forced = name!          // 如果name为nil会崩溃</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>类型不匹配：<code>let x: Int = 3.14</code> 会报错，整数不能赋值浮点数。</p>
+                    <p>隐式解包nil：<code>var x: String! = nil; print(x)</code> 会崩溃。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Swift中表示空值的关键字是什么？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch3-q1" value="A"> A. null</label>
+                        <label class="option-label"><input type="radio" name="ch3-q1" value="B"> B. nil</label>
+                        <label class="option-label"><input type="radio" name="ch3-q1" value="C"> C. None</label>
+                        <label class="option-label"><input type="radio" name="ch3-q1" value="D"> D. undefined</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
+                    <div id="ch3-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 1)">查看答案</button>
+                    <div id="ch3-answer1" class="answer-box">B. nil</div>
+
+                    <div class="question">2. 将整数100转换为字符串</div>
+                    <input type="text" class="answer-input" id="ch3-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
+                    <div id="ch3-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 2)">查看答案</button>
+                    <div id="ch3-answer2" class="answer-box">String(100)</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节4: 流程控制 -->
+            <div id="ch4" class="chapter-section">
+                <h2>
+                    4. 流程控制
+                    <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔀 条件语句</h3>
+                    <p>Swift提供 <code>if</code>、<code>else</code>、<code>else if</code> 和 <code>switch</code> 语句进行条件判断。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code1"><code>// if-else语句
+let age = 18
+if age >= 18 {
+    print("成年人")
+} else {
+    print("未成年人")
+}
+
+// if-else if-else语句
+let score = 85
+if score >= 90 {
+    print("A")
+} else if score >= 80 {
+    print("B")
+} else if score >= 70 {
+    print("C")
+} else {
+    print("D")
+}
+
+// switch语句（支持多种类型）
+let fruit = "apple"
+switch fruit {
+case "apple":
+    print("红色的水果")
+case "banana":
+    print("黄色的水果")
+case "orange":
+    print("橙色的水果")
+default:
+    print("未知水果")
+}
+
+// switch支持范围匹配
+let number = 5
+switch number {
+case 1...5:
+    print("1到5")
+case 6...10:
+    print("6到10")
+default:
+    print("其他")
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 循环语句</h3>
+                    <p>Swift提供 <code>for-in</code>、<code>while</code> 和 <code>repeat-while</code> 循环。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code2"><code>// for-in循环（遍历范围）
+for i in 0..<5 {
+    print(i)  // 0, 1, 2, 3, 4
+}
+
+for i in 1...5 {
+    print(i)  // 1, 2, 3, 4, 5
+}
+
+// for-in循环（遍历数组）
+let fruits = ["apple", "banana", "cherry"]
+for fruit in fruits {
+    print(fruit)
+}
+
+// 带索引的遍历
+for (index, fruit) in fruits.enumerated() {
+    print("\(index): \(fruit)")
+}
+
+// while循环
+var count = 0
+while count < 5 {
+    print(count)
+    count += 1
+}
+
+// repeat-while循环（至少执行一次）
+var x = 0
+repeat {
+    print(x)
+    x += 1
+} while x < 5
+
+// break和continue
+for i in 0..<10 {
+    if i == 5 {
+        break  // 跳出循环
+    }
+    print(i)
+}
+
+for i in 0..<10 {
+    if i % 2 == 0 {
+        continue  // 跳过本次循环
+    }
+    print(i)
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>switch缺少default：Swift的switch必须覆盖所有可能的情况，或者提供default分支。</p>
+                    <p>无限循环：忘记更新循环条件会导致无限循环。</p>
+                </div>
+
+                <div class="tip-box">
+                    💡 <strong>提示：</strong>Swift的switch比其他语言更强大，可以匹配范围、元组、类型等。
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 使用for-in循环输出1到10</div>
+                    <textarea class="answer-textarea" id="ch4-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
+                    <div id="ch4-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 1)">查看答案</button>
+                    <div id="ch4-answer1" class="answer-box">for i in 1...10 {
+    print(i)
+}</div>
+
+                    <div class="question">2. switch语句必须包含哪个分支？</div>
+                    <input type="text" class="answer-input" id="ch4-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
+                    <div id="ch4-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 2)">查看答案</button>
+                    <div id="ch4-answer2" class="answer-box">default</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节5: 集合类型 -->
+            <div id="ch5" class="chapter-section">
+                <h2>
+                    5. 集合类型
+                    <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📋 数组 (Array)</h3>
+                    <p>数组是有序的元素集合，使用方括号 <code>[ ]</code> 创建。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code1"><code>// 创建数组
+var fruits = ["apple", "banana", "cherry"]
+var numbers: [Int] = [1, 2, 3]
+var emptyArray = [String]()
+
+// 访问元素
+print(fruits[0])      // 第一个元素
+print(fruits.last)    // 最后一个元素（可选值）
+
+// 修改元素
+fruits[1] = "orange"
+
+// 添加元素
+fruits.append("grape")
+fruits.insert("mango", at: 1)
+
+// 删除元素
+fruits.remove(at: 0)
+fruits.removeLast()
+fruits.removeAll()
+
+// 数组属性
+print(fruits.count)   // 元素个数
+print(fruits.isEmpty) // 是否为空
+
+// 遍历数组
+for fruit in fruits {
+    print(fruit)
+}
+
+for (index, value) in fruits.enumerated() {
+    print("\(index): \(value)")
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔑 字典 (Dictionary)</h3>
+                    <p>字典是无序的键值对集合，使用方括号 <code>[key: value]</code> 创建。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code2"><code>// 创建字典
+var person: [String: Any] = [
+    "name": "Alice",
+    "age": 25,
+    "city": "New York"
+]
+var emptyDict = [String: Int]()
+
+// 访问值（返回可选值）
+let name = person["name"] as? String
+let age = person["age"] as? Int
+
+// 添加/修改
+person["email"] = "alice@example.com"
+person["age"] = 26
+
+// 删除
+person["city"] = nil
+
+// 字典属性
+print(person.count)
+print(person.isEmpty)
+
+// 遍历
+for (key, value) in person {
+    print("\(key): \(value)")
+}
+
+for key in person.keys {
+    print(key)
+}
+
+for value in person.values {
+    print(value)
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 集合 (Set)</h3>
+                    <p>集合是无序且不重复的元素集合，使用 <code>Set&lt;&gt;</code> 创建。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code3"><code>// 创建集合
+var numbers: Set<Int> = [1, 2, 3, 3, 4, 5]
+print(numbers)  // 输出: [1, 2, 3, 4, 5]
+
+// 添加元素
+numbers.insert(6)
+
+// 删除元素
+numbers.remove(3)
+
+// 集合操作
+let setA: Set = [1, 2, 3, 4, 5]
+let setB: Set = [4, 5, 6, 7, 8]
+
+let union = setA.union(setB)           // 并集
+let intersection = setA.intersection(setB)  // 交集
+let difference = setA.subtracting(setB)     // 差集
+let symmetric = setA.symmetricDifference(setB) // 对称差集
+
+// 判断关系
+let isSubset = setA.isSubset(of: setB)
+let isSuperset = setA.isSuperset(of: setB)
+let isDisjoint = setA.isDisjoint(with: setB)</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>数组越界：<code>fruits[10]</code> 如果数组只有3个元素会崩溃。</p>
+                    <p>字典键不存在：<code>person["phone"]</code> 返回nil，需要进行可选绑定。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 如何判断数组是否为空？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="A"> A. array.empty</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="B"> B. array.isEmpty</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="C"> C. array.count == 0</label>
+                        <label class="option-label"><input type="radio" name="ch5-q1" value="D"> D. B和C都正确</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
+                    <div id="ch5-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 1)">查看答案</button>
+                    <div id="ch5-answer1" class="answer-box">D. B和C都正确</div>
+
+                    <div class="question">2. 创建一个字典存储学生信息，包含姓名、年龄、成绩</div>
+                    <textarea class="answer-textarea" id="ch5-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
+                    <div id="ch5-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 2)">查看答案</button>
+                    <div id="ch5-answer2" class="answer-box">var student: [String: Any] = [
+    "name": "张三",
+    "age": 20,
+    "score": 95
+]</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节6: 函数 -->
+            <div id="ch6" class="chapter-section">
+                <h2>
+                    6. 函数
+                    <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📝 函数定义</h3>
+                    <p>使用 <code>func</code> 关键字定义函数。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code1"><code>// 基本函数定义
+func greet(name: String) {
+    print("Hello, \(name)!")
+}
+
+// 调用函数
+greet(name: "Alice")
+
+// 返回值函数
+func add(_ a: Int, _ b: Int) -> Int {
+    return a + b
+}
+
+let result = add(3, 5)
+print(result)  // 输出: 8
+
+// 多返回值
+func calculate(a: Int, b: Int) -> (sum: Int, product: Int) {
+    return (a + b, a * b)
+}
+
+let values = calculate(a: 3, b: 5)
+print(values.sum)      // 输出: 8
+print(values.product)  // 输出: 15
+
+// 默认参数值
+func greet(name: String, greeting: String = "Hello") {
+    print("\(greeting), \(name)!")
+}
+
+greet(name: "Bob")              // 使用默认问候语
+greet(name: "Charlie", greeting: "Hi")
+
+// 可变参数
+func sum(_ numbers: Int...) -> Int {
+    var total = 0
+    for num in numbers {
+        total += num
+    }
+    return total
+}
+
+print(sum(1, 2, 3, 4))  // 输出: 10</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 函数类型与高阶函数</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code2"><code>// 函数类型
+let mathFunction: (Int, Int) -> Int = add
+
+// 函数作为参数
+func apply(_ operation: (Int, Int) -> Int, to a: Int, and b: Int) -> Int {
+    return operation(a, b)
+}
+
+let sumResult = apply(add, to: 10, and: 20)
+
+// 函数作为返回值
+func makeMultiplier(_ factor: Int) -> (Int) -> Int {
+    return { number in
+        return number * factor
+    }
+}
+
+let double = makeMultiplier(2)
+print(double(5))  // 输出: 10
+
+// 高阶函数
+let numbers = [1, 2, 3, 4, 5]
+
+// map - 转换
+let squared = numbers.map { $0 * $0 }
+print(squared)  // [1, 4, 9, 16, 25]
+
+// filter - 过滤
+let evenNumbers = numbers.filter { $0 % 2 == 0 }
+print(evenNumbers)  // [2, 4]
+
+// reduce - 归约
+let total = numbers.reduce(0, +)
+print(total)  // 15
+
+// sorted - 排序
+let sorted = numbers.sorted { $0 > $1 }
+print(sorted)  // [5, 4, 3, 2, 1]</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>参数标签错误：Swift默认要求使用参数标签，除非使用下划线 <code>_</code> 省略。</p>
+                    <p>返回类型不匹配：函数声明的返回类型必须与实际返回值一致。</p>
+                </div>
+
+                <div class="tip-box">
+                    💡 <strong>提示：</strong>使用 <code>$0, $1, $2...</code> 可以简化闭包中的参数引用。
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个函数计算两个数的乘积</div>
+                    <textarea class="answer-textarea" id="ch6-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
+                    <div id="ch6-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 1)">查看答案</button>
+                    <div id="ch6-answer1" class="answer-box">func multiply(_ a: Int, _ b: Int) -> Int {
+    return a * b
+}</div>
+
+                    <div class="question">2. 使用map函数将数组[1,2,3,4,5]中的每个元素翻倍</div>
+                    <input type="text" class="answer-input" id="ch6-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
+                    <div id="ch6-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 2)">查看答案</button>
+                    <div id="ch6-answer2" class="answer-box">numbers.map { $0 * 2 }</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节7: 闭包 -->
+            <div id="ch7" class="chapter-section">
+                <h2>
+                    7. 闭包
+                    <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📦 闭包基础</h3>
+                    <p>闭包是自包含的功能代码块，可以作为参数传递或存储。闭包可以捕获和存储其所在上下文中的常量和变量。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code1"><code>// 完整形式的闭包
+let add = {(a: Int, b: Int) -> Int in
+    return a + b
+}
+
+print(add(3, 5))  // 输出: 8
+
+// 简化形式（类型推断）
+let multiply = { (a, b) in
+    a * b
+}
+
+// 更简化（单表达式闭包自动返回）
+let divide = { $0 / $1 }
+
+// 闭包作为函数参数
+func performOperation(_ operation: (Int, Int) -> Int, on a: Int, and b: Int) {
+    print(operation(a, b))
+}
+
+performOperation(add, on: 10, and: 20)
+
+// 尾随闭包（当闭包是最后一个参数时）
+performOperation(on: 10, and: 20) { $0 * $1 }
+
+// 闭包捕获值
+func makeCounter() -> () -> Int {
+    var count = 0
+    return {
+        count += 1
+        return count
+    }
+}
+
+let counter = makeCounter()
+print(counter())  // 1
+print(counter())  // 2
+print(counter())  // 3</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔗 逃逸闭包与非逃逸闭包</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code2"><code>// 非逃逸闭包（默认）
+func process(_ closure: () -> Void) {
+    closure()
+}
+
+// 逃逸闭包（需要显式标记）
+func asyncProcess(_ closure: @escaping () -> Void) {
+    DispatchQueue.main.async {
+        closure()
+    }
+}
+
+// 自动闭包（延迟求值）
+func check(_ condition: @autoclosure () -> Bool) {
+    if condition() {
+        print("条件为真")
+    }
+}
+
+check(10 > 5)</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记in关键字：闭包中参数列表和代码体之间必须使用 <code>in</code> 分隔。</p>
+                    <p>逃逸闭包未标记：当闭包需要在函数返回后执行时，必须使用 <code>@escaping</code> 标记。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 创建一个闭包计算两个数的最大值</div>
+                    <textarea class="answer-textarea" id="ch7-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
+                    <div id="ch7-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 1)">查看答案</button>
+                    <div id="ch7-answer1" class="answer-box">let max = { $0 > $1 ? $0 : $1 }</div>
+
+                    <div class="question">2. 什么是尾随闭包？</div>
+                    <input type="text" class="answer-input" id="ch7-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 2)">检查答案</button>
+                    <div id="ch7-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 2)">查看答案</button>
+                    <div id="ch7-answer2" class="answer-box">当闭包是函数的最后一个参数时</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节8: 面向对象 -->
+            <div id="ch8" class="chapter-section">
+                <h2>
+                    8. 面向对象
+                    <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🏠 类与对象</h3>
+                    <p>使用 <code>class</code> 关键字定义类，使用 <code>init</code> 定义初始化方法。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code1"><code>// 定义类
+class Person {
+    var name: String
+    var age: Int
+    
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+    
+    func introduce() {
+        print("My name is \(name)")
+    }
+    
+    deinit {
+        print("\(name) is being deinitialized")
+    }
+}
+
+// 创建对象
+let person = Person(name: "Alice", age: 25)
+person.introduce()
+
+// 类继承
+class Student: Person {
+    var grade: String
+    
+    init(name: String, age: Int, grade: String) {
+        self.grade = grade
+        super.init(name: name, age: age)
+    }
+    
+    override func introduce() {
+        super.introduce()
+        print("I'm in grade \(grade)")
+    }
+}
+
+let student = Student(name: "Bob", age: 18, grade: "Senior")
+student.introduce()</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔑 属性与方法</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code2"><code>// 计算属性
+class Circle {
+    var radius: Double
+    
+    init(radius: Double) {
+        self.radius = radius
+    }
+    
+    var area: Double {
+        return Double.pi * radius * radius
+    }
+}
+
+let circle = Circle(radius: 5)
+print(circle.area)
+
+// 属性观察器
+class Counter {
+    var count = 0 {
+        willSet {
+            print("即将设置为 \(newValue)")
+        }
+        didSet {
+            print("从 \(oldValue) 设置为 \(count)")
+        }
+    }
+}
+
+let counter = Counter()
+counter.count = 10
+
+// 类型属性和方法
+class Math {
+    static let pi = 3.14159
+    static func square(_ x: Double) -> Double {
+        return x * x
+    }
+}
+
+print(Math.pi)
+print(Math.square(5))</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📋 协议</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code3"><code>// 定义协议
+protocol Flyable {
+    func fly()
+}
+
+protocol Runnable {
+    func run()
+}
+
+// 实现协议
+class Bird: Flyable {
+    func fly() {
+        print("Bird is flying")
+    }
+}
+
+class Plane: Flyable, Runnable {
+    func fly() {
+        print("Plane is flying")
+    }
+    
+    func run() {
+        print("Plane is running")
+    }
+}
+
+// 协议扩展
+extension Flyable {
+    func soar() {
+        print("Soaring high")
+    }
+}
+
+let bird = Bird()
+bird.fly()
+bird.soar()</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记调用super.init：子类初始化时必须调用父类的初始化方法。</p>
+                    <p>未实现协议方法：类实现协议时必须实现所有必需的方法。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个Dog类，包含name属性和bark方法</div>
+                    <textarea class="answer-textarea" id="ch8-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
+                    <div id="ch8-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 1)">查看答案</button>
+                    <div id="ch8-answer1" class="answer-box">class Dog {
+    var name: String
+    init(name: String) {
+        self.name = name
+    }
+    func bark() {
+        print("\(name) is barking!")
+    }
+}</div>
+
+                    <div class="question">2. 子类继承父类时，初始化方法中必须调用什么？</div>
+                    <input type="text" class="answer-input" id="ch8-q2" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 2)">检查答案</button>
+                    <div id="ch8-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 2)">查看答案</button>
+                    <div id="ch8-answer2" class="answer-box">super.init</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节9: 错误处理 -->
+            <div id="ch9" class="chapter-section">
+                <h2>
+                    9. 错误处理
+                    <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>⚠️ 错误定义</h3>
+                    <p>使用 <code>enum</code> 定义错误类型，需要遵循 <code>Error</code> 协议。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code1"><code>// 定义错误类型
+enum ValidationError: Error {
+    case invalidEmail
+    case passwordTooShort(minLength: Int)
+    case ageUnder18
+}
+
+// 抛出错误
+func validateEmail(_ email: String) throws {
+    if !email.contains("@") {
+        throw ValidationError.invalidEmail
+    }
+}
+
+func validatePassword(_ password: String) throws {
+    if password.count < 8 {
+        throw ValidationError.passwordTooShort(minLength: 8)
+    }
+}
+
+// try-catch处理错误
+do {
+    try validateEmail("invalid-email")
+    print("Email valid")
+} catch ValidationError.invalidEmail {
+    print("Invalid email format")
+} catch {
+    print("Unknown error: \(error)")
+}
+
+do {
+    try validateEmail("test@example.com")
+    try validatePassword("pass")
+} catch ValidationError.invalidEmail {
+    print("Invalid email")
+} catch ValidationError.passwordTooShort(let min) {
+    print("Password must be at least \(min) characters")
+}</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 可选错误处理</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code2"><code>// try? 返回可选值
+let result = try? validateEmail("test@example.com")
+if result == nil {
+    print("Validation failed")
+}
+
+// try! 强制解包
+let success = try! validateEmail("valid@example.com")
+
+// 自定义错误描述
+extension ValidationError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .invalidEmail:
+            return "Invalid email address"
+        case .passwordTooShort(let min):
+            return "Password must be at least \(min) characters"
+        case .ageUnder18:
+            return "Must be 18 or older"
+        }
+    }
+}</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>未处理抛出的错误：调用可抛出函数时必须使用 <code>try</code>、<code>try?</code> 或 <code>try!</code>。</p>
+                    <p>错误类型未遵循Error协议：自定义错误必须遵循 <code>Error</code> 协议。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个错误类型表示文件操作失败</div>
+                    <textarea class="answer-textarea" id="ch9-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
+                    <div id="ch9-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 1)">查看答案</button>
+                    <div id="ch9-answer1" class="answer-box">enum FileError: Error {
+    case fileNotFound
+    case permissionDenied
+    case fileEmpty
+}</div>
+
+                    <div class="question">2. 调用可抛出函数时，必须使用哪个关键字？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch9-q2" value="A"> A. catch</label>
+                        <label class="option-label"><input type="radio" name="ch9-q2" value="B"> B. throw</label>
+                        <label class="option-label"><input type="radio" name="ch9-q2" value="C"> C. try</label>
+                        <label class="option-label"><input type="radio" name="ch9-q2" value="D"> D. error</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 2)">检查答案</button>
+                    <div id="ch9-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 2)">查看答案</button>
+                    <div id="ch9-answer2" class="answer-box">C. try</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节10: 综合实战 -->
+            <div id="ch10" class="chapter-section">
+                <h2>
+                    10. 综合实战
+                    <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🎯 项目概述</h3>
+                    <p>创建一个简单的待办事项应用，包含添加、删除、完成等功能。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code1"><code>// TodoItem结构体
+struct TodoItem: Identifiable {
+    let id = UUID()
+    var title: String
+    var description: String
+    var isCompleted: Bool
+    var createdAt: Date
+}
+
+// TodoManager类
+class TodoManager {
+    private var todos: [TodoItem] = []
+    
+    // 添加待办
+    func addTodo(title: String, description: String = "") {
+        let todo = TodoItem(
+            title: title,
+            description: description,
+            isCompleted: false,
+            createdAt: Date()
+        )
+        todos.append(todo)
+    }
+    
+    // 删除待办
+    func deleteTodo(at index: Int) {
+        guard index >= 0 && index < todos.count else { return }
+        todos.remove(at: index)
+    }
+    
+    // 切换完成状态
+    func toggleCompletion(at index: Int) {
+        guard index >= 0 && index < todos.count else { return }
+        todos[index].isCompleted.toggle()
+    }
+    
+    // 获取所有待办
+    func getAllTodos() -> [TodoItem] {
+        return todos
+    }
+    
+    // 获取未完成的待办数量
+    func getPendingCount() -> Int {
+        return todos.filter { !$0.isCompleted }.count
+    }
+}
+
+// 使用示例
+let manager = TodoManager()
+manager.addTodo(title: "学习Swift", description: "完成第10章")
+manager.addTodo(title: "购物")
+manager.toggleCompletion(at: 0)
+print("已完成: \(manager.getPendingCount())")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📊 扩展功能</h3>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">swift</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code2"><code>// 扩展TodoManager
+extension TodoManager {
+    func getSortedTodos() -> [TodoItem] {
+        return todos.sorted { $0.createdAt > $1.createdAt }
+    }
+    
+    func searchTodos(_ query: String) -> [TodoItem] {
+        return todos.filter {
+            $0.title.lowercased().contains(query.lowercased())
+        }
+    }
+    
+    func clearCompleted() {
+        todos = todos.filter { !$0.isCompleted }
+    }
+    
+    func exportTodos() -> String {
+        var result = ""
+        for (index, todo) in todos.enumerated() {
+            let status = todo.isCompleted ? "[✓]" : "[ ]"
+            result += "\(index + 1). \(status) \(todo.title)\n"
+        }
+        return result
+    }
+}
+
+// 使用扩展功能
+let sortedTodos = manager.getSortedTodos()
+let searchResults = manager.searchTodos("学习")
+print(manager.exportTodos())
+manager.clearCompleted()</code></pre>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 为TodoManager添加一个方法，统计待办事项总数</div>
+                    <textarea class="answer-textarea" id="ch10-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
+                    <div id="ch10-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 1)">查看答案</button>
+                    <div id="ch10-answer1" class="answer-box">func getTotalCount() -> Int {
+    return todos.count
+}</div>
+
+                    <div class="question">2. 添加一个方法，按标题搜索待办事项</div>
+                    <textarea class="answer-textarea" id="ch10-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 2)">检查答案</button>
+                    <div id="ch10-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 2)">查看答案</button>
+                    <div id="ch10-answer2" class="answer-box">func searchByTitle(_ query: String) -> [TodoItem] {
+    return todos.filter {
+        $0.title.lowercased().contains(query.lowercased())
+    }
+}</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToHub()">🏠 返回首页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const TOTAL_CHAPTERS = 10;
+        const LANGUAGE = 'swift';
+        
+        const chapters = [
+            { id: 1, title: '入门介绍与环境搭建', icon: '🚀' },
+            { id: 2, title: '基本语法', icon: '📝' },
+            { id: 3, title: '数据类型', icon: '📊' },
+            { id: 4, title: '流程控制', icon: '🔀' },
+            { id: 5, title: '集合类型', icon: '📋' },
+            { id: 6, title: '函数', icon: '⚙️' },
+            { id: 7, title: '闭包', icon: '🔗' },
+            { id: 8, title: '面向对象', icon: '🏠' },
+            { id: 9, title: '错误处理', icon: '⚠️' },
+            { id: 10, title: '综合实战', icon: '🎯' }
+        ];
+
+        const correctAnswers = {
+            1: { 1: 'apple', 2: 'print("Hello Swift")' },
+            2: { 1: 'b', 2: 'print("\\(name)"' },
+            3: { 1: 'b', 2: 'String(100)' },
+            4: { 1: 'for i in 1...10', 2: 'default' },
+            5: { 1: 'd', 2: 'var student: [String: Any]' },
+            6: { 1: 'func multiply(_ a: Int', 2: 'numbers.map { $0 * 2 }' },
+            7: { 1: 'let max = { $0 > $1', 2: '当闭包是函数的最后一个参数时' },
+            8: { 1: 'class Dog {', 2: 'super.init' },
+            9: { 1: 'enum FileError: Error {', 2: 'c' },
+            10: { 1: 'func getTotalCount()', 2: 'func searchByTitle' }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initChapterList();
+            loadProgress();
+            loadNotes();
+            loadBookmarks();
+            loadTheme();
+            KeyboardShortcuts.init();
+        });
+
+        function initChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map(ch => `
+                <li class="chapter-item" onclick="goToChapter(${ch.id})" id="chapterItem${ch.id}">
+                    <span><span class="chapter-icon">${ch.icon}</span> ${ch.title}</span>
+                    <span class="chapter-status" id="status${ch.id}"></span>
+                </li>
+            `).join('');
+        }
+
+        function goToChapter(chapter) {
+            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`ch${chapter}`).classList.add('active');
+            document.getElementById(`chapterItem${chapter}`).classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToHub() {
+            window.location.href = 'tutorial-hub.html';
+        }
+
+        function markCompleted(chapter) {
+            const stats = LearningStats.get();
+            const key = `${LANGUAGE}_${chapter}`;
+            
+            if (!stats.chaptersCompleted.includes(key)) {
+                LearningStats.recordChapterCompletion(LANGUAGE, chapter);
+            }
+            
+            const btn = document.getElementById(`completeBtn${chapter}`);
+            btn.classList.add('completed');
+            btn.textContent = '✓ 已完成';
+            btn.disabled = true;
+            
+            document.getElementById(`chapterItem${chapter}`).classList.add('completed');
+            document.getElementById(`status${chapter}`).textContent = '✓';
+            
+            updateProgress();
+            updateStats();
+        }
+
+        function loadProgress() {
+            const stats = LearningStats.get();
+            const completedChapters = stats.languagesProgress[LANGUAGE] || [];
+            
+            completedChapters.forEach(chapter => {
+                const num = parseInt(chapter);
+                if (num > 0) {
+                    document.getElementById(`chapterItem${num}`)?.classList.add('completed');
+                    document.getElementById(`status${num}`)?.textContent = '✓';
+                    
+                    const btn = document.getElementById(`completeBtn${num}`);
+                    if (btn) {
+                        btn.classList.add('completed');
+                        btn.textContent = '✓ 已完成';
+                        btn.disabled = true;
+                    }
+                }
+            });
+            
+            updateProgress();
+            updateStats();
+        }
+
+        function updateProgress() {
+            const stats = LearningStats.get();
+            const completed = stats.languagesProgress[LANGUAGE]?.length || 0;
+            const percentage = Math.round((completed / TOTAL_CHAPTERS) * 100);
+            
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressPercent').textContent = `${percentage}%`;
+        }
+
+        function updateStats() {
+            const bookmarks = BookmarkManager.getAll();
+            const languageBookmarks = bookmarks.filter(b => b.language === LANGUAGE);
+            document.getElementById('bookmarkCount').textContent = languageBookmarks.length;
+        }
+
+        function toggleBookmark(chapter) {
+            const btn = document.getElementById(`bookmarkBtn${chapter}`);
+            const isBookmarked = btn.classList.contains('bookmarked');
+            
+            if (isBookmarked) {
+                btn.classList.remove('bookmarked');
+                btn.textContent = '📌';
+            } else {
+                btn.classList.add('bookmarked');
+                btn.textContent = '⭐';
+                BookmarkManager.save(LANGUAGE, chapter);
+            }
+        }
+
+        function loadBookmarks() {
+            const bookmarks = BookmarkManager.getAll();
+            bookmarks.forEach(b => {
+                if (b.language === LANGUAGE) {
+                    const btn = document.getElementById(`bookmarkBtn${b.chapter}`);
+                    if (btn) {
+                        btn.classList.add('bookmarked');
+                        btn.textContent = '⭐';
+                    }
+                }
+            });
+        }
+
+        function saveNote(chapter) {
+            const textarea = document.getElementById(`ch${chapter}-note`);
+            const note = textarea.value;
+            
+            localStorage.setItem(`${LANGUAGE}_note_${chapter}`, note);
+            SnippetManager.showToast('笔记已保存');
+        }
+
+        function loadNotes() {
+            chapters.forEach(ch => {
+                const note = localStorage.getItem(`${LANGUAGE}_note_${ch.id}`);
+                if (note) {
+                    document.getElementById(`ch${ch.id}-note`).value = note;
+                }
+            });
+        }
+
+        function checkAnswer(chapter, question) {
+            const answer = getAnswer(chapter, question);
+            const correct = correctAnswers[chapter][question];
+            
+            if (!answer || !correct) return;
+            
+            const resultDiv = document.getElementById(`ch${chapter}-result${question}`);
+            
+            if (answer.toLowerCase().includes(correct.toLowerCase())) {
+                resultDiv.innerHTML = '✅ 正确！';
+                resultDiv.classList.add('correct');
+                resultDiv.classList.remove('incorrect');
+            } else {
+                resultDiv.innerHTML = '❌ 错误，请重试';
+                resultDiv.classList.add('incorrect');
+                resultDiv.classList.remove('correct');
+            }
+        }
+
+        function getAnswer(chapter, question) {
+            const radioName = `ch${chapter}-q${question}`;
+            const radio = document.querySelector(`input[name="${radioName}"]:checked`);
+            if (radio) return radio.value;
+            
+            const input = document.getElementById(`ch${chapter}-q${question}`);
+            if (input) return input.value;
+            
+            return null;
+        }
+
+        function toggleAnswer(chapter, question) {
+            const answerBox = document.getElementById(`ch${chapter}-answer${question}`);
+            answerBox.classList.toggle('show');
+        }
+
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                SnippetManager.showToast('代码已复制到剪贴板');
+            });
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('tutorial_theme', newTheme);
+            
+            const themeText = document.getElementById('themeText');
+            themeText.textContent = newTheme === 'dark' ? '浅色模式' : '深色模式';
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('tutorial_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            const themeText = document.getElementById('themeText');
+            themeText.textContent = savedTheme === 'dark' ? '浅色模式' : '深色模式';
+        }
+
+        function searchTutorial() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            chapters.forEach(ch => {
+                const section = document.getElementById(`ch${ch.id}`);
+                const content = section.textContent.toLowerCase();
+                
+                if (content.includes(query)) {
+                    section.style.display = 'block';
+                } else {
+                    section.style.display = query ? 'none' : 'none';
+                }
+            });
+            
+            if (!query) {
+                document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+                document.getElementById('ch1').classList.add('active');
+                goToChapter(1);
+            }
+        }
+
+        function showStats() {
+            const stats = LearningStats.get();
+            const hours = Math.floor(stats.totalStudyTime / 3600);
+            const minutes = Math.floor((stats.totalStudyTime % 3600) / 60);
+            
+            alert(`学习统计:\n\n总学习时间: ${hours}小时 ${minutes}分钟\n完成章节: ${stats.chaptersCompleted.length}\n连续学习: ${stats.dailyStreak}天\n成就: ${stats.achievements.length}`);
+        }
+    </script>
+</body>
+</html>

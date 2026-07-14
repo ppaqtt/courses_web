@@ -1,0 +1,1742 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHP教程 - 编程语言学习平台</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a68;
+            --text-muted: #8a8a9a;
+            --accent-color: #777bb4;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-color: #9399ff;
+            --success-color: #34d399;
+            --error-color: #f87171;
+            --warning-color: #fbbf24;
+            --border-color: #3f3f5a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #777bb4, #5a67d8);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .progress-bar {
+            margin-top: 20px;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chapter-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .chapter-item.completed::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .chapter-item.active.completed::before {
+            color: white;
+        }
+
+        .chapter-number {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .chapter-title {
+            font-size: 0.95rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        .theme-toggle, .note-toggle {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover, .note-toggle:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .content-area {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .chapter-header h2 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn.favorite {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .action-btn.favorite.active {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .action-btn.complete {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .action-btn.complete:hover {
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section h3 {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section p {
+            margin: 0 0 10px 0;
+            color: var(--text-secondary);
+        }
+
+        .section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block.light {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block.light pre {
+            color: var(--text-primary);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #8a8a9a;
+            font-size: 0.85rem;
+        }
+
+        .code-lang {
+            background: rgba(255,255,255,0.1);
+            padding: 3px 10px;
+            border-radius: 5px;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #8a8a9a;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .error-example {
+            border-left: 4px solid var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .error-example .error-title {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .quiz-section {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .quiz-section h4 {
+            margin: 0 0 20px 0;
+            font-size: 1.2rem;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-question p {
+            font-weight: 600;
+            margin: 0 0 15px 0;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 12px 15px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-color);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(119, 123, 180, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .quiz-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .quiz-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .quiz-btn:hover {
+            opacity: 0.9;
+        }
+
+        .answer-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid var(--success-color);
+            display: none;
+        }
+
+        .answer-section.show {
+            display: block;
+        }
+
+        .answer-section h5 {
+            margin: 0 0 10px 0;
+            color: var(--success-color);
+        }
+
+        .notes-panel {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            margin-top: 30px;
+        }
+
+        .notes-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .notes-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(119, 123, 180, 0.1), rgba(90, 103, 216, 0.1));
+            border: 1px solid rgba(119, 123, 180, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-color);
+        }
+
+        .tips-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .tips-box .tips-icon {
+            color: var(--warning-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .search-results {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: rgba(119, 123, 180, 0.1);
+        }
+
+        .search-result-item .result-title {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .search-result-item .result-chapter {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .chapter-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1>📚 PHP教程</h1>
+                    <p>从零开始学习PHP，掌握服务器端开发核心技能</p>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                        🌙 深色模式
+                    </button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">已完成 0/10 章节</div>
+        </div>
+
+        <div class="main-layout">
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜索教程内容..." oninput="handleSearch()">
+                    <h3>📖 章节列表</h3>
+                    <ul class="chapter-list" id="chapterList"></ul>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3>🎯 学习进度</h3>
+                    <div id="sidebarProgress"></div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div id="chapterContent"></div>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn secondary" id="prevBtn" onclick="navigateChapter(-1)">
+                        ⬅️ 上一章
+                    </button>
+                    <button class="nav-btn" id="nextBtn" onclick="navigateChapter(1)">
+                        下一章 ➡️
+                    </button>
+                </div>
+
+                <div class="notes-panel" id="notesPanel">
+                    <h3>📝 我的笔记</h3>
+                    <textarea class="notes-textarea" id="notesTextarea" placeholder="在这里记录你的学习笔记..."></textarea>
+                    <div class="notes-actions">
+                        <button class="action-btn complete" onclick="saveNotes()">💾 保存笔记</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const STORAGE_KEY = 'php_tutorial_progress';
+        const FAVORITES_KEY = 'php_tutorial_favorites';
+        const NOTES_KEY = 'php_tutorial_notes';
+        
+        let currentChapter = 0;
+        
+        const chapters = [
+            {
+                id: 1,
+                title: '入门介绍与环境搭建',
+                icon: '🚀',
+                completed: false,
+                content: {
+                    intro: '<p>PHP是一种服务器端脚本语言，主要用于Web开发。PHP代码在服务器上执行，生成HTML发送到客户端浏览器。</p><p>PHP支持多种数据库，易于学习，是Web开发中最流行的语言之一。</p>',
+                    points: [
+                        'PHP是开源的服务器端脚本语言',
+                        'PHP代码嵌入在HTML中，以<?php开始，?>结束',
+                        'PHP文件扩展名为.php',
+                        'PHP支持多种数据库：MySQL、PostgreSQL、SQLite等',
+                        'PHP可以生成动态网页内容、处理表单数据、管理会话等'
+                    ],
+                    codeExample: `<?php
+// 第一个PHP程序
+echo "Hello, World!";
+
+// 在HTML中嵌入PHP
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PHP入门</title>
+</head>
+<body>
+    <h1><?php echo "欢迎学习PHP！"; ?></h1>
+    <p>当前时间：<?php echo date("Y-m-d H:i:s"); ?></p>
+</body>
+</html>`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：缺少结束标签
+echo "Hello, World!";
+// 这里缺少 ?> 结束标签`,
+                        message: '虽然PHP文件末尾可以省略?>结束标签，但在某些情况下会导致问题。建议在HTML文件中正确使用结束标签。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: 'PHP代码在哪里执行？',
+                        options: ['客户端浏览器', '服务器端', '数据库', '操作系统'],
+                        answer: 1
+                    },
+                    answer: '正确答案：服务器端。PHP是服务器端脚本语言，代码在Web服务器上执行，执行结果以HTML形式发送到浏览器。'
+                }
+            },
+            {
+                id: 2,
+                title: '基本语法',
+                icon: '📝',
+                completed: false,
+                content: {
+                    intro: '<p>PHP的基本语法包括变量、数据类型、运算符和注释。理解这些基础知识是学习PHP的第一步。</p>',
+                    points: [
+                        '变量以$符号开头，如$name',
+                        'PHP是弱类型语言，变量类型根据值自动确定',
+                        '支持的数据类型：字符串、整数、浮点数、布尔值、数组、对象、NULL',
+                        '注释：单行用//或#，多行用/* */',
+                        '语句以分号结尾'
+                    ],
+                    codeExample: `<?php
+// 变量声明
+$name = "张三";
+$age = 25;
+$height = 1.75;
+$isStudent = true;
+
+// 输出变量
+echo "姓名：$name<br>";
+echo "年龄：{$age}岁<br>";
+echo "身高：$height米<br>";
+
+// 变量类型
+$var1 = 100;      // 整数
+$var2 = "100";    // 字符串
+$sum = $var1 + $var2; // PHP会自动转换类型，结果为200
+
+// 常量定义
+define("PI", 3.14159);
+echo "圆周率：" . PI;`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：变量名错误
+$name = "张三";
+echo $Name; // 注意大小写，PHP变量名区分大小写
+
+// 错误示例：未定义变量
+echo $age; // Notice: Undefined variable: age`,
+                        message: 'PHP变量名区分大小写，$name和$Name是不同的变量。使用未定义的变量会产生Notice警告。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: 'PHP变量名以什么符号开头？',
+                        answer: '$'
+                    },
+                    answer: '正确答案：$。PHP变量必须以$符号开头，后面跟变量名，如$name、$age等。'
+                }
+            },
+            {
+                id: 3,
+                title: '流程控制',
+                icon: '🔀',
+                completed: false,
+                content: {
+                    intro: '<p>流程控制语句用于控制代码的执行顺序，包括条件语句和循环语句。</p>',
+                    points: [
+                        'if-else：条件判断',
+                        'switch：多条件分支',
+                        'for：循环执行',
+                        'while：条件循环',
+                        'do-while：至少执行一次的循环',
+                        'break/continue：控制循环流程'
+                    ],
+                    codeExample: `<?php
+// if-else语句
+$score = 85;
+if ($score >= 90) {
+    echo "优秀";
+} elseif ($score >= 60) {
+    echo "及格";
+} else {
+    echo "不及格";
+}
+
+// switch语句
+$day = date("w");
+switch ($day) {
+    case 0:
+        echo "星期日";
+        break;
+    case 1:
+        echo "星期一";
+        break;
+    default:
+        echo "其他";
+}
+
+// for循环
+for ($i = 1; $i <= 5; $i++) {
+    echo "数字: $i<br>";
+}
+
+// while循环
+$count = 0;
+while ($count < 3) {
+    echo "计数: $count<br>";
+    $count++;
+}`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：switch缺少break
+$num = 2;
+switch ($num) {
+    case 1:
+        echo "一";
+    case 2:
+        echo "二";
+    case 3:
+        echo "三";
+}
+// 输出：二三`,
+                        message: 'switch语句中每个case结束后需要使用break，否则会继续执行下一个case。上述代码会输出"二三"而不是"二"。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: '以下哪个循环至少执行一次？',
+                        options: ['for', 'while', 'do-while', 'foreach'],
+                        answer: 2
+                    },
+                    answer: '正确答案：do-while。do-while循环先执行循环体，再判断条件，所以至少执行一次。'
+                }
+            },
+            {
+                id: 4,
+                title: '函数',
+                icon: '🔧',
+                completed: false,
+                content: {
+                    intro: '<p>函数是可重用的代码块，用于执行特定任务。PHP提供了大量内置函数，也可以自定义函数。</p>',
+                    points: [
+                        '使用function关键字定义函数',
+                        '函数可以接受参数，也可以返回值',
+                        '参数可以设置默认值',
+                        '支持可变数量参数',
+                        '可以通过引用传递参数',
+                        '递归函数：函数调用自身'
+                    ],
+                    codeExample: `<?php
+// 定义函数
+function greet($name) {
+    return "你好，$name！";
+}
+
+// 调用函数
+echo greet("张三");
+
+// 带默认参数的函数
+function introduce($name, $age = 18) {
+    echo "$name今年$age岁";
+}
+introduce("李四");        // 使用默认值18
+introduce("王五", 25);    // 使用指定值25
+
+// 返回值的函数
+function add($a, $b) {
+    return $a + $b;
+}
+$result = add(10, 20);
+echo "结果：$result";
+
+// 引用传递
+function increment(&$num) {
+    $num++;
+}
+$count = 5;
+increment($count);
+echo $count; // 输出6`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：重复定义函数
+function sayHello() {
+    echo "Hello";
+}
+
+function sayHello() { // Fatal error: Cannot redeclare sayHello()
+    echo "Hi";
+}
+
+// 错误示例：函数名错误
+function myFunction() {
+    echo "Hello";
+}
+myfunction(); // 注意大小写`,
+                        message: 'PHP不允许重复定义同名函数。函数名区分大小写，myFunction和myfunction是不同的函数。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: 'PHP中定义函数使用什么关键字？',
+                        answer: 'function'
+                    },
+                    answer: '正确答案：function。使用function关键字定义函数，语法：function 函数名(参数) { ... }'
+                }
+            },
+            {
+                id: 5,
+                title: '数组',
+                icon: '📦',
+                completed: false,
+                content: {
+                    intro: '<p>数组是存储多个值的有序集合。PHP支持索引数组、关联数组和多维数组。</p>',
+                    points: [
+                        '索引数组：使用数字索引',
+                        '关联数组：使用字符串键名',
+                        '多维数组：数组包含数组',
+                        '常用数组函数：count()、array_push()、array_pop()、foreach等',
+                        '可以使用list()解构数组',
+                        '数组可以使用[]或array()创建'
+                    ],
+                    codeExample: `<?php
+// 索引数组
+$fruits = array("苹果", "香蕉", "橙子");
+$fruits = ["苹果", "香蕉", "橙子"]; // 简写形式
+
+echo $fruits[0]; // 苹果
+echo count($fruits); // 3
+
+// 关联数组
+$person = [
+    "name" => "张三",
+    "age" => 25,
+    "city" => "北京"
+];
+echo $person["name"]; // 张三
+
+// 多维数组
+$students = [
+    ["name" => "张三", "score" => 90],
+    ["name" => "李四", "score" => 85],
+    ["name" => "王五", "score" => 95]
+];
+echo $students[1]["name"]; // 李四
+
+// 遍历数组
+foreach ($fruits as $fruit) {
+    echo "$fruit<br>";
+}
+
+foreach ($person as $key => $value) {
+    echo "$key: $value<br>";
+}`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：访问不存在的索引
+$fruits = ["苹果", "香蕉"];
+echo $fruits[5]; // 注意：PHP不会报错，返回NULL
+
+// 错误示例：使用错误的键名
+$person = ["name" => "张三"];
+echo $person["Name"]; // 关联数组键名区分大小写`,
+                        message: '访问不存在的数组索引PHP不会报错，但会返回NULL并产生Notice。关联数组的键名区分大小写。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: '以下哪种方式可以创建数组？',
+                        options: ['array()', '[]', 'Array()', '以上都可以'],
+                        answer: 3
+                    },
+                    answer: '正确答案：以上都可以。PHP支持array()和[]两种语法创建数组，Array()是array()的别名。'
+                }
+            },
+            {
+                id: 6,
+                title: '面向对象',
+                icon: '🏗️',
+                completed: false,
+                content: {
+                    intro: '<p>面向对象编程(OOP)是一种编程范式，使用类和对象来组织代码。PHP完全支持面向对象编程。</p>',
+                    points: [
+                        '类(class)：定义对象的模板',
+                        '对象(object)：类的实例',
+                        '属性(property)：对象的数据',
+                        '方法(method)：对象的行为',
+                        '构造函数(__construct)：初始化对象',
+                        '访问修饰符：public、private、protected',
+                        '继承：使用extends关键字',
+                        '多态：方法重写和接口'
+                    ],
+                    codeExample: `<?php
+// 定义类
+class Person {
+    // 属性
+    private $name;
+    private $age;
+    
+    // 构造函数
+    public function __construct($name, $age) {
+        $this->name = $name;
+        $this->age = $age;
+    }
+    
+    // 方法
+    public function introduce() {
+        return "我叫{$this->name}，今年{$this->age}岁";
+    }
+    
+    // getter方法
+    public function getName() {
+        return $this->name;
+    }
+}
+
+// 创建对象
+$person = new Person("张三", 25);
+echo $person->introduce();
+
+// 继承
+class Student extends Person {
+    private $school;
+    
+    public function __construct($name, $age, $school) {
+        parent::__construct($name, $age);
+        $this->school = $school;
+    }
+    
+    public function study() {
+        return "{$this->getName()}在{$this->school}学习";
+    }
+}
+
+$student = new Student("李四", 20, "北京大学");
+echo $student->study();`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：访问私有属性
+class Person {
+    private $name = "张三";
+}
+
+$p = new Person();
+echo $p->name; // Fatal error: Cannot access private property
+
+// 错误示例：忘记调用父类构造函数
+class Student extends Person {
+    public function __construct() {
+        // 应该调用 parent::__construct()
+    }
+}`,
+                        message: '私有属性(private)只能在类内部访问，外部访问会报错。子类构造函数中需要调用parent::__construct()来初始化父类。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: 'PHP中构造函数的名称是什么？',
+                        answer: '__construct'
+                    },
+                    answer: '正确答案：__construct。PHP使用__construct()作为构造函数方法名。'
+                }
+            },
+            {
+                id: 7,
+                title: '表单处理',
+                icon: '📋',
+                completed: false,
+                content: {
+                    intro: '<p>表单处理是Web开发的核心功能之一。PHP可以接收和处理HTML表单提交的数据。</p>',
+                    points: [
+                        '使用$_POST接收POST方法提交的数据',
+                        '使用$_GET接收GET方法提交的数据',
+                        '使用$_REQUEST同时接收POST和GET数据',
+                        '表单验证：检查数据是否有效',
+                        '防止SQL注入和XSS攻击',
+                        '文件上传：使用$_FILES'
+                    ],
+                    codeExample: `<!-- HTML表单 -->
+<form method="post" action="process.php">
+    <input type="text" name="username" placeholder="用户名">
+    <input type="password" name="password" placeholder="密码">
+    <input type="submit" value="登录">
+</form>
+
+<?php
+// process.php - 处理表单数据
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // 获取表单数据
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    
+    // 数据验证
+    if (empty($username)) {
+        echo "用户名不能为空";
+    } elseif (empty($password)) {
+        echo "密码不能为空";
+    } else {
+        // 安全处理
+        $username = htmlspecialchars($username);
+        echo "欢迎，$username";
+    }
+}
+
+// 文件上传处理
+if (isset($_FILES["file"])) {
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($_FILES["file"]["name"]);
+    
+    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+        echo "文件上传成功";
+    } else {
+        echo "文件上传失败";
+    }
+}`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：直接使用用户输入（安全风险）
+$username = $_POST["username"];
+echo "欢迎，$username"; // 可能存在XSS攻击
+
+// 错误示例：未检查数据是否存在
+echo $_POST["username"]; // 如果username字段不存在会报错`,
+                        message: '直接输出用户输入可能导致XSS攻击，应该使用htmlspecialchars()转义。访问未定义的数组元素会产生Notice错误，应该先使用isset()检查。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: '接收POST表单数据使用哪个超全局变量？',
+                        options: ['$_GET', '$_POST', '$_REQUEST', '$_SESSION'],
+                        answer: 1
+                    },
+                    answer: '正确答案：$_POST。使用$_POST接收POST方法提交的表单数据，$_GET接收GET方法的数据。'
+                }
+            },
+            {
+                id: 8,
+                title: '数据库操作(MySQL)',
+                icon: '🗄️',
+                completed: false,
+                content: {
+                    intro: '<p>PHP与MySQL数据库的结合是Web开发中最常见的组合。PHP提供了多种方式连接和操作MySQL数据库。</p>',
+                    points: [
+                        '使用PDO或MySQLi连接数据库',
+                        'PDO支持多种数据库，推荐使用',
+                        '预处理语句防止SQL注入',
+                        'CRUD操作：增删改查',
+                        '事务处理保证数据一致性',
+                        '错误处理和异常捕获'
+                    ],
+                    codeExample: `<?php
+// 使用PDO连接MySQL数据库
+$host = "localhost";
+$dbname = "mydatabase";
+$username = "root";
+$password = "password";
+
+try {
+    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", 
+                   $username, $password);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // 查询数据
+    $stmt = $pdo->query("SELECT * FROM users");
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "{$row['name']} - {$row['email']}<br>";
+    }
+    
+    // 插入数据（使用预处理语句）
+    $stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
+    $stmt->execute(['name' => '张三', 'email' => 'zhangsan@example.com']);
+    
+    // 更新数据
+    $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = :id");
+    $stmt->execute(['email' => 'new@example.com', 'id' => 1]);
+    
+    // 删除数据
+    $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+    $stmt->execute(['id' => 1]);
+    
+} catch(PDOException $e) {
+    die("数据库连接失败: " . $e->getMessage());
+}`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：SQL注入风险
+$username = $_POST["username"];
+$query = "SELECT * FROM users WHERE username = '$username'";
+$result = $pdo->query($query); // 如果username是 ' OR 1=1 -- 会返回所有数据
+
+// 错误示例：未设置错误模式
+$pdo = new PDO($dsn, $user, $pass);
+// 默认情况下PDO不会抛出异常，需要设置ATTR_ERRMODE`,
+                        message: '直接拼接SQL语句会导致SQL注入攻击，应该使用预处理语句。PDO默认不抛出异常，需要设置ERRMODE_EXCEPTION来捕获错误。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: 'PHP中推荐使用什么扩展连接MySQL数据库？',
+                        answer: 'PDO'
+                    },
+                    answer: '正确答案：PDO。PDO(PHP Data Objects)是PHP的数据库抽象层，支持多种数据库，推荐在新项目中使用。'
+                }
+            },
+            {
+                id: 9,
+                title: '会话管理',
+                icon: '🔑',
+                completed: false,
+                content: {
+                    intro: '<p>会话管理用于在多个页面之间保持用户状态。PHP提供了内置的会话管理功能。</p>',
+                    points: [
+                        '使用session_start()启动会话',
+                        '使用$_SESSION存储会话数据',
+                        '会话数据存储在服务器端',
+                        'session_id()获取会话ID',
+                        'session_destroy()销毁会话',
+                        'cookie和session的区别',
+                        '会话安全：使用HTTPS、设置cookie属性'
+                    ],
+                    codeExample: `<?php
+// page1.php - 启动会话并存储数据
+session_start();
+
+// 存储会话数据
+$_SESSION["username"] = "张三";
+$_SESSION["login_time"] = time();
+
+echo "会话已创建";
+echo "<a href='page2.php'>跳转到页面2</a>";
+
+<?php
+// page2.php - 访问会话数据
+session_start();
+
+// 检查会话是否存在
+if (isset($_SESSION["username"])) {
+    echo "欢迎回来，" . $_SESSION["username"];
+    echo "<br>登录时间：" . date("Y-m-d H:i:s", $_SESSION["login_time"]);
+} else {
+    echo "请先登录";
+}
+
+// 修改会话数据
+$_SESSION["page_views"] = ($_SESSION["page_views"] ?? 0) + 1;
+echo "<br>页面访问次数：" . $_SESSION["page_views"];
+
+// 销毁会话
+session_destroy();`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：在输出之后启动会话
+echo "Hello";
+session_start(); // Warning: Cannot modify header information
+
+// 错误示例：未启动会话就使用$_SESSION
+$_SESSION["name"] = "张三"; // Notice: Undefined variable`,
+                        message: 'session_start()必须在任何输出之前调用，因为它需要发送HTTP头。使用$_SESSION之前必须先调用session_start()。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: 'PHP中使用哪个超全局变量存储会话数据？',
+                        options: ['$_POST', '$_GET', '$_SESSION', '$_COOKIE'],
+                        answer: 2
+                    },
+                    answer: '正确答案：$_SESSION。使用$_SESSION超全局数组存储和访问会话数据，数据存储在服务器端。'
+                }
+            },
+            {
+                id: 10,
+                title: '综合实战',
+                icon: '🎯',
+                completed: false,
+                content: {
+                    intro: '<p>现在我们将所学知识综合运用，创建一个简单的用户登录系统。这个项目包含用户注册、登录、会话管理和数据库操作。</p>',
+                    points: [
+                        '创建数据库表存储用户信息',
+                        '用户注册功能（表单验证、数据插入）',
+                        '用户登录功能（身份验证、会话管理）',
+                        '用户注销功能',
+                        '保护受限制页面',
+                        '密码安全存储（使用password_hash）'
+                    ],
+                    codeExample: `<?php
+// 1. 创建数据库表
+/*
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+*/
+
+// 2. 用户注册处理
+function register($username, $email, $password) {
+    global $pdo;
+    
+    // 验证数据
+    if (empty($username) || empty($email) || empty($password)) {
+        return "请填写所有字段";
+    }
+    
+    // 检查用户名是否已存在
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    if ($stmt->rowCount() > 0) {
+        return "用户名已存在";
+    }
+    
+    // 哈希密码
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    
+    // 插入用户
+    $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
+    $stmt->execute([$username, $email, $hashedPassword]);
+    
+    return "注册成功";
+}
+
+// 3. 用户登录处理
+function login($username, $password) {
+    global $pdo;
+    
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$username]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($user && password_verify($password, $user["password"])) {
+        session_start();
+        $_SESSION["user_id"] = $user["id"];
+        $_SESSION["username"] = $user["username"];
+        return true;
+    }
+    
+    return false;
+}
+
+// 4. 保护页面
+function requireLogin() {
+    session_start();
+    if (!isset($_SESSION["user_id"])) {
+        header("Location: login.php");
+        exit();
+    }
+}`,
+                    errorExample: {
+                        code: `<?php
+// 错误示例：明文存储密码
+$password = $_POST["password"];
+$stmt = $pdo->prepare("INSERT INTO users (password) VALUES (?)");
+$stmt->execute([$password]); // 不安全！
+
+// 错误示例：直接比较密码
+if ($user["password"] == $_POST["password"]) { // 应该使用password_verify()
+    // 登录成功
+}`,
+                        message: '永远不要明文存储密码，应该使用password_hash()哈希后存储。验证密码时使用password_verify()而不是直接比较。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: 'PHP中安全存储密码使用什么函数？',
+                        answer: 'password_hash'
+                    },
+                    answer: '正确答案：password_hash()。使用password_hash()对密码进行哈希处理，使用password_verify()验证密码。'
+                }
+            }
+        ];
+
+        function loadProgress() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                const saved = JSON.parse(stored);
+                saved.forEach(s => {
+                    const chapter = chapters.find(ch => ch.id === s.id);
+                    if (chapter) {
+                        chapter.completed = s.completed;
+                    }
+                });
+            }
+            
+            const savedChapter = localStorage.getItem('php_current_chapter');
+            if (savedChapter) {
+                currentChapter = parseInt(savedChapter);
+            }
+        }
+
+        function saveProgress() {
+            const progress = chapters.map(ch => ({
+                id: ch.id,
+                completed: ch.completed
+            }));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            localStorage.setItem('php_current_chapter', currentChapter);
+            updateProgressUI();
+        }
+
+        function updateProgressUI() {
+            const completedCount = chapters.filter(ch => ch.completed).length;
+            const percentage = (completedCount / chapters.length) * 100;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('progressText').textContent = `已完成 ${completedCount}/${chapters.length} 章节`;
+            
+            const sidebarProgress = document.getElementById('sidebarProgress');
+            sidebarProgress.innerHTML = `
+                <div style="height: 10px; background: var(--bg-secondary); border-radius: 5px; overflow: hidden; margin-bottom: 10px;">
+                    <div style="height: 100%; width: ${percentage}%; background: var(--accent-color); border-radius: 5px;"></div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-muted);">${completedCount}/${chapters.length} 章节</div>
+            `;
+        }
+
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map((ch, index) => `
+                <li class="chapter-item ${index === currentChapter ? 'active' : ''} ${ch.completed ? 'completed' : ''}" 
+                    onclick="goToChapter(${index})">
+                    <span class="chapter-number">${ch.id}.</span>
+                    <span class="chapter-title">${ch.icon} ${ch.title}</span>
+                </li>
+            `).join('');
+        }
+
+        function renderChapter() {
+            const chapter = chapters[currentChapter];
+            const content = document.getElementById('chapterContent');
+            const quizId = `quiz-${chapter.id}`;
+            
+            content.innerHTML = `
+                <div class="chapter-header">
+                    <div>
+                        <h2>${chapter.icon} 第${chapter.id}章：${chapter.title}</h2>
+                        <p style="color: var(--text-muted); margin-top: 5px;">PHP学习教程</p>
+                    </div>
+                    <div class="chapter-actions">
+                        <button class="action-btn favorite ${isFavorite(chapter.id) ? 'active' : ''}" 
+                                onclick="toggleFavorite(${chapter.id})">
+                            ${isFavorite(chapter.id) ? '❤️' : '🤍'} 收藏
+                        </button>
+                        <button class="action-btn complete" onclick="markChapterComplete()">
+                            ${chapter.completed ? '✅ 已完成' : '✓ 标记完成'}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>📖 知识点讲解</h3>
+                    ${chapter.content.intro}
+                    <div class="highlight-box">
+                        <strong>核心要点：</strong>
+                        <ul>
+                            ${chapter.content.points.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💻 代码示例</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">PHP</span>
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                        </div>
+                        <pre>${escapeHtml(chapter.content.codeExample)}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>❌ 错误示例</h3>
+                    <div class="error-example">
+                        <div class="error-title">常见错误</div>
+                        <div class="code-block light" style="margin: 10px 0;">
+                            <pre>${escapeHtml(chapter.content.errorExample.code)}</pre>
+                        </div>
+                        <p><strong>错误原因：</strong>${chapter.content.errorExample.message}</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <p>${chapter.content.quiz.question}</p>
+                            ${chapter.content.quiz.type === 'multiple' ? `
+                                <div class="quiz-options">
+                                    ${chapter.content.quiz.options.map((opt, idx) => `
+                                        <div class="quiz-option" onclick="selectOption(this, ${idx}, ${chapter.content.quiz.answer}, '${quizId}')">
+                                            ${String.fromCharCode(65 + idx)}. ${opt}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <input type="text" class="quiz-input" id="${quizId}-input" placeholder="输入你的答案...">
+                                <button class="quiz-btn" onclick="checkTextAnswer('${quizId}', '${chapter.content.quiz.answer}')">检查答案</button>
+                            `}
+                        </div>
+                        <div class="answer-section" id="${quizId}-answer">
+                            <h5>✓ 答案解析</h5>
+                            <p>${chapter.content.answer}</p>
+                        </div>
+                    </div>
+                </div>
+
+                ${chapter.id === 10 ? `
+                    <div class="section">
+                        <div class="tips-box">
+                            <span class="tips-icon">🎊</span>
+                            恭喜你完成了PHP教程的所有章节！现在你可以尝试创建自己的项目来巩固所学知识。
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            renderChapterList();
+            updateNavButtons();
+            updateProgressUI();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyCode(btn) {
+            const code = btn.closest('.code-block').querySelector('pre').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = '已复制';
+                setTimeout(() => btn.textContent = '复制', 2000);
+            });
+        }
+
+        function selectOption(el, selected, correct, quizId) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            el.classList.add('selected');
+            
+            if (selected === correct) {
+                el.classList.add('correct');
+                document.getElementById(`${quizId}-answer`).classList.add('show');
+            } else {
+                el.classList.add('incorrect');
+            }
+        }
+
+        function checkTextAnswer(quizId, correctAnswer) {
+            const input = document.getElementById(`${quizId}-input`);
+            const userAnswer = input.value.trim().toLowerCase();
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                input.style.borderColor = 'var(--success-color)';
+                document.getElementById(`${quizId}-answer`).classList.add('show');
+            } else {
+                input.style.borderColor = 'var(--error-color)';
+                input.value = '';
+                input.placeholder = '答案不正确，请重试...';
+            }
+        }
+
+        function goToChapter(index) {
+            if (index >= 0 && index < chapters.length) {
+                currentChapter = index;
+                renderChapter();
+                document.getElementById('searchResults').classList.remove('show');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function navigateChapter(direction) {
+            goToChapter(currentChapter + direction);
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentChapter === 0;
+            document.getElementById('nextBtn').disabled = currentChapter === chapters.length - 1;
+        }
+
+        function markChapterComplete() {
+            chapters[currentChapter].completed = !chapters[currentChapter].completed;
+            saveProgress();
+            renderChapter();
+            
+            LearningStats.recordChapterCompletion('php', currentChapter + 1);
+        }
+
+        function isFavorite(chapterId) {
+            const favorites = localStorage.getItem(FAVORITES_KEY);
+            if (!favorites) return false;
+            return JSON.parse(favorites).includes(chapterId);
+        }
+
+        function toggleFavorite(chapterId) {
+            let favorites = localStorage.getItem(FAVORITES_KEY);
+            favorites = favorites ? JSON.parse(favorites) : [];
+            
+            const index = favorites.indexOf(chapterId);
+            if (index === -1) {
+                favorites.push(chapterId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+            renderChapter();
+        }
+
+        function loadNotes() {
+            const notes = localStorage.getItem(NOTES_KEY);
+            if (notes) {
+                document.getElementById('notesTextarea').value = notes;
+            }
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notesTextarea').value;
+            localStorage.setItem(NOTES_KEY, notes);
+            
+            const btn = document.querySelector('.notes-actions button');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ 已保存';
+            setTimeout(() => btn.textContent = originalText, 2000);
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('tutorial_theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeButton(savedTheme);
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('tutorial_theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            btn.textContent = theme === 'dark' ? '☀️ 浅色模式' : '🌙 深色模式';
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (!query) {
+                resultsContainer.classList.remove('show');
+                return;
+            }
+
+            const results = [];
+            chapters.forEach((chapter, chapterIndex) => {
+                const content = JSON.stringify(chapter.content).toLowerCase();
+                if (chapter.title.toLowerCase().includes(query) || content.includes(query)) {
+                    results.push({
+                        chapterIndex,
+                        title: chapter.title,
+                        snippet: getSearchSnippet(chapter, query)
+                    });
+                }
+            });
+
+            if (results.length > 0) {
+                resultsContainer.innerHTML = `
+                    <h3 style="margin-bottom: 15px;">🔍 搜索结果 (${results.length})</h3>
+                    ${results.map(r => `
+                        <div class="search-result-item" onclick="goToChapter(${r.chapterIndex})">
+                            <div class="result-title">第${r.chapterIndex + 1}章：${r.title}</div>
+                            ${r.snippet ? `<div class="result-chapter">${r.snippet}</div>` : ''}
+                        </div>
+                    `).join('')}
+                `;
+                resultsContainer.classList.add('show');
+            } else {
+                resultsContainer.innerHTML = '<p style="color: var(--text-muted);">未找到相关内容</p>';
+                resultsContainer.classList.add('show');
+            }
+        }
+
+        function getSearchSnippet(chapter, query) {
+            const text = chapter.content.intro + ' ' + chapter.content.points.join(' ');
+            const index = text.toLowerCase().indexOf(query);
+            if (index !== -1) {
+                const start = Math.max(0, index - 30);
+                const end = Math.min(text.length, index + query.length + 30);
+                return '...' + text.substring(start, end) + '...';
+            }
+            return null;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            renderChapter();
+            loadNotes();
+            initTheme();
+        });
+    </script>
+</body>
+</html>
