@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="tutorial-style.css">
     <link rel="stylesheet" href="tutorial-features.css">
     <link rel="stylesheet" href="tutorial-extensions.css">
+    <link rel="stylesheet" href="tutorial-advanced.css">
     <style>
         .hub-header {
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -304,6 +305,27 @@
             <button class="hub-tab" onclick="showTab('mastery')">🧠 知识点分析</button>
             <button class="hub-tab" onclick="showTab('shortcuts')">⌨️ 快捷键</button>
             <button class="hub-tab" onclick="showTab('themes')">🎨 主题</button>
+            <button class="hub-tab" onclick="showTab('reviewWorkflow')">🔍 审查流程</button>
+            <button class="hub-tab" onclick="showTab('replay')">🎬 代码回放</button>
+            <button class="hub-tab" onclick="showTab('completion')">💡 智能提示</button>
+            <button class="hub-tab" onclick="showTab('visualizer')">📊 代码可视化</button>
+            <button class="hub-tab" onclick="showTab('interactiveQuiz')">📝 交互式测验</button>
+            <button class="hub-tab" onclick="showTab('gamification')">🎮 游戏化</button>
+            <button class="hub-tab" onclick="showTab('heatmap')">🗓️ 热力图</button>
+            <button class="hub-tab" onclick="showTab('knowledgeGraph')">🔗 知识关联</button>
+            <button class="hub-tab" onclick="showTab('efficiency')">⏱️ 效率分析</button>
+            <button class="hub-tab" onclick="showTab('wrongBook')">📕 错题本</button>
+            <button class="hub-tab" onclick="showTab('git')">🔀 Git</button>
+            <button class="hub-tab" onclick="showTab('database')">🗄️ 数据库</button>
+            <button class="hub-tab" onclick="showTab('apiTester')">🔗 API测试</button>
+            <button class="hub-tab" onclick="showTab('quality')">✅ 质量检查</button>
+            <button class="hub-tab" onclick="showTab('coverage')">📊 覆盖率</button>
+            <button class="hub-tab" onclick="showTab('adaptive')">🧠 自适应</button>
+            <button class="hub-tab" onclick="showTab('report')">📋 学习报告</button>
+            <button class="hub-tab" onclick="showTab('certification')">🏅 认证</button>
+            <button class="hub-tab" onclick="showTab('career')">💼 职业规划</button>
+            <button class="hub-tab" onclick="showTab('export')">📤 数据导出</button>
+            <button class="hub-tab" onclick="showTab('mobile')">📱 移动端</button>
         </div>
         
         <!-- 概览 -->
@@ -432,10 +454,116 @@
         <div id="themes" class="hub-content">
             <div id="themesContainer"></div>
         </div>
+        
+        <!-- 代码审查流程 -->
+        <div id="reviewWorkflow" class="hub-content">
+            <div id="reviewWorkflowContainer"></div>
+        </div>
+        
+        <!-- 代码回放 -->
+        <div id="replay" class="hub-content">
+            <div id="replayContainer"></div>
+        </div>
+        
+        <!-- 智能提示 -->
+        <div id="completion" class="hub-content">
+            <div id="completionContainer"></div>
+        </div>
+        
+        <!-- 代码可视化 -->
+        <div id="visualizer" class="hub-content">
+            <div id="visualizerContainer"></div>
+        </div>
+        
+        <!-- 交互式测验 -->
+        <div id="interactiveQuiz" class="hub-content">
+            <div id="interactiveQuizContainer"></div>
+        </div>
+        
+        <!-- 代码游戏化 -->
+        <div id="gamification" class="hub-content">
+            <div id="gamificationContainer"></div>
+        </div>
+        
+        <!-- 学习热力图 -->
+        <div id="heatmap" class="hub-content">
+            <div id="heatmapContainer"></div>
+        </div>
+        
+        <!-- 知识点关联图 -->
+        <div id="knowledgeGraph" class="hub-content">
+            <div id="knowledgeGraphContainer"></div>
+        </div>
+        
+        <!-- 学习效率分析 -->
+        <div id="efficiency" class="hub-content">
+            <div id="efficiencyContainer"></div>
+        </div>
+        
+        <!-- 错题本 -->
+        <div id="wrongBook" class="hub-content">
+            <div id="wrongBookContainer"></div>
+        </div>
+        
+        <!-- Git集成 -->
+        <div id="git" class="hub-content">
+            <div id="gitContainer"></div>
+        </div>
+        
+        <!-- 数据库连接 -->
+        <div id="database" class="hub-content">
+            <div id="databaseContainer"></div>
+        </div>
+        
+        <!-- API测试工具 -->
+        <div id="apiTester" class="hub-content">
+            <div id="apiTesterContainer"></div>
+        </div>
+        
+        <!-- 代码质量检查 -->
+        <div id="quality" class="hub-content">
+            <div id="qualityContainer"></div>
+        </div>
+        
+        <!-- 代码覆盖率 -->
+        <div id="coverage" class="hub-content">
+            <div id="coverageContainer"></div>
+        </div>
+        
+        <!-- 自适应学习 -->
+        <div id="adaptive" class="hub-content">
+            <div id="adaptiveContainer"></div>
+        </div>
+        
+        <!-- 学习报告 -->
+        <div id="report" class="hub-content">
+            <div id="reportContainer"></div>
+        </div>
+        
+        <!-- 技能认证 -->
+        <div id="certification" class="hub-content">
+            <div id="certificationContainer"></div>
+        </div>
+        
+        <!-- 职业规划 -->
+        <div id="career" class="hub-content">
+            <div id="careerContainer"></div>
+        </div>
+        
+        <!-- 数据导出 -->
+        <div id="export" class="hub-content">
+            <div id="exportContainer"></div>
+        </div>
+        
+        <!-- 移动端APP -->
+        <div id="mobile" class="hub-content">
+            <div id="mobileContainer"></div>
+        </div>
     </div>
     
     <script src="tutorial-common.js"></script>
     <script src="tutorial-extensions.js"></script>
+    <script src="tutorial-advanced.js"></script>
     <script>
         // 页面初始化
         document.addEventListener('DOMContentLoaded', () => {
@@ -447,6 +575,7 @@
             updateSharePreview();
             initExtensions();
             
+            // 之前的功能
             LearningGoals.render('goalsContainer');
             CodeChallenges.render('challengesContainer', 'all');
             CodeTemplates.render('templatesContainer', 'python');
@@ -459,8 +588,30 @@
             KnowledgeAnalysis.render('masteryContainer', 'python');
             KeyboardShortcuts.render('shortcutsContainer');
             CustomThemes.render('themesContainer');
-            
             LearningAnalytics.renderBarChart('timeChart');
+            
+            // 新增高级功能
+            CodeReviewWorkflow.render('reviewWorkflowContainer');
+            CodeReplay.render('replayContainer');
+            SmartCompletion.render('completionContainer');
+            CodeVisualizer.render('visualizerContainer');
+            InteractiveQuiz.render('interactiveQuizContainer', 'all');
+            GamificationSystem.render('gamificationContainer');
+            LearningHeatmap.render('heatmapContainer');
+            KnowledgeGraph.render('knowledgeGraphContainer');
+            EfficiencyAnalyzer.render('efficiencyContainer');
+            WrongAnswerBook.render('wrongBookContainer');
+            GitIntegration.render('gitContainer');
+            DatabaseManager.render('databaseContainer');
+            APITester.render('apiTesterContainer');
+            CodeQualityChecker.render('qualityContainer');
+            CodeCoverage.render('coverageContainer');
+            AdaptiveLearning.render('adaptiveContainer');
+            LearningReport.render('reportContainer');
+            SkillCertification.render('certificationContainer');
+            CareerPlanner.render('careerContainer');
+            DataExporter.render('exportContainer');
+            MobileApp.render('mobileContainer');
         });
         
         // 显示标签页

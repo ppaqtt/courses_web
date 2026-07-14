@@ -1,0 +1,341 @@
+/**
+ * 编程语言教程系统 - 高级扩展功能样式
+ */
+
+/* ==================== 代码审查流程 ==================== */
+.review-workflow-form {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.review-workflow-form textarea,
+.review-workflow-form input {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+.review-workflow-list { display: flex; flex-direction: column; gap: 15px; }
+.workflow-card {
+    background: var(--bg-card);
+    padding: 20px;
+    border-radius: 12px;
+}
+.workflow-header { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.workflow-status { color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; }
+.workflow-lang { background: var(--accent-color); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; }
+.workflow-time { font-size: 0.85rem; color: var(--text-muted); }
+.workflow-desc { color: var(--text-primary); margin-bottom: 10px; }
+.workflow-code { background: var(--code-bg); color: var(--code-text); padding: 10px; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 0.85rem; overflow-x: auto; }
+.workflow-stats { display: flex; gap: 15px; margin: 10px 0; }
+.workflow-timeline { margin: 15px 0; padding-left: 20px; border-left: 2px solid var(--border-color); }
+.timeline-item { padding: 5px 0; display: flex; gap: 10px; }
+.timeline-action { font-weight: 600; color: var(--text-primary); }
+.timeline-time { font-size: 0.85rem; color: var(--text-muted); }
+.workflow-actions { display: flex; gap: 10px; margin-top: 15px; }
+
+/* ==================== 代码回放 ==================== */
+.replay-controls { display: flex; gap: 10px; margin-bottom: 15px; }
+.recordings-list { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+.recording-card { background: var(--bg-card); padding: 15px; border-radius: 10px; }
+.recording-info { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+.recording-lang { background: var(--accent-color); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; }
+.recording-steps { font-size: 0.85rem; color: var(--text-muted); }
+.recording-time { font-size: 0.85rem; color: var(--text-muted); }
+.recording-actions { display: flex; gap: 10px; }
+
+/* ==================== 智能提示 ==================== */
+.smart-editor { position: relative; }
+.editor-wrapper { position: relative; }
+.editor-wrapper textarea {
+    width: 100%; min-height: 200px; padding: 15px; border: 1px solid var(--border-color);
+    border-radius: 8px; background: var(--code-bg); color: var(--code-text); font-family: 'Consolas', monospace; font-size: 0.9rem;
+}
+.suggestion-box {
+    position: absolute; top: 100%; left: 0; right: 0; background: var(--bg-card);
+    border: 1px solid var(--border-color); border-radius: 8px; max-height: 200px;
+    overflow-y: auto; z-index: 100; box-shadow: var(--shadow-lg); display: none;
+}
+.suggestion-item {
+    display: flex; gap: 10px; padding: 8px 15px; cursor: pointer; align-items: center;
+}
+.suggestion-item:hover { background: var(--bg-secondary); }
+.suggestion-icon { width: 20px; text-align: center; }
+.suggestion-text { font-family: 'Consolas', monospace; color: var(--text-primary); }
+.suggestion-type { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+.completion-stats { margin-top: 20px; }
+.supported-langs, .hint-types { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.lang-tag, .hint-types span { background: var(--bg-secondary); padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; }
+
+/* ==================== 代码可视化 ==================== */
+.visualizer-input { margin-bottom: 20px; }
+.visualizer-input textarea {
+    width: 100%; min-height: 120px; padding: 15px; border: 1px solid var(--border-color);
+    border-radius: 8px; background: var(--code-bg); color: var(--code-text); font-family: 'Consolas', monospace; margin-bottom: 10px;
+}
+.flowchart { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 20px; }
+.flowchart-node {
+    padding: 12px 25px; border-radius: 10px; border: 2px solid; background: var(--bg-card);
+    display: flex; align-items: center; gap: 10px; min-width: 150px; justify-content: center;
+}
+.flowchart-node.condition { border-radius: 0; transform: rotate(0deg); }
+.flowchart-node.function { border-radius: 25px; }
+.flowchart-node.start, .flowchart-node.end { border-radius: 25px; }
+.node-icon { font-size: 1.2rem; }
+.node-label { font-size: 0.9rem; color: var(--text-primary); font-weight: 500; }
+.flowchart-arrow { color: var(--text-muted); font-size: 1.5rem; }
+
+/* ==================== 交互式测验 ==================== */
+.quiz-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.quiz-card {
+    background: var(--bg-card); padding: 20px; border-radius: 12px; margin-bottom: 15px;
+    border-left: 4px solid var(--accent-color); transition: all 0.3s;
+}
+.quiz-card.correct { border-left-color: #22c55e; }
+.quiz-card.incorrect { border-left-color: #ef4444; }
+.quiz-type-badge { display: inline-block; background: var(--accent-color); color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; margin-bottom: 10px; }
+.quiz-question { font-size: 1.05rem; color: var(--text-primary); margin-bottom: 15px; font-weight: 500; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+    display: flex; align-items: center; gap: 10px; padding: 12px 15px;
+    background: var(--bg-secondary); border-radius: 8px; cursor: pointer; transition: all 0.2s;
+}
+.quiz-option:hover { background: var(--border-color); }
+.quiz-option.selected-correct { background: rgba(34,197,94,0.15); border: 1px solid #22c55e; }
+.quiz-option.selected-incorrect { background: rgba(239,68,68,0.15); border: 1px solid #ef4444; }
+.quiz-option input { margin-right: 5px; }
+.quiz-fill { display: flex; gap: 10px; align-items: center; }
+.quiz-fill input {
+    flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px;
+    background: var(--bg-secondary); color: var(--text-primary);
+}
+.quiz-feedback { padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: 500; }
+.quiz-feedback.correct { background: rgba(34,197,94,0.1); color: #22c55e; }
+.quiz-feedback.incorrect { background: rgba(239,68,68,0.1); color: #ef4444; }
+
+/* ==================== 代码游戏化 ==================== */
+.game-profile {
+    background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 30px;
+    border-radius: 15px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; margin-bottom: 20px;
+}
+.game-avatar { font-size: 4rem; }
+.game-info { flex: 1; min-width: 150px; }
+.game-level { font-size: 1.5rem; font-weight: bold; }
+.game-points, .game-streak { font-size: 1.1rem; margin-top: 5px; }
+.level-progress { width: 100%; }
+.level-progress-bar { height: 10px; background: rgba(255,255,255,0.3); border-radius: 5px; overflow: hidden; margin-bottom: 5px; }
+.level-progress-fill { height: 100%; background: white; border-radius: 5px; }
+.game-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.game-badges h4 { margin-bottom: 10px; }
+.badge-list { display: flex; flex-wrap: wrap; gap: 10px; }
+.game-badge { background: var(--bg-secondary); padding: 8px 15px; border-radius: 8px; }
+
+/* ==================== 学习热力图 ==================== */
+.heatmap-container { overflow-x: auto; padding: 20px 0; }
+.heatmap-months { display: flex; gap: 30px; margin-bottom: 10px; padding-left: 10px; }
+.heatmap-month { font-size: 0.8rem; color: var(--text-muted); }
+.heatmap-grid { display: flex; gap: 3px; }
+.heatmap-week { display: flex; flex-direction: column; gap: 3px; }
+.heatmap-cell { width: 14px; height: 14px; border-radius: 3px; }
+.heatmap-legend { display: flex; align-items: center; gap: 5px; margin-top: 15px; font-size: 0.85rem; color: var(--text-muted); }
+
+/* ==================== 知识点关联图 ==================== */
+.knowledge-graph { overflow-x: auto; }
+.graph-svg { width: 100%; max-width: 800px; height: auto; }
+.graph-node { cursor: pointer; transition: all 0.3s; }
+.graph-node:hover { opacity: 1 !important; r: 30; }
+.graph-legend { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+/* ==================== 学习效率分析 ==================== */
+.efficiency-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.eff-stat { background: var(--bg-card); padding: 20px; border-radius: 12px; text-align: center; }
+.eff-value { display: block; font-size: 1.3rem; font-weight: bold; color: var(--accent-color); }
+.eff-label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
+.hourly-chart { display: flex; align-items: flex-end; gap: 2px; height: 150px; padding: 20px 0; flex-wrap: wrap; }
+.hour-bar {
+    flex: 1; min-width: 20px; background: linear-gradient(180deg, #667eea, #764ba2);
+    border-radius: 3px 3px 0 0; position: relative; max-width: 35px;
+}
+.hour-val { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: var(--text-muted); white-space: nowrap; }
+.hour-label { font-size: 0.7rem; color: var(--text-muted); text-align: center; writing-mode: vertical-lr; }
+
+/* ==================== 错题本 ==================== */
+.wrong-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.wrong-list { display: flex; flex-direction: column; gap: 10px; }
+.wrong-card { background: var(--bg-card); padding: 15px; border-radius: 10px; border-left: 4px solid #ef4444; }
+.wrong-number { font-weight: bold; color: #ef4444; margin-bottom: 5px; }
+.wrong-question { color: var(--text-primary); margin-bottom: 10px; }
+.wrong-answers { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.wrong-user { color: #ef4444; font-size: 0.9rem; }
+.wrong-correct { color: #22c55e; font-size: 0.9rem; }
+.wrong-time { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ==================== Git集成 ==================== */
+.git-actions { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+.git-actions input { flex: 1; min-width: 150px; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); }
+.git-repos { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+.repo-card { background: var(--bg-card); padding: 20px; border-radius: 12px; }
+.repo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.repo-branches { display: flex; gap: 8px; margin-bottom: 15px; }
+.branch-tag { background: rgba(102,126,234,0.1); color: var(--accent-color); padding: 3px 10px; border-radius: 4px; font-size: 0.85rem; }
+.repo-commit-form { display: flex; gap: 8px; }
+.repo-commit-form input { flex: 1; padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-secondary); color: var(--text-primary); }
+.commit-log { display: flex; flex-direction: column; gap: 8px; }
+.commit-item { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--bg-secondary); border-radius: 6px; flex-wrap: wrap; }
+.commit-id { font-family: 'Consolas', monospace; font-size: 0.85rem; color: var(--accent-color); }
+.commit-msg { flex: 1; color: var(--text-primary); font-size: 0.9rem; }
+.commit-branch { background: rgba(102,126,234,0.1); color: var(--accent-color); padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+.commit-time { font-size: 0.8rem; color: var(--text-muted); }
+
+/* ==================== 数据库连接 ==================== */
+.db-connect-form { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.db-connect-form input { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); }
+.db-query { margin-bottom: 15px; }
+.db-query textarea { width: 100%; min-height: 80px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--code-bg); color: var(--code-text); font-family: 'Consolas', monospace; margin-bottom: 10px; }
+.query-results { overflow-x: auto; }
+.result-info { margin-bottom: 10px; font-size: 0.9rem; color: var(--text-muted); }
+.result-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.result-table th, .result-table td { padding: 10px 15px; border: 1px solid var(--border-color); text-align: left; }
+.result-table th { background: var(--bg-secondary); font-weight: 600; color: var(--text-primary); }
+
+/* ==================== API测试工具 ==================== */
+.api-test-form { background: var(--bg-card); padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+.api-method-row { display: flex; gap: 10px; margin-bottom: 10px; }
+.api-method-row select { padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); }
+.api-method-row input { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); }
+.api-headers { margin-bottom: 10px; }
+.api-headers input { width: 100%; padding: 10px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); }
+.api-test-form textarea { width: 100%; min-height: 80px; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--code-bg); color: var(--code-text); font-family: 'Consolas', monospace; margin-bottom: 10px; }
+.api-response { margin-bottom: 20px; }
+.response-header { display: flex; gap: 15px; margin-bottom: 10px; }
+.response-status.success { color: #22c55e; font-weight: bold; }
+.response-status.error { color: #ef4444; font-weight: bold; }
+.response-time { color: var(--text-muted); }
+.response-body { background: var(--code-bg); color: var(--code-text); padding: 15px; border-radius: 8px; font-family: 'Consolas', monospace; font-size: 0.85rem; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+.api-history { display: flex; flex-direction: column; gap: 8px; }
+.api-history-item { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--bg-secondary); border-radius: 6px; flex-wrap: wrap; }
+.api-method-tag { padding: 3px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; color: white; }
+.api-method-tag.GET { background: #22c55e; }
+.api-method-tag.POST { background: #3b82f6; }
+.api-method-tag.PUT { background: #f59e0b; }
+.api-method-tag.DELETE { background: #ef4444; }
+.api-method-tag.PATCH { background: #8b5cf6; }
+.api-url { flex: 1; font-size: 0.9rem; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.api-status { font-size: 0.85rem; }
+.api-duration { font-size: 0.85rem; color: var(--text-muted); }
+
+/* ==================== 代码质量检查 ==================== */
+.quality-score { display: flex; gap: 20px; align-items: center; margin: 20px 0; }
+.score-circle { width: 100px; height: 100px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+.score-circle.good { background: #22c55e; }
+.score-circle.fair { background: #f59e0b; }
+.score-circle.poor { background: #ef4444; }
+.score-value { font-size: 2rem; font-weight: bold; }
+.score-label { font-size: 0.85rem; }
+.score-summary { display: flex; flex-wrap: wrap; gap: 10px; }
+.score-summary span { background: var(--bg-secondary); padding: 5px 12px; border-radius: 6px; font-size: 0.85rem; }
+.quality-issues { display: flex; flex-direction: column; gap: 8px; }
+.issue-item { display: flex; gap: 10px; align-items: center; padding: 10px; background: var(--bg-secondary); border-radius: 6px; flex-wrap: wrap; }
+.issue-severity { color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; }
+.issue-line { font-size: 0.85rem; color: var(--text-muted); }
+.issue-rule { font-weight: 500; color: var(--text-primary); }
+.issue-message { flex: 1; font-size: 0.9rem; color: var(--text-secondary); }
+
+/* ==================== 代码覆盖率 ==================== */
+.coverage-report { margin-top: 20px; }
+.coverage-item { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
+.coverage-label { min-width: 80px; font-weight: 500; color: var(--text-primary); }
+.coverage-bar { flex: 1; height: 20px; background: var(--bg-secondary); border-radius: 10px; overflow: hidden; }
+.coverage-fill { height: 100%; border-radius: 10px; transition: width 0.5s; }
+.coverage-fill.good { background: #22c55e; }
+.coverage-fill.fair { background: #f59e0b; }
+.coverage-fill.poor { background: #ef4444; }
+.coverage-value { min-width: 100px; text-align: right; font-size: 0.9rem; color: var(--text-primary); }
+
+/* ==================== 自适应学习 ==================== */
+.adaptive-list { display: flex; flex-direction: column; gap: 15px; }
+.adaptive-card { background: var(--bg-card); padding: 20px; border-radius: 12px; }
+.adaptive-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.adaptive-lang { font-weight: 600; color: var(--text-primary); font-size: 1.1rem; }
+.adaptive-priority { color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; }
+.adaptive-message { color: var(--text-secondary); margin-bottom: 15px; }
+.adaptive-next { display: flex; gap: 15px; margin-bottom: 15px; font-size: 0.9rem; color: var(--text-muted); flex-wrap: wrap; }
+
+/* ==================== 学习报告 ==================== */
+.report-card { background: var(--bg-card); padding: 25px; border-radius: 15px; }
+.report-header { margin-bottom: 20px; }
+.report-summary { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.report-stat { text-align: center; }
+.report-value { display: block; font-size: 1.5rem; font-weight: bold; color: var(--accent-color); }
+.report-label { font-size: 0.85rem; color: var(--text-muted); }
+.report-langs { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.report-lang-item { display: flex; gap: 15px; align-items: center; }
+.report-lang-item span:first-child { min-width: 80px; }
+.report-progress { flex: 1; height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden; }
+.report-progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; }
+.report-actions { display: flex; gap: 10px; }
+
+/* ==================== 技能认证 ==================== */
+.cert-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
+.cert-card { background: var(--bg-card); padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 15px; }
+.cert-card.earned { border: 2px solid #f59e0b; background: rgba(245,158,11,0.05); }
+.cert-icon { font-size: 2.5rem; }
+.cert-info { flex: 1; }
+.cert-info h4 { color: var(--text-primary); margin-bottom: 8px; }
+.cert-progress { display: flex; gap: 10px; align-items: center; }
+.cert-progress-bar { flex: 1; height: 6px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; }
+.cert-progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 3px; }
+.cert-badge { font-size: 0.85rem; }
+.cert-badge.pending { color: var(--text-muted); }
+
+/* ==================== 职业规划 ==================== */
+.career-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 15px; }
+.career-card { background: var(--bg-card); padding: 20px; border-radius: 12px; }
+.career-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.career-header h4 { color: var(--text-primary); }
+.career-salary { background: rgba(34,197,94,0.1); color: #22c55e; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; }
+.career-meta { display: flex; gap: 15px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+.career-skills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 15px; }
+.skill-tag { background: var(--bg-secondary); padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; }
+.career-match { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; }
+.match-bar { flex: 1; height: 8px; background: var(--bg-secondary); border-radius: 4px; overflow: hidden; }
+.match-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); border-radius: 4px; }
+
+/* ==================== 数据导出 ==================== */
+.export-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+.export-card { background: var(--bg-card); padding: 25px; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; }
+.export-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.export-icon { font-size: 3rem; margin-bottom: 10px; }
+.export-card h4 { color: var(--text-primary); margin-bottom: 8px; }
+.export-card p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px; }
+.export-card input[type="file"] { font-size: 0.85rem; }
+
+/* ==================== 移动端APP ==================== */
+.mobile-app-info { background: var(--bg-card); padding: 25px; border-radius: 15px; text-align: center; }
+.app-preview { margin-bottom: 20px; }
+.app-icon { font-size: 4rem; margin-bottom: 10px; }
+.app-features { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 20px 0; }
+.app-feature { background: rgba(34,197,94,0.1); color: #22c55e; padding: 8px 15px; border-radius: 8px; }
+.installed-badge { background: #22c55e; color: white; padding: 10px 20px; border-radius: 10px; display: inline-block; margin: 15px 0; }
+.install-guide { text-align: left; margin-top: 20px; }
+.install-guide h4 { margin-bottom: 10px; }
+.install-guide p { margin-bottom: 8px; color: var(--text-secondary); }
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+    .game-profile { flex-direction: column; text-align: center; }
+    .efficiency-summary { grid-template-columns: 1fr 1fr; }
+    .hourly-chart { justify-content: flex-start; }
+    .career-list { grid-template-columns: 1fr; }
+    .cert-list { grid-template-columns: 1fr; }
+    .api-method-row { flex-direction: column; }
+    .report-summary { grid-template-columns: 1fr 1fr; }
+    .export-options { grid-template-columns: 1fr; }
+}
