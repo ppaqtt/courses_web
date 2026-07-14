@@ -3,1740 +3,1880 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PHP教程 - 编程语言学习平台</title>
-    <link rel="stylesheet" href="tutorial-style.css">
-    <link rel="stylesheet" href="tutorial-features.css">
-    <link rel="stylesheet" href="tutorial-extensions.css">
+    <title>PHP教程 - 从零开始学习PHP编程（35章完整版）</title>
     <style>
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a68;
-            --text-muted: #8a8a9a;
-            --accent-color: #777bb4;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --warning-color: #f59e0b;
-            --border-color: #e5e7eb;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --bg-primary: #ffffff; --bg-secondary: #f8fafc; --bg-card: #ffffff;
+            --text-primary: #1e293b; --text-secondary: #64748b; --text-muted: #94a3b8;
+            --accent-color: #7c3aed; --success-color: #10b981; --warning-color: #f59e0b;
+            --danger-color: #ef4444; --border-color: #e2e8f0;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --code-bg: #1e293b; --code-text: #e2e8f0; --code-border: #334155;
         }
-
         [data-theme="dark"] {
-            --bg-primary: #0f0f23;
-            --bg-secondary: #1a1a2e;
-            --bg-card: #16213e;
-            --text-primary: #e4e4e7;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --accent-color: #9399ff;
-            --success-color: #34d399;
-            --error-color: #f87171;
-            --warning-color: #fbbf24;
-            --border-color: #3f3f5a;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #777bb4, #5a67d8);
-            color: white;
-            padding: 40px 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-            margin-top: 10px;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .progress-bar {
-            margin-top: 20px;
-            height: 10px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: white;
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-
-        .progress-text {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .main-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-        }
-
-        .sidebar {
-            position: sticky;
-            top: 20px;
-            height: fit-content;
-        }
-
-        .sidebar-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: var(--shadow-md);
-            margin-bottom: 20px;
-        }
-
-        .sidebar-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chapter-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .chapter-item {
-            padding: 12px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 5px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chapter-item:hover {
-            background: var(--bg-secondary);
-        }
-
-        .chapter-item.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .chapter-item.completed::before {
-            content: '✓';
-            color: var(--success-color);
-            font-weight: bold;
-        }
-
-        .chapter-item.active.completed::before {
-            color: white;
-        }
-
-        .chapter-number {
-            font-size: 0.85rem;
-            opacity: 0.7;
-        }
-
-        .chapter-title {
-            font-size: 0.95rem;
-        }
-
-        .search-box {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-
-        .search-box::placeholder {
-            color: var(--text-muted);
-        }
-
-        .theme-toggle, .note-toggle {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            cursor: pointer;
-            font-size: 1rem;
-            margin-bottom: 10px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .theme-toggle:hover, .note-toggle:hover {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .content-area {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .chapter-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .chapter-header h2 {
-            font-size: 2rem;
-            margin: 0;
-        }
-
-        .chapter-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .action-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .action-btn.favorite {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .action-btn.favorite.active {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .action-btn.complete {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .action-btn.complete:hover {
-            opacity: 0.9;
-        }
-
-        .section {
-            margin-bottom: 35px;
-        }
-
-        .section h3 {
-            font-size: 1.4rem;
-            color: var(--accent-color);
-            margin: 0 0 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section p {
-            margin: 0 0 10px 0;
-            color: var(--text-secondary);
-        }
-
-        .section ul {
-            margin: 0;
-            padding-left: 20px;
-            color: var(--text-secondary);
-        }
-
-        .section li {
-            margin-bottom: 8px;
-        }
-
-        .code-block {
-            background: #1e1e1e;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .code-block.light {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .code-block pre {
-            margin: 0;
-            color: #d4d4d4;
-            font-family: 'Fira Code', 'Consolas', monospace;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        .code-block.light pre {
-            color: var(--text-primary);
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #8a8a9a;
-            font-size: 0.85rem;
-        }
-
-        .code-lang {
-            background: rgba(255,255,255,0.1);
-            padding: 3px 10px;
-            border-radius: 5px;
-        }
-
-        .copy-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #8a8a9a;
-            padding: 5px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        .copy-btn:hover {
-            background: rgba(255,255,255,0.2);
-            color: white;
-        }
-
-        .error-example {
-            border-left: 4px solid var(--error-color);
-            background: rgba(239, 68, 68, 0.1);
-            padding: 15px 20px;
-            border-radius: 0 10px 10px 0;
-            margin: 15px 0;
-        }
-
-        .error-example .error-title {
-            color: var(--error-color);
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .quiz-section {
-            background: var(--bg-secondary);
-            border-radius: 15px;
-            padding: 25px;
-            margin-top: 20px;
-        }
-
-        .quiz-section h4 {
-            margin: 0 0 20px 0;
-            font-size: 1.2rem;
-        }
-
-        .quiz-question {
-            margin-bottom: 20px;
-        }
-
-        .quiz-question p {
-            font-weight: 600;
-            margin: 0 0 15px 0;
-        }
-
-        .quiz-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .quiz-option {
-            padding: 12px 15px;
-            background: var(--bg-card);
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .quiz-option:hover {
-            border-color: var(--accent-color);
-        }
-
-        .quiz-option.selected {
-            border-color: var(--accent-color);
-            background: rgba(119, 123, 180, 0.1);
-        }
-
-        .quiz-option.correct {
-            border-color: var(--success-color);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .quiz-option.incorrect {
-            border-color: var(--error-color);
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .quiz-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 1rem;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-
-        .quiz-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .quiz-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            background: var(--accent-color);
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-
-        .quiz-btn:hover {
-            opacity: 0.9;
-        }
-
-        .answer-section {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(16, 185, 129, 0.1);
-            border-radius: 10px;
-            border-left: 4px solid var(--success-color);
-            display: none;
-        }
-
-        .answer-section.show {
-            display: block;
-        }
-
-        .answer-section h5 {
-            margin: 0 0 10px 0;
-            color: var(--success-color);
-        }
-
-        .notes-panel {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: var(--shadow-md);
-            margin-top: 30px;
-        }
-
-        .notes-panel h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.2rem;
-        }
-
-        .notes-textarea {
-            width: 100%;
-            min-height: 150px;
-            padding: 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-            box-sizing: border-box;
-            resize: vertical;
-        }
-
-        .notes-textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
-        .notes-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border-color);
-        }
-
-        .nav-btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            background: var(--accent-color);
-            color: white;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-btn:hover {
-            opacity: 0.9;
-        }
-
-        .nav-btn.secondary {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(119, 123, 180, 0.1), rgba(90, 103, 216, 0.1));
-            border: 1px solid rgba(119, 123, 180, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-
-        .highlight-box strong {
-            color: var(--accent-color);
-        }
-
-        .tips-box {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid var(--warning-color);
-            padding: 15px 20px;
-            border-radius: 0 10px 10px 0;
-            margin: 15px 0;
-        }
-
-        .tips-box .tips-icon {
-            color: var(--warning-color);
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .search-results {
-            margin-top: 20px;
-            display: none;
-        }
-
-        .search-results.show {
-            display: block;
-        }
-
-        .search-result-item {
-            padding: 15px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .search-result-item:hover {
-            background: rgba(119, 123, 180, 0.1);
-        }
-
-        .search-result-item .result-title {
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .search-result-item .result-chapter {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        @media (max-width: 1024px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-            
-            .sidebar {
-                position: static;
-            }
-            
-            .chapter-list {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 10px;
-            }
-        }
+            --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-card: #1e293b;
+            --text-primary: #f8fafc; --text-secondary: #cbd5e1; --text-muted: #64748b;
+            --accent-color: #a78bfa; --success-color: #34d399; --warning-color: #fbbf24;
+            --danger-color: #f87171; --border-color: #334155;
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --code-bg: #0f172a; --code-text: #e2e8f0; --code-border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; transition: background 0.3s, color 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; padding: 40px 20px; border-radius: 20px; margin-bottom: 30px; text-align: center; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 10px; background: var(--bg-card); padding: 15px; border-radius: 15px; margin-bottom: 30px; box-shadow: var(--shadow-md); align-items: center; }
+        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .toolbar-right { display: flex; gap: 10px; }
+        .search-box { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 25px; background: var(--bg-secondary); color: var(--text-primary); width: 300px; font-size: 1rem; }
+        .btn { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .btn-primary { background: var(--accent-color); color: white; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: rgba(124,58,237,0.1); color: var(--accent-color); }
+        .progress-bar { flex: 1; height: 8px; background: var(--bg-secondary); border-radius: 10px; overflow: hidden; margin: 0 20px; min-width: 100px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #7c3aed, #4f46e5); border-radius: 10px; transition: width 0.5s ease; }
+        .sidebar { position: fixed; left: 20px; top: 200px; width: 260px; background: var(--bg-card); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-md); overflow-y: auto; max-height: calc(100vh - 220px); z-index: 10; }
+        .sidebar h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .chapter-list { list-style: none; padding: 0; margin: 0; }
+        .chapter-item { padding: 8px 12px; margin-bottom: 3px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .chapter-item:hover { background: rgba(124,58,237,0.1); }
+        .chapter-item.active { background: var(--accent-color); color: white; }
+        .chapter-item.completed .ch-title { text-decoration: line-through; opacity: 0.7; }
+        .chapter-item.active.completed .ch-title { text-decoration: none; opacity: 1; }
+        .main-content { margin-left: 290px; }
+        .chapter-section { background: var(--bg-card); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: var(--shadow-md); display: none; }
+        .chapter-section.active { display: block; }
+        .chapter-section h2 { font-size: 1.8rem; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .chapter-section h3 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 12px; color: var(--text-primary); }
+        .section-content { margin-bottom: 20px; color: var(--text-secondary); }
+        .section-content ul, .section-content ol { padding-left: 20px; margin: 10px 0; }
+        .section-content li { margin-bottom: 6px; }
+        .section-content code { background: rgba(124,58,237,0.15); padding: 2px 6px; border-radius: 4px; font-family: 'Monaco','Menlo',monospace; font-size: 0.9em; }
+        .code-block { background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 12px; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block pre { margin: 0; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; font-size: 0.9rem; line-height: 1.6; }
+        .code-block code { color: inherit; background: none; padding: 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--code-border); }
+        .code-lang { font-size: 0.85rem; color: #94a3b8; }
+        .code-actions { display: flex; gap: 10px; }
+        .code-btn { background: rgba(255,255,255,0.1); border: none; color: #e2e8f0; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; }
+        .code-btn:hover { background: rgba(255,255,255,0.2); }
+        .error-block { background: rgba(239,68,68,0.08); border-left: 4px solid var(--danger-color); padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .error-block h4 { color: var(--danger-color); margin-top: 0; }
+        .error-block code { background: rgba(239,68,68,0.1); padding: 2px 5px; border-radius: 4px; }
+        .practice-section { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .practice-section h4 { color: var(--success-color); margin-top: 0; }
+        .question { margin-bottom: 15px; font-weight: 500; }
+        .answer-input, .answer-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; margin-bottom: 15px; font-family: inherit; }
+        .answer-textarea { min-height: 100px; }
+        .answer-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .option-label { display: flex; align-items: center; gap: 10px; padding: 10px; background: var(--bg-secondary); border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .option-label:hover { background: rgba(124,58,237,0.1); }
+        .option-label input[type="radio"] { accent-color: var(--accent-color); }
+        .quiz-result { padding: 15px; border-radius: 10px; margin-top: 15px; display: none; align-items: center; gap: 10px; }
+        .quiz-result.correct { background: rgba(16,185,129,0.1); color: var(--success-color); display: flex; }
+        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--danger-color); display: flex; }
+        .show-answer-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; color: var(--text-secondary); transition: all 0.3s; margin-top: 10px; }
+        .show-answer-btn:hover { background: rgba(124,58,237,0.1); color: var(--accent-color); }
+        .answer-box { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); padding: 15px; border-radius: 10px; margin-top: 15px; display: none; white-space: pre-wrap; font-family: 'Monaco','Menlo',monospace; font-size: 0.9rem; }
+        .answer-box.show { display: block; }
+        .note-section { background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .note-section h4 { color: var(--warning-color); margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        .note-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: inherit; min-height: 80px; margin-bottom: 10px; }
+        .save-note-btn { background: var(--warning-color); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .save-note-btn:hover { opacity: 0.9; }
+        .bookmark-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; }
+        .bookmark-btn:hover { transform: scale(1.2); }
+        .bookmark-btn.bookmarked { color: #f59e0b; }
+        .completion-btn { background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 20px; transition: all 0.3s; }
+        .completion-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .completion-btn.completed { background: var(--text-muted); cursor: not-allowed; }
+        .stats-info { display: flex; gap: 30px; margin-bottom: 20px; padding: 20px; background: var(--bg-card); border-radius: 15px; box-shadow: var(--shadow-md); flex-wrap: wrap; justify-content: center; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .nav-btn-primary { background: var(--accent-color); color: white; }
+        .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
+        .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .nav-btn-secondary:hover:not(:disabled) { background: rgba(124,58,237,0.1); color: var(--accent-color); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-color); color: white; padding: 15px 30px; border-radius: 10px; box-shadow: var(--shadow-md); z-index: 9999; transition: transform 0.3s ease; font-size: 1rem; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        @media (max-width: 1024px) { .sidebar { position: static; width: 100%; max-height: 200px; margin-bottom: 20px; } .main-content { margin-left: 0; } .progress-bar { display: none; } .search-box { width: 100%; } .toolbar { flex-direction: column; } }
     </style>
 </head>
-<body>
+<body data-language="php">
     <div class="container">
         <div class="header">
-            <div class="header-content">
-                <div>
-                    <h1>📚 PHP教程</h1>
-                    <p>从零开始学习PHP，掌握服务器端开发核心技能</p>
-                </div>
-                <div class="header-actions">
-                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-                        🌙 深色模式
-                    </button>
-                </div>
+            <h1>🐘 PHP教程</h1>
+            <p>从入门到精通 · 35章完整教程 · 系统学习PHP Web开发</p>
+        </div>
+
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
             </div>
             <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            <div class="progress-text" id="progressText">已完成 0/10 章节</div>
-        </div>
-
-        <div class="main-layout">
-            <div class="sidebar">
-                <div class="sidebar-card">
-                    <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜索教程内容..." oninput="handleSearch()">
-                    <h3>📖 章节列表</h3>
-                    <ul class="chapter-list" id="chapterList"></ul>
-                </div>
-                
-                <div class="sidebar-card">
-                    <h3>🎯 学习进度</h3>
-                    <div id="sidebarProgress"></div>
-                </div>
-            </div>
-
-            <div class="content-area">
-                <div id="chapterContent"></div>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn secondary" id="prevBtn" onclick="navigateChapter(-1)">
-                        ⬅️ 上一章
-                    </button>
-                    <button class="nav-btn" id="nextBtn" onclick="navigateChapter(1)">
-                        下一章 ➡️
-                    </button>
-                </div>
-
-                <div class="notes-panel" id="notesPanel">
-                    <h3>📝 我的笔记</h3>
-                    <textarea class="notes-textarea" id="notesTextarea" placeholder="在这里记录你的学习笔记..."></textarea>
-                    <div class="notes-actions">
-                        <button class="action-btn complete" onclick="saveNotes()">💾 保存笔记</button>
-                    </div>
-                </div>
+            <div class="toolbar-right">
+                <button class="btn btn-secondary" onclick="toggleTheme()">🌙 <span id="themeText">深色模式</span></button>
+                <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
+                <button class="btn btn-primary" onclick="goToHub()">🏠 返回首页</button>
             </div>
         </div>
 
-        <div class="search-results" id="searchResults"></div>
-    </div>
+        <div class="stats-info" id="statsInfo">
+            <div class="stat-item"><div class="stat-value" id="completedCount">0</div><div class="stat-label">已完成章节</div></div>
+            <div class="stat-item"><div class="stat-value" id="totalCount">35</div><div class="stat-label">总章节数</div></div>
+            <div class="stat-item"><div class="stat-value" id="progressPercent">0%</div><div class="stat-label">学习进度</div></div>
+            <div class="stat-item"><div class="stat-value" id="bookmarkCount">0</div><div class="stat-label">收藏章节</div></div>
+        </div>
+
+        <div class="sidebar" id="sidebar">
+            <h3>📚 章节导航</h3>
+            <ul class="chapter-list" id="chapterList"></ul>
+        </div>
+
+        <div class="main-content" id="mainContent">
+
+            <!-- 第1章 PHP简介 -->
+            <div id="ch1" class="chapter-section active">
+                <h2>1. PHP简介 <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>PHP的诞生：</strong>PHP由Rasmus Lerdorf于1994年创建，最初是一组Personal Home Page Tools，用于追踪其个人网站的访问者</li><li><strong>名称演变：</strong>PHP原意为Personal Home Page，后改为递归缩写PHP: Hypertext Preprocessor（超文本预处理器）</li><li><strong>版本演进：</strong>PHP 5（2004）引入OOP，PHP 7（2015）性能翻倍，PHP 8（2020）引入JIT编译器和命名参数</li><li><strong>应用领域：</strong>Web后端开发（占全球网站77%+）、API开发、命令行脚本、内容管理系统（WordPress/Laravel）</li><li><strong>语言特点：</strong>服务端脚本语言、嵌入HTML、跨平台、开源免费、丰富的扩展库</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch1-code1')">📋 复制</button></div></div><pre id="ch1-code1"><code>&lt;?php
+// PHP代码以 &lt;?php 开始，以 ?&gt; 结束
+echo "Hello, World!";
+echo PHP_VERSION;      // 查看PHP版本
+echo PHP_OS;           // 查看操作系统
+echo php_uname();      // 详细系统信息
+?&gt;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>文件扩展名错误：PHP文件必须以<code>.php</code>为扩展名，<code>.html</code>文件中的PHP代码不会被解析</p><p>直接用浏览器打开：PHP需要通过Web服务器运行，不能像HTML那样直接双击打开</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">PHP的全称含义是什么？</div><input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(1,1)">检查答案</button><div id="ch1-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(1,1)">查看答案</button><div id="ch1-answer1" class="answer-box">PHP: Hypertext Preprocessor（超文本预处理器）</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(1)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第2章 开发环境配置(XAMPP) -->
+            <div id="ch2" class="chapter-section">
+                <h2>2. 开发环境配置(XAMPP) <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>XAMPP介绍：</strong>跨平台集成环境，包含Apache服务器、MySQL数据库、PHP和Perl，一键安装即可搭建开发环境</li><li><strong>目录结构：</strong>htdocs为网站根目录，PHP文件放于此可通过localhost访问；mysql目录存放数据库</li><li><strong>启动服务：</strong>通过XAMPP控制面板启动Apache和MySQL服务，默认端口80和3306</li><li><strong>配置修改：</strong>php.ini为PHP配置文件，可修改上传大小、时区、错误显示等设置</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch2-code1')">📋 复制</button></div></div><pre id="ch2-code1"><code>&lt;?php
+// 将此文件保存到 htdocs/info.php，浏览器访问 localhost/info.php
+phpinfo();  // 查看PHP完整配置信息
+
+// 检查关键配置
+echo "PHP版本: " . PHP_VERSION . "&lt;br&gt;";
+echo "文档根目录: " . $_SERVER['DOCUMENT_ROOT'] . "&lt;br&gt;";
+echo "当前文件: " . __FILE__ . "&lt;br&gt;";
+echo "时区: " . date_default_timezone_get() . "&lt;br&gt;";
+?&gt;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>端口冲突：Apache默认80端口，若被IIS或Skype占用需修改端口或关闭占用程序</p><p>修改php.ini不生效：修改后必须重启Apache服务才能使配置生效</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">XAMPP中PHP文件应放在哪个目录？</div><input type="text" class="answer-input" id="ch2-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(2,1)">检查答案</button><div id="ch2-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(2,1)">查看答案</button><div id="ch2-answer1" class="answer-box">htdocs目录</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(2)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第3章 第一个PHP程序 -->
+            <div id="ch3" class="chapter-section">
+                <h2>3. 第一个PHP程序 <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>PHP标签：</strong><code>&lt;?php ... ?&gt;</code>为标准标签，<code>&lt;?= ... ?&gt;</code>为短回显标签（等于<code>&lt;?php echo ... ?&gt;</code>）</li><li><strong>echo与print：</strong>echo可输出多个字符串（无返回值），print只能输出一个（返回1），echo稍快</li><li><strong>语句结束：</strong>每条语句必须以分号<code>;</code>结尾，最后一行的分号可省略但不推荐</li><li><strong>HTML嵌入：</strong>PHP可以与HTML混合编写，在<code>&lt;?php ?&gt;</code>外的内容直接输出</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch3-code1')">📋 复制</button></div></div><pre id="ch3-code1"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;&lt;?php echo "我的第一个PHP页面"; ?&gt;&lt;/h1&gt;
+    &lt;p&gt;今天是 &lt;?= date("Y-m-d") ?&gt;&lt;/p&gt;
+    &lt;?php
+        $name = "PHP学习者";
+        echo "&lt;p&gt;你好，{$name}！&lt;/p&gt;";
+        echo "&lt;p&gt;当前时间: " . date("H:i:s") . "&lt;/p&gt;";
+    ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记分号：<code>echo "hello"</code>缺少分号会报Parse error，最常见的新手错误</p><p>中文引号：使用<code>""</code>中文引号而非<code>""</code>英文引号导致语法错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写PHP代码输出你的名字和今天的日期</div><textarea class="answer-textarea" id="ch3-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(3,1)">检查答案</button><div id="ch3-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(3,1)">查看答案</button><div id="ch3-answer1" class="answer-box">&lt;?php
+$name = "张三";
+echo "我的名字是{$name}，今天是" . date("Y-m-d");</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(3)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第4章 注释 -->
+            <div id="ch4" class="chapter-section">
+                <h2>4. 注释 <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>单行注释：</strong>使用<code>//</code>或<code>#</code>，<code>//</code>更常用，<code>#</code>常用于shell风格脚本</li><li><strong>多行注释：</strong>使用<code>/* ... */</code>，可跨越多行，不能嵌套</li><li><strong>文档注释：</code>使用<code>/** ... */</code>，可被phpDocumentor等工具解析生成API文档</li><li><strong>注释的作用：</strong>解释代码逻辑、临时禁用代码、标注TODO/FIXME、生成文档</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch4-code1')">📋 复制</button></div></div><pre id="ch4-code1"><code>&lt;?php
+// 这是单行注释（C++风格）
+# 这是单行注释（Shell风格）
+
+/*
+ * 这是多行注释
+ * 可以写很多行
+ * 注意：多行注释不能嵌套
+ */
+
+/**
+ * 文档注释 - 用于生成API文档
+ * @param string $name 用户名
+ * @return string 问候语
+ */
+function greet(string $name): string {
+    return "Hello, {$name}!";
+}
+
+// TODO: 待实现的功能
+// FIXME: 需要修复的bug
+echo greet("World");</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>多行注释嵌套：<code>/* 外层 /* 内层 */ 这里还在注释中 */</code>会导致语法错误</p><p>注释未闭合：<code>/* 忘记闭合</code>会导致后面所有代码都被当作注释</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">PHP中用于生成API文档的注释格式是什么？</div><label class="option-label"><input type="radio" name="ch4-q1" value="A"> A. // 注释</label><label class="option-label"><input type="radio" name="ch4-q1" value="B"> B. # 注释</label><label class="option-label"><input type="radio" name="ch4-q1" value="C"> C. /** ... */ 注释</label><label class="option-label"><input type="radio" name="ch4-q1" value="D"> D. /* ... */ 注释</label><button class="btn btn-primary" onclick="checkAnswer(4,1)">检查答案</button><div id="ch4-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(4,1)">查看答案</button><div id="ch4-answer1" class="answer-box">C</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(4)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第5章 变量与作用域 -->
+            <div id="ch5" class="chapter-section">
+                <h2>5. 变量与作用域 <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>变量规则：</strong>以<code>$</code>开头，区分大小写，只能包含字母数字下划线，不能以数字开头</li><li><strong>局部作用域：</strong>函数内部声明的变量为局部变量，函数外无法访问</li><li><strong>全局作用域：</strong>函数外声明的变量为全局变量，函数内需用<code>global</code>关键字或<code>$GLOBALS</code>数组访问</li><li><strong>静态变量：</strong>使用<code>static</code>声明，函数调用结束后值不丢失</li><li><strong>超全局变量：</strong><code>$_GET</code>、<code>$_POST</code>、<code>$_SESSION</code>等在所有作用域均可访问</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch5-code1')">📋 复制</button></div></div><pre id="ch5-code1"><code>&lt;?php
+$name = "Alice";    // 全局变量
+
+function testScope() {
+    global $name;    // 使用global访问全局变量
+    echo $name;      // Alice
+
+    $local = "局部"; // 局部变量
+    static $count = 0; // 静态变量
+    $count++;
+    echo "调用次数: {$count}";
+}
+
+testScope();  // Alice 调用次数: 1
+testScope();  // Alice 调用次数: 2
+
+// $GLOBALS数组
+$x = 10;
+$y = 20;
+function add() {
+    $GLOBALS['z'] = $GLOBALS['x'] + $GLOBALS['y'];
+}
+add();
+echo $z;  // 30</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>函数内直接使用全局变量：函数内<code>echo $name</code>不使用global会报Undefined variable</p><p>忘记$符号：<code>name = "test"</code>会报语法错误，PHP变量必须以$开头</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何在函数内部访问全局变量<code>$count</code>？</div><input type="text" class="answer-input" id="ch5-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(5,1)">检查答案</button><div id="ch5-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(5,1)">查看答案</button><div id="ch5-answer1" class="answer-box">使用 global $count; 或 $GLOBALS['count']</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(5)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第6章 数据类型 -->
+            <div id="ch6" class="chapter-section">
+                <h2>6. 数据类型 <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>标量类型：</strong>string（字符串）、int（整数）、float（浮点数）、bool（布尔值）</li><li><strong>复合类型：</strong>array（数组）、object（对象）、callable（可调用）、iterable（可迭代）</li><li><strong>特殊类型：</strong>resource（资源，如数据库连接）、NULL（无值）</li><li><strong>类型检查：</strong><code>gettype()</code>获取类型，<code>is_int()</code>/<code>is_string()</code>等判断类型，<code>var_dump()</code>查看详细类型和值</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch6-code1')">📋 复制</button></div></div><pre id="ch6-code1"><code>&lt;?php
+// 标量类型
+$str = "Hello";       // string
+$num = 42;            // int
+$pi = 3.14;           // float
+$flag = true;         // bool
+
+// 复合类型
+$arr = [1, 2, 3];     // array
+$obj = new stdClass(); // object
+
+// 特殊类型
+$fp = fopen("test.txt", "r"); // resource
+$nothing = null;              // NULL
+
+// 类型检查
+echo gettype($str);    // string
+echo gettype($num);    // integer
+var_dump($pi);         // float(3.14)
+var_dump($flag);       // bool(true)
+
+is_string($str);       // true
+is_int($num);          // true
+is_null($nothing);     // true</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>松散比较混淆：<code>0 == "php"</code>为true（字符串转数字为0），应使用<code>===</code>严格比较</p><p>NULL与空字符串混淆：<code>null !== ""</code>，null是无值，空字符串是有值但长度为0</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">PHP有哪些标量数据类型？</div><input type="text" class="answer-input" id="ch6-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(6,1)">检查答案</button><div id="ch6-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(6,1)">查看答案</button><div id="ch6-answer1" class="answer-box">string、int、float、bool</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(6)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第7章 类型转换 -->
+            <div id="ch7" class="chapter-section">
+                <h2>7. 类型转换 <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>自动转换：</strong>PHP在运算时自动转换类型，如<code>"5" + 3</code>结果为8（字符串"5"自动转整数）</li><li><strong>强制转换：</strong>使用<code>(int)</code>、<code>(float)</code>、<code>(string)</code>、<code>(array)</code>等进行类型转换</li><li><strong>转换函数：</strong><code>intval()</code>、<code>floatval()</code>、<code>strval()</code>、<code>settype()</code></li><li><strong>字符串转数字：</strong>提取开头有效数字部分，如<code>"3abc"</code>转数字为3，<code>"abc3"</code>转为0</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch7-code1')">📋 复制</button></div></div><pre id="ch7-code1"><code>&lt;?php
+// 自动类型转换
+$result = "5" + 3;        // 8 (int)
+$result = "3.14" + 1;     // 4.14 (float)
+$result = true + 1;       // 2 (true→1)
+
+// 强制类型转换
+$x = "3.14abc";
+echo (int)$x;             // 3
+echo (float)$x;           // 3.14
+echo (string)42;          // "42"
+echo (bool)0;             // false
+echo (array)"hello";      // ["hello"]
+
+// 转换函数
+echo intval("42abc");     // 42
+echo floatval("3.14");    // 3.14
+echo strval(100);         // "100"
+
+$x = "123";
+settype($x, "integer");
+echo gettype($x);         // integer</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>非数字字符串转数字：<code>"abc" + 1</code>结果为1而非报错，PHP 8会产生Warning</p><p>浮点数转整数溢出：<code>(int)9223372036854775808</code>超出int范围结果不确定</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">表达式<code>"3abc" + 2</code>的结果是什么？</div><input type="text" class="answer-input" id="ch7-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(7,1)">检查答案</button><div id="ch7-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(7,1)">查看答案</button><div id="ch7-answer1" class="answer-box">5（"3abc"自动转换为3，3+2=5）</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(7)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第8章 运算符 -->
+            <div id="ch8" class="chapter-section">
+                <h2>8. 运算符 <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>算术运算符：</strong><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code> <code>**</code>（幂运算PHP 5.6+）</li><li><strong>比较运算符：</strong><code>==</code>松散比较、<code>===</code>严格比较（值和类型都相同）、<code>&lt;=&gt;</code>太空船运算符</li><li><strong>逻辑运算符：</strong><code>&&</code>与、<code>||</code>或、<code>!</code>非、<code>and</code>/<code>or</code>（优先级更低）</li><li><strong>赋值运算符：</strong><code>=</code>、<code>+=</code>、<code>.=</code>（字符串拼接赋值）等</li><li><strong>特殊运算符：</strong><code>??</code>NULL合并、<code>? :</code>三元、<code>.</code>字符串连接</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch8-code1')">📋 复制</button></div></div><pre id="ch8-code1"><code>&lt;?php
+// 算术运算符
+echo 10 % 3;      // 1 取模
+echo 2 ** 10;     // 1024 幂运算
+
+// 比较运算符
+var_dump(1 == "1");   // true（松散比较）
+var_dump(1 === "1");  // false（严格比较）
+echo 1 &lt;=&gt; 2;         // -1（太空船运算符）
+
+// 逻辑运算符
+$a = true && false;    // false
+$b = true || false;    // true
+
+// 字符串连接
+$greeting = "Hello" . " " . "World";  // Hello World
+$name = "PHP";
+$name .= "教程";         // PHP教程
+
+// NULL合并运算符
+$user = $name ?? "访客";  // 若$name为null则用"访客"
+
+// 三元运算符
+$status = ($age >= 18) ? "成年" : "未成年";</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>==与===混淆：<code>0 == false</code>为true但<code>0 === false</code>为false，建议优先使用===</p><p>and/or优先级问题：<code>$a = true && false</code>与<code>$a = true and false</code>结果不同，and优先级低于=</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question"><code>1 === "1"</code>的结果是什么？</div><label class="option-label"><input type="radio" name="ch8-q1" value="A"> A. true</label><label class="option-label"><input type="radio" name="ch8-q1" value="B"> B. false</label><label class="option-label"><input type="radio" name="ch8-q1" value="C"> C. 报错</label><button class="btn btn-primary" onclick="checkAnswer(8,1)">检查答案</button><div id="ch8-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(8,1)">查看答案</button><div id="ch8-answer1" class="answer-box">B（===严格比较，类型不同1是int，"1"是string）</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(8)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第9章 if-else语句 -->
+            <div id="ch9" class="chapter-section">
+                <h2>9. if-else语句 <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>if语句：</strong>条件为true时执行代码块，条件可以是任何表达式</li><li><strong>else语句：</strong>if条件为false时执行else代码块</li><li><strong>elseif语句：</strong>多个条件判断，PHP也支持<code>else if</code>（空格分开）写法</li><li><strong>替代语法：</strong>用于HTML模板中，<code>if(): ... endif;</code>形式，更适合混编</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch9-code1')">📋 复制</button></div></div><pre id="ch9-code1"><code>&lt;?php
+$score = 85;
+
+// 基本if-else
+if ($score >= 90) {
+    echo "优秀";
+} elseif ($score >= 70) {
+    echo "良好";
+} else {
+    echo "需要努力";
+}
+
+// 替代语法（模板中使用）
+$loggedIn = true;
+?&gt;
+&lt;?php if ($loggedIn): ?&gt;
+    &lt;p&gt;欢迎回来！&lt;/p&gt;
+&lt;?php else: ?&gt;
+    &lt;p&gt;请先登录&lt;/p&gt;
+&lt;?php endif; ?&gt;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>赋值与比较混淆：<code>if ($a = 5)</code>是赋值不是比较，应为<code>if ($a == 5)</code></p><p>elseif与else if：<code>elseif</code>是一个关键字，<code>else if</code>等同于<code>else { if }</code>，在替代语法中只能用<code>elseif</code></p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">写出判断一个数是正数、负数还是零的if-else代码</div><textarea class="answer-textarea" id="ch9-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(9,1)">检查答案</button><div id="ch9-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(9,1)">查看答案</button><div id="ch9-answer1" class="answer-box">$num = 5;
+if ($num > 0) {
+    echo "正数";
+} elseif ($num < 0) {
+    echo "负数";
+} else {
+    echo "零";
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(9)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第10章 switch语句 -->
+            <div id="ch10" class="chapter-section">
+                <h2>10. switch语句 <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本语法：</strong>将一个变量与多个case值比较，匹配后执行对应代码块</li><li><strong>break关键字：</strong>每个case后必须<code>break</code>，否则会继续执行下一个case（fall-through）</li><li><strong>default分支：</strong>所有case都不匹配时执行default，建议始终包含</li><li><strong>松散比较：</strong>switch使用<code>==</code>比较，注意<code>case "0"</code>和<code>case 0</code>可能同时匹配</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch10-code1')">📋 复制</button></div></div><pre id="ch10-code1"><code>&lt;?php
+$day = "周一";
+
+switch ($day) {
+    case "周一":
+        echo "新的一周开始了";
+        break;
+    case "周五":
+        echo "快到周末了";
+        break;
+    case "周六":
+    case "周日":
+        echo "周末愉快！";
+        break;
+    default:
+        echo "工作日";
+}
+
+// match表达式（PHP 8.0+）
+$result = match($status) {
+    200 => "成功",
+    404 => "未找到",
+    500 => "服务器错误",
+    default => "未知状态",
+};</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记break：缺少break导致穿透执行，<code>case "周一": echo "周一"; case "周二": echo "周二";</code>两个都会输出</p><p>松散比较问题：<code>switch(true)</code>中<code>case "php"</code>会匹配非空字符串，因<code>true == "php"</code></p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">switch语句中忘记写break会导致什么问题？</div><input type="text" class="answer-input" id="ch10-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(10,1)">检查答案</button><div id="ch10-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(10,1)">查看答案</button><div id="ch10-answer1" class="answer-box">穿透（fall-through），会继续执行下一个case的代码直到遇到break</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(10)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(11)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第11章 for循环 -->
+            <div id="ch11" class="chapter-section">
+                <h2>11. for循环 <button class="bookmark-btn" onclick="toggleBookmark(11)" id="bookmarkBtn11">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本语法：</strong><code>for (初始化; 条件; 递增) { 循环体 }</code>，三个表达式均可省略</li><li><strong>执行顺序：</strong>初始化→条件判断→循环体→递增→条件判断→...</li><li><strong>替代语法：</strong><code>for (;;): ... endfor;</code>用于模板中</li><li><strong>嵌套循环：</strong>外层循环一次，内层循环完整执行一遍，注意性能影响</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch11-code1')">📋 复制</button></div></div><pre id="ch11-code1"><code>&lt;?php
+// 基本for循环
+for ($i = 1; $i <= 10; $i++) {
+    echo $i . " ";  // 1 2 3 4 5 6 7 8 9 10
+}
+
+// 计算1到100的和
+$sum = 0;
+for ($i = 1; $i <= 100; $i++) {
+    $sum += $i;
+}
+echo "1到100的和: {$sum}";  // 5050
+
+// 嵌套循环 - 九九乘法表
+for ($i = 1; $i <= 9; $i++) {
+    for ($j = 1; $j <= $i; $j++) {
+        echo "{$j}×{$i}=" . ($i * $j) . " ";
+    }
+    echo "&lt;br&gt;";
+}
+
+// 省略表达式的无限循环
+for (;;) {
+    break;  // 需要手动break退出
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>条件写反导致死循环：<code>for ($i = 0; $i >= 0; $i++)</code>永远不会终止</p><p>循环变量修改：<code>for ($i = 0; $i < 10; $i--)</code>递减而非递增导致死循环</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用for循环输出1到50中所有偶数</div><textarea class="answer-textarea" id="ch11-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(11,1)">检查答案</button><div id="ch11-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(11,1)">查看答案</button><div id="ch11-answer1" class="answer-box">for ($i = 2; $i <= 50; $i += 2) {
+    echo $i . " ";
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch11-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(11)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn11" onclick="markCompleted(11)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(10)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(12)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第12章 while与do-while -->
+            <div id="ch12" class="chapter-section">
+                <h2>12. while与do-while <button class="bookmark-btn" onclick="toggleBookmark(12)" id="bookmarkBtn12">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>while循环：</strong>先判断条件再执行，条件为true时重复执行代码块</li><li><strong>do-while循环：</strong>先执行一次再判断条件，保证至少执行一次</li><li><strong>适用场景：</strong>循环次数未知时用while，至少执行一次时用do-while</li><li><strong>替代语法：</strong><code>while (条件): ... endwhile;</code></li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch12-code1')">📋 复制</button></div></div><pre id="ch12-code1"><code>&lt;?php
+// while循环 - 计算2的幂直到超过1000
+$power = 1;
+while ($power <= 1000) {
+    $power *= 2;
+    echo $power . " ";
+}
+// 2 4 8 16 32 64 128 256 512 1024
+
+// do-while - 至少执行一次
+$num = 5;
+do {
+    echo $num . " ";
+    $num--;
+} while ($num > 0);
+// 5 4 3 2 1
+
+// 读取数据直到结束
+$data = ["a", "b", "c", ""];
+$i = 0;
+while (isset($data[$i]) && $data[$i] !== "") {
+    echo $data[$i];
+    $i++;
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>while条件永远为true：<code>while(true)</code>忘记更新循环变量导致死循环</p><p>do-while忘记分号：<code>while($i > 0)</code>后面必须有<code>;</code>结束do-while语句</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">while和do-while的主要区别是什么？</div><input type="text" class="answer-input" id="ch12-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(12,1)">检查答案</button><div id="ch12-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(12,1)">查看答案</button><div id="ch12-answer1" class="answer-box">while先判断后执行，do-while先执行后判断（至少执行一次）</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch12-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(12)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn12" onclick="markCompleted(12)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(11)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(13)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第13章 foreach循环 -->
+            <div id="ch13" class="chapter-section">
+                <h2>13. foreach循环 <button class="bookmark-btn" onclick="toggleBookmark(13)" id="bookmarkBtn13">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>遍历数组：</strong><code>foreach ($array as $value)</code>遍历值，<code>foreach ($array as $key => $value)</code>遍历键值对</li><li><strong>引用修改：</strong><code>foreach ($array as &$value)</code>通过引用直接修改数组元素</li><li><strong>遍历对象：</strong>foreach可遍历对象的公开属性</li><li><strong>注意事项：</strong>foreach结束后应<code>unset()</code>引用变量，避免后续意外修改</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch13-code1')">📋 复制</button></div></div><pre id="ch13-code1"><code>&lt;?php
+// 遍历索引数组
+$fruits = ["苹果", "香蕉", "橘子"];
+foreach ($fruits as $fruit) {
+    echo $fruit . " ";
+}
+
+// 遍历关联数组
+$person = ["name" => "Alice", "age" => 25, "city" => "北京"];
+foreach ($person as $key => $value) {
+    echo "{$key}: {$value}&lt;br&gt;";
+}
+
+// 引用修改
+$nums = [1, 2, 3, 4, 5];
+foreach ($nums as &$num) {
+    $num *= 2;  // 每个元素乘以2
+}
+unset($num);  // 重要：取消引用
+// $nums = [2, 4, 6, 8, 10]
+
+// 替代语法
+foreach ($fruits as $fruit):
+    echo "&lt;li&gt;{$fruit}&lt;/li&gt;";
+endforeach;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>引用变量未unset：foreach引用后<code>$num</code>仍指向最后一个元素，后续操作可能意外修改数组</p><p>遍历中修改数组：在foreach中添加/删除元素可能导致不可预期的行为</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用foreach遍历关联数组并输出键值对</div><textarea class="answer-textarea" id="ch13-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(13,1)">检查答案</button><div id="ch13-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(13,1)">查看答案</button><div id="ch13-answer1" class="answer-box">$colors = ["red" => "红色", "blue" => "蓝色"];
+foreach ($colors as $en => $cn) {
+    echo "{$en}: {$cn}";
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch13-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(13)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn13" onclick="markCompleted(13)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(12)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(14)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第14章 索引数组 -->
+            <div id="ch14" class="chapter-section">
+                <h2>14. 索引数组 <button class="bookmark-btn" onclick="toggleBookmark(14)" id="bookmarkBtn14">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>创建数组：</strong>使用<code>[]</code>或<code>array()</code>，索引默认从0开始自动递增</li><li><strong>访问元素：</strong>通过索引<code>$arr[0]</code>访问，索引从0开始</li><li><strong>添加元素：</strong><code>$arr[] = value</code>在末尾追加，或<code>array_push()</code></li><li><strong>删除元素：</strong><code>unset($arr[$index])</code>删除但索引不重新排列，需<code>array_values()</code>重建索引</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch14-code1')">📋 复制</button></div></div><pre id="ch14-code1"><code>&lt;?php
+// 创建索引数组
+$fruits = ["苹果", "香蕉", "橘子"];
+$nums = array(10, 20, 30);
+
+// 访问元素
+echo $fruits[0];  // 苹果
+echo $fruits[1];  // 香蕉
+
+// 添加元素
+$fruits[] = "葡萄";       // 末尾追加
+array_push($fruits, "芒果"); // 末尾追加
+
+// 修改元素
+$fruits[0] = "红苹果";
+
+// 删除元素
+unset($fruits[1]);  // 删除索引1的元素
+$fruits = array_values($fruits);  // 重建索引
+
+// 数组长度
+echo count($fruits);  // 4
+
+// 检查元素是否存在
+echo in_array("葡萄", $fruits);  // true
+echo isset($fruits[0]);          // true</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>访问不存在的索引：<code>$arr[5]</code>当数组只有3个元素时报Undefined offset</p><p>unset后索引不连续：删除后数组索引可能有"空洞"，循环时用foreach而非for更安全</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何获取数组的长度？</div><input type="text" class="answer-input" id="ch14-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(14,1)">检查答案</button><div id="ch14-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(14,1)">查看答案</button><div id="ch14-answer1" class="answer-box">使用 count() 函数</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch14-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(14)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn14" onclick="markCompleted(14)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(13)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(15)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第15章 关联数组 -->
+            <div id="ch15" class="chapter-section">
+                <h2>15. 关联数组 <button class="bookmark-btn" onclick="toggleBookmark(15)" id="bookmarkBtn15">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>定义方式：</strong>使用字符串键名<code>["key" => "value"]</code>，键名通常为有意义的名称</li><li><strong>访问元素：</strong>通过键名<code>$arr["key"]</code>访问，也可以用变量作键名</li><li><strong>多维数组：</strong>数组的值可以是另一个数组，形成嵌套结构</li><li><strong>键的规则：</strong>键名可以是int或string，float键会被截断为int，bool转0/1</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch15-code1')">📋 复制</button></div></div><pre id="ch15-code1"><code>&lt;?php
+// 创建关联数组
+$student = [
+    "name"  => "张三",
+    "age"   => 20,
+    "score" => 95.5
+];
+
+// 访问和修改
+echo $student["name"];         // 张三
+$student["age"] = 21;         // 修改
+$student["grade"] = "A";      // 添加
+
+// 多维关联数组
+$class = [
+    "student1" => ["name" => "张三", "score" => 95],
+    "student2" => ["name" => "李四", "score" => 88],
+];
+echo $class["student1"]["name"];  // 张三
+
+// 检查键是否存在
+echo array_key_exists("name", $student);  // true
+echo isset($student["email"]);            // false
+
+// 获取所有键和值
+$keys = array_keys($student);
+$values = array_values($student);</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>键名未加引号：<code>$arr[key]</code>中的key若未定义常量会报Warning，必须<code>$arr["key"]</code></p><p>访问不存在的键：<code>$arr["email"]</code>键不存在报Undefined index，用isset()先检查</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建一个包含3个学生信息（姓名、年龄）的多维关联数组</div><textarea class="answer-textarea" id="ch15-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(15,1)">检查答案</button><div id="ch15-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(15,1)">查看答案</button><div id="ch15-answer1" class="answer-box">$students = [
+    "s1" => ["name" => "张三", "age" => 20],
+    "s2" => ["name" => "李四", "age" => 21],
+    "s3" => ["name" => "王五", "age" => 22],
+];</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch15-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(15)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn15" onclick="markCompleted(15)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(14)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(16)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第16章 数组函数 -->
+            <div id="ch16" class="chapter-section">
+                <h2>16. 数组函数 <button class="bookmark-btn" onclick="toggleBookmark(16)" id="bookmarkBtn16">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>排序函数：</strong><code>sort()</code>升序、<code>rsort()</code>降序、<code>asort()</code>按值升序保留键、<code>ksort()</code>按键升序</li><li><strong>查找函数：</strong><code>in_array()</code>检查值、<code>array_search()</code>搜索值返回键、<code>array_key_exists()</code>检查键</li><li><strong>操作函数：</strong><code>array_merge()</code>合并、<code>array_slice()</code>切片、<code>array_splice()</code>移除替换</li><li><strong>过滤映射：</strong><code>array_filter()</code>过滤、<code>array_map()</code>映射、<code>array_reduce()</code>归约</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch16-code1')">📋 复制</button></div></div><pre id="ch16-code1"><code>&lt;?php
+$nums = [3, 1, 4, 1, 5, 9, 2, 6];
+
+// 排序
+sort($nums);          // [1,1,2,3,4,5,6,9] 键重排
+$assoc = ["b" => 2, "a" => 1];
+asort($assoc);        // 按值排序保留键
+ksort($assoc);        // 按键排序
+
+// 查找
+echo in_array(4, $nums);           // true
+echo array_search(5, $nums);       // 4 (返回键名)
+
+// 合并
+$a = [1, 2]; $b = [3, 4];
+$merged = array_merge($a, $b);    // [1,2,3,4]
+
+// 过滤
+$scores = [45, 80, 92, 30, 75];
+$passed = array_filter($scores, fn($s) => $s >= 60);
+// [80, 92, 75]
+
+// 映射
+$doubled = array_map(fn($n) => $n * 2, $nums);
+
+// 归约
+$total = array_reduce($scores, fn($carry, $item) => $carry + $item, 0);
+
+// 去重
+$unique = array_unique([1,2,2,3,3,3]);  // [1,2,3]</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>sort()重排索引：<code>sort()</code>会重新索引关联数组，保留键应使用<code>asort()</code></p><p>array_merge键覆盖：两个数组有相同字符串键时，后面的值覆盖前面的</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用array_filter过滤出数组中所有的偶数</div><textarea class="answer-textarea" id="ch16-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(16,1)">检查答案</button><div id="ch16-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(16,1)">查看答案</button><div id="ch16-answer1" class="answer-box">$nums = [1, 2, 3, 4, 5, 6];
+$evens = array_filter($nums, fn($n) => $n % 2 === 0);
+// [2, 4, 6]</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch16-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(16)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn16" onclick="markCompleted(16)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(15)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(17)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第17章 字符串操作 -->
+            <div id="ch17" class="chapter-section">
+                <h2>17. 字符串操作 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>字符串定义：</strong>单引号（不解析变量）、双引号（解析变量和转义）、Heredoc/Nowdoc（多行）</li><li><strong>常用函数：</strong><code>strlen()</code>长度、<code>substr()</code>截取、<code>str_replace()</code>替换、<code>strpos()</code>查找位置</li><li><strong>大小写转换：</strong><code>strtoupper()</code>、<code>strtolower()</code>、<code>ucfirst()</code>首字母大写</li><li><strong>分割与连接：</strong><code>explode()</code>分割、<code>implode()</code>连接</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch17-code1')">📋 复制</button></div></div><pre id="ch17-code1"><code>&lt;?php
+// 单引号vs双引号
+$name = "World";
+echo 'Hello $name';    // Hello $name（不解析）
+echo "Hello {$name}";  // Hello World（解析变量）
+
+// 常用函数
+$str = "Hello, PHP World!";
+echo strlen($str);              // 17
+echo substr($str, 7, 3);        // PHP
+echo str_replace("PHP", "PHP8", $str);  // Hello, PHP8 World!
+echo strpos($str, "PHP");       // 7
+
+// 大小写
+echo strtoupper("hello");       // HELLO
+echo strtolower("HELLO");       // hello
+echo ucfirst("hello world");    // Hello world
+
+// 分割与连接
+$parts = explode(",", "a,b,c,d");   // ["a","b","c","d"]
+$joined = implode("-", $parts);     // a-b-c-d
+
+// 去空白
+echo trim("  hello  ");         // hello
+echo ltrim("  hello");          // hello
+echo rtrim("hello  ");          // hello</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>中文字符串长度：<code>strlen("中文")</code>返回6而非2（UTF-8每字3字节），需用<code>mb_strlen()</code></p><p>单引号不解析转义：<code>'Hello\n'</code>输出字面量\n而非换行</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何将字符串"a,b,c"按逗号分割成数组？</div><input type="text" class="answer-input" id="ch17-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(17,1)">检查答案</button><div id="ch17-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(17,1)">查看答案</button><div id="ch17-answer1" class="answer-box">explode(",", "a,b,c")</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch17-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(17)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn17" onclick="markCompleted(17)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(16)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(18)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第18章 函数定义 -->
+            <div id="ch18" class="chapter-section">
+                <h2>18. 函数定义 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本语法：</strong><code>function functionName($param) { ... return $result; }</code></li><li><strong>命名规范：</strong>函数名不区分大小写，建议使用snake_case或camelCase</li><li><strong>返回值：</strong>使用<code>return</code>返回值，无return则返回null；PHP 7+支持返回类型声明</li><li><strong>函数提升：</strong>PHP中函数定义可以在调用之后（有条件定义除外）</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch18-code1')">📋 复制</button></div></div><pre id="ch18-code1"><code>&lt;?php
+// 基本函数
+function greet(string $name): string {
+    return "Hello, {$name}!";
+}
+echo greet("PHP");  // Hello, PHP!
+
+// 带返回类型声明
+function add(int $a, int $b): int {
+    return $a + $b;
+}
+echo add(3, 5);  // 8
+
+// 无返回值（返回null）
+function printLine(string $text): void {
+    echo $text . "&lt;br&gt;";
+}
+printLine("测试");
+
+// 可空返回类型
+function findUser(int $id): ?string {
+    if ($id > 0) return "User_{$id}";
+    return null;
+}
+
+// 严格模式
+declare(strict_types=1);
+function multiply(float $a, float $b): float {
+    return $a * $b;
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>类型不匹配：开启strict_types后<code>add("3", 5)</code>会抛TypeError</p><p>void函数使用返回值：<code>function f(): void { return 1; }</code>会报Fatal error</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">写一个函数判断一个数是否为偶数</div><textarea class="answer-textarea" id="ch18-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button><div id="ch18-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button><div id="ch18-answer1" class="answer-box">function isEven(int $num): bool {
+    return $num % 2 === 0;
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch18-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(18)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn18" onclick="markCompleted(18)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(17)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(19)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第19章 函数参数与返回值 -->
+            <div id="ch19" class="chapter-section">
+                <h2>19. 函数参数与返回值 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>默认参数：</strong><code>function greet($name = "World")</code>，默认参数必须放在非默认参数右侧</li><li><strong>类型声明：</strong>PHP 7+支持int、float、string、bool、array、callable、self、类名等类型</li><li><strong>可变参数：</strong><code>...$args</code>收集剩余参数，<code>func_get_args()</code>获取所有参数</li><li><strong>命名参数：</strong>PHP 8+支持<code>greet(name: "Alice")</code>，可跳过可选参数</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch19-code1')">📋 复制</button></div></div><pre id="ch19-code1"><code>&lt;?php
+// 默认参数
+function connect(string $host, int $port = 3306): string {
+    return "{$host}:{$port}";
+}
+echo connect("localhost");       // localhost:3306
+echo connect("db.com", 3307);   // db.com:3307
+
+// 可变参数
+function sum(float ...$numbers): float {
+    return array_sum($numbers);
+}
+echo sum(1, 2, 3, 4, 5);  // 15
+
+// 命名参数（PHP 8+）
+function createUser(string $name, int $age, string $role = "user"): array {
+    return compact('name', 'age', 'role');
+}
+$user = createUser(age: 25, name: "Alice");
+// ["name" => "Alice", "age" => 25, "role" => "user"]
+
+// 引用传递
+function addPrefix(&$str) {
+    $str = "Prefix_" . $str;
+}
+$text = "Hello";
+addPrefix($text);
+echo $text;  // Prefix_Hello</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>默认参数位置错误：<code>function f($a = 1, $b)</code>非法，默认参数必须在非默认参数右边</p><p>引用传递未加&：想修改外部变量但忘记<code>function f(&$param)</code>中的&</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">写一个函数接受任意数量的参数并返回它们的平均值</div><textarea class="answer-textarea" id="ch19-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(19,1)">检查答案</button><div id="ch19-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(19,1)">查看答案</button><div id="ch19-answer1" class="answer-box">function average(float ...$nums): float {
+    return array_sum($nums) / count($nums);
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch19-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(19)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn19" onclick="markCompleted(19)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(18)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(20)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第20章 匿名函数 -->
+            <div id="ch20" class="chapter-section">
+                <h2>20. 匿名函数 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>闭包定义：</strong><code>function($param) { ... }</code>，没有函数名的函数，可赋值给变量</li><li><strong>use关键字：</strong>从父作用域继承变量，<code>function() use ($var) { ... }</code></li><li><strong>箭头函数：</strong>PHP 7.4+的<code>fn($x) => $x * 2</code>，自动捕获外部变量</li><li><strong>回调使用：</strong>常作为array_map、array_filter、usort等的回调参数</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch20-code1')">📋 复制</button></div></div><pre id="ch20-code1"><code>&lt;?php
+// 匿名函数赋值给变量
+$greet = function(string $name): string {
+    return "Hello, {$name}!";
+};
+echo $greet("PHP");  // Hello, PHP!
+
+// use捕获外部变量
+$prefix = "Mr.";
+$formatName = function(string $name) use ($prefix): string {
+    return "{$prefix} {$name}";
+};
+echo $formatName("Smith");  // Mr. Smith
+
+// 箭头函数（PHP 7.4+）
+$multiply = fn($a, $b) => $a * $b;
+echo $multiply(3, 4);  // 12
+
+// 作为回调使用
+$nums = [3, 1, 4, 1, 5];
+$doubled = array_map(fn($n) => $n * 2, $nums);
+// [6, 2, 8, 2, 10]
+
+$evens = array_filter($nums, fn($n) => $n % 2 === 0);
+// [4]
+
+// 自定义排序
+usort($nums, fn($a, $b) => $b - $a);  // 降序</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>use不传引用：<code>use ($var)</code>捕获的是值，修改不影响外部；需要<code>use (&$var)</code>才能修改</p><p>箭头函数中$this：箭头函数自动绑定<code>$this</code>，但匿名函数需要<code>use ($this)</code>（PHP 7.1+自动可用）</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用匿名函数和array_map将数组[1,2,3,4,5]中每个元素平方</div><textarea class="answer-textarea" id="ch20-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(20,1)">检查答案</button><div id="ch20-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(20,1)">查看答案</button><div id="ch20-answer1" class="answer-box">$nums = [1, 2, 3, 4, 5];
+$squares = array_map(fn($n) => $n ** 2, $nums);
+// [1, 4, 9, 16, 25]</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch20-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(20)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn20" onclick="markCompleted(20)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(19)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(21)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第21章 类与对象 -->
+            <div id="ch21" class="chapter-section">
+                <h2>21. 类与对象 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>类的定义：</strong>使用<code>class</code>关键字，包含属性和方法，属性可声明类型和可见性</li><li><strong>访问修饰符：</strong><code>public</code>公开、<code>protected</code>受保护（子类可访问）、<code>private</code>私有（仅本类）</li><li><strong>$this引用：</strong>在方法内使用<code>$this-></code>访问当前对象的属性和方法</li><li><strong>对象创建：</strong>使用<code>new ClassName()</code>创建实例，对象按引用传递</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch21-code1')">📋 复制</button></div></div><pre id="ch21-code1"><code>&lt;?php
+class Person {
+    public string $name;
+    protected int $age;
+    private string $email;
+
+    public function __construct(string $name, int $age) {
+        $this->name = $name;
+        $this->age = $age;
+    }
+
+    public function introduce(): string {
+        return "我是{$this->name}，今年{$this->age}岁";
+    }
+
+    public function getAge(): int {
+        return $this->age;
+    }
+}
+
+$person = new Person("张三", 25);
+echo $person->name;            // 张三
+echo $person->introduce();     // 我是张三，今年25岁
+echo $person->getAge();        // 25
+// echo $person->age;          // 错误：protected属性外部不可访问</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>使用->访问属性忘记$：<code>$this->name</code>而非<code>$this->$name</code>，后者会把$name的值当属性名</p><p>访问private属性：<code>$obj->privateProp</code>报Fatal error，应通过getter方法</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建一个Rectangle类，包含宽高属性和计算面积的方法</div><textarea class="answer-textarea" id="ch21-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(21,1)">检查答案</button><div id="ch21-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(21,1)">查看答案</button><div id="ch21-answer1" class="answer-box">class Rectangle {
+    public float $width;
+    public float $height;
+    public function __construct(float $w, float $h) {
+        $this->width = $w;
+        $this->height = $h;
+    }
+    public function area(): float {
+        return $this->width * $this->height;
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch21-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(21)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn21" onclick="markCompleted(21)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(20)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(22)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第22章 构造与析构 -->
+            <div id="ch22" class="chapter-section">
+                <h2>22. 构造与析构 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>构造函数：</strong><code>__construct()</code>在创建对象时自动调用，用于初始化属性</li><li><strong>析构函数：</strong><code>__destruct()</code>在对象被销毁时自动调用，用于释放资源</li><li><strong>构造函数提升：</strong>PHP 8+支持<code>function __construct(public int $x)</code>直接声明并初始化属性</li><li><strong>对象销毁：</strong>无引用时由垃圾回收自动销毁，也可用<code>unset()</code>手动销毁</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch22-code1')">📋 复制</button></div></div><pre id="ch22-code1"><code>&lt;?php
+class Database {
+    private ?PDO $conn = null;
+
+    public function __construct(string $host, string $dbname) {
+        $this->conn = new PDO("mysql:host={$host};dbname={$dbname}");
+        echo "数据库连接已建立&lt;br&gt;";
+    }
+
+    public function __destruct() {
+        $this->conn = null;  // 关闭连接
+        echo "数据库连接已关闭&lt;br&gt;";
+    }
+}
+
+$db = new Database("localhost", "test");
+unset($db);  // 触发析构函数
+
+// PHP 8 构造函数提升
+class Point {
+    public function __construct(
+        public float $x,
+        public float $y
+    ) {}
+}
+$p = new Point(3.0, 4.0);
+echo $p->x;  // 3.0</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>构造函数中调用被子类覆盖的方法：父类构造中<code>$this->method()</code>可能调用子类覆盖后的版本</p><p>析构中抛出异常：析构函数中抛出异常会导致Fatal error</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">PHP 8的构造函数提升写法有什么好处？</div><input type="text" class="answer-input" id="ch22-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(22,1)">检查答案</button><div id="ch22-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(22,1)">查看答案</button><div id="ch22-answer1" class="answer-box">直接在构造函数参数中声明属性，减少样板代码，无需手动赋值</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch22-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(22)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn22" onclick="markCompleted(22)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(21)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(23)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第23章 继承 -->
+            <div id="ch23" class="chapter-section">
+                <h2>23. 继承 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>extends关键字：</strong><code>class Child extends Parent</code>，子类继承父类的public和protected成员</li><li><strong>方法重写：</strong>子类可重写父类方法，建议使用<code>#[Override]</code>属性（PHP 8.3+）标注</li><li><strong>parent关键字：</strong>用<code>parent::__construct()</code>调用父类方法</li><li><strong>final关键字：</strong><code>final class</code>不可继承，<code>final method</code>不可重写</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch23-code1')">📋 复制</button></div></div><pre id="ch23-code1"><code>&lt;?php
+class Animal {
+    public function __construct(protected string $name) {}
+
+    public function speak(): string {
+        return "{$this->name}发出声音";
+    }
+}
+
+class Dog extends Animal {
+    public function __construct(string $name, private string $breed) {
+        parent::__construct($name);
+    }
+
+    public function speak(): string {
+        return "{$this->name}汪汪叫";
+    }
+
+    public function info(): string {
+        return "{$this->name}（{$this->breed}）";
+    }
+}
+
+$dog = new Dog("旺财", "柴犬");
+echo $dog->speak();  // 旺财汪汪叫
+echo $dog->info();   // 旺财（柴犬）
+
+// final类
+final class Utility {
+    final public function helper(): void {}
+}
+// class SubUtility extends Utility {}  // 错误！final类不能被继承</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记调用parent构造：<code>class B extends A</code>若B有自己的构造但不调用<code>parent::__construct()</code>，A的初始化不会执行</p><p>重写方法降低可见性：父类public方法不能在子类改为protected/private</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建一个Animal父类和Cat子类，Cat重写speak方法</div><textarea class="answer-textarea" id="ch23-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(23,1)">检查答案</button><div id="ch23-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(23,1)">查看答案</button><div id="ch23-answer1" class="answer-box">class Animal {
+    public function speak(): string {
+        return "发出声音";
+    }
+}
+class Cat extends Animal {
+    public function speak(): string {
+        return "喵喵叫";
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch23-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(23)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn23" onclick="markCompleted(23)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(22)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(24)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第24章 接口与抽象类 -->
+            <div id="ch24" class="chapter-section">
+                <h2>24. 接口与抽象类 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>接口interface：</strong>定义方法签名（无实现），类用<code>implements</code>实现，可多实现</li><li><strong>抽象类abstract：</strong>可包含抽象方法和具体实现，子类用<code>extends</code>继承，单继承</li><li><strong>接口vs抽象类：</strong>接口定义"能做什么"，抽象类定义"是什么"；接口多实现，抽象类单继承</li><li><strong>接口常量：</strong>接口中可定义常量，实现类的常量不能覆盖接口常量</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch24-code1')">📋 复制</button></div></div><pre id="ch24-code1"><code>&lt;?php
+// 接口
+interface Logger {
+    public function log(string $message): void;
+    public function error(string $message): void;
+}
+
+interface Formattable {
+    public function format(string $text): string;
+}
+
+// 实现多个接口
+class FileLogger implements Logger, Formattable {
+    public function log(string $message): void {
+        file_put_contents("app.log", $message . "\n", FILE_APPEND);
+    }
+    public function error(string $message): void {
+        $this->log("[ERROR] " . $message);
+    }
+    public function format(string $text): string {
+        return "[" . date("Y-m-d") . "] " . $text;
+    }
+}
+
+// 抽象类
+abstract class Shape {
+    abstract public function area(): float;
+    public function describe(): string {
+        return "面积: " . $this->area();
+    }
+}
+
+class Circle extends Shape {
+    public function __construct(private float $radius) {}
+    public function area(): float {
+        return pi() * $this->radius ** 2;
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>未实现所有接口方法：实现接口必须实现所有方法，否则报Fatal error</p><p>抽象类不能实例化：<code>new Shape()</code>报错，必须创建具体子类实例</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">接口和抽象类的主要区别是什么？</div><input type="text" class="answer-input" id="ch24-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(24,1)">检查答案</button><div id="ch24-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(24,1)">查看答案</button><div id="ch24-answer1" class="answer-box">接口只能定义方法签名，可多实现；抽象类可有具体实现，只能单继承</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch24-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(24)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn24" onclick="markCompleted(24)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(23)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(25)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第25章 命名空间 -->
+            <div id="ch25" class="chapter-section">
+                <h2>25. 命名空间 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本语法：</strong><code>namespace App\Controller;</code>必须在文件最前面声明，解决类名冲突</li><li><strong>使用命名空间：</strong><code>use App\Controller\UserController;</code>导入，<code>use App\Controller as Ctrl;</code>别名</li><li><strong>全局空间：</strong>没有命名空间的代码在全局空间<code>\</code>中，如<code>\strlen()</code></li><li><strong>PSR-4规范：</strong>命名空间与目录结构对应，类名与文件名对应，Composer自动加载</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch25-code1')">📋 复制</button></div></div><pre id="ch25-code1"><code>&lt;?php
+// 文件: App/Models/User.php
+namespace App\Models;
+
+class User {
+    public function __construct(private string $name) {}
+    public function getName(): string { return $this->name; }
+}
+
+// 文件: app.php
+namespace App\Controller;
+
+use App\Models\User;
+use App\Models\User as UserModel;  // 别名
+
+class UserController {
+    public function show(): void {
+        $user = new User("Alice");
+        echo $user->getName();
+    }
+}
+
+// 全局函数
+$len = \strlen("hello");  // 反斜杠开头表示全局
+
+// 命名空间常量
+echo __NAMESPACE__;  // App\Controller</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>namespace不在文件开头：<code>&lt;?php</code>之前不能有任何输出，namespace必须在<code>&lt;?php</code>后第一条语句</p><p>忘记use导入：使用<code>new User()</code>但未导入，会在当前命名空间查找导致类不存在</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何为命名空间App\Models\User设置别名MU？</div><input type="text" class="answer-input" id="ch25-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(25,1)">检查答案</button><div id="ch25-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(25,1)">查看答案</button><div id="ch25-answer1" class="answer-box">use App\Models\User as MU;</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch25-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(25)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn25" onclick="markCompleted(25)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(24)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(26)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第26章 表单处理($_GET/$_POST) -->
+            <div id="ch26" class="chapter-section">
+                <h2>26. 表单处理($_GET/$_POST) <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>$_GET：</strong>收集URL参数（?name=value），数据可见于URL，有长度限制，适合搜索/分页</li><li><strong>$_POST：</strong>收集HTTP POST数据，不在URL中显示，无长度限制，适合登录/提交</li><li><strong>$_REQUEST：</strong>包含GET+POST+COOKIE，不推荐使用，安全风险高</li><li><strong>数据过滤：</strong>始终使用<code>htmlspecialchars()</code>转义输出，防止XSS攻击</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch26-code1')">📋 复制</button></div></div><pre id="ch26-code1"><code>&lt;!-- form.html --&gt;
+&lt;form method="POST" action="process.php"&gt;
+    &lt;input type="text" name="username"&gt;
+    &lt;input type="email" name="email"&gt;
+    &lt;button type="submit"&gt;提交&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;?php
+// process.php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = $_POST["username"] ?? "";
+    $email = $_POST["email"] ?? "";
+
+    // 数据验证
+    $name = trim($name);
+    $email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+    // 安全输出（防XSS）
+    echo "用户名: " . htmlspecialchars($name);
+    echo "邮箱: " . htmlspecialchars($email ?? "");
+}
+
+// GET参数处理
+$page = (int)($_GET["page"] ?? 1);
+$search = htmlspecialchars($_GET["q"] ?? "");
+?&gt;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>直接输出用户输入：不转义直接<code>echo $_POST["name"]</code>存在XSS风险，必须<code>htmlspecialchars()</code></p><p>未检查请求方法：不检查<code>$_SERVER["REQUEST_METHOD"]</code>直接访问POST数据可能报Undefined index</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">GET和POST的主要区别是什么？</div><input type="text" class="answer-input" id="ch26-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(26,1)">检查答案</button><div id="ch26-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(26,1)">查看答案</button><div id="ch26-answer1" class="answer-box">GET数据在URL中可见、有长度限制、适合查询；POST数据在请求体中、无长度限制、适合提交敏感数据</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch26-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(26)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn26" onclick="markCompleted(26)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(25)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(27)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第27章 文件上传 -->
+            <div id="ch27" class="chapter-section">
+                <h2>27. 文件上传 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>$_FILES数组：</strong>包含name、type、size、tmp_name、error等信息</li><li><strong>上传流程：</strong>表单<code>enctype="multipart/form-data"</code>→接收→验证→移动</li><li><strong>安全验证：</strong>检查文件类型、大小、扩展名，使用<code>move_uploaded_file()</code>而非copy</li><li><strong>错误码：</strong>UPLOAD_ERR_OK(0)成功、UPLOAD_ERR_INI_SIZE(1)超php.ini限制、UPLOAD_ERR_NO_FILE(4)无文件</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch27-code1')">📋 复制</button></div></div><pre id="ch27-code1"><code>&lt;!-- upload.html --&gt;
+&lt;form method="POST" enctype="multipart/form-data"&gt;
+    &lt;input type="file" name="avatar" accept="image/*"&gt;
+    &lt;button&gt;上传&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;?php
+// upload.php
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $file = $_FILES["avatar"];
+
+    if ($file["error"] !== UPLOAD_ERR_OK) {
+        die("上传失败，错误码: " . $file["error"]);
+    }
+
+    // 验证文件类型
+    $allowed = ["image/jpeg", "image/png", "image/gif"];
+    if (!in_array($file["type"], $allowed)) {
+        die("只允许上传JPG/PNG/GIF图片");
+    }
+
+    // 验证文件大小（2MB）
+    if ($file["size"] > 2 * 1024 * 1024) {
+        die("文件大小不能超过2MB");
+    }
+
+    // 生成安全文件名并移动
+    $ext = pathinfo($file["name"], PATHINFO_EXTENSION);
+    $newName = uniqid() . "." . $ext;
+    $dest = "uploads/" . $newName;
+
+    if (move_uploaded_file($file["tmp_name"], $dest)) {
+        echo "上传成功: {$newName}";
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记enctype：表单未设置<code>enctype="multipart/form-data"</code>导致<code>$_FILES</code>为空</p><p>使用原始文件名：直接用<code>$file["name"]</code>保存有路径穿越和覆盖风险，应生成随机文件名</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">文件上传表单必须设置哪个enctype属性？</div><input type="text" class="answer-input" id="ch27-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(27,1)">检查答案</button><div id="ch27-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(27,1)">查看答案</button><div id="ch27-answer1" class="answer-box">enctype="multipart/form-data"</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch27-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(27)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn27" onclick="markCompleted(27)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(26)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(28)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第28章 Cookie操作 -->
+            <div id="ch28" class="chapter-section">
+                <h2>28. Cookie操作 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>设置Cookie：</strong><code>setcookie(name, value, expires, path, domain, secure, httponly)</code>必须在输出前调用</li><li><strong>读取Cookie：</strong>通过<code>$_COOKIE["name"]</code>访问，下次请求才能读到新设的Cookie</li><li><strong>删除Cookie：</strong>设置过期时间为过去时间<code>setcookie("name", "", time()-3600)</code></li><li><strong>安全选项：</strong>httponly防止JS读取、secure仅HTTPS传输、samesite防止CSRF</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch28-code1')">📋 复制</button></div></div><pre id="ch28-code1"><code>&lt;?php
+// 设置Cookie（必须在任何输出之前）
+setcookie("username", "Alice", time() + 86400, "/", "", true, true);
+// 参数：名称、值、过期时间(1天)、路径、域名、secure、httponly
+
+// 设置带SameSite的Cookie（PHP 7.3+）
+setcookie("token", "abc123", [
+    "expires"  => time() + 3600,
+    "path"     => "/",
+    "secure"   => true,
+    "httponly" => true,
+    "samesite" => "Strict"
+]);
+
+// 读取Cookie
+if (isset($_COOKIE["username"])) {
+    echo "欢迎回来，" . htmlspecialchars($_COOKIE["username"]);
+}
+
+// 删除Cookie
+setcookie("username", "", time() - 3600, "/");
+unset($_COOKIE["username"]);
+
+// 判断Cookie是否存在
+echo isset($_COOKIE["theme"]) ? $_COOKIE["theme"] : "light";</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>setcookie前有输出：<code>echo</code>或空行后调用setcookie会报"headers already sent"</p><p>立即读取新Cookie：<code>setcookie()</code>后<code>$_COOKIE</code>不会立即更新，需下次请求才能读取</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何删除名为"token"的Cookie？</div><input type="text" class="answer-input" id="ch28-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(28,1)">检查答案</button><div id="ch28-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(28,1)">查看答案</button><div id="ch28-answer1" class="answer-box">setcookie("token", "", time() - 3600, "/");</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch28-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(28)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn28" onclick="markCompleted(28)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(27)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(29)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第29章 Session管理 -->
+            <div id="ch29" class="chapter-section">
+                <h2>29. Session管理 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>启动Session：</strong><code>session_start()</code>必须在任何输出前调用，每个需要Session的页面都要调用</li><li><strong>存取数据：</strong>通过<code>$_SESSION["key"]</code>读写，数据存储在服务器端</li><li><strong>销毁Session：</strong><code>session_unset()</code>清空数据、<code>session_destroy()</code>销毁会话</li><li><strong>Session vs Cookie：</strong>Session数据在服务器端更安全，Cookie在客户端有篡改风险</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch29-code1')">📋 复制</button></div></div><pre id="ch29-code1"><code>&lt;?php
+// 启动Session（页面最前面）
+session_start();
+
+// 设置Session数据
+$_SESSION["user_id"] = 1001;
+$_SESSION["username"] = "Alice";
+$_SESSION["login_time"] = time();
+
+// 读取Session
+if (isset($_SESSION["username"])) {
+    echo "当前用户: " . $_SESSION["username"];
+}
+
+// 登录验证示例
+function login(string $user, string $pass): bool {
+    if ($user === "admin" && $pass === "123456") {
+        $_SESSION["logged_in"] = true;
+        $_SESSION["user"] = $user;
+        session_regenerate_id(true);  // 防止会话固定攻击
+        return true;
+    }
+    return false;
+}
+
+// 退出登录
+function logout(): void {
+    session_unset();       // 清空Session变量
+    session_destroy();     // 销毁Session
+    setcookie(session_name(), "", time() - 3600, "/");  // 删除Session Cookie
+}
+
+// Session配置
+ini_set("session.cookie_httponly", 1);     // 禁止JS访问
+ini_set("session.cookie_secure", 1);       // 仅HTTPS
+ini_set("session.use_strict_mode", 1);     // 严格模式</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记session_start()：不启动Session直接使用<code>$_SESSION</code>会报Undefined variable</p><p>session_start前有输出：和setcookie一样，必须在所有输出之前调用</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">Session和Cookie的主要区别是什么？</div><input type="text" class="answer-input" id="ch29-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(29,1)">检查答案</button><div id="ch29-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(29,1)">查看答案</button><div id="ch29-answer1" class="answer-box">Session存储在服务器端更安全，Cookie存储在客户端可被篡改；Session通过Cookie中的Session ID关联</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch29-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(29)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn29" onclick="markCompleted(29)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(28)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(30)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第30章 PDO数据库连接 -->
+            <div id="ch30" class="chapter-section">
+                <h2>30. PDO数据库连接 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>PDO介绍：</strong>PHP Data Objects，统一的数据库访问抽象层，支持MySQL/SQLite/PostgreSQL等</li><li><strong>DSN格式：</strong><code>mysql:host=localhost;dbname=test;charset=utf8mb4</code></li><li><strong>错误模式：</strong><code>PDO::ERRMODE_SILENT</code>、<code>PDO::ERRMODE_WARNING</code>、<code>PDO::ERRMODE_EXCEPTION</code>（推荐）</li><li><strong>连接选项：</strong>设置字符集、错误模式、 fetch模式、持久连接等</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch30-code1')">📋 复制</button></div></div><pre id="ch30-code1"><code>&lt;?php
+try {
+    $pdo = new PDO(
+        "mysql:host=localhost;dbname=test;charset=utf8mb4",
+        "root",
+        "password",
+        [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]
+    );
+    echo "数据库连接成功！";
+} catch (PDOException $e) {
+    die("连接失败: " . $e->getMessage());
+}
+
+// 查询数据
+$stmt = $pdo->query("SELECT * FROM users");
+$users = $stmt->fetchAll();
+
+foreach ($users as $user) {
+    echo $user["name"] . " - " . $user["email"] . "&lt;br&gt;";
+}
+
+// 关闭连接（可选，脚本结束自动关闭）
+$pdo = null;</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记charset：<code>utf8</code>而非<code>utf8mb4</code>，前者不支持4字节字符（如emoji），应用utf8mb4</p><p>密码硬编码：数据库密码直接写在代码中不安全，应使用环境变量或配置文件</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">PDO的全称是什么？它有什么优势？</div><input type="text" class="answer-input" id="ch30-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(30,1)">检查答案</button><div id="ch30-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(30,1)">查看答案</button><div id="ch30-answer1" class="answer-box">PHP Data Objects，优势：支持多种数据库、预处理语句防SQL注入、异常处理、面向对象接口</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch30-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(30)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn30" onclick="markCompleted(30)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(29)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(31)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第31章 CRUD操作 -->
+            <div id="ch31" class="chapter-section">
+                <h2>31. CRUD操作 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Create(创建)：</strong><code>INSERT INTO table (cols) VALUES (vals)</code>，使用<code>lastInsertId()</code>获取自增ID</li><li><strong>Read(读取)：</strong><code>SELECT</code>查询，<code>fetch()</code>取一行，<code>fetchAll()</code>取全部</li><li><strong>Update(更新)：</strong><code>UPDATE table SET col=val WHERE condition</code>，注意WHERE条件不能少</li><li><strong>Delete(删除)：</strong><code>DELETE FROM table WHERE condition</code>，<code>rowCount()</code>获取影响行数</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button></div></div><pre id="ch31-code1"><code>&lt;?php
+$pdo = new PDO("mysql:host=localhost;dbname=test", "root", "");
+
+// Create - 插入数据
+$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+$stmt->execute(["张三", "zhang@test.com"]);
+echo "新用户ID: " . $pdo->lastInsertId();
+
+// Read - 查询数据
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([1]);
+$user = $stmt->fetch();  // 获取一行
+
+$stmt = $pdo->query("SELECT * FROM users ORDER BY id DESC");
+$allUsers = $stmt->fetchAll();  // 获取全部
+
+// Update - 更新数据
+$stmt = $pdo->prepare("UPDATE users SET name = ? WHERE id = ?");
+$stmt->execute(["李四", 1]);
+echo "更新了 {$stmt->rowCount()} 行";
+
+// Delete - 删除数据
+$stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+$stmt->execute([2]);
+echo "删除了 {$stmt->rowCount()} 行";</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>UPDATE/DELETE忘记WHERE：<code>UPDATE users SET name="test"</code>会更新所有行，灾难性操作！</p><p>直接拼接SQL：<code>"SELECT * FROM users WHERE name='" . $name . "'"</code>有SQL注入风险</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何获取INSERT后新记录的自增ID？</div><input type="text" class="answer-input" id="ch31-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(31,1)">检查答案</button><div id="ch31-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(31,1)">查看答案</button><div id="ch31-answer1" class="answer-box">使用 $pdo->lastInsertId()</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch31-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(31)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn31" onclick="markCompleted(31)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(30)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(32)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第32章 预处理语句 -->
+            <div id="ch32" class="chapter-section">
+                <h2>32. 预处理语句 <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>什么是预处理：</strong>SQL模板先编译，参数后绑定，防止SQL注入的核心机制</li><li><strong>位置占位符：</strong>使用<code>?</code>占位，<code>execute([val1, val2])</code>按顺序绑定</li><li><strong>命名占位符：</strong>使用<code>:name</code>占位，<code>execute(["name" => val])</code>按键名绑定</li><li><strong>bindParam vs bindValue：</strong>bindParam绑定变量引用，bindValue绑定值，前者适合循环中变量变化</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch32-code1')">📋 复制</button></div></div><pre id="ch32-code1"><code>&lt;?php
+$pdo = new PDO("mysql:host=localhost;dbname=test", "root", "", [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+]);
+
+// 位置占位符
+$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+$stmt->execute(["张三", "zhang@test.com"]);
+
+// 命名占位符
+$stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+$stmt->execute(["email" => "zhang@test.com"]);
+$user = $stmt->fetch();
+
+// bindParam（绑定引用）
+$stmt = $pdo->prepare("INSERT INTO logs (message) VALUES (?)");
+$msg = "";
+$stmt->bindParam(1, $msg);
+$messages = ["登录", "操作", "退出"];
+foreach ($messages as $msg) {
+    $stmt->execute();  // $msg按引用读取当前值
+}
+
+// 批量插入
+$stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (?, ?)");
+$users = [["李四","li@test.com"], ["王五","wang@test.com"]];
+foreach ($users as $u) {
+    $stmt->execute($u);
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>占位符数量不匹配：<code>prepare("INSERT INTO t (a,b) VALUES (?,?)")</code>但<code>execute([1])</code>参数不够</p><p>命名占位符漏冒号：<code>execute(["email" => val])</code>中键名不加冒号，SQL中<code>:email</code>要加</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">预处理语句为什么能防止SQL注入？</div><input type="text" class="answer-input" id="ch32-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(32,1)">检查答案</button><div id="ch32-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(32,1)">查看答案</button><div id="ch32-answer1" class="answer-box">SQL模板和参数分开处理，参数不会作为SQL代码执行，只作为数据值绑定</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch32-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(32)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn32" onclick="markCompleted(32)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(31)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(33)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第33章 JSON处理 -->
+            <div id="ch33" class="chapter-section">
+                <h2>33. JSON处理 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>json_encode：</strong>PHP值转JSON字符串，支持数组/对象/标量，常用flags：<code>JSON_UNESCAPED_UNICODE</code>、<code>JSON_PRETTY_PRINT</code></li><li><strong>json_decode：</strong>JSON字符串转PHP值，第二参数true返回数组，false返回对象</li><li><strong>错误处理：</strong><code>json_last_error()</code>获取错误码，<code>json_last_error_msg()</code>获取错误信息</li><li><strong>API响应：</strong>设置<code>Content-Type: application/json</code>头部后输出JSON数据</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button></div></div><pre id="ch33-code1"><code>&lt;?php
+// 编码
+$data = ["name" => "张三", "age" => 25, "skills" => ["PHP", "MySQL"]];
+echo json_encode($data);
+// {"name":"\u5f20\u4e09","age":25,"skills":["PHP","MySQL"]}
+
+echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+// 中文不转义 + 美化输出
+
+// 解码
+$json = '{"name":"张三","age":25}';
+$arr = json_decode($json, true);   // 返回关联数组
+$obj = json_decode($json);         // 返回stdClass对象
+echo $arr["name"];   // 张三
+echo $obj->name;     // 张三
+
+// 错误处理
+$badJson = "{invalid}";
+$result = json_decode($badJson);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo "JSON错误: " . json_last_error_msg();
+}
+
+// API响应
+header("Content-Type: application/json; charset=utf-8");
+echo json_encode(["status" => "ok", "data" => $data]);</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>json_decode返回null：<code>json_decode("invalid")</code>返回null，需检查<code>json_last_error()</code>区分是null值还是错误</p><p>中文被转义：<code>json_encode("中文")</code>默认转义为Unicode，需加<code>JSON_UNESCAPED_UNICODE</code></p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何将JSON字符串解码为关联数组？</div><input type="text" class="answer-input" id="ch33-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(33,1)">检查答案</button><div id="ch33-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(33,1)">查看答案</button><div id="ch33-answer1" class="answer-box">json_decode($jsonStr, true)，第二个参数true返回数组</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch33-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(33)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn33" onclick="markCompleted(33)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(32)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(34)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第34章 文件读写 -->
+            <div id="ch34" class="chapter-section">
+                <h2>34. 文件读写 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>文件读取：</strong><code>file_get_contents()</code>读全部、<code>fopen()+fread()</code>流式读取、<code>file()</code>按行读入数组</li><li><strong>文件写入：</strong><code>file_put_contents()</code>写全部、<code>fopen()+fwrite()</code>流式写入</li><li><strong>文件操作：</strong><code>file_exists()</code>存在性、<code>is_readable()</code>可读、<code>unlink()</code>删除、<code>rename()</code>重命名</li><li><strong>目录操作：</strong><code>mkdir()</code>创建、<code>rmdir()</code>删除、<code>scandir()</code>列出、<code>glob()</code>模式匹配</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button></div></div><pre id="ch34-code1"><code>&lt;?php
+// 读取文件
+$content = file_get_contents("data.txt");     // 读取全部
+$lines = file("data.txt");                    // 按行读取到数组
+
+// 流式读取（适合大文件）
+$handle = fopen("large.log", "r");
+while (($line = fgets($handle)) !== false) {
+    echo $line;
+}
+fclose($handle);
+
+// 写入文件
+file_put_contents("output.txt", "Hello World");              // 覆盖写入
+file_put_contents("output.txt", "追加内容", FILE_APPEND);     // 追加写入
+
+// 流式写入
+$handle = fopen("log.txt", "a");  // "a"追加模式
+fwrite($handle, date("Y-m-d H:i:s") . " 日志记录\n");
+fclose($handle);
+
+// 文件检查
+if (file_exists("data.txt") && is_readable("data.txt")) {
+    echo "文件存在且可读";
+}
+
+// CSV操作
+$csv = fopen("data.csv", "r");
+while (($row = fgetcsv($csv)) !== false) {
+    print_r($row);
+}
+fclose($csv);
+
+// 删除文件
+unlink("temp.txt");</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记fclose：<code>fopen()</code>后不<code>fclose()</code>导致文件锁未释放和资源泄露</p><p>file_get_contents大文件：<code>file_get_contents()</code>将整个文件载入内存，大文件应用流式读取</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">如何追加内容到文件而不覆盖原有内容？</div><input type="text" class="answer-input" id="ch34-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(34,1)">检查答案</button><div id="ch34-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(34,1)">查看答案</button><div id="ch34-answer1" class="answer-box">file_put_contents("file.txt", "内容", FILE_APPEND); 或 fopen("file.txt", "a")</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch34-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(34)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn34" onclick="markCompleted(34)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(33)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(35)">下一章 ▶</button></div>
+            </div>
+
+            <!-- 第35章 综合实战 -->
+            <div id="ch35" class="chapter-section">
+                <h2>35. 综合实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>项目架构：</strong>MVC模式分层（Model数据、View展示、Controller逻辑），单一入口index.php</li><li><strong>安全实践：</strong>输入过滤、输出转义、CSRF令牌、密码哈希（password_hash）、SQL预处理</li><li><strong>错误处理：</strong>try-catch捕获异常、自定义错误处理器、日志记录</li><li><strong>最佳实践：</strong>自动加载(Composer)、环境变量(.env)、路由分发、依赖注入</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">php</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button></div></div><pre id="ch35-code1"><code>&lt;?php
+// ===== 简易博客系统 =====
+
+// 数据库配置
+class Config {
+    const DB_HOST = "localhost";
+    const DB_NAME = "blog";
+    const DB_USER = "root";
+    const DB_PASS = "";
+}
+
+// 数据库连接（单例模式）
+class Database {
+    private static ?PDO $instance = null;
+
+    public static function getInstance(): PDO {
+        if (self::$instance === null) {
+            self::$instance = new PDO(
+                "mysql:host=" . Config::DB_HOST . ";dbname=" . Config::DB_NAME . ";charset=utf8mb4",
+                Config::DB_USER, Config::DB_PASS,
+                [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC]
+            );
+        }
+        return self::$instance;
+    }
+}
+
+// Model层 - 文章模型
+class PostModel {
+    private PDO $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance();
+    }
+
+    public function getAll(): array {
+        $stmt = $this->db->query("SELECT * FROM posts ORDER BY created_at DESC");
+        return $stmt->fetchAll();
+    }
+
+    public function getById(int $id): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM posts WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public function create(string $title, string $content, int $authorId): int {
+        $stmt = $this->db->prepare(
+            "INSERT INTO posts (title, content, author_id) VALUES (?, ?, ?)"
+        );
+        $stmt->execute([$title, $content, $authorId]);
+        return (int)$this->db->lastInsertId();
+    }
+
+    public function delete(int $id): bool {
+        $stmt = $this->db->prepare("DELETE FROM posts WHERE id = ?");
+        $stmt->execute([$id]);
+        return $stmt->rowCount() > 0;
+    }
+}
+
+// Controller层
+class PostController {
+    private PostModel $model;
+
+    public function __construct() {
+        $this->model = new PostModel();
+    }
+
+    public function index(): void {
+        $posts = $this->model->getAll();
+        $this->jsonResponse(["status" => "ok", "data" => $posts]);
+    }
+
+    public function show(int $id): void {
+        $post = $this->model->getById($id);
+        if ($post) {
+            $this->jsonResponse(["status" => "ok", "data" => $post]);
+        } else {
+            http_response_code(404);
+            $this->jsonResponse(["status" => "error", "message" => "文章不存在"]);
+        }
+    }
+
+    public function store(): void {
+        $input = json_decode(file_get_contents("php://input"), true);
+        $title = trim($input["title"] ?? "");
+        $content = trim($input["content"] ?? "");
+
+        if (empty($title) || empty($content)) {
+            http_response_code(422);
+            $this->jsonResponse(["status" => "error", "message" => "标题和内容不能为空"]);
+            return;
+        }
+
+        $id = $this->model->create($title, $content, 1);
+        http_response_code(201);
+        $this->jsonResponse(["status" => "ok", "id" => $id]);
+    }
+
+    private function jsonResponse(array $data): void {
+        header("Content-Type: application/json; charset=utf-8");
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+}
+
+// 路由分发
+$method = $_SERVER["REQUEST_METHOD"];
+$path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$controller = new PostController();
+
+try {
+    match ($method . " " . $path) {
+        "GET /posts"     => $controller->index(),
+        "GET /posts/" . (int)basename($path) => $controller->show((int)basename($path)),
+        "POST /posts"    => $controller->store(),
+        default => http_response_code(404)
+    };
+} catch (Throwable $e) {
+    error_log($e->getMessage());
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "服务器内部错误"]);
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>直接输出错误信息：生产环境不应<code>echo $e->getMessage()</code>，会暴露服务器信息</p><p>缺少输入验证：不验证用户输入长度、格式、类型，导致脏数据入库或安全问题</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">尝试为博客系统添加用户注册和登录功能，要求密码使用password_hash加密</div><textarea class="answer-textarea" id="ch35-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(35,1)">检查答案</button><div id="ch35-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(35,1)">查看答案</button><div id="ch35-answer1" class="answer-box">class UserModel {
+    private PDO $db;
+    public function __construct() { $this->db = Database::getInstance(); }
+
+    public function register(string $name, string $email, string $password): int {
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $this->db->prepare("INSERT INTO users (name,email,password) VALUES (?,?,?)");
+        $stmt->execute([$name, $email, $hash]);
+        return (int)$this->db->lastInsertId();
+    }
+
+    public function login(string $email, string $password): ?array {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+        if ($user && password_verify($password, $user["password"])) {
+            return $user;
+        }
+        return null;
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch35-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(35)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn35" onclick="markCompleted(35)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(34)">◀ 上一章</button><button class="nav-btn nav-btn-primary" disabled>已完成全部章节 🎉</button></div>
+            </div>
+
+        </div><!-- main-content end -->
+    </div><!-- container end -->
+
+    <div class="toast" id="toast"></div>
 
     <script src="tutorial-common.js"></script>
     <script src="tutorial-extensions.js"></script>
     <script>
-        const STORAGE_KEY = 'php_tutorial_progress';
-        const FAVORITES_KEY = 'php_tutorial_favorites';
-        const NOTES_KEY = 'php_tutorial_notes';
-        
-        let currentChapter = 0;
-        
-        const chapters = [
-            {
-                id: 1,
-                title: '入门介绍与环境搭建',
-                icon: '🚀',
-                completed: false,
-                content: {
-                    intro: '<p>PHP是一种服务器端脚本语言，主要用于Web开发。PHP代码在服务器上执行，生成HTML发送到客户端浏览器。</p><p>PHP支持多种数据库，易于学习，是Web开发中最流行的语言之一。</p>',
-                    points: [
-                        'PHP是开源的服务器端脚本语言',
-                        'PHP代码嵌入在HTML中，以<?php开始，?>结束',
-                        'PHP文件扩展名为.php',
-                        'PHP支持多种数据库：MySQL、PostgreSQL、SQLite等',
-                        'PHP可以生成动态网页内容、处理表单数据、管理会话等'
-                    ],
-                    codeExample: `<?php
-// 第一个PHP程序
-echo "Hello, World!";
+    (function() {
+        const TOTAL = 35;
+        const PROGRESS_KEY = 'php_progress';
 
-// 在HTML中嵌入PHP
-?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>PHP入门</title>
-</head>
-<body>
-    <h1><?php echo "欢迎学习PHP！"; ?></h1>
-    <p>当前时间：<?php echo date("Y-m-d H:i:s"); ?></p>
-</body>
-</html>`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：缺少结束标签
-echo "Hello, World!";
-// 这里缺少 ?> 结束标签`,
-                        message: '虽然PHP文件末尾可以省略?>结束标签，但在某些情况下会导致问题。建议在HTML文件中正确使用结束标签。'
-                    },
-                    quiz: {
-                        type: 'multiple',
-                        question: 'PHP代码在哪里执行？',
-                        options: ['客户端浏览器', '服务器端', '数据库', '操作系统'],
-                        answer: 1
-                    },
-                    answer: '正确答案：服务器端。PHP是服务器端脚本语言，代码在Web服务器上执行，执行结果以HTML形式发送到浏览器。'
-                }
-            },
-            {
-                id: 2,
-                title: '基本语法',
-                icon: '📝',
-                completed: false,
-                content: {
-                    intro: '<p>PHP的基本语法包括变量、数据类型、运算符和注释。理解这些基础知识是学习PHP的第一步。</p>',
-                    points: [
-                        '变量以$符号开头，如$name',
-                        'PHP是弱类型语言，变量类型根据值自动确定',
-                        '支持的数据类型：字符串、整数、浮点数、布尔值、数组、对象、NULL',
-                        '注释：单行用//或#，多行用/* */',
-                        '语句以分号结尾'
-                    ],
-                    codeExample: `<?php
-// 变量声明
-$name = "张三";
-$age = 25;
-$height = 1.75;
-$isStudent = true;
+        // 章节标题映射
+        const chapterTitles = {
+            1:'PHP简介',2:'开发环境配置(XAMPP)',3:'第一个PHP程序',4:'注释',
+            5:'变量与作用域',6:'数据类型',7:'类型转换',8:'运算符',
+            9:'if-else语句',10:'switch语句',11:'for循环',12:'while与do-while',
+            13:'foreach循环',14:'索引数组',15:'关联数组',16:'数组函数',
+            17:'字符串操作',18:'函数定义',19:'函数参数与返回值',20:'匿名函数',
+            21:'类与对象',22:'构造与析构',23:'继承',24:'接口与抽象类',
+            25:'命名空间',26:'表单处理',27:'文件上传',28:'Cookie操作',
+            29:'Session管理',30:'PDO数据库连接',31:'CRUD操作',32:'预处理语句',
+            33:'JSON处理',34:'文件读写',35:'综合实战'
+        };
 
-// 输出变量
-echo "姓名：$name<br>";
-echo "年龄：{$age}岁<br>";
-echo "身高：$height米<br>";
+        // 正确答案
+        const correctAnswers = {
+            '1-1': 'php: hypertext preprocessor',
+            '2-1': 'htdocs',
+            '4-1': 'C',
+            '5-1': 'global',
+            '6-1': 'string int float bool',
+            '7-1': '5',
+            '8-1': 'B',
+            '10-1': '穿透',
+            '12-1': '先判断后执行',
+            '14-1': 'count',
+            '17-1': 'explode',
+            '25-1': 'use app\\models\\user as mu',
+            '26-1': 'url',
+            '27-1': 'multipart/form-data',
+            '28-1': 'setcookie',
+            '29-1': '服务器',
+            '30-1': 'pdo',
+            '31-1': 'lastinsertid',
+            '32-1': '预处理',
+            '33-1': 'json_decode',
+            '34-1': 'file_append'
+        };
 
-// 变量类型
-$var1 = 100;      // 整数
-$var2 = "100";    // 字符串
-$sum = $var1 + $var2; // PHP会自动转换类型，结果为200
-
-// 常量定义
-define("PI", 3.14159);
-echo "圆周率：" . PI;`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：变量名错误
-$name = "张三";
-echo $Name; // 注意大小写，PHP变量名区分大小写
-
-// 错误示例：未定义变量
-echo $age; // Notice: Undefined variable: age`,
-                        message: 'PHP变量名区分大小写，$name和$Name是不同的变量。使用未定义的变量会产生Notice警告。'
-                    },
-                    quiz: {
-                        type: 'text',
-                        question: 'PHP变量名以什么符号开头？',
-                        answer: '$'
-                    },
-                    answer: '正确答案：$。PHP变量必须以$符号开头，后面跟变量名，如$name、$age等。'
-                }
-            },
-            {
-                id: 3,
-                title: '流程控制',
-                icon: '🔀',
-                completed: false,
-                content: {
-                    intro: '<p>流程控制语句用于控制代码的执行顺序，包括条件语句和循环语句。</p>',
-                    points: [
-                        'if-else：条件判断',
-                        'switch：多条件分支',
-                        'for：循环执行',
-                        'while：条件循环',
-                        'do-while：至少执行一次的循环',
-                        'break/continue：控制循环流程'
-                    ],
-                    codeExample: `<?php
-// if-else语句
-$score = 85;
-if ($score >= 90) {
-    echo "优秀";
-} elseif ($score >= 60) {
-    echo "及格";
-} else {
-    echo "不及格";
-}
-
-// switch语句
-$day = date("w");
-switch ($day) {
-    case 0:
-        echo "星期日";
-        break;
-    case 1:
-        echo "星期一";
-        break;
-    default:
-        echo "其他";
-}
-
-// for循环
-for ($i = 1; $i <= 5; $i++) {
-    echo "数字: $i<br>";
-}
-
-// while循环
-$count = 0;
-while ($count < 3) {
-    echo "计数: $count<br>";
-    $count++;
-}`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：switch缺少break
-$num = 2;
-switch ($num) {
-    case 1:
-        echo "一";
-    case 2:
-        echo "二";
-    case 3:
-        echo "三";
-}
-// 输出：二三`,
-                        message: 'switch语句中每个case结束后需要使用break，否则会继续执行下一个case。上述代码会输出"二三"而不是"二"。'
-                    },
-                    quiz: {
-                        type: 'multiple',
-                        question: '以下哪个循环至少执行一次？',
-                        options: ['for', 'while', 'do-while', 'foreach'],
-                        answer: 2
-                    },
-                    answer: '正确答案：do-while。do-while循环先执行循环体，再判断条件，所以至少执行一次。'
-                }
-            },
-            {
-                id: 4,
-                title: '函数',
-                icon: '🔧',
-                completed: false,
-                content: {
-                    intro: '<p>函数是可重用的代码块，用于执行特定任务。PHP提供了大量内置函数，也可以自定义函数。</p>',
-                    points: [
-                        '使用function关键字定义函数',
-                        '函数可以接受参数，也可以返回值',
-                        '参数可以设置默认值',
-                        '支持可变数量参数',
-                        '可以通过引用传递参数',
-                        '递归函数：函数调用自身'
-                    ],
-                    codeExample: `<?php
-// 定义函数
-function greet($name) {
-    return "你好，$name！";
-}
-
-// 调用函数
-echo greet("张三");
-
-// 带默认参数的函数
-function introduce($name, $age = 18) {
-    echo "$name今年$age岁";
-}
-introduce("李四");        // 使用默认值18
-introduce("王五", 25);    // 使用指定值25
-
-// 返回值的函数
-function add($a, $b) {
-    return $a + $b;
-}
-$result = add(10, 20);
-echo "结果：$result";
-
-// 引用传递
-function increment(&$num) {
-    $num++;
-}
-$count = 5;
-increment($count);
-echo $count; // 输出6`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：重复定义函数
-function sayHello() {
-    echo "Hello";
-}
-
-function sayHello() { // Fatal error: Cannot redeclare sayHello()
-    echo "Hi";
-}
-
-// 错误示例：函数名错误
-function myFunction() {
-    echo "Hello";
-}
-myfunction(); // 注意大小写`,
-                        message: 'PHP不允许重复定义同名函数。函数名区分大小写，myFunction和myfunction是不同的函数。'
-                    },
-                    quiz: {
-                        type: 'text',
-                        question: 'PHP中定义函数使用什么关键字？',
-                        answer: 'function'
-                    },
-                    answer: '正确答案：function。使用function关键字定义函数，语法：function 函数名(参数) { ... }'
-                }
-            },
-            {
-                id: 5,
-                title: '数组',
-                icon: '📦',
-                completed: false,
-                content: {
-                    intro: '<p>数组是存储多个值的有序集合。PHP支持索引数组、关联数组和多维数组。</p>',
-                    points: [
-                        '索引数组：使用数字索引',
-                        '关联数组：使用字符串键名',
-                        '多维数组：数组包含数组',
-                        '常用数组函数：count()、array_push()、array_pop()、foreach等',
-                        '可以使用list()解构数组',
-                        '数组可以使用[]或array()创建'
-                    ],
-                    codeExample: `<?php
-// 索引数组
-$fruits = array("苹果", "香蕉", "橙子");
-$fruits = ["苹果", "香蕉", "橙子"]; // 简写形式
-
-echo $fruits[0]; // 苹果
-echo count($fruits); // 3
-
-// 关联数组
-$person = [
-    "name" => "张三",
-    "age" => 25,
-    "city" => "北京"
-];
-echo $person["name"]; // 张三
-
-// 多维数组
-$students = [
-    ["name" => "张三", "score" => 90],
-    ["name" => "李四", "score" => 85],
-    ["name" => "王五", "score" => 95]
-];
-echo $students[1]["name"]; // 李四
-
-// 遍历数组
-foreach ($fruits as $fruit) {
-    echo "$fruit<br>";
-}
-
-foreach ($person as $key => $value) {
-    echo "$key: $value<br>";
-}`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：访问不存在的索引
-$fruits = ["苹果", "香蕉"];
-echo $fruits[5]; // 注意：PHP不会报错，返回NULL
-
-// 错误示例：使用错误的键名
-$person = ["name" => "张三"];
-echo $person["Name"]; // 关联数组键名区分大小写`,
-                        message: '访问不存在的数组索引PHP不会报错，但会返回NULL并产生Notice。关联数组的键名区分大小写。'
-                    },
-                    quiz: {
-                        type: 'multiple',
-                        question: '以下哪种方式可以创建数组？',
-                        options: ['array()', '[]', 'Array()', '以上都可以'],
-                        answer: 3
-                    },
-                    answer: '正确答案：以上都可以。PHP支持array()和[]两种语法创建数组，Array()是array()的别名。'
-                }
-            },
-            {
-                id: 6,
-                title: '面向对象',
-                icon: '🏗️',
-                completed: false,
-                content: {
-                    intro: '<p>面向对象编程(OOP)是一种编程范式，使用类和对象来组织代码。PHP完全支持面向对象编程。</p>',
-                    points: [
-                        '类(class)：定义对象的模板',
-                        '对象(object)：类的实例',
-                        '属性(property)：对象的数据',
-                        '方法(method)：对象的行为',
-                        '构造函数(__construct)：初始化对象',
-                        '访问修饰符：public、private、protected',
-                        '继承：使用extends关键字',
-                        '多态：方法重写和接口'
-                    ],
-                    codeExample: `<?php
-// 定义类
-class Person {
-    // 属性
-    private $name;
-    private $age;
-    
-    // 构造函数
-    public function __construct($name, $age) {
-        $this->name = $name;
-        $this->age = $age;
-    }
-    
-    // 方法
-    public function introduce() {
-        return "我叫{$this->name}，今年{$this->age}岁";
-    }
-    
-    // getter方法
-    public function getName() {
-        return $this->name;
-    }
-}
-
-// 创建对象
-$person = new Person("张三", 25);
-echo $person->introduce();
-
-// 继承
-class Student extends Person {
-    private $school;
-    
-    public function __construct($name, $age, $school) {
-        parent::__construct($name, $age);
-        $this->school = $school;
-    }
-    
-    public function study() {
-        return "{$this->getName()}在{$this->school}学习";
-    }
-}
-
-$student = new Student("李四", 20, "北京大学");
-echo $student->study();`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：访问私有属性
-class Person {
-    private $name = "张三";
-}
-
-$p = new Person();
-echo $p->name; // Fatal error: Cannot access private property
-
-// 错误示例：忘记调用父类构造函数
-class Student extends Person {
-    public function __construct() {
-        // 应该调用 parent::__construct()
-    }
-}`,
-                        message: '私有属性(private)只能在类内部访问，外部访问会报错。子类构造函数中需要调用parent::__construct()来初始化父类。'
-                    },
-                    quiz: {
-                        type: 'text',
-                        question: 'PHP中构造函数的名称是什么？',
-                        answer: '__construct'
-                    },
-                    answer: '正确答案：__construct。PHP使用__construct()作为构造函数方法名。'
-                }
-            },
-            {
-                id: 7,
-                title: '表单处理',
-                icon: '📋',
-                completed: false,
-                content: {
-                    intro: '<p>表单处理是Web开发的核心功能之一。PHP可以接收和处理HTML表单提交的数据。</p>',
-                    points: [
-                        '使用$_POST接收POST方法提交的数据',
-                        '使用$_GET接收GET方法提交的数据',
-                        '使用$_REQUEST同时接收POST和GET数据',
-                        '表单验证：检查数据是否有效',
-                        '防止SQL注入和XSS攻击',
-                        '文件上传：使用$_FILES'
-                    ],
-                    codeExample: `<!-- HTML表单 -->
-<form method="post" action="process.php">
-    <input type="text" name="username" placeholder="用户名">
-    <input type="password" name="password" placeholder="密码">
-    <input type="submit" value="登录">
-</form>
-
-<?php
-// process.php - 处理表单数据
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 获取表单数据
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    
-    // 数据验证
-    if (empty($username)) {
-        echo "用户名不能为空";
-    } elseif (empty($password)) {
-        echo "密码不能为空";
-    } else {
-        // 安全处理
-        $username = htmlspecialchars($username);
-        echo "欢迎，$username";
-    }
-}
-
-// 文件上传处理
-if (isset($_FILES["file"])) {
-    $target_dir = "uploads/";
-    $target_file = $target_dir . basename($_FILES["file"]["name"]);
-    
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
-        echo "文件上传成功";
-    } else {
-        echo "文件上传失败";
-    }
-}`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：直接使用用户输入（安全风险）
-$username = $_POST["username"];
-echo "欢迎，$username"; // 可能存在XSS攻击
-
-// 错误示例：未检查数据是否存在
-echo $_POST["username"]; // 如果username字段不存在会报错`,
-                        message: '直接输出用户输入可能导致XSS攻击，应该使用htmlspecialchars()转义。访问未定义的数组元素会产生Notice错误，应该先使用isset()检查。'
-                    },
-                    quiz: {
-                        type: 'multiple',
-                        question: '接收POST表单数据使用哪个超全局变量？',
-                        options: ['$_GET', '$_POST', '$_REQUEST', '$_SESSION'],
-                        answer: 1
-                    },
-                    answer: '正确答案：$_POST。使用$_POST接收POST方法提交的表单数据，$_GET接收GET方法的数据。'
-                }
-            },
-            {
-                id: 8,
-                title: '数据库操作(MySQL)',
-                icon: '🗄️',
-                completed: false,
-                content: {
-                    intro: '<p>PHP与MySQL数据库的结合是Web开发中最常见的组合。PHP提供了多种方式连接和操作MySQL数据库。</p>',
-                    points: [
-                        '使用PDO或MySQLi连接数据库',
-                        'PDO支持多种数据库，推荐使用',
-                        '预处理语句防止SQL注入',
-                        'CRUD操作：增删改查',
-                        '事务处理保证数据一致性',
-                        '错误处理和异常捕获'
-                    ],
-                    codeExample: `<?php
-// 使用PDO连接MySQL数据库
-$host = "localhost";
-$dbname = "mydatabase";
-$username = "root";
-$password = "password";
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", 
-                   $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // 查询数据
-    $stmt = $pdo->query("SELECT * FROM users");
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        echo "{$row['name']} - {$row['email']}<br>";
-    }
-    
-    // 插入数据（使用预处理语句）
-    $stmt = $pdo->prepare("INSERT INTO users (name, email) VALUES (:name, :email)");
-    $stmt->execute(['name' => '张三', 'email' => 'zhangsan@example.com']);
-    
-    // 更新数据
-    $stmt = $pdo->prepare("UPDATE users SET email = :email WHERE id = :id");
-    $stmt->execute(['email' => 'new@example.com', 'id' => 1]);
-    
-    // 删除数据
-    $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
-    $stmt->execute(['id' => 1]);
-    
-} catch(PDOException $e) {
-    die("数据库连接失败: " . $e->getMessage());
-}`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：SQL注入风险
-$username = $_POST["username"];
-$query = "SELECT * FROM users WHERE username = '$username'";
-$result = $pdo->query($query); // 如果username是 ' OR 1=1 -- 会返回所有数据
-
-// 错误示例：未设置错误模式
-$pdo = new PDO($dsn, $user, $pass);
-// 默认情况下PDO不会抛出异常，需要设置ATTR_ERRMODE`,
-                        message: '直接拼接SQL语句会导致SQL注入攻击，应该使用预处理语句。PDO默认不抛出异常，需要设置ERRMODE_EXCEPTION来捕获错误。'
-                    },
-                    quiz: {
-                        type: 'text',
-                        question: 'PHP中推荐使用什么扩展连接MySQL数据库？',
-                        answer: 'PDO'
-                    },
-                    answer: '正确答案：PDO。PDO(PHP Data Objects)是PHP的数据库抽象层，支持多种数据库，推荐在新项目中使用。'
-                }
-            },
-            {
-                id: 9,
-                title: '会话管理',
-                icon: '🔑',
-                completed: false,
-                content: {
-                    intro: '<p>会话管理用于在多个页面之间保持用户状态。PHP提供了内置的会话管理功能。</p>',
-                    points: [
-                        '使用session_start()启动会话',
-                        '使用$_SESSION存储会话数据',
-                        '会话数据存储在服务器端',
-                        'session_id()获取会话ID',
-                        'session_destroy()销毁会话',
-                        'cookie和session的区别',
-                        '会话安全：使用HTTPS、设置cookie属性'
-                    ],
-                    codeExample: `<?php
-// page1.php - 启动会话并存储数据
-session_start();
-
-// 存储会话数据
-$_SESSION["username"] = "张三";
-$_SESSION["login_time"] = time();
-
-echo "会话已创建";
-echo "<a href='page2.php'>跳转到页面2</a>";
-
-<?php
-// page2.php - 访问会话数据
-session_start();
-
-// 检查会话是否存在
-if (isset($_SESSION["username"])) {
-    echo "欢迎回来，" . $_SESSION["username"];
-    echo "<br>登录时间：" . date("Y-m-d H:i:s", $_SESSION["login_time"]);
-} else {
-    echo "请先登录";
-}
-
-// 修改会话数据
-$_SESSION["page_views"] = ($_SESSION["page_views"] ?? 0) + 1;
-echo "<br>页面访问次数：" . $_SESSION["page_views"];
-
-// 销毁会话
-session_destroy();`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：在输出之后启动会话
-echo "Hello";
-session_start(); // Warning: Cannot modify header information
-
-// 错误示例：未启动会话就使用$_SESSION
-$_SESSION["name"] = "张三"; // Notice: Undefined variable`,
-                        message: 'session_start()必须在任何输出之前调用，因为它需要发送HTTP头。使用$_SESSION之前必须先调用session_start()。'
-                    },
-                    quiz: {
-                        type: 'multiple',
-                        question: 'PHP中使用哪个超全局变量存储会话数据？',
-                        options: ['$_POST', '$_GET', '$_SESSION', '$_COOKIE'],
-                        answer: 2
-                    },
-                    answer: '正确答案：$_SESSION。使用$_SESSION超全局数组存储和访问会话数据，数据存储在服务器端。'
-                }
-            },
-            {
-                id: 10,
-                title: '综合实战',
-                icon: '🎯',
-                completed: false,
-                content: {
-                    intro: '<p>现在我们将所学知识综合运用，创建一个简单的用户登录系统。这个项目包含用户注册、登录、会话管理和数据库操作。</p>',
-                    points: [
-                        '创建数据库表存储用户信息',
-                        '用户注册功能（表单验证、数据插入）',
-                        '用户登录功能（身份验证、会话管理）',
-                        '用户注销功能',
-                        '保护受限制页面',
-                        '密码安全存储（使用password_hash）'
-                    ],
-                    codeExample: `<?php
-// 1. 创建数据库表
-/*
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-*/
-
-// 2. 用户注册处理
-function register($username, $email, $password) {
-    global $pdo;
-    
-    // 验证数据
-    if (empty($username) || empty($email) || empty($password)) {
-        return "请填写所有字段";
-    }
-    
-    // 检查用户名是否已存在
-    $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    if ($stmt->rowCount() > 0) {
-        return "用户名已存在";
-    }
-    
-    // 哈希密码
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
-    // 插入用户
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password) VALUES (?, ?, ?)");
-    $stmt->execute([$username, $email, $hashedPassword]);
-    
-    return "注册成功";
-}
-
-// 3. 用户登录处理
-function login($username, $password) {
-    global $pdo;
-    
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($user && password_verify($password, $user["password"])) {
-        session_start();
-        $_SESSION["user_id"] = $user["id"];
-        $_SESSION["username"] = $user["username"];
-        return true;
-    }
-    
-    return false;
-}
-
-// 4. 保护页面
-function requireLogin() {
-    session_start();
-    if (!isset($_SESSION["user_id"])) {
-        header("Location: login.php");
-        exit();
-    }
-}`,
-                    errorExample: {
-                        code: `<?php
-// 错误示例：明文存储密码
-$password = $_POST["password"];
-$stmt = $pdo->prepare("INSERT INTO users (password) VALUES (?)");
-$stmt->execute([$password]); // 不安全！
-
-// 错误示例：直接比较密码
-if ($user["password"] == $_POST["password"]) { // 应该使用password_verify()
-    // 登录成功
-}`,
-                        message: '永远不要明文存储密码，应该使用password_hash()哈希后存储。验证密码时使用password_verify()而不是直接比较。'
-                    },
-                    quiz: {
-                        type: 'text',
-                        question: 'PHP中安全存储密码使用什么函数？',
-                        answer: 'password_hash'
-                    },
-                    answer: '正确答案：password_hash()。使用password_hash()对密码进行哈希处理，使用password_verify()验证密码。'
-                }
-            }
-        ];
-
+        // 加载进度
         function loadProgress() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored) {
-                const saved = JSON.parse(stored);
-                saved.forEach(s => {
-                    const chapter = chapters.find(ch => ch.id === s.id);
-                    if (chapter) {
-                        chapter.completed = s.completed;
+            try { return JSON.parse(localStorage.getItem(PROGRESS_KEY)) || {}; }
+            catch(e) { return {}; }
+        }
+        function saveProgress(data) {
+            localStorage.setItem(PROGRESS_KEY, JSON.stringify(data));
+        }
+
+        // 初始化侧边栏
+        function initSidebar() {
+            const list = document.getElementById('chapterList');
+            const progress = loadProgress();
+            let html = '';
+            for (let i = 1; i <= TOTAL; i++) {
+                const completed = progress['completed'] && progress['completed'].includes(i);
+                const bookmarked = progress['bookmarks'] && progress['bookmarks'].includes(i);
+                const activeClass = i === 1 ? ' active' : '';
+                const completedClass = completed ? ' completed' : '';
+                html += '<li class="chapter-item' + activeClass + completedClass + '" onclick="goToChapter(' + i + ')">';
+                html += '<span class="ch-title">' + i + '. ' + chapterTitles[i] + '</span>';
+                html += (completed ? ' ✅' : '') + (bookmarked ? ' ⭐' : '');
+                html += '</li>';
+            }
+            list.innerHTML = html;
+        }
+
+        // 更新进度显示
+        function updateProgress() {
+            const progress = loadProgress();
+            const completed = (progress['completed'] || []).length;
+            const bookmarks = (progress['bookmarks'] || []).length;
+            const percent = Math.round((completed / TOTAL) * 100);
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('bookmarkCount').textContent = bookmarks;
+            document.getElementById('progressFill').style.width = percent + '%';
+        }
+
+        // 跳转章节
+        window.goToChapter = function(num) {
+            if (num < 1 || num > TOTAL) return;
+            document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('ch' + num).classList.add('active');
+            document.querySelectorAll('.chapter-item').forEach((item, idx) => {
+                item.classList.toggle('active', idx + 1 === num);
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // 标记完成
+        window.markCompleted = function(num) {
+            const progress = loadProgress();
+            if (!progress['completed']) progress['completed'] = [];
+            if (!progress['completed'].includes(num)) {
+                progress['completed'].push(num);
+                saveProgress(progress);
+            }
+            const btn = document.getElementById('completeBtn' + num);
+            btn.textContent = '✅ 已完成';
+            btn.classList.add('completed');
+            btn.onclick = null;
+            initSidebar();
+            updateProgress();
+            showToast('第' + num + '章已标记为完成！');
+        };
+
+        // 收藏章节
+        window.toggleBookmark = function(num) {
+            const progress = loadProgress();
+            if (!progress['bookmarks']) progress['bookmarks'] = [];
+            const idx = progress['bookmarks'].indexOf(num);
+            const btn = document.getElementById('bookmarkBtn' + num);
+            if (idx > -1) {
+                progress['bookmarks'].splice(idx, 1);
+                btn.classList.remove('bookmarked');
+                btn.textContent = '📌';
+                showToast('已取消收藏第' + num + '章');
+            } else {
+                progress['bookmarks'].push(num);
+                btn.classList.add('bookmarked');
+                btn.textContent = '⭐';
+                showToast('已收藏第' + num + '章');
+            }
+            saveProgress(progress);
+            initSidebar();
+            updateProgress();
+        };
+
+        // 保存笔记
+        window.saveNote = function(num) {
+            const progress = loadProgress();
+            if (!progress['notes']) progress['notes'] = {};
+            const noteEl = document.getElementById('ch' + num + '-note');
+            progress['notes'][num] = noteEl.value;
+            saveProgress(progress);
+            showToast('第' + num + '章笔记已保存！');
+        };
+
+        // 检查答案
+        window.checkAnswer = function(ch, q) {
+            const key = ch + '-' + q;
+            const el = document.getElementById('ch' + ch + '-q' + q);
+            const resultEl = document.getElementById('ch' + ch + '-result' + q);
+            const correct = correctAnswers[key];
+            if (!correct) {
+                resultEl.className = 'quiz-result correct';
+                resultEl.textContent = '✅ 答案已记录，请对照参考答案！';
+                return;
+            }
+            const userAnswer = el ? el.value.trim().toLowerCase().replace(/[\\s"]/g, '') : '';
+            if (userAnswer.includes(correct.toLowerCase().replace(/[\\s"]/g, ''))) {
+                resultEl.className = 'quiz-result correct';
+                resultEl.textContent = '✅ 回答正确！';
+            } else {
+                resultEl.className = 'quiz-result incorrect';
+                resultEl.textContent = '❌ 回答不正确，请查看参考答案';
+            }
+        };
+
+        // 显示/隐藏答案
+        window.toggleAnswer = function(ch, q) {
+            const el = document.getElementById('ch' + ch + '-answer' + q);
+            el.classList.toggle('show');
+        };
+
+        // 复制代码
+        window.copyCode = function(id) {
+            const codeEl = document.getElementById(id);
+            if (codeEl) {
+                const text = codeEl.textContent || codeEl.innerText;
+                navigator.clipboard.writeText(text).then(() => {
+                    showToast('代码已复制到剪贴板！');
+                }).catch(() => {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                    showToast('代码已复制到剪贴板！');
+                });
+            }
+        };
+
+        // 搜索
+        window.searchTutorial = function() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            document.querySelectorAll('.chapter-section').forEach(section => {
+                if (!query) {
+                    section.classList.remove('active');
+                    return;
+                }
+                const text = section.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+            if (!query) {
+                document.getElementById('ch1').classList.add('active');
+            }
+        };
+
+        // 主题切换
+        window.toggleTheme = function() {
+            const body = document.body;
+            const isDark = body.getAttribute('data-theme') === 'dark';
+            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('themeText').textContent = isDark ? '深色模式' : '浅色模式';
+            const progress = loadProgress();
+            progress['theme'] = isDark ? 'light' : 'dark';
+            saveProgress(progress);
+        };
+
+        // 显示统计
+        window.showStats = function() {
+            const info = document.getElementById('statsInfo');
+            info.style.display = info.style.display === 'none' ? 'flex' : 'none';
+        };
+
+        // 返回首页
+        window.goToHub = function() {
+            window.location.href = 'tutorial-hub.html';
+        };
+
+        // Toast提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // 初始化
+        function init() {
+            initSidebar();
+            updateProgress();
+            // 恢复主题
+            const progress = loadProgress();
+            if (progress['theme'] === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                document.getElementById('themeText').textContent = '浅色模式';
+            }
+            // 恢复笔记
+            if (progress['notes']) {
+                Object.keys(progress['notes']).forEach(ch => {
+                    const noteEl = document.getElementById('ch' + ch + '-note');
+                    if (noteEl) noteEl.value = progress['notes'][ch];
+                });
+            }
+            // 恢复完成状态
+            if (progress['completed']) {
+                progress['completed'].forEach(ch => {
+                    const btn = document.getElementById('completeBtn' + ch);
+                    if (btn) {
+                        btn.textContent = '✅ 已完成';
+                        btn.classList.add('completed');
+                        btn.onclick = null;
                     }
                 });
             }
-            
-            const savedChapter = localStorage.getItem('php_current_chapter');
-            if (savedChapter) {
-                currentChapter = parseInt(savedChapter);
+            // 恢复收藏状态
+            if (progress['bookmarks']) {
+                progress['bookmarks'].forEach(ch => {
+                    const btn = document.getElementById('bookmarkBtn' + ch);
+                    if (btn) {
+                        btn.classList.add('bookmarked');
+                        btn.textContent = '⭐';
+                    }
+                });
             }
         }
 
-        function saveProgress() {
-            const progress = chapters.map(ch => ({
-                id: ch.id,
-                completed: ch.completed
-            }));
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-            localStorage.setItem('php_current_chapter', currentChapter);
-            updateProgressUI();
-        }
-
-        function updateProgressUI() {
-            const completedCount = chapters.filter(ch => ch.completed).length;
-            const percentage = (completedCount / chapters.length) * 100;
-            document.getElementById('progressFill').style.width = `${percentage}%`;
-            document.getElementById('progressText').textContent = `已完成 ${completedCount}/${chapters.length} 章节`;
-            
-            const sidebarProgress = document.getElementById('sidebarProgress');
-            sidebarProgress.innerHTML = `
-                <div style="height: 10px; background: var(--bg-secondary); border-radius: 5px; overflow: hidden; margin-bottom: 10px;">
-                    <div style="height: 100%; width: ${percentage}%; background: var(--accent-color); border-radius: 5px;"></div>
-                </div>
-                <div style="font-size: 0.9rem; color: var(--text-muted);">${completedCount}/${chapters.length} 章节</div>
-            `;
-        }
-
-        function renderChapterList() {
-            const list = document.getElementById('chapterList');
-            list.innerHTML = chapters.map((ch, index) => `
-                <li class="chapter-item ${index === currentChapter ? 'active' : ''} ${ch.completed ? 'completed' : ''}" 
-                    onclick="goToChapter(${index})">
-                    <span class="chapter-number">${ch.id}.</span>
-                    <span class="chapter-title">${ch.icon} ${ch.title}</span>
-                </li>
-            `).join('');
-        }
-
-        function renderChapter() {
-            const chapter = chapters[currentChapter];
-            const content = document.getElementById('chapterContent');
-            const quizId = `quiz-${chapter.id}`;
-            
-            content.innerHTML = `
-                <div class="chapter-header">
-                    <div>
-                        <h2>${chapter.icon} 第${chapter.id}章：${chapter.title}</h2>
-                        <p style="color: var(--text-muted); margin-top: 5px;">PHP学习教程</p>
-                    </div>
-                    <div class="chapter-actions">
-                        <button class="action-btn favorite ${isFavorite(chapter.id) ? 'active' : ''}" 
-                                onclick="toggleFavorite(${chapter.id})">
-                            ${isFavorite(chapter.id) ? '❤️' : '🤍'} 收藏
-                        </button>
-                        <button class="action-btn complete" onclick="markChapterComplete()">
-                            ${chapter.completed ? '✅ 已完成' : '✓ 标记完成'}
-                        </button>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3>📖 知识点讲解</h3>
-                    ${chapter.content.intro}
-                    <div class="highlight-box">
-                        <strong>核心要点：</strong>
-                        <ul>
-                            ${chapter.content.points.map(p => `<li>${p}</li>`).join('')}
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3>💻 代码示例</h3>
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-lang">PHP</span>
-                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
-                        </div>
-                        <pre>${escapeHtml(chapter.content.codeExample)}</pre>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3>❌ 错误示例</h3>
-                    <div class="error-example">
-                        <div class="error-title">常见错误</div>
-                        <div class="code-block light" style="margin: 10px 0;">
-                            <pre>${escapeHtml(chapter.content.errorExample.code)}</pre>
-                        </div>
-                        <p><strong>错误原因：</strong>${chapter.content.errorExample.message}</p>
-                    </div>
-                </div>
-
-                <div class="section">
-                    <h3>📝 练习题</h3>
-                    <div class="quiz-section">
-                        <div class="quiz-question">
-                            <p>${chapter.content.quiz.question}</p>
-                            ${chapter.content.quiz.type === 'multiple' ? `
-                                <div class="quiz-options">
-                                    ${chapter.content.quiz.options.map((opt, idx) => `
-                                        <div class="quiz-option" onclick="selectOption(this, ${idx}, ${chapter.content.quiz.answer}, '${quizId}')">
-                                            ${String.fromCharCode(65 + idx)}. ${opt}
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            ` : `
-                                <input type="text" class="quiz-input" id="${quizId}-input" placeholder="输入你的答案...">
-                                <button class="quiz-btn" onclick="checkTextAnswer('${quizId}', '${chapter.content.quiz.answer}')">检查答案</button>
-                            `}
-                        </div>
-                        <div class="answer-section" id="${quizId}-answer">
-                            <h5>✓ 答案解析</h5>
-                            <p>${chapter.content.answer}</p>
-                        </div>
-                    </div>
-                </div>
-
-                ${chapter.id === 10 ? `
-                    <div class="section">
-                        <div class="tips-box">
-                            <span class="tips-icon">🎊</span>
-                            恭喜你完成了PHP教程的所有章节！现在你可以尝试创建自己的项目来巩固所学知识。
-                        </div>
-                    </div>
-                ` : ''}
-            `;
-
-            renderChapterList();
-            updateNavButtons();
-            updateProgressUI();
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function copyCode(btn) {
-            const code = btn.closest('.code-block').querySelector('pre').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = '已复制';
-                setTimeout(() => btn.textContent = '复制', 2000);
-            });
-        }
-
-        function selectOption(el, selected, correct, quizId) {
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('selected', 'correct', 'incorrect');
-            });
-            
-            el.classList.add('selected');
-            
-            if (selected === correct) {
-                el.classList.add('correct');
-                document.getElementById(`${quizId}-answer`).classList.add('show');
-            } else {
-                el.classList.add('incorrect');
-            }
-        }
-
-        function checkTextAnswer(quizId, correctAnswer) {
-            const input = document.getElementById(`${quizId}-input`);
-            const userAnswer = input.value.trim().toLowerCase();
-            
-            if (userAnswer === correctAnswer.toLowerCase()) {
-                input.style.borderColor = 'var(--success-color)';
-                document.getElementById(`${quizId}-answer`).classList.add('show');
-            } else {
-                input.style.borderColor = 'var(--error-color)';
-                input.value = '';
-                input.placeholder = '答案不正确，请重试...';
-            }
-        }
-
-        function goToChapter(index) {
-            if (index >= 0 && index < chapters.length) {
-                currentChapter = index;
-                renderChapter();
-                document.getElementById('searchResults').classList.remove('show');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function navigateChapter(direction) {
-            goToChapter(currentChapter + direction);
-        }
-
-        function updateNavButtons() {
-            document.getElementById('prevBtn').disabled = currentChapter === 0;
-            document.getElementById('nextBtn').disabled = currentChapter === chapters.length - 1;
-        }
-
-        function markChapterComplete() {
-            chapters[currentChapter].completed = !chapters[currentChapter].completed;
-            saveProgress();
-            renderChapter();
-            
-            LearningStats.recordChapterCompletion('php', currentChapter + 1);
-        }
-
-        function isFavorite(chapterId) {
-            const favorites = localStorage.getItem(FAVORITES_KEY);
-            if (!favorites) return false;
-            return JSON.parse(favorites).includes(chapterId);
-        }
-
-        function toggleFavorite(chapterId) {
-            let favorites = localStorage.getItem(FAVORITES_KEY);
-            favorites = favorites ? JSON.parse(favorites) : [];
-            
-            const index = favorites.indexOf(chapterId);
-            if (index === -1) {
-                favorites.push(chapterId);
-            } else {
-                favorites.splice(index, 1);
-            }
-            
-            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
-            renderChapter();
-        }
-
-        function loadNotes() {
-            const notes = localStorage.getItem(NOTES_KEY);
-            if (notes) {
-                document.getElementById('notesTextarea').value = notes;
-            }
-        }
-
-        function saveNotes() {
-            const notes = document.getElementById('notesTextarea').value;
-            localStorage.setItem(NOTES_KEY, notes);
-            
-            const btn = document.querySelector('.notes-actions button');
-            const originalText = btn.textContent;
-            btn.textContent = '✅ 已保存';
-            setTimeout(() => btn.textContent = originalText, 2000);
-        }
-
-        function initTheme() {
-            const savedTheme = localStorage.getItem('tutorial_theme');
-            if (savedTheme) {
-                document.documentElement.setAttribute('data-theme', savedTheme);
-                updateThemeButton(savedTheme);
-            }
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('tutorial_theme', newTheme);
-            updateThemeButton(newTheme);
-        }
-
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeToggle');
-            btn.textContent = theme === 'dark' ? '☀️ 浅色模式' : '🌙 深色模式';
-        }
-
-        function handleSearch() {
-            const query = document.getElementById('searchInput').value.trim().toLowerCase();
-            const resultsContainer = document.getElementById('searchResults');
-            
-            if (!query) {
-                resultsContainer.classList.remove('show');
-                return;
-            }
-
-            const results = [];
-            chapters.forEach((chapter, chapterIndex) => {
-                const content = JSON.stringify(chapter.content).toLowerCase();
-                if (chapter.title.toLowerCase().includes(query) || content.includes(query)) {
-                    results.push({
-                        chapterIndex,
-                        title: chapter.title,
-                        snippet: getSearchSnippet(chapter, query)
-                    });
-                }
-            });
-
-            if (results.length > 0) {
-                resultsContainer.innerHTML = `
-                    <h3 style="margin-bottom: 15px;">🔍 搜索结果 (${results.length})</h3>
-                    ${results.map(r => `
-                        <div class="search-result-item" onclick="goToChapter(${r.chapterIndex})">
-                            <div class="result-title">第${r.chapterIndex + 1}章：${r.title}</div>
-                            ${r.snippet ? `<div class="result-chapter">${r.snippet}</div>` : ''}
-                        </div>
-                    `).join('')}
-                `;
-                resultsContainer.classList.add('show');
-            } else {
-                resultsContainer.innerHTML = '<p style="color: var(--text-muted);">未找到相关内容</p>';
-                resultsContainer.classList.add('show');
-            }
-        }
-
-        function getSearchSnippet(chapter, query) {
-            const text = chapter.content.intro + ' ' + chapter.content.points.join(' ');
-            const index = text.toLowerCase().indexOf(query);
-            if (index !== -1) {
-                const start = Math.max(0, index - 30);
-                const end = Math.min(text.length, index + query.length + 30);
-                return '...' + text.substring(start, end) + '...';
-            }
-            return null;
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadProgress();
-            renderChapter();
-            loadNotes();
-            initTheme();
-        });
+        init();
+    })();
     </script>
 </body>
 </html>

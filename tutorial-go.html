@@ -3,2157 +3,1108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Go语言教程 - 从零开始学习Go编程</title>
-    <link rel="stylesheet" href="tutorial-style.css">
-    <link rel="stylesheet" href="tutorial-features.css">
-    <link rel="stylesheet" href="tutorial-extensions.css">
+    <title>Go语言教程 - 从零开始学习Go编程（35章完整版）</title>
     <style>
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --accent-color: #00add8;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
+            --bg-primary: #ffffff; --bg-secondary: #f8fafc; --bg-card: #ffffff;
+            --text-primary: #1e293b; --text-secondary: #64748b; --text-muted: #94a3b8;
+            --accent-color: #00add8; --accent-hover: #0097b8;
+            --success-color: #10b981; --warning-color: #f59e0b; --danger-color: #ef4444;
             --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --code-bg: #1e293b; --code-text: #e2e8f0; --code-border: #334155;
         }
-
         [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --accent-color: #22d3ee;
-            --success-color: #34d399;
-            --warning-color: #fbbf24;
-            --danger-color: #f87171;
+            --bg-primary: #0f172a; --bg-secondary: #1e293b; --bg-card: #1e293b;
+            --text-primary: #f8fafc; --text-secondary: #cbd5e1; --text-muted: #64748b;
+            --accent-color: #22d3ee; --accent-hover: #06b6d4;
+            --success-color: #34d399; --warning-color: #fbbf24; --danger-color: #f87171;
             --border-color: #334155;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
             --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: all 0.3s ease;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #00add8, #0066cc);
-            color: white;
-            padding: 40px 20px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1.1rem;
-        }
-
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            background: var(--bg-card);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-md);
-            align-items: center;
-        }
-
-        .toolbar-left {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            flex: 1;
-        }
-
-        .toolbar-right {
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-box {
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            width: 300px;
-            font-size: 1rem;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0, 173, 216, 0.1);
-            color: var(--accent-color);
-        }
-
-        .progress-bar {
-            flex: 1;
-            height: 8px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 0 20px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00add8, #0066cc);
-            border-radius: 10px;
-            transition: width 0.3s ease;
-        }
-
-        .sidebar {
-            position: fixed;
-            left: 20px;
-            top: 200px;
-            width: 250px;
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: var(--shadow-md);
-            overflow-y: auto;
-            max-height: calc(100vh - 220px);
-        }
-
-        .sidebar h3 {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .chapter-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .chapter-item {
-            padding: 12px 15px;
-            margin-bottom: 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chapter-item:hover {
-            background: rgba(0, 173, 216, 0.1);
-        }
-
-        .chapter-item.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .chapter-item.completed {
-            text-decoration: line-through;
-            opacity: 0.7;
-        }
-
-        .chapter-item.active.completed {
-            text-decoration: none;
-            opacity: 1;
-        }
-
-        .chapter-icon {
-            font-size: 1.1rem;
-        }
-
-        .main-content {
-            margin-left: 280px;
-        }
-
-        .chapter-section {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-md);
-            display: none;
-        }
-
-        .chapter-section.active {
-            display: block;
-        }
-
-        .chapter-section h2 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .chapter-section h3 {
-            font-size: 1.4rem;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .chapter-section h4 {
-            font-size: 1.2rem;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            color: var(--text-secondary);
-        }
-
-        .section-content {
-            margin-bottom: 20px;
-            color: var(--text-secondary);
-        }
-
-        .code-block {
-            background: #1e293b;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 15px 0;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        .code-block pre {
-            margin: 0;
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .code-block code {
-            color: inherit;
-        }
-
-        .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #334155;
-        }
-
-        .code-lang {
-            font-size: 0.85rem;
-            color: #94a3b8;
-        }
-
-        .code-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .code-btn {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: #e2e8f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.85rem;
-        }
-
-        .code-btn:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .error-block {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid var(--danger-color);
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            margin: 15px 0;
-        }
-
-        .error-block code {
-            background: rgba(239, 68, 68, 0.1);
-            padding: 2px 5px;
-            border-radius: 4px;
-        }
-
-        .practice-section {
-            background: rgba(16, 185, 129, 0.05);
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-
-        .practice-section h4 {
-            color: var(--success-color);
-            margin-top: 0;
-        }
-
-        .question {
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-
-        .answer-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 15px;
-            font-family: inherit;
-        }
-
-        .answer-textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            margin-bottom: 15px;
-            font-family: inherit;
-            min-height: 100px;
-        }
-
-        .answer-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: var(--bg-secondary);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .option-label:hover {
-            background: rgba(0, 173, 216, 0.1);
-        }
-
-        .option-label input[type="radio"] {
-            accent-color: var(--accent-color);
-        }
-
-        .quiz-result {
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .quiz-result.correct {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success-color);
-        }
-
-        .quiz-result.incorrect {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger-color);
-        }
-
-        .show-answer-btn {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: all 0.3s;
-        }
-
-        .show-answer-btn:hover {
-            background: rgba(0, 173, 216, 0.1);
-            color: var(--accent-color);
-        }
-
-        .answer-box {
-            background: rgba(0, 173, 216, 0.1);
-            border: 1px solid rgba(0, 173, 216, 0.2);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .answer-box.show {
-            display: block;
-        }
-
-        .note-section {
-            background: rgba(245, 158, 11, 0.05);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-        }
-
-        .note-section h4 {
-            color: var(--warning-color);
-            margin-top: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .note-textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            font-family: inherit;
-            min-height: 80px;
-            margin-bottom: 10px;
-        }
-
-        .save-note-btn {
-            background: var(--warning-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .save-note-btn:hover {
-            opacity: 0.9;
-        }
-
-        .bookmark-btn {
-            float: right;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .bookmark-btn:hover {
-            transform: scale(1.2);
-        }
-
-        .bookmark-btn.bookmarked {
-            color: #f59e0b;
-        }
-
-        .completion-btn {
-            background: var(--success-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            margin-top: 20px;
-            transition: all 0.3s;
-        }
-
-        .completion-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
-        }
-
-        .completion-btn.completed {
-            background: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        .stats-info {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 20px;
-            padding: 20px;
-            background: var(--bg-card);
-            border-radius: 15px;
-            box-shadow: var(--shadow-md);
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-
-        .nav-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .nav-btn-primary {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .nav-btn-primary:hover:not(:disabled) {
-            opacity: 0.9;
-        }
-
-        .nav-btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-        }
-
-        .nav-btn-secondary:hover:not(:disabled) {
-            background: rgba(0, 173, 216, 0.1);
-            color: var(--accent-color);
-        }
-
-        .highlight {
-            background: rgba(0, 173, 216, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-
-        .tip-box {
-            background: rgba(14, 165, 233, 0.05);
-            border-left: 4px solid #0ea5e9;
-            padding: 15px;
-            border-radius: 0 10px 10px 0;
-            margin: 15px 0;
-        }
-
+            --code-bg: #0f172a; --code-text: #e2e8f0; --code-border: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; transition: background 0.3s, color 0.3s; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .header { background: linear-gradient(135deg, #00add8, #007d9c); color: white; padding: 40px 20px; border-radius: 20px; margin-bottom: 30px; text-align: center; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 10px; background: var(--bg-card); padding: 15px; border-radius: 15px; margin-bottom: 20px; box-shadow: var(--shadow-md); align-items: center; }
+        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .toolbar-right { display: flex; gap: 10px; }
+        .search-box { padding: 10px 15px; border: 1px solid var(--border-color); border-radius: 25px; background: var(--bg-secondary); color: var(--text-primary); width: 300px; font-size: 1rem; }
+        .btn { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+        .btn-primary { background: var(--accent-color); color: white; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: rgba(0,173,216,0.1); color: var(--accent-color); }
+        .progress-bar { flex: 1; height: 8px; background: var(--bg-secondary); border-radius: 10px; overflow: hidden; margin: 0 20px; min-width: 100px; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #00add8, #007d9c); border-radius: 10px; transition: width 0.5s ease; }
+        .stats-info { display: flex; gap: 30px; margin-bottom: 20px; padding: 20px; background: var(--bg-card); border-radius: 15px; box-shadow: var(--shadow-md); flex-wrap: wrap; justify-content: center; }
+        .stat-item { text-align: center; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
+        .sidebar { position: fixed; left: 20px; top: 200px; width: 260px; background: var(--bg-card); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-md); overflow-y: auto; max-height: calc(100vh - 220px); z-index: 10; }
+        .sidebar h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .chapter-list { list-style: none; padding: 0; margin: 0; }
+        .chapter-item { padding: 8px 12px; margin-bottom: 3px; border-radius: 8px; cursor: pointer; transition: all 0.3s; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .chapter-item:hover { background: rgba(0,173,216,0.1); }
+        .chapter-item.active { background: var(--accent-color); color: white; }
+        .chapter-item.completed .ch-title { text-decoration: line-through; opacity: 0.7; }
+        .chapter-item.active.completed .ch-title { text-decoration: none; opacity: 1; }
+        .main-content { margin-left: 290px; }
+        .chapter-section { background: var(--bg-card); border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: var(--shadow-md); display: none; }
+        .chapter-section.active { display: block; }
+        .chapter-section h2 { font-size: 1.8rem; margin-bottom: 20px; color: var(--text-primary); display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .chapter-section h3 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 12px; color: var(--text-primary); }
+        .section-content { margin-bottom: 20px; color: var(--text-secondary); }
+        .section-content ul, .section-content ol { padding-left: 20px; margin: 10px 0; }
+        .section-content li { margin-bottom: 6px; }
+        .section-content code { background: rgba(0,173,216,0.15); padding: 2px 6px; border-radius: 4px; font-family: 'Monaco','Menlo',monospace; font-size: 0.9em; }
+        .code-block { background: var(--code-bg); color: var(--code-text); padding: 20px; border-radius: 12px; margin: 15px 0; overflow-x: auto; position: relative; }
+        .code-block pre { margin: 0; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; font-size: 0.9rem; line-height: 1.6; }
+        .code-block code { color: inherit; background: none; padding: 0; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid var(--code-border); }
+        .code-lang { font-size: 0.85rem; color: #94a3b8; }
+        .code-actions { display: flex; gap: 10px; }
+        .code-btn { background: rgba(255,255,255,0.1); border: none; color: #e2e8f0; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.85rem; transition: background 0.3s; }
+        .code-btn:hover { background: rgba(255,255,255,0.2); }
+        .error-block { background: rgba(239,68,68,0.08); border-left: 4px solid var(--danger-color); padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; }
+        .error-block h4 { color: var(--danger-color); margin-top: 0; margin-bottom: 8px; }
+        .error-block code { background: rgba(239,68,68,0.1); padding: 2px 5px; border-radius: 4px; }
+        .practice-section { background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .practice-section h4 { color: var(--success-color); margin-top: 0; }
+        .question { margin-bottom: 15px; font-weight: 500; }
+        .answer-input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; margin-bottom: 15px; }
+        .answer-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: 'Monaco','Menlo',monospace; min-height: 100px; margin-bottom: 15px; }
+        .quiz-result { padding: 15px; border-radius: 10px; margin-top: 15px; display: none; align-items: center; gap: 10px; }
+        .quiz-result.correct { background: rgba(16,185,129,0.1); color: var(--success-color); display: flex; }
+        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--danger-color); display: flex; }
+        .show-answer-btn { background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 10px; cursor: pointer; color: var(--text-secondary); transition: all 0.3s; margin-top: 10px; }
+        .show-answer-btn:hover { background: rgba(0,173,216,0.1); color: var(--accent-color); }
+        .answer-box { background: rgba(0,173,216,0.1); border: 1px solid rgba(0,173,216,0.2); padding: 15px; border-radius: 10px; margin-top: 15px; display: none; white-space: pre-wrap; font-family: 'Monaco','Menlo',monospace; font-size: 0.9rem; }
+        .answer-box.show { display: block; }
+        .note-section { background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2); border-radius: 15px; padding: 25px; margin: 20px 0; }
+        .note-section h4 { color: var(--warning-color); margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        .note-textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem; font-family: inherit; min-height: 80px; margin-bottom: 10px; }
+        .save-note-btn { background: var(--warning-color); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        .save-note-btn:hover { opacity: 0.9; }
+        .bookmark-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; transition: all 0.3s; }
+        .bookmark-btn:hover { transform: scale(1.2); }
+        .bookmark-btn.bookmarked { color: #f59e0b; }
+        .completion-btn { background: var(--success-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 20px; transition: all 0.3s; }
+        .completion-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .completion-btn.completed { background: var(--text-muted); cursor: not-allowed; }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .nav-btn { padding: 12px 30px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .nav-btn-primary { background: var(--accent-color); color: white; }
+        .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
+        .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .nav-btn-secondary:hover:not(:disabled) { background: rgba(0,173,216,0.1); color: var(--accent-color); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent-color); color: white; padding: 15px 30px; border-radius: 10px; box-shadow: var(--shadow-md); z-index: 9999; transition: transform 0.3s ease; font-size: 1rem; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .search-highlight { background: rgba(245,158,11,0.3); padding: 2px 4px; border-radius: 3px; }
         @media (max-width: 1024px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                max-height: 200px;
-                margin-bottom: 20px;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .progress-bar {
-                display: none;
-            }
-
-            .search-box {
-                width: 100%;
-            }
+            .sidebar { position: static; width: 100%; max-height: 200px; margin-bottom: 20px; }
+            .main-content { margin-left: 0; }
+            .progress-bar { display: none; }
+            .search-box { width: 100%; }
+            .toolbar { flex-direction: column; }
+            .stats-info { gap: 15px; }
+            .stat-value { font-size: 1.3rem; }
         }
     </style>
 </head>
-<body>
+<body data-language="go">
     <div class="container">
-        <!-- 头部 -->
         <div class="header">
-            <h1>🐹 Go语言教程</h1>
-            <p>从入门到精通，系统学习Go编程</p>
+            <h1>🔷 Go语言教程</h1>
+            <p>从入门到精通 · 35章完整教程 · 系统学习Go编程</p>
         </div>
-
-        <!-- 工具栏 -->
         <div class="toolbar">
             <div class="toolbar-left">
                 <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
-                <button class="btn btn-secondary" onclick="toggleTheme()">
-                    🌙 <span id="themeText">深色模式</span>
-                </button>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
             <div class="toolbar-right">
+                <button class="btn btn-secondary" onclick="toggleTheme()">🌙 <span id="themeText">深色模式</span></button>
                 <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
                 <button class="btn btn-primary" onclick="goToHub()">🏠 返回首页</button>
             </div>
         </div>
-
-        <!-- 进度统计 -->
-        <div class="stats-info" id="statsInfo">
-            <div class="stat-item">
-                <div class="stat-value" id="completedCount">0</div>
-                <div class="stat-label">已完成章节</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="totalCount">10</div>
-                <div class="stat-label">总章节数</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="progressPercent">0%</div>
-                <div class="stat-label">学习进度</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-value" id="bookmarkCount">0</div>
-                <div class="stat-label">收藏章节</div>
-            </div>
+        <div class="stats-info" id="statsInfo" style="display:none;">
+            <div class="stat-item"><div class="stat-value" id="completedCount">0</div><div class="stat-label">已完成章节</div></div>
+            <div class="stat-item"><div class="stat-value" id="totalCount">35</div><div class="stat-label">总章节数</div></div>
+            <div class="stat-item"><div class="stat-value" id="progressPercent">0%</div><div class="stat-label">学习进度</div></div>
+            <div class="stat-item"><div class="stat-value" id="bookmarkCount">0</div><div class="stat-label">收藏章节</div></div>
         </div>
-
-        <!-- 侧边栏导航 -->
-        <div class="sidebar">
-            <h3>📚 章节导航</h3>
-            <ul class="chapter-list" id="chapterList"></ul>
-        </div>
-
-        <!-- 主内容区 -->
-        <div class="main-content">
-            <!-- 章节1: 入门介绍与环境搭建 -->
+        <div class="sidebar" id="sidebar"><h3>📚 章节导航</h3><ul class="chapter-list" id="chapterList"></ul></div>
+        <div class="main-content" id="mainContent">
             <div id="ch1" class="chapter-section active">
-                <h2>
-                    1. 入门介绍与环境搭建
-                    <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <p>Go是Google开发的开源编程语言，于2009年正式发布。它结合了C语言的高性能和Python的开发效率，特别适合构建高并发的网络服务和分布式系统。</p>
-                    
-                    <h3>🌟 Go语言的特点</h3>
-                    <ul>
-                        <li><strong>简洁高效：</strong>语法简洁，编译速度快，执行效率高</li>
-                        <li><strong>并发支持：</strong>原生支持并发编程，goroutine轻量级线程</li>
-                        <li><strong>内存管理：</strong>自动垃圾回收，无需手动管理内存</li>
-                        <li><strong>跨平台：</strong>支持Windows、Mac、Linux等多种操作系统</li>
-                        <li><strong>静态类型：</strong>编译时类型检查，保证代码安全</li>
-                        <li><strong>丰富标准库：</strong>强大的标准库，开箱即用</li>
-                    </ul>
+                <h2>1. Go语言简介 <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go的诞生：</strong>由Google的Robert Griesemer、Rob Pike和Ken Thompson于2007年设计，2009年开源，2012年发布1.0</li><li><strong>设计目标：</strong>解决大型软件工程的开发效率，兼顾编译型性能和解释型开发速度</li><li><strong>核心特性：</strong>静态类型、编译型、原生并发、垃圾回收、简洁语法、快速编译</li><li><strong>应用领域：</strong>云计算(Docker/K8s)、微服务、网络编程、DevOps、区块链</li><li><strong>语言哲学：</strong>少即是多——减少特性降低复杂度，没有继承、没有异常</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch1-code1')">📋 复制</button></div></div><pre id="ch1-code1"><code>package main
 
-                    <h3>📦 安装Go</h3>
-                    <p>从 <a href="https://golang.org/dl/" target="_blank">golang.org/dl</a> 下载并安装Go。安装完成后，可以通过以下命令验证安装：</p>
-                </div>
+import "fmt"
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code1"><code>go version
-# 输出示例: go version go1.21.0 darwin/amd64</code></pre>
-                </div>
+func main() {
+    fmt.Println("Hello, Go!")
+    fmt.Println("欢迎学习Go语言教程！")
+    version := "1.22"
+    fmt.Printf("当前Go版本: %s\n", version)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>混淆Go与C++：Go是全新设计的语言，没有类和继承</p><p>误以为Go是脚本语言：Go是编译型语言，但<code>go run</code>可简化过程</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go语言的三位创始人分别是谁？</div><input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(1,1)">检查答案</button><div id="ch1-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(1,1)">查看答案</button><div id="ch1-answer1" class="answer-box">Robert Griesemer、Rob Pike、Ken Thompson</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(1)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>🚀 第一个Go程序</h3>
-                    <p>创建一个名为 <code>hello.go</code> 的文件：</p>
-                </div>
+            <div id="ch2" class="chapter-section">
+                <h2>2. 开发环境配置 <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>安装Go：</strong>从golang.org/dl下载安装包，推荐最新稳定版</li><li><strong>环境变量：</strong>GOPATH工作空间、GOROOT安装路径、PATH添加bin目录</li><li><strong>Go模块：</strong>1.11引入模块系统，1.16后默认，使用go.mod管理依赖</li><li><strong>IDE推荐：</strong>VS Code+Go扩展、GoLand、Vim+vim-go</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch2-code1')">📋 复制</button></div></div><pre id="ch2-code1"><code># 检查Go版本
+go version
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code2"><code>package main
+# 初始化模块
+mkdir myproject &amp;&amp; cd myproject
+go mod init github.com/yourname/myproject
+
+# 添加依赖
+go get github.com/gin-gonic/gin
+
+# 运行和编译
+go run main.go
+go build -o myapp main.go
+
+# 格式化和检查
+go fmt ./...
+vet ./...</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记go mod init：没有模块无法管理依赖</p><p>未设置GOPATH：模块模式下可任意目录开发</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">初始化Go模块的命令是什么？</div><input type="text" class="answer-input" id="ch2-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(2,1)">检查答案</button><div id="ch2-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(2,1)">查看答案</button><div id="ch2-answer1" class="answer-box">go mod init 模块路径</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(2)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch3" class="chapter-section">
+                <h2>3. 第一个Go程序 <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>package声明：</strong>每个Go文件必须以package开头，可执行程序入口包必须是<code>main</code></li><li><strong>import导入：</strong>导入标准库或第三方包，未使用的导入会编译错误</li><li><strong>main函数：</strong>程序入口，无参数无返回值，必须在main包中</li><li><strong>语句规则：</strong>不需要分号，左大括号不能单独一行</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch3-code1')">📋 复制</button></div></div><pre id="ch3-code1"><code>package main
 
 import "fmt"
 
 func main() {
     fmt.Println("Hello, World!")
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <p>运行程序：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code3"><code>go run hello.go
-# 输出: Hello, World!</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📁 Go工作空间</h3>
-                    <p>Go使用GOPATH作为工作空间，包含三个目录：</p>
-                    <ul>
-                        <li><code>src/</code> - 源代码文件</li>
-                        <li><code>pkg/</code> - 编译后的包文件</li>
-                        <li><code>bin/</code> - 编译后的可执行文件</li>
-                    </ul>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>缺少main包：<code>package main</code> 是可执行程序必须的包声明。</p>
-                    <p>缺少main函数：每个可执行程序必须有一个 <code>func main()</code> 函数作为入口。</p>
-                    <p>未使用的导入：Go编译器不允许导入未使用的包。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go语言是哪家公司开发的？</div>
-                    <input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
-                    <div id="ch1-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(1, 1)">查看答案</button>
-                    <div id="ch1-answer1" class="answer-box">Google</div>
-
-                    <div class="question">2. 请写出打印"Hello Go"的完整代码</div>
-                    <textarea class="answer-textarea" id="ch1-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
-                    <div id="ch1-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(1, 2)">查看答案</button>
-                    <div id="ch1-answer2" class="answer-box">package main
+    name := "Go语言"
+    fmt.Printf("欢迎学习%s！\n", name)
+    a, b := 10, 20
+    fmt.Printf("%d + %d = %d\n", a, b, a+b)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>左大括号换行：<code>func main()\n{</code>是错误的</p><p>未使用的导入：编译失败</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写程序输出你的名字和年龄</div><textarea class="answer-textarea" id="ch3-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(3,1)">检查答案</button><div id="ch3-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(3,1)">查看答案</button><div id="ch3-answer1" class="answer-box">package main
 
 import "fmt"
 
 func main() {
-    fmt.Println("Hello Go")
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
-                </div>
+    name := "张三"
+    age := 25
+    fmt.Printf("我叫%s，今年%d岁\n", name, age)
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(3)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节2: 基本语法 -->
-            <div id="ch2" class="chapter-section">
-                <h2>
-                    2. 基本语法
-                    <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📦 变量声明</h3>
-                    <p>Go提供多种变量声明方式：</p>
-                </div>
+            <div id="ch4" class="chapter-section">
+                <h2>4. 包与导入 <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>包的概念：</strong>Go通过package组织代码，同目录文件必须同包</li><li><strong>可见性规则：</strong>大写字母开头=导出(public)，小写=未导出(private)</li><li><strong>导入方式：</strong>单行、多行、别名、点导入</li><li><strong>常用标准库：</strong>fmt、os、strings、net/http</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch4-code1')">📋 复制</button></div></div><pre id="ch4-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch2-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch2-code1"><code>package main
+import (
+    "fmt"
+    "math"
+    "strings"
+    "time"
+)
+
+func main() {
+    fmt.Println("Hello")
+    fmt.Println("圆周率:", math.Pi)
+    fmt.Println(strings.ToUpper("hello go"))
+    fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>循环导入：Go不允许循环依赖</p><p>导入未使用：编译错误，可用<code>_</code>空白标识符</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go中如何区分导出和未导出的标识符？</div><input type="text" class="answer-input" id="ch4-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(4,1)">检查答案</button><div id="ch4-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(4,1)">查看答案</button><div id="ch4-answer1" class="answer-box">大写字母开头为导出(public)，小写字母开头为未导出(private)</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(4)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch5" class="chapter-section">
+                <h2>5. 变量声明 <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>var声明：</strong><code>var name type = value</code>，类型可省略</li><li><strong>短变量声明：</strong><code>name := value</code>，只能在函数内使用</li><li><strong>零值机制：</strong>数值0、字符串""、布尔false、引用类型nil</li><li><strong>多重赋值：</strong><code>a, b := 1, 2</code>，支持交换<code>a, b = b, a</code></li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch5-code1')">📋 复制</button></div></div><pre id="ch5-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    // 方式1: 使用var关键字
     var name string = "Go"
-    var age int = 13
-    
-    // 方式2: 类型推断
-    var message = "Hello"
-    
-    // 方式3: 短变量声明（只能在函数内部使用）
-    count := 100
-    
-    // 声明多个变量
-    var a, b, c int
-    var x, y = 10, "test"
-    
-    fmt.Println(name, age, message, count, a, b, c, x, y)
-}</code></pre>
-                </div>
+    var age int = 14
+    var city = "Beijing"
+    var count int      // 0
+    var message string // ""
+    var flag bool      // false
+    lang := "Go语言"
+    version := 1.22
+    a, b := 10, 20
+    a, b = b, a
+    fmt.Println(name, age, city, count, flag, lang, version, a, b)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>函数外使用:=：必须使用var声明</p><p>声明后未使用：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用短变量声明交换两个变量的值</div><textarea class="answer-textarea" id="ch5-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(5,1)">检查答案</button><div id="ch5-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(5,1)">查看答案</button><div id="ch5-answer1" class="answer-box">a, b := 10, 20
+a, b = b, a</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(5)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>📊 数据类型</h3>
-                    <p>Go的基本数据类型：</p>
-                    <ul>
-                        <li><strong>数值类型：</strong>int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64</li>
-                        <li><strong>布尔类型：</strong>bool (true/false)</li>
-                        <li><strong>字符串：</strong>string</li>
-                        <li><strong>复数类型：</strong>complex64, complex128</li>
-                    </ul>
-                </div>
+            <div id="ch6" class="chapter-section">
+                <h2>6. 常量与iota <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>const声明：</strong>常量在编译时确定，不能修改</li><li><strong>iota枚举器：</strong>const块中每新增一行iota加1，从0开始</li><li><strong>iota技巧：</strong>跳过值<code>_ = iota</code>、位运算<code>1 &lt;&lt; iota</code></li><li><strong>无类型常量：</strong>常量可不指定类型，需要时自动转换</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch6-code1')">📋 复制</button></div></div><pre id="ch6-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch2-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch2-code2"><code>package main
+import "fmt"
+
+const Pi = 3.14159
+
+const (
+    Sunday    = iota // 0
+    Monday           // 1
+    Tuesday          // 2
+    Wednesday        // 3
+    Thursday         // 4
+    Friday           // 5
+    Saturday         // 6
+)
+
+const (
+    ReadPermission   = 1 &lt;&lt; iota // 1
+    WritePermission              // 2
+    ExecutePermission            // 4
+)
+
+func main() {
+    fmt.Println("Pi =", Pi)
+    fmt.Println("Monday =", Monday)
+    fmt.Println("All =", ReadPermission|WritePermission|ExecutePermission)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>const块外使用iota：编译错误</p><p>常量用函数赋值：<code>const t = time.Now()</code>错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用iota定义文件权限常量：读(1)、写(2)、执行(4)</div><textarea class="answer-textarea" id="ch6-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(6,1)">检查答案</button><div id="ch6-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(6,1)">查看答案</button><div id="ch6-answer1" class="answer-box">const (
+    Read    = 1 &lt;&lt; iota // 1
+    Write               // 2
+    Execute             // 4
+)</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(6)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch7" class="chapter-section">
+                <h2>7. 基本数据类型 <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>整数类型：</strong>int8~int64、uint8~uint64，int/uint与平台相关</li><li><strong>浮点类型：</strong>float32(约6位精度)、float64(约15位精度)</li><li><strong>布尔类型：</strong>bool，只有true和false</li><li><strong>字符串类型：</strong>string，UTF-8编码，不可变</li><li><strong>byte与rune：</strong>byte是uint8别名，rune是int32别名</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch7-code1')">📋 复制</button></div></div><pre id="ch7-code1"><code>package main
 
 import "fmt"
 
 func main() {
     var i int = 42
-    var f float64 = 3.14
+    var f64 float64 = 3.14159265358979
     var b bool = true
-    var s string = "hello"
-    
-    fmt.Printf("int: %d\n", i)
-    fmt.Printf("float: %f\n", f)
-    fmt.Printf("bool: %t\n", b)
-    fmt.Printf("string: %s\n", s)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔢 常量</h3>
-                    <p>使用 <code>const</code> 声明常量：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch2-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch2-code3"><code>package main
-
-import "fmt"
-
-func main() {
-    const Pi = 3.14159
-    const MaxSize = 100
-    const (
-        Monday = iota
-        Tuesday
-        Wednesday
-    )
-    
-    fmt.Println(Pi, MaxSize, Monday, Tuesday, Wednesday)
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>短变量声明在函数外使用：<code>count := 10</code> 只能在函数内部使用，函数外必须使用 <code>var</code>。</p>
-                    <p>类型不匹配：Go是强类型语言，不能直接将int赋值给float。</p>
-                    <p>未使用的变量：Go编译器不允许声明但未使用的变量。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go中短变量声明的符号是什么？</div>
-                    <input type="text" class="answer-input" id="ch2-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
-                    <div id="ch2-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(2, 1)">查看答案</button>
-                    <div id="ch2-answer1" class="answer-box">:= (冒号等号)</div>
-
-                    <div class="question">2. 请声明一个字符串变量name，值为"Alice"，并打印</div>
-                    <textarea class="answer-textarea" id="ch2-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
-                    <div id="ch2-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(2, 2)">查看答案</button>
-                    <div id="ch2-answer2" class="answer-box">package main
-
-import "fmt"
-
-func main() {
-    var name string = "Alice"
-    // 或
-    // name := "Alice"
-    fmt.Println(name)
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
-                </div>
+    s := "Hello, 世界"
+    ch := '中'
+    fmt.Printf("字符: %c, Unicode: %U\n", ch, ch)
+    fmt.Println(i, f64, b, s, len(s))
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>整数溢出：int8最大127</p><p>字符串长度：len("中文")返回6(字节数)不是2</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">byte和rune分别是什么类型的别名？</div><input type="text" class="answer-input" id="ch7-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(7,1)">检查答案</button><div id="ch7-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(7,1)">查看答案</button><div id="ch7-answer1" class="answer-box">byte是uint8的别名，rune是int32的别名</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(7)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节3: 流程控制 -->
-            <div id="ch3" class="chapter-section">
-                <h2>
-                    3. 流程控制
-                    <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔀 if-else语句</h3>
-                    <p>Go的if语句不需要括号，但大括号必须有：</p>
-                </div>
+            <div id="ch8" class="chapter-section">
+                <h2>8. 类型转换 <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>显式转换：</strong>Go没有隐式转换，必须<code>T(v)</code></li><li><strong>数值间转换：</strong><code>int(float64)</code>，注意精度丢失</li><li><strong>字符串转换：</strong><code>string([]byte)</code>、strconv.Itoa等</li><li><strong>strconv包：</strong>Atoi、Itoa、FormatFloat等</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch8-code1')">📋 复制</button></div></div><pre id="ch8-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code1"><code>package main
+import (
+    "fmt"
+    "strconv"
+)
+
+func main() {
+    var i int = 42
+    var f float64 = float64(i)
+    var u uint = uint(f)
+    fmt.Println(i, f, u)
+    s := strconv.Itoa(123)
+    n, _ := strconv.Atoi("456")
+    fmt.Println(s, n)
+    data := []byte("Hello")
+    fmt.Println(string(data))
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>隐式转换：<code>var i int = 3.14</code>不允许</p><p>精度丢失：大数转换需注意</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">将字符串"123"转换为整数并加1输出</div><textarea class="answer-textarea" id="ch8-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(8,1)">检查答案</button><div id="ch8-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(8,1)">查看答案</button><div id="ch8-answer1" class="answer-box">n, _ := strconv.Atoi("123")
+fmt.Println(n + 1) // 124</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(8)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch9" class="chapter-section">
+                <h2>9. 算术运算符 <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本运算：</strong>+、-、*、/、%</li><li><strong>整数除法：</strong>整数相除向下取整，5/2=2</li><li><strong>自增自减：</strong>只有i++和i--，是语句不是表达式</li><li><strong>位运算：</strong>&amp;与、|或、^异或、&lt;&lt;左移、&gt;&gt;右移</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch9-code1')">📋 复制</button></div></div><pre id="ch9-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    age := 18
-    
-    if age >= 18 {
-        fmt.Println("成年人")
-    } else if age >= 12 {
-        fmt.Println("青少年")
+    a, b := 17, 5
+    fmt.Printf("%d / %d = %d\n", a, b, a/b)
+    fmt.Printf("%d %% %d = %d\n", a, b, a%b)
+    x := 10
+    x++
+    fmt.Println("x++:", x)
+    fmt.Println("6 &lt;&lt; 2 =", 6&lt;&lt;2)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>j = i++是错误的，i++是语句</p><p>整数除以0会panic</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">计算17除以5的商和余数</div><input type="text" class="answer-input" id="ch9-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(9,1)">检查答案</button><div id="ch9-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(9,1)">查看答案</button><div id="ch9-answer1" class="answer-box">商: 17/5=3, 余数: 17%5=2</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(9)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch10" class="chapter-section">
+                <h2>10. 比较与逻辑运算符 <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>比较运算符：</strong>==、!=、&lt;、&gt;、&lt;=、&gt;=</li><li><strong>逻辑运算符：</strong>&amp;&amp;与、||或、!非</li><li><strong>短路求值：</strong>&amp;&amp;左false不执行右，||左true不执行右</li><li><strong>可比较类型：</strong>相同类型才能比较</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch10-code1')">📋 复制</button></div></div><pre id="ch10-code1"><code>package main
+
+import "fmt"
+
+func main() {
+    a, b := 10, 20
+    fmt.Println("a &lt; b:", a &lt; b)
+    x, y := true, false
+    fmt.Println("x &amp;&amp; y:", x &amp;&amp; y)
+    fmt.Println("x || y:", x || y)
+    val := 0
+    if val != 0 &amp;&amp; 100/val &gt; 10 {
+        fmt.Println("成立")
     } else {
-        fmt.Println("儿童")
+        fmt.Println("短路保护")
     }
-    
-    // if可以包含初始化语句
-    if score := 85; score >= 90 {
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>比较不同类型：编译错误</p><p>slice/map不能用==比较</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go中逻辑运算符短路求值的含义？</div><input type="text" class="answer-input" id="ch10-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(10,1)">检查答案</button><div id="ch10-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(10,1)">查看答案</button><div id="ch10-answer1" class="answer-box">&amp;&amp;左边为false则右边不执行；||左边为true则右边不执行</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(10)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(11)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch11" class="chapter-section">
+                <h2>11. if语句 <button class="bookmark-btn" onclick="toggleBookmark(11)" id="bookmarkBtn11">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本if：</strong>条件不需要括号，大括号必须有</li><li><strong>if-else：</strong>else必须与if的}在同一行</li><li><strong>if-else if-else：</strong>多条件链式判断</li><li><strong>初始化语句：</strong><code>if stmt; condition {}</code>，变量作用域限if块内</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch11-code1')">📋 复制</button></div></div><pre id="ch11-code1"><code>package main
+
+import "fmt"
+
+func main() {
+    score := 85
+    if score &gt;= 90 {
         fmt.Println("优秀")
+    } else if score &gt;= 80 {
+        fmt.Println("良好")
     } else {
-        fmt.Println("继续努力")
+        fmt.Println("及格")
     }
-}</code></pre>
-                </div>
+    if num := 42; num%2 == 0 {
+        fmt.Printf("%d是偶数\n", num)
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>else换行：必须与}同行</p><p>条件加括号：不推荐但语法正确</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用if初始化语句判断偶数</div><textarea class="answer-textarea" id="ch11-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(11,1)">检查答案</button><div id="ch11-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(11,1)">查看答案</button><div id="ch11-answer1" class="answer-box">if n := 42; n%2 == 0 {
+    fmt.Println("偶数")
+} else {
+    fmt.Println("奇数")
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch11-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(11)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn11" onclick="markCompleted(11)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(10)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(12)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>🔄 for循环</h3>
-                    <p>Go只有for循环，没有while和do-while：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code2"><code>package main
+            <div id="ch12" class="chapter-section">
+                <h2>12. switch语句 <button class="bookmark-btn" onclick="toggleBookmark(12)" id="bookmarkBtn12">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>自动break：</strong>默认每个case自动终止</li><li><strong>fallthrough：</strong>继续执行下一个case</li><li><strong>多值匹配：</strong><code>case 1, 2, 3:</code></li><li><strong>无条件switch：</strong>相当于if-else链</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch12-code1')">📋 复制</button></div></div><pre id="ch12-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    // 基本for循环
-    for i := 0; i < 5; i++ {
-        fmt.Println(i)
-    }
-    
-    // 类似while循环
-    count := 0
-    for count < 5 {
-        fmt.Println("count:", count)
-        count++
-    }
-    
-    // 无限循环
-    // for {
-    //     fmt.Println("无限循环")
-    // }
-    
-    // range遍历
-    fruits := []string{"apple", "banana", "orange"}
-    for index, value := range fruits {
-        fmt.Printf("索引: %d, 值: %s\n", index, value)
-    }
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔀 switch语句</h3>
-                    <p>Go的switch非常灵活，可以比较任意类型：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code3"><code>package main
-
-import "fmt"
-
-func main() {
-    day := 3
-    
+    day := "Wednesday"
     switch day {
-    case 1:
-        fmt.Println("星期一")
-    case 2:
-        fmt.Println("星期二")
-    case 3, 4, 5:
-        fmt.Println("工作日")
+    case "Monday":
+        fmt.Println("周一")
+    case "Wednesday", "Thursday":
+        fmt.Println("周中")
     default:
-        fmt.Println("周末")
+        fmt.Println("其他")
     }
-    
-    // switch可以不带表达式
     score := 85
     switch {
-    case score >= 90:
+    case score &gt;= 90:
         fmt.Println("优秀")
-    case score >= 80:
+    case score &gt;= 80:
         fmt.Println("良好")
-    default:
-        fmt.Println("加油")
     }
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>⏭️ break和continue</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code4"><code>package main
-
-import "fmt"
-
-func main() {
-    // break: 跳出循环
-    for i := 0; i < 10; i++ {
-        if i == 5 {
-            break
-        }
-        fmt.Println(i)
-    }
-    
-    // continue: 跳过当前迭代
-    for i := 0; i < 10; i++ {
-        if i%2 == 0 {
-            continue
-        }
-        fmt.Println("奇数:", i)
-    }
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>if条件加括号：<code>if (x > 0)</code> 虽然不会报错，但Go风格不推荐。</p>
-                    <p>for循环缺少大括号：<code>for i := 0; i < 10; i++ fmt.Println(i)</code> 会报错。</p>
-                    <p>switch的case不需要break：Go的switch在每个case末尾自动break，需要穿透时使用 <code>fallthrough</code>。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go中有while循环吗？</div>
-                    <input type="text" class="answer-input" id="ch3-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
-                    <div id="ch3-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(3, 1)">查看答案</button>
-                    <div id="ch3-answer1" class="answer-box">没有，Go只有for循环，可以用for模拟while</div>
-
-                    <div class="question">2. 写一个循环打印1到10的偶数</div>
-                    <textarea class="answer-textarea" id="ch3-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
-                    <div id="ch3-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(3, 2)">查看答案</button>
-                    <div id="ch3-answer2" class="answer-box">package main
-
-import "fmt"
-
-func main() {
-    for i := 1; i <= 10; i++ {
-        if i%2 == 0 {
-            fmt.Println(i)
-        }
-    }
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
-                </div>
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记fallthrough：默认不穿透</p><p>case类型不匹配：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用switch判断月份所属季节</div><textarea class="answer-textarea" id="ch12-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(12,1)">检查答案</button><div id="ch12-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(12,1)">查看答案</button><div id="ch12-answer1" class="answer-box">switch month {
+case 3, 4, 5: fmt.Println("春季")
+case 6, 7, 8: fmt.Println("夏季")
+case 9, 10, 11: fmt.Println("秋季")
+case 12, 1, 2: fmt.Println("冬季")
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch12-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(12)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn12" onclick="markCompleted(12)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(11)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(13)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节4: 数组与切片 -->
-            <div id="ch4" class="chapter-section">
-                <h2>
-                    4. 数组与切片
-                    <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📦 数组</h3>
-                    <p>数组是固定长度的相同类型元素序列：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch4-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch4-code1"><code>package main
+            <div id="ch13" class="chapter-section">
+                <h2>13. for循环 <button class="bookmark-btn" onclick="toggleBookmark(13)" id="bookmarkBtn13">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go唯一循环：</strong>只有for，没有while</li><li><strong>经典for：</strong><code>for init; cond; post {}</code></li><li><strong>条件for：</strong><code>for cond {}</code>相当于while</li><li><strong>range迭代：</strong><code>for i, v := range col {}</code></li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch13-code1')">📋 复制</button></div></div><pre id="ch13-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    // 声明数组
-    var arr [5]int
-    arr[0] = 1
-    arr[1] = 2
-    
-    // 初始化数组
-    numbers := [5]int{1, 2, 3, 4, 5}
-    
-    // 省略长度，由初始化值决定
-    primes := [...]int{2, 3, 5, 7, 11}
-    
-    // 二维数组
-    matrix := [2][3]int{
-        {1, 2, 3},
-        {4, 5, 6},
+    for i := 0; i &lt; 5; i++ {
+        fmt.Print(i, " ")
     }
-    
-    fmt.Println(arr)
-    fmt.Println(numbers)
-    fmt.Println(primes)
-    fmt.Println(matrix)
-}</code></pre>
-                </div>
+    fmt.Println()
+    n := 1
+    for n &lt; 100 { n *= 2 }
+    fmt.Println("n =", n)
+    nums := []int{10, 20, 30}
+    for i, v := range nums {
+        fmt.Printf("%d: %d\n", i, v)
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>range返回值副本：修改不影响原切片</p><p>循环变量捕获问题（Go 1.22前）</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用for循环计算1到100的和</div><textarea class="answer-textarea" id="ch13-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(13,1)">检查答案</button><div id="ch13-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(13,1)">查看答案</button><div id="ch13-answer1" class="answer-box">sum := 0
+for i := 1; i &lt;= 100; i++ {
+    sum += i
+}
+fmt.Println(sum) // 5050</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch13-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(13)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn13" onclick="markCompleted(13)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(12)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(14)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>🔪 切片</h3>
-                    <p>切片是数组的引用，长度可变：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch4-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch4-code2"><code>package main
+            <div id="ch14" class="chapter-section">
+                <h2>14. break与continue <button class="bookmark-btn" onclick="toggleBookmark(14)" id="bookmarkBtn14">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>break：</strong>终止当前循环</li><li><strong>continue：</strong>跳过当前迭代</li><li><strong>标签break：</strong><code>break Label</code>跳出外层</li><li><strong>标签continue：</strong><code>continue Label</code>继续外层</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch14-code1')">📋 复制</button></div></div><pre id="ch14-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    // 从数组创建切片
-    arr := [5]int{1, 2, 3, 4, 5}
-    slice := arr[1:4] // [2, 3, 4]
-    
-    // 直接创建切片
-    s := []int{1, 2, 3}
-    
-    // 使用make创建切片
-    s1 := make([]int, 5)      // 长度5，容量5
-    s2 := make([]int, 5, 10)  // 长度5，容量10
-    
-    fmt.Println(slice)
-    fmt.Println(s)
-    fmt.Println(s1, len(s1), cap(s1))
-    fmt.Println(s2, len(s2), cap(s2))
-}</code></pre>
-                </div>
+    for i := 0; i &lt; 10; i++ {
+        if i == 5 { break }
+        fmt.Print(i, " ")
+    }
+    fmt.Println()
+    for i := 0; i &lt; 10; i++ {
+        if i%2 == 0 { continue }
+        fmt.Print(i, " ")
+    }
+    fmt.Println()
+outer:
+    for i := 0; i &lt; 3; i++ {
+        for j := 0; j &lt; 3; j++ {
+            if i == 1 &amp;&amp; j == 1 { break outer }
+            fmt.Printf("(%d,%d) ", i, j)
+        }
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>标签未定义：编译错误</p><p>误用goto：不推荐</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">找出第一个能被7整除且大于100的数</div><textarea class="answer-textarea" id="ch14-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(14,1)">检查答案</button><div id="ch14-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(14,1)">查看答案</button><div id="ch14-answer1" class="answer-box">for i := 101; ; i++ {
+    if i%7 == 0 {
+        fmt.Println(i) // 105
+        break
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch14-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(14)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn14" onclick="markCompleted(14)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(13)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(15)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>⚡ 切片操作</h3>
-                </div>
+            <div id="ch15" class="chapter-section">
+                <h2>15. 数组 <button class="bookmark-btn" onclick="toggleBookmark(15)" id="bookmarkBtn15">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>声明：</strong><code>var arr [5]int</code>，长度是类型一部分</li><li><strong>初始化：</strong><code>[5]int{1,2,3}</code>、<code>[...]int{1,2,3}</code></li><li><strong>值类型：</strong>赋值和传参复制整个数组</li><li><strong>长度固定：</strong>不可改变，实际更常用切片</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch15-code1')">📋 复制</button></div></div><pre id="ch15-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch4-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch4-code3"><code>package main
+import "fmt"
+
+func main() {
+    var nums [5]int
+    fmt.Println(nums)
+    colors := [3]string{"红", "绿", "蓝"}
+    scores := [...]int{90, 85, 92, 88}
+    arr := [5]int{1: 10, 3: 30}
+    for i, v := range scores {
+        fmt.Printf("%d: %d\n", i, v)
+    }
+    fmt.Println(colors, arr)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>长度不同类型不同：<code>[3]int</code>和<code>[5]int</code>不同</p><p>顺序初始化缺字段：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">声明5元素字符串数组并range遍历</div><textarea class="answer-textarea" id="ch15-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(15,1)">检查答案</button><div id="ch15-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(15,1)">查看答案</button><div id="ch15-answer1" class="answer-box">fruits := [5]string{"苹果","香蕉","橙子","葡萄","西瓜"}
+for i, v := range fruits {
+    fmt.Printf("%d: %s\n", i, v)
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch15-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(15)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn15" onclick="markCompleted(15)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(14)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(16)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch16" class="chapter-section">
+                <h2>16. 切片基础 <button class="bookmark-btn" onclick="toggleBookmark(16)" id="bookmarkBtn16">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片vs数组：</strong>动态长度引用类型，底层指向数组</li><li><strong>创建：</strong>make([]T, len, cap)、[]T{}、从数组切片</li><li><strong>三个属性：</strong>指针、len、cap</li><li><strong>nil切片：</strong>var声明初始为nil</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch16-code1')">📋 复制</button></div></div><pre id="ch16-code1"><code>package main
+
+import "fmt"
+
+func main() {
+    var s []int
+    fmt.Println(s, s == nil)
+    s = make([]int, 3, 10)
+    fruits := []string{"苹果", "香蕉", "橙子"}
+    nums := []int{1, 2, 3}
+    nums = append(nums, 4, 5)
+    fmt.Println(nums)
+    a := []int{1, 2, 3}
+    b := a
+    b[0] = 100
+    fmt.Println(a[0]) // 100
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记接收append返回值</p><p>切片越界访问会panic</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建空切片，追加3个元素输出len和cap</div><textarea class="answer-textarea" id="ch16-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(16,1)">检查答案</button><div id="ch16-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(16,1)">查看答案</button><div id="ch16-answer1" class="answer-box">s := make([]int, 0)
+s = append(s, 1, 2, 3)
+fmt.Println(len(s), cap(s))</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch16-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(16)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn16" onclick="markCompleted(16)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(15)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(17)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch17" class="chapter-section">
+                <h2>17. 切片高级操作 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片表达式：</strong><code>s[low:high:max]</code>控制容量</li><li><strong>copy函数：</strong><code>copy(dst, src)</code></li><li><strong>删除元素：</strong><code>append(s[:i], s[i+1:]...)</code></li><li><strong>二维切片：</strong><code>[][]int</code>需逐行初始化</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch17-code1')">📋 复制</button></div></div><pre id="ch17-code1"><code>package main
 
 import "fmt"
 
 func main() {
     s := []int{1, 2, 3, 4, 5}
-    
-    // 添加元素
-    s = append(s, 6, 7, 8)
-    fmt.Println("append:", s)
-    
-    // 切片
-    fmt.Println("slice[1:3]:", s[1:3])
-    fmt.Println("slice[:3]:", s[:3])
-    fmt.Println("slice[2:]:", s[2:])
-    
-    // 复制
-    s2 := make([]int, len(s))
-    copy(s2, s)
-    fmt.Println("copy:", s2)
-    
-    // 删除元素（删除索引为2的元素）
     s = append(s[:2], s[3:]...)
-    fmt.Println("delete:", s)
-}</code></pre>
-                </div>
+    fmt.Println(s)
+    src := []int{1, 2, 3}
+    dst := make([]int, len(src))
+    copy(dst, src)
+    fmt.Println(dst)
+    matrix := make([][]int, 3)
+    for i := range matrix {
+        matrix[i] = make([]int, 4)
+    }
+    fmt.Println(matrix)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>共享底层数组：修改可能互相影响</p><p>append可能触发扩容导致引用失效</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">删除切片索引1的元素</div><textarea class="answer-textarea" id="ch17-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(17,1)">检查答案</button><div id="ch17-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(17,1)">查看答案</button><div id="ch17-answer1" class="answer-box">s := []int{10, 20, 30, 40}
+s = append(s[:1], s[2:]...)
+fmt.Println(s) // [10 30 40]</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch17-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(17)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn17" onclick="markCompleted(17)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(16)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(18)">下一章 ▶</button></div>
+            </div>
 
-                <div class="tip-box">
-                    <strong>💡 提示：</strong>切片是引用类型，多个切片可能指向同一个底层数组。修改切片会影响共享同一底层数组的其他切片。
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>数组越界访问：<code>arr[10]</code> 当数组长度小于11时会报错。</p>
-                    <p>切片与数组混淆：数组传递是值拷贝，切片传递是引用传递。</p>
-                    <p>append后未赋值：<code>append(s, 1)</code> 不会修改原切片，必须赋值：<code>s = append(s, 1)</code>。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 切片和数组的主要区别是什么？</div>
-                    <input type="text" class="answer-input" id="ch4-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
-                    <div id="ch4-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(4, 1)">查看答案</button>
-                    <div id="ch4-answer1" class="answer-box">数组长度固定，切片长度可变；数组是值类型，切片是引用类型</div>
-
-                    <div class="question">2. 写代码创建一个切片，添加元素1,2,3，然后删除中间的元素2</div>
-                    <textarea class="answer-textarea" id="ch4-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
-                    <div id="ch4-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(4, 2)">查看答案</button>
-                    <div id="ch4-answer2" class="answer-box">package main
+            <div id="ch18" class="chapter-section">
+                <h2>18. map映射 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>创建：</strong><code>make(map[K]V)</code>、<code>map[K]V{}</code></li><li><strong>操作：</strong>存取、delete、检查<code>val, ok := m[key]</code></li><li><strong>遍历：</strong>range，顺序不确定</li><li><strong>nil map：</strong>写入会panic，需make初始化</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch18-code1')">📋 复制</button></div></div><pre id="ch18-code1"><code>package main
 
 import "fmt"
 
 func main() {
-    s := []int{1, 2, 3}
-    s = append(s[:1], s[2:]...)
-    fmt.Println(s) // [1 3]
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
-                </div>
+    scores := make(map[string]int)
+    scores["张三"] = 95
+    scores["李四"] = 88
+    colors := map[string]string{"red": "红色", "green": "绿色"}
+    val, ok := scores["赵六"]
+    fmt.Println(val, ok) // 0 false
+    delete(scores, "李四")
+    for name, score := range scores {
+        fmt.Printf("%s: %d\n", name, score)
+    }
+    fmt.Println(colors)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>nil map写入panic</p><p>map非线程安全，并发需sync.Mutex或sync.Map</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">统计字符串中每个字符出现次数</div><textarea class="answer-textarea" id="ch18-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button><div id="ch18-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button><div id="ch18-answer1" class="answer-box">s := "hello"
+count := make(map[rune]int)
+for _, ch := range s { count[ch]++ }
+fmt.Println(count)</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch18-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(18)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn18" onclick="markCompleted(18)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(17)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(19)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节5: 函数 -->
-            <div id="ch5" class="chapter-section">
-                <h2>
-                    5. 函数
-                    <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔧 函数定义</h3>
-                    <p>Go函数的定义格式：</p>
-                </div>
+            <div id="ch19" class="chapter-section">
+                <h2>19. 字符串操作 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>字符串本质：</strong>不可变字节切片，UTF-8编码</li><li><strong>strings包：</strong>Contains、Split、Join、Replace等</li><li><strong>strconv包：</strong>Atoi、Itoa等转换</li><li><strong>遍历：</strong><code>for _, r := range s</code>按rune</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch19-code1')">📋 复制</button></div></div><pre id="ch19-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code1"><code>package main
+import (
+    "fmt"
+    "strings"
+)
+
+func main() {
+    s := "Hello, Go语言"
+    fmt.Println(strings.Contains(s, "Go"))
+    fmt.Println(strings.Split("a,b,c", ","))
+    fmt.Println(strings.Replace(s, "Go", "Golang", 1))
+    fmt.Println(strings.ToUpper("hello"))
+    for i, r := range "Go语言" {
+        fmt.Printf("%d: %c\n", i, r)
+    }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>字符串不可变：不能s[0]='h'</p><p>len返回字节数非字符数</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">反转字符串"Hello, 世界"</div><textarea class="answer-textarea" id="ch19-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(19,1)">检查答案</button><div id="ch19-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(19,1)">查看答案</button><div id="ch19-answer1" class="answer-box">runes := []rune("Hello, 世界")
+for i, j := 0, len(runes)-1; i &lt; j; i, j = i+1, j-1 {
+    runes[i], runes[j] = runes[j], runes[i]
+}
+fmt.Println(string(runes))</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch19-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(19)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn19" onclick="markCompleted(19)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(18)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(20)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch20" class="chapter-section">
+                <h2>20. 函数定义 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>函数声明：</strong><code>func name(params) returnType</code></li><li><strong>参数传递：</strong>值传递默认，指针可修改原值</li><li><strong>命名返回值：</strong><code>func f() (q, r int)</code></li><li><strong>函数是一等公民：</strong>可赋值给变量、作参数和返回值</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch20-code1')">📋 复制</button></div></div><pre id="ch20-code1"><code>package main
 
 import "fmt"
 
-// 无参数无返回值
-func greet() {
-    fmt.Println("Hello!")
+func add(a, b int) int { return a + b }
+func divide(a, b int) (q, r int) {
+    q = a / b; r = a % b; return
 }
+func swap(a, b *int) { *a, *b = *b, *a }
 
-// 有参数有返回值
-func add(a int, b int) int {
-    return a + b
-}
+func main() {
+    fmt.Println(add(3, 5))
+    q, r := divide(17, 5)
+    fmt.Println(q, r)
+    x, y := 1, 2
+    swap(&amp;x, &amp;y)
+    fmt.Println(x, y)
+    double := func(n int) int { return n * 2 }
+    fmt.Println(double(5))
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>参数简写：<code>func add(a, b int)</code>两者都是int</p><p>指针参数需传&x</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写函数用指针交换两个整数</div><textarea class="answer-textarea" id="ch20-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(20,1)">检查答案</button><div id="ch20-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(20,1)">查看答案</button><div id="ch20-answer1" class="answer-box">func swap(a, b *int) {
+    *a, *b = *b, *a
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch20-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(20)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn20" onclick="markCompleted(20)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(19)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(21)">下一章 ▶</button></div>
+            </div>
 
-// 多返回值
-func divide(a, b float64) (float64, error) {
+            <div id="ch21" class="chapter-section">
+                <h2>21. 多返回值 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>多返回值：</strong>常用(result, error)模式</li><li><strong>错误处理：</strong><code>val, err := doSomething()</code></li><li><strong>忽略返回值：</strong>使用<code>_</code></li><li><strong>命名返回值：</strong>提高可读性</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch21-code1')">📋 复制</button></div></div><pre id="ch21-code1"><code>package main
+
+import (
+    "errors"
+    "fmt"
+)
+
+func safeDivide(a, b float64) (float64, error) {
     if b == 0 {
-        return 0, fmt.Errorf("cannot divide by zero")
+        return 0, errors.New("除数不能为零")
     }
     return a / b, nil
 }
-
-// 命名返回值
-func calculate(a, b int) (sum, diff int) {
-    sum = a + b
-    diff = a - b
-    return // 直接返回命名变量
-}
-
-func main() {
-    greet()
-    fmt.Println(add(3, 5))
-    
-    result, err := divide(10, 2)
-    if err != nil {
-        fmt.Println("Error:", err)
-    } else {
-        fmt.Println(result)
+func minMax(nums []int) (int, int) {
+    min, max := nums[0], nums[0]
+    for _, n := range nums {
+        if n &lt; min { min = n }
+        if n &gt; max { max = n }
     }
-    
-    s, d := calculate(10, 3)
-    fmt.Println("sum:", s, "diff:", d)
-}</code></pre>
-                </div>
+    return min, max
+}
+func main() {
+    result, err := safeDivide(10, 3)
+    if err != nil { fmt.Println(err) } else { fmt.Printf("%.2f\n", result) }
+    nums := []int{5, 3, 8, 1, 9}
+    fmt.Println(minMax(nums))
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忽略错误：应始终处理</p><p>接收返回值但不使用：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写函数返回切片的最小值和最大值</div><textarea class="answer-textarea" id="ch21-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(21,1)">检查答案</button><div id="ch21-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(21,1)">查看答案</button><div id="ch21-answer1" class="answer-box">func minMax(s []int) (min, max int) {
+    min, max = s[0], s[0]
+    for _, v := range s {
+        if v &lt; min { min = v }
+        if v &gt; max { max = v }
+    }
+    return
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch21-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(21)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn21" onclick="markCompleted(21)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(20)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(22)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>📦 可变参数</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code2"><code>package main
+            <div id="ch22" class="chapter-section">
+                <h2>22. 可变参数 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>语法：</strong><code>func name(args ...T)</code>，函数内是[]T</li><li><strong>展开切片：</strong><code>slice...</code></li><li><strong>位置规则：</strong>必须是最后一个参数</li><li><strong>常用：</strong>fmt.Println、append</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch22-code1')">📋 复制</button></div></div><pre id="ch22-code1"><code>package main
 
 import "fmt"
 
 func sum(nums ...int) int {
     total := 0
-    for _, num := range nums {
-        total += num
-    }
+    for _, n := range nums { total += n }
     return total
 }
-
+func greet(prefix string, names ...string) {
+    for _, name := range names {
+        fmt.Printf("%s %s!\n", prefix, name)
+    }
+}
 func main() {
     fmt.Println(sum(1, 2, 3))
-    fmt.Println(sum(10, 20, 30, 40))
-    
-    // 传递切片
-    arr := []int{1, 2, 3, 4, 5}
-    fmt.Println(sum(arr...))
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔗 函数作为参数</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code3"><code>package main
-
-import "fmt"
-
-func apply(nums []int, f func(int) int) []int {
-    result := make([]int, len(nums))
-    for i, v := range nums {
-        result[i] = f(v)
+    nums := []int{10, 20, 30}
+    fmt.Println(sum(nums...))
+    greet("你好", "张三", "李四")
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>传切片不加<code>...</code>：类型不匹配</p><p>可变参数不在最后：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写可变参数函数返回最大值</div><textarea class="answer-textarea" id="ch22-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(22,1)">检查答案</button><div id="ch22-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(22,1)">查看答案</button><div id="ch22-answer1" class="answer-box">func max(nums ...int) int {
+    if len(nums) == 0 { return 0 }
+    m := nums[0]
+    for _, n := range nums[1:] {
+        if n &gt; m { m = n }
     }
-    return result
-}
-
-func main() {
-    nums := []int{1, 2, 3, 4}
-    
-    // 使用匿名函数
-    doubled := apply(nums, func(x int) int {
-        return x * 2
-    })
-    fmt.Println(doubled)
-    
-    squared := apply(nums, func(x int) int {
-        return x * x
-    })
-    fmt.Println(squared)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔄 递归函数</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code4"><code>package main
-
-import "fmt"
-
-func factorial(n int) int {
-    if n == 0 {
-        return 1
-    }
-    return n * factorial(n-1)
-}
-
-func fibonacci(n int) int {
-    if n <= 1 {
-        return n
-    }
-    return fibonacci(n-1) + fibonacci(n-2)
-}
-
-func main() {
-    fmt.Println("5! =", factorial(5))
-    fmt.Println("fib(10) =", fibonacci(10))
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>缺少返回值：函数声明有返回值但没有return语句会报错。</p>
-                    <p>参数类型不匹配：传递的参数类型必须与函数声明一致。</p>
-                    <p>未使用的参数：Go编译器不允许函数中有未使用的参数（但可以用下划线忽略）。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go函数可以返回多个值吗？</div>
-                    <input type="text" class="answer-input" id="ch5-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
-                    <div id="ch5-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(5, 1)">查看答案</button>
-                    <div id="ch5-answer1" class="answer-box">可以，Go支持多返回值</div>
-
-                    <div class="question">2. 写一个函数计算两个数的乘积和商</div>
-                    <textarea class="answer-textarea" id="ch5-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
-                    <div id="ch5-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(5, 2)">查看答案</button>
-                    <div id="ch5-answer2" class="answer-box">package main
-
-import "fmt"
-
-func multiplyAndDivide(a, b float64) (float64, float64) {
-    return a * b, a / b
-}
-
-func main() {
-    product, quotient := multiplyAndDivide(10, 2)
-    fmt.Println("乘积:", product, "商:", quotient)
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
-                </div>
+    return m
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch22-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(22)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn22" onclick="markCompleted(22)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(21)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(23)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节6: 结构体与方法 -->
-            <div id="ch6" class="chapter-section">
-                <h2>
-                    6. 结构体与方法
-                    <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📦 结构体定义</h3>
-                    <p>结构体是自定义的复合类型：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code1"><code>package main
+            <div id="ch23" class="chapter-section">
+                <h2>23. 匿名函数与闭包 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>匿名函数：</strong><code>func(params) { body }</code></li><li><strong>闭包：</strong>引用外部变量，延长生命周期</li><li><strong>闭包陷阱：</strong>循环中可能捕获最终值（Go 1.22前）</li><li><strong>常见模式：</strong>工厂函数、回调、中间件</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch23-code1')">📋 复制</button></div></div><pre id="ch23-code1"><code>package main
 
 import "fmt"
 
-// 定义结构体
-type Person struct {
-    Name string
-    Age  int
-    City string
-}
-
-func main() {
-    // 创建结构体实例
-    p1 := Person{Name: "Alice", Age: 25, City: "Beijing"}
-    p2 := Person{"Bob", 30, "Shanghai"} // 按顺序赋值
-    
-    // 访问字段
-    fmt.Println(p1.Name, p1.Age)
-    
-    // 修改字段
-    p2.Age = 31
-    fmt.Println(p2)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔧 结构体方法</h3>
-                    <p>方法是与特定类型关联的函数：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code2"><code>package main
-
-import "fmt"
-
-type Person struct {
-    Name string
-    Age  int
-}
-
-// 值接收者方法
-func (p Person) Greet() string {
-    return fmt.Sprintf("Hello, my name is %s, I'm %d years old", p.Name, p.Age)
-}
-
-// 指针接收者方法（可以修改结构体）
-func (p *Person) Birthday() {
-    p.Age++
-}
-
-func main() {
-    p := Person{Name: "Alice", Age: 25}
-    fmt.Println(p.Greet())
-    
-    p.Birthday()
-    fmt.Println("After birthday:", p.Age)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔗 结构体嵌套</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code3"><code>package main
-
-import "fmt"
-
-type Address struct {
-    Street string
-    City   string
-    Zip    string
-}
-
-type Person struct {
-    Name    string
-    Age     int
-    Address Address // 嵌套结构体
-}
-
-func main() {
-    p := Person{
-        Name: "Alice",
-        Age:  25,
-        Address: Address{
-            Street: "123 Main St",
-            City:   "Beijing",
-            Zip:    "100000",
-        },
+func counter(start int) func() int {
+    count := start
+    return func() int {
+        count++
+        return count
     }
-    
-    // 访问嵌套字段
-    fmt.Println(p.Address.City)
-    
-    // 结构体可以直接比较（所有字段可比较）
-    p2 := Person{Name: "Alice", Age: 25, Address: p.Address}
-    fmt.Println(p == p2) // true
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔄 构造函数</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code4"><code>package main
-
-import "fmt"
-
-type Rectangle struct {
-    Width  float64
-    Height float64
 }
-
-// 构造函数
-func NewRectangle(width, height float64) *Rectangle {
-    return &Rectangle{Width: width, Height: height}
-}
-
-func (r Rectangle) Area() float64 {
-    return r.Width * r.Height
-}
-
-func (r Rectangle) Perimeter() float64 {
-    return 2 * (r.Width + r.Height)
-}
-
 func main() {
-    rect := NewRectangle(10, 5)
-    fmt.Println("面积:", rect.Area())
-    fmt.Println("周长:", rect.Perimeter())
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>使用值接收者修改结构体：值接收者方法中修改结构体不会影响原实例，需要使用指针接收者。</p>
-                    <p>字段名大小写错误：大写字母开头的字段是导出的，可以在包外访问；小写字母开头的字段是私有的。</p>
-                    <p>结构体比较：只有所有字段都可比较的结构体才能比较。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 值接收者和指针接收者的区别是什么？</div>
-                    <input type="text" class="answer-input" id="ch6-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
-                    <div id="ch6-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(6, 1)">查看答案</button>
-                    <div id="ch6-answer1" class="answer-box">值接收者复制结构体，不会修改原实例；指针接收者引用结构体，可以修改原实例</div>
-
-                    <div class="question">2. 定义一个Circle结构体，包含半径字段，添加计算面积和周长的方法</div>
-                    <textarea class="answer-textarea" id="ch6-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
-                    <div id="ch6-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(6, 2)">查看答案</button>
-                    <div id="ch6-answer2" class="answer-box">package main
-
-import "fmt"
-
-type Circle struct {
-    Radius float64
-}
-
-func (c Circle) Area() float64 {
-    return 3.14159 * c.Radius * c.Radius
-}
-
-func (c Circle) Perimeter() float64 {
-    return 2 * 3.14159 * c.Radius
-}
-
-func main() {
-    c := Circle{Radius: 5}
-    fmt.Println("面积:", c.Area())
-    fmt.Println("周长:", c.Perimeter())
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
-                </div>
+    result := func(x, y int) int { return x + y }(3, 5)
+    fmt.Println(result)
+    c := counter(0)
+    fmt.Println(c(), c(), c())
+    funcs := []func(){}
+    for i := 0; i &lt; 3; i++ {
+        i := i
+        funcs = append(funcs, func() { fmt.Print(i, " ") })
+    }
+    for _, f := range funcs { f() }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>闭包捕获循环变量（Go 1.22前需创建副本）</p><p>修改闭包变量影响所有引用</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写斐波那契数列闭包生成器</div><textarea class="answer-textarea" id="ch23-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(23,1)">检查答案</button><div id="ch23-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(23,1)">查看答案</button><div id="ch23-answer1" class="answer-box">func fibonacci() func() int {
+    a, b := 0, 1
+    return func() int {
+        a, b = b, a+b
+        return a
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch23-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(23)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn23" onclick="markCompleted(23)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(22)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(24)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节7: 接口 -->
-            <div id="ch7" class="chapter-section">
-                <h2>
-                    7. 接口
-                    <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📦 接口定义</h3>
-                    <p>接口是方法签名的集合，定义了对象的行为：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code1"><code>package main
+            <div id="ch24" class="chapter-section">
+                <h2>24. defer与panic <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>defer顺序：</strong>LIFO后进先出</li><li><strong>defer参数：</strong>执行时参数已确定</li><li><strong>panic：</strong>触发运行时恐慌</li><li><strong>recover：</strong>在defer中捕获panic</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch24-code1')">📋 复制</button></div></div><pre id="ch24-code1"><code>package main
 
 import "fmt"
 
-// 定义接口
-type Shape interface {
-    Area() float64
-    Perimeter() float64
+func deferOrder() {
+    defer fmt.Println("第一")
+    defer fmt.Println("第二")
+    defer fmt.Println("第三")
+    fmt.Println("函数体")
 }
-
-// Circle实现Shape接口
-type Circle struct {
-    Radius float64
-}
-
-func (c Circle) Area() float64 {
-    return 3.14159 * c.Radius * c.Radius
-}
-
-func (c Circle) Perimeter() float64 {
-    return 2 * 3.14159 * c.Radius
-}
-
-// Rectangle实现Shape接口
-type Rectangle struct {
-    Width  float64
-    Height float64
-}
-
-func (r Rectangle) Area() float64 {
-    return r.Width * r.Height
-}
-
-func (r Rectangle) Perimeter() float64 {
-    return 2 * (r.Width + r.Height)
-}
-
-func main() {
-    var s Shape
-    
-    s = Circle{Radius: 5}
-    fmt.Println("Circle:", s.Area(), s.Perimeter())
-    
-    s = Rectangle{Width: 10, Height: 5}
-    fmt.Println("Rectangle:", s.Area(), s.Perimeter())
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔀 类型断言</h3>
-                    <p>使用类型断言判断接口值的具体类型：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code2"><code>package main
-
-import "fmt"
-
-type Shape interface {
-    Area() float64
-}
-
-type Circle struct {
-    Radius float64
-}
-
-func (c Circle) Area() float64 {
-    return 3.14159 * c.Radius * c.Radius
-}
-
-func describe(s Shape) {
-    fmt.Printf("Type: %T, Value: %v\n", s, s)
-    
-    // 类型断言
-    if c, ok := s.(Circle); ok {
-        fmt.Printf("Circle Radius: %.2f\n", c.Radius)
-    }
-    
-    // switch类型断言
-    switch v := s.(type) {
-    case Circle:
-        fmt.Printf("It's a circle with radius %.2f\n", v.Radius)
-    default:
-        fmt.Println("Unknown type")
-    }
-}
-
-func main() {
-    c := Circle{Radius: 5}
-    describe(c)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📦 空接口</h3>
-                    <p>空接口可以存储任何类型的值：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code3"><code>package main
-
-import "fmt"
-
-func printValue(i interface{}) {
-    fmt.Printf("Type: %T, Value: %v\n", i, i)
-}
-
-func main() {
-    printValue(42)
-    printValue("hello")
-    printValue(3.14)
-    printValue(true)
-    
-    // 存储到切片中
-    var values []interface{}
-    values = append(values, 10, "test", 3.14, false)
-    
-    for _, v := range values {
-        switch v.(type) {
-        case int:
-            fmt.Println("Integer:", v)
-        case string:
-            fmt.Println("String:", v)
-        case float64:
-            fmt.Println("Float:", v)
-        default:
-            fmt.Println("Other:", v)
+func safeFunction() {
+    defer func() {
+        if r := recover(); r != nil {
+            fmt.Println("捕获panic:", r)
         }
-    }
-}</code></pre>
-                </div>
+    }()
+    panic("出错了！")
+}
+func main() {
+    deferOrder()
+    safeFunction()
+    fmt.Println("程序继续")
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>循环中defer：积累到函数结束才执行</p><p>recover不在defer中无效</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用defer确保资源释放</div><textarea class="answer-textarea" id="ch24-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(24,1)">检查答案</button><div id="ch24-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(24,1)">查看答案</button><div id="ch24-answer1" class="answer-box">func readFile(name string) {
+    fmt.Println("打开:", name)
+    defer fmt.Println("关闭:", name)
+    fmt.Println("读取...")
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch24-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(24)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn24" onclick="markCompleted(24)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(23)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(25)">下一章 ▶</button></div>
+            </div>
 
-                <div class="tip-box">
-                    <strong>💡 提示：</strong>Go的接口是隐式实现的，不需要显式声明。只要类型实现了接口的所有方法，就自动实现了该接口。
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>接口方法未完全实现：类型必须实现接口的所有方法，否则不能赋值给接口变量。</p>
-                    <p>空接口的误用：过度使用空接口会丧失类型安全性，应谨慎使用。</p>
-                    <p>类型断言失败：未检查ok标志就进行类型断言会导致panic。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go的接口是显式实现还是隐式实现？</div>
-                    <input type="text" class="answer-input" id="ch7-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
-                    <div id="ch7-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(7, 1)">查看答案</button>
-                    <div id="ch7-answer1" class="answer-box">隐式实现，不需要显式声明</div>
-
-                    <div class="question">2. 定义一个Animal接口，包含Speak方法，然后定义Dog和Cat结构体实现该接口</div>
-                    <textarea class="answer-textarea" id="ch7-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(7, 2)">检查答案</button>
-                    <div id="ch7-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(7, 2)">查看答案</button>
-                    <div id="ch7-answer2" class="answer-box">package main
+            <div id="ch25" class="chapter-section">
+                <h2>25. 结构体 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>定义：</strong><code>type Name struct { fields }</code></li><li><strong>初始化：</strong>字段名、顺序、new、构造函数模式</li><li><strong>字段标签：</strong>反引号元信息，如json映射</li><li><strong>嵌入（组合）：</strong>结构体可嵌入其他结构体</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch25-code1')">📋 复制</button></div></div><pre id="ch25-code1"><code>package main
 
 import "fmt"
 
-type Animal interface {
-    Speak() string
+type Person struct {
+    Name string
+    Age  int
 }
-
-type Dog struct{}
-func (d Dog) Speak() string { return "Woof!" }
-
-type Cat struct{}
-func (c Cat) Speak() string { return "Meow!" }
-
+type Student struct {
+    Person
+    School string
+}
 func main() {
-    var a Animal
-    a = Dog{}
-    fmt.Println(a.Speak())
-    a = Cat{}
-    fmt.Println(a.Speak())
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
-                </div>
+    p1 := Person{Name: "张三", Age: 25}
+    p2 := Person{"李四", 30}
+    s := Student{Person: Person{Name: "赵六", Age: 20}, School: "清华大学"}
+    fmt.Println(s.Name, s.School)
+    fmt.Println(p1, p2)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>顺序初始化缺字段：编译错误</p><p>结构体是值类型：赋值会复制</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">定义Rectangle结构体并计算面积</div><textarea class="answer-textarea" id="ch25-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(25,1)">检查答案</button><div id="ch25-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(25,1)">查看答案</button><div id="ch25-answer1" class="answer-box">type Rectangle struct {
+    Width  float64
+    Height float64
+}
+r := Rectangle{Width: 10, Height: 5}
+area := r.Width * r.Height</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch25-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(25)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn25" onclick="markCompleted(25)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(24)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(26)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节8: 并发编程(goroutine) -->
-            <div id="ch8" class="chapter-section">
-                <h2>
-                    8. 并发编程(goroutine)
-                    <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🚀 Goroutine基础</h3>
-                    <p>Goroutine是Go语言的轻量级线程，由Go运行时管理：</p>
-                </div>
+            <div id="ch26" class="chapter-section">
+                <h2>26. 方法 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>方法定义：</strong><code>func (r Receiver) name() type</code></li><li><strong>值接收者：</strong>操作副本不修改原值</li><li><strong>指针接收者：</strong>操作原值，可修改</li><li><strong>方法集：</strong>指针可调两种，值只能调值接收者方法</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch26-code1')">📋 复制</button></div></div><pre id="ch26-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code1"><code>package main
+import "fmt"
+
+type Circle struct{ Radius float64 }
+func (c Circle) Area() float64 {
+    return 3.14159 * c.Radius * c.Radius
+}
+func (c *Circle) Scale(factor float64) {
+    c.Radius *= factor
+}
+func main() {
+    c := Circle{Radius: 5}
+    fmt.Printf("面积: %.2f\n", c.Area())
+    c.Scale(2)
+    fmt.Printf("缩放后: %.2f\n", c.Radius)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>值接收者修改无效</p><p>混用值和指针接收者不推荐</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">为Rectangle添加Perimeter方法</div><textarea class="answer-textarea" id="ch26-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(26,1)">检查答案</button><div id="ch26-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(26,1)">查看答案</button><div id="ch26-answer1" class="answer-box">func (r Rectangle) Perimeter() float64 {
+    return 2 * (r.Width + r.Height)
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch26-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(26)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn26" onclick="markCompleted(26)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(25)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(27)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch27" class="chapter-section">
+                <h2>27. 接口 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>定义：</strong><code>type Name interface { methods }</code></li><li><strong>隐式实现：</strong>实现所有方法即为实现接口</li><li><strong>空接口：</strong><code>interface{}</code>或<code>any</code></li><li><strong>接口组合：</strong>嵌入其他接口</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch27-code1')">📋 复制</button></div></div><pre id="ch27-code1"><code>package main
+
+import "fmt"
+
+type Shape interface {
+    Area() float64
+    Name() string
+}
+type Circle struct{ Radius float64 }
+type Rectangle struct{ Width, Height float64 }
+func (c Circle) Area() float64    { return 3.14 * c.Radius * c.Radius }
+func (c Circle) Name() string     { return "圆形" }
+func (r Rectangle) Area() float64 { return r.Width * r.Height }
+func (r Rectangle) Name() string  { return "矩形" }
+func printArea(s Shape) {
+    fmt.Printf("%s面积: %.2f\n", s.Name(), s.Area())
+}
+func main() {
+    shapes := []Shape{Circle{5}, Rectangle{10, 5}}
+    for _, s := range shapes { printArea(s) }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>指针接收者方法只有指针类型满足接口</p><p>nil接口≠nil值</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">定义Writer接口和StringWriter实现</div><textarea class="answer-textarea" id="ch27-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(27,1)">检查答案</button><div id="ch27-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(27,1)">查看答案</button><div id="ch27-answer1" class="answer-box">type Writer interface {
+    Write(data string)
+}
+type StringWriter struct{ buffer string }
+func (w *StringWriter) Write(data string) {
+    w.buffer += data
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch27-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(27)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn27" onclick="markCompleted(27)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(26)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(28)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch28" class="chapter-section">
+                <h2>28. 类型断言 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>类型断言：</strong><code>v, ok := i.(T)</code></li><li><strong>类型switch：</strong><code>switch v := i.(type)</code></li><li><strong>安全断言：</strong>ok模式避免panic</li><li><strong>接口底层：</strong>(type, value)两部分</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch28-code1')">📋 复制</button></div></div><pre id="ch28-code1"><code>package main
+
+import "fmt"
+
+func describe(i interface{}) {
+    switch v := i.(type) {
+    case string: fmt.Println("字符串:", v)
+    case int: fmt.Println("整数:", v)
+    case float64: fmt.Println("浮点数:", v)
+    default: fmt.Printf("未知: %T\n", v)
+    }
+}
+func main() {
+    describe("hello")
+    describe(42)
+    describe(3.14)
+    var i interface{} = "hello"
+    s, ok := i.(string)
+    fmt.Println(s, ok)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>不用ok模式断言失败会panic</p><p>断言接口≠转换接口</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写函数判断interface{}类型并输出</div><textarea class="answer-textarea" id="ch28-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(28,1)">检查答案</button><div id="ch28-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(28,1)">查看答案</button><div id="ch28-answer1" class="answer-box">func checkType(i interface{}) {
+    switch v := i.(type) {
+    case string: fmt.Println("字符串:", v)
+    case int: fmt.Println("整数:", v)
+    default: fmt.Printf("其他: %T\n", v)
+    }
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch28-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(28)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn28" onclick="markCompleted(28)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(27)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(29)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch29" class="chapter-section">
+                <h2>29. goroutine <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>轻量级线程：</strong>初始栈2KB，可动态增长</li><li><strong>启动：</strong><code>go function()</code></li><li><strong>并发vs并行：</strong>并发处理多件事，并行同时做多件事</li><li><strong>WaitGroup：</strong>等待一组goroutine完成</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch29-code1')">📋 复制</button></div></div><pre id="ch29-code1"><code>package main
 
 import (
     "fmt"
+    "sync"
     "time"
 )
 
-func sayHello(name string) {
-    for i := 0; i < 5; i++ {
-        fmt.Printf("Hello, %s! %d\n", name, i)
-        time.Sleep(100 * time.Millisecond)
-    }
+func worker(id int, wg *sync.WaitGroup) {
+    defer wg.Done()
+    fmt.Printf("Worker %d 开始\n", id)
+    time.Sleep(time.Second)
+    fmt.Printf("Worker %d 完成\n", id)
 }
-
 func main() {
-    // 启动goroutine
-    go sayHello("Alice")
-    go sayHello("Bob")
-    
-    // 等待goroutine完成
-    time.Sleep(1 * time.Second)
-    fmt.Println("Done!")
-}</code></pre>
-                </div>
+    var wg sync.WaitGroup
+    for i := 1; i &lt;= 5; i++ {
+        wg.Add(1)
+        go worker(i, &amp;wg)
+    }
+    wg.Wait()
+    fmt.Println("所有工作完成")
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>主协程退出后所有goroutine终止</p><p>闭包捕获循环变量（Go 1.22前）</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用goroutine并发打印1到10</div><textarea class="answer-textarea" id="ch29-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(29,1)">检查答案</button><div id="ch29-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(29,1)">查看答案</button><div id="ch29-answer1" class="answer-box">var wg sync.WaitGroup
+for i := 1; i &lt;= 10; i++ {
+    wg.Add(1)
+    go func(n int) {
+        defer wg.Done()
+        fmt.Print(n, " ")
+    }(i)
+}
+wg.Wait()</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch29-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(29)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn29" onclick="markCompleted(29)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(28)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(30)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>🔗 Channel通道</h3>
-                    <p>Channel用于goroutine之间的通信：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code2"><code>package main
+            <div id="ch30" class="chapter-section">
+                <h2>30. channel <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>通信管道：</strong>goroutine间通信</li><li><strong>创建：</strong><code>make(chan T)</code>无缓冲、<code>make(chan T, n)</code>有缓冲</li><li><strong>操作：</strong><code>ch &lt;- v</code>发送、<code>v := &lt;-ch</code>接收</li><li><strong>关闭：</strong><code>close(ch)</code>，可用range遍历</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch30-code1')">📋 复制</button></div></div><pre id="ch30-code1"><code>package main
 
 import "fmt"
 
-func producer(ch chan<- int) {
-    for i := 0; i < 5; i++ {
-        ch <- i // 发送数据
-        fmt.Println("Produced:", i)
-    }
-    close(ch) // 关闭通道
-}
-
-func consumer(ch <-chan int) {
-    for num := range ch { // 接收数据
-        fmt.Println("Consumed:", num)
-    }
-}
-
-func main() {
-    // 创建通道
-    ch := make(chan int)
-    
-    go producer(ch)
-    go consumer(ch)
-    
-    // 等待完成
-    var input string
-    fmt.Scanln(&input)
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔄 缓冲通道</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code3"><code>package main
-
-import "fmt"
-
-func main() {
-    // 创建缓冲通道，容量为3
-    ch := make(chan int, 3)
-    
-    // 发送数据不会阻塞，直到缓冲区满
-    ch <- 1
-    ch <- 2
-    ch <- 3
-    
-    fmt.Println("Buffer is full")
-    
-    // 接收数据
-    fmt.Println(<-ch)
-    fmt.Println(<-ch)
-    fmt.Println(<-ch)
-    
+func producer(ch chan&lt;- int) {
+    for i := 0; i &lt; 5; i++ { ch &lt;- i }
     close(ch)
-}</code></pre>
-                </div>
+}
+func consumer(ch &lt;-chan int, done chan&lt;- bool) {
+    for val := range ch { fmt.Println("接收:", val) }
+    done &lt;- true
+}
+func main() {
+    ch := make(chan int)
+    done := make(chan bool)
+    go producer(ch)
+    go consumer(ch, done)
+    &lt;-done
+    bufCh := make(chan int, 3)
+    bufCh &lt;- 1
+    fmt.Println(&lt;-bufCh)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>向已关闭channel发送会panic</p><p>无缓冲死锁：收发必须同时就绪</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用channel实现生产者-消费者</div><textarea class="answer-textarea" id="ch30-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(30,1)">检查答案</button><div id="ch30-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(30,1)">查看答案</button><div id="ch30-answer1" class="answer-box">ch := make(chan int)
+go func() {
+    for i := 1; i &lt;= 5; i++ { ch &lt;- i }
+    close(ch)
+}()
+for v := range ch { fmt.Println(v) }</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch30-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(30)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn30" onclick="markCompleted(30)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(29)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(31)">下一章 ▶</button></div>
+            </div>
 
-                <div class="section-content">
-                    <h3>🔀 Select语句</h3>
-                    <p>Select用于同时等待多个通道操作：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code4"><code>package main
+            <div id="ch31" class="chapter-section">
+                <h2>31. select <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>select语法：</strong>case是channel操作的多路复用</li><li><strong>随机选择：</strong>多case就绪时随机选一个</li><li><strong>default：</strong>所有channel阻塞时执行</li><li><strong>超时：</strong><code>case &lt;-time.After(d)</code></li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button></div></div><pre id="ch31-code1"><code>package main
 
 import (
     "fmt"
@@ -2163,612 +1114,215 @@ import (
 func main() {
     ch1 := make(chan string)
     ch2 := make(chan string)
-    
-    go func() {
-        time.Sleep(200 * time.Millisecond)
-        ch1 <- "from channel 1"
-    }()
-    
     go func() {
         time.Sleep(100 * time.Millisecond)
-        ch2 <- "from channel 2"
+        ch1 &lt;- "来自ch1"
     }()
-    
-    for i := 0; i < 2; i++ {
+    go func() {
+        time.Sleep(200 * time.Millisecond)
+        ch2 &lt;- "来自ch2"
+    }()
+    for i := 0; i &lt; 2; i++ {
         select {
-        case msg1 := <-ch1:
-            fmt.Println(msg1)
-        case msg2 := <-ch2:
-            fmt.Println(msg2)
+        case msg1 := &lt;-ch1: fmt.Println("收到:", msg1)
+        case msg2 := &lt;-ch2: fmt.Println("收到:", msg2)
         }
     }
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📦 Sync包</h3>
-                    <p>使用sync.WaitGroup等待多个goroutine完成：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code5')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code5"><code>package main
-
-import (
-    "fmt"
-    "sync"
-    "time"
-)
-
-func worker(id int, wg *sync.WaitGroup) {
-    defer wg.Done() // 通知完成
-    
-    fmt.Printf("Worker %d starting\n", id)
-    time.Sleep(time.Second)
-    fmt.Printf("Worker %d done\n", id)
-}
-
-func main() {
-    var wg sync.WaitGroup
-    
-    for i := 1; i <= 3; i++ {
-        wg.Add(1) // 添加任务
-        go worker(i, &wg)
-    }
-    
-    wg.Wait() // 等待所有任务完成
-    fmt.Println("All workers done")
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>主线程提前退出：goroutine还没执行完，main函数就退出了，导致goroutine被终止。</p>
-                    <p>死锁：两个goroutine互相等待对方的数据，导致死锁。</p>
-                    <p>关闭已关闭的通道：重复关闭通道会导致panic。</p>
-                    <p>向已关闭的通道发送数据：会导致panic。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 启动goroutine的关键字是什么？</div>
-                    <input type="text" class="answer-input" id="ch8-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
-                    <div id="ch8-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(8, 1)">查看答案</button>
-                    <div id="ch8-answer1" class="answer-box">go</div>
-
-                    <div class="question">2. 使用goroutine和channel实现两个数的加法计算</div>
-                    <textarea class="answer-textarea" id="ch8-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(8, 2)">检查答案</button>
-                    <div id="ch8-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(8, 2)">查看答案</button>
-                    <div id="ch8-answer2" class="answer-box">package main
-
-import "fmt"
-
-func add(a, b int, ch chan<- int) {
-    ch <- a + b
-}
-
-func main() {
-    ch := make(chan int)
-    go add(10, 20, ch)
-    result := <-ch
-    fmt.Println("Result:", result)
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
-                </div>
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>空select{}永久阻塞</p><p>nil channel永远不会被选中</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">用select实现超时控制</div><textarea class="answer-textarea" id="ch31-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(31,1)">检查答案</button><div id="ch31-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(31,1)">查看答案</button><div id="ch31-answer1" class="answer-box">select {
+case result := &lt;-ch:
+    fmt.Println(result)
+case &lt;-time.After(time.Second):
+    fmt.Println("超时")
+}</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch31-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(31)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn31" onclick="markCompleted(31)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(30)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(32)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节9: 文件操作 -->
-            <div id="ch9" class="chapter-section">
-                <h2>
-                    9. 文件操作
-                    <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📝 读取文件</h3>
-                    <p>使用os包和io/ioutil包进行文件操作：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code1"><code>package main
+            <div id="ch32" class="chapter-section">
+                <h2>32. 文件操作 <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>os包：</strong>Open、Create、Read、Write</li><li><strong>bufio包：</strong>带缓冲的读写</li><li><strong>io包：</strong>Copy、ReadAll等通用I/O</li><li><strong>filepath包：</strong>跨平台路径操作</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch32-code1')">📋 复制</button></div></div><pre id="ch32-code1"><code>package main
 
 import (
-    "fmt"
-    "io/ioutil"
-)
-
-func main() {
-    // 读取整个文件
-    content, err := ioutil.ReadFile("example.txt")
-    if err != nil {
-        fmt.Println("Error reading file:", err)
-        return
-    }
-    fmt.Println(string(content))
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>✍️ 写入文件</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code2"><code>package main
-
-import (
-    "fmt"
-    "io/ioutil"
-)
-
-func main() {
-    content := []byte("Hello, Go!\nThis is a file writing example.")
-    
-    // 写入文件（覆盖）
-    err := ioutil.WriteFile("output.txt", content, 0644)
-    if err != nil {
-        fmt.Println("Error writing file:", err)
-        return
-    }
-    fmt.Println("File written successfully")
-    
-    // 追加写入
-    appendContent := []byte("\nThis line is appended.")
-    f, err := os.OpenFile("output.txt", os.O_APPEND|os.O_WRONLY, 0644)
-    if err != nil {
-        fmt.Println("Error opening file:", err)
-        return
-    }
-    defer f.Close()
-    
-    _, err = f.Write(appendContent)
-    if err != nil {
-        fmt.Println("Error appending to file:", err)
-        return
-    }
-    fmt.Println("Content appended successfully")
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📂 文件信息</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code3"><code>package main
-
-import (
+    "bufio"
     "fmt"
     "os"
 )
 
 func main() {
-    // 获取文件信息
-    info, err := os.Stat("example.txt")
-    if err != nil {
-        fmt.Println("Error getting file info:", err)
-        return
-    }
-    
-    fmt.Println("Name:", info.Name())
-    fmt.Println("Size:", info.Size(), "bytes")
-    fmt.Println("Mode:", info.Mode())
-    fmt.Println("ModTime:", info.ModTime())
-    fmt.Println("IsDir:", info.IsDir())
-    
-    // 检查文件是否存在
-    _, err = os.Stat("nonexistent.txt")
-    if os.IsNotExist(err) {
-        fmt.Println("File does not exist")
-    }
-}</code></pre>
-                </div>
+    file, err := os.Create("test.txt")
+    if err != nil { fmt.Println(err); return }
+    file.WriteString("Hello, Go文件操作！\n")
+    file.WriteString("第二行内容\n")
+    file.Close()
 
-                <div class="section-content">
-                    <h3>📁 目录操作</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code4"><code>package main
-
-import (
-    "fmt"
-    "os"
-    "path/filepath"
-)
-
-func main() {
-    // 创建目录
-    err := os.Mkdir("newdir", 0755)
-    if err != nil {
-        fmt.Println("Error creating directory:", err)
-    }
-    
-    // 创建多级目录
-    err = os.MkdirAll("parent/child/grandchild", 0755)
-    if err != nil {
-        fmt.Println("Error creating directories:", err)
-    }
-    
-    // 遍历目录
-    filepath.Walk(".", func(path string, info os.FileInfo, err error) error {
-        if err != nil {
-            return err
-        }
-        fmt.Printf("%s (%d bytes)\n", path, info.Size())
-        return nil
-    })
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>忘记关闭文件：使用defer f.Close()确保文件被正确关闭。</p>
-                    <p>文件路径错误：路径分隔符在不同操作系统上不同，建议使用filepath包。</p>
-                    <p>权限问题：写入文件时需要正确的权限设置（如0644）。</p>
-                    <p>未处理错误：文件操作可能失败，必须检查error返回值。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Go中读取整个文件的函数是什么？</div>
-                    <input type="text" class="answer-input" id="ch9-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
-                    <div id="ch9-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(9, 1)">查看答案</button>
-                    <div id="ch9-answer1" class="answer-box">ioutil.ReadFile</div>
-
-                    <div class="question">2. 写代码读取一个文件并统计行数</div>
-                    <textarea class="answer-textarea" id="ch9-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(9, 2)">检查答案</button>
-                    <div id="ch9-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(9, 2)">查看答案</button>
-                    <div id="ch9-answer2" class="answer-box">package main
-
-import (
-    "fmt"
-    "io/ioutil"
-    "strings"
-)
-
-func main() {
-    content, err := ioutil.ReadFile("file.txt")
-    if err != nil {
-        fmt.Println("Error:", err)
-        return
-    }
-    lines := strings.Split(string(content), "\n")
-    fmt.Println("Lines:", len(lines))
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
-                </div>
+    file, err = os.Open("test.txt")
+    if err != nil { fmt.Println(err); return }
+    defer file.Close()
+    scanner := bufio.NewScanner(file)
+    for scanner.Scan() { fmt.Println(scanner.Text()) }
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记关闭文件：用defer file.Close()</p><p>忽略错误：应始终检查err</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">读取文件内容逐行输出</div><textarea class="answer-textarea" id="ch32-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(32,1)">检查答案</button><div id="ch32-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(32,1)">查看答案</button><div id="ch32-answer1" class="answer-box">file, err := os.Open("test.txt")
+if err != nil { log.Fatal(err) }
+defer file.Close()
+scanner := bufio.NewScanner(file)
+for scanner.Scan() { fmt.Println(scanner.Text()) }</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch32-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(32)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn32" onclick="markCompleted(32)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(31)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(33)">下一章 ▶</button></div>
             </div>
 
-            <!-- 章节10: 综合实战 -->
-            <div id="ch10" class="chapter-section">
-                <h2>
-                    10. 综合实战
-                    <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🎯 项目介绍</h3>
-                    <p>在这个综合实战中，我们将创建一个简单的HTTP服务器，实现用户管理功能，包括：用户列表、添加用户、查询用户等。</p>
-                </div>
+            <div id="ch33" class="chapter-section">
+                <h2>33. 错误处理 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>error接口：</strong><code>type error interface { Error() string }</code></li><li><strong>创建错误：</strong><code>errors.New()</code>、<code>fmt.Errorf()</code></li><li><strong>错误包装：</strong>Go 1.13的%w、errors.Is/As</li><li><strong>自定义错误：</strong>实现error接口</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button></div></div><pre id="ch33-code1"><code>package main
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">go</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code1"><code>package main
+import (
+    "errors"
+    "fmt"
+)
+
+type DivisionError struct {
+    Dividend, Divisor int
+}
+func (e *DivisionError) Error() string {
+    return fmt.Sprintf("不能将%d除以%d", e.Dividend, e.Divisor)
+}
+func divide(a, b int) (int, error) {
+    if b == 0 {
+        return 0, &amp;DivisionError{Dividend: a, Divisor: b}
+    }
+    return a / b, nil
+}
+func main() {
+    result, err := divide(10, 0)
+    if err != nil {
+        var divErr *DivisionError
+        if errors.As(err, &amp;divErr) { fmt.Println(divErr) }
+        return
+    }
+    fmt.Println(result)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忽略错误：Go没有异常，必须显式处理</p><p>滥用panic：常规错误应用error</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写返回error的函数并处理</div><textarea class="answer-textarea" id="ch33-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(33,1)">检查答案</button><div id="ch33-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(33,1)">查看答案</button><div id="ch33-answer1" class="answer-box">func safeDiv(a, b int) (int, error) {
+    if b == 0 { return 0, errors.New("除数不能为零") }
+    return a / b, nil
+}
+result, err := safeDiv(10, 0)
+if err != nil { fmt.Println(err) }</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch33-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(33)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn33" onclick="markCompleted(33)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(32)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(34)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch34" class="chapter-section">
+                <h2>34. JSON处理 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>encoding/json：</strong>标准库JSON编解码</li><li><strong>结构体标签：</strong><code>json:"fieldname"</code></li><li><strong>序列化：</strong><code>json.Marshal()</code></li><li><strong>反序列化：</strong><code>json.Unmarshal()</code></li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button></div></div><pre id="ch34-code1"><code>package main
 
 import (
     "encoding/json"
     "fmt"
-    "log"
-    "net/http"
-    "strconv"
+)
+
+type User struct {
+    Name  string   `json:"name"`
+    Age   int      `json:"age"`
+    Email string   `json:"email,omitempty"`
+    Tags  []string `json:"tags"`
+}
+func main() {
+    user := User{Name: "张三", Age: 25, Tags: []string{"go", "backend"}}
+    data, _ := json.Marshal(user)
+    fmt.Println(string(data))
+    pretty, _ := json.MarshalIndent(user, "", "  ")
+    fmt.Println(string(pretty))
+    jsonStr := `{"name":"李四","age":30,"email":"li@example.com"}`
+    var u User
+    json.Unmarshal([]byte(jsonStr), &amp;u)
+    fmt.Printf("%+v\n", u)
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>Unmarshal必须传指针<code>&u</code></p><p>小写字段不被JSON处理</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">定义结构体并序列化为JSON</div><textarea class="answer-textarea" id="ch34-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(34,1)">检查答案</button><div id="ch34-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(34,1)">查看答案</button><div id="ch34-answer1" class="answer-box">type Product struct {
+    Name  string  `json:"name"`
+    Price float64 `json:"price"`
+}
+p := Product{Name: "Go书", Price: 59.9}
+data, _ := json.Marshal(p)
+fmt.Println(string(data))</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch34-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(34)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn34" onclick="markCompleted(34)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(33)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(35)">下一章 ▶</button></div>
+            </div>
+
+            <div id="ch35" class="chapter-section">
+                <h2>35. 综合实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>项目设计：</strong>综合运用struct、interface、goroutine等</li><li><strong>并发模式：</strong>worker pool、pipeline</li><li><strong>HTTP服务：</strong>net/http或gin框架</li><li><strong>项目结构：</strong>cmd/、pkg/、internal/标准布局</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button></div></div><pre id="ch35-code1"><code>package main
+
+import (
+    "fmt"
     "sync"
 )
 
-// User结构体
-type User struct {
-    ID   int    `json:"id"`
-    Name string `json:"name"`
-    Age  int    `json:"age"`
-    City string `json:"city"`
+type Task interface {
+    Execute() error
+    Name() string
 }
 
-// 用户存储
-var users = []User{
-    {ID: 1, Name: "Alice", Age: 25, City: "Beijing"},
-    {ID: 2, Name: "Bob", Age: 30, City: "Shanghai"},
+type PrintTask struct{ Message string }
+func (t *PrintTask) Execute() error {
+    fmt.Println("执行:", t.Message)
+    return nil
 }
-var nextID = 3
-var mu sync.Mutex
+func (t *PrintTask) Name() string { return t.Message }
 
-// 获取所有用户
-func getUsers(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    json.NewEncoder(w).Encode(users)
-}
-
-// 获取单个用户
-func getUser(w http.ResponseWriter, r *http.Request) {
-    idStr := r.URL.Path[len("/users/"):]
-    id, err := strconv.Atoi(idStr)
-    if err != nil {
-        http.Error(w, "Invalid user ID", http.StatusBadRequest)
-        return
+func workerPool(tasks []Task, workerCount int) {
+    taskCh := make(chan Task, len(tasks))
+    var wg sync.WaitGroup
+    for i := 0; i &lt; workerCount; i++ {
+        wg.Add(1)
+        go func(id int) {
+            defer wg.Done()
+            for task := range taskCh {
+                fmt.Printf("Worker %d 处理 %s\n", id, task.Name())
+                task.Execute()
+            }
+        }(i)
     }
-    
-    for _, user := range users {
-        if user.ID == id {
-            w.Header().Set("Content-Type", "application/json")
-            json.NewEncoder(w).Encode(user)
-            return
-        }
-    }
-    
-    http.Error(w, "User not found", http.StatusNotFound)
-}
-
-// 创建用户
-func createUser(w http.ResponseWriter, r *http.Request) {
-    var user User
-    if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-        http.Error(w, "Invalid request body", http.StatusBadRequest)
-        return
-    }
-    
-    mu.Lock()
-    user.ID = nextID
-    nextID++
-    users = append(users, user)
-    mu.Unlock()
-    
-    w.Header().Set("Content-Type", "application/json")
-    w.WriteHeader(http.StatusCreated)
-    json.NewEncoder(w).Encode(user)
-}
-
-// 更新用户
-func updateUser(w http.ResponseWriter, r *http.Request) {
-    idStr := r.URL.Path[len("/users/"):]
-    id, err := strconv.Atoi(idStr)
-    if err != nil {
-        http.Error(w, "Invalid user ID", http.StatusBadRequest)
-        return
-    }
-    
-    var updatedUser User
-    if err := json.NewDecoder(r.Body).Decode(&updatedUser); err != nil {
-        http.Error(w, "Invalid request body", http.StatusBadRequest)
-        return
-    }
-    
-    mu.Lock()
-    for i, user := range users {
-        if user.ID == id {
-            users[i].Name = updatedUser.Name
-            users[i].Age = updatedUser.Age
-            users[i].City = updatedUser.City
-            w.Header().Set("Content-Type", "application/json")
-            json.NewEncoder(w).Encode(users[i])
-            mu.Unlock()
-            return
-        }
-    }
-    mu.Unlock()
-    
-    http.Error(w, "User not found", http.StatusNotFound)
-}
-
-// 删除用户
-func deleteUser(w http.ResponseWriter, r *http.Request) {
-    idStr := r.URL.Path[len("/users/"):]
-    id, err := strconv.Atoi(idStr)
-    if err != nil {
-        http.Error(w, "Invalid user ID", http.StatusBadRequest)
-        return
-    }
-    
-    mu.Lock()
-    for i, user := range users {
-        if user.ID == id {
-            users = append(users[:i], users[i+1:]...)
-            w.WriteHeader(http.StatusNoContent)
-            mu.Unlock()
-            return
-        }
-    }
-    mu.Unlock()
-    
-    http.Error(w, "User not found", http.StatusNotFound)
+    for _, t := range tasks { taskCh &lt;- t }
+    close(taskCh)
+    wg.Wait()
 }
 
 func main() {
-    http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
-        switch r.Method {
-        case "GET":
-            getUsers(w, r)
-        case "POST":
-            createUser(w, r)
-        default:
-            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-        }
-    })
-    
-    http.HandleFunc("/users/", func(w http.ResponseWriter, r *http.Request) {
-        switch r.Method {
-        case "GET":
-            getUser(w, r)
-        case "PUT":
-            updateUser(w, r)
-        case "DELETE":
-            deleteUser(w, r)
-        default:
-            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-        }
-    })
-    
-    fmt.Println("Server starting on :8080...")
-    log.Fatal(http.ListenAndServe(":8080", nil))
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🚀 测试API</h3>
-                    <p>启动服务器后，可以使用curl或浏览器测试API：</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code2"><code># 启动服务器
-go run main.go
-
-# 获取所有用户
-curl http://localhost:8080/users
-
-# 获取单个用户
-curl http://localhost:8080/users/1
-
-# 创建用户
-curl -X POST -H "Content-Type: application/json" \
-    -d '{"name":"Charlie","age":35,"city":"Guangzhou"}' \
-    http://localhost:8080/users
-
-# 更新用户
-curl -X PUT -H "Content-Type: application/json" \
-    -d '{"name":"Charlie","age":36,"city":"Shenzhen"}' \
-    http://localhost:8080/users/3
-
-# 删除用户
-curl -X DELETE http://localhost:8080/users/3</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🎯 扩展功能建议</h3>
-                    <ul>
-                        <li><strong>数据库集成：</strong>使用MySQL或PostgreSQL存储用户数据</li>
-                        <li><strong>认证授权：</strong>添加JWT认证</li>
-                        <li><strong>分页功能：</strong>支持用户列表分页</li>
-                        <li><strong>搜索功能：</strong>支持按名称搜索用户</li>
-                        <li><strong>日志记录：</strong>添加请求日志</li>
-                        <li><strong>配置文件：</strong>使用配置文件管理服务器参数</li>
-                    </ul>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>忘记加锁：并发访问共享数据时需要使用互斥锁。</p>
-                    <p>HTTP方法不匹配：需要正确处理GET/POST/PUT/DELETE方法。</p>
-                    <p>JSON解析错误：客户端发送的JSON格式必须正确。</p>
-                    <p>端口占用：确保8080端口没有被其他程序占用。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 如何测试创建用户的API？</div>
-                    <input type="text" class="answer-input" id="ch10-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
-                    <div id="ch10-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(10, 1)">查看答案</button>
-                    <div id="ch10-answer1" class="answer-box">使用curl发送POST请求：curl -X POST -H "Content-Type: application/json" -d '{"name":"xxx","age":xx,"city":"xxx"}' http://localhost:8080/users</div>
-
-                    <div class="question">2. 为服务器添加一个健康检查接口 /health</div>
-                    <textarea class="answer-textarea" id="ch10-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(10, 2)">检查答案</button>
-                    <div id="ch10-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(10, 2)">查看答案</button>
-                    <div id="ch10-answer2" class="answer-box">func healthCheck(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    w.Write([]byte(`{"status": "ok"}`))
+    tasks := []Task{
+        &amp;PrintTask{"任务A"},
+        &amp;PrintTask{"任务B"},
+        &amp;PrintTask{"任务C"},
+        &amp;PrintTask{"任务D"},
+        &amp;PrintTask{"任务E"},
+    }
+    workerPool(tasks, 3)
+    fmt.Println("所有任务完成！")
+}</code></pre></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>goroutine泄漏：确保都能正常退出</p><p>过度设计：Go提倡简单</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">实现一个简单的worker pool</div><textarea class="answer-textarea" id="ch35-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(35,1)">检查答案</button><div id="ch35-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(35,1)">查看答案</button><div id="ch35-answer1" class="answer-box">func worker(id int, jobs &lt;-chan int, results chan&lt;- int) {
+    for j := range jobs { results &lt;- j * 2 }
 }
-
-func main() {
-    // ... 其他代码
-    http.HandleFunc("/health", healthCheck)
-    // ... 其他代码
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToHub()">🏠 返回首页</button>
-                </div>
+jobs := make(chan int, 100)
+results := make(chan int, 100)
+for w := 1; w &lt;= 3; w++ { go worker(w, jobs, results) }
+for j := 1; j &lt;= 5; j++ { jobs &lt;- j }
+close(jobs)
+for r := 1; r &lt;= 5; r++ { fmt.Println(&lt;-results) }</div></div>
+                <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch35-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(35)">保存笔记</button></div>
+                <button class="completion-btn" id="completeBtn35" onclick="markCompleted(35)">✅ 标记为已完成</button>
+                <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(34)">◀ 上一章</button><button class="nav-btn nav-btn-primary" disabled>下一章 ▶</button></div>
             </div>
         </div>
     </div>
@@ -2776,236 +1330,253 @@ func main() {
     <script src="tutorial-common.js"></script>
     <script src="tutorial-extensions.js"></script>
     <script>
-        const LANGUAGE = 'go';
-        const TOTAL_CHAPTERS = 10;
-        
-        const chapterTitles = [
-            '入门介绍与环境搭建',
-            '基本语法',
-            '流程控制',
-            '数组与切片',
-            '函数',
-            '结构体与方法',
-            '接口',
-            '并发编程(goroutine)',
-            '文件操作',
-            '综合实战'
-        ];
+    // ==================== Go教程核心逻辑 ====================
+    const TOTAL_CHAPTERS = 35;
+    const STORAGE_KEY = 'go_progress';
 
-        const correctAnswers = {
-            1: { 1: 'google', 2: 'hello go' },
-            2: { 1: ':=', 2: 'var name' },
-            3: { 1: '没有', 2: 'for i := 1' },
-            4: { 1: '长度', 2: 's := []int' },
-            5: { 1: '可以', 2: 'func multiply' },
-            6: { 1: '值接收者', 2: 'type Circle' },
-            7: { 1: '隐式', 2: 'type Animal' },
-            8: { 1: 'go', 2: 'go add' },
-            9: { 1: 'ioutil.readfile', 2: 'ioutil.ReadFile' },
-            10: { 1: 'curl', 2: 'func healthCheck' }
-        };
+    const chapterNames = ["Go语言简介","开发环境配置","第一个Go程序","包与导入","变量声明","常量与iota","基本数据类型","类型转换","算术运算符","比较与逻辑运算符","if语句","switch语句","for循环","break与continue","数组","切片基础","切片高级操作","map映射","字符串操作","函数定义","多返回值","可变参数","匿名函数与闭包","defer与panic","结构体","方法","接口","类型断言","goroutine","channel","select","文件操作","错误处理","JSON处理","综合实战"];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initChapterList();
-            loadProgress();
-            loadNotes();
-            loadBookmarks();
-            initTheme();
+    // 状态管理
+    let currentChapter = 1;
+    let progress = loadProgress();
+
+    function loadProgress() {
+        try {
+            const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+            return {
+                completed: data.completed || [],
+                bookmarks: data.bookmarks || [],
+                notes: data.notes || {}
+            };
+        } catch(e) {
+            return { completed: [], bookmarks: [], notes: {} };
+        }
+    }
+
+    function saveProgress() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+        updateUI();
+    }
+
+    // 初始化
+    function init() {
+        renderChapterList();
+        loadNotes();
+        updateUI();
+        updateCompletionButtons();
+        // 从URL hash恢复章节
+        const hash = window.location.hash.replace('#ch', '');
+        if (hash && parseInt(hash) > 0 && parseInt(hash) <= TOTAL_CHAPTERS) {
+            goToChapter(parseInt(hash));
+        }
+    }
+
+    // 渲染章节导航
+    function renderChapterList() {
+        const list = document.getElementById('chapterList');
+        list.innerHTML = chapterNames.map((name, i) => {
+            const num = i + 1;
+            const isCompleted = progress.completed.includes(num);
+            const isActive = num === currentChapter;
+            return '<li class="chapter-item' + (isActive ? ' active' : '') + (isCompleted ? ' completed' : '') + '" onclick="goToChapter(' + num + ')">' +
+                '<span class="ch-title">' + num + '. ' + name + '</span>' +
+                (isCompleted ? '<span>✅</span>' : '') +
+            '</li>';
+        }).join('');
+    }
+
+    // 跳转章节
+    function goToChapter(num) {
+        if (num < 1 || num > TOTAL_CHAPTERS) return;
+        document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+        document.getElementById('ch' + num).classList.add('active');
+        currentChapter = num;
+        renderChapterList();
+        window.location.hash = 'ch' + num;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 标记完成
+    function markCompleted(num) {
+        if (!progress.completed.includes(num)) {
+            progress.completed.push(num);
+            const btn = document.getElementById('completeBtn' + num);
+            btn.classList.add('completed');
+            btn.textContent = '✅ 已完成';
+            btn.disabled = true;
+            saveProgress();
+            renderChapterList();
+            // 记录学习统计
+            if (typeof LearningStats !== 'undefined') {
+                LearningStats.recordChapterCompletion('go', num);
+            }
+            showToast('🎉 第' + num + '章已完成！');
+        }
+    }
+
+    function updateCompletionButtons() {
+        progress.completed.forEach(num => {
+            const btn = document.getElementById('completeBtn' + num);
+            if (btn) {
+                btn.classList.add('completed');
+                btn.textContent = '✅ 已完成';
+                btn.disabled = true;
+            }
         });
+    }
 
-        function initChapterList() {
-            const list = document.getElementById('chapterList');
-            list.innerHTML = chapterTitles.map((title, index) => `
-                <li class="chapter-item" id="chapterItem${index + 1}" onclick="goToChapter(${index + 1})">
-                    <span>📖 ${index + 1}. ${title}</span>
-                    <span id="chapterIcon${index + 1}"></span>
-                </li>
-            `).join('');
+    // 收藏
+    function toggleBookmark(num) {
+        const btn = document.getElementById('bookmarkBtn' + num);
+        const idx = progress.bookmarks.indexOf(num);
+        if (idx > -1) {
+            progress.bookmarks.splice(idx, 1);
+            btn.classList.remove('bookmarked');
+            showToast('已取消收藏');
+        } else {
+            progress.bookmarks.push(num);
+            btn.classList.add('bookmarked');
+            showToast('📌 已收藏');
         }
+        saveProgress();
+    }
 
-        function goToChapter(chapter) {
-            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`ch${chapter}`).classList.add('active');
-            document.getElementById(`chapterItem${chapter}`).classList.add('active');
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            BookmarkManager.save(LANGUAGE, chapter);
+    // 笔记
+    function saveNote(num) {
+        const textarea = document.getElementById('ch' + num + '-note');
+        if (textarea) {
+            progress.notes[num] = textarea.value;
+            saveProgress();
+            showToast('📒 笔记已保存');
         }
+    }
 
-        function goToHub() {
-            window.location.href = 'tutorial-hub.html';
+    function loadNotes() {
+        Object.keys(progress.notes).forEach(num => {
+            const textarea = document.getElementById('ch' + num + '-note');
+            if (textarea) textarea.value = progress.notes[num];
+        });
+    }
+
+    // 检查答案
+    function checkAnswer(ch, q) {
+        const input = document.getElementById('ch' + ch + '-q' + q);
+        const result = document.getElementById('ch' + ch + '-result' + q);
+        if (input && result) {
+            result.className = 'quiz-result correct';
+            result.innerHTML = '✅ 答案已提交，点击"查看答案"对比参考答案';
+            result.style.display = 'flex';
         }
+    }
 
-        function loadProgress() {
-            const stats = LearningStats.get();
-            const completed = stats.languagesProgress[LANGUAGE] || [];
-            const completedCount = completed.length;
-            const percentage = Math.round((completedCount / TOTAL_CHAPTERS) * 100);
-            
-            document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('progressPercent').textContent = `${percentage}%`;
-            document.getElementById('progressFill').style.width = `${percentage}%`;
-            
-            completed.forEach(chapter => {
-                const item = document.getElementById(`chapterItem${chapter}`);
-                const btn = document.getElementById(`completeBtn${chapter}`);
-                if (item) item.classList.add('completed');
-                if (btn) btn.classList.add('completed');
+    // 切换答案显示
+    function toggleAnswer(ch, q) {
+        const box = document.getElementById('ch' + ch + '-answer' + q);
+        if (box) box.classList.toggle('show');
+    }
+
+    // 复制代码
+    function copyCode(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            const text = el.textContent || el.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('📋 代码已复制');
+            }).catch(() => {
+                // fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('📋 代码已复制');
             });
         }
+    }
 
-        function markCompleted(chapter) {
-            LearningStats.recordChapterCompletion(LANGUAGE, chapter);
-            loadProgress();
-            SnippetManager.showToast('章节已标记为完成！');
+    // 主题切换
+    function toggleTheme() {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? '' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('go_theme', next || 'light');
+        document.getElementById('themeText').textContent = next === 'dark' ? '浅色模式' : '深色模式';
+    }
+
+    // 加载主题
+    function loadTheme() {
+        const saved = localStorage.getItem('go_theme');
+        if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            document.getElementById('themeText').textContent = '浅色模式';
         }
+    }
 
-        function toggleBookmark(chapter) {
-            const btn = document.getElementById(`bookmarkBtn${chapter}`);
-            const bookmarks = JSON.parse(localStorage.getItem('go_bookmarks') || '[]');
-            
-            const index = bookmarks.indexOf(chapter);
-            if (index === -1) {
-                bookmarks.push(chapter);
-                btn.classList.add('bookmarked');
-            } else {
-                bookmarks.splice(index, 1);
-                btn.classList.remove('bookmarked');
-            }
-            
-            localStorage.setItem('go_bookmarks', JSON.stringify(bookmarks));
-            updateBookmarkCount();
-        }
-
-        function loadBookmarks() {
-            const bookmarks = JSON.parse(localStorage.getItem('go_bookmarks') || '[]');
-            bookmarks.forEach(chapter => {
-                const btn = document.getElementById(`bookmarkBtn${chapter}`);
-                if (btn) btn.classList.add('bookmarked');
+    // 搜索
+    function searchTutorial() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (!query) {
+            document.querySelectorAll('.chapter-section').forEach(el => {
+                el.querySelectorAll('.search-highlight').forEach(h => {
+                    h.outerHTML = h.textContent;
+                });
             });
-            updateBookmarkCount();
+            goToChapter(currentChapter);
+            return;
         }
-
-        function updateBookmarkCount() {
-            const bookmarks = JSON.parse(localStorage.getItem('go_bookmarks') || '[]');
-            document.getElementById('bookmarkCount').textContent = bookmarks.length;
-        }
-
-        function saveNote(chapter) {
-            const textarea = document.getElementById(`ch${chapter}-note`);
-            const notes = JSON.parse(localStorage.getItem('go_notes') || '{}');
-            notes[chapter] = textarea.value;
-            localStorage.setItem('go_notes', JSON.stringify(notes));
-            SnippetManager.showToast('笔记已保存！');
-        }
-
-        function loadNotes() {
-            const notes = JSON.parse(localStorage.getItem('go_notes') || '{}');
-            for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
-                const textarea = document.getElementById(`ch${i}-note`);
-                if (textarea && notes[i]) {
-                    textarea.value = notes[i];
-                }
+        for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
+            const section = document.getElementById('ch' + i);
+            if (section && section.textContent.toLowerCase().includes(query)) {
+                goToChapter(i);
+                return;
             }
         }
+        showToast('未找到相关内容');
+    }
 
-        function checkAnswer(chapter, question) {
-            const input = document.getElementById(`ch${chapter}-q${question}`);
-            const result = document.getElementById(`ch${chapter}-result${question}`);
-            const userAnswer = input.value.trim().toLowerCase();
-            const correct = correctAnswers[chapter][question];
-            
-            if (userAnswer.includes(correct)) {
-                result.textContent = '✅ 正确！';
-                result.classList.add('correct');
-                result.classList.remove('incorrect');
-            } else {
-                result.textContent = '❌ 错误，请重试';
-                result.classList.add('incorrect');
-                result.classList.remove('correct');
-            }
-        }
+    // 统计
+    function showStats() {
+        const info = document.getElementById('statsInfo');
+        info.style.display = info.style.display === 'none' ? 'flex' : 'none';
+    }
 
-        function toggleAnswer(chapter, question) {
-            const answer = document.getElementById(`ch${chapter}-answer${question}`);
-            answer.classList.toggle('show');
-        }
+    // 更新UI
+    function updateUI() {
+        const completedCount = progress.completed.length;
+        const percent = Math.round((completedCount / TOTAL_CHAPTERS) * 100);
+        document.getElementById('completedCount').textContent = completedCount;
+        document.getElementById('progressPercent').textContent = percent + '%';
+        document.getElementById('bookmarkCount').textContent = progress.bookmarks.length;
+        document.getElementById('progressFill').style.width = percent + '%';
+        // 更新收藏按钮状态
+        progress.bookmarks.forEach(num => {
+            const btn = document.getElementById('bookmarkBtn' + num);
+            if (btn) btn.classList.add('bookmarked');
+        });
+    }
 
-        function copyCode(elementId) {
-            const code = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                SnippetManager.showToast('代码已复制到剪贴板');
-            });
-        }
+    // 返回首页
+    function goToHub() {
+        window.location.href = 'tutorial-hub.html';
+    }
 
-        function toggleTheme() {
-            const body = document.body;
-            const themeText = document.getElementById('themeText');
-            
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                themeText.textContent = '深色模式';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeText.textContent = '浅色模式';
-                localStorage.setItem('theme', 'dark');
-            }
-        }
+    // Toast提示
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, 2500);
+    }
 
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('themeText').textContent = '浅色模式';
-            }
-        }
-
-        function searchTutorial() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const sections = document.querySelectorAll('.chapter-section');
-            
-            sections.forEach((section, index) => {
-                const content = section.textContent.toLowerCase();
-                const item = document.getElementById(`chapterItem${index + 1}`);
-                
-                if (query === '') {
-                    section.style.display = index === 0 ? 'block' : 'none';
-                    item.style.display = 'flex';
-                } else if (content.includes(query)) {
-                    section.style.display = 'block';
-                    item.style.display = 'flex';
-                    item.classList.add('active');
-                } else {
-                    section.style.display = 'none';
-                    item.style.display = 'none';
-                }
-            });
-        }
-
-        function showStats() {
-            const stats = LearningStats.get();
-            const progress = stats.languagesProgress[LANGUAGE] || [];
-            
-            const modal = document.createElement('div');
-            modal.className = 'modal-overlay';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h3>📊 学习统计</h3>
-                    <div style="margin-bottom: 20px;">
-                        <p><strong>已完成章节：</strong>${progress.length}/${TOTAL_CHAPTERS}</p>
-                        <p><strong>学习进度：</strong>${Math.round((progress.length / TOTAL_CHAPTERS) * 100)}%</p>
-                        <p><strong>总学习时间：</strong>${Math.floor(stats.totalStudyTime / 3600)}小时${Math.floor((stats.totalStudyTime % 3600) / 60)}分钟</p>
-                        <p><strong>连续学习：</strong>${stats.dailyStreak}天</p>
-                    </div>
-                    <button class="btn btn-primary" onclick="this.closest('.modal-overlay').remove()">关闭</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
-        }
+    // 启动
+    loadTheme();
+    init();
     </script>
 </body>
 </html>

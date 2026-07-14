@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rust语言教程</title>
+    <title>Rust语言教程 - 35章完整指南</title>
     <style>
         :root {
             --bg-primary: #ffffff;
@@ -25,8 +25,8 @@
             --code-number: #fbbf24;
             --code-function: #60a5fa;
             --sidebar-width: 280px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
         [data-theme="dark"] {
             --bg-primary: #0f172a;
             --bg-secondary: #1e293b;
@@ -39,1440 +39,1089 @@
             --border-color: #334155;
             --code-bg: #0f172a;
             --code-text: #cbd5e1;
+            --shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-primary);
+            background: var(--bg-primary);
             color: var(--text-primary);
             line-height: 1.6;
-            transition: all 0.3s ease;
+            transition: background 0.3s, color 0.3s;
         }
-
         .header {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
             padding: 20px 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 100;
         }
-
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            max-width: 1400px; margin: 0 auto;
         }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
+        .header h1 { font-size: 24px; font-weight: 600; }
+        .toolbar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .search-box {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            width: 200px;
-            outline: none;
-            transition: width 0.3s;
+            padding: 8px 15px; border: none; border-radius: 20px;
+            font-size: 14px; width: 200px; outline: none; transition: width 0.3s;
         }
-
-        .search-box:focus {
-            width: 250px;
-        }
-
+        .search-box:focus { width: 260px; }
         .btn {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s;
+            padding: 8px 16px; border: none; border-radius: 8px;
+            cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;
         }
-
-        .btn-primary {
-            background: white;
-            color: var(--accent-primary);
-        }
-
-        .btn-primary:hover {
-            background: rgba(255, 255, 255, 0.9);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            backdrop-filter: blur(4px);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
+        .btn-primary { background: white; color: var(--accent-primary); }
+        .btn-primary:hover { background: rgba(255,255,255,0.9); }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; backdrop-filter: blur(4px); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
 
         .progress-container {
-            background: var(--bg-secondary);
-            padding: 15px 30px;
+            background: var(--bg-secondary); padding: 15px 30px;
             border-bottom: 1px solid var(--border-color);
         }
-
         .progress-bar {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 20px;
+            max-width: 1400px; margin: 0 auto;
+            display: flex; align-items: center; gap: 20px;
         }
-
-        .progress-info {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
+        .progress-info { display: flex; gap: 20px; font-size: 14px; color: var(--text-secondary); flex-shrink: 0; }
         .progress-fill {
-            flex: 1;
-            height: 10px;
-            background: var(--bg-card);
-            border-radius: 5px;
-            overflow: hidden;
+            flex: 1; height: 10px; background: var(--bg-card);
+            border-radius: 5px; overflow: hidden;
         }
-
         .progress-fill > div {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-primary), var(--success-color));
-            border-radius: 5px;
-            transition: width 0.5s ease;
+            height: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--success-color));
+            border-radius: 5px; transition: width 0.5s ease;
         }
 
         .main-content {
-            display: flex;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 30px;
-            gap: 30px;
+            display: flex; max-width: 1400px; margin: 0 auto;
+            padding: 30px; gap: 30px;
         }
-
         .sidebar {
-            width: var(--sidebar-width);
-            flex-shrink: 0;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 20px;
-            position: sticky;
-            top: 20px;
-            height: fit-content;
+            width: var(--sidebar-width); flex-shrink: 0;
+            background: var(--bg-secondary); border-radius: 12px; padding: 20px;
+            position: sticky; top: 80px; height: fit-content;
+            max-height: calc(100vh - 100px); overflow-y: auto;
         }
-
         .sidebar h3 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
+            font-size: 16px; margin-bottom: 15px; padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color); color: var(--text-primary);
         }
-
-        .chapter-list {
-            list-style: none;
-            padding: 0;
-        }
-
+        .chapter-list { list-style: none; padding: 0; }
         .chapter-item {
-            padding: 12px 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 14px;
+            padding: 10px 12px; margin-bottom: 4px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; color: var(--text-secondary);
         }
+        .chapter-item:hover { background: var(--bg-card); }
+        .chapter-item.active { background: var(--accent-primary); color: white; }
+        .chapter-item.completed .ch-icon { color: var(--success-color); }
+        .chapter-item.active.completed { background: var(--success-color); color: white; }
+        .ch-icon { font-size: 12px; flex-shrink: 0; margin-left: 8px; }
 
-        .chapter-item:hover {
-            background: var(--bg-card);
-        }
-
-        .chapter-item.active {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        .chapter-item.completed {
-            color: var(--success-color);
-        }
-
-        .chapter-item.active.completed {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .chapter-icon {
-            font-size: 12px;
-        }
-
-        .content-area {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .chapter-section {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .chapter-section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        .content-area { flex: 1; min-width: 0; }
+        .chapter-section { display: none; animation: fadeIn 0.3s ease; }
+        .chapter-section.active { display: block; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .chapter-section h2 {
-            font-size: 28px;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
+            font-size: 28px; margin-bottom: 25px; padding-bottom: 15px;
             border-bottom: 2px solid var(--accent-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
         }
-
         .bookmark-btn {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            transition: transform 0.2s;
+            background: none; border: none; font-size: 20px;
+            cursor: pointer; transition: transform 0.2s;
         }
+        .bookmark-btn:hover { transform: scale(1.2); }
+        .bookmark-btn.bookmarked { color: var(--warning-color); }
 
-        .bookmark-btn:hover {
-            transform: scale(1.2);
-        }
-
-        .bookmark-btn.bookmarked {
-            color: var(--warning-color);
-        }
-
-        .section-content {
-            margin-bottom: 25px;
-        }
-
-        .section-content h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .section-content p {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
-        .section-content ul {
-            margin-left: 25px;
-            margin-bottom: 15px;
-        }
-
-        .section-content li {
-            margin-bottom: 8px;
-            color: var(--text-secondary);
+        .section-content { margin-bottom: 25px; }
+        .section-content h3 { font-size: 20px; margin-bottom: 12px; color: var(--text-primary); }
+        .section-content p { font-size: 16px; color: var(--text-secondary); margin-bottom: 12px; }
+        .section-content ul { margin-left: 25px; margin-bottom: 12px; }
+        .section-content li { margin-bottom: 8px; color: var(--text-secondary); }
+        .section-content code {
+            background: var(--bg-card); padding: 2px 6px; border-radius: 4px;
+            font-family: 'Fira Code', monospace; font-size: 14px;
         }
 
         .code-block {
-            background: var(--code-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: var(--code-bg); border-radius: 12px;
+            overflow: hidden; margin-bottom: 25px; box-shadow: var(--shadow);
         }
-
         .code-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            background: rgba(0, 0, 0, 0.2);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 15px; background: rgba(0,0,0,0.2);
         }
-
-        .code-lang {
-            font-size: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .code-actions {
-            display: flex;
-            gap: 10px;
-        }
-
+        .code-lang { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+        .code-actions { display: flex; gap: 8px; }
         .code-btn {
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 14px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: all 0.2s;
+            background: none; border: none; color: var(--text-muted);
+            font-size: 14px; cursor: pointer; padding: 4px 8px;
+            border-radius: 4px; transition: all 0.2s;
         }
-
-        .code-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--code-text);
-        }
-
+        .code-btn:hover { background: rgba(255,255,255,0.1); color: var(--code-text); }
         .code-block pre {
-            padding: 20px;
-            overflow-x: auto;
-            font-family: 'Fira Code', 'Monaco', monospace;
-            font-size: 14px;
-            line-height: 1.6;
+            padding: 20px; overflow-x: auto;
+            font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+            font-size: 14px; line-height: 1.6; margin: 0;
         }
-
-        .code-block code {
-            color: var(--code-text);
-        }
-
-        .code-block .keyword { color: var(--code-keyword); }
-        .code-block .string { color: var(--code-string); }
-        .code-block .number { color: var(--code-number); }
-        .code-block .function { color: var(--code-function); }
+        .code-block code { color: var(--code-text); }
 
         .error-block {
-            background: rgba(239, 68, 68, 0.1);
-            border-left: 4px solid var(--error-color);
-            padding: 15px 20px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 25px;
+            background: rgba(239,68,68,0.1); border-left: 4px solid var(--error-color);
+            padding: 15px 20px; border-radius: 0 8px 8px 0; margin-bottom: 25px;
         }
-
-        .error-block h4 {
-            color: var(--error-color);
-            margin-bottom: 10px;
-        }
-
-        .error-block p {
-            color: var(--text-secondary);
-            font-size: 14px;
+        .error-block h4 { color: var(--error-color); margin-bottom: 10px; }
+        .error-block p { color: var(--text-secondary); font-size: 14px; margin-bottom: 6px; }
+        .error-block code {
+            background: rgba(239,68,68,0.15); padding: 2px 6px; border-radius: 3px;
+            font-family: 'Fira Code', monospace; font-size: 13px;
         }
 
         .practice-section {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
+            background: var(--bg-secondary); border-radius: 12px;
+            padding: 25px; margin-bottom: 25px;
         }
-
-        .practice-section h4 {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: var(--text-primary);
-        }
-
-        .question {
-            font-size: 16px;
-            color: var(--text-secondary);
-            margin-bottom: 15px;
-        }
-
+        .practice-section h4 { font-size: 18px; margin-bottom: 20px; color: var(--text-primary); }
+        .question { font-size: 16px; color: var(--text-secondary); margin-bottom: 15px; }
         .answer-input, .answer-textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            font-family: inherit;
-            outline: none;
-            transition: border-color 0.2s;
+            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color);
+            border-radius: 8px; font-size: 14px; background: var(--bg-primary);
+            color: var(--text-primary); margin-bottom: 10px; font-family: inherit; outline: none;
         }
-
-        .answer-input:focus, .answer-textarea:focus {
-            border-color: var(--accent-primary);
-        }
-
-        .answer-textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .answer-options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
+        .answer-input:focus, .answer-textarea:focus { border-color: var(--accent-primary); }
+        .answer-textarea { min-height: 80px; resize: vertical; }
+        .answer-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
         .option-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 10px 15px;
-            background: var(--bg-primary);
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            transition: all 0.2s;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            padding: 10px 15px; background: var(--bg-primary); border-radius: 8px;
+            border: 1px solid var(--border-color); transition: all 0.2s;
         }
-
-        .option-label:hover {
-            border-color: var(--accent-primary);
-        }
-
-        .option-label input[type="radio"] {
-            accent-color: var(--accent-primary);
-        }
-
+        .option-label:hover { border-color: var(--accent-primary); }
+        .option-label input[type="radio"] { accent-color: var(--accent-primary); }
         .quiz-result {
-            margin: 10px 0;
-            padding: 10px 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 14px;
-            font-weight: 500;
+            margin: 10px 0; padding: 10px 15px; border-radius: 8px;
+            display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500;
         }
-
-        .quiz-result.correct {
-            background: rgba(34, 197, 94, 0.1);
-            color: var(--success-color);
-        }
-
-        .quiz-result.incorrect {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--error-color);
-        }
-
-        .result-icon {
-            font-size: 16px;
-        }
-
+        .quiz-result.correct { background: rgba(34,197,94,0.1); color: var(--success-color); }
+        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--error-color); }
         .show-answer-btn {
-            background: none;
-            border: none;
-            color: var(--accent-primary);
-            cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 20px;
-            padding: 5px 0;
-            text-decoration: underline;
+            background: none; border: none; color: var(--accent-primary);
+            cursor: pointer; font-size: 14px; margin-bottom: 20px;
+            padding: 5px 0; text-decoration: underline;
         }
-
-        .show-answer-btn:hover {
-            color: var(--accent-secondary);
-        }
-
+        .show-answer-btn:hover { color: var(--accent-secondary); }
         .answer-box {
-            display: none;
-            background: rgba(14, 165, 233, 0.1);
+            display: none; background: rgba(14,165,233,0.1);
             border-left: 4px solid var(--accent-primary);
-            padding: 15px;
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 20px;
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            word-break: break-all;
+            padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 20px;
+            font-family: 'Fira Code', monospace; font-size: 14px;
+            white-space: pre-wrap; word-break: break-all; color: var(--text-primary);
         }
-
-        .answer-box.show {
-            display: block;
-        }
+        .answer-box.show { display: block; }
 
         .note-section {
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 25px;
+            background: var(--bg-secondary); border-radius: 12px;
+            padding: 25px; margin-bottom: 25px;
         }
-
-        .note-section h4 {
-            font-size: 18px;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
+        .note-section h4 { font-size: 18px; margin-bottom: 15px; color: var(--text-primary); }
         .note-textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 14px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: inherit;
-            resize: vertical;
-            outline: none;
-            transition: border-color 0.2s;
+            width: 100%; min-height: 100px; padding: 15px;
+            border: 1px solid var(--border-color); border-radius: 8px;
+            font-size: 14px; background: var(--bg-primary); color: var(--text-primary);
+            font-family: inherit; resize: vertical; outline: none;
         }
-
-        .note-textarea:focus {
-            border-color: var(--accent-primary);
-        }
-
+        .note-textarea:focus { border-color: var(--accent-primary); }
         .save-note-btn {
-            margin-top: 10px;
-            background: var(--accent-primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: background 0.2s;
+            margin-top: 10px; background: var(--accent-primary); color: white;
+            border: none; padding: 10px 20px; border-radius: 8px;
+            cursor: pointer; font-size: 14px; font-weight: 500; transition: background 0.2s;
         }
-
-        .save-note-btn:hover {
-            background: var(--accent-secondary);
-        }
+        .save-note-btn:hover { background: var(--accent-secondary); }
 
         .completion-btn {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background: var(--success-color);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 20px;
-            transition: all 0.2s;
+            display: block; width: 100%; padding: 15px;
+            background: var(--success-color); color: white; border: none;
+            border-radius: 12px; font-size: 16px; font-weight: 600;
+            cursor: pointer; margin-bottom: 20px; transition: all 0.2s;
         }
+        .completion-btn:hover { background: #16a34a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34,197,94,0.3); }
+        .completion-btn.completed { background: var(--text-muted); cursor: default; transform: none; box-shadow: none; }
 
-        .completion-btn:hover {
-            background: #16a34a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
-        }
-
-        .completion-btn.completed {
-            background: var(--text-muted);
-            cursor: default;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
+        .nav-buttons { display: flex; justify-content: space-between; gap: 15px; }
         .nav-btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 12px 30px; border: none; border-radius: 8px;
+            font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s;
         }
+        .nav-btn-primary { background: var(--accent-primary); color: white; }
+        .nav-btn-primary:hover:not(:disabled) { background: var(--accent-secondary); }
+        .nav-btn-secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border-color); }
+        .nav-btn-secondary:hover { background: var(--border-color); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .nav-btn-primary {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        .nav-btn-primary:hover:not(:disabled) {
-            background: var(--accent-secondary);
-        }
-
-        .nav-btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .nav-btn-secondary:hover {
-            background: var(--border-color);
-        }
-
-        .nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
+        .search-highlight { background: rgba(14,165,233,0.3); padding: 2px 4px; border-radius: 3px; }
 
         @media (max-width: 1024px) {
-            .main-content {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                position: static;
-            }
-
-            .chapter-list {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .chapter-item {
-                font-size: 13px;
-                padding: 10px;
-            }
+            .main-content { flex-direction: column; }
+            .sidebar { width: 100%; position: static; max-height: none; }
+            .chapter-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+            .chapter-item { font-size: 12px; padding: 8px; }
         }
-
         @media (max-width: 640px) {
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .toolbar {
-                width: 100%;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .search-box {
-                width: 100%;
-            }
-
-            .chapter-list {
-                grid-template-columns: 1fr;
-            }
-
-            .nav-buttons {
-                flex-direction: column;
-            }
-
-            .chapter-section h2 {
-                font-size: 22px;
-            }
+            .header-content { flex-direction: column; gap: 15px; }
+            .toolbar { width: 100%; justify-content: center; }
+            .search-box { width: 100%; }
+            .chapter-list { grid-template-columns: 1fr; }
+            .nav-buttons { flex-direction: column; }
+            .chapter-section h2 { font-size: 22px; }
+            .main-content { padding: 15px; }
         }
     </style>
 </head>
-<body>
+<body data-language="rust">
     <div class="header">
         <div class="header-content">
             <h1>🦀 Rust语言教程</h1>
             <div class="toolbar">
-                <input type="text" id="searchInput" class="search-box" placeholder="搜索教程内容..." onkeyup="searchTutorial()">
+                <input type="text" id="searchInput" class="search-box" placeholder="搜索教程内容..." oninput="searchTutorial()">
                 <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
                 <button class="btn btn-secondary" onclick="goToHub()">🏠 教程中心</button>
-                <button class="btn btn-primary" onclick="toggleTheme()">
-                    <span id="themeText">深色模式</span>
-                </button>
+                <button class="btn btn-primary" onclick="toggleTheme()"><span id="themeText">深色模式</span></button>
             </div>
         </div>
     </div>
-
     <div class="progress-container">
         <div class="progress-bar">
             <div class="progress-info">
-                <span>已完成章节: <strong id="completedCount">0</strong>/10</span>
+                <span>已完成: <strong id="completedCount">0</strong>/35</span>
                 <span>进度: <strong id="progressPercent">0%</strong></span>
-                <span>收藏数: <strong id="bookmarkCount">0</strong></span>
+                <span>收藏: <strong id="bookmarkCount">0</strong></span>
             </div>
-            <div class="progress-fill">
-                <div id="progressFill"></div>
-            </div>
+            <div class="progress-fill"><div id="progressFill"></div></div>
         </div>
     </div>
-
     <div class="main-content">
         <div class="sidebar">
-            <h3>📚 章节列表</h3>
+            <h3>📚 章节导航</h3>
             <ul class="chapter-list" id="chapterList"></ul>
         </div>
+        <div class="content-area" id="contentArea"></div>
+    </div>
 
-        <div class="content-area">
-            <div id="ch1" class="chapter-section active">
-                <h2>
-                    1. 入门介绍与环境搭建
-                    <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🌟 Rust的特点</h3>
-                    <p>Rust是一种系统级编程语言，由Mozilla开发，于2010年首次发布。它以内存安全、零成本抽象和并发安全著称。</p>
-                    <ul>
-                        <li><strong>内存安全：</strong>通过所有权系统保证内存安全，无需垃圾回收</li>
-                        <li><strong>零成本抽象：</strong>高级抽象不带来运行时开销</li>
-                        <li><strong>并发安全：</strong>编译时检查数据竞争</li>
-                        <li><strong>高性能：</strong>与C/C++相当的性能</li>
-                        <li><strong>跨平台：</strong>支持Windows、Mac、Linux等多种平台</li>
-                    </ul>
-                </div>
-
-                <div class="section-content">
-                    <h3>📦 安装Rust</h3>
-                    <p>使用rustup安装Rust工具链。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code1"><code># Linux/macOS
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+    // ==================== 35章完整数据 ====================
+    const chapterData = [
+        {
+            id: 1, title: 'Rust简介',
+            points: [
+                'Rust是由Mozilla研究院开发的系统级编程语言，于2015年发布1.0版本',
+                '核心设计理念：内存安全（无GC）、零成本抽象、并发安全、高性能',
+                '适用场景：操作系统、嵌入式、WebAssembly、网络服务、CLI工具',
+                'Rust连续多年蝉联Stack Overflow"最受喜爱编程语言"榜首'
+            ],
+            code: { lang: 'rust', content: `// Rust的核心优势演示
+fn main() {
+    // 1. 内存安全 - 编译时保证，无需垃圾回收
+    let data = vec![1, 2, 3, 4, 5];
+    
+    // 2. 零成本抽象 - 高级写法无运行时开销
+    let sum: i32 = data.iter().map(|x| x * 2).sum();
+    println!("求和结果: {}", sum);
+    
+    // 3. 并发安全 - 编译器检查数据竞争
+    let message = String::from("Hello, Rust!");
+    println!("{}", message);
+}` },
+            error: {
+                title: '对Rust的常见误解',
+                items: [
+                    { wrong: '认为Rust有垃圾回收器(GC)', fix: 'Rust通过所有权系统在编译时管理内存，无需GC，性能可预测' },
+                    { wrong: '认为Rust只能写底层系统程序', fix: 'Rust也适合Web后端(actix-web/axum)、CLI工具、WASM前端等' }
+                ]
+            },
+            exercises: [
+                { q: 'Rust通过什么机制保证内存安全（而非GC）？', a: '所有权系统(Ownership)' },
+                { q: 'Rust的包管理器和构建工具叫什么？', a: 'Cargo' }
+            ]
+        },
+        {
+            id: 2, title: '安装与Cargo',
+            points: [
+                '使用rustup安装和管理Rust工具链，支持stable/beta/nightly通道',
+                'Cargo是Rust的构建系统和包管理器，相当于npm/pip的角色',
+                'Cargo.toml是项目配置文件，Cargo.lock锁定依赖版本',
+                '常用命令：cargo new/build/run/test/doc'
+            ],
+            code: { lang: 'bash', content: `# 安装Rust (Linux/macOS)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-# Windows
-# 下载并运行 https://win.rustup.rs/
+# 验证安装
+rustc --version    # 编译器版本
+cargo --version    # Cargo版本
+rustup update      # 更新工具链
 
-# 检查安装
-rustc --version
-cargo --version</code></pre>
-                </div>
+# 创建新项目
+cargo new my_project
+cd my_project
 
-                <div class="section-content">
-                    <h3>👋 第一个Rust程序</h3>
-                </div>
+# 项目结构
+# my_project/
+# ├── Cargo.toml    # 项目配置
+# ├── src/
+# │   └── main.rs   # 入口文件
+# └── target/       # 构建输出
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch1-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code2"><code>fn main() {
-    println!("Hello, Rust!");
-}</code></pre>
-                </div>
+# 常用Cargo命令
+cargo build          # 编译项目
+cargo run            # 编译并运行
+cargo test           # 运行测试
+cargo check          # 快速检查(不生成二进制)
+cargo build --release # 发布优化构建` },
+            error: {
+                title: '安装与Cargo常见错误',
+                items: [
+                    { wrong: '安装后直接运行rustc提示找不到命令', fix: '需要重新打开终端或运行 source $HOME/.cargo/env 使PATH生效' },
+                    { wrong: 'cargo run报错找不到main.rs', fix: '确保在项目根目录(含Cargo.toml)下执行命令' }
+                ]
+            },
+            exercises: [
+                { q: 'cargo check 和 cargo build 的区别是什么？', a: 'check只做语法和类型检查不生成二进制，build会生成完整二进制文件' },
+                { q: '创建一个名为hello_rust的新项目', a: 'cargo new hello_rust' }
+            ]
+        },
+        {
+            id: 3, title: '第一个Rust程序',
+            points: [
+                'fn main()是程序入口点，每个可执行Rust程序必须有一个',
+                'println!是宏(注意感叹号)，用于格式化输出到标准输出',
+                'Rust代码以分号结尾，函数体用花括号包裹',
+                '缩进使用4个空格(非Tab)，这是Rust官方风格'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    println!("Hello, World!");
+    
+    // 带变量的格式化输出
+    let name = "Rust";
+    let year = 2015;
+    println!("{}发布于{}", name, year);
+    
+    // 位置参数和命名参数
+    println!("{0}说:{1}, {0}!", "Alice", "你好");
+    println!("{subject} {verb} {object}",
+        subject="我", verb="学习", object="Rust");
+    
+    // 调试输出
+    let v = vec![1, 2, 3];
+    println!("向量: {:?}", v);
+}` },
+            error: {
+                title: '初学者常见错误',
+                items: [
+                    { wrong: 'fn main() 缺少括号或花括号', fix: 'Rust函数定义必须有完整签名: fn main() { ... }' },
+                    { wrong: 'println! 写成 println (缺少感叹号)', fix: 'println!是宏不是函数，感叹号是宏调用的标志，不可省略' }
+                ]
+            },
+            exercises: [
+                { q: 'println后面的感叹号!有什么含义？', a: '表示这是一个宏(macro)调用，而非普通函数调用' },
+                { q: '编写程序输出"我爱Rust"', a: 'fn main() { println!("我爱Rust"); }' }
+            ]
+        },
+        {
+            id: 4, title: '注释与格式化输出',
+            points: [
+                '单行注释用 //，多行注释用 /* */，文档注释用 /// 和 //!',
+                'println!支持{}占位符、位置参数{0}、命名参数{name}',
+                '{:?}用于Debug格式化输出，{:#?}为美化Debug输出',
+                '文档注释支持Markdown语法，可通过cargo doc生成HTML文档'
+            ],
+            code: { lang: 'rust', content: `/// 这是一个文档注释 - 计算 两数之和
+/// # Examples
+/// \`\`\`
+/// let result = add(2, 3);
+/// assert_eq!(result, 5);
+/// \`\`\`
+fn add(a: i32, b: i32) -> i32 {
+    // 单行注释
+    a + b /* 内联多行注释 */ + 0
+}
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch1-code3')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch1-code3"><code># 创建新项目
-cargo new hello_rust
-cd hello_rust
-
-# 编译运行
-cargo run
-
-# 只编译
-cargo build
-
-# 编译发布版本
-cargo build --release</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>忘记添加分号：Rust语句必须以分号结尾。</p>
-                    <p>大小写敏感：Rust区分大小写，<code>main</code> 和 <code>Main</code> 是不同的。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Rust的包管理器名称是什么？</div>
-                    <input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
-                    <div id="ch1-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(1, 1)">查看答案</button>
-                    <div id="ch1-answer1" class="answer-box">cargo</div>
-
-                    <div class="question">2. 编写一个输出"Hello Rust"的程序</div>
-                    <textarea class="answer-textarea" id="ch1-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
-                    <div id="ch1-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(1, 2)">查看答案</button>
-                    <div id="ch1-answer2" class="answer-box">fn main() {
-    println!("Hello Rust");
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch2" class="chapter-section">
-                <h2>
-                    2. 基本语法
-                    <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📝 变量与常量</h3>
-                    <p>Rust使用 <code>let</code> 声明变量，<code>const</code> 声明常量。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch2-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch2-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch2-code1"><code>fn main() {
+fn main() {
+    let pi = 3.14159265;
+    
+    // 基本格式化
+    println!("圆周率: {}", pi);
+    
+    // 宽度与对齐
+    println!("左对齐: {:<10}", "Rust");
+    println!("右对齐: {:>10}", "Rust");
+    println!("居中:   {:^10}", "Rust");
+    
+    // 精度控制
+    println!("保留2位: {:.2}", pi);
+    println!("宽度8保留2位: {:8.2}", pi);
+    
+    // 数字进制
+    println!("十进制: {}", 42);
+    println!("二进制: {:b}", 42);
+    println!("八进制: {:o}", 42);
+    println!("十六进制: {:x}", 42);
+    
+    // Debug输出
+    let arr = [1, 2, 3];
+    println!("数组: {:?}", arr);
+    println!("美化: {:#?}", arr);
+}` },
+            error: {
+                title: '注释与输出常见错误',
+                items: [
+                    { wrong: '文档注释 /// 写在了函数后面', fix: '文档注释必须紧跟在被注释项的上方' },
+                    { wrong: '对自定义类型使用{:?}报错', fix: '需要为类型派生Debug trait: #[derive(Debug)]' }
+                ]
+            },
+            exercises: [
+                { q: '如何生成项目文档？', a: 'cargo doc --open' },
+                { q: '如何让自定义结构体支持{:?}输出？', a: '添加 #[derive(Debug)]' }
+            ]
+        },
+        {
+            id: 5, title: '变量与可变性',
+            points: [
+                'let声明不可变变量，let mut声明可变变量，这是Rust的安全基石',
+                'const声明编译时常量，必须标注类型，命名用SCREAMING_SNAKE_CASE',
+                '变量遮蔽(shadowing)：允许用let重新声明同名变量，类型可以不同',
+                '不可变变量是默认行为，体现了Rust"安全优先"的设计哲学'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 不可变变量(默认)
     let x = 5;
+    // x = 10; // 错误！不能对不可变变量赋值
+    
+    // 可变变量
     let mut y = 10;
-    y = 15;
+    y = 20; // 正确
+    println!("y = {}", y);
     
+    // 常量
     const MAX_POINTS: u32 = 100_000;
+    println!("最大分数: {}", MAX_POINTS);
     
-    let x: i32 = 5;
-    let y: f64 = 3.14;
-    
-    let z = x + 10;
+    // 变量遮蔽(shadowing)
+    let z = 5;
+    let z = z + 1; // 遮蔽，新变量z
+    let z = z * 2;  // 再次遮蔽
+    let z = "现在是字符串"; // 类型也可以变！
     println!("z = {}", z);
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>💬 字符串</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch2-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch2-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch2-code2"><code>fn main() {
-    let s1 = "hello";
-    let s2 = String::from("world");
     
-    let s3 = s1.to_string();
-    let s4 = format!("{} {}", s1, s2);
+    // 遮蔽 vs mut 的区别
+    let spaces = "   ";
+    let spaces = spaces.len(); // 遮蔽允许改变类型
+    println!("空格数: {}", spaces);
+}` },
+            error: {
+                title: '变量相关常见错误',
+                items: [
+                    { wrong: 'let x = 5; x = 10; // 对不可变变量重新赋值', fix: '使用 let mut x = 5; 或通过遮蔽 let x = 10;' },
+                    { wrong: 'const X = 5; // 常量缺少类型标注', fix: '常量必须标注类型: const X: i32 = 5;' }
+                ]
+            },
+            exercises: [
+                { q: '变量遮蔽(shadowing)和mut的关键区别？', a: '遮蔽创建新变量(可改变类型)，mut修改同一变量(类型不变)' },
+                { q: 'Rust变量默认是可变还是不可变？', a: '不可变(immutable)' }
+            ]
+        },
+        {
+            id: 6, title: '数据类型',
+            points: [
+                '标量类型：整数(i8-i128,u8-u128)、浮点(f32/f64)、布尔(bool)、字符(char)',
+                '复合类型：元组(tuple)和数组(array)，大小固定',
+                '整数默认i32，浮点默认f64，isize/usize取决于平台位数',
+                'char是4字节Unicode标量值，可以存储emoji和中文字符'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 整数类型
+    let a: i32 = -42;
+    let b: u8 = 255;
+    let c = 0xff;       // 十六进制
+    let d = 0o77;       // 八进制
+    let e = 0b1111_0000; // 二进制
+    let f = 1_000_000;  // 数字分隔符
     
-    println!("s1 length: {}", s1.len());
-    println!("s4: {}", s4);
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>修改不可变变量：<code>let x = 5; x = 10;</code> 会报错，需要用 <code>let mut</code>。</p>
-                    <p>类型不匹配：<code>let x: i32 = "hello";</code> 会报错，需要显式类型转换。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 以下哪个关键字用于声明可变变量？</div>
-                    <div class="answer-options">
-                        <label class="option-label"><input type="radio" name="ch2-q1" value="A"> A. var</label>
-                        <label class="option-label"><input type="radio" name="ch2-q1" value="B"> B. mutable</label>
-                        <label class="option-label"><input type="radio" name="ch2-q1" value="C"> C. mut</label>
-                        <label class="option-label"><input type="radio" name="ch2-q1" value="D"> D. change</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
-                    <div id="ch2-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(2, 1)">查看答案</button>
-                    <div id="ch2-answer1" class="answer-box">C. mut</div>
-
-                    <div class="question">2. 计算表达式 2 + 1 * 3 的结果</div>
-                    <input type="text" class="answer-input" id="ch2-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
-                    <div id="ch2-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(2, 2)">查看答案</button>
-                    <div id="ch2-answer2" class="answer-box">5</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch3" class="chapter-section">
-                <h2>
-                    3. 所有权系统
-                    <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔑 所有权规则</h3>
-                    <ul>
-                        <li>每个值都有一个<strong>所有者</strong></li>
-                        <li>值在任一时刻只能有一个所有者</li>
-                        <li>当所有者离开作用域，值将被丢弃</li>
-                    </ul>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code1"><code>fn main() {
-    let s1 = String::from("hello");
-    let s2 = s1;
+    // 浮点类型
+    let x: f64 = 2.0;
+    let y: f32 = 3.0;
     
-    // println!("{}", s1); // 错误！s1的所有权已移动到s2
-    println!("{}", s2); // 正确
+    // 布尔类型
+    let t: bool = true;
+    let f_val: bool = false;
     
-    let s3 = String::from("world");
-    let s4 = s3.clone();
+    // 字符类型(Unicode)
+    let c1: char = 'z';
+    let c2: char = '中';
+    let c3: char = '🐘';
     
-    println!("{} {}", s3, s4); // 正确，clone创建了副本
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔗 借用与引用</h3>
-                    <p>借用允许你引用某些值而不获取其所有权。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code2"><code>fn calculate_length(s: &String) -> usize {
-    s.len()
-}
-
-fn main() {
-    let s1 = String::from("hello");
-    let len = calculate_length(&s1);
-    println!("'{}' 的长度是 {}", s1, len);
+    // 元组
+    let tup: (i32, f64, char) = (500, 6.4, 'y');
+    let (x, y, z) = tup; // 解构
+    let first = tup.0;   // 索引访问
     
-    let mut s2 = String::from("hello");
-    change(&mut s2);
-    println!("s2 = {}", s2);
-}
-
-fn change(s: &mut String) {
-    s.push_str(", world");
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>⏱️ 生命周期</h3>
-                    <p>生命周期确保引用在使用期间始终有效。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch3-code3')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch3-code3').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch3-code3"><code>fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-    if x.len() > y.len() { x } else { y }
-}
-
-fn main() {
-    let string1 = String::from("abcd");
-    let string2 = "xyz";
-    
-    let result = longest(string1.as_str(), string2);
-    println!("最长的字符串是 {}", result);
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>使用已移动的值：<code>let s1 = s2; println!("{}", s2);</code> 会报错。</p>
-                    <p>可变引用与不可变引用冲突：同一时间只能有一个可变引用。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Rust中每个值有几个所有者？</div>
-                    <input type="text" class="answer-input" id="ch3-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
-                    <div id="ch3-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(3, 1)">查看答案</button>
-                    <div id="ch3-answer1" class="answer-box">1个</div>
-
-                    <div class="question">2. 不获取所有权的情况下访问值的方式叫什么？</div>
-                    <input type="text" class="answer-input" id="ch3-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
-                    <div id="ch3-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(3, 2)">查看答案</button>
-                    <div id="ch3-answer2" class="answer-box">借用</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch4" class="chapter-section">
-                <h2>
-                    4. 数据类型
-                    <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔢 标量类型</h3>
-                    <ul>
-                        <li><strong>整数类型：</strong>i8, i16, i32, i64, i128, u8, u16, u32, u64, u128</li>
-                        <li><strong>浮点类型：</strong>f32, f64</li>
-                        <li><strong>布尔类型：</strong>bool (true/false)</li>
-                        <li><strong>字符类型：</strong>char (Unicode标量值)</li>
-                    </ul>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch4-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch4-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch4-code1"><code>fn main() {
-    let x: i32 = 42;
-    let y: u64 = 100;
-    let pi: f64 = 3.14159;
-    let is_active: bool = true;
-    let c: char = 'z';
-    
-    let a = 1_000_000;
-    let b = 0xff;
-    let c = 0o77;
-    let d = 0b1111;
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📦 复合类型</h3>
-                    <ul>
-                        <li><strong>元组：</strong>固定大小的多个值组合</li>
-                        <li><strong>数组：</strong>固定大小的相同类型元素集合</li>
-                        <li><strong>向量：</strong>可变大小的相同类型元素集合</li>
-                    </ul>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch4-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch4-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch4-code2"><code>fn main() {
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
-    let (x, y, z) = tup;
-    println!("x = {}, y = {}, z = {}", x, y, z);
-    
+    // 数组(固定长度，相同类型)
     let arr: [i32; 5] = [1, 2, 3, 4, 5];
-    let arr2 = [3; 5];
+    let zeros = [0; 10]; // [0,0,0,0,0,0,0,0,0,0]
+    let first = arr[0];
     
-    let mut v: Vec<i32> = Vec::new();
-    v.push(1);
-    v.push(2);
-    v.push(3);
+    println!("元组第一个: {}, 数组第一个: {}", first, first);
+}` },
+            error: {
+                title: '数据类型常见错误',
+                items: [
+                    { wrong: 'let arr = [1, 2, 3]; let x = arr[3]; // 越界', fix: '数组索引从0开始，长度3的数组最大索引为2' },
+                    { wrong: 'let x: i32 = 3.14; // 浮点赋给整数类型', fix: '类型必须匹配: let x: f64 = 3.14;' }
+                ]
+            },
+            exercises: [
+                { q: 'Rust中默认的整数类型和浮点类型？', a: 'i32 和 f64' },
+                { q: '创建一个包含3个true的布尔数组', a: 'let arr = [true; 3];' }
+            ]
+        },
+        {
+            id: 7, title: '类型转换',
+            points: [
+                'Rust不支持隐式类型转换，必须使用as关键字显式转换',
+                'as主要用于基本数值类型之间的转换，可能丢失精度',
+                'From/Into trait提供安全的类型转换，是Rust惯用方式',
+                'TryFrom/TryInto用于可能失败的转换，返回Result'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // as 关键字显式转换
+    let a: i32 = 42;
+    let b: f64 = a as f64;
+    let c: u8 = a as u8; // 截断
+    println!("i32->f64: {}, i32->u8: {}", b, c);
     
-    println!("向量长度: {}", v.len());
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>数组越界访问：<code>arr[10]</code> 会导致panic。</p>
-                    <p>类型不匹配：元组中的元素类型必须一致才能解构。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 默认整数类型是什么？</div>
-                    <div class="answer-options">
-                        <label class="option-label"><input type="radio" name="ch4-q1" value="A"> A. i8</label>
-                        <label class="option-label"><input type="radio" name="ch4-q1" value="B"> B. i32</label>
-                        <label class="option-label"><input type="radio" name="ch4-q1" value="C"> C. u32</label>
-                        <label class="option-label"><input type="radio" name="ch4-q1" value="D"> D. i64</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
-                    <div id="ch4-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(4, 1)">查看答案</button>
-                    <div id="ch4-answer1" class="answer-box">B. i32</div>
-
-                    <div class="question">2. 创建一个包含5个元素的向量的宏是什么？</div>
-                    <input type="text" class="answer-input" id="ch4-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
-                    <div id="ch4-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(4, 2)">查看答案</button>
-                    <div id="ch4-answer2" class="answer-box">vec!</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch5" class="chapter-section">
-                <h2>
-                    5. 流程控制
-                    <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔀 if-else表达式</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch5-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code1"><code>fn main() {
+    // 数值精度损失
+    let x: f64 = 3.99;
+    let y: i32 = x as i32; // 3, 丢失小数部分
+    println!("f64->i32: {} (截断非四舍五入)", y);
+    
+    // From/Into trait (惯用方式)
+    let s = String::from("hello");
+    let n: i32 = i32::from(42u8);
+    
+    // TryFrom (可能失败的转换)
+    use std::convert::TryFrom;
+    let big: i32 = 300;
+    match u8::try_from(big) {
+        Ok(v) => println!("转换成功: {}", v),
+        Err(e) => println!("转换失败: {}", e),
+    }
+    
+    // 字符串与数值转换
+    let num: i32 = "42".parse().unwrap();
+    let s = 42i32.to_string();
+    println!("parse: {}, to_string: {}", num, s);
+}` },
+            error: {
+                title: '类型转换常见错误',
+                items: [
+                    { wrong: 'let x: i32 = 3.14; // 隐式转换', fix: 'Rust不允许隐式转换，必须显式: let x: i32 = 3.14 as i32;' },
+                    { wrong: '"hello".parse::<i32>().unwrap() // 解析失败会panic', fix: '使用match或?处理可能的错误' }
+                ]
+            },
+            exercises: [
+                { q: 'as转换和From trait的区别？', a: 'as是简单的强制转换(可能丢精度)，From是类型安全惯用转换' },
+                { q: '如何安全地将字符串转为整数？', a: '使用 "42".parse::<i32>() 返回Result，配合match或?处理' }
+            ]
+        },
+        {
+            id: 8, title: '运算符',
+            points: [
+                '算术运算符：+, -, *, /, %，整数除法截断(非四舍五入)',
+                '比较运算符：==, !=, <, >, <=, >=，返回bool',
+                '逻辑运算符：&&, ||, !，支持短路求值',
+                '位运算符：&, |, ^, !, <<, >>，操作二进制位'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 算术运算
+    let sum = 5 + 10;
+    let diff = 95.5 - 4.3;
+    let product = 4 * 30;
+    let quotient = 56.7 / 32.2;
+    let remainder = 43 % 5;
+    println!("商: {}, 余: {}", quotient, remainder);
+    
+    // 比较运算
+    let a = 5;
+    println!("5 == 5: {}", a == 5);
+    println!("5 != 3: {}", a != 3);
+    println!("5 > 3: {}", a > 3);
+    
+    // 逻辑运算(短路求值)
+    let x = true;
+    let y = false;
+    println!("true && false: {}", x && y);
+    println!("true || false: {}", x || y);
+    println!("!true: {}", !x);
+    
+    // 位运算
+    println!("1 & 2 = {}", 1 & 2);   // 0
+    println!("1 | 2 = {}", 1 | 2);   // 3
+    println!("1 ^ 2 = {}", 1 ^ 2);   // 3
+    println!("1 << 3 = {}", 1u32 << 3); // 8
+    println!("16 >> 2 = {}", 16u32 >> 2); // 4
+}` },
+            error: {
+                title: '运算符常见错误',
+                items: [
+                    { wrong: 'let x = 5 / 0; // 整数除以零', fix: '整数除以零会在运行时panic，需先检查除数是否为零' },
+                    { wrong: 'if x = 5 {} // 用=做比较', fix: '比较用==，=是赋值运算符: if x == 5 {}' }
+                ]
+            },
+            exercises: [
+                { q: '7 / 2 的结果是什么？', a: '3 (整数除法截断)' },
+                { q: '1 << 4 等于多少？', a: '16 (左移4位等于乘以2的4次方)' }
+            ]
+        },
+        {
+            id: 9, title: 'if表达式',
+            points: [
+                'if是表达式而非语句，可以返回值绑定到变量',
+                '条件必须是bool类型，不支持隐式转换为bool',
+                'if/else if/else分支中返回的值类型必须一致',
+                'if后不需要括号(加了也没错，但不符合Rust风格)'
+            ],
+            code: { lang: 'rust', content: `fn main() {
     let number = 6;
     
-    if number % 4 == 0 {
-        println!("能被4整除");
-    } else if number % 3 == 0 {
-        println!("能被3整除");
-    } else if number % 2 == 0 {
-        println!("能被2整除");
+    // 基本if-else
+    if number > 10 {
+        println!("大于10");
+    } else if number > 5 {
+        println!("大于5");
     } else {
-        println!("不能被2、3、4整除");
+        println!("5或更小");
     }
     
+    // if是表达式，可以用在let右侧
     let condition = true;
-    let value = if condition { 5 } else { 6 };
-    println!("value = {}", value);
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔄 循环</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch5-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch5-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch5-code2"><code>fn main() {
-    loop {
-        println!("无限循环");
-        break;
-    }
+    let x = if condition { 5 } else { 6 };
+    println!("x = {}", x);
     
+    // 在循环中使用if表达式
     let mut count = 0;
-    loop {
+    let max = if true { 10 } else { 5 };
+    while count < max {
         count += 1;
-        if count == 5 {
-            break count;
+    }
+    println!("count = {}", count);
+}` },
+            error: {
+                title: 'if表达式常见错误',
+                items: [
+                    { wrong: 'if 1 { } // 非bool条件', fix: '条件必须是bool: if 1 != 0 { } 或 if true { }' },
+                    { wrong: 'let x = if true { 5 } else { "six" }; // 类型不一致', fix: 'if各分支返回值类型必须一致' }
+                ]
+            },
+            exercises: [
+                { q: 'Rust中if是语句还是表达式？有什么含义？', a: 'if是表达式，可以返回值，能用在let等需要值的地方' },
+                { q: 'if的条件可以是非bool值吗？', a: '不可以，条件必须严格是bool类型' }
+            ]
+        },
+        {
+            id: 10, title: '循环(loop/while/for)',
+            points: [
+                'loop创建无限循环，通过break退出，可返回值',
+                'while在条件为true时循环，条件为bool表达式',
+                'for遍历迭代器，是Rust中最常用和最安全的循环',
+                'for与Range配合：1..5是不含5，1..=5包含5'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // loop - 无限循环
+    let mut counter = 0;
+    let result = loop {
+        counter += 1;
+        if counter == 10 {
+            break counter * 2; // loop可以返回值
         }
+    };
+    println!("loop结果: {}", result);
+    
+    // while - 条件循环
+    let mut num = 3;
+    while num != 0 {
+        println!("倒计时: {}!", num);
+        num -= 1;
     }
     
-    for i in 1..=5 {
+    // for - 遍历循环(推荐)
+    let arr = [10, 20, 30, 40, 50];
+    for element in arr.iter() {
+        println!("值: {}", element);
+    }
+    
+    // Range
+    for i in 1..5 {    // 1,2,3,4
+        println!("i = {}", i);
+    }
+    for i in 1..=5 {   // 1,2,3,4,5
         println!("i = {}", i);
     }
     
-    let a = [10, 20, 30, 40, 50];
-    for element in a.iter() {
-        println!("element = {}", element);
+    // 反向遍历
+    for i in (1..4).rev() {
+        println!("rev: {}", i);
+    }
+}` },
+            error: {
+                title: '循环常见错误',
+                items: [
+                    { wrong: 'for i in 0..arr.len() { arr[i] } // C风格遍历', fix: 'Rust惯用: for elem in arr.iter() { ... }' },
+                    { wrong: 'while 1 { } // 条件不是bool', fix: 'while条件必须是bool: while true { }' }
+                ]
+            },
+            exercises: [
+                { q: 'Rust中最推荐的循环方式是哪种？', a: 'for循环，配合迭代器使用' },
+                { q: '1..5 和 1..=5 的区别？', a: '1..5包含1到4，1..=5包含1到5' }
+            ]
+        },
+        {
+            id: 11, title: 'break与continue',
+            points: [
+                'break退出当前循环，loop中的break可携带返回值',
+                'break可以配合标签退出外层循环(嵌套循环)',
+                'continue跳过当前迭代，进入下一次循环',
+                '循环标签用\'label:语法定义，用于多层循环控制'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // break退出循环
+    let mut count = 0;
+    loop {
+        if count == 5 { break; }
+        count += 1;
     }
     
-    let mut number = 3;
-    while number != 0 {
-        println!("{}!", number);
-        number -= 1;
-    }
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>if后面的条件不需要括号：<code>if (x > 0)</code> 会报错。</p>
-                    <p>while循环条件必须是bool类型：<code>while 1</code> 会报错。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 遍历1到10的数字用什么循环？</div>
-                    <div class="answer-options">
-                        <label class="option-label"><input type="radio" name="ch5-q1" value="A"> A. while</label>
-                        <label class="option-label"><input type="radio" name="ch5-q1" value="B"> B. loop</label>
-                        <label class="option-label"><input type="radio" name="ch5-q1" value="C"> C. for</label>
-                        <label class="option-label"><input type="radio" name="ch5-q1" value="D"> D. repeat</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
-                    <div id="ch5-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(5, 1)">查看答案</button>
-                    <div id="ch5-answer1" class="answer-box">C. for</div>
-
-                    <div class="question">2. 无限循环用什么关键字？</div>
-                    <input type="text" class="answer-input" id="ch5-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
-                    <div id="ch5-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(5, 2)">查看答案</button>
-                    <div id="ch5-answer2" class="answer-box">loop</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch6" class="chapter-section">
-                <h2>
-                    6. 模式匹配
-                    <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🎯 match表达式</h3>
-                    <p><code>match</code> 表达式用于模式匹配，类似于switch但更强大。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch6-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code1"><code>fn main() {
-    let x = 1;
+    // break返回值
+    let result = loop {
+        count += 1;
+        if count > 10 { break count; }
+    };
+    println!("break返回: {}", result);
     
-    match x {
-        1 => println!("one"),
-        2 => println!("two"),
-        3 => println!("three"),
-        _ => println!("other"),
+    // continue跳过当前迭代
+    for i in 1..=10 {
+        if i % 2 == 0 { continue; } // 跳过偶数
+        println!("奇数: {}", i);
     }
     
-    let some_number = Some(5);
-    match some_number {
-        Some(i) => println!("value = {}", i),
-        None => println!("no value"),
+    // 标签break退出外层循环
+    let mut found = false;
+    'outer: for i in 0..5 {
+        for j in 0..5 {
+            if i * j == 6 {
+                println!("找到: {}*{}=6", i, j);
+                break 'outer; // 退出外层循环
+            }
+        }
     }
-}</code></pre>
-                </div>
+}` },
+            error: {
+                title: 'break/continue常见错误',
+                items: [
+                    { wrong: '在while/for的break中返回值', fix: '只有loop的break可以返回值，for/while的break仅退出循环' },
+                    { wrong: '忘记标签引号: outer: 而非 \'outer:', fix: '标签语法必须带单引号前缀: \'label:' }
+                ]
+            },
+            exercises: [
+                { q: '哪种循环的break可以返回值？', a: 'loop循环' },
+                { q: '如何退出外层循环？', a: '使用标签: \'outer: for ... { break \'outer; }' }
+            ]
+        },
+        {
+            id: 12, title: '所有权规则',
+            points: [
+                '规则1：每个值有且只有一个所有者(owner)',
+                '规则2：同一时刻，值只能有一个所有者(移动语义)',
+                '规则3：当所有者离开作用域，值自动被丢弃(drop)',
+                '所有权是Rust最核心特性，无需GC即可保证内存安全'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 规则1: 每个值有所有者
+    let s1 = String::from("hello"); // s1拥有"hello"
+    
+    // 规则2: 移动语义 - 所有权转移
+    let s2 = s1; // s1的所有权移动到s2
+    // println!("{}", s1); // 错误！s1已失效
+    
+    // clone深拷贝
+    let s3 = String::from("world");
+    let s4 = s3.clone(); // 深拷贝，两个独立所有者
+    println!("s3: {}, s4: {}", s3, s4); // 都有效
+    
+    // 栈上数据: Copy语义(自动复制)
+    let x = 5;
+    let y = x; // i32实现了Copy trait，x仍然有效
+    println!("x: {}, y: {}", x, y);
+    
+    // 规则3: 作用域结束时自动drop
+    {
+        let s = String::from("inside");
+        println!("{}", s);
+    } // s在这里被drop，内存释放
+    // println!("{}", s); // 错误！s已不存在
+}` },
+            error: {
+                title: '所有权常见错误',
+                items: [
+                    { wrong: 'let s2 = s1; println!(\"{}\", s1); // 使用已移动的值', fix: '使用引用&: fn foo(s: &String) 或clone: s1.clone()' },
+                    { wrong: '在函数中传递所有权后继续使用原变量', fix: '函数可以返回所有权，或使用引用借用' }
+                ]
+            },
+            exercises: [
+                { q: 'String移动后原变量为什么不能使用？', a: '因为所有权已转移，原变量不再有效，避免双重释放' },
+                { q: '哪些类型实现了Copy trait(移动后仍有效)？', a: '基本标量类型(i32/f64/bool/char)和只含Copy类型的元组/数组' }
+            ]
+        },
+        {
+            id: 13, title: '引用与借用',
+            points: [
+                '引用&允许使用值而不获取所有权，称为"借用"',
+                '不可变引用&T：可读不可写，同一时刻可有多个',
+                '可变引用&mut T：可读可写，同一时刻只能有一个',
+                '规则：不可变引用和可变引用不能同时存在(NLL规则)'
+            ],
+            code: { lang: 'rust', content: `fn calculate_length(s: &String) -> usize {
+    s.len() // 借用s，不获取所有权
+} // s离开作用域，但因为它不拥有所有权，不会drop原值
 
-                <div class="section-content">
-                    <h3>💡 if let和while let</h3>
-                    <p><code>if let</code> 用于简化只关心一个模式的情况。</p>
-                </div>
+fn append_world(s: &mut String) {
+    s.push_str(", world"); // 可变借用，可以修改
+}
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch6-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch6-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch6-code2"><code>fn main() {
-    let config_max = Some(3u8);
-    if let Some(max) = config_max {
-        println!("最大值是 {}", max);
+fn main() {
+    let mut s = String::from("hello");
+    
+    // 不可变借用
+    let len = calculate_length(&s);
+    println!("'{}' 长度: {}", s, len); // s仍然有效
+    
+    // 可变借用
+    append_world(&mut s);
+    println!("{}", s); // "hello, world"
+    
+    // 多个不可变引用 - OK
+    let r1 = &s;
+    let r2 = &s;
+    println!("r1: {}, r2: {}", r1, r2);
+    
+    // 可变引用与不可变引用不能同时存在
+    // let r3 = &mut s; // 错误！r1/r2仍存在
+}` },
+            error: {
+                title: '引用与借用常见错误',
+                items: [
+                    { wrong: '同时存在可变引用和不可变引用', fix: '在可变引用之前，不可变引用最后一次使用必须已结束(NLL)' },
+                    { wrong: '同一作用域创建两个可变引用', fix: '可变引用具有独占性，同一时刻只能有一个' }
+                ]
+            },
+            exercises: [
+                { q: '不可变引用和可变引用的核心区别？', a: '不可变引用(&T)只读可多个共存，可变引用(&mut T)可读写但独占' },
+                { q: '什么是悬垂引用(dangling reference)？Rust如何避免？', a: '引用指向已释放内存的值。Rust编译器通过生命周期检查确保引用始终有效' }
+            ]
+        },
+        {
+            id: 14, title: '切片',
+            points: [
+                '切片(slice)是引用一段连续序列的视图，不拥有所有权',
+                '字符串切片&str是String的部分引用，范围用[开始..结束]',
+                '数组切片&[T]是数组的部分引用，语法类似字符串切片',
+                '切片范围省略：[..]全部，[2..]从2到末尾，[..4]从0到4'
+            ],
+            code: { lang: 'rust', content: `fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+    &s[..]
+}
+
+fn main() {
+    // 字符串切片
+    let s = String::from("hello world");
+    let hello = &s[0..5];   // "hello"
+    let world = &s[6..11];  // "world"
+    let all = &s[..];       // "hello world"
+    let from6 = &s[6..];    // "world"
+    let to5 = &s[..5];      // "hello"
+    println!("{} {}", hello, world);
+    
+    // 字符串字面量就是切片
+    let literal: &str = "我是切片";
+    
+    // 函数签名用&str更通用
+    let word = first_word(&s);
+    println!("第一个词: {}", word);
+    let word2 = first_word("hello rust");
+    println!("第一个词: {}", word2);
+    
+    // 数组切片
+    let arr = [1, 2, 3, 4, 5];
+    let slice = &arr[1..3]; // [2, 3]
+    println!("切片: {:?}", slice);
+}` },
+            error: {
+                title: '切片常见错误',
+                items: [
+                    { wrong: '按字节切片UTF-8多字节字符: &s[0..3]可能切到字符中间', fix: '使用.chars()迭代Unicode字符，或确保按字符边界切片' },
+                    { wrong: '切片索引越界: &s[0..100]', fix: '切片范围不能超过原字符串长度' }
+                ]
+            },
+            exercises: [
+                { q: 'String和&str的区别？', a: 'String拥有堆分配字符串(可增长)，&str是字符串切片(借用视图)' },
+                { q: '函数参数用String还是&str？', a: '优先用&str，因为它可以接受String(通过解引用强制转换)和字面量' }
+            ]
+        },
+        {
+            id: 15, title: '字符串',
+            points: [
+                'String是堆分配的可增长UTF-8字符串，&str是不可变切片',
+                'String::from()和.to_string()创建String，push/push_str修改',
+                '+运算符拼接字符串会获取左侧所有权，format!宏不获取所有权',
+                'Rust字符串是UTF-8编码，不支持直接索引，需用chars()/bytes()'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 创建String
+    let mut s = String::new();
+    s.push_str("hello");
+    s.push('!');
+    println!("{}", s);
+    
+    let s1 = String::from("hello");
+    let s2 = "world".to_string();
+    
+    // 拼接
+    let s3 = s1 + &s2; // s1被移动，s2被借用
+    println!("{}", s3);
+    
+    let s4 = format!("{}-{}", "hello", "world");
+    println!("{}", s4);
+    
+    // 遍历
+    let s = "你好Rust";
+    for c in s.chars() {
+        println!("字符: {}", c);
+    }
+    for b in s.bytes() {
+        println!("字节: {}", b);
     }
     
-    let mut stack = Vec::new();
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-    
-    while let Some(top) = stack.pop() {
-        println!("top = {}", top);
-    }
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>match缺少穷尽性：<code>match x { Some(i) => i + 1 }</code> 会报错，必须处理None情况。</p>
-                    <p>模式不匹配：<code>if let Some(3) = Some(5)</code> 不会报错，但不会执行。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 补全以下代码，处理Option<i32>的两种情况</div>
-                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 8px;">fn get_value(opt: Option<i32>) {
-    match opt {
-        ___ => println!("有值: {}", i),
-        ___ => println!("无值"),
-    }
-}</pre>
-                    <input type="text" class="answer-input" id="ch6-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
-                    <div id="ch6-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(6, 1)">查看答案</button>
-                    <div id="ch6-answer1" class="answer-box">Some(i) 和 None</div>
-
-                    <div class="question">2. 使用if let简化以下match表达式</div>
-                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 8px;">match x {
-    Some(5) => println!("five"),
-    _ => (),
-}</pre>
-                    <textarea class="answer-textarea" id="ch6-q2" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
-                    <div id="ch6-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(6, 2)">查看答案</button>
-                    <div id="ch6-answer2" class="answer-box">if let Some(5) = x {
-    println!("five");
-}</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch7" class="chapter-section">
-                <h2>
-                    7. 结构体与枚举
-                    <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📦 结构体（Struct）</h3>
-                    <p>结构体用于组合多个相关值。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code1"><code>struct User {
+    // 常用方法
+    let s = String::from("hello world");
+    println!("长度: {}", s.len());
+    println!("包含'world': {}", s.contains("world"));
+    println!("替换: {}", s.replace("world", "Rust"));
+    println!("trim: {}", "  hello  ".trim());
+    println!("split: {:?}", "a,b,c".split(',').collect::<Vec<_>>());
+}` },
+            error: {
+                title: '字符串常见错误',
+                items: [
+                    { wrong: 'let c = s[0]; // 对字符串直接索引', fix: '字符串不支持直接索引，用 s.chars().nth(0) 或 s.as_bytes()[0]' },
+                    { wrong: 'let s3 = s1 + s2; // 两个String相加', fix: '+右侧必须是&str: s1 + &s2 或用 format!(\"{}{}\", s1, s2)' }
+                ]
+            },
+            exercises: [
+                { q: '为什么Rust字符串不支持s[0]索引？', a: 'UTF-8编码下字符可能占多字节，按字节索引可能得到无效字符' },
+                { q: '如何不获取所有权地拼接两个字符串？', a: '使用format!宏: format!(\"{}{}\", s1, s2)' }
+            ]
+        },
+        {
+            id: 16, title: '结构体',
+            points: [
+                'struct定义自定义类型，有三种形式：具名字段、元组、单元',
+                '字段默认不可变，整个结构体实例必须声明为mut才能修改',
+                '结构体更新语法..允许从其他实例复用字段值',
+                '#[derive(Debug)]自动生成Debug trait实现，支持{:?}输出'
+            ],
+            code: { lang: 'rust', content: `#[derive(Debug)]
+struct User {
     username: String,
     email: String,
     sign_in_count: u64,
     active: bool,
 }
 
-fn main() {
-    let user1 = User {
-        email: String::from("someone@example.com"),
-        username: String::from("someusername123"),
+// 元组结构体
+struct Color(i32, i32, i32);
+// 单元结构体(无字段)
+struct AlwaysEqual;
+
+fn build_user(email: String, username: String) -> User {
+    User {
+        email,      // 字段简写(变量名与字段名相同)
+        username,
         active: true,
         sign_in_count: 1,
+    }
+}
+
+fn main() {
+    let mut user1 = build_user(
+        String::from("a@b.com"),
+        String::from("alice"),
+    );
+    user1.email = String::from("new@b.com");
+    
+    // 结构体更新语法
+    let user2 = User {
+        email: String::from("bob@b.com"),
+        ..user1 // 其余字段从user1复制
     };
     
-    let mut user3 = User {
-        email: String::from("mutable@example.com"),
-        username: String::from("mutableuser"),
-        active: true,
-        sign_in_count: 1,
-    };
-    user3.email = String::from("updated@example.com");
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔧 结构体方法</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code2"><code>struct Rectangle {
+    // 元组结构体
+    let red = Color(255, 0, 0);
+    println!("R: {}", red.0);
+    
+    println!("{:?}", user2);
+}` },
+            error: {
+                title: '结构体常见错误',
+                items: [
+                    { wrong: '部分字段可变: struct { mut x: i32, y: i32 }', fix: 'Rust不允许部分可变，必须让整个实例mut: let mut s = ...' },
+                    { wrong: '结构体字段引用未标注生命周期', fix: '含有引用字段的结构体需要生命周期标注: struct Foo<\'a> { s: &\'a str }' }
+                ]
+            },
+            exercises: [
+                { q: '结构体的三种形式？', a: '具名字段struct、元组struct(类似元组)、单元struct(无字段)' },
+                { q: '为什么结构体不能只让部分字段可变？', a: 'Rust设计上避免数据部分可变导致的竞态条件，整体mut更安全简洁' }
+            ]
+        },
+        {
+            id: 17, title: '方法',
+            points: [
+                'impl块为结构体定义方法，&self引用实例自身',
+                '&self = 不可变借用，&mut self = 可变借用，self = 获取所有权',
+                '关联函数(无self)类似其他语言的"静态方法"，用::调用',
+                'String::from()就是String的关联函数，不是方法'
+            ],
+            code: { lang: 'rust', content: `#[derive(Debug)]
+struct Rectangle {
     width: u32,
     height: u32,
 }
 
 impl Rectangle {
+    // 关联函数(构造器)
     fn square(size: u32) -> Self {
         Self { width: size, height: size }
     }
     
+    // 方法 - 不可变借用
     fn area(&self) -> u32 {
         self.width * self.height
     }
@@ -1480,762 +1129,1476 @@ impl Rectangle {
     fn can_hold(&self, other: &Rectangle) -> bool {
         self.width > other.width && self.height > other.height
     }
+    
+    // 方法 - 可变借用
+    fn scale(&mut self, factor: u32) {
+        self.width *= factor;
+        self.height *= factor;
+    }
 }
 
 fn main() {
     let rect1 = Rectangle { width: 30, height: 50 };
+    let rect2 = Rectangle { width: 10, height: 40 };
+    let square = Rectangle::square(10);
+    
     println!("面积: {}", rect1.area());
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🎯 枚举（Enum）</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch7-code3')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch7-code3').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch7-code3"><code>enum IpAddr {
+    println!("rect1能容纳rect2: {}", rect1.can_hold(&rect2));
+    println!("正方形: {:?}", square);
+    
+    let mut rect3 = Rectangle { width: 5, height: 5 };
+    rect3.scale(3);
+    println!("缩放后: {:?}", rect3);
+}` },
+            error: {
+                title: '方法常见错误',
+                items: [
+                    { wrong: '在impl外定义方法: fn area(self: &Rectangle)', fix: '方法必须在impl块内定义' },
+                    { wrong: '方法第一个参数写成self而非&self导致所有权移动', fix: '通常用&self借用，避免消耗实例' }
+                ]
+            },
+            exercises: [
+                { q: '方法和关联函数的区别？', a: '方法有&self/&mut self/self参数，通过实例.调用；关联函数无self，通过Type::调用' },
+                { q: 'Self在impl块中代表什么？', a: 'Self是当前实现类型的别名，在Rectangle的impl中Self就是Rectangle' }
+            ]
+        },
+        {
+            id: 18, title: '枚举',
+            points: [
+                'enum定义枚举类型，每个变体可以携带不同类型和数量的数据',
+                'Option<T>是标准库枚举：Some(T)有值，None无值，替代null',
+                '枚举变体可通过::访问，如Direction::North',
+                '#[derive(Debug)]让枚举支持{:?}格式化输出'
+            ],
+            code: { lang: 'rust', content: `#[derive(Debug)]
+enum IpAddr {
     V4(u8, u8, u8, u8),
     V6(String),
 }
 
-let home = IpAddr::V4(127, 0, 0, 1);
-let loopback = IpAddr::V6(String::from("::1"));
-
+#[derive(Debug)]
 enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
+    Quit,                       // 无数据
+    Move { x: i32, y: i32 },   // 具名字段
+    Write(String),             // 包含String
+    ChangeColor(i32, i32, i32), // 包含三个i32
 }
 
 impl Message {
     fn call(&self) {
-        println!("Message called");
+        println!("调用: {:?}", self);
     }
 }
 
-let some_number = Some(5);
-let absent_number: Option<i32> = None;</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>忘记导入枚举变体：<code>use IpAddr::*;</code> 可以避免每次都写 <code>IpAddr::V4</code>。</p>
-                    <p>在impl块中忘记使用self参数。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 定义一个Circle结构体，包含半径字段，并实现计算面积的方法</div>
-                    <textarea class="answer-textarea" id="ch7-q1" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
-                    <div id="ch7-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(7, 1)">查看答案</button>
-                    <div id="ch7-answer1" class="answer-box">struct Circle {
-    radius: f64,
-}
-
-impl Circle {
-    fn area(&self) -> f64 {
-        std::f64::consts::PI * self.radius * self.radius
-    }
-}</div>
-
-                    <div class="question">2. Option<T>枚举有哪两个变体？</div>
-                    <input type="text" class="answer-input" id="ch7-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(7, 2)">检查答案</button>
-                    <div id="ch7-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(7, 2)">查看答案</button>
-                    <div id="ch7-answer2" class="answer-box">Some(T) 和 None</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch8" class="chapter-section">
-                <h2>
-                    8. 函数与闭包
-                    <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>📝 函数定义</h3>
-                    <p>使用 <code>fn</code> 关键字定义函数。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch8-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code1"><code>fn greet() {
-    println!("Hello, Rust!");
-}
-
-fn add(a: i32, b: i32) -> i32 {
-    a + b
-}
-
-fn swap(a: i32, b: i32) -> (i32, i32) {
-    (b, a)
-}
-
 fn main() {
-    let (x, y) = swap(10, 20);
-    println!("x = {}, y = {}", x, y);
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>💡 闭包（Closure）</h3>
-                    <p>闭包是可以捕获其环境的匿名函数。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch8-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch8-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch8-code2"><code>let add_one = |x: i32| -> i32 { x + 1 };
-let add_two = |x| x + 2;
-
-let x = 10;
-let multiply = |y| x * y;
-println!("10 * 5 = {}", multiply(5));
-
-fn apply<F>(f: F, value: i32) -> i32
-where
-    F: Fn(i32) -> i32,
-{
-    f(value)
-}
-
-fn main() {
-    let result = apply(add_one, 5);
-    println!("result = {}", result);
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>返回语句加了分号：<code>fn add(a, b) -> i32 { return a + b; }</code> 应该是 <code>fn add(a, b) -> i32 { a + b }</code>。</p>
-                    <p>闭包缺少类型标注：虽然可以省略，但在复杂场景下可能导致编译错误。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 定义一个函数，计算三个数的平均值</div>
-                    <textarea class="answer-textarea" id="ch8-q1" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
-                    <div id="ch8-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(8, 1)">查看答案</button>
-                    <div id="ch8-answer1" class="answer-box">fn average(a: f64, b: f64, c: f64) -> f64 {
-    (a + b + c) / 3.0
-}</div>
-
-                    <div class="question">2. 使用闭包过滤出大于5的元素</div>
-                    <input type="text" class="answer-input" id="ch8-q2" placeholder="输入代码...">
-                    <button class="btn btn-primary" onclick="checkAnswer(8, 2)">检查答案</button>
-                    <div id="ch8-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(8, 2)">查看答案</button>
-                    <div id="ch8-answer2" class="answer-box">numbers.iter().filter(|&&x| x > 5).collect()</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch9" class="chapter-section">
-                <h2>
-                    9. 错误处理
-                    <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🔴 panic! 宏</h3>
-                    <p><code>panic!</code> 用于不可恢复的错误，会导致程序崩溃。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code1')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code1').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code1"><code>panic!("发生了严重错误！");
-
-let v = vec![1, 2, 3];
-println!("{}", v[10]);
-
-fn divide(a: i32, b: i32) -> i32 {
-    debug_assert!(b != 0, "除数不能为零");
-    a / b
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔵 Result类型</h3>
-                    <p><code>Result<T, E></code> 用于可恢复的错误。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code2')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code2').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code2"><code>use std::fs::File;
-
-fn main() {
-    let file = File::open("hello.txt");
-    let file = match file {
-        Ok(f) => f,
-        Err(e) => {
-            println!("打开文件失败: {}", e);
-            return;
-        }
-    };
+    let home = IpAddr::V4(127, 0, 0, 1);
+    let loopback = IpAddr::V6(String::from("::1"));
+    println!("{:?}", home);
     
-    let file = File::open("hello.txt").unwrap();
-    let file = File::open("hello.txt").expect("无法打开文件");
-}</code></pre>
-                </div>
+    let msgs = vec![
+        Message::Quit,
+        Message::Move { x: 1, y: 2 },
+        Message::Write(String::from("hello")),
+        Message::ChangeColor(0, 255, 0),
+    ];
+    for msg in &msgs { msg.call(); }
+    
+    // Option<T> - 替代null
+    let some_num: Option<i32> = Some(42);
+    let none_num: Option<i32> = None;
+    println!("{:?}, {:?}", some_num, none_num);
+}` },
+            error: {
+                title: '枚举常见错误',
+                items: [
+                    { wrong: '直接使用Option<T>的值而不处理None', fix: '必须用match/if let/?处理Some和None两种情况' },
+                    { wrong: 'let x: Option<i32> = Some(5); let y = x + 1;', fix: 'Option<i32>不能直接和i32运算，需先解包: match x { Some(v) => v+1, None => 0 }' }
+                ]
+            },
+            exercises: [
+                { q: 'Option<T>的作用是什么？', a: '替代null，在类型系统层面区分"有值"和"无值"，强制处理空值情况' },
+                { q: '枚举变体可以携带数据吗？举例', a: '可以，如enum Msg { Quit, Write(String), Move{x:i32,y:i32} }' }
+            ]
+        },
+        {
+            id: 19, title: 'match匹配',
+            points: [
+                'match是Rust强大的模式匹配，类似增强版switch',
+                'match必须穷尽所有可能(编译器检查)，_匹配任意值',
+                'match臂返回值类型必须一致，match本身是表达式',
+                '匹配守卫(guard)用if添加额外条件'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    let number = 13;
+    
+    // 基本match
+    match number {
+        1 => println!("一"),
+        2 | 3 | 5 | 7 | 11 | 13 => println!("质数"),
+        13..=19 => println!("十几岁"),
+        _ => println!("其他"),
+    }
+    
+    // 匹配Option
+    let some_value: Option<i32> = Some(42);
+    match some_value {
+        Some(42) => println!("答案是42"),
+        Some(n) if n > 100 => println!("大于100: {}", n), // 守卫
+        Some(n) => println!("其他值: {}", n),
+        None => println!("无值"),
+    }
+    
+    // match解构
+    let point = (3, -5);
+    match point {
+        (0, 0) => println!("原点"),
+        (x, 0) => println!("x轴: x={}", x),
+        (0, y) => println!("y轴: y={}", y),
+        (x, y) => println!("({},{})", x, y),
+    }
+}` },
+            error: {
+                title: 'match常见错误',
+                items: [
+                    { wrong: 'match未处理所有情况', fix: '添加_ => ()兜底，或确保处理所有变体(如Some和None)' },
+                    { wrong: 'match各臂返回不同类型', fix: '所有match臂必须返回相同类型' }
+                ]
+            },
+            exercises: [
+                { q: 'match中_的作用？', a: '通配符模式，匹配任何值，通常放在最后做兜底处理' },
+                { q: '什么是匹配守卫？', a: 'match臂后添加if条件: Some(x) if x > 0 => ...，为模式添加额外判断' }
+            ]
+        },
+        {
+            id: 20, title: 'if let与while let',
+            points: [
+                'if let简化只关心一种模式的match，避免写大量_ => ()',
+                'if let Some(x) = val 等价于match但只处理一种情况',
+                'while let在循环中反复匹配，如从迭代器取值',
+                'if let可以搭配else使用，处理不匹配的情况'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    let config_max: Option<u32> = Some(3u8 as u32);
+    
+    // 用match处理一种模式 - 冗余
+    // match config_max {
+    //     Some(max) => println!("最大: {}", max),
+    //     _ => (),
+    // }
+    
+    // if let 简化
+    if let Some(max) = config_max {
+        println!("最大: {}", max);
+    }
+    
+    // if let + else
+    let value: Option<i32> = None;
+    if let Some(v) = value {
+        println!("值: {}", v);
+    } else {
+        println!("无值");
+    }
+    
+    // while let - 循环匹配
+    let mut stack = Vec::new();
+    stack.push(1);
+    stack.push(2);
+    stack.push(3);
+    
+    while let Some(top) = stack.pop() {
+        println!("弹出: {}", top);
+    }
+    
+    // while let遍历迭代器
+    let mut iter = vec![10, 20, 30].into_iter();
+    while let Some(val) = iter.next() {
+        println!("迭代: {}", val);
+    }
+}` },
+            error: {
+                title: 'if let/while let常见错误',
+                items: [
+                    { wrong: 'if let = 右侧不是枚举或可模式匹配的类型', fix: 'if let右侧必须是支持模式匹配的类型(Option/Result/枚举等)' },
+                    { wrong: 'while let循环永远不会结束', fix: '确保右侧条件最终变为None/Err等不匹配值' }
+                ]
+            },
+            exercises: [
+                { q: 'if let相比match的优势？', a: '更简洁，只处理关心的模式，无需写_ => ()兜底' },
+                { q: 'while let适合什么场景？', a: '循环取出值直到为空，如迭代器.next()或栈.pop()' }
+            ]
+        },
+        {
+            id: 21, title: '向量Vec',
+            points: [
+                'Vec<T>是动态数组，堆分配，可增长缩，Rust中最常用集合',
+                'vec!宏快速创建，push添加元素，pop移除末尾元素',
+                '访问方式：索引v[i](可能panic)、get(i)(返回Option)',
+                '遍历：for item in &v(借用)或for item in v(消耗)'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 创建Vec
+    let mut v: Vec<i32> = Vec::new();
+    v.push(1);
+    v.push(2);
+    v.push(3);
+    
+    let v2 = vec![10, 20, 30, 40, 50];
+    let v3 = vec![0; 5]; // [0, 0, 0, 0, 0]
+    
+    // 访问元素
+    let third = v2[2]; // 30，越界会panic
+    let third_safe = v2.get(2); // Some(&30)
+    let none = v2.get(100); // None
+    println!("third: {}, safe: {:?}", third, third_safe);
+    
+    // 遍历
+    for i in &v2 {
+        println!("引用: {}", i);
+    }
+    for i in &mut v {
+        *i += 50; // 修改元素
+    }
+    
+    // 常用方法
+    println!("长度: {}", v.len());
+    println!("是否空: {}", v.is_empty());
+    println!("包含: {}", v.contains(&51));
+    
+    v.pop(); // 移除末尾
+    v.remove(0); // 移除索引0
+    v.insert(0, 100); // 在索引0插入
+    println!("v: {:?}", v);
+}` },
+            error: {
+                title: 'Vec常见错误',
+                items: [
+                    { wrong: 'let v = vec![1,2,3]; let x = v[5]; // 越界访问', fix: '使用v.get(5)返回Option，安全处理越界' },
+                    { wrong: '遍历时修改Vec: for i in &v { v.push(4); }', fix: '不能在借用期间修改Vec，先收集修改或用索引' }
+                ]
+            },
+            exercises: [
+                { q: 'v[i]和v.get(i)的区别？', a: 'v[i]越界panic；v.get(i)返回Option<&T>，越界返回None更安全' },
+                { q: '创建含5个零的Vec', a: 'vec![0; 5] 或 vec![0, 0, 0, 0, 0]' }
+            ]
+        },
+        {
+            id: 22, title: '字符串操作',
+            points: [
+                'Rust字符串内部是Vec<u8>，保证有效UTF-8，操作需注意编码',
+                'push/push_str/insert/insert_str修改字符串内容',
+                'replace/trim/split/join等产生新字符串，原字符串不变',
+                'contains/starts_with/ends_with/len/is_empty查询方法'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    let mut s = String::from("Hello");
+    
+    // 追加
+    s.push_str(", World");
+    s.push('!');
+    println!("{}", s);
+    
+    // 插入
+    s.insert(5, '-');
+    println!("insert: {}", s);
+    
+    // 替换
+    let s2 = s.replace("-", " ");
+    println!("replace: {}", s2);
+    
+    // 删除
+    let mut s3 = String::from("hello world");
+    s3.remove(0);       // 删除第0个字节
+    let removed = s3.pop(); // 删除末尾字符
+    println!("pop: {:?}", removed);
+    
+    // 截取
+    let s4 = String::from("hello world");
+    let slice = &s4[0..5]; // "hello"
+    println!("slice: {}", slice);
+    
+    // 分割与连接
+    let parts: Vec<&str> = "a,b,c,d".split(',').collect();
+    let joined = parts.join("-");
+    println!("split: {:?}, join: {}", parts, joined);
+    
+    // 查询
+    println!("contains 'world': {}", "hello world".contains("world"));
+    println!("starts_with 'hello': {}", "hello".starts_with("he"));
+    println!("trim: '{}'", "  hello  ".trim());
+}` },
+            error: {
+                title: '字符串操作常见错误',
+                items: [
+                    { wrong: '对中文按字节切片: &\"你好\"[0..1]', fix: '中文字符占3字节，应按字符边界切片或用chars()' },
+                    { wrong: 'let s = String::from(\"hello\"); s.push_str(s); // 借用冲突', fix: '先clone: s.push_str(s.clone().as_str())' }
+                ]
+            },
+            exercises: [
+                { q: 'split()返回什么类型？', a: '返回迭代器Split，通常用.collect()收集为Vec' },
+                { q: '如何反转字符串？', a: 's.chars().rev().collect::<String>()' }
+            ]
+        },
+        {
+            id: 23, title: 'HashMap',
+            points: [
+                'HashMap<K,V>存储键值对，键唯一，需要键实现Eq+Hash',
+                'use std::collections::HashMap引入，new()或collect()创建',
+                'entry API高效处理"存在则更新，不存在则插入"逻辑',
+                '键和值必须实现Clone才能被clone，键需实现Hash+Eq'
+            ],
+            code: { lang: 'rust', content: `use std::collections::HashMap;
 
-                <div class="section-content">
-                    <h3>⚡ ? 操作符</h3>
-                    <p><code>?</code> 操作符是传播错误的便捷方式。</p>
-                </div>
+fn main() {
+    // 创建HashMap
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Red"), 50);
+    
+    // 从Vec创建
+    let teams = vec![String::from("Blue"), String::from("Red")];
+    let initial = vec![10, 50];
+    let map: HashMap<_, _> = teams.into_iter().zip(initial.into_iter()).collect();
+    
+    // 访问
+    let score = scores.get(&String::from("Blue")); // Some(&10)
+    println!("Blue: {:?}", score);
+    
+    // 遍历
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
+    
+    // insert会覆盖旧值
+    scores.insert(String::from("Blue"), 25);
+    
+    // 只在键不存在时插入
+    scores.entry(String::from("Yellow")).or_insert(50);
+    scores.entry(String::from("Blue")).or_insert(100); // Blue已存在，不插入
+    
+    // entry API更新值
+    let text = "hello world wonderful world";
+    let mut word_count = HashMap::new();
+    for word in text.split_whitespace() {
+        let count = word_count.entry(word).or_insert(0);
+        *count += 1;
+    }
+    println!("词频: {:?}", word_count);
+}` },
+            error: {
+                title: 'HashMap常见错误',
+                items: [
+                    { wrong: '未引入HashMap: 直接使用HashMap::new()', fix: '需要 use std::collections::HashMap;' },
+                    { wrong: '用可浮点数做Key: HashMap<f64, V>', fix: 'f64未实现Hash trait，不可做Key，用整数或字符串替代' }
+                ]
+            },
+            exercises: [
+                { q: 'entry().or_insert()的作用？', a: '如果键存在返回值的可变引用，不存在则插入默认值后返回可变引用' },
+                { q: 'HashMap的键需要实现哪些trait？', a: 'Hash + Eq (用于计算哈希值和比较相等性)' }
+            ]
+        },
+        {
+            id: 24, title: '错误处理(Result/Option)',
+            points: [
+                'Result<T,E> = Ok(T)成功或Err(E)失败，用于可恢复错误',
+                'Option<T> = Some(T)有值或None无值，用于可能为空的值',
+                'Rust没有异常(exception)，错误处理通过类型系统强制执行',
+                'panic!用于不可恢复错误(程序缺陷)，Result用于可恢复错误'
+            ],
+            code: { lang: 'rust', content: `use std::fs::File;
+use std::io::Read;
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch9-code3')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch9-code3').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch9-code3"><code>use std::fs::File;
+fn divide(a: f64, b: f64) -> Result<f64, String> {
+    if b == 0.0 {
+        Err(String::from("除数不能为零"))
+    } else {
+        Ok(a / b)
+    }
+}
+
+fn find_user(id: u32) -> Option<String> {
+    if id == 1 {
+        Some(String::from("Alice"))
+    } else {
+        None
+    }
+}
+
+fn main() {
+    // Result处理
+    match divide(10.0, 3.0) {
+        Ok(result) => println!("结果: {:.2}", result),
+        Err(e) => println!("错误: {}", e),
+    }
+    
+    // Option处理
+    if let Some(name) = find_user(1) {
+        println!("找到用户: {}", name);
+    }
+    
+    // 常见模式: 提供默认值
+    let value: Option<i32> = None;
+    let v = value.unwrap_or(0);
+    println!("默认值: {}", v);
+    
+    // map和and_then组合
+    let result = divide(10.0, 2.0)
+        .map(|x| x * 3.0)
+        .unwrap_or(0.0);
+    println!("map结果: {}", result);
+}` },
+            error: {
+                title: '错误处理常见错误',
+                items: [
+                    { wrong: '过度使用unwrap()：可能panic', fix: '生产代码用match/?/unwrap_or/unwrap_or_default处理错误' },
+                    { wrong: '忽略Result返回值: File::open(\"file\");', fix: '必须处理: let _ = File::open(\"file\"); 或match处理' }
+                ]
+            },
+            exercises: [
+                { q: 'Result和Option分别适用于什么场景？', a: 'Option用于可能为空的值，Result用于可能失败并需要错误信息的操作' },
+                { q: '如何给Option提供默认值？', a: '使用 unwrap_or(default) 或 unwrap_or_default()' }
+            ]
+        },
+        {
+            id: 25, title: 'unwrap与?操作符',
+            points: [
+                'unwrap()直接取出值，None/Err时panic，仅用于确定安全的情况',
+                'expect()同unwrap但可自定义错误信息，比unwrap更有意义',
+                '?操作符：Ok/Some直接取出值，Err/None提前返回错误',
+                '?只能在返回Result/Option的函数中使用'
+            ],
+            code: { lang: 'rust', content: `use std::fs::File;
 use std::io::{self, Read};
 
-fn read_username_from_file() -> Result<String, io::Error> {
-    let mut f = File::open("username.txt")?;
-    let mut s = String::new();
-    f.read_to_string(&mut s)?;
-    Ok(s)
+// ?操作符简化错误传播
+fn read_file_content(path: &str) -> Result<String, io::Error> {
+    let mut file = File::open(path)?; // 打开失败则返回Err
+    let mut content = String::new();
+    file.read_to_string(&mut content)?; // 读取失败则返回Err
+    Ok(content)
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let username = read_username_from_file()?;
-    println!("username: {}", username);
+    // unwrap - 确定安全时使用
+    let val: Option<i32> = Some(42);
+    println!("unwrap: {}", val.unwrap());
+    
+    // expect - 更好的错误信息
+    let val2: Result<i32, &str> = Ok(100);
+    println!("expect: {}", val2.expect("应该有值"));
+    
+    // ?操作符
+    let content = read_file_content("example.txt")?;
+    println!("内容: {}", content);
+    
+    // 链式?操作符
+    let num: Result<i32, &str> = Ok("42".parse::<i32>()?);
+    println!("数字: {:?}", num);
+    
     Ok(())
-}</code></pre>
-                </div>
-
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p>在main函数中使用?：需要将返回类型改为 <code>Result&lt;(), E&gt;</code>。</p>
-                    <p>过度使用unwrap()：会导致程序在错误时直接panic。</p>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. Result<T, E>有哪两个变体？</div>
-                    <div class="answer-options">
-                        <label class="option-label"><input type="radio" name="ch9-q1" value="A"> A. Success和Failure</label>
-                        <label class="option-label"><input type="radio" name="ch9-q1" value="B"> B. Ok和Err</label>
-                        <label class="option-label"><input type="radio" name="ch9-q1" value="C"> C. Yes和No</label>
-                        <label class="option-label"><input type="radio" name="ch9-q1" value="D"> D. True和False</label>
-                    </div>
-                    <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
-                    <div id="ch9-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(9, 1)">查看答案</button>
-                    <div id="ch9-answer1" class="answer-box">B. Ok和Err</div>
-
-                    <div class="question">2. 使用?操作符的条件是什么？</div>
-                    <input type="text" class="answer-input" id="ch9-q2" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(9, 2)">检查答案</button>
-                    <div id="ch9-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(9, 2)">查看答案</button>
-                    <div id="ch9-answer2" class="answer-box">?操作符只能在返回Result或Option的函数中使用</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <div id="ch10" class="chapter-section">
-                <h2>
-                    10. 综合实战
-                    <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button>
-                </h2>
-                
-                <div class="section-content">
-                    <h3>🎯 项目概述</h3>
-                    <p>创建一个简单的命令行待办事项应用，包含添加、删除、标记完成等功能。</p>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code1')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code1"><code>cargo new todo_app
-cd todo_app
-cargo run -- --help</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>📦 添加依赖</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">toml</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code2')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code2"><code>[dependencies]
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
-structopt = "0.3"</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🔧 实现代码</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">rust</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code3')">📋</button>
-                            <button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('ch10-code3').textContent, 'rust')">💾</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code3"><code>use serde::{Deserialize, Serialize};
-use std::fs;
-use structopt::StructOpt;
-
-#[derive(Debug, StructOpt)]
-enum Command {
-    Add { task: String },
-    List,
-    Done { index: usize },
-    Remove { index: usize },
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Todo {
-    tasks: Vec<Task>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct Task {
-    description: String,
-    completed: bool,
-}
-
-impl Todo {
-    fn load() -> Self {
-        if std::path::Path::new("todo.json").exists() {
-            let content = fs::read_to_string("todo.json").unwrap();
-            serde_json::from_str(&content).unwrap()
-        } else {
-            Todo { tasks: Vec::new() }
+}` },
+            error: {
+                title: 'unwrap/?常见错误',
+                items: [
+                    { wrong: '在main()中用?但返回类型不是Result', fix: '修改main签名: fn main() -> Result<(), Box<dyn std::error::Error>>' },
+                    { wrong: '在测试外对可能失败的操作用unwrap()', fix: '用?/match/unwrap_or替代，unwrap仅用于原型和测试' }
+                ]
+            },
+            exercises: [
+                { q: '?操作符的工作原理？', a: '遇到Ok/Some取出值继续，遇到Err/None提前从函数返回错误' },
+                { q: 'unwrap和expect的区别？', a: 'expect可以自定义panic信息，便于调试定位问题' }
+            ]
+        },
+        {
+            id: 26, title: '泛型',
+            points: [
+                '泛型让代码适用于多种类型，<T>是类型参数',
+                '泛型函数：fn foo<T>(x: T)，泛型结构体：struct Foo<T>',
+                '泛型约束用trait bound限制可用类型：T: Display',
+                'Rust泛型通过单态化(monomorphization)实现零成本抽象'
+            ],
+            code: { lang: 'rust', content: `// 泛型函数
+fn largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+    for item in &list[1..] {
+        if item > largest {
+            largest = item;
         }
     }
+    largest
+}
+
+// 泛型结构体
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+// 泛型方法
+impl<T: std::fmt::Display> Point<T> {
+    fn display(&self) {
+        println!("({}, {})", self.x, self.y);
+    }
+}
+
+// 多泛型参数
+struct Pair<T, U> {
+    first: T,
+    second: U,
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+    println!("最大: {}", largest(&numbers));
     
-    fn save(&self) {
-        let content = serde_json::to_string_pretty(self).unwrap();
-        fs::write("todo.json", content).unwrap();
+    let chars = vec!['y', 'm', 'a', 'q'];
+    println!("最大: {}", largest(&chars));
+    
+    let p = Point { x: 5, y: 10 };
+    p.display();
+    
+    let pair = Pair { first: 1, second: "hello" };
+    println!("Pair: {}, {}", pair.first, pair.second);
+}` },
+            error: {
+                title: '泛型常见错误',
+                items: [
+                    { wrong: '泛型类型未加约束就调用方法: fn foo<T>(x: T) { x.display(); }', fix: '添加trait bound: fn foo<T: Display>(x: T)' },
+                    { wrong: 'impl Point { } 忘记<T>', fix: '泛型结构体的impl必须带泛型: impl<T> Point<T> { }' }
+                ]
+            },
+            exercises: [
+                { q: '什么是单态化(monomorphization)？', a: '编译时为每种具体类型生成专门代码，运行时无泛型开销' },
+                { q: '如何在泛型上调用特定方法？', a: '用trait bound约束: fn foo<T: Display>(x: T) 限定T必须实现Display' }
+            ]
+        },
+        {
+            id: 27, title: 'trait',
+            points: [
+                'trait定义共享行为(类似接口)，包含方法签名和默认实现',
+                'impl Trait for Type为类型实现trait',
+                'trait bound约束泛型: fn foo<T: Summary>(item: T)',
+                '孤儿规则：只能在定义trait或类型的crate中实现trait'
+            ],
+            code: { lang: 'rust', content: `// 定义trait
+trait Summary {
+    fn summarize_author(&self) -> String;
+    
+    // 默认实现
+    fn summarize(&self) -> String {
+        format!("(阅读更多来自{}...)", self.summarize_author())
+    }
+}
+
+struct Article {
+    title: String,
+    author: String,
+    content: String,
+}
+
+struct Tweet {
+    username: String,
+    content: String,
+}
+
+// 为类型实现trait
+impl Summary for Article {
+    fn summarize_author(&self) -> String {
+        self.author.clone()
+    }
+    fn summarize(&self) -> String {
+        format!("{}, by {}", self.title, self.author)
+    }
+}
+
+impl Summary for Tweet {
+    fn summarize_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+
+// trait作为参数
+fn notify(item: &impl Summary) {
+    println!("突发新闻! {}", item.summarize());
+}
+
+fn main() {
+    let article = Article {
+        title: String::from("Rust指南"),
+        author: String::from("Alice"),
+        content: String::from("Rust很棒"),
+    };
+    let tweet = Tweet {
+        username: String::from("bob"),
+        content: String::from("学Rust!"),
+    };
+    
+    notify(&article);
+    notify(&tweet);
+}` },
+            error: {
+                title: 'trait常见错误',
+                items: [
+                    { wrong: '为外部类型实现外部trait(违反孤儿规则)', fix: '只能在定义trait或类型的crate中impl，可使用newtype模式绕过' },
+                    { wrong: 'trait方法未全部实现', fix: '必须实现所有无默认实现的方法' }
+                ]
+            },
+            exercises: [
+                { q: '什么是孤儿规则？', a: '只能在定义trait的crate或定义类型的crate中实现trait，防止冲突' },
+                { q: 'impl Trait和T: Trait两种语法的关系？', a: 'impl Trait是语法糖，等价于T: Trait的泛型写法' }
+            ]
+        },
+        {
+            id: 28, title: '生命周期',
+            points: [
+                '生命周期(lifetime)确保引用在使用期间始终有效',
+                '生命周期标注\'a不改变引用存活时间，仅描述引用间的关系',
+                '编译器通过生命周期省略规则自动推断大部分情况',
+                '生命周期约束: \'a: \'b 表示\'a至少和\'b一样长'
+            ],
+            code: { lang: 'rust', content: `// 生命周期标注
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() { x } else { y }
+}
+
+// 结构体中的生命周期
+struct ImportantExcerpt<'a> {
+    part: &'a str,
+}
+
+impl<'a> ImportantExcerpt<'a> {
+    fn level(&self) -> i32 { 3 }
+    
+    // 省略规则自动推断
+    fn announce_and_return(&self, announcement: &str) -> &str {
+        println!("注意: {}", announcement);
+        self.part
+    }
+}
+
+// 静态生命周期
+static GREETING: &str = "Hello, world!";
+
+fn main() {
+    let string1 = String::from("long string is long");
+    let result;
+    {
+        let string2 = String::from("xyz");
+        result = longest(string1.as_str(), string2.as_str());
+        println!("最长: {}", result);
     }
     
-    fn add(&mut self, description: String) {
-        self.tasks.push(Task { description, completed: false });
-    }
+    let novel = String::from("Call me Ishmael. Some years ago...");
+    let first_sentence = novel.split('.').next().unwrap();
+    let excerpt = ImportantExcerpt {
+        part: first_sentence,
+    };
+    println!("摘录: {}", excerpt.part);
     
-    fn list(&self) {
-        for (i, task) in self.tasks.iter().enumerate() {
-            let status = if task.completed { "✓" } else { " " };
-            println!("{} [{}] {}", i + 1, status, task.description);
+    // 'static: 存活整个程序
+    let s: &'static str = "我是静态字符串";
+    println!("{}", s);
+}` },
+            error: {
+                title: '生命周期常见错误',
+                items: [
+                    { wrong: '返回悬垂引用: fn foo() -> &str { let s = String::new(); &s }', fix: '返回拥有所有权的String或传入引用参数' },
+                    { wrong: '结构体含引用但未标注生命周期', fix: 'struct Foo<\'a> { part: &\'a str }' }
+                ]
+            },
+            exercises: [
+                { q: '生命周期标注\'a的实际作用？', a: '不改变引用存活时间，只是告诉编译器多个引用间的关系约束' },
+                { q: '什么是\'static生命周期？', a: '引用存活整个程序运行期间，字符串字面量就是\'static的' }
+            ]
+        },
+        {
+            id: 29, title: '闭包',
+            points: [
+                '闭包是可以捕获环境的匿名函数: |参数| { 体 }',
+                '三种捕获方式: Fn(不可变借用)、FnMut(可变借用)、FnOnce(获取所有权)',
+                '闭包类型由编译器推断，每个闭包有唯一匿名类型',
+                '闭包常用于迭代器适配器(map/filter/sort_by)和回调'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    // 基本闭包
+    let add_one = |x: i32| -> i32 { x + 1 };
+    let add_two = |x| x + 2; // 类型推断
+    println!("add_one(3) = {}", add_one(3));
+    println!("add_two(3) = {}", add_two(3));
+    
+    // 捕获环境变量
+    let x = 4;
+    let equal_to_x = |z| z == x;
+    println!("4等于4: {}", equal_to_x(4));
+    
+    // FnMut闭包(修改捕获的变量)
+    let mut list = vec![1, 2, 3];
+    let mut push_val = |val| list.push(val);
+    push_val(4);
+    println!("list: {:?}", list);
+    
+    // 闭包作为函数参数
+    fn apply<F: Fn(i32) -> i32>(f: F, x: i32) -> i32 {
+        f(x)
+    }
+    let double = |x| x * 2;
+    println!("apply: {}", apply(double, 5));
+    
+    // 迭代器中使用闭包
+    let nums = vec![1, 2, 3, 4, 5];
+    let doubled: Vec<i32> = nums.iter().map(|x| x * 2).collect();
+    let evens: Vec<&i32> = nums.iter().filter(|x| *x % 2 == 0).collect();
+    println!("doubled: {:?}, evens: {:?}", doubled, evens);
+}` },
+            error: {
+                title: '闭包常见错误',
+                items: [
+                    { wrong: 'FnOnce闭包调用两次: let f = || drop(v); f(); f();', fix: 'FnOnce消耗捕获值，只能调用一次' },
+                    { wrong: '闭包捕获可变引用但声明为Fn', fix: '修改捕获变量需要FnMut trait bound' }
+                ]
+            },
+            exercises: [
+                { q: 'Fn、FnMut、FnOnce的区别？', a: 'Fn不可变借用环境，FnMut可变借用环境，FnOnce获取环境所有权(只调用一次)' },
+                { q: '如何让闭包获取捕获变量的所有权？', a: '在参数列表前加move: let c = move || x;' }
+            ]
+        },
+        {
+            id: 30, title: '迭代器',
+            points: [
+                'Iterator trait定义遍历协议，只需实现next()方法',
+                '适配器方法(惰性): map/filter/take/skip/zip/chain',
+                '消费者方法(触发执行): collect/for_each/fold/count/sum',
+                'IntoIterator让类型可迭代，for循环自动调用into_iter()'
+            ],
+            code: { lang: 'rust', content: `fn main() {
+    let v = vec![1, 2, 3, 4, 5];
+    
+    // 基本迭代
+    let mut iter = v.iter();
+    println!("next: {:?}", iter.next()); // Some(&1)
+    
+    // 适配器方法(惰性，不立即执行)
+    let doubled: Vec<i32> = v.iter().map(|x| x * 2).collect();
+    let evens: Vec<&i32> = v.iter().filter(|x| *x % 2 == 0).collect();
+    let taken: Vec<&i32> = v.iter().take(3).collect();
+    let skipped: Vec<&i32> = v.iter().skip(2).collect();
+    
+    println!("doubled: {:?}", doubled);
+    println!("evens: {:?}", evens);
+    println!("taken: {:?}", taken);
+    
+    // 消费者方法
+    let sum: i32 = v.iter().sum();
+    let count = v.iter().count();
+    let product: i32 = v.iter().product();
+    println!("sum: {}, count: {}, product: {}", sum, count, product);
+    
+    // fold(归约)
+    let sum2 = v.iter().fold(0, |acc, x| acc + x);
+    println!("fold sum: {}", sum2);
+    
+    // 链式调用
+    let result: i32 = (1..=10)
+        .filter(|x| x % 2 == 0)
+        .map(|x| x * x)
+        .sum();
+    println!("偶数平方和: {}", result); // 4+16+36+64+100=220
+    
+    // enumerate获取索引
+    for (i, val) in v.iter().enumerate() {
+        println!("索引{}: 值{}", i, val);
+    }
+}` },
+            error: {
+                title: '迭代器常见错误',
+                items: [
+                    { wrong: '只调用适配器不消费: v.iter().map(|x| x+1); // 什么都没做', fix: '适配器是惰性的，必须用collect/for_each等消费者触发执行' },
+                    { wrong: '迭代时修改集合', fix: '先collect再修改，或使用索引遍历' }
+                ]
+            },
+            exercises: [
+                { q: '适配器方法和消费者方法的区别？', a: '适配器惰性(返回新迭代器不执行)，消费者触发遍历并产生最终结果' },
+                { q: '如何同时获取索引和值？', a: '使用.enumerate(): for (i, v) in arr.iter().enumerate()' }
+            ]
+        },
+        {
+            id: 31, title: '模块系统',
+            points: [
+                'mod声明模块，pub控制可见性，use引入路径',
+                'crate是Rust编译单元，mod可以组织代码为树状结构',
+                'pub(crate)限制在crate内可见，pub(super)限制在父模块可见',
+                'mod.rs或模块名.rs文件约定定义模块内容'
+            ],
+            code: { lang: 'rust', content: `// 模块系统示例(通常分布在多文件中)
+mod front_of_house {
+    pub mod hosting {
+        pub fn add_to_waitlist() {
+            println!("添加到等候列表");
         }
+        
+        fn seat_at_table() {} // 私有，不可外部访问
     }
     
-    fn done(&mut self, index: usize) {
-        if let Some(task) = self.tasks.get_mut(index) {
-            task.completed = true;
+    mod serving {
+        pub fn take_order() {}
+        pub fn serve_order() {}
+        fn take_payment() {} // 私有
+    }
+}
+
+use front_of_house::hosting; // use引入路径
+
+mod back_of_house {
+    pub struct Breakfast {
+        pub toast: String,     // 公开字段
+        seasonal_fruit: String, // 私有字段
+    }
+    
+    impl Breakfast {
+        pub fn summer(toast: String) -> Breakfast {
+            Breakfast {
+                toast,
+                seasonal_fruit: String::from("peaches"),
+            }
         }
-    }
-    
-    fn remove(&mut self, index: usize) {
-        self.tasks.remove(index);
     }
 }
 
 fn main() {
-    let command = Command::from_args();
-    let mut todo = Todo::load();
+    // 绝对路径
+    front_of_house::hosting::add_to_waitlist();
     
-    match command {
-        Command::Add { task } => {
-            todo.add(task);
-            println!("添加成功");
+    // use简化
+    hosting::add_to_waitlist();
+    
+    // 使用公开结构体
+    let meal = back_of_house::Breakfast::summer(String::from("Rye"));
+    println!("Toast: {}", meal.toast);
+    // meal.seasonal_fruit // 错误！私有字段
+}` },
+            error: {
+                title: '模块系统常见错误',
+                items: [
+                    { wrong: '访问私有项: front_of_house::serving::take_payment()', fix: '用pub标记需要公开的项' },
+                    { wrong: 'use A::B; use C::B; // 同名冲突', fix: '用as重命名: use C::B as OtherB;' }
+                ]
+            },
+            exercises: [
+                { q: 'pub和pub(crate)的区别？', a: 'pub对外完全公开，pub(crate)只在当前crate内可见' },
+                { q: 'use ... as的作用？', a: '为引入的路径起别名，解决同名冲突' }
+            ]
+        },
+        {
+            id: 32, title: '文件IO',
+            points: [
+                'std::fs处理文件操作，std::io提供通用IO trait',
+                'File::open()读文件返回Result，File::create()写文件',
+                'read_to_string()一次性读取，BufReader逐行读取',
+                'write!宏写入实现Write trait的类型'
+            ],
+            code: { lang: 'rust', content: `use std::fs;
+use std::io::{BufRead, BufWriter, Write};
+
+fn main() -> std::io::Result<()> {
+    // 写文件
+    fs::write("output.txt", "Hello, Rust IO!")?;
+    
+    // 一次性读取
+    let content = fs::read_to_string("output.txt")?;
+    println!("内容: {}", content);
+    
+    // 使用File API
+    use std::fs::File;
+    
+    // 写入(覆盖)
+    let file = File::create("data.txt")?;
+    let mut writer = BufWriter::new(file);
+    writeln!(writer, "第一行")?;
+    writeln!(writer, "第二行")?;
+    writer.flush()?; // 确保写入磁盘
+    
+    // 逐行读取
+    let file = File::open("data.txt")?;
+    let reader = std::io::BufReader::new(file);
+    for (i, line) in reader.lines().enumerate() {
+        println!("行{}: {}", i + 1, line?);
+    }
+    
+    // 追加写入
+    use std::fs::OpenOptions;
+    let file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open("data.txt")?;
+    let mut appender = BufWriter::new(file);
+    writeln!(appender, "追加的行")?;
+    
+    // 文件元信息
+    let metadata = fs::metadata("data.txt")?;
+    println!("文件大小: {}字节", metadata.len());
+    
+    Ok(())
+}` },
+            error: {
+                title: '文件IO常见错误',
+                items: [
+                    { wrong: 'File::open()不检查结果', fix: '必须处理Result: File::open(\"f\")? 或 match/unwrap_or' },
+                    { wrong: '写入后不flush可能数据丢失', fix: '对BufWriter调用flush()确保数据写入磁盘' }
+                ]
+            },
+            exercises: [
+                { q: 'read_to_string和BufReader逐行读取的选择？', a: '小文件用read_to_string简单；大文件用BufReader逐行节省内存' },
+                { q: '如何追加写入而非覆盖？', a: '用OpenOptions::new().write(true).append(true).open()' }
+            ]
+        },
+        {
+            id: 33, title: '并发编程',
+            points: [
+                'std::thread::spawn创建线程，返回JoinHandle',
+                'move闭包将变量所有权移入线程，避免引用问题',
+                'mpsc通道(channel)实现线程间消息传递',
+                'Mutex<T>互斥锁和Arc<T>原子引用计数实现共享状态'
+            ],
+            code: { lang: 'rust', content: `use std::sync::mpsc;
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    // 创建线程
+    let handle = thread::spawn(|| {
+        for i in 1..=5 {
+            println!("子线程: {}", i);
         }
-        Command::List => todo.list(),
-        Command::Done { index } => {
-            todo.done(index - 1);
-            println!("标记完成");
+    });
+    
+    for i in 1..=3 {
+        println!("主线程: {}", i);
+    }
+    handle.join().unwrap();
+    
+    // move闭包捕获所有权
+    let data = vec![1, 2, 3];
+    let handle = thread::spawn(move || {
+        println!("线程数据: {:?}", data);
+    });
+    handle.join().unwrap();
+    
+    // 通道(channel)消息传递
+    let (tx, rx) = mpsc::channel();
+    thread::spawn(move || {
+        let vals = vec!["hi", "from", "thread"];
+        for val in vals {
+            tx.send(val).unwrap();
         }
-        Command::Remove { index } => {
-            todo.remove(index - 1);
-            println!("删除成功");
+    });
+    for received in rx {
+        println!("收到: {}", received);
+    }
+    
+    // Mutex + Arc 共享状态
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+    for h in handles { h.join().unwrap(); }
+    println!("计数器: {}", *counter.lock().unwrap());
+}` },
+            error: {
+                title: '并发编程常见错误',
+                items: [
+                    { wrong: '在线程中使用外部引用(生命周期可能不够)', fix: '使用move闭包转移所有权到线程中' },
+                    { wrong: '忘记lock Mutex直接访问值', fix: '必须通过lock()获取MutexGuard才能访问' }
+                ]
+            },
+            exercises: [
+                { q: 'mpsc通道的含义？', a: 'Multiple Producer Single Consumer - 多生产者单消费者' },
+                { q: 'Arc和Rc的区别？', a: 'Arc是原子引用计数(线程安全)，Rc是非原子引用计数(仅单线程)' }
+            ]
+        },
+        {
+            id: 34, title: '宏基础',
+            points: [
+                '宏(Macro)是元编程工具，在编译时展开生成代码',
+                '声明宏macro_rules!用模式匹配定义，如vec!和println!',
+                '过程宏(Procedural Macro)更强大：派生宏/属性宏/函数宏',
+                '宏与函数区别：宏可变参数、编译时展开、可操作代码结构'
+            ],
+            code: { lang: 'rust', content: `// 声明宏
+macro_rules! say_hello {
+    () => {
+        println!("Hello!");
+    };
+    ($name:expr) => {
+        println!("Hello, {}!", $name);
+    };
+    ($($name:expr),+) => {
+        $(println!("Hello, {}!", $name);)+
+    };
+}
+
+macro_rules! create_function {
+    ($func_name:ident) => {
+        fn $func_name() {
+            println!("函数 {:?} 被调用", stringify!($func_name));
+        }
+    };
+}
+
+create_function!(foo);
+create_function!(bar);
+
+fn main() {
+    // 使用自定义宏
+    say_hello!();
+    say_hello!("Rust");
+    say_hello!("Alice", "Bob", "Carol");
+    
+    foo();
+    bar();
+    
+    // 标准库常用宏
+    println!("println! 是宏");
+    let v = vec![1, 2, 3];       // vec! 创建向量
+    let s = format!("x={}", 42); // format! 格式化字符串
+    let x = assert_eq!(1 + 1, 2); // assert_eq! 断言相等
+    dbg!(42);                     // dbg! 调试输出
+}` },
+            error: {
+                title: '宏常见错误',
+                items: [
+                    { wrong: '宏定义中忘记$符号: (name:ident)', fix: '宏变量必须用$前缀: ($name:ident)' },
+                    { wrong: '混淆宏和函数调用: 认为println是函数', fix: 'println!是宏(注意!)，宏在编译时展开，函数在运行时调用' }
+                ]
+            },
+            exercises: [
+                { q: '宏和函数的核心区别？', a: '宏在编译时展开(可变参数、操作代码)，函数在运行时调用(固定签名)' },
+                { q: '宏的三种类型？', a: '声明宏(macro_rules!)、派生宏(#[derive])、属性宏/函数宏(过程宏)' }
+            ]
+        },
+        {
+            id: 35, title: '综合实战',
+            points: [
+                '整合所学知识构建一个完整的命令行TODO应用',
+                '应用结构体、枚举、match、Result、Vec、String等核心特性',
+                '使用serde进行序列化/反序列化持久化数据',
+                '体现Rust零成本抽象、安全并发的实践价值'
+            ],
+            code: { lang: 'rust', content: `// 综合实战: 命令行TODO应用
+// Cargo.toml: serde = { version = "1", features = ["derive"] }
+//            serde_json = "1"
+
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::io;
+
+#[derive(Debug, Serialize, Deserialize)]
+struct TodoList {
+    items: Vec<TodoItem>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct TodoItem {
+    id: usize,
+    title: String,
+    completed: bool,
+}
+
+impl TodoList {
+    fn load() -> Self {
+        match fs::read_to_string("todos.json") {
+            Ok(content) => serde_json::from_str(&content).unwrap_or_else(|_| TodoList { items: vec![] }),
+            Err(_) => TodoList { items: vec![] },
         }
     }
     
-    todo.save();
-}</code></pre>
-                </div>
-
-                <div class="section-content">
-                    <h3>🚀 使用示例</h3>
-                </div>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">bash</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch10-code4')">📋</button>
-                        </div>
-                    </div>
-                    <pre id="ch10-code4"><code>cargo run -- add "学习Rust"
-cargo run -- list
-cargo run -- done 1
-cargo run -- remove 1</code></pre>
-                </div>
-
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 为待办事项应用添加"清除已完成任务"的功能</div>
-                    <textarea class="answer-textarea" id="ch10-q1" placeholder="输入代码..."></textarea>
-                    <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
-                    <div id="ch10-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(10, 1)">查看答案</button>
-                    <div id="ch10-answer1" class="answer-box">fn clear_completed(&mut self) {
-    self.tasks.retain(|task| !task.completed);
-}</div>
-
-                    <div class="question">2. 为Command枚举添加Clear变体</div>
-                    <input type="text" class="answer-input" id="ch10-q2" placeholder="输入代码...">
-                    <button class="btn btn-primary" onclick="checkAnswer(10, 2)">检查答案</button>
-                    <div id="ch10-result2" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(10, 2)">查看答案</button>
-                    <div id="ch10-answer2" class="answer-box">Clear,</div>
-                </div>
-
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
-                </div>
-
-                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
-                
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" disabled>完成学习</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="tutorial-common.js"></script>
-    <script src="tutorial-extensions.js"></script>
-    <script>
-        const chapters = [
-            { id: 1, title: '入门介绍与环境搭建' },
-            { id: 2, title: '基本语法' },
-            { id: 3, title: '所有权系统' },
-            { id: 4, title: '数据类型' },
-            { id: 5, title: '流程控制' },
-            { id: 6, title: '模式匹配' },
-            { id: 7, title: '结构体与枚举' },
-            { id: 8, title: '函数与闭包' },
-            { id: 9, title: '错误处理' },
-            { id: 10, title: '综合实战' }
-        ];
-
-        const correctAnswers = {
-            1: { 1: 'cargo', 2: 'fn main()' },
-            2: { 1: 'c', 2: '5' },
-            3: { 1: '1', 2: '借用' },
-            4: { 1: 'b', 2: 'vec!' },
-            5: { 1: 'c', 2: 'loop' },
-            6: { 1: 'some(i)', 2: 'if let' },
-            7: { 1: 'struct', 2: 'some(t)' },
-            8: { 1: 'fn', 2: 'filter' },
-            9: { 1: 'b', 2: 'result' },
-            10: { 1: 'retain', 2: 'clear,' }
-        };
-
-        let currentChapter = 1;
-
-        function initChapterList() {
-            const list = document.getElementById('chapterList');
-            list.innerHTML = chapters.map(ch => `
-                <li class="chapter-item" onclick="goToChapter(${ch.id})" id="chapterItem${ch.id}">
-                    <span>${ch.id}. ${ch.title}</span>
-                    <span class="chapter-icon" id="chapterIcon${ch.id}">📚</span>
-                </li>
-            `).join('');
-            updateChapterList();
+    fn save(&self) -> io::Result<()> {
+        let json = serde_json::to_string_pretty(self)?;
+        fs::write("todos.json", json)
+    }
+    
+    fn add(&mut self, title: String) {
+        let id = self.items.len() + 1;
+        self.items.push(TodoItem { id, title, completed: false });
+    }
+    
+    fn complete(&mut self, id: usize) -> Result<(), String> {
+        let item = self.items.iter_mut()
+            .find(|item| item.id == id)
+            .ok_or(format!("ID {} 不存在", id))?;
+        item.completed = true;
+        Ok(())
+    }
+    
+    fn list(&self) {
+        if self.items.is_empty() {
+            println!("📝 暂无任务");
+            return;
         }
-
-        function goToChapter(chapterId) {
-            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`ch${chapterId}`).classList.add('active');
-            currentChapter = chapterId;
-            updateChapterList();
-            updateProgress();
-            BookmarkManager.save('rust', chapterId);
+        for item in &self.items {
+            let status = if item.completed { "✓" } else { " " };
+            println!("[{}] {} - {}", status, item.id, item.title);
         }
+    }
+}
 
-        function updateChapterList() {
-            const completed = getCompletedChapters();
-            chapters.forEach(ch => {
-                const item = document.getElementById(`chapterItem${ch.id}`);
-                const icon = document.getElementById(`chapterIcon${ch.id}`);
-                if (ch.id === currentChapter) {
-                    item.classList.add('active');
-                } else {
-                    item.classList.remove('active');
+fn main() {
+    let mut todos = TodoList::load();
+    
+    println!("🦀 Rust TODO 应用");
+    println!("命令: add <标题> | done <id> | list | quit");
+    
+    loop {
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let parts: Vec<&str> = input.trim().splitn(2, ' ').collect();
+        
+        match parts.get(0).map(|s| *s) {
+            Some("add") => {
+                if let Some(title) = parts.get(1) {
+                    todos.add(title.to_string());
+                    println!("✅ 已添加");
                 }
-                if (completed.includes(ch.id)) {
-                    item.classList.add('completed');
-                    icon.textContent = '✅';
-                } else {
-                    item.classList.remove('completed');
-                    icon.textContent = '📚';
+            }
+            Some("done") => {
+                if let Some(id) = parts.get(1).and_then(|s| s.parse::<usize>().ok()) {
+                    match todos.complete(id) {
+                        Ok(()) => println!("✅ 已完成"),
+                        Err(e) => println!("❌ {}", e),
+                    }
                 }
-            });
-        }
-
-        function getCompletedChapters() {
-            const stored = localStorage.getItem('rust_completed_chapters');
-            return stored ? JSON.parse(stored) : [];
-        }
-
-        function markCompleted(chapterId) {
-            let completed = getCompletedChapters();
-            if (!completed.includes(chapterId)) {
-                completed.push(chapterId);
-                localStorage.setItem('rust_completed_chapters', JSON.stringify(completed));
-                LearningStats.recordChapterCompletion('rust', chapterId);
             }
-            const btn = document.getElementById(`completeBtn${chapterId}`);
-            btn.classList.add('completed');
-            btn.textContent = '✓ 已完成';
-            updateChapterList();
-            updateProgress();
+            Some("list") => todos.list(),
+            Some("quit") => break,
+            _ => println!("未知命令"),
         }
-
-        function updateProgress() {
-            const completed = getCompletedChapters().length;
-            const total = chapters.length;
-            const percent = Math.round((completed / total) * 100);
-            
-            document.getElementById('completedCount').textContent = completed;
-            document.getElementById('progressPercent').textContent = `${percent}%`;
-            document.getElementById('progressFill').style.width = `${percent}%`;
+    }
+    
+    if let Err(e) = todos.save() {
+        eprintln!("保存失败: {}", e);
+    }
+}` },
+            error: {
+                title: '综合实战常见问题',
+                items: [
+                    { wrong: '忘记添加serde依赖到Cargo.toml', fix: '在[dependencies]下添加: serde = { version = "1", features = ["derive"] }' },
+                    { wrong: 'JSON反序列化错误未处理', fix: '使用unwrap_or_default()或match提供默认值' }
+                ]
+            },
+            exercises: [
+                { q: '为TODO应用添加"删除任务"功能', a: 'fn remove(&mut self, id: usize) { self.items.retain(|item| item.id != id); }' },
+                { q: '如何添加"按状态筛选"功能？', a: 'fn filter(&self, completed: Option<bool>) -> Vec<&TodoItem> { self.items.iter().filter(|i| completed.map_or(true, |c| i.completed == c)).collect() }' }
+            ]
         }
+    ];
 
-        function toggleBookmark(chapterId) {
-            const bookmarks = getBookmarks();
-            const btn = document.getElementById(`bookmarkBtn${chapterId}`);
-            
-            if (bookmarks.includes(chapterId)) {
-                const newBookmarks = bookmarks.filter(b => b !== chapterId);
-                localStorage.setItem('rust_bookmarks', JSON.stringify(newBookmarks));
-                btn.classList.remove('bookmarked');
-            } else {
-                bookmarks.push(chapterId);
-                localStorage.setItem('rust_bookmarks', JSON.stringify(bookmarks));
-                btn.classList.add('bookmarked');
-            }
-            updateBookmarkCount();
-        }
+    // ==================== 渲染引擎 ====================
+    const TOTAL_CHAPTERS = chapterData.length;
+    let currentChapter = 1;
 
-        function getBookmarks() {
-            const stored = localStorage.getItem('rust_bookmarks');
-            return stored ? JSON.parse(stored) : [];
-        }
+    function escapeHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
 
-        function updateBookmarkCount() {
-            document.getElementById('bookmarkCount').textContent = getBookmarks().length;
-        }
+    function renderChapter(ch) {
+        const prevBtn = ch.id === 1
+            ? '<button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>'
+            : `<button class="nav-btn nav-btn-secondary" onclick="goToChapter(${ch.id-1})">◀ 上一章</button>`;
+        const nextBtn = ch.id === TOTAL_CHAPTERS
+            ? '<button class="nav-btn nav-btn-primary" disabled>完成学习 🎉</button>'
+            : `<button class="nav-btn nav-btn-primary" onclick="goToChapter(${ch.id+1})">下一章 ▶</button>`;
 
-        function saveNote(chapterId) {
-            const note = document.getElementById(`ch${chapterId}-note`).value;
-            const notes = getNotes();
-            notes[chapterId] = note;
-            localStorage.setItem('rust_notes', JSON.stringify(notes));
-            SnippetManager.showToast('笔记已保存');
-        }
+        let html = `<h2>${ch.id}. ${ch.title} <button class="bookmark-btn" onclick="toggleBookmark(${ch.id})" id="bookmarkBtn${ch.id}">📌</button></h2>`;
 
-        function getNotes() {
-            const stored = localStorage.getItem('rust_notes');
-            return stored ? JSON.parse(stored) : {};
-        }
+        // 知识点
+        html += `<div class="section-content"><h3>📖 知识要点</h3><ul>`;
+        ch.points.forEach(p => { html += `<li>${p}</li>`; });
+        html += `</ul></div>`;
 
-        function loadNotes() {
-            const notes = getNotes();
-            chapters.forEach(ch => {
-                const textarea = document.getElementById(`ch${ch.id}-note`);
-                if (textarea && notes[ch.id]) {
-                    textarea.value = notes[ch.id];
-                }
-            });
-        }
+        // 代码示例
+        const codeId = `ch${ch.id}-code`;
+        html += `<div class="section-content"><h3>💻 代码示例</h3></div>`;
+        html += `<div class="code-block"><div class="code-header"><span class="code-lang">${ch.code.lang}</span>`;
+        html += `<div class="code-actions">`;
+        html += `<button class="code-btn" onclick="copyCode('${codeId}')">📋 复制</button>`;
+        html += `<button class="code-btn" onclick="SnippetManager.showSaveDialog(document.getElementById('${codeId}').textContent,'rust')">💾 保存</button>`;
+        html += `</div></div>`;
+        html += `<pre id="${codeId}"><code>${escapeHtml(ch.code.content)}</code></pre></div>`;
 
-        function checkAnswer(chapterId, questionId) {
-            const answer = document.getElementById(`ch${chapterId}-q${questionId}`).value.toLowerCase().trim();
-            const correct = correctAnswers[chapterId][questionId];
-            const resultDiv = document.getElementById(`ch${chapterId}-result${questionId}`);
-            
-            if (answer.includes(correct)) {
-                resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">正确！</span>';
-                resultDiv.classList.add('correct');
-                resultDiv.classList.remove('incorrect');
-            } else {
-                resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">错误，请重试</span>';
-                resultDiv.classList.add('incorrect');
-                resultDiv.classList.remove('correct');
-            }
-        }
-
-        function toggleAnswer(chapterId, questionId) {
-            const answerBox = document.getElementById(`ch${chapterId}-answer${questionId}`);
-            answerBox.classList.toggle('show');
-        }
-
-        function copyCode(codeId) {
-            const code = document.getElementById(codeId).textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                SnippetManager.showToast('代码已复制');
-            });
-        }
-
-        function searchTutorial() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            if (!query) {
-                chapters.forEach(ch => {
-                    document.getElementById(`ch${ch.id}`).style.display = '';
-                });
-                return;
-            }
-            
-            chapters.forEach(ch => {
-                const content = document.getElementById(`ch${ch.id}`).textContent.toLowerCase();
-                if (content.includes(query)) {
-                    document.getElementById(`ch${ch.id}`).style.display = '';
-                    goToChapter(ch.id);
-                } else {
-                    document.getElementById(`ch${ch.id}`).style.display = 'none';
-                }
-            });
-        }
-
-        function toggleTheme() {
-            const body = document.body;
-            const themeText = document.getElementById('themeText');
-            
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.removeAttribute('data-theme');
-                themeText.textContent = '深色模式';
-                localStorage.setItem('tutorial_theme', 'light');
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                themeText.textContent = '浅色模式';
-                localStorage.setItem('tutorial_theme', 'dark');
-            }
-        }
-
-        function loadTheme() {
-            const theme = localStorage.getItem('tutorial_theme') || 'light';
-            if (theme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('themeText').textContent = '浅色模式';
-            }
-        }
-
-        function showStats() {
-            const stats = LearningStats.get();
-            alert(`学习统计：\n总学习时间：${Math.floor(stats.totalStudyTime / 60)}分钟\n完成章节：${getCompletedChapters().length}\n连续学习：${stats.dailyStreak}天`);
-        }
-
-        function goToHub() {
-            window.location.href = 'tutorial-hub.html';
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initChapterList();
-            updateProgress();
-            updateBookmarkCount();
-            loadNotes();
-            loadTheme();
-            BookmarkManager.restore('rust');
-            KeyboardShortcuts.init();
+        // 错误示例
+        html += `<div class="error-block"><h4>❌ ${ch.error.title}</h4>`;
+        ch.error.items.forEach(item => {
+            html += `<p>✘ <code>${escapeHtml(item.wrong)}</code></p>`;
+            html += `<p>✔ 修正: ${escapeHtml(item.fix)}</p>`;
         });
+        html += `</div>`;
+
+        // 练习题
+        html += `<div class="practice-section"><h4>📝 练习题</h4>`;
+        ch.exercises.forEach((ex, idx) => {
+            const qid = `ch${ch.id}-q${idx+1}`;
+            const rid = `ch${ch.id}-result${idx+1}`;
+            const aid = `ch${ch.id}-answer${idx+1}`;
+            html += `<div class="question">${idx+1}. ${ex.q}</div>`;
+            html += `<input type="text" class="answer-input" id="${qid}" placeholder="输入答案...">`;
+            html += `<button class="btn btn-primary" onclick="checkAnswer(${ch.id},${idx+1})">检查答案</button>`;
+            html += `<div id="${rid}" class="quiz-result"></div>`;
+            html += `<button class="show-answer-btn" onclick="toggleAnswerBox('${aid}')">查看答案</button>`;
+            html += `<div id="${aid}" class="answer-box">${escapeHtml(ex.a)}</div>`;
+        });
+        html += `</div>`;
+
+        // 笔记
+        html += `<div class="note-section"><h4>📒 学习笔记</h4>`;
+        html += `<textarea class="note-textarea" id="ch${ch.id}-note" placeholder="记录你的学习笔记..."></textarea>`;
+        html += `<button class="save-note-btn" onclick="saveNote(${ch.id})">保存笔记</button></div>`;
+
+        // 完成按钮
+        html += `<button class="completion-btn" id="completeBtn${ch.id}" onclick="markCompleted(${ch.id})">✅ 标记为已完成</button>`;
+
+        // 导航
+        html += `<div class="nav-buttons">${prevBtn}${nextBtn}</div>`;
+
+        return html;
+    }
+
+    function initContent() {
+        const area = document.getElementById('contentArea');
+        area.innerHTML = chapterData.map(ch =>
+            `<div id="ch${ch.id}" class="chapter-section${ch.id===1?' active':''}">${renderChapter(ch)}</div>`
+        ).join('');
+    }
+
+    function initChapterList() {
+        const list = document.getElementById('chapterList');
+        list.innerHTML = chapterData.map(ch => `
+            <li class="chapter-item" onclick="goToChapter(${ch.id})" id="chapterItem${ch.id}">
+                <span>${ch.id}. ${ch.title}</span>
+                <span class="ch-icon" id="chapterIcon${ch.id}">📚</span>
+            </li>
+        `).join('');
+        updateChapterList();
+    }
+
+    // ==================== 导航与状态管理 ====================
+    function goToChapter(id) {
+        document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(`ch${id}`).classList.add('active');
+        currentChapter = id;
+        updateChapterList();
+        updateProgress();
+        BookmarkManager.save('rust', id);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function updateChapterList() {
+        const completed = getCompletedChapters();
+        chapterData.forEach(ch => {
+            const item = document.getElementById(`chapterItem${ch.id}`);
+            const icon = document.getElementById(`chapterIcon${ch.id}`);
+            if (!item) return;
+            item.classList.toggle('active', ch.id === currentChapter);
+            if (completed.includes(ch.id)) {
+                item.classList.add('completed');
+                icon.textContent = '✅';
+            } else {
+                item.classList.remove('completed');
+                icon.textContent = '📚';
+            }
+        });
+    }
+
+    function getCompletedChapters() {
+        const stored = localStorage.getItem('rust_progress');
+        return stored ? JSON.parse(stored) : [];
+    }
+
+    function markCompleted(id) {
+        let completed = getCompletedChapters();
+        if (!completed.includes(id)) {
+            completed.push(id);
+            localStorage.setItem('rust_progress', JSON.stringify(completed));
+            LearningStats.recordChapterCompletion('rust', id);
+        }
+        const btn = document.getElementById(`completeBtn${id}`);
+        if (btn) { btn.classList.add('completed'); btn.textContent = '✓ 已完成'; }
+        updateChapterList();
+        updateProgress();
+    }
+
+    function updateProgress() {
+        const completed = getCompletedChapters().length;
+        const percent = Math.round((completed / TOTAL_CHAPTERS) * 100);
+        document.getElementById('completedCount').textContent = completed;
+        document.getElementById('progressPercent').textContent = `${percent}%`;
+        document.getElementById('progressFill').style.width = `${percent}%`;
+    }
+
+    // ==================== 收藏 ====================
+    function getBookmarks() {
+        const s = localStorage.getItem('rust_bookmarks');
+        return s ? JSON.parse(s) : [];
+    }
+    function toggleBookmark(id) {
+        const bm = getBookmarks();
+        const btn = document.getElementById(`bookmarkBtn${id}`);
+        if (bm.includes(id)) {
+            const nb = bm.filter(b => b !== id);
+            localStorage.setItem('rust_bookmarks', JSON.stringify(nb));
+            btn.classList.remove('bookmarked');
+        } else {
+            bm.push(id);
+            localStorage.setItem('rust_bookmarks', JSON.stringify(bm));
+            btn.classList.add('bookmarked');
+        }
+        updateBookmarkCount();
+    }
+    function updateBookmarkCount() {
+        document.getElementById('bookmarkCount').textContent = getBookmarks().length;
+    }
+    function loadBookmarks() {
+        getBookmarks().forEach(id => {
+            const btn = document.getElementById(`bookmarkBtn${id}`);
+            if (btn) btn.classList.add('bookmarked');
+        });
+    }
+
+    // ==================== 笔记 ====================
+    function getNotes() {
+        const s = localStorage.getItem('rust_notes');
+        return s ? JSON.parse(s) : {};
+    }
+    function saveNote(id) {
+        const ta = document.getElementById(`ch${id}-note`);
+        if (!ta) return;
+        const notes = getNotes();
+        notes[id] = ta.value;
+        localStorage.setItem('rust_notes', JSON.stringify(notes));
+        SnippetManager.showToast('笔记已保存');
+    }
+    function loadNotes() {
+        const notes = getNotes();
+        chapterData.forEach(ch => {
+            const ta = document.getElementById(`ch${ch.id}-note`);
+            if (ta && notes[ch.id]) ta.value = notes[ch.id];
+        });
+    }
+
+    // ==================== 完成状态加载 ====================
+    function loadCompletedState() {
+        getCompletedChapters().forEach(id => {
+            const btn = document.getElementById(`completeBtn${id}`);
+            if (btn) { btn.classList.add('completed'); btn.textContent = '✓ 已完成'; }
+        });
+    }
+
+    // ==================== 答案检查 ====================
+    const answerMap = {};
+    chapterData.forEach(ch => {
+        answerMap[ch.id] = {};
+        ch.exercises.forEach((ex, idx) => {
+            answerMap[ch.id][idx+1] = ex.a;
+        });
+    });
+
+    function checkAnswer(chId, qId) {
+        const input = document.getElementById(`ch${chId}-q${qId}`);
+        if (!input) return;
+        const userAns = input.value.trim().toLowerCase();
+        const correctAns = answerMap[chId][qId].toLowerCase();
+        const resultDiv = document.getElementById(`ch${chId}-result${qId}`);
+        if (userAns && correctAns.includes(userAns) || userAns === correctAns) {
+            resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">正确！</span>';
+            resultDiv.className = 'quiz-result correct';
+        } else {
+            resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">错误，请重试</span>';
+            resultDiv.className = 'quiz-result incorrect';
+        }
+    }
+
+    function toggleAnswerBox(aid) {
+        const box = document.getElementById(aid);
+        if (box) box.classList.toggle('show');
+    }
+
+    // ==================== 代码复制 ====================
+    function copyCode(codeId) {
+        const el = document.getElementById(codeId);
+        if (!el) return;
+        navigator.clipboard.writeText(el.textContent).then(() => {
+            SnippetManager.showToast('代码已复制到剪贴板');
+        });
+    }
+
+    // ==================== 搜索 ====================
+    function searchTutorial() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        if (!query) {
+            chapterData.forEach(ch => {
+                const el = document.getElementById(`ch${ch.id}`);
+                if (el) el.style.display = '';
+            });
+            return;
+        }
+        chapterData.forEach(ch => {
+            const el = document.getElementById(`ch${ch.id}`);
+            if (!el) return;
+            const text = el.textContent.toLowerCase();
+            if (text.includes(query)) {
+                el.style.display = '';
+                goToChapter(ch.id);
+            } else {
+                el.style.display = 'none';
+            }
+        });
+    }
+
+    // ==================== 主题切换 ====================
+    function toggleTheme() {
+        const body = document.body;
+        const txt = document.getElementById('themeText');
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+            txt.textContent = '深色模式';
+            localStorage.setItem('tutorial_theme', 'light');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            txt.textContent = '浅色模式';
+            localStorage.setItem('tutorial_theme', 'dark');
+        }
+    }
+    function loadTheme() {
+        if (localStorage.getItem('tutorial_theme') === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.getElementById('themeText').textContent = '浅色模式';
+        }
+    }
+
+    // ==================== 统计与导航 ====================
+    function showStats() {
+        const stats = LearningStats.get();
+        const completed = getCompletedChapters().length;
+        alert(`📊 Rust学习统计\n\n已完成章节: ${completed}/${TOTAL_CHAPTERS}\n完成进度: ${Math.round(completed/TOTAL_CHAPTERS*100)}%\n连续学习: ${stats.dailyStreak}天\n总学习时间: ${Math.floor(stats.totalStudyTime/60)}分钟\n收藏数: ${getBookmarks().length}`);
+    }
+    function goToHub() { window.location.href = 'tutorial-hub.html'; }
+
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        initContent();
+        initChapterList();
+        updateProgress();
+        updateBookmarkCount();
+        loadNotes();
+        loadBookmarks();
+        loadCompletedState();
+        loadTheme();
+        BookmarkManager.restore('rust');
+        KeyboardShortcuts.init();
+    });
     </script>
 </body>
 </html>

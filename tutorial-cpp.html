@@ -3,615 +3,1994 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>C++教程 - 从入门到精通</title>
-    <link rel="stylesheet" href="tutorial-style.css">
+    <title>C++教程 - 从零开始学习C++编程</title>
     <link rel="stylesheet" href="tutorial-features.css">
     <link rel="stylesheet" href="tutorial-extensions.css">
     <style>
-        :root { --accent-color: #007acc; --bg-primary: #fff; --bg-secondary: #f5f5f5; --bg-card: #fff; --text-primary: #333; --text-secondary: #666; --text-muted: #999; --border-color: #e0e0e0; --shadow-sm: 0 2px 4px rgba(0,0,0,0.05); --shadow-md: 0 4px 12px rgba(0,0,0,0.08); --success-color: #4caf50; --error-color: #f44336; --warning-color: #ff9800; }
-        .dark-mode { --bg-primary: #1a1a2e; --bg-secondary: #16213e; --bg-card: #0f3460; --text-primary: #fff; --text-secondary: #b0b0b0; --text-muted: #808080; --border-color: #333355; --shadow-sm: 0 2px 4px rgba(0,0,0,0.3); --shadow-md: 0 4px 12px rgba(0,0,0,0.4); }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg-primary); color: var(--text-primary); line-height: 1.6; margin: 0; padding: 0; transition: all 0.3s; }
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-color: #667eea;
+            --accent-hover: #764ba2;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-color: #818cf8;
+            --accent-hover: #a78bfa;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --danger-color: #f87171;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
+        }
+
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header { background: linear-gradient(135deg, #007acc, #005a9e); color: white; padding: 40px 20px; border-radius: 20px; margin-bottom: 30px; text-align: center; position: relative; }
-        .header h1 { font-size: 2.5rem; margin: 0 0 10px 0; }
-        .header p { opacity: 0.9; font-size: 1.1rem; margin: 0; }
-        .header-controls { position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; }
-        .control-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 10px 15px; border-radius: 10px; cursor: pointer; font-size: 1rem; }
-        .control-btn:hover { background: rgba(255,255,255,0.3); }
-        .search-bar { display: flex; gap: 10px; margin-bottom: 30px; }
-        .search-bar input { flex: 1; padding: 15px 20px; border: 2px solid var(--border-color); border-radius: 15px; font-size: 1rem; background: var(--bg-secondary); color: var(--text-primary); }
-        .search-bar button { padding: 15px 30px; border: none; border-radius: 15px; background: var(--accent-color); color: white; cursor: pointer; font-size: 1rem; }
-        .progress-bar { background: var(--bg-secondary); height: 20px; border-radius: 10px; margin-bottom: 30px; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, var(--accent-color), #00bcd4); height: 100%; border-radius: 10px; transition: width 0.5s; position: relative; }
-        .progress-fill::after { content: attr(data-percentage); position: absolute; right: 10px; top: 50%; transform: translateY(-50%); color: white; font-size: 0.85rem; font-weight: bold; }
-        .progress-info { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: var(--text-secondary); }
-        .sidebar { position: fixed; left: 20px; top: 200px; width: 250px; background: var(--bg-card); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-md); overflow-y: auto; max-height: calc(100vh - 250px); }
-        .sidebar h3 { margin-top: 0; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; padding: 40px 20px; border-radius: 20px;
+            margin-bottom: 30px; text-align: center;
+        }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+
+        .toolbar {
+            display: flex; flex-wrap: wrap; gap: 10px;
+            background: var(--bg-card); padding: 15px; border-radius: 15px;
+            margin-bottom: 30px; box-shadow: var(--shadow-md); align-items: center;
+        }
+        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
+        .toolbar-right { display: flex; gap: 10px; }
+
+        .search-box {
+            padding: 10px 15px; border: 1px solid var(--border-color);
+            border-radius: 25px; background: var(--bg-secondary);
+            color: var(--text-primary); width: 300px; font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px; border: none; border-radius: 10px;
+            cursor: pointer; font-size: 1rem; transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-primary { background: var(--accent-color); color: white; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: rgba(102,126,234,0.1); color: var(--accent-color); }
+
+        .progress-bar {
+            flex: 1; height: 8px; background: var(--bg-secondary);
+            border-radius: 10px; overflow: hidden; margin: 0 20px;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px; transition: width 0.3s ease;
+        }
+
+        .sidebar {
+            position: fixed; left: 20px; top: 200px; width: 250px;
+            background: var(--bg-card); border-radius: 15px; padding: 20px;
+            box-shadow: var(--shadow-md); overflow-y: auto;
+            max-height: calc(100vh - 220px); z-index: 100;
+        }
+        .sidebar h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+
         .chapter-list { list-style: none; padding: 0; margin: 0; }
-        .chapter-item { padding: 12px 15px; margin-bottom: 5px; border-radius: 10px; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 10px; }
-        .chapter-item:hover { background: rgba(0,122,204,0.1); }
-        .chapter-item.completed { background: rgba(76,175,80,0.1); color: var(--success-color); }
+        .chapter-item {
+            padding: 8px 12px; margin-bottom: 3px; border-radius: 8px;
+            cursor: pointer; transition: all 0.3s;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.88rem;
+        }
+        .chapter-item:hover { background: rgba(102,126,234,0.1); }
         .chapter-item.active { background: var(--accent-color); color: white; }
-        .chapter-number { width: 28px; height: 28px; border-radius: 50%; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: bold; }
-        .chapter-item.active .chapter-number, .chapter-item.completed .chapter-number { background: rgba(255,255,255,0.2); }
-        .main-content { margin-left: 280px; padding-bottom: 100px; }
-        .chapter { background: var(--bg-card); border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: var(--shadow-md); display: none; }
-        .chapter.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .chapter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border-color); }
-        .chapter-title { font-size: 2rem; margin: 0; display: flex; align-items: center; gap: 15px; }
-        .chapter-actions { display: flex; gap: 10px; }
-        .action-btn { padding: 10px 20px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
-        .action-btn:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); }
-        .action-btn.favorite.active { background: #ff9800; border-color: #ff9800; }
-        .action-btn.complete.active { background: var(--success-color); border-color: var(--success-color); }
-        .section { margin-bottom: 30px; }
-        .section-title { font-size: 1.3rem; color: var(--accent-color); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-        .section-title::before { content: ''; width: 4px; height: 24px; background: var(--accent-color); border-radius: 2px; }
-        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 15px; overflow-x: auto; margin: 15px 0; position: relative; }
-        .code-block code { font-family: 'Consolas', monospace; font-size: 0.95rem; line-height: 1.6; }
-        .code-block .copy-btn { position: absolute; top: 10px; right: 10px; padding: 5px 10px; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
-        .error-block { background: rgba(244,67,54,0.1); border-left: 4px solid var(--error-color); padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
-        .error-block code { color: var(--error-color); }
-        .warning-box { background: rgba(255,152,0,0.1); border: 1px solid var(--warning-color); padding: 15px 20px; border-radius: 10px; margin: 15px 0; }
-        .practice-section { background: var(--bg-secondary); border-radius: 15px; padding: 25px; margin: 20px 0; }
-        .practice-question { margin-bottom: 20px; }
-        .practice-question p { margin: 0 0 10px 0; font-weight: 500; }
-        .practice-input { width: 100%; padding: 12px 15px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); color: var(--text-primary); font-family: monospace; font-size: 1rem; }
-        .practice-btn { padding: 10px 25px; border: none; border-radius: 10px; background: var(--accent-color); color: white; cursor: pointer; font-size: 1rem; margin-top: 10px; }
-        .practice-result { margin-top: 15px; padding: 15px; border-radius: 10px; display: none; }
-        .practice-result.correct { display: block; background: rgba(76,175,80,0.1); color: var(--success-color); border: 1px solid var(--success-color); }
-        .practice-result.incorrect { display: block; background: rgba(244,67,54,0.1); color: var(--error-color); border: 1px solid var(--error-color); }
-        .answer-box { background: rgba(76,175,80,0.1); border: 1px dashed var(--success-color); padding: 15px 20px; border-radius: 10px; margin-top: 15px; display: none; }
+        .chapter-item.completed { text-decoration: line-through; opacity: 0.7; }
+        .chapter-item.active.completed { text-decoration: none; opacity: 1; }
+        .chapter-icon { font-size: 1rem; margin-right: 4px; }
+
+        .main-content { margin-left: 280px; }
+
+        .chapter-section {
+            background: var(--bg-card); border-radius: 15px; padding: 30px;
+            margin-bottom: 30px; box-shadow: var(--shadow-md); display: none;
+        }
+        .chapter-section.active { display: block; }
+        .chapter-section h2 {
+            font-size: 1.8rem; margin-bottom: 20px; color: var(--text-primary);
+            display: flex; align-items: center; gap: 15px;
+        }
+        .chapter-section h3 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 12px; color: var(--text-primary); }
+        .chapter-section h4 { font-size: 1.1rem; margin-top: 18px; margin-bottom: 8px; color: var(--text-secondary); }
+
+        .section-content { margin-bottom: 20px; color: var(--text-secondary); }
+        .section-content ul, .section-content ol { padding-left: 20px; margin: 10px 0; }
+        .section-content li { margin-bottom: 6px; }
+        .section-content code {
+            background: rgba(102,126,234,0.15); padding: 2px 6px;
+            border-radius: 4px; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #1e293b; color: #e2e8f0; padding: 20px;
+            border-radius: 12px; margin: 15px 0; overflow-x: auto; position: relative;
+        }
+        .code-block pre { margin: 0; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; font-size: 0.92rem; line-height: 1.6; }
+        .code-block code { color: inherit; }
+
+        .code-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #334155;
+        }
+        .code-lang { font-size: 0.85rem; color: #94a3b8; }
+        .code-actions { display: flex; gap: 10px; }
+        .code-btn {
+            background: rgba(255,255,255,0.1); border: none; color: #e2e8f0;
+            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.85rem;
+        }
+        .code-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .error-block {
+            background: rgba(239,68,68,0.1); border-left: 4px solid var(--danger-color);
+            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
+        }
+        .error-block h4 { color: var(--danger-color); margin-top: 0; }
+        .error-block code {
+            background: rgba(239,68,68,0.1); padding: 2px 5px; border-radius: 4px;
+        }
+
+        .practice-section {
+            background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2);
+            border-radius: 15px; padding: 25px; margin: 20px 0;
+        }
+        .practice-section h4 { color: var(--success-color); margin-top: 0; }
+        .question { margin-bottom: 15px; font-weight: 500; }
+
+        .answer-input, .answer-textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
+            font-size: 1rem; margin-bottom: 15px; font-family: inherit;
+        }
+        .answer-textarea { min-height: 100px; }
+
+        .answer-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .option-label {
+            display: flex; align-items: center; gap: 10px; padding: 10px;
+            background: var(--bg-secondary); border-radius: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .option-label:hover { background: rgba(102,126,234,0.1); }
+        .option-label input[type="radio"] { accent-color: var(--accent-color); }
+
+        .quiz-result {
+            padding: 15px; border-radius: 10px; margin-top: 15px;
+            display: none; align-items: center; gap: 10px;
+        }
+        .quiz-result.correct { background: rgba(16,185,129,0.1); color: var(--success-color); display: flex; }
+        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--danger-color); display: flex; }
+
+        .show-answer-btn {
+            background: var(--bg-secondary); border: 1px solid var(--border-color);
+            padding: 10px 20px; border-radius: 10px; cursor: pointer;
+            color: var(--text-secondary); transition: all 0.3s;
+        }
+        .show-answer-btn:hover { background: rgba(102,126,234,0.1); color: var(--accent-color); }
+
+        .answer-box {
+            background: rgba(102,126,234,0.1); border: 1px solid rgba(102,126,234,0.2);
+            padding: 15px; border-radius: 10px; margin-top: 15px; display: none;
+        }
         .answer-box.show { display: block; }
-        .notes-section { background: var(--bg-secondary); border-radius: 15px; padding: 25px; margin-top: 30px; }
-        .notes-section h4 { margin: 0 0 15px 0; display: flex; align-items: center; gap: 10px; }
-        .notes-textarea { width: 100%; min-height: 100px; padding: 15px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); color: var(--text-primary); font-family: inherit; font-size: 1rem; resize: vertical; }
-        .notes-save-btn { padding: 10px 25px; border: none; border-radius: 10px; background: var(--accent-color); color: white; cursor: pointer; font-size: 1rem; margin-top: 10px; }
-        .footer { text-align: center; padding: 30px; color: var(--text-muted); font-size: 0.9rem; }
-        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 30px; }
-        .pagination-btn { padding: 12px 24px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; font-size: 1rem; }
-        .pagination-btn:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); }
-        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .table { width: 100%; border-collapse: collapse; margin: 15px 0; }
-        .table th, .table td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        .table th { background: var(--bg-secondary); font-weight: 600; }
-        @media (max-width: 1000px) { .sidebar { position: static; width: auto; max-height: 300px; margin-bottom: 30px; } .main-content { margin-left: 0; } }
+
+        .note-section {
+            background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 15px; padding: 25px; margin: 20px 0;
+        }
+        .note-section h4 { color: var(--warning-color); margin-top: 0; display: flex; align-items: center; gap: 8px; }
+        .note-textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--border-color);
+            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
+            font-size: 1rem; font-family: inherit; min-height: 80px; margin-bottom: 10px;
+        }
+        .save-note-btn {
+            background: var(--warning-color); color: white; border: none;
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: all 0.3s;
+        }
+        .save-note-btn:hover { opacity: 0.9; }
+
+        .bookmark-btn {
+            float: right; background: none; border: none;
+            font-size: 1.5rem; cursor: pointer; transition: all 0.3s;
+        }
+        .bookmark-btn:hover { transform: scale(1.2); }
+        .bookmark-btn.bookmarked { color: #f59e0b; }
+
+        .completion-btn {
+            background: var(--success-color); color: white; border: none;
+            padding: 12px 25px; border-radius: 10px; cursor: pointer;
+            font-size: 1rem; margin-top: 20px; transition: all 0.3s;
+        }
+        .completion-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .completion-btn.completed { background: var(--text-muted); cursor: not-allowed; }
+
+        .stats-info {
+            display: flex; gap: 30px; margin-bottom: 20px; padding: 20px;
+            background: var(--bg-card); border-radius: 15px; box-shadow: var(--shadow-md);
+            flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; min-width: 80px; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
+
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; }
+        .nav-btn {
+            padding: 12px 30px; border: none; border-radius: 10px;
+            cursor: pointer; font-size: 1rem; transition: all 0.3s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .nav-btn-primary { background: var(--accent-color); color: white; }
+        .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
+        .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
+        .nav-btn-secondary:hover:not(:disabled) { background: rgba(102,126,234,0.1); color: var(--accent-color); }
+
+        .tip-box {
+            background: rgba(14,165,233,0.05); border-left: 4px solid #0ea5e9;
+            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
+        }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--accent-color); color: white; padding: 12px 25px;
+            border-radius: 10px; box-shadow: var(--shadow-lg); z-index: 9999;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .toast.show { opacity: 1; }
+
+        .highlight { background: rgba(102,126,234,0.2); padding: 2px 6px; border-radius: 4px; }
+
+        @media (max-width: 1024px) {
+            .sidebar { position: static; width: 100%; max-height: 200px; margin-bottom: 20px; }
+            .main-content { margin-left: 0; }
+            .progress-bar { display: none; }
+            .search-box { width: 100%; }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .stats-info { gap: 15px; }
+            .stat-value { font-size: 1.4rem; }
+            .chapter-section { padding: 20px; }
+            .chapter-section h2 { font-size: 1.4rem; }
+        }
     </style>
 </head>
-<body>
+<body data-language="cpp">
     <div class="container">
         <div class="header">
-            <div class="header-controls">
-                <button class="control-btn" onclick="toggleTheme()" id="themeBtn">🌙 深色模式</button>
-                <button class="control-btn" onclick="BookmarkManager.save('cpp', currentChapter)">🔖 保存进度</button>
-            </div>
-            <h1>💻 C++教程</h1>
+            <h1>⚡ C++教程</h1>
             <p>从入门到精通，系统学习C++编程语言</p>
         </div>
-        <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
-            <button onclick="searchTutorial()">🔍 搜索</button>
+
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
+                <button class="btn btn-secondary" onclick="toggleTheme()">🌙 <span id="themeText">深色模式</span></button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
+                <button class="btn btn-primary" onclick="goToHub()">🏠 返回首页</button>
+            </div>
         </div>
-        <div class="progress-info">
-            <span>学习进度</span>
-            <span id="progressText">0/10 章节</span>
+
+        <div class="stats-info" id="statsInfo">
+            <div class="stat-item"><div class="stat-value" id="completedCount">0</div><div class="stat-label">已完成章节</div></div>
+            <div class="stat-item"><div class="stat-value" id="totalCount">35</div><div class="stat-label">总章节数</div></div>
+            <div class="stat-item"><div class="stat-value" id="progressPercent">0%</div><div class="stat-label">学习进度</div></div>
+            <div class="stat-item"><div class="stat-value" id="bookmarkCount">0</div><div class="stat-label">收藏章节</div></div>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressBar" data-percentage="0%"></div>
-        </div>
+
         <div class="sidebar">
             <h3>📚 章节导航</h3>
             <ul class="chapter-list" id="chapterList"></ul>
         </div>
-        <div class="main-content" id="mainContent"></div>
-        <div class="footer">© 2026 C++教程 | 学习编程，开启无限可能</div>
+
+        <div class="main-content">
+
+<!-- ======== 第1章 C++简介与历史 ======== -->
+<div id="ch1" class="chapter-section active">
+    <h2>1. C++简介与历史 <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button></h2>
+    <div class="section-content">
+        <p>C++是一种通用的、静态类型的、编译式编程语言，由Bjarne Stroustrup于1979年在贝尔实验室开始设计，作为C语言的扩展（最初被称为"C with Classes"）。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>C++的诞生：</strong>1979年Bjarne Stroustrup在C语言基础上增加类、虚函数等面向对象特性，1983年正式命名为C++</li>
+            <li><strong>标准演进：</strong>C++98（首个标准）→ C++03 → C++11（重大革新）→ C++14 → C++17 → C++20 → C++23</li>
+            <li><strong>多范式支持：</strong>C++同时支持过程式编程、面向对象编程、泛型编程和函数式编程</li>
+            <li><strong>应用领域：</strong>系统软件、游戏开发、嵌入式系统、高性能计算、金融建模、编译器开发</li>
+            <li><strong>C与C++关系：</strong>C++是C的超集（几乎所有合法C代码也是合法C++代码），但C++增加了类型检查、类、模板等</li>
+        </ul>
     </div>
-    <script src="tutorial-common.js"></script>
-    <script src="tutorial-extensions.js"></script>
-    <script>
-        const chapters = [
-            {
-                id: 1, title: '入门介绍与环境搭建', content: `
-                    <div class="section"><h3 class="section-title">什么是C++</h3><p>C++是高级编程语言，由Bjarne Stroustrup在1985年创建，是C语言的扩展，支持面向对象、泛型和过程式编程。</p><p>C++是编译型语言，代码需通过编译器编译成机器码运行，以高性能和灵活性著称，广泛应用于系统编程、游戏开发、嵌入式系统等领域。</p></div>
-                    <div class="section"><h3 class="section-title">开发环境搭建</h3><ul><li><strong>Windows：</strong>安装Visual Studio或MinGW</li><li><strong>macOS：</strong>安装Xcode或Homebrew + gcc</li><li><strong>Linux：</strong>使用gcc或clang编译器</li></ul></div>
-                    <div class="section"><h3 class="section-title">第一个C++程序</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch1-code1')">📋</button></div></div><pre id="ch1-code1"><code>#include &lt;iostream&gt;
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << endl;
+    cout &lt;&lt; "Hello, C++!" &lt;&lt; endl;
+    cout &lt;&lt; "C++ is a powerful language!" &lt;&lt; endl;
     return 0;
-}</code></div><p><strong>代码解析：</strong></p><ul><li><code>#include &lt;iostream&gt;</code> - 引入输入输出流库</li><li><code>using namespace std;</code> - 使用标准命名空间</li><li><code>int main()</code> - 主函数，程序入口</li><li><code>cout << "Hello, World!"</code> - 输出到控制台</li></ul></div>
-                    <div class="section"><h3 class="section-title">错误示例</h3><div class="error-block"><p><strong>错误：忘记使用命名空间</strong></p><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>忘记 <code>#include &lt;iostream&gt;</code> 会导致编译错误，因为 <code>cout</code> 和 <code>endl</code> 定义在该头文件中。</p><p><strong>修正：</strong>始终确保包含所需的头文件。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. C++最初被称为什么？</p><input type="text" class="answer-input" id="ch1-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch1-result1"></div><button class="show-answer-btn" onclick="toggleAnswer(1,1)">查看答案</button><div class="answer-box" id="ch1-answer1">C with Classes（带类的C）</div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch1-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(1)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第2章 开发环境配置 ======== -->
+<div id="ch2" class="chapter-section">
+    <h2>2. 开发环境配置 <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button></h2>
+    <div class="section-content">
+        <p>在开始编写C++程序之前，需要配置开发环境，包括编译器和编辑器/IDE。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>编译器选择：</strong>Windows推荐MSVC或MinGW；Linux推荐GCC；macOS推荐Clang</li>
+            <li><strong>IDE选择：</strong>Visual Studio、CLion、VS Code + C++扩展、Code::Blocks</li>
+            <li><strong>编译流程：</strong>源文件(.cpp) → 预处理 → 编译 → 汇编 → 链接 → 可执行文件</li>
+            <li><strong>CMake构建：</strong>跨平台构建工具，管理大型项目的编译配置</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">bash</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch2-code1')">📋</button></div></div><pre id="ch2-code1"><code># Linux安装GCC
+sudo apt-get install g++
+
+# macOS安装Clang
+xcode-select --install
+
+# 验证安装
+g++ --version
+
+# 编译运行
+g++ -o hello hello.cpp
+./hello</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>在Windows下直接使用 <code>gcc</code> 编译C++文件会报错：<code>gcc hello.cpp</code> 应改为 <code>g++ hello.cpp</code>，因为gcc默认按C语言处理。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 以下哪个不是C++编译器？</p><div class="answer-options"><label class="option-label"><input type="radio" name="ch2-q1" value="a"> A. GCC</label><label class="option-label"><input type="radio" name="ch2-q1" value="b"> B. Clang</label><label class="option-label"><input type="radio" name="ch2-q1" value="c"> C. Pylint</label><label class="option-label"><input type="radio" name="ch2-q1" value="d"> D. MSVC</label></div><div class="quiz-result" id="ch2-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch2-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(2)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第3章 第一个C++程序 ======== -->
+<div id="ch3" class="chapter-section">
+    <h2>3. 第一个C++程序 <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button></h2>
+    <div class="section-content">
+        <p>编写并运行第一个C++程序，理解程序的基本结构。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>程序结构：</strong>#include指令、using声明、main函数、语句和返回值</li>
+            <li><strong>main函数：</strong>程序入口，返回int类型，0表示正常退出</li>
+            <li><strong>输入输出：</strong>cout用于输出（配合<<运算符），cin用于输入（配合>>运算符）</li>
+            <li><strong>命名空间：</strong>std命名空间包含标准库的所有组件</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch3-code1')">📋</button></div></div><pre id="ch3-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
 int main() {
-    cout << "Hello";  // 错误：cout未定义
+    int age;
+    cout &lt;&lt; "请输入你的年龄: ";
+    cin &gt;&gt; age;
+    cout &lt;&lt; "你的年龄是: " &lt;&lt; age &lt;&lt; endl;
     return 0;
-}</code></div><p><strong>修复：</strong>添加 <code>using namespace std;</code> 或使用 <code>std::cout</code></p></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. C++程序的入口函数是什么？</p><input type="text" class="practice-input" id="q1_ch1" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch1', 1)">检查答案</button><div class="practice-result" id="result_ch1_1"></div><button class="practice-btn" onclick="toggleAnswer('ch1', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch1_1"><strong>答案：</strong>main()函数是C++程序的入口点。</div></div><div class="practice-question"><p>2. 写出输出"Hello, C++"的完整代码</p><textarea class="practice-input" id="q2_ch1" rows="5" placeholder="输入代码..."></textarea><button class="practice-btn" onclick="checkAnswer('ch1', 2)">检查答案</button><div class="practice-result" id="result_ch1_2"></div><button class="practice-btn" onclick="toggleAnswer('ch1', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch1_2"><strong>答案：</strong><pre>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p><code>int main()</code> 写成 <code>void main()</code> 虽然某些编译器允许，但不符合C++标准，应始终使用 <code>int main()</code> 并返回0。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写一个程序，输出你的姓名和学号。</p><textarea class="answer-textarea" id="ch3-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch3-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch3-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(3)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第4章 注释与命名空间 ======== -->
+<div id="ch4" class="chapter-section">
+    <h2>4. 注释与命名空间 <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button></h2>
+    <div class="section-content">
+        <p>注释用于解释代码，命名空间用于组织代码和避免命名冲突。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>单行注释：</strong>以 <code>//</code> 开头，到行尾结束</li>
+            <li><strong>多行注释：</strong>以 <code>/*</code> 开头，<code>*/</code> 结束，可跨越多行</li>
+            <li><strong>命名空间定义：</strong><code>namespace MyNS { ... }</code> 封装相关代码</li>
+            <li><strong>using声明：</strong><code>using namespace std;</code> 或 <code>using std::cout;</code></li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch4-code1')">📋</button></div></div><pre id="ch4-code1"><code>#include &lt;iostream&gt;
 using namespace std;
-int main() { cout << "Hello, C++" << endl; return 0; }</pre></div></div></div></div>
-                `
-            },
-            {
-                id: 2, title: '基本语法', content: `
-                    <div class="section"><h3 class="section-title">变量与数据类型</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
-using namespace std;
+
+namespace Math {
+    double PI = 3.14159;
+    int square(int x) { return x * x; }
+}
+
 int main() {
-    int age = 25;           // 整数
-    float height = 1.75f;   // 单精度浮点
-    double pi = 3.14159;    // 双精度浮点
-    char grade = 'A';       // 字符
-    bool isStudent = true;  // 布尔值
-    cout << "年龄: " << age << endl;
+    // 单行注释示例
+    cout &lt;&lt; "PI = " &lt;&lt; Math::PI &lt;&lt; endl;
+    /* 多行注释示例
+       计算平方值 */
+    cout &lt;&lt; "5^2 = " &lt;&lt; Math::square(5) &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">常用数据类型</h3><table class="table"><tr><th>类型</th><th>说明</th><th>大小</th></tr><tr><td>int</td><td>整数</td><td>4字节</td></tr><tr><td>float</td><td>单精度浮点</td><td>4字节</td></tr><tr><td>double</td><td>双精度浮点</td><td>8字节</td></tr><tr><td>char</td><td>字符</td><td>1字节</td></tr><tr><td>bool</td><td>布尔值</td><td>1字节</td></tr></table></div>
-                    <div class="section"><h3 class="section-title">常量</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>多行注释不能嵌套：<code>/* 外层 /* 内层 */ 继续外层 */</code> 会导致编译错误，因为第一个 <code>*/</code> 就结束了注释。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. C++有哪两种注释方式？</p><input type="text" class="answer-input" id="ch4-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch4-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch4-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(4)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第5章 基本数据类型 ======== -->
+<div id="ch5" class="chapter-section">
+    <h2>5. 基本数据类型 <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button></h2>
+    <div class="section-content">
+        <p>C++提供了丰富的内置数据类型来存储不同种类的数据。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>整数类型：</strong>short(2字节)、int(4字节)、long(4/8字节)、long long(8字节)，各有signed/unsigned版本</li>
+            <li><strong>浮点类型：</strong>float(4字节，约7位精度)、double(8字节，约15位精度)、long double</li>
+            <li><strong>字符类型：</strong>char(1字节)、wchar_t、char16_t、char32_t</li>
+            <li><strong>布尔类型：</strong>bool，值为true或false</li>
+            <li><strong>sizeof运算符：</strong>获取类型或变量占用的字节数</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch5-code1')">📋</button></div></div><pre id="ch5-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 int main() {
-    const int MAX_AGE = 100;
-    const double PI = 3.14159;
-    cout << "最大年龄: " << MAX_AGE << endl;
+    int a = 42;
+    double pi = 3.14159;
+    char ch = 'A';
+    bool flag = true;
+
+    cout &lt;&lt; "int大小: " &lt;&lt; sizeof(int) &lt;&lt; " 字节" &lt;&lt; endl;
+    cout &lt;&lt; "double大小: " &lt;&lt; sizeof(double) &lt;&lt; " 字节" &lt;&lt; endl;
+    cout &lt;&lt; "char: " &lt;&lt; ch &lt;&lt; " ASCII: " &lt;&lt; (int)ch &lt;&lt; endl;
+    cout &lt;&lt; "bool: " &lt;&lt; flag &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">运算符</h3><ul><li><strong>算术：</strong>+ - * / %</li><li><strong>关系：</strong>== != > < >= <=</li><li><strong>逻辑：</strong>&& || !</li><li><strong>赋值：</strong>= += -= *= /= %=</li></ul></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 声明双精度浮点数变量price，初始值为99.99</p><input type="text" class="practice-input" id="q1_ch2" placeholder="输入代码..."><button class="practice-btn" onclick="checkAnswer('ch2', 1)">检查答案</button><div class="practice-result" id="result_ch2_1"></div><button class="practice-btn" onclick="toggleAnswer('ch2', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch2_1"><strong>答案：</strong>double price = 99.99;</div></div><div class="practice-question"><p>2. 计算10除以3的余数，使用什么运算符？</p><input type="text" class="practice-input" id="q2_ch2" placeholder="输入运算符..."><button class="practice-btn" onclick="checkAnswer('ch2', 2)">检查答案</button><div class="practice-result" id="result_ch2_2"></div><button class="practice-btn" onclick="toggleAnswer('ch2', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch2_2"><strong>答案：</strong>取模运算符 %</div></div></div></div>
-                `
-            },
-            {
-                id: 3, title: '流程控制', content: `
-                    <div class="section"><h3 class="section-title">if-else语句</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>将浮点数赋值给int类型会丢失小数部分：<code>int x = 3.14;</code> 结果x为3，编译器可能发出警告。应使用显式类型转换。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. sizeof(char)在C++中一定是多少字节？</p><input type="text" class="answer-input" id="ch5-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch5-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch5-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(5)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第6章 变量与常量 ======== -->
+<div id="ch6" class="chapter-section">
+    <h2>6. 变量与常量 <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button></h2>
+    <div class="section-content">
+        <p>变量是存储数据的命名内存空间，常量是不可修改的固定值。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>变量声明与初始化：</strong><code>int x = 10;</code>（拷贝初始化）、<code>int x{10};</code>（列表初始化，C++11）</li>
+            <li><strong>const常量：</strong><code>const int MAX = 100;</code> 必须在声明时初始化，之后不能修改</li>
+            <li><strong>constexpr（C++11）：</strong>编译期常量，<code>constexpr int SIZE = 10;</code></li>
+            <li><strong>宏定义常量：</strong><code>#define PI 3.14</code>（不推荐，优先使用const）</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch6-code1')">📋</button></div></div><pre id="ch6-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
+int main() {
+    int age = 25;           // 变量
+    const double PI = 3.14159;  // const常量
+    constexpr int SIZE = 10;    // constexpr常量
+
+    // age = 30;  // OK: 变量可以修改
+    // PI = 3.0;  // 错误: const不能修改
+
+    cout &lt;&lt; "age = " &lt;&lt; age &lt;&lt; endl;
+    cout &lt;&lt; "PI = " &lt;&lt; PI &lt;&lt; endl;
+    cout &lt;&lt; "SIZE = " &lt;&lt; SIZE &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>未初始化的局部变量使用未定义行为：<code>int x; cout &lt;&lt; x;</code> 输出不确定的值。应始终初始化变量。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. const和#define定义常量有什么区别？</p><textarea class="answer-textarea" id="ch6-q1" placeholder="输入你的答案..."></textarea><div class="quiz-result" id="ch6-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch6-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(6)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第7章 类型转换 ======== -->
+<div id="ch7" class="chapter-section">
+    <h2>7. 类型转换 <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button></h2>
+    <div class="section-content">
+        <p>C++支持多种类型转换方式，包括隐式转换和显式转换。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>隐式转换：</strong>小类型→大类型自动转换，如int→double</li>
+            <li><strong>C风格转换：</strong><code>(double)x</code>，功能强大但不够安全</li>
+            <li><strong>static_cast：</strong>编译期转换，<code>static_cast&lt;double&gt;(x)</code>，最常用</li>
+            <li><strong>dynamic_cast：</strong>运行时多态类型转换，用于继承体系中的向下转型</li>
+            <li><strong>const_cast/reinterpret_cast：</strong>去除const限定/重新解释位模式</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch7-code1')">📋</button></div></div><pre id="ch7-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a = 7, b = 2;
+
+    // 隐式转换: 先转double再除
+    double r1 = a / b;          // 3 (整数除法)
+    double r2 = (double)a / b;  // 3.5 (C风格)
+    double r3 = static_cast&lt;double&gt;(a) / b; // 3.5 (C++风格)
+
+    cout &lt;&lt; "r1 = " &lt;&lt; r1 &lt;&lt; endl;
+    cout &lt;&lt; "r2 = " &lt;&lt; r2 &lt;&lt; endl;
+    cout &lt;&lt; "r3 = " &lt;&lt; r3 &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>整数除法丢失精度：<code>double r = 7 / 2;</code> 结果为3.0而非3.5，因为7/2先做整数除法得3，再隐式转为3.0。修正：<code>double r = 7.0 / 2;</code></p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. C++11推荐的四种具名转换运算符是什么？</p><input type="text" class="answer-input" id="ch7-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch7-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch7-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(7)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第8章 算术运算符 ======== -->
+<div id="ch8" class="chapter-section">
+    <h2>8. 算术运算符 <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button></h2>
+    <div class="section-content">
+        <p>算术运算符用于执行基本的数学运算。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>基本运算：</strong>+（加）、-（减）、*（乘）、/（除）、%（取模）</li>
+            <li><strong>自增自减：</strong>++（自增）、--（自减），分前缀和后缀形式</li>
+            <li><strong>复合赋值：</strong>+=、-=、*=、/=、%=</li>
+            <li><strong>运算符优先级：</strong>* / % 高于 + -，可用括号改变</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch8-code1')">📋</button></div></div><pre id="ch8-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a = 10, b = 3;
+    cout &lt;&lt; "a + b = " &lt;&lt; a + b &lt;&lt; endl;  // 13
+    cout &lt;&lt; "a - b = " &lt;&lt; a - b &lt;&lt; endl;  // 7
+    cout &lt;&lt; "a * b = " &lt;&lt; a * b &lt;&lt; endl;  // 30
+    cout &lt;&lt; "a / b = " &lt;&lt; a / b &lt;&lt; endl;  // 3
+    cout &lt;&lt; "a % b = " &lt;&lt; a % b &lt;&lt; endl;  // 1
+
+    int c = 5;
+    cout &lt;&lt; "c++ = " &lt;&lt; c++ &lt;&lt; endl;  // 5 (后缀: 先用后加)
+    cout &lt;&lt; "++c = " &lt;&lt; ++c &lt;&lt; endl;  // 7 (前缀: 先加后用)
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>对浮点数使用取模运算符：<code>double x = 5.5 % 2;</code> 编译错误，%只能用于整数操作数。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. int x=5; cout &lt;&lt; x++ &lt;&lt; ++x; 输出什么？</p><input type="text" class="answer-input" id="ch8-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch8-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch8-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(8)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第9章 关系与逻辑运算符 ======== -->
+<div id="ch9" class="chapter-section">
+    <h2>9. 关系与逻辑运算符 <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button></h2>
+    <div class="section-content">
+        <p>关系运算符比较值的大小，逻辑运算符组合布尔表达式。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>关系运算符：</strong>==、!=、&lt;、&gt;、&lt;=、&gt;=，返回bool值</li>
+            <li><strong>逻辑运算符：</strong>&&amp;（与）、||（或）、!（非）</li>
+            <li><strong>短路求值：</strong>&&amp;左边为false时不再计算右边；||左边为true时不再计算右边</li>
+            <li><strong>C++20宇宙飞船运算符：</strong>&lt;=&gt; 三路比较运算符</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch9-code1')">📋</button></div></div><pre id="ch9-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int a = 10, b = 20;
+    cout &lt;&lt; boolalpha;  // 输出true/false而非1/0
+    cout &lt;&lt; "a &gt; b: " &lt;&lt; (a &gt; b) &lt;&lt; endl;
+    cout &lt;&lt; "a == b: " &lt;&lt; (a == b) &lt;&lt; endl;
+    cout &lt;&lt; "(a &lt; b) && (b &gt; 0): " &lt;&lt; ((a &lt; b) && (b &gt; 0)) &lt;&lt; endl;
+    cout &lt;&lt; "(a &gt; b) || (b &gt; 0): " &lt;&lt; ((a &gt; b) || (b &gt; 0)) &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>将 <code>==</code> 写成 <code>=</code>：<code>if (x = 5)</code> 是赋值而非比较，结果始终为true（非零值）。应写 <code>if (x == 5)</code>。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 逻辑与(&&)的短路求值是什么意思？</p><textarea class="answer-textarea" id="ch9-q1" placeholder="输入你的答案..."></textarea><div class="quiz-result" id="ch9-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch9-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(9)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第10章 位运算符 ======== -->
+<div id="ch10" class="chapter-section">
+    <h2>10. 位运算符 <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button></h2>
+    <div class="section-content">
+        <p>位运算符直接操作二进制位，常用于底层编程和性能优化。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>位运算符：</strong>&amp;（按位与）、|（按位或）、^（按位异或）、~（按位取反）</li>
+            <li><strong>移位运算符：</strong>&lt;&lt;（左移，相当于×2）、&gt;&gt;（右移，相当于÷2）</li>
+            <li><strong>常用技巧：</strong>判断奇偶 <code>n &amp; 1</code>、交换变量 <code>a ^= b; b ^= a; a ^= b;</code></li>
+            <li><strong>位掩码：</strong>设置/清除/翻转特定位，广泛用于标志位操作</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch10-code1')">📋</button></div></div><pre id="ch10-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    unsigned int a = 0b1100;  // 12
+    unsigned int b = 0b1010;  // 10
+
+    cout &lt;&lt; "a & b = " &lt;&lt; (a & b) &lt;&lt; endl;   // 8  (1000)
+    cout &lt;&lt; "a | b = " &lt;&lt; (a | b) &lt;&lt; endl;   // 14 (1110)
+    cout &lt;&lt; "a ^ b = " &lt;&lt; (a ^ b) &lt;&lt; endl;   // 6  (0110)
+    cout &lt;&lt; "a &lt;&lt; 1 = " &lt;&lt; (a &lt;&lt; 1) &lt;&lt; endl; // 24 (左移1位)
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>对有符号数使用右移：负数右移行为由实现定义，可能进行算术右移（补1）或逻辑右移（补0）。建议对位运算使用无符号类型。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 如何用位运算判断一个整数是否为2的幂？</p><textarea class="answer-textarea" id="ch10-q1" placeholder="写出表达式..."></textarea><div class="quiz-result" id="ch10-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch10-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(10)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第11章 if-else语句 ======== -->
+<div id="ch11" class="chapter-section">
+    <h2>11. if-else语句 <button class="bookmark-btn" onclick="toggleBookmark(11)" id="bookmarkBtn11">📌</button></h2>
+    <div class="section-content">
+        <p>if-else是最基本的条件判断语句，根据条件执行不同的代码分支。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>基本形式：</strong>if (条件) { ... } else { ... }</li>
+            <li><strong>多重分支：</strong>if-else if-else链，从上到下依次判断</li>
+            <li><strong>嵌套if：</strong>if内部可以嵌套另一个if，注意缩进和花括号</li>
+            <li><strong>三目运算符：</strong><code>条件 ? 值1 : 值2</code>，简洁的条件表达式</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch11-code1')">📋</button></div></div><pre id="ch11-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
 int main() {
     int score;
-    cin >> score;
-    if (score >= 90) cout << "优秀!" << endl;
-    else if (score >= 80) cout << "良好" << endl;
-    else if (score >= 60) cout << "及格" << endl;
-    else cout << "不及格" << endl;
+    cout &lt;&lt; "输入成绩: ";
+    cin &gt;&gt; score;
+
+    if (score &gt;= 90) {
+        cout &lt;&lt; "优秀" &lt;&lt; endl;
+    } else if (score &gt;= 80) {
+        cout &lt;&lt; "良好" &lt;&lt; endl;
+    } else if (score &gt;= 60) {
+        cout &lt;&lt; "及格" &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "不及格" &lt;&lt; endl;
+    }
+
+    // 三目运算符
+    string result = (score &gt;= 60) ? "通过" : "未通过";
+    cout &lt;&lt; result &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">for循环</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>在if后加分号：<code>if (x &gt; 0);</code> 空语句，无论条件如何都不执行任何操作，后面的代码块会无条件执行。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用if-else编写判断闰年的程序。</p><textarea class="answer-textarea" id="ch11-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch11-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch11-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(11)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn11" onclick="markCompleted(11)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第12章 switch语句 ======== -->
+<div id="ch12" class="chapter-section">
+    <h2>12. switch语句 <button class="bookmark-btn" onclick="toggleBookmark(12)" id="bookmarkBtn12">📌</button></h2>
+    <div class="section-content">
+        <p>switch语句根据表达式的值跳转到匹配的case分支，适合多值判断。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>基本语法：</strong>switch(表达式) { case 值: 语句; break; ... default: 语句; }</li>
+            <li><strong>break的作用：</strong>跳出switch，否则会穿透到下一个case（fall-through）</li>
+            <li><strong>表达式限制：</strong>必须是整数类型或枚举类型</li>
+            <li><strong>C++17特性：</strong>[[fallthrough]]属性显式标记有意穿透</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch12-code1')">📋</button></div></div><pre id="ch12-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 int main() {
-    for (int i = 1; i <= 10; i++) {
-        cout << i << " ";
+    int day;
+    cout &lt;&lt; "输入星期(1-7): ";
+    cin &gt;&gt; day;
+
+    switch (day) {
+        case 1: cout &lt;&lt; "星期一" &lt;&lt; endl; break;
+        case 2: cout &lt;&lt; "星期二" &lt;&lt; endl; break;
+        case 3: cout &lt;&lt; "星期三" &lt;&lt; endl; break;
+        case 6:
+        case 7: cout &lt;&lt; "周末" &lt;&lt; endl; break;
+        default: cout &lt;&lt; "无效输入" &lt;&lt; endl; break;
     }
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">while循环</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>忘记写break导致fall-through：<code>case 1: cout &lt;&lt; "一"; case 2: cout &lt;&lt; "二";</code> 输入1时会输出"一二"而非"一"。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. switch的表达式可以是string类型吗？</p><input type="text" class="answer-input" id="ch12-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch12-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch12-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(12)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn12" onclick="markCompleted(12)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第13章 for循环 ======== -->
+<div id="ch13" class="chapter-section">
+    <h2>13. for循环 <button class="bookmark-btn" onclick="toggleBookmark(13)" id="bookmarkBtn13">📌</button></h2>
+    <div class="section-content">
+        <p>for循环是最常用的循环结构，适合已知循环次数的场景。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>经典for：</strong><code>for(初始化; 条件; 更新) { 循环体 }</code></li>
+            <li><strong>范围for（C++11）：</strong><code>for(类型 变量 : 容器) { 循环体 }</code>，遍历容器元素</li>
+            <li><strong>无限循环：</strong><code>for(;;)</code> 或 <code>for(;true;)</code></li>
+            <li><strong>多变量控制：</strong><code>for(int i=0, j=10; i&lt;j; i++, j--)</code></li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch13-code1')">📋</button></div></div><pre id="ch13-code1"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
 using namespace std;
+
 int main() {
-    int count = 0;
-    while (count < 5) {
-        cout << "计数: " << count << endl;
+    // 经典for循环
+    int sum = 0;
+    for (int i = 1; i &lt;= 100; i++) {
+        sum += i;
+    }
+    cout &lt;&lt; "1+2+...+100 = " &lt;&lt; sum &lt;&lt; endl;
+
+    // 范围for循环(C++11)
+    vector&lt;int&gt; nums = {1, 2, 3, 4, 5};
+    for (int n : nums) {
+        cout &lt;&lt; n &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>循环条件写错导致死循环：<code>for(int i=0; i&lt;10; i--)</code> 中i递减但判断i&lt;10，i永远满足条件。应为 <code>i++</code>。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用for循环计算10的阶乘(10!)。</p><textarea class="answer-textarea" id="ch13-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch13-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch13-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(13)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn13" onclick="markCompleted(13)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第14章 while与do-while ======== -->
+<div id="ch14" class="chapter-section">
+    <h2>14. while与do-while <button class="bookmark-btn" onclick="toggleBookmark(14)" id="bookmarkBtn14">📌</button></h2>
+    <div class="section-content">
+        <p>while循环适合未知循环次数的场景，do-while保证至少执行一次。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>while：</strong><code>while(条件) { 循环体 }</code>，先判断后执行</li>
+            <li><strong>do-while：</strong><code>do { 循环体 } while(条件);</code>，先执行后判断，至少执行一次</li>
+            <li><strong>选择依据：</strong>已知次数用for，未知次数用while，至少一次用do-while</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch14-code1')">📋</button></div></div><pre id="ch14-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    // while: 计算数字位数
+    int num = 12345, count = 0, temp = num;
+    while (temp > 0) {
+        temp /= 10;
         count++;
     }
+    cout &lt;&lt; num &lt;&lt; " 有 " &lt;&lt; count &lt;&lt; " 位" &lt;&lt; endl;
+
+    // do-while: 菜单选择
+    int choice;
+    do {
+        cout &lt;&lt; "1.开始 2.设置 0.退出" &lt;&lt; endl;
+        cout &lt;&lt; "请选择: ";
+        cin &gt;&gt; choice;
+    } while (choice != 0);
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 写出输出1到100所有偶数的for循环</p><input type="text" class="practice-input" id="q1_ch3" placeholder="输入代码..."><button class="practice-btn" onclick="checkAnswer('ch3', 1)">检查答案</button><div class="practice-result" id="result_ch3_1"></div><button class="practice-btn" onclick="toggleAnswer('ch3', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch3_1"><strong>答案：</strong><pre>for (int i = 2; i <= 100; i += 2) { cout << i << " "; }</pre></div></div><div class="practice-question"><p>2. switch语句中，使用什么关键字跳出当前分支？</p><input type="text" class="practice-input" id="q2_ch3" placeholder="输入关键字..."><button class="practice-btn" onclick="checkAnswer('ch3', 2)">检查答案</button><div class="practice-result" id="result_ch3_2"></div><button class="practice-btn" onclick="toggleAnswer('ch3', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch3_2"><strong>答案：</strong>break</div></div></div></div>
-                `
-            },
-            {
-                id: 4, title: '数组与字符串', content: `
-                    <div class="section"><h3 class="section-title">数组基础</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>do-while末尾忘记分号：<code>do { ... } while(cond)</code> 缺少最后的 <code>;</code>，会导致编译错误。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. while和do-while的关键区别是什么？</p><input type="text" class="answer-input" id="ch14-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch14-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch14-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(14)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn14" onclick="markCompleted(14)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第15章 break与continue ======== -->
+<div id="ch15" class="chapter-section">
+    <h2>15. break与continue <button class="bookmark-btn" onclick="toggleBookmark(15)" id="bookmarkBtn15">📌</button></h2>
+    <div class="section-content">
+        <p>break和continue用于改变循环的正常执行流程。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>break：</strong>立即跳出当前循环或switch语句</li>
+            <li><strong>continue：</strong>跳过本次循环的剩余语句，直接进入下一次迭代</li>
+            <li><strong>嵌套循环：</strong>break和continue只影响最内层的循环</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch15-code1')">📋</button></div></div><pre id="ch15-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 int main() {
-    int scores[5] = {90, 85, 95, 88, 92};
-    cout << "第一个: " << scores[0] << endl;
-    for (int i = 0; i < 5; i++) {
-        cout << scores[i] << " ";
+    // break: 找到第一个能被7整除的数
+    for (int i = 1; i &lt;= 100; i++) {
+        if (i % 7 == 0) {
+            cout &lt;&lt; "第一个: " &lt;&lt; i &lt;&lt; endl;
+            break;
+        }
+    }
+
+    // continue: 输出1-10中的奇数
+    for (int i = 1; i &lt;= 10; i++) {
+        if (i % 2 == 0) continue;
+        cout &lt;&lt; i &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>在嵌套循环中期望break跳出外层循环，但break只能跳出最内层。如需跳出外层，可使用标志变量或goto。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用continue实现输出1-50中不被3整除的数。</p><textarea class="answer-textarea" id="ch15-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch15-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch15-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(15)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn15" onclick="markCompleted(15)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第16章 一维数组 ======== -->
+<div id="ch16" class="chapter-section">
+    <h2>16. 一维数组 <button class="bookmark-btn" onclick="toggleBookmark(16)" id="bookmarkBtn16">📌</button></h2>
+    <div class="section-content">
+        <p>数组是存储相同类型元素的固定大小连续内存空间。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明与初始化：</strong><code>int arr[5];</code>、<code>int arr[] = {1,2,3};</code></li>
+            <li><strong>下标访问：</strong>从0开始，<code>arr[0]</code>是第一个元素</li>
+            <li><strong>数组大小：</strong>必须在编译期确定（C风格），变长数组不是标准C++</li>
+            <li><strong>越界访问：</strong>不检查边界，越界访问是未定义行为</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch16-code1')">📋</button></div></div><pre id="ch16-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int scores[] = {85, 92, 78, 95, 88};
+    int n = sizeof(scores) / sizeof(scores[0]);
+
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++) {
+        sum += scores[i];
+    }
+    double avg = static_cast&lt;double&gt;(sum) / n;
+    cout &lt;&lt; "平均分: " &lt;&lt; avg &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>数组越界访问：<code>int arr[5]; arr[5] = 10;</code> 下标5已越界（有效范围0-4），可能导致程序崩溃或数据损坏。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写程序找出数组中的最大值。</p><textarea class="answer-textarea" id="ch16-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch16-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch16-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(16)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn16" onclick="markCompleted(16)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第17章 多维数组 ======== -->
+<div id="ch17" class="chapter-section">
+    <h2>17. 多维数组 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
+    <div class="section-content">
+        <p>多维数组是数组的数组，最常用的是二维数组（矩阵）。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明：</strong><code>int matrix[3][4];</code> 3行4列的二维数组</li>
+            <li><strong>初始化：</strong><code>int m[2][3] = {{1,2,3},{4,5,6}};</code></li>
+            <li><strong>内存布局：</strong>按行优先存储，连续内存</li>
+            <li><strong>作为函数参数：</strong>必须指定除第一维外的所有维度</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch17-code1')">📋</button></div></div><pre id="ch17-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int matrix[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+
+    // 打印矩阵
+    for (int i = 0; i &lt; 3; i++) {
+        for (int j = 0; j &lt; 3; j++) {
+            cout &lt;&lt; matrix[i][j] &lt;&lt; " ";
+        }
+        cout &lt;&lt; endl;
     }
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">字符串</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>初始化时维度不匹配：<code>int m[2][3] = {{1,2,3,4},{5,6}};</code> 第一行有4个元素但只声明3列，编译错误。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写程序计算3×3矩阵对角线元素之和。</p><textarea class="answer-textarea" id="ch17-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch17-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch17-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(17)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn17" onclick="markCompleted(17)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第18章 C风格字符串 ======== -->
+<div id="ch18" class="chapter-section">
+    <h2>18. C风格字符串 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
+    <div class="section-content">
+        <p>C风格字符串是以null字符('\0')结尾的字符数组。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明与初始化：</strong><code>char str[] = "hello";</code> 自动添加'\0'，数组大小为6</li>
+            <li><strong>常用函数：</strong>strlen、strcpy、strcat、strcmp（需<code>&lt;cstring&gt;</code>）</li>
+            <li><strong>安全性：</strong>strcpy/strcat不检查缓冲区大小，推荐使用strncpy/strncat</li>
+            <li><strong>输入输出：</strong>cin/cout可处理C字符串，但cin遇到空格停止</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch18-code1')">📋</button></div></div><pre id="ch18-code1"><code>#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+int main() {
+    char str1[] = "Hello";
+    char str2[] = " World";
+    char result[50];
+
+    strcpy(result, str1);     // 复制
+    strcat(result, str2);     // 连接
+    cout &lt;&lt; result &lt;&lt; endl;  // Hello World
+    cout &lt;&lt; "长度: " &lt;&lt; strlen(result) &lt;&lt; endl;
+    cout &lt;&lt; "比较: " &lt;&lt; strcmp(str1, str2) &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>数组太小导致缓冲区溢出：<code>char buf[5]; strcpy(buf, "Hello World");</code> "Hello World"需要12字节（含'\0'），buf只有5字节。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. strlen("abc")返回值是多少？</p><input type="text" class="answer-input" id="ch18-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch18-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch18-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(18)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn18" onclick="markCompleted(18)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第19章 string类 ======== -->
+<div id="ch19" class="chapter-section">
+    <h2>19. string类 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
+    <div class="section-content">
+        <p>C++标准库提供的string类比C字符串更安全、更方便。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明与初始化：</strong><code>string s = "hello";</code>、<code>string s(5, 'a');</code>（5个'a'）</li>
+            <li><strong>常用操作：</strong>+（拼接）、=（赋值）、==（比较）、[]（下标访问）</li>
+            <li><strong>成员函数：</strong>length/size、substr、find、replace、insert、erase、c_str</li>
+            <li><strong>输入：</strong>cin&gt;&gt;s（遇空格停）、getline(cin,s)（读整行）</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch19-code1')">📋</button></div></div><pre id="ch19-code1"><code>#include &lt;iostream&gt;
 #include &lt;string&gt;
 using namespace std;
+
 int main() {
-    string firstName = "John";
-    string lastName = "Doe";
-    string fullName = firstName + " " + lastName;
-    cout << "姓名: " << fullName << endl;
-    cout << "长度: " << fullName.length() << endl;
+    string s1 = "Hello";
+    string s2 = " World";
+    string s3 = s1 + s2;  // 拼接
+
+    cout &lt;&lt; s3 &lt;&lt; endl;
+    cout &lt;&lt; "长度: " &lt;&lt; s3.length() &lt;&lt; endl;
+    cout &lt;&lt; "子串: " &lt;&lt; s3.substr(0, 5) &lt;&lt; endl;
+    cout &lt;&lt; "查找: " &lt;&lt; s3.find("World") &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 声明包含5个元素的整数数组，初始化为1-5</p><input type="text" class="practice-input" id="q1_ch4" placeholder="输入代码..."><button class="practice-btn" onclick="checkAnswer('ch4', 1)">检查答案</button><div class="practice-result" id="result_ch4_1"></div><button class="practice-btn" onclick="toggleAnswer('ch4', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch4_1"><strong>答案：</strong>int arr[5] = {1, 2, 3, 4, 5};</div></div><div class="practice-question"><p>2. 获取字符串长度的方法？</p><input type="text" class="practice-input" id="q2_ch4" placeholder="输入方法名..."><button class="practice-btn" onclick="checkAnswer('ch4', 2)">检查答案</button><div class="practice-result" id="result_ch4_2"></div><button class="practice-btn" onclick="toggleAnswer('ch4', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch4_2"><strong>答案：</strong>length() 或 size()</div></div></div></div>
-                `
-            },
-            {
-                id: 5, title: '函数', content: `
-                    <div class="section"><h3 class="section-title">函数定义与调用</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>用<code>==</code>比较C字符串是比较指针而非内容：<code>char *a="hi"; char *b="hi"; if(a==b)</code> 可能失败。应使用<code>strcmp</code>或改用string。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写程序反转一个string。</p><textarea class="answer-textarea" id="ch19-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch19-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch19-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(19)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn19" onclick="markCompleted(19)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第20章 函数定义与调用 ======== -->
+<div id="ch20" class="chapter-section">
+    <h2>20. 函数定义与调用 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
+    <div class="section-content">
+        <p>函数是可重用的代码块，接受参数、执行操作、返回结果。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>定义：</strong><code>返回类型 函数名(参数列表) { 函数体 }</code></li>
+            <li><strong>声明与定义：</strong>声明（原型）告诉编译器函数签名，定义提供实现</li>
+            <li><strong>值传递与引用传递：</strong>值传递拷贝参数，引用传递操作原变量</li>
+            <li><strong>返回值：</strong>void函数不返回值，其他类型必须有return语句</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch20-code1')">📋</button></div></div><pre id="ch20-code1"><code>#include &lt;iostream&gt;
 using namespace std;
-int add(int a, int b);
+
+// 函数声明
+int factorial(int n);
+
 int main() {
-    int result = add(10, 20);
-    cout << "结果: " << result << endl;
+    cout &lt;&lt; "5! = " &lt;&lt; factorial(5) &lt;&lt; endl;
     return 0;
 }
-int add(int a, int b) { return a + b; }</code></div></div>
-                    <div class="section"><h3 class="section-title">函数重载</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
-using namespace std;
-int max(int a, int b) { return a > b ? a : b; }
-double max(double a, double b) { return a > b ? a : b; }
-int main() {
-    cout << max(10, 20) << endl;
-    cout << max(3.14, 2.71) << endl;
-    return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">递归函数</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
-using namespace std;
+
+// 函数定义
 int factorial(int n) {
-    if (n == 0 || n == 1) return 1;
+    if (n &lt;= 1) return 1;
     return n * factorial(n - 1);
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>函数使用在定义之前且没有声明：<code>int main() { foo(); } void foo() {}</code> 编译器不知道foo的存在。修正：在main前添加<code>void foo();</code>声明。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写一个函数判断素数。</p><textarea class="answer-textarea" id="ch20-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch20-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch20-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(20)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn20" onclick="markCompleted(20)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第21章 函数重载 ======== -->
+<div id="ch21" class="chapter-section">
+    <h2>21. 函数重载 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
+    <div class="section-content">
+        <p>函数重载允许同名函数具有不同参数列表，编译器根据调用时的参数选择匹配版本。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>重载条件：</strong>同名函数的参数类型、个数或顺序不同</li>
+            <li><strong>返回类型不参与重载：</strong>仅返回类型不同的同名函数不能重载</li>
+            <li><strong>名称修饰：</strong>编译器内部为重载函数生成唯一名称（name mangling）</li>
+            <li><strong>重载解析：</strong>精确匹配 → 类型提升匹配 → 标准转换匹配 → 用户定义转换匹配</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch21-code1')">📋</button></div></div><pre id="ch21-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int add(int a, int b) { return a + b; }
+double add(double a, double b) { return a + b; }
+int add(int a, int b, int c) { return a + b + c; }
+
+int main() {
+    cout &lt;&lt; add(1, 2) &lt;&lt; endl;       // 调用int版本
+    cout &lt;&lt; add(1.5, 2.5) &lt;&lt; endl;    // 调用double版本
+    cout &lt;&lt; add(1, 2, 3) &lt;&lt; endl;     // 调用三参数版本
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>仅返回类型不同的重载：<code>int foo(int x);</code> 和 <code>double foo(int x);</code> 编译错误——参数列表必须不同。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写重载函数area，分别计算圆面积和矩形面积。</p><textarea class="answer-textarea" id="ch21-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch21-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch21-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(21)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn21" onclick="markCompleted(21)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第22章 默认参数 ======== -->
+<div id="ch22" class="chapter-section">
+    <h2>22. 默认参数 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
+    <div class="section-content">
+        <p>默认参数允许函数调用时省略某些参数，使用预设的默认值。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>语法：</strong><code>void foo(int a, int b = 10, int c = 20);</code></li>
+            <li><strong>规则：</strong>默认参数必须从右向左连续设置，中间不能跳过</li>
+            <li><strong>声明与定义：</strong>默认参数写在声明中，不要在定义中重复</li>
+            <li><strong>与重载的关系：</strong>默认参数有时可以替代重载，但不能完全替代</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch22-code1')">📋</button></div></div><pre id="ch22-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+void greet(string name, string msg = "你好") {
+    cout &lt;&lt; msg &lt;&lt; ", " &lt;&lt; name &lt;&lt; "!" &lt;&lt; endl;
 }
+
 int main() {
-    cout << "5! = " << factorial(5) << endl;
+    greet("张三");            // 你好, 张三!
+    greet("李四", "早上好");  // 早上好, 李四!
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 定义函数sum，计算两个整数的和</p><textarea class="practice-input" id="q1_ch5" rows="3" placeholder="输入代码..."></textarea><button class="practice-btn" onclick="checkAnswer('ch5', 1)">检查答案</button><div class="practice-result" id="result_ch5_1"></div><button class="practice-btn" onclick="toggleAnswer('ch5', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch5_1"><strong>答案：</strong><pre>int sum(int a, int b) { return a + b; }</pre></div></div><div class="practice-question"><p>2. 递归函数必须具备什么条件？</p><input type="text" class="practice-input" id="q2_ch5" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch5', 2)">检查答案</button><div class="practice-result" id="result_ch5_2"></div><button class="practice-btn" onclick="toggleAnswer('ch5', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch5_2"><strong>答案：</strong>递归终止条件</div></div></div></div>
-                `
-            },
-            {
-                id: 6, title: '指针与引用', content: `
-                    <div class="section"><h3 class="section-title">指针基础</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>默认参数不连续：<code>void foo(int a=1, int b, int c=3);</code> b没有默认值但a有，违反从右向左的规则。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 默认参数必须在声明还是定义中指定？</p><input type="text" class="answer-input" id="ch22-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch22-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch22-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(22)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn22" onclick="markCompleted(22)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第23章 内联函数 ======== -->
+<div id="ch23" class="chapter-section">
+    <h2>23. 内联函数 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
+    <div class="section-content">
+        <p>内联函数建议编译器将函数体直接嵌入调用处，避免函数调用开销。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>定义：</strong><code>inline int square(int x) { return x * x; }</code></li>
+            <li><strong>优势：</strong>消除函数调用开销（压栈、跳转、返回），适合短小频繁调用的函数</li>
+            <li><strong>局限性：</strong>inline只是建议，编译器可能忽略；递归函数、含循环的函数通常不会被内联</li>
+            <li><strong>与宏对比：</strong>inline有类型检查、不会产生副作用，比#define安全</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch23-code1')">📋</button></div></div><pre id="ch23-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
+inline int square(int x) { return x * x; }
+inline int max(int a, int b) { return (a &gt; b) ? a : b; }
+
 int main() {
-    int num = 100;
-    int *ptr = &num;
-    cout << "指针指向的值: " << *ptr << endl;
-    *ptr = 200;
-    cout << "修改后的值: " << num << endl;
+    cout &lt;&lt; "square(5) = " &lt;&lt; square(5) &lt;&lt; endl;
+    cout &lt;&lt; "max(3, 7) = " &lt;&lt; max(3, 7) &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">引用</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>用宏实现"内联"：<code>#define SQUARE(x) x*x</code>，调用 <code>SQUARE(1+2)</code> 展开为 <code>1+2*1+2</code>=5而非9。应使用inline函数。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. inline函数与普通函数在执行效率上有何区别？</p><textarea class="answer-textarea" id="ch23-q1" placeholder="输入你的答案..."></textarea><div class="quiz-result" id="ch23-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch23-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(23)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn23" onclick="markCompleted(23)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第24章 指针基础 ======== -->
+<div id="ch24" class="chapter-section">
+    <h2>24. 指针基础 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
+    <div class="section-content">
+        <p>指针是存储内存地址的变量，是C++最强大也最危险的特性之一。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明与初始化：</strong><code>int *p = &amp;x;</code> p存储x的地址，&amp;是取地址运算符</li>
+            <li><strong>解引用：</strong><code>*p</code> 访问指针指向的值，*是解引用运算符</li>
+            <li><strong>空指针：</strong><code>nullptr</code>（C++11），不指向任何对象</li>
+            <li><strong>指针与地址：</strong>每个变量都有内存地址，指针用来间接访问变量</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch24-code1')">📋</button></div></div><pre id="ch24-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 int main() {
-    int num = 10;
-    int &ref = num;
-    ref = 20;
-    cout << "num: " << num << endl;
+    int x = 42;
+    int *p = &amp;x;  // p指向x
+
+    cout &lt;&lt; "x的值: " &lt;&lt; x &lt;&lt; endl;
+    cout &lt;&lt; "x的地址: " &lt;&lt; p &lt;&lt; endl;
+    cout &lt;&lt; "通过指针访问: " &lt;&lt; *p &lt;&lt; endl;
+
+    *p = 100;  // 通过指针修改x
+    cout &lt;&lt; "修改后x = " &lt;&lt; x &lt;&lt; endl;
+
+    int *q = nullptr;  // 空指针
+    cout &lt;&lt; "空指针: " &lt;&lt; q &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">指针与引用的区别</h3><table class="table"><tr><th>特性</th><th>指针</th><th>引用</th></tr><tr><td>空值</td><td>可以为NULL</td><td>不能为空</td></tr><tr><td>修改指向</td><td>可以重新指向</td><td>不能重新绑定</td></tr></table></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 声明指针ptr，指向整数变量x</p><input type="text" class="practice-input" id="q1_ch6" placeholder="输入代码..."><button class="practice-btn" onclick="checkAnswer('ch6', 1)">检查答案</button><div class="practice-result" id="result_ch6_1"></div><button class="practice-btn" onclick="toggleAnswer('ch6', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch6_1"><strong>答案：</strong>int *ptr = &x;</div></div><div class="practice-question"><p>2. 引用和指针的主要区别？</p><input type="text" class="practice-input" id="q2_ch6" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch6', 2)">检查答案</button><div class="practice-result" id="result_ch6_2"></div><button class="practice-btn" onclick="toggleAnswer('ch6', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch6_2"><strong>答案：</strong>引用不能为空，指针可以为NULL</div></div></div></div>
-                `
-            },
-            {
-                id: 7, title: '类与对象', content: `
-                    <div class="section"><h3 class="section-title">类的定义</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>使用未初始化的指针：<code>int *p; *p = 10;</code> p指向随机地址，写入该地址是未定义行为，可能崩溃。应先初始化：<code>int x; int *p = &amp;x;</code></p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 使用指针交换两个变量的值。</p><textarea class="answer-textarea" id="ch24-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch24-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch24-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(24)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn24" onclick="markCompleted(24)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第25章 指针与数组 ======== -->
+<div id="ch25" class="chapter-section">
+    <h2>25. 指针与数组 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
+    <div class="section-content">
+        <p>数组名可以当作指针使用，指针运算与数组下标访问等价。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>数组名即指针：</strong>数组名是首元素地址，<code>arr</code> 等价于 <code>&amp;arr[0]</code></li>
+            <li><strong>指针运算：</strong><code>p+1</code> 指向下一个元素（偏移sizeof(*p)字节）</li>
+            <li><strong>下标与指针等价：</strong><code>arr[i]</code> 等价于 <code>*(arr+i)</code></li>
+            <li><strong>指针遍历数组：</strong>用指针加减运算遍历数组元素</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch25-code1')">📋</button></div></div><pre id="ch25-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int arr[] = {10, 20, 30, 40, 50};
+    int *p = arr;  // 指向数组首元素
+
+    // 指针遍历
+    for (int i = 0; i &lt; 5; i++) {
+        cout &lt;&lt; *(p + i) &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+
+    // arr[i] 与 *(arr+i) 等价
+    cout &lt;&lt; arr[2] &lt;&lt; " " &lt;&lt; *(arr + 2) &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>数组名是常量指针不能修改：<code>int arr[5]; arr++;</code> 编译错误，arr不能自增。可以用 <code>int *p = arr; p++;</code> 代替。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用指针实现数组元素的逆序。</p><textarea class="answer-textarea" id="ch25-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch25-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch25-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(25)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn25" onclick="markCompleted(25)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第26章 引用 ======== -->
+<div id="ch26" class="chapter-section">
+    <h2>26. 引用 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
+    <div class="section-content">
+        <p>引用是已存在变量的别名，必须初始化且不能重新绑定。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>声明：</strong><code>int &amp;r = x;</code> r是x的引用，对r的操作就是对x的操作</li>
+            <li><strong>必须初始化：</strong>引用声明时必须绑定到一个对象</li>
+            <li><strong>不可重绑定：</strong>引用一旦绑定就不能改为引用其他对象</li>
+            <li><strong>引用传参：</strong>函数参数使用引用可以避免拷贝并允许修改原变量</li>
+            <li><strong>const引用：</strong><code>const int &amp;r = x;</code> 不能通过r修改x，可以绑定到右值</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch26-code1')">📋</button></div></div><pre id="ch26-code1"><code>#include &lt;iostream&gt;
+using namespace std;
+
+void swap(int &amp;a, int &amp;b) {
+    int temp = a;
+    a = b;
+    b = temp;
+}
+
+int main() {
+    int x = 10, y = 20;
+    cout &lt;&lt; "交换前: " &lt;&lt; x &lt;&lt; " " &lt;&lt; y &lt;&lt; endl;
+    swap(x, y);
+    cout &lt;&lt; "交换后: " &lt;&lt; x &lt;&lt; " " &lt;&lt; y &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>声明未初始化的引用：<code>int &amp;r;</code> 编译错误，引用必须在声明时初始化。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 引用和指针的主要区别有哪些？（至少列出3点）</p><textarea class="answer-textarea" id="ch26-q1" placeholder="输入你的答案..."></textarea><div class="quiz-result" id="ch26-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch26-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(26)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn26" onclick="markCompleted(26)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第27章 类与对象 ======== -->
+<div id="ch27" class="chapter-section">
+    <h2>27. 类与对象 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
+    <div class="section-content">
+        <p>类是面向对象编程的核心，封装数据和操作，对象是类的实例。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>类定义：</strong>class关键字，包含成员变量（属性）和成员函数（方法）</li>
+            <li><strong>访问控制：</strong>public（公开）、private（私有）、protected（保护）</li>
+            <li><strong>对象创建：</strong><code>ClassName obj;</code> 或 <code>ClassName obj(args);</code></li>
+            <li><strong>成员访问：</strong>对象用 <code>.</code> 运算符，指针用 <code>-&gt;</code> 运算符</li>
+            <li><strong>this指针：</strong>指向当前对象的指针，在成员函数内隐式可用</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch27-code1')">📋</button></div></div><pre id="ch27-code1"><code>#include &lt;iostream&gt;
 #include &lt;string&gt;
 using namespace std;
-class Person {
+
+class Student {
 private:
     string name;
     int age;
 public:
-    Person(string n, int a) : name(n), age(a) {}
-    void introduce() {
-        cout << "我是" << name << ", 今年" << age << "岁" << endl;
+    void setName(string n) { name = n; }
+    void setAge(int a) { age = a; }
+    void display() {
+        cout &lt;&lt; "姓名: " &lt;&lt; name &lt;&lt; ", 年龄: " &lt;&lt; age &lt;&lt; endl;
     }
 };
+
 int main() {
-    Person p("张三", 25);
-    p.introduce();
+    Student s;
+    s.setName("张三");
+    s.setAge(20);
+    s.display();
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">构造函数</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>在类定义末尾忘记分号：<code>class Foo { ... }</code> 缺少最后的 <code>;</code>，会导致难以理解的编译错误。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 定义一个Circle类，包含半径和计算面积的方法。</p><textarea class="answer-textarea" id="ch27-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch27-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch27-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(27)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn27" onclick="markCompleted(27)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第28章 构造与析构函数 ======== -->
+<div id="ch28" class="chapter-section">
+    <h2>28. 构造与析构函数 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
+    <div class="section-content">
+        <p>构造函数初始化对象，析构函数清理资源，两者是类生命周期管理的关键。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>构造函数：</strong>与类同名，无返回类型，在对象创建时自动调用</li>
+            <li><strong>初始化列表：</strong><code>ClassName(int a) : member(a) {}</code> 比赋值初始化更高效</li>
+            <li><strong>析构函数：</strong><code>~ClassName()</code> 对象销毁时自动调用，用于释放资源</li>
+            <li><strong>拷贝构造：</strong><code>ClassName(const ClassName&amp; other)</code> 用已有对象初始化新对象</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch28-code1')">📋</button></div></div><pre id="ch28-code1"><code>#include &lt;iostream&gt;
 using namespace std;
-class Rectangle {
+
+class Point {
 private:
-    int width, height;
+    int x, y;
 public:
-    Rectangle() : width(0), height(0) {}
-    Rectangle(int w, int h) : width(w), height(h) {}
-    int getArea() { return width * height; }
+    Point(int a, int b) : x(a), y(b) {  // 构造函数(初始化列表)
+        cout &lt;&lt; "构造: (" &lt;&lt; x &lt;&lt; "," &lt;&lt; y &lt;&lt; ")" &lt;&lt; endl;
+    }
+    ~Point() {  // 析构函数
+        cout &lt;&lt; "析构: (" &lt;&lt; x &lt;&lt; "," &lt;&lt; y &lt;&lt; ")" &lt;&lt; endl;
+    }
+    void show() { cout &lt;&lt; "(" &lt;&lt; x &lt;&lt; "," &lt;&lt; y &lt;&lt; ")" &lt;&lt; endl; }
 };
+
 int main() {
-    Rectangle r(5, 3);
-    cout << "面积: " << r.getArea() << endl;
+    Point p(3, 4);
+    p.show();
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 定义Circle类，包含半径和计算面积的方法</p><textarea class="practice-input" id="q1_ch7" rows="5" placeholder="输入代码..."></textarea><button class="practice-btn" onclick="checkAnswer('ch7', 1)">检查答案</button><div class="practice-result" id="result_ch7_1"></div><button class="practice-btn" onclick="toggleAnswer('ch7', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch7_1"><strong>答案：</strong><pre>class Circle {
-private: double radius;
-public: Circle(double r) : radius(r) {}
-double getArea() { return 3.14159 * radius * radius; }
-};</pre></div></div><div class="practice-question"><p>2. 类的成员访问修饰符有哪些？</p><input type="text" class="practice-input" id="q2_ch7" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch7', 2)">检查答案</button><div class="practice-result" id="result_ch7_2"></div><button class="practice-btn" onclick="toggleAnswer('ch7', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch7_2"><strong>答案：</strong>public、private、protected</div></div></div></div>
-                `
-            },
-            {
-                id: 8, title: '继承与多态', content: `
-                    <div class="section"><h3 class="section-title">继承基础</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
-#include &lt;string&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>构造函数初始化列表顺序与声明顺序不一致：初始化列表的执行顺序由成员声明顺序决定，而非列表中的书写顺序，可能导致依赖问题。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 构造函数和析构函数的调用顺序是什么？</p><input type="text" class="answer-input" id="ch28-q1" placeholder="输入你的答案..."><div class="quiz-result" id="ch28-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch28-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(28)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn28" onclick="markCompleted(28)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第29章 继承 ======== -->
+<div id="ch29" class="chapter-section">
+    <h2>29. 继承 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
+    <div class="section-content">
+        <p>继承允许从已有类派生新类，实现代码复用和层次化设计。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>语法：</strong><code>class Derived : public Base { };</code></li>
+            <li><strong>继承方式：</strong>public（最常用）、protected、private，影响基类成员在派生类中的访问权限</li>
+            <li><strong>构造顺序：</strong>先构造基类部分，再构造派生类部分；析构顺序相反</li>
+            <li><strong>函数隐藏：</strong>派生类同名函数会隐藏基类所有同名函数（即使签名不同）</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch29-code1')">📋</button></div></div><pre id="ch29-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 class Animal {
-protected: string name;
-public: Animal(string n) : name(n) {}
-void eat() { cout << name << "正在吃东西" << endl; }
+public:
+    string name;
+    Animal(string n) : name(n) {}
+    void speak() { cout &lt;&lt; name &lt;&lt; " 发出声音" &lt;&lt; endl; }
 };
+
 class Dog : public Animal {
-public: Dog(string n) : Animal(n) {}
-void bark() { cout << name << "汪汪叫" << endl; }
+public:
+    Dog(string n) : Animal(n) {}
+    void speak() { cout &lt;&lt; name &lt;&lt; " 汪汪!" &lt;&lt; endl; }
+    void fetch() { cout &lt;&lt; name &lt;&lt; " 捡球!" &lt;&lt; endl; }
 };
+
 int main() {
-    Dog dog("旺财");
-    dog.eat();
-    dog.bark();
+    Dog d("旺财");
+    d.speak();
+    d.fetch();
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">虚函数与多态</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>派生类构造函数未调用基类构造函数：若基类没有默认构造函数，派生类必须显式调用基类构造函数。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 定义Vehicle基类和Car派生类，体现继承关系。</p><textarea class="answer-textarea" id="ch29-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch29-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch29-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(29)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn29" onclick="markCompleted(29)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第30章 多态与虚函数 ======== -->
+<div id="ch30" class="chapter-section">
+    <h2>30. 多态与虚函数 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
+    <div class="section-content">
+        <p>多态允许通过基类接口操作不同派生类对象，虚函数是实现运行时多态的机制。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>虚函数：</strong><code>virtual void foo();</code> 声明为虚函数，支持动态绑定</li>
+            <li><strong>纯虚函数：</strong><code>virtual void foo() = 0;</code> 使类成为抽象类</li>
+            <li><strong>override：</strong>C++11关键字，显式标记重写基类虚函数，防止拼写错误</li>
+            <li><strong>虚析构函数：</strong>基类析构函数应声明为virtual，确保delete基类指针时正确调用派生类析构函数</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch30-code1')">📋</button></div></div><pre id="ch30-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
 class Shape {
 public:
-    virtual void draw() { cout << "绘制形状" << endl; }
+    virtual double area() = 0;  // 纯虚函数
+    virtual ~Shape() {}         // 虚析构
 };
+
 class Circle : public Shape {
+    double r;
 public:
-    void draw() override { cout << "绘制圆形" << endl; }
+    Circle(double radius) : r(radius) {}
+    double area() override { return 3.14159 * r * r; }
 };
+
+class Rectangle : public Shape {
+    double w, h;
+public:
+    Rectangle(double w, double h) : w(w), h(h) {}
+    double area() override { return w * h; }
+};
+
 int main() {
-    Shape *shape = new Circle();
-    shape->draw();
-    delete shape;
+    Shape *s1 = new Circle(5);
+    Shape *s2 = new Rectangle(4, 6);
+    cout &lt;&lt; "圆面积: " &lt;&lt; s1-&gt;area() &lt;&lt; endl;
+    cout &lt;&lt; "矩形面积: " &lt;&lt; s2-&gt;area() &lt;&lt; endl;
+    delete s1; delete s2;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 什么是多态？如何实现？</p><input type="text" class="practice-input" id="q1_ch8" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch8', 1)">检查答案</button><div class="practice-result" id="result_ch8_1"></div><button class="practice-btn" onclick="toggleAnswer('ch8', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch8_1"><strong>答案：</strong>多态是同一接口有不同实现，通过虚函数实现</div></div><div class="practice-question"><p>2. 包含纯虚函数的类称为什么？</p><input type="text" class="practice-input" id="q2_ch8" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch8', 2)">检查答案</button><div class="practice-result" id="result_ch8_2"></div><button class="practice-btn" onclick="toggleAnswer('ch8', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch8_2"><strong>答案：</strong>抽象类</div></div></div></div>
-                `
-            },
-            {
-                id: 9, title: 'STL标准库', content: `
-                    <div class="section"><h3 class="section-title">常用容器</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
-#include &lt;vector&gt;
-#include &lt;map&gt;
-#include &lt;set&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>基类析构函数非virtual：<code>Base *p = new Derived; delete p;</code> 只调用Base析构，Derived析构不调用，资源泄漏。修正：声明 <code>virtual ~Base() {}</code></p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 虚函数和纯虚函数有什么区别？</p><textarea class="answer-textarea" id="ch30-q1" placeholder="输入你的答案..."></textarea><div class="quiz-result" id="ch30-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch30-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(30)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn30" onclick="markCompleted(30)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第31章 模板 ======== -->
+<div id="ch31" class="chapter-section">
+    <h2>31. 模板 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
+    <div class="section-content">
+        <p>模板是C++泛型编程的基石，允许编写与类型无关的代码。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>函数模板：</strong><code>template&lt;typename T&gt; T max(T a, T b) { return a&gt;b ? a : b; }</code></li>
+            <li><strong>类模板：</strong><code>template&lt;typename T&gt; class Stack { ... };</code></li>
+            <li><strong>模板实例化：</strong>编译器根据使用时的具体类型生成对应代码</li>
+            <li><strong>模板特化：</strong>为特定类型提供特殊实现</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋</button></div></div><pre id="ch31-code1"><code>#include &lt;iostream&gt;
 using namespace std;
+
+template&lt;typename T&gt;
+T getMax(T a, T b) {
+    return (a &gt; b) ? a : b;
+}
+
+template&lt;typename T&gt;
+class Pair {
+public:
+    T first, second;
+    Pair(T a, T b) : first(a), second(b) {}
+    T max() { return (first &gt; second) ? first : second; }
+};
+
 int main() {
-    vector&lt;int&gt; nums = {1,2,3,4,5};
-    nums.push_back(6);
-    map&lt;string, int&gt; ages;
-    ages["张三"] = 25;
-    set&lt;int&gt; s = {3,1,4,1,5};
+    cout &lt;&lt; getMax(3, 7) &lt;&lt; endl;
+    cout &lt;&lt; getMax(3.5, 2.1) &lt;&lt; endl;
+    Pair&lt;int&gt; p(10, 20);
+    cout &lt;&lt; "Max: " &lt;&lt; p.max() &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">常用算法</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>模板定义放在.cpp文件中而声明在.h中：模板需要在实例化时可见完整定义，通常将模板实现也放在头文件中。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写一个模板函数swapValues交换两个任意类型的值。</p><textarea class="answer-textarea" id="ch31-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch31-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch31-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(31)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn31" onclick="markCompleted(31)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第32章 STL容器vector ======== -->
+<div id="ch32" class="chapter-section">
+    <h2>32. STL容器vector <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
+    <div class="section-content">
+        <p>vector是STL中最常用的动态数组容器，自动管理内存。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>创建：</strong><code>vector&lt;int&gt; v;</code>、<code>vector&lt;int&gt; v = {1,2,3};</code>、<code>vector&lt;int&gt; v(10, 0);</code></li>
+            <li><strong>常用操作：</strong>push_back、pop_back、size、empty、clear、resize</li>
+            <li><strong>访问：</strong>v[i]（无边界检查）、v.at(i)（有边界检查）、v.front()、v.back()</li>
+            <li><strong>迭代器：</strong><code>vector&lt;int&gt;::iterator it;</code>，begin()、end()，支持范围for</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch32-code1')">📋</button></div></div><pre id="ch32-code1"><code>#include &lt;iostream&gt;
+#include &lt;vector&gt;
+using namespace std;
+
+int main() {
+    vector&lt;int&gt; v = {1, 2, 3, 4, 5};
+
+    v.push_back(6);   // 末尾添加
+    v.pop_back();     // 末尾删除
+
+    // 遍历
+    for (int x : v) {
+        cout &lt;&lt; x &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; "大小: " &lt;&lt; v.size() &lt;&lt; endl;
+    cout &lt;&lt; "首个: " &lt;&lt; v.front() &lt;&lt; endl;
+    cout &lt;&lt; "最后: " &lt;&lt; v.back() &lt;&lt; endl;
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>使用[]越界访问：<code>v[100]</code> 不像at()那样抛异常，而是未定义行为。安全访问应使用 <code>v.at(100)</code>。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用vector实现一个简单的学生成绩管理（添加、删除、求平均）。</p><textarea class="answer-textarea" id="ch32-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch32-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch32-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(32)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn32" onclick="markCompleted(32)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第33章 STL算法 ======== -->
+<div id="ch33" class="chapter-section">
+    <h2>33. STL算法 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+    <div class="section-content">
+        <p>STL算法库提供大量通用算法，配合迭代器操作容器。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>排序：</strong><code>sort(v.begin(), v.end())</code>，默认升序，可传入比较函数</li>
+            <li><strong>查找：</strong>find、binary_search、count、min_element、max_element</li>
+            <li><strong>修改：</strong>reverse、rotate、fill、replace、remove、unique</li>
+            <li><strong>数值：</strong>accumulate（需<code>&lt;numeric&gt;</code>）、inner_product</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch33-code1')">📋</button></div></div><pre id="ch33-code1"><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;algorithm&gt;
+#include &lt;numeric&gt;
 using namespace std;
+
 int main() {
-    vector&lt;int&gt; nums = {3,1,4,1,5};
-    sort(nums.begin(), nums.end());
-    auto it = find(nums.begin(), nums.end(), 5);
+    vector&lt;int&gt; v = {5, 2, 8, 1, 9, 3};
+
+    sort(v.begin(), v.end());  // 排序
+    for (int x : v) cout &lt;&lt; x &lt;&lt; " ";
+    cout &lt;&lt; endl;
+
+    auto it = find(v.begin(), v.end(), 8);
+    if (it != v.end()) cout &lt;&lt; "找到: " &lt;&lt; *it &lt;&lt; endl;
+
+    int sum = accumulate(v.begin(), v.end(), 0);
+    cout &lt;&lt; "总和: " &lt;&lt; sum &lt;&lt; endl;
+
+    reverse(v.begin(), v.end());
+    for (int x : v) cout &lt;&lt; x &lt;&lt; " ";
+    cout &lt;&lt; endl;
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. STL中常用容器有哪些？</p><input type="text" class="practice-input" id="q1_ch9" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch9', 1)">检查答案</button><div class="practice-result" id="result_ch9_1"></div><button class="practice-btn" onclick="toggleAnswer('ch9', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch9_1"><strong>答案：</strong>vector、list、map、set等</div></div><div class="practice-question"><p>2. 对vector排序使用什么算法？</p><input type="text" class="practice-input" id="q2_ch9" placeholder="输入算法名..."><button class="practice-btn" onclick="checkAnswer('ch9', 2)">检查答案</button><div class="practice-result" id="result_ch9_2"></div><button class="practice-btn" onclick="toggleAnswer('ch9', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch9_2"><strong>答案：</strong>sort()</div></div></div></div>
-                `
-            },
-            {
-                id: 10, title: '综合实战', content: `
-                    <div class="section"><h3 class="section-title">项目概述</h3><p>实现学生成绩管理系统：添加学生、查询信息、修改成绩、删除学生、统计成绩。</p></div>
-                    <div class="section"><h3 class="section-title">完整代码</h3><div class="code-block"><button class="copy-btn" onclick="copyCode(this)">复制</button><code>#include &lt;iostream&gt;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>对未排序容器使用binary_search：<code>vector&lt;int&gt; v={3,1,4}; binary_search(v.begin(),v.end(),1);</code> 可能返回false。binary_search要求容器已排序。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 用STL算法去除vector中重复元素（提示：sort + unique）。</p><textarea class="answer-textarea" id="ch33-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch33-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch33-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(33)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn33" onclick="markCompleted(33)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第34章 文件IO ======== -->
+<div id="ch34" class="chapter-section">
+    <h2>34. 文件IO <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+    <div class="section-content">
+        <p>C++通过文件流类实现文件的读写操作。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>文件流类：</strong>ofstream（写）、ifstream（读）、fstream（读写），需<code>&lt;fstream&gt;</code></li>
+            <li><strong>打开模式：</strong>ios::in、ios::out、ios::app、ios::binary等</li>
+            <li><strong>写入文件：</strong><code>ofstream fout("file.txt"); fout &lt;&lt; data;</code></li>
+            <li><strong>读取文件：</strong>逐行 <code>getline(fin, line)</code> 或逐词 <code>fin &gt;&gt; word</code></li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch34-code1')">📋</button></div></div><pre id="ch34-code1"><code>#include &lt;iostream&gt;
+#include &lt;fstream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    // 写入文件
+    ofstream fout("test.txt");
+    fout &lt;&lt; "Hello, File IO!" &lt;&lt; endl;
+    fout &lt;&lt; "C++ is great!" &lt;&lt; endl;
+    fout.close();
+
+    // 读取文件
+    ifstream fin("test.txt");
+    string line;
+    while (getline(fin, line)) {
+        cout &lt;&lt; line &lt;&lt; endl;
+    }
+    fin.close();
+    return 0;
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>不检查文件是否成功打开：<code>ifstream fin("nofile.txt");</code> 若文件不存在，后续读取操作静默失败。应检查：<code>if (!fin) { cerr &lt;&lt; "无法打开文件"; }</code></p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 编写程序将一个文件的内容复制到另一个文件。</p><textarea class="answer-textarea" id="ch34-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch34-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch34-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(34)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn34" onclick="markCompleted(34)">✅ 标记完成</button>
+</div>
+
+<!-- ======== 第35章 综合实战 ======== -->
+<div id="ch35" class="chapter-section">
+    <h2>35. 综合实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+    <div class="section-content">
+        <p>通过一个综合项目——学生成绩管理系统，综合运用前面所学的所有知识点。</p>
+        <h3>🌟 核心知识点</h3>
+        <ul>
+            <li><strong>类设计：</strong>Student类封装学生信息，GradeManager类管理所有学生</li>
+            <li><strong>STL容器：</strong>使用vector存储学生数据，map存储科目成绩</li>
+            <li><strong>文件IO：</strong>将数据保存到文件，程序启动时加载</li>
+            <li><strong>多态应用：</strong>不同排序策略（按姓名、按成绩）可使用策略模式</li>
+        </ul>
+    </div>
+    <div class="code-block"><div class="code-header"><span class="code-lang">cpp</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch35-code1')">📋</button></div></div><pre id="ch35-code1"><code>#include &lt;iostream&gt;
 #include &lt;vector&gt;
 #include &lt;string&gt;
-#include &lt;iomanip&gt;
 #include &lt;algorithm&gt;
 using namespace std;
 
 class Student {
 private:
     string name;
-    int id;
-    double score;
+    vector&lt;double&gt; scores;
 public:
-    Student(string n, int i, double s) : name(n), id(i), score(s) {}
+    Student(string n) : name(n) {}
+    void addScore(double s) { scores.push_back(s); }
+    double getAverage() const {
+        if (scores.empty()) return 0;
+        double sum = 0;
+        for (double s : scores) sum += s;
+        return sum / scores.size();
+    }
     string getName() const { return name; }
-    int getId() const { return id; }
-    double getScore() const { return score; }
-    void setScore(double s) { score = s; }
     void display() const {
-        cout << left << setw(15) << name << setw(10) << id << setw(10) << fixed << setprecision(2) << score << endl;
+        cout &lt;&lt; name &lt;&lt; " - 平均分: " &lt;&lt; getAverage() &lt;&lt; endl;
     }
 };
 
-class ScoreManager {
+class GradeManager {
 private:
     vector&lt;Student&gt; students;
 public:
-    void addStudent() {
-        string name; int id; double score;
-        cin >> name >> id >> score;
-        students.push_back(Student(name, id, score));
+    void addStudent(const Student&amp; s) { students.push_back(s); }
+    void showAll() {
+        for (const auto&amp; s : students) s.display();
     }
-    void displayAll() const {
-        for (const auto& s : students) s.display();
-    }
-    void statistics() const {
-        if (students.empty()) return;
-        double sum = 0;
-        for (const auto& s : students) sum += s.getScore();
-        cout << "平均分: " << sum / students.size() << endl;
+    void sortByAvg() {
+        sort(students.begin(), students.end(),
+            [](const Student&amp; a, const Student&amp; b) {
+                return a.getAverage() &gt; b.getAverage();
+            });
     }
 };
 
 int main() {
-    ScoreManager manager;
-    manager.addStudent();
-    manager.displayAll();
-    manager.statistics();
+    GradeManager mgr;
+    Student s1("张三"); s1.addScore(85); s1.addScore(90); s1.addScore(78);
+    Student s2("李四"); s2.addScore(92); s2.addScore(88); s2.addScore(95);
+    mgr.addStudent(s1); mgr.addStudent(s2);
+    mgr.sortByAvg();
+    mgr.showAll();
     return 0;
-}</code></div></div>
-                    <div class="section"><h3 class="section-title">练习题</h3><div class="practice-section"><div class="practice-question"><p>1. 如何按成绩从高到低排序？</p><textarea class="practice-input" id="q1_ch10" rows="3" placeholder="输入代码..."></textarea><button class="practice-btn" onclick="checkAnswer('ch10', 1)">检查答案</button><div class="practice-result" id="result_ch10_1"></div><button class="practice-btn" onclick="toggleAnswer('ch10', 1)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch10_1"><strong>答案：</strong><pre>sort(students.begin(), students.end(), [](const Student& a, const Student& b) { return a.getScore() > b.getScore(); });</pre></div></div><div class="practice-question"><p>2. 项目使用了哪些面向对象特性？</p><input type="text" class="practice-input" id="q2_ch10" placeholder="输入答案..."><button class="practice-btn" onclick="checkAnswer('ch10', 2)">检查答案</button><div class="practice-result" id="result_ch10_2"></div><button class="practice-btn" onclick="toggleAnswer('ch10', 2)" style="background: var(--warning-color)">查看答案</button><div class="answer-box" id="answer_ch10_2"><strong>答案：</strong>封装、抽象</div></div></div></div>
-                `
-            }
+}</code></pre></div>
+    <div class="error-block"><h4>❌ 常见错误</h4><p>lambda捕获未考虑生命周期：lambda按引用捕获局部变量，如果lambda在变量销毁后执行，会产生悬垂引用。优先按值捕获。</p></div>
+    <div class="practice-section"><h4>📝 练习题</h4><p class="question">1. 为GradeManager添加按姓名搜索学生的功能。</p><textarea class="answer-textarea" id="ch35-q1" placeholder="写出代码..."></textarea><div class="quiz-result" id="ch35-result1"></div></div>
+    <div class="note-section"><h4>📝 笔记</h4><textarea class="note-textarea" id="ch35-note" placeholder="在此记录学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(35)">保存笔记</button></div>
+    <button class="completion-btn" id="completeBtn35" onclick="markCompleted(35)">✅ 标记完成</button>
+</div>
+
+        </div><!-- end main-content -->
+    </div><!-- end container -->
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const chapters = [
+            { id: 1, title: 'C++简介与历史', icon: '📖' },
+            { id: 2, title: '开发环境配置', icon: '🔧' },
+            { id: 3, title: '第一个C++程序', icon: '🚀' },
+            { id: 4, title: '注释与命名空间', icon: '📝' },
+            { id: 5, title: '基本数据类型', icon: '🔢' },
+            { id: 6, title: '变量与常量', icon: '📦' },
+            { id: 7, title: '类型转换', icon: '🔄' },
+            { id: 8, title: '算术运算符', icon: '➕' },
+            { id: 9, title: '关系与逻辑运算符', icon: '⚖️' },
+            { id: 10, title: '位运算符', icon: '💻' },
+            { id: 11, title: 'if-else语句', icon: '🔀' },
+            { id: 12, title: 'switch语句', icon: '🎯' },
+            { id: 13, title: 'for循环', icon: '🔁' },
+            { id: 14, title: 'while与do-while', icon: '🔄' },
+            { id: 15, title: 'break与continue', icon: '⏭️' },
+            { id: 16, title: '一维数组', icon: '📊' },
+            { id: 17, title: '多维数组', icon: '📋' },
+            { id: 18, title: 'C风格字符串', icon: '🔤' },
+            { id: 19, title: 'string类', icon: '🔗' },
+            { id: 20, title: '函数定义与调用', icon: '⚙️' },
+            { id: 21, title: '函数重载', icon: '🔃' },
+            { id: 22, title: '默认参数', icon: '📌' },
+            { id: 23, title: '内联函数', icon: '⚡' },
+            { id: 24, title: '指针基础', icon: '👉' },
+            { id: 25, title: '指针与数组', icon: '📈' },
+            { id: 26, title: '引用', icon: '🔗' },
+            { id: 27, title: '类与对象', icon: '🏗️' },
+            { id: 28, title: '构造与析构函数', icon: '🔧' },
+            { id: 29, title: '继承', icon: '🧬' },
+            { id: 30, title: '多态与虚函数', icon: '🎭' },
+            { id: 31, title: '模板', icon: '🧩' },
+            { id: 32, title: 'STL容器vector', icon: '📦' },
+            { id: 33, title: 'STL算法', icon: '🧮' },
+            { id: 34, title: '文件IO', icon: '📁' },
+            { id: 35, title: '综合实战', icon: '🏆' }
         ];
 
-        let currentChapter = 1;
-        let favorites = JSON.parse(localStorage.getItem('cpp_favorites') || '[]');
-        let completed = JSON.parse(localStorage.getItem('cpp_completed') || '[]');
-        let notes = JSON.parse(localStorage.getItem('cpp_notes') || '{}');
+        const correctAnswers = {
+            1: { 1: 'c with classes' },
+            2: { 1: 'c' },
+            3: { 1: 'print' },
+            4: { 1: '单行和多行' },
+            5: { 1: '1' },
+            6: { 1: 'const有类型检查' },
+            7: { 1: 'static_cast dynamic_cast const_cast reinterpret_cast' },
+            8: { 1: '5 7' },
+            9: { 1: '短路' },
+            10: { 1: 'n & (n-1)' },
+            11: { 1: 'leap' },
+            12: { 1: '不能' },
+            13: { 1: '3628800' },
+            14: { 1: '先判断后执行vs先执行后判断' },
+            15: { 1: 'continue' },
+            16: { 1: 'max' },
+            17: { 1: '对角线' },
+            18: { 1: '3' },
+            19: { 1: 'reverse' },
+            20: { 1: 'prime' },
+            21: { 1: 'area' },
+            22: { 1: '声明' },
+            23: { 1: '内联' },
+            24: { 1: 'swap' },
+            25: { 1: 'reverse' },
+            26: { 1: '必须初始化' },
+            27: { 1: 'circle' },
+            28: { 1: '先构造后析构' },
+            29: { 1: 'vehicle' },
+            30: { 1: '纯虚函数等于0' },
+            31: { 1: 'template' },
+            32: { 1: 'vector' },
+            33: { 1: 'unique' },
+            34: { 1: 'copy' },
+            35: { 1: 'search' }
+        };
 
         function init() {
             renderChapterList();
-            renderChapterContent();
-            updateProgress();
+            loadProgress();
+            loadBookmarks();
             loadNotes();
-            applyTheme();
+            updateStats();
+            checkTheme();
         }
 
         function renderChapterList() {
             const list = document.getElementById('chapterList');
             list.innerHTML = chapters.map(ch => `
-                <li class="chapter-item ${completed.includes(ch.id) ? 'completed' : ''} ${currentChapter === ch.id ? 'active' : ''}" onclick="switchChapter(${ch.id})">
-                    <span class="chapter-number">${ch.id}</span>
+                <li class="chapter-item" id="chapter-${ch.id}" onclick="goToChapter(${ch.id})">
+                    <span class="chapter-icon">${ch.icon}</span>
                     <span>${ch.title}</span>
-                    ${completed.includes(ch.id) ? '✓' : ''}
+                    <span id="chapter-status-${ch.id}"></span>
                 </li>
             `).join('');
         }
 
-        function renderChapterContent() {
-            const content = document.getElementById('mainContent');
-            const chapter = chapters.find(c => c.id === currentChapter);
-            content.innerHTML = `
-                <div class="chapter active" id="ch${chapter.id}">
-                    <div class="chapter-header">
-                        <h2 class="chapter-title">
-                            <span class="chapter-number" style="background: var(--accent-color); color: white;">${chapter.id}</span>
-                            ${chapter.title}
-                        </h2>
-                        <div class="chapter-actions">
-                            <button class="action-btn favorite ${favorites.includes(chapter.id) ? 'active' : ''}" onclick="toggleFavorite(${chapter.id})">
-                                ⭐ ${favorites.includes(chapter.id) ? '已收藏' : '收藏'}
-                            </button>
-                            <button class="action-btn complete ${completed.includes(chapter.id) ? 'active' : ''}" onclick="toggleComplete(${chapter.id})">
-                                ✅ ${completed.includes(chapter.id) ? '已完成' : '标记完成'}
-                            </button>
-                        </div>
-                    </div>
-                    ${chapter.content}
-                    <div class="notes-section">
-                        <h4>📝 我的笔记</h4>
-                        <textarea class="notes-textarea" id="chapterNotes" placeholder="写下你的学习笔记...">${notes[chapter.id] || ''}</textarea>
-                        <button class="notes-save-btn" onclick="saveNotes()">💾 保存笔记</button>
-                    </div>
-                    <div class="pagination">
-                        <button class="pagination-btn" onclick="prevChapter()" ${currentChapter === 1 ? 'disabled' : ''}>← 上一章</button>
-                        <button class="pagination-btn" onclick="nextChapter()" ${currentChapter === chapters.length ? 'disabled' : ''}>下一章 →</button>
-                    </div>
-                </div>
-            `;
-        }
+        function goToChapter(chapterId) {
+            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
 
-        function switchChapter(id) {
-            currentChapter = id;
-            renderChapterList();
-            renderChapterContent();
-            loadNotes();
+            document.getElementById(`ch${chapterId}`).classList.add('active');
+            document.getElementById(`chapter-${chapterId}`).classList.add('active');
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            BookmarkManager.save('cpp', chapterId);
+
+            // 更新导航按钮
+            updateNavButtons(chapterId);
         }
 
-        function prevChapter() { if (currentChapter > 1) switchChapter(currentChapter - 1); }
-        function nextChapter() { if (currentChapter < chapters.length) switchChapter(currentChapter + 1); }
-
-        function toggleFavorite(id) {
-            const idx = favorites.indexOf(id);
-            if (idx === -1) favorites.push(id);
-            else favorites.splice(idx, 1);
-            localStorage.setItem('cpp_favorites', JSON.stringify(favorites));
-            renderChapterContent();
+        function updateNavButtons(chapterId) {
+            // Navigation is handled via sidebar clicks
         }
 
-        function toggleComplete(id) {
-            const idx = completed.indexOf(id);
-            if (idx === -1) {
-                completed.push(id);
-                LearningStats.recordChapterCompletion('cpp', id);
-            } else completed.splice(idx, 1);
-            localStorage.setItem('cpp_completed', JSON.stringify(completed));
-            renderChapterList();
-            renderChapterContent();
-            updateProgress();
+        function goToHub() {
+            window.location.href = 'tutorial-hub.html';
         }
 
-        function updateProgress() {
-            const percent = Math.round((completed.length / chapters.length) * 100);
-            document.getElementById('progressBar').style.width = `${percent}%`;
-            document.getElementById('progressBar').setAttribute('data-percentage', `${percent}%`);
-            document.getElementById('progressText').textContent = `${completed.length}/${chapters.length} 章节`;
+        function markCompleted(chapterId) {
+            const key = `cpp_${chapterId}`;
+            let progress = JSON.parse(localStorage.getItem('cpp_progress') || '{"completed":[]}');
+
+            if (!progress.completed.includes(key)) {
+                progress.completed.push(key);
+                localStorage.setItem('cpp_progress', JSON.stringify(progress));
+
+                const stats = LearningStats.get();
+                if (!stats.chaptersCompleted.includes(key)) {
+                    stats.chaptersCompleted.push(key);
+                }
+                if (!stats.languagesProgress['cpp']) {
+                    stats.languagesProgress['cpp'] = [];
+                }
+                if (!stats.languagesProgress['cpp'].includes(chapterId)) {
+                    stats.languagesProgress['cpp'].push(chapterId);
+                }
+                LearningStats.save(stats);
+                LearningStats.checkAchievements();
+
+                updateChapterStatus(chapterId, true);
+                updateStats();
+
+                const btn = document.getElementById(`completeBtn${chapterId}`);
+                if (btn) {
+                    btn.classList.add('completed');
+                    btn.textContent = '✓ 已完成';
+                    btn.disabled = true;
+                }
+            }
         }
 
-        function saveNotes() {
-            notes[currentChapter] = document.getElementById('chapterNotes').value;
-            localStorage.setItem('cpp_notes', JSON.stringify(notes));
-            alert('笔记已保存！');
+        function updateChapterStatus(chapterId, completed) {
+            const status = document.getElementById(`chapter-status-${chapterId}`);
+            const btn = document.getElementById(`completeBtn${chapterId}`);
+
+            if (completed) {
+                if (status) status.textContent = '✓';
+                const item = document.getElementById(`chapter-${chapterId}`);
+                if (item) item.classList.add('completed');
+                if (btn) {
+                    btn.classList.add('completed');
+                    btn.textContent = '✓ 已完成';
+                    btn.disabled = true;
+                }
+            }
+        }
+
+        function loadProgress() {
+            const progress = JSON.parse(localStorage.getItem('cpp_progress') || '{"completed":[]}');
+            progress.completed.forEach(key => {
+                const chapterId = parseInt(key.replace('cpp_', ''));
+                if (chapterId) updateChapterStatus(chapterId, true);
+            });
+        }
+
+        function loadBookmarks() {
+            const bookmarks = JSON.parse(localStorage.getItem('cpp_bookmarks') || '[]');
+            bookmarks.forEach(ch => {
+                const btn = document.getElementById(`bookmarkBtn${ch}`);
+                if (btn) btn.classList.add('bookmarked');
+            });
+        }
+
+        function toggleBookmark(chapterId) {
+            const btn = document.getElementById(`bookmarkBtn${chapterId}`);
+            const bookmarks = JSON.parse(localStorage.getItem('cpp_bookmarks') || '[]');
+
+            const index = bookmarks.indexOf(chapterId);
+            if (index === -1) {
+                bookmarks.push(chapterId);
+                if (btn) btn.classList.add('bookmarked');
+            } else {
+                bookmarks.splice(index, 1);
+                if (btn) btn.classList.remove('bookmarked');
+            }
+
+            localStorage.setItem('cpp_bookmarks', JSON.stringify(bookmarks));
+            updateStats();
         }
 
         function loadNotes() {
-            const textarea = document.getElementById('chapterNotes');
-            if (textarea && notes[currentChapter]) textarea.value = notes[currentChapter];
+            const notes = JSON.parse(localStorage.getItem('cpp_notes') || '{}');
+            chapters.forEach(ch => {
+                const textarea = document.getElementById(`ch${ch.id}-note`);
+                if (textarea && notes[ch.id]) {
+                    textarea.value = notes[ch.id];
+                }
+            });
         }
 
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.getElementById('themeBtn');
-            if (body.classList.contains('dark-mode')) {
-                body.classList.remove('dark-mode');
-                btn.textContent = '🌙 深色模式';
-                localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.add('dark-mode');
-                btn.textContent = '☀️ 浅色模式';
-                localStorage.setItem('theme', 'dark');
+        function saveNote(chapterId) {
+            const notes = JSON.parse(localStorage.getItem('cpp_notes') || '{}');
+            const textarea = document.getElementById(`ch${chapterId}-note`);
+            if (textarea) {
+                notes[chapterId] = textarea.value;
+                localStorage.setItem('cpp_notes', JSON.stringify(notes));
             }
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.textContent = '笔记已保存';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
 
-        function applyTheme() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
-                document.body.classList.add('dark-mode');
-                document.getElementById('themeBtn').textContent = '☀️ 浅色模式';
+        function checkAnswer(chapterId, questionId) {
+            const input = document.getElementById(`ch${chapterId}-q${questionId}`);
+            const resultDiv = document.getElementById(`ch${chapterId}-result${questionId}`);
+
+            if (!input) {
+                const radio = document.querySelector(`input[name="ch${chapterId}-q${questionId}"]:checked`);
+                if (radio) {
+                    const correct = correctAnswers[chapterId] && correctAnswers[chapterId][questionId];
+                    if (correct && radio.value.toLowerCase() === correct.toLowerCase()) {
+                        resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">回答正确！</span>';
+                        resultDiv.className = 'quiz-result correct';
+                    } else {
+                        resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">回答错误，请重试</span>';
+                        resultDiv.className = 'quiz-result incorrect';
+                    }
+                    resultDiv.style.display = 'flex';
+                } else {
+                    resultDiv.innerHTML = '<span class="result-icon">❓</span><span class="result-text">请选择一个选项</span>';
+                    resultDiv.className = 'quiz-result incorrect';
+                    resultDiv.style.display = 'flex';
+                }
+                return;
             }
+
+            const userAnswer = input.value.trim().toLowerCase();
+            const correct = correctAnswers[chapterId] && correctAnswers[chapterId][questionId];
+
+            if (correct && userAnswer.includes(correct.toLowerCase())) {
+                resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">回答正确！</span>';
+                resultDiv.className = 'quiz-result correct';
+            } else if (userAnswer) {
+                resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">回答错误，请重试</span>';
+                resultDiv.className = 'quiz-result incorrect';
+            }
+            resultDiv.style.display = 'flex';
+        }
+
+        function toggleAnswer(chapterId, questionId) {
+            const answerBox = document.getElementById(`ch${chapterId}-answer${questionId}`);
+            if (answerBox) answerBox.classList.toggle('show');
+        }
+
+        function copyCode(codeId) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'toast show';
+                toast.textContent = '代码已复制到剪贴板';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        }
+
+        function updateStats() {
+            const progress = JSON.parse(localStorage.getItem('cpp_progress') || '{"completed":[]}');
+            const completedCount = progress.completed.length;
+            const totalCount = chapters.length;
+            const percent = Math.round((completedCount / totalCount) * 100);
+            const bookmarks = JSON.parse(localStorage.getItem('cpp_bookmarks') || '[]');
+
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            const fill = document.getElementById('progressFill');
+            if (fill) fill.style.width = `${percent}%`;
+            document.getElementById('bookmarkCount').textContent = bookmarks.length;
         }
 
         function searchTutorial() {
             const query = document.getElementById('searchInput').value.toLowerCase();
-            if (!query) { switchChapter(currentChapter); return; }
-            const content = document.getElementById('mainContent');
-            const results = chapters.filter(ch => ch.title.toLowerCase().includes(query) || ch.content.toLowerCase().includes(query));
-            content.innerHTML = `
-                <div class="chapter active"><h2>搜索结果: "${query}"</h2>
-                    ${results.length > 0 ? results.map(ch => `<div class="search-result" onclick="switchChapter(${ch.id});document.getElementById('searchInput').value=''"><h3>第${ch.id}章：${ch.title}</h3></div>`).join('') : '<p>未找到相关内容</p>'}
-                </div>
-            `;
-        }
+            const sections = document.querySelectorAll('.chapter-section');
 
-        function checkAnswer(chapter, question) {
-            const answers = {
-                'ch1': ['main', 'main()'], 'ch2': ['double price', '%'], 'ch3': ['for', 'break'],
-                'ch4': ['int arr[5]', 'length'], 'ch5': ['int sum', '递归终止'], 'ch6': ['int *ptr', '引用不能为空'],
-                'ch7': ['class Circle', 'public'], 'ch8': ['多态', '抽象类'], 'ch9': ['vector', 'sort'],
-                'ch10': ['sort', '封装']
-            };
-            const userAnswer = document.getElementById(`q${question}_${chapter}`).value.toLowerCase();
-            const correct = answers[chapter][question - 1];
-            const resultDiv = document.getElementById(`result_${chapter}_${question}`);
-            if (userAnswer.includes(correct)) {
-                resultDiv.textContent = '✅ 正确！';
-                resultDiv.className = 'practice-result correct';
+            if (query) {
+                sections.forEach(section => {
+                    const content = section.textContent.toLowerCase();
+                    section.style.display = content.includes(query) ? 'block' : 'none';
+                });
+                document.querySelector('.sidebar').style.display = 'none';
+                document.querySelector('.main-content').style.marginLeft = '0';
             } else {
-                resultDiv.textContent = '❌ 错误，请重试';
-                resultDiv.className = 'practice-result incorrect';
+                sections.forEach(section => {
+                    section.style.display = section.classList.contains('active') ? 'block' : 'none';
+                });
+                document.querySelector('.sidebar').style.display = 'block';
+                document.querySelector('.main-content').style.marginLeft = '280px';
             }
         }
 
-        function toggleAnswer(chapter, question) {
-            document.getElementById(`answer_${chapter}_${question}`).classList.toggle('show');
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const themeText = document.getElementById('themeText');
+
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeText.textContent = '深色模式';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeText.textContent = '浅色模式';
+            }
         }
 
-        function copyCode(btn) {
-            const code = btn.parentElement.querySelector('code').textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                btn.textContent = '已复制';
-                setTimeout(() => btn.textContent = '复制', 2000);
-            });
+        function checkTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const html = document.documentElement;
+            const themeText = document.getElementById('themeText');
+
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeText.textContent = '浅色模式';
+            } else {
+                themeText.textContent = '深色模式';
+            }
+        }
+
+        function showStats() {
+            const stats = LearningStats.get();
+            const hours = Math.floor(stats.totalStudyTime / 3600);
+            const minutes = Math.floor((stats.totalStudyTime % 3600) / 60);
+            const progress = JSON.parse(localStorage.getItem('cpp_progress') || '{"completed":[]}');
+
+            alert(`学习统计：\n总学习时间：${hours}小时${minutes}分钟\n完成章节：${progress.completed.length}个\n总章节数：35个\n连续学习：${stats.dailyStreak}天\n正确答题：${stats.correctAnswers || 0}道`);
         }
 
         document.addEventListener('DOMContentLoaded', init);
