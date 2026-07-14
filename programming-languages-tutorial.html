@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>流行编程语言教程</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="学习最流行的编程语言，从Python到Swift，包含教程、练习题、代码示例">
     <style>
         * {
             margin: 0;
@@ -28,6 +31,7 @@
             text-align: center;
             padding: 60px 20px;
             color: white;
+            position: relative;
         }
 
         header h1 {
@@ -39,6 +43,46 @@
         header p {
             font-size: 1.2rem;
             opacity: 0.9;
+        }
+
+        .hub-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hub-link:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .lang-switcher:hover {
+            background: white;
+            color: #667eea;
         }
 
         .stats-bar {
@@ -356,6 +400,8 @@
 <body>
     <div class="container">
         <header>
+            <button class="lang-switcher" onclick="toggleLanguage()">🌐 中文</button>
+            <a href="tutorial-hub.html" class="hub-link">🎯 学习中心</a>
             <h1>🚀 流行编程语言教程</h1>
             <p>探索当今世界最受欢迎的编程语言，找到最适合你的那一个</p>
         </header>
@@ -1386,6 +1432,14 @@ manager.printSummary()`,
 
         renderLanguages();
         animateNumber(totalLangsEl, languages.length);
+        updateProgressStats();
+
+        // 切换语言
+        function toggleLanguage() {
+            const newLang = window.toggleLanguage ? window.toggleLanguage() : 'zh';
+            document.querySelector('.lang-switcher').textContent = newLang === 'zh' ? '🌐 中文' : '🌐 English';
+        }
     </script>
+    <script src="tutorial-common.js"></script>
 </body>
 </html>
