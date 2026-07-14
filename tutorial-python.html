@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python教程 - 从零开始学习Python编程</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent-color: #667eea;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --accent-color: #818cf8;
+            --success-color: #34d399;
+            --warning-color: #fbbf24;
+            --danger-color: #f87171;
+            --border-color: #334155;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            align-items: center;
+        }
+
+        .toolbar-left {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            flex: 1;
+        }
+
+        .toolbar-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            padding: 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 25px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            width: 300px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 20px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 200px;
+            width: 250px;
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            overflow-y: auto;
+            max-height: calc(100vh - 220px);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chapter-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .chapter-item.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
+        .chapter-item.active.completed {
+            text-decoration: none;
+            opacity: 1;
+        }
+
+        .chapter-icon {
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+        }
+
+        .chapter-section {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .chapter-section.active {
+            display: block;
+        }
+
+        .chapter-section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .chapter-section h3 {
+            font-size: 1.4rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .chapter-section h4 {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .section-content {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: inherit;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .code-lang {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #e2e8f0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .code-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .error-block {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger-color);
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .error-block code {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        .practice-section {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .practice-section h4 {
+            color: var(--success-color);
+            margin-top: 0;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .answer-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-family: inherit;
+            min-height: 100px;
+        }
+
+        .answer-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-label:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .option-label input[type="radio"] {
+            accent-color: var(--accent-color);
+        }
+
+        .quiz-result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quiz-result.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .show-answer-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .show-answer-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .answer-box {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .answer-box.show {
+            display: block;
+        }
+
+        .note-section {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .note-section h4 {
+            color: var(--warning-color);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .note-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            min-height: 80px;
+            margin-bottom: 10px;
+        }
+
+        .save-note-btn {
+            background: var(--warning-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-note-btn:hover {
+            opacity: 0.9;
+        }
+
+        .bookmark-btn {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .bookmark-btn.bookmarked {
+            color: #f59e0b;
+        }
+
+        .completion-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .completion-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .completion-btn.completed {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .stats-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .nav-btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .nav-btn-primary:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .nav-btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn-secondary:hover:not(:disabled) {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .highlight {
+            background: rgba(102, 126, 234, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .tip-box {
+            background: rgba(14, 165, 233, 0.05);
+            border-left: 4px solid #0ea5e9;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                max-height: 200px;
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .progress-bar {
+                display: none;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>🐍 Python教程</h1>
+            <p>从入门到精通，系统学习Python编程</p>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="toolbar-left">
+                <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
+                <button class="btn btn-secondary" onclick="toggleTheme()">
+                    🌙 <span id="themeText">深色模式</span>
+                </button>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="toolbar-right">
+                <button class="btn btn-secondary" onclick="showStats()">📊 统计</button>
+                <button class="btn btn-primary" onclick="goToHub()">🏠 返回首页</button>
+            </div>
+        </div>
+
+        <!-- 进度统计 -->
+        <div class="stats-info" id="statsInfo">
+            <div class="stat-item">
+                <div class="stat-value" id="completedCount">0</div>
+                <div class="stat-label">已完成章节</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="totalCount">10</div>
+                <div class="stat-label">总章节数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="progressPercent">0%</div>
+                <div class="stat-label">学习进度</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="bookmarkCount">0</div>
+                <div class="stat-label">收藏章节</div>
+            </div>
+        </div>
+
+        <!-- 侧边栏导航 -->
+        <div class="sidebar">
+            <h3>📚 章节导航</h3>
+            <ul class="chapter-list" id="chapterList"></ul>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="main-content">
+            <!-- 章节1: 入门介绍 -->
+            <div id="ch1" class="chapter-section active">
+                <h2>
+                    1. 入门介绍
+                    <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <p>Python是一种高级通用编程语言，由Guido van Rossum于1991年创建。它以简洁的语法和强大的功能著称，广泛应用于Web开发、数据科学、人工智能、自动化脚本等领域。</p>
+                    
+                    <h3>🌟 Python的特点</h3>
+                    <ul>
+                        <li><strong>简洁优雅：</strong>语法简单，代码可读性强</li>
+                        <li><strong>跨平台：</strong>支持Windows、Mac、Linux等多种操作系统</li>
+                        <li><strong>丰富的库：</strong>拥有庞大的标准库和第三方库</li>
+                        <li><strong>面向对象：</strong>支持面向对象编程</li>
+                        <li><strong>动态类型：</strong>无需声明变量类型</li>
+                    </ul>
+
+                    <h3>📦 安装Python</h3>
+                    <p>从 <a href="https://www.python.org/downloads/" target="_blank">python.org</a> 下载并安装Python。安装完成后，可以通过以下命令验证安装：</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code1"><code>python --version
+# 或
+python3 --version</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🚀 第一个Python程序</h3>
+                    <p>打开文本编辑器，输入以下代码，保存为 <code>hello.py</code>：</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code2"><code># 这是一个注释
+print("Hello, World!")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <p>在终端运行：</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">bash</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch1-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch1-code3"><code>python hello.py</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记引号：<code>print(Hello)</code> 会报错，字符串必须用引号包裹。</p>
+                    <p>使用中文标点：<code>print("Hello！")</code> 虽然不会报错，但建议使用英文标点。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. Python的创始人是谁？</div>
+                    <input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
+                    <div id="ch1-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 1)">查看答案</button>
+                    <div id="ch1-answer1" class="answer-box">Guido van Rossum</div>
+
+                    <div class="question">2. 请写出打印"Hello Python"的代码</div>
+                    <textarea class="answer-textarea" id="ch1-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
+                    <div id="ch1-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(1, 2)">查看答案</button>
+                    <div id="ch1-answer2" class="answer-box">print("Hello Python")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节2: 变量与数据类型 -->
+            <div id="ch2" class="chapter-section">
+                <h2>
+                    2. 变量与数据类型
+                    <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📦 变量</h3>
+                    <p>变量是存储数据的容器。在Python中，变量不需要声明类型，直接赋值即可。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code1"><code># 变量赋值
+name = "Alice"
+age = 25
+height = 1.65
+is_student = True
+
+# 同时赋值多个变量
+x, y, z = 1, 2, 3
+
+# 输出变量
+print(name)
+print(f"{name} is {age} years old")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📊 基本数据类型</h3>
+                    <ul>
+                        <li><strong>int：</strong>整数，如 <code>10</code>, <code>-5</code>, <code>0</code></li>
+                        <li><strong>float：</strong>浮点数，如 <code>3.14</code>, <code>-2.5</code></li>
+                        <li><strong>str：</strong>字符串，如 <code>"hello"</code>, <code>'world'</code></li>
+                        <li><strong>bool：</strong>布尔值，<code>True</code> 或 <code>False</code></li>
+                        <li><strong>None：</strong>空值，表示没有值</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch2-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch2-code2"><code># 数据类型示例
+num1 = 10          # int
+num2 = 3.14        # float
+text = "Hello"     # str
+flag = True        # bool
+empty = None       # NoneType
+
+# 类型转换
+print(int(3.9))    # 输出: 3
+print(float(5))    # 输出: 5.0
+print(str(100))    # 输出: "100"
+print(bool(0))     # 输出: False
+print(bool(""))    # 输出: False</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>变量名错误：<code>1name = "test"</code> 数字不能作为变量名开头。</p>
+                    <p>类型错误：<code>"Hello" + 10</code> 不能直接拼接字符串和数字，需要转换类型。</p>
+                </div>
+
+                <div class="tip-box">
+                    💡 <strong>提示：</strong>使用 <code>type()</code> 函数可以查看变量的数据类型。
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 以下哪个不是Python的基本数据类型？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="A"> A. int</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="B"> B. float</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="C"> C. array</label>
+                        <label class="option-label"><input type="radio" name="ch2-q1" value="D"> D. str</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
+                    <div id="ch2-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 1)">查看答案</button>
+                    <div id="ch2-answer1" class="answer-box">C. array（array不是Python基本数据类型，正确的是list）</div>
+
+                    <div class="question">2. 将字符串"123"转换为整数的代码是？</div>
+                    <input type="text" class="answer-input" id="ch2-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
+                    <div id="ch2-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(2, 2)">查看答案</button>
+                    <div id="ch2-answer2" class="answer-box">int("123")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节3: 流程控制 -->
+            <div id="ch3" class="chapter-section">
+                <h2>
+                    3. 流程控制
+                    <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🔀 条件语句</h3>
+                    <p>条件语句用于根据不同条件执行不同的代码块。Python使用 <code>if</code>、<code>elif</code>、<code>else</code> 关键字。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code1"><code># 简单条件判断
+age = 18
+if age >= 18:
+    print("成年人")
+else:
+    print("未成年人")
+
+# 多条件判断
+score = 85
+if score >= 90:
+    grade = "A"
+elif score >= 80:
+    grade = "B"
+elif score >= 70:
+    grade = "C"
+else:
+    grade = "D"
+print(f"成绩等级: {grade}")
+
+# 嵌套条件
+is_student = True
+has_id = True
+if is_student:
+    if has_id:
+        print("可以进入图书馆")
+    else:
+        print("请出示学生证")
+else:
+    print("校外人员禁止入内")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 循环语句</h3>
+                    <p>循环语句用于重复执行一段代码。Python提供 <code>for</code> 循环和 <code>while</code> 循环。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch3-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch3-code2"><code># for 循环
+for i in range(5):
+    print(i)  # 输出: 0 1 2 3 4
+
+# 遍历列表
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(fruit)
+
+# while 循环
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+
+# break 和 continue
+for i in range(10):
+    if i == 5:
+        break  # 跳出循环
+    print(i)
+
+for i in range(10):
+    if i % 2 == 0:
+        continue  # 跳过本次循环
+    print(i)</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>缩进错误：Python使用缩进来区分代码块，<code>if</code>、<code>for</code>、<code>while</code> 后的代码必须缩进。</p>
+                    <p>无限循环：<code>while True:</code> 如果没有 <code>break</code> 语句会导致无限循环。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 输出1到10的所有偶数</div>
+                    <textarea class="answer-textarea" id="ch3-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
+                    <div id="ch3-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 1)">查看答案</button>
+                    <div id="ch3-answer1" class="answer-box">for i in range(1, 11):
+    if i % 2 == 0:
+        print(i)</div>
+
+                    <div class="question">2. 以下代码的输出是什么？</div>
+                    <pre style="background: var(--bg-secondary); padding: 10px; border-radius: 8px;">for i in range(3):
+    print(i, end=" ")</pre>
+                    <input type="text" class="answer-input" id="ch3-q2" placeholder="输入输出结果...">
+                    <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
+                    <div id="ch3-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(3, 2)">查看答案</button>
+                    <div id="ch3-answer2" class="answer-box">0 1 2</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch3-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节4: 数据结构 -->
+            <div id="ch4" class="chapter-section">
+                <h2>
+                    4. 数据结构
+                    <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📋 列表 (List)</h3>
+                    <p>列表是Python中最常用的数据结构，可以存储多个元素，元素类型可以不同。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code1"><code># 创建列表
+fruits = ["apple", "banana", "cherry"]
+mixed = [1, "hello", True, 3.14]
+
+# 访问元素
+print(fruits[0])    # 第一个元素
+print(fruits[-1])   # 最后一个元素
+
+# 切片
+print(fruits[1:3])  # 索引1到2的元素
+
+# 修改元素
+fruits[1] = "orange"
+
+# 添加元素
+fruits.append("grape")      # 末尾添加
+fruits.insert(1, "mango")   # 指定位置插入
+
+# 删除元素
+fruits.remove("banana")     # 删除指定值
+del fruits[0]               # 删除指定索引
+popped = fruits.pop()       # 删除并返回末尾元素
+
+# 其他操作
+print(len(fruits))          # 长度
+fruits.sort()               # 排序
+fruits.reverse()            # 反转</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔑 字典 (Dictionary)</h3>
+                    <p>字典是键值对的集合，键必须唯一，值可以是任意类型。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code2"><code># 创建字典
+person = {
+    "name": "Alice",
+    "age": 25,
+    "city": "New York"
+}
+
+# 访问值
+print(person["name"])
+print(person.get("age"))
+
+# 添加/修改
+person["email"] = "alice@example.com"
+person["age"] = 26
+
+# 删除
+del person["city"]
+person.pop("email")
+
+# 遍历
+for key in person:
+    print(key, person[key])
+
+for key, value in person.items():
+    print(f"{key}: {value}")
+
+# 获取所有键和值
+print(person.keys())
+print(person.values())</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📦 元组 (Tuple) 和 集合 (Set)</h3>
+                    <ul>
+                        <li><strong>元组：</strong>不可变的序列，使用圆括号 <code>( )</code></li>
+                        <li><strong>集合：</strong>无序不重复的元素集合，使用花括号 <code>{ }</code></li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch4-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch4-code3"><code># 元组
+colors = ("red", "green", "blue")
+print(colors[0])
+# colors[0] = "yellow"  # 错误：元组不可修改
+
+# 集合
+numbers = {1, 2, 3, 3, 4, 5}
+print(numbers)  # 输出: {1, 2, 3, 4, 5}
+
+# 集合操作
+a = {1, 2, 3}
+b = {3, 4, 5}
+print(a | b)    # 并集
+print(a & b)    # 交集
+print(a - b)    # 差集</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>索引越界：<code>fruits[10]</code> 如果列表只有3个元素会报错。</p>
+                    <p>字典键不存在：<code>person["phone"]</code> 如果键不存在会报错，应使用 <code>person.get("phone")</code>。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 如何向列表末尾添加元素？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="A"> A. list.add(item)</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="B"> B. list.append(item)</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="C"> C. list.push(item)</label>
+                        <label class="option-label"><input type="radio" name="ch4-q1" value="D"> D. list.insert(item)</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
+                    <div id="ch4-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 1)">查看答案</button>
+                    <div id="ch4-answer1" class="answer-box">B. list.append(item)</div>
+
+                    <div class="question">2. 创建一个字典存储学生信息（姓名、年龄、成绩），然后输出所有信息</div>
+                    <textarea class="answer-textarea" id="ch4-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
+                    <div id="ch4-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(4, 2)">查看答案</button>
+                    <div id="ch4-answer2" class="answer-box">student = {
+    "name": "张三",
+    "age": 20,
+    "score": 95
+}
+for key, value in student.items():
+    print(f"{key}: {value}")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节5: 函数定义 -->
+            <div id="ch5" class="chapter-section">
+                <h2>
+                    5. 函数定义
+                    <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📝 函数基础</h3>
+                    <p>函数是可重用的代码块，用于执行特定任务。使用 <code>def</code> 关键字定义函数。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code1"><code># 定义函数
+def greet(name):
+    """向用户打招呼"""
+    print(f"Hello, {name}!")
+
+# 调用函数
+greet("Alice")
+
+# 返回值
+def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(result)  # 输出: 8
+
+# 默认参数
+def greet(name, greeting="Hello"):
+    print(f"{greeting}, {name}!")
+
+greet("Bob")              # 使用默认问候语
+greet("Charlie", "Hi")    # 使用自定义问候语
+
+# 可变参数
+def sum_numbers(*args):
+    total = 0
+    for num in args:
+        total += num
+    return total
+
+print(sum_numbers(1, 2, 3, 4))  # 输出: 10
+
+# 关键字参数
+def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=25, city="New York")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔄 匿名函数 (Lambda)</h3>
+                    <p>Lambda函数是一种简洁的匿名函数，通常用于简单的操作。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch5-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch5-code2"><code># Lambda函数
+add = lambda x, y: x + y
+print(add(3, 5))  # 输出: 8
+
+# 与map、filter配合使用
+numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, numbers))
+print(squared)  # 输出: [1, 4, 9, 16, 25]
+
+even_numbers = list(filter(lambda x: x % 2 == 0, numbers))
+print(even_numbers)  # 输出: [2, 4]
+
+# 排序时使用
+people = [("Alice", 25), ("Bob", 20), ("Charlie", 30)]
+people.sort(key=lambda x: x[1])
+print(people)</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>参数不匹配：调用函数时传入的参数数量与定义不一致。</p>
+                    <p>忘记return：函数没有return语句时返回None。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 定义一个函数计算两个数的乘积</div>
+                    <textarea class="answer-textarea" id="ch5-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
+                    <div id="ch5-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 1)">查看答案</button>
+                    <div id="ch5-answer1" class="answer-box">def multiply(a, b):
+    return a * b</div>
+
+                    <div class="question">2. 使用lambda函数对列表[1,2,3,4,5]中的每个元素加10</div>
+                    <input type="text" class="answer-input" id="ch5-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
+                    <div id="ch5-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(5, 2)">查看答案</button>
+                    <div id="ch5-answer2" class="answer-box">list(map(lambda x: x + 10, [1,2,3,4,5]))</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节6: 模块与包 -->
+            <div id="ch6" class="chapter-section">
+                <h2>
+                    6. 模块与包
+                    <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📦 模块</h3>
+                    <p>模块是包含Python定义和语句的文件，可以被其他程序导入和使用。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code1"><code># 导入模块
+import math
+
+print(math.pi)          # 圆周率
+print(math.sqrt(16))    # 平方根
+
+# 导入特定函数
+from math import pi, sqrt
+print(pi)
+print(sqrt(25))
+
+# 导入并重命名
+import numpy as np
+arr = np.array([1, 2, 3])
+
+# 导入所有内容
+from math import *
+print(sin(0))
+
+# 创建自定义模块
+# mymodule.py
+def greet(name):
+    return f"Hello, {name}!"
+
+# 在另一个文件中使用
+import mymodule
+print(mymodule.greet("Alice"))</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📁 包</h3>
+                    <p>包是包含多个模块的目录，通常包含一个 <code>__init__.py</code> 文件。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch6-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch6-code2"><code># 包结构
+# mypackage/
+#     __init__.py
+#     module1.py
+#     module2.py
+
+# __init__.py
+__all__ = ["module1", "module2"]
+
+# 导入包中的模块
+import mypackage.module1
+from mypackage import module2
+
+# 使用 __all__ 导入所有模块
+from mypackage import *
+
+# 常见标准库
+import os           # 操作系统接口
+import sys          # 系统参数
+import datetime     # 日期时间
+import random       # 随机数
+import json         # JSON处理
+import csv          # CSV处理</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>模块未安装：使用第三方库前需要先安装，如 <code>pip install numpy</code>。</p>
+                    <p>路径问题：自定义模块需要在Python路径中才能被导入。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 如何导入math模块中的sqrt函数？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch6-q1" value="A"> A. import sqrt from math</label>
+                        <label class="option-label"><input type="radio" name="ch6-q1" value="B"> B. from math import sqrt</label>
+                        <label class="option-label"><input type="radio" name="ch6-q1" value="C"> C. math.import sqrt</label>
+                        <label class="option-label"><input type="radio" name="ch6-q1" value="D"> D. include math.sqrt</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
+                    <div id="ch6-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 1)">查看答案</button>
+                    <div id="ch6-answer1" class="answer-box">B. from math import sqrt</div>
+
+                    <div class="question">2. 生成一个0到1之间的随机数</div>
+                    <input type="text" class="answer-input" id="ch6-q2" placeholder="输入代码...">
+                    <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
+                    <div id="ch6-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(6, 2)">查看答案</button>
+                    <div id="ch6-answer2" class="answer-box">import random
+print(random.random())</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch6-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节7: 面向对象 -->
+            <div id="ch7" class="chapter-section">
+                <h2>
+                    7. 面向对象
+                    <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🏗️ 类与对象</h3>
+                    <p>面向对象编程是一种编程范式，使用类和对象来组织代码。类是对象的模板，对象是类的实例。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code1"><code># 定义类
+class Person:
+    # 构造方法
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    
+    # 实例方法
+    def greet(self):
+        print(f"Hello, my name is {self.name}")
+    
+    # 获取年龄
+    def get_age(self):
+        return self.age
+
+# 创建对象
+person1 = Person("Alice", 25)
+person2 = Person("Bob", 30)
+
+# 调用方法
+person1.greet()
+print(person2.get_age())
+
+# 修改属性
+person1.age = 26
+print(person1.age)</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔗 继承</h3>
+                    <p>继承允许一个类（子类）继承另一个类（父类）的属性和方法。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code2"><code># 父类
+class Animal:
+    def __init__(self, name):
+        self.name = name
+    
+    def speak(self):
+        print(f"{self.name} makes a sound")
+
+# 子类继承父类
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)  # 调用父类构造方法
+        self.breed = breed
+    
+    # 重写方法
+    def speak(self):
+        print(f"{self.name} barks: Woof!")
+    
+    # 新增方法
+    def fetch(self):
+        print(f"{self.name} fetches the ball")
+
+# 使用子类
+dog = Dog("Buddy", "Golden Retriever")
+dog.speak()   # 输出: Buddy barks: Woof!
+dog.fetch()   # 输出: Buddy fetches the ball</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🔒 封装、多态</h3>
+                    <ul>
+                        <li><strong>封装：</strong>隐藏对象内部细节，通过方法访问</li>
+                        <li><strong>多态：</strong>不同对象对同一方法有不同的实现</li>
+                    </ul>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch7-code3')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch7-code3"><code># 封装（私有属性）
+class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance  # 私有属性
+    
+    def deposit(self, amount):
+        if amount > 0:
+            self.__balance += amount
+    
+    def withdraw(self, amount):
+        if amount > 0 and amount <= self.__balance:
+            self.__balance -= amount
+    
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(1000)
+account.deposit(500)
+print(account.get_balance())  # 输出: 1500
+# print(account.__balance)  # 错误：私有属性不能直接访问
+
+# 多态示例
+class Cat(Animal):
+    def speak(self):
+        print(f"{self.name} meows: Meow!")
+
+def make_sound(animal):
+    animal.speak()
+
+dog = Dog("Buddy", "Labrador")
+cat = Cat("Whiskers")
+make_sound(dog)   # 输出: Buddy barks: Woof!
+make_sound(cat)   # 输出: Whiskers meows: Meow!</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>忘记self：实例方法必须以self作为第一个参数。</p>
+                    <p>访问私有属性：私有属性（以__开头）不能直接从外部访问。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 类的构造方法名称是？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch7-q1" value="A"> A. constructor</label>
+                        <label class="option-label"><input type="radio" name="ch7-q1" value="B"> B. __init__</label>
+                        <label class="option-label"><input type="radio" name="ch7-q1" value="C"> C. init</label>
+                        <label class="option-label"><input type="radio" name="ch7-q1" value="D"> D. create</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
+                    <div id="ch7-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 1)">查看答案</button>
+                    <div id="ch7-answer1" class="answer-box">B. __init__</div>
+
+                    <div class="question">2. 定义一个Student类，继承自Person类，添加grade属性</div>
+                    <textarea class="answer-textarea" id="ch7-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(7, 2)">检查答案</button>
+                    <div id="ch7-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(7, 2)">查看答案</button>
+                    <div id="ch7-answer2" class="answer-box">class Student(Person):
+    def __init__(self, name, age, grade):
+        super().__init__(name, age)
+        self.grade = grade</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节8: 文件操作 -->
+            <div id="ch8" class="chapter-section">
+                <h2>
+                    8. 文件操作
+                    <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>📄 文件读写</h3>
+                    <p>Python提供了内置的文件操作功能，可以读取和写入文件。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code1"><code># 打开文件（推荐使用with语句）
+with open("example.txt", "r") as f:
+    content = f.read()
+    print(content)
+
+# 写入文件
+with open("output.txt", "w") as f:
+    f.write("Hello, World!")
+
+# 追加内容
+with open("output.txt", "a") as f:
+    f.write("\nThis is appended.")
+
+# 按行读取
+with open("example.txt", "r") as f:
+    for line in f:
+        print(line.strip())
+
+# 读取所有行
+with open("example.txt", "r") as f:
+    lines = f.readlines()
+    print(lines)</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📁 文件路径与目录</h3>
+                    <p>使用os模块进行文件和目录操作。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch8-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch8-code2"><code>import os
+
+# 获取当前目录
+print(os.getcwd())
+
+# 列出目录内容
+print(os.listdir())
+
+# 创建目录
+os.mkdir("new_folder")
+
+# 删除目录
+os.rmdir("new_folder")
+
+# 文件重命名
+os.rename("old.txt", "new.txt")
+
+# 删除文件
+os.remove("file.txt")
+
+# 检查文件是否存在
+if os.path.exists("example.txt"):
+    print("文件存在")
+
+# 检查是否是文件
+if os.path.isfile("example.txt"):
+    print("是文件")
+
+# 检查是否是目录
+if os.path.isdir("folder"):
+    print("是目录")</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>文件不存在：打开不存在的文件会抛出FileNotFoundError。</p>
+                    <p>权限问题：没有读写权限会抛出PermissionError。</p>
+                    <p>忘记关闭文件：使用with语句可以自动关闭文件。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 使用with语句读取文件的好处是什么？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch8-q1" value="A"> A. 代码更简洁</label>
+                        <label class="option-label"><input type="radio" name="ch8-q1" value="B"> B. 自动关闭文件</label>
+                        <label class="option-label"><input type="radio" name="ch8-q1" value="C"> C. 运行速度更快</label>
+                        <label class="option-label"><input type="radio" name="ch8-q1" value="D"> D. 可以读取更大的文件</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
+                    <div id="ch8-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 1)">查看答案</button>
+                    <div id="ch8-answer1" class="answer-box">B. 自动关闭文件</div>
+
+                    <div class="question">2. 将列表["apple", "banana", "cherry"]写入文件，每行一个元素</div>
+                    <textarea class="answer-textarea" id="ch8-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(8, 2)">检查答案</button>
+                    <div id="ch8-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(8, 2)">查看答案</button>
+                    <div id="ch8-answer2" class="answer-box">fruits = ["apple", "banana", "cherry"]
+with open("fruits.txt", "w") as f:
+    for fruit in fruits:
+        f.write(fruit + "\n")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节9: 错误处理 -->
+            <div id="ch9" class="chapter-section">
+                <h2>
+                    9. 错误处理
+                    <button class="bookmark-btn" onclick="toggleBookmark(9)" id="bookmarkBtn9">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🛡️ try-except语句</h3>
+                    <p>错误处理是编程中非常重要的部分，可以防止程序因异常而崩溃。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code1"><code># 基本错误处理
+try:
+    num = int(input("请输入一个数字: "))
+    print(f"输入的数字是: {num}")
+except ValueError:
+    print("错误: 请输入有效的数字")
+
+# 多个except
+try:
+    file = open("example.txt", "r")
+    content = file.read()
+    print(content)
+except FileNotFoundError:
+    print("错误: 文件不存在")
+except PermissionError:
+    print("错误: 没有读取权限")
+
+# 捕获所有异常
+try:
+    result = 10 / 0
+except Exception as e:
+    print(f"发生错误: {e}")
+
+# else和finally
+try:
+    num = int(input("请输入数字: "))
+except ValueError:
+    print("输入错误")
+else:
+    print(f"你输入了: {num}")
+finally:
+    print("操作完成")</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>📢 抛出异常</h3>
+                    <p>使用raise语句可以主动抛出异常。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch9-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch9-code2"><code># 抛出异常
+def check_age(age):
+    if age < 0:
+        raise ValueError("年龄不能为负数")
+    if age > 120:
+        raise ValueError("年龄不合理")
+    return age
+
+try:
+    check_age(-5)
+except ValueError as e:
+    print(f"错误: {e}")
+
+# 自定义异常
+class InvalidEmailError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+def validate_email(email):
+    if "@" not in email:
+        raise InvalidEmailError(f"无效的邮箱: {email}")
+    return True
+
+try:
+    validate_email("invalid-email")
+except InvalidEmailError as e:
+    print(e)</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>过度捕获异常：使用 <code>except Exception</code> 会捕获所有异常，包括系统退出等，应尽量捕获特定异常。</p>
+                    <p>忽略异常：空的 <code>except</code> 块会隐藏错误，不利于调试。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 以下哪个语句用于捕获异常？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="A"> A. catch</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="B"> B. except</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="C"> C. error</label>
+                        <label class="option-label"><input type="radio" name="ch9-q1" value="D"> D. handle</label>
+                    </div>
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
+                    <div id="ch9-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 1)">查看答案</button>
+                    <div id="ch9-answer1" class="answer-box">B. except</div>
+
+                    <div class="question">2. 编写代码处理除以零的异常</div>
+                    <textarea class="answer-textarea" id="ch9-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(9, 2)">检查答案</button>
+                    <div id="ch9-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(9, 2)">查看答案</button>
+                    <div id="ch9-answer2" class="answer-box">try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("错误: 不能除以零")</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 章节10: 综合实战 -->
+            <div id="ch10" class="chapter-section">
+                <h2>
+                    10. 综合实战
+                    <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button>
+                </h2>
+                
+                <div class="section-content">
+                    <h3>🎯 学生管理系统</h3>
+                    <p>现在我们来创建一个完整的学生管理系统，综合运用前面学到的所有知识。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code1')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code1"><code>import json
+
+class Student:
+    def __init__(self, name, age, student_id, grade):
+        self.name = name
+        self.age = age
+        self.student_id = student_id
+        self.grade = grade
+    
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "age": self.age,
+            "student_id": self.student_id,
+            "grade": self.grade
+        }
+
+class StudentManager:
+    def __init__(self):
+        self.students = []
+        self.load_students()
+    
+    def load_students(self):
+        try:
+            with open("students.json", "r") as f:
+                data = json.load(f)
+                self.students = [Student(**s) for s in data]
+        except FileNotFoundError:
+            self.students = []
+    
+    def save_students(self):
+        with open("students.json", "w") as f:
+            data = [s.to_dict() for s in self.students]
+            json.dump(data, f, indent=2)
+    
+    def add_student(self, student):
+        if any(s.student_id == student.student_id for s in self.students):
+            raise ValueError("学号已存在")
+        self.students.append(student)
+        self.save_students()
+    
+    def remove_student(self, student_id):
+        self.students = [s for s in self.students if s.student_id != student_id]
+        self.save_students()
+    
+    def search_student(self, keyword):
+        return [s for s in self.students if keyword in s.name or keyword == s.student_id]
+    
+    def get_all_students(self):
+        return self.students
+    
+    def get_student_by_id(self, student_id):
+        return next((s for s in self.students if s.student_id == student_id), None)</code></pre>
+                </div>
+
+                <div class="section-content">
+                    <h3>🖥️ 命令行界面</h3>
+                    <p>为学生管理系统添加命令行交互界面。</p>
+                </div>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">python</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch10-code2')">📋</button>
+                        </div>
+                    </div>
+                    <pre id="ch10-code2"><code>def display_menu():
+    print("\n===== 学生管理系统 =====")
+    print("1. 添加学生")
+    print("2. 删除学生")
+    print("3. 搜索学生")
+    print("4. 显示所有学生")
+    print("5. 退出")
+    print("======================")
+
+def add_student_menu(manager):
+    try:
+        name = input("请输入姓名: ")
+        age = int(input("请输入年龄: "))
+        student_id = input("请输入学号: ")
+        grade = input("请输入成绩: ")
+        
+        student = Student(name, age, student_id, grade)
+        manager.add_student(student)
+        print("学生添加成功！")
+    except ValueError as e:
+        print(f"错误: {e}")
+
+def search_student_menu(manager):
+    keyword = input("请输入搜索关键词（姓名或学号）: ")
+    results = manager.search_student(keyword)
+    
+    if results:
+        print("\n搜索结果:")
+        for s in results:
+            print(f"学号: {s.student_id}, 姓名: {s.name}, 年龄: {s.age}, 成绩: {s.grade}")
+    else:
+        print("未找到匹配的学生")
+
+def show_all_students(manager):
+    students = manager.get_all_students()
+    
+    if students:
+        print("\n所有学生:")
+        for s in students:
+            print(f"学号: {s.student_id}, 姓名: {s.name}, 年龄: {s.age}, 成绩: {s.grade}")
+    else:
+        print("暂无学生记录")
+
+def main():
+    manager = StudentManager()
+    
+    while True:
+        display_menu()
+        choice = input("请选择操作: ")
+        
+        if choice == "1":
+            add_student_menu(manager)
+        elif choice == "2":
+            student_id = input("请输入要删除的学号: ")
+            manager.remove_student(student_id)
+            print("删除成功")
+        elif choice == "3":
+            search_student_menu(manager)
+        elif choice == "4":
+            show_all_students(manager)
+        elif choice == "5":
+            print("退出系统")
+            break
+        else:
+            print("无效选择，请重新输入")
+
+if __name__ == "__main__":
+    main()</code></pre>
+                </div>
+
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p>数据格式错误：JSON文件格式不正确会导致解析失败。</p>
+                    <p>学号重复：添加学生时没有检查学号唯一性。</p>
+                </div>
+
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 为学生管理系统添加修改学生信息的功能</div>
+                    <textarea class="answer-textarea" id="ch10-q1" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
+                    <div id="ch10-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 1)">查看答案</button>
+                    <div id="ch10-answer1" class="answer-box">def update_student(self, student_id, **kwargs):
+    student = self.get_student_by_id(student_id)
+    if student:
+        for key, value in kwargs.items():
+            if hasattr(student, key):
+                setattr(student, key, value)
+        self.save_students()
+        return True
+    return False</div>
+
+                    <div class="question">2. 添加按成绩排序显示学生的功能</div>
+                    <textarea class="answer-textarea" id="ch10-q2" placeholder="输入代码..."></textarea>
+                    <button class="btn btn-primary" onclick="checkAnswer(10, 2)">检查答案</button>
+                    <div id="ch10-result2" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(10, 2)">查看答案</button>
+                    <div id="ch10-answer2" class="answer-box">def get_students_sorted_by_grade(self):
+    return sorted(self.students, key=lambda s: float(s.grade), reverse=True)</div>
+                </div>
+
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
+                </div>
+
+                <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToHub()">🏠 返回首页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const chapters = [
+            { id: 1, title: '入门介绍', icon: '🐍' },
+            { id: 2, title: '变量与数据类型', icon: '📦' },
+            { id: 3, title: '流程控制', icon: '🔀' },
+            { id: 4, title: '数据结构', icon: '📋' },
+            { id: 5, title: '函数定义', icon: '📝' },
+            { id: 6, title: '模块与包', icon: '📁' },
+            { id: 7, title: '面向对象', icon: '🏗️' },
+            { id: 8, title: '文件操作', icon: '📄' },
+            { id: 9, title: '错误处理', icon: '🛡️' },
+            { id: 10, title: '综合实战', icon: '🎯' }
+        ];
+
+        const correctAnswers = {
+            1: { 1: 'guido van rossum', 2: 'print("hello python")' },
+            2: { 1: 'c', 2: 'int("123")' },
+            3: { 1: 'for i in range(1, 11):\n    if i % 2 == 0:\n        print(i)', 2: '0 1 2' },
+            4: { 1: 'b', 2: 'student = {\n    "name": "张三",\n    "age": 20,\n    "score": 95\n}\nfor key, value in student.items():\n    print(f"{key}: {value}")' },
+            5: { 1: 'def multiply(a, b):\n    return a * b', 2: 'list(map(lambda x: x + 10, [1,2,3,4,5]))' },
+            6: { 1: 'b', 2: 'import random\nprint(random.random())' },
+            7: { 1: 'b', 2: 'class Student(Person):\n    def __init__(self, name, age, grade):\n        super().__init__(name, age)\n        self.grade = grade' },
+            8: { 1: 'b', 2: 'fruits = ["apple", "banana", "cherry"]\nwith open("fruits.txt", "w") as f:\n    for fruit in fruits:\n        f.write(fruit + "\\n")' },
+            9: { 1: 'b', 2: 'try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print("错误: 不能除以零")' },
+            10: { 1: 'def update_student(self, student_id, **kwargs):\n    student = self.get_student_by_id(student_id)\n    if student:\n        for key, value in kwargs.items():\n            if hasattr(student, key):\n                setattr(student, key, value)\n        self.save_students()\n        return True\n    return False', 2: 'def get_students_sorted_by_grade(self):\n    return sorted(self.students, key=lambda s: float(s.grade), reverse=True)' }
+        };
+
+        function init() {
+            renderChapterList();
+            loadProgress();
+            loadBookmarks();
+            loadNotes();
+            updateStats();
+            checkTheme();
+        }
+
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map(ch => `
+                <li class="chapter-item" id="chapter-${ch.id}" onclick="goToChapter(${ch.id})">
+                    <span class="chapter-icon">${ch.icon}</span>
+                    <span>${ch.title}</span>
+                    <span id="chapter-status-${ch.id}"></span>
+                </li>
+            `).join('');
+        }
+
+        function goToChapter(chapterId) {
+            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById(`ch${chapterId}`).classList.add('active');
+            document.getElementById(`chapter-${chapterId}`).classList.add('active');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            BookmarkManager.save('python', chapterId);
+        }
+
+        function goToHub() {
+            window.location.href = 'tutorial-hub.html';
+        }
+
+        function markCompleted(chapterId) {
+            const stats = LearningStats.get();
+            const key = `python_${chapterId}`;
+            
+            if (!stats.chaptersCompleted.includes(key)) {
+                stats.chaptersCompleted.push(key);
+                
+                if (!stats.languagesProgress['python']) {
+                    stats.languagesProgress['python'] = [];
+                }
+                if (!stats.languagesProgress['python'].includes(chapterId)) {
+                    stats.languagesProgress['python'].push(chapterId);
+                }
+                
+                LearningStats.save(stats);
+                LearningStats.checkAchievements();
+                
+                updateChapterStatus(chapterId, true);
+                updateStats();
+                
+                const btn = document.getElementById(`completeBtn${chapterId}`);
+                btn.classList.add('completed');
+                btn.textContent = '✓ 已完成';
+                btn.disabled = true;
+            }
+        }
+
+        function updateChapterStatus(chapterId, completed) {
+            const status = document.getElementById(`chapter-status-${chapterId}`);
+            const btn = document.getElementById(`completeBtn${chapterId}`);
+            
+            if (completed) {
+                status.textContent = '✓';
+                document.getElementById(`chapter-${chapterId}`).classList.add('completed');
+                
+                if (btn) {
+                    btn.classList.add('completed');
+                    btn.textContent = '✓ 已完成';
+                    btn.disabled = true;
+                }
+            }
+        }
+
+        function loadProgress() {
+            const stats = LearningStats.get();
+            const completed = stats.chaptersCompleted || [];
+            
+            chapters.forEach(ch => {
+                const key = `python_${ch.id}`;
+                if (completed.includes(key)) {
+                    updateChapterStatus(ch.id, true);
+                }
+            });
+        }
+
+        function loadBookmarks() {
+            const bookmarks = localStorage.getItem('python_bookmarks');
+            if (bookmarks) {
+                const bookmarked = JSON.parse(bookmarks);
+                bookmarked.forEach(ch => {
+                    const btn = document.getElementById(`bookmarkBtn${ch}`);
+                    if (btn) btn.classList.add('bookmarked');
+                });
+            }
+        }
+
+        function toggleBookmark(chapterId) {
+            const btn = document.getElementById(`bookmarkBtn${chapterId}`);
+            const bookmarks = JSON.parse(localStorage.getItem('python_bookmarks') || '[]');
+            
+            const index = bookmarks.indexOf(chapterId);
+            if (index === -1) {
+                bookmarks.push(chapterId);
+                btn.classList.add('bookmarked');
+            } else {
+                bookmarks.splice(index, 1);
+                btn.classList.remove('bookmarked');
+            }
+            
+            localStorage.setItem('python_bookmarks', JSON.stringify(bookmarks));
+            updateStats();
+        }
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('python_notes') || '{}');
+            chapters.forEach(ch => {
+                const textarea = document.getElementById(`ch${ch.id}-note`);
+                if (textarea && notes[ch.id]) {
+                    textarea.value = notes[ch.id];
+                }
+            });
+        }
+
+        function saveNote(chapterId) {
+            const notes = JSON.parse(localStorage.getItem('python_notes') || '{}');
+            const textarea = document.getElementById(`ch${chapterId}-note`);
+            notes[chapterId] = textarea.value;
+            localStorage.setItem('python_notes', JSON.stringify(notes));
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast show';
+            toast.textContent = '笔记已保存';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function checkAnswer(chapterId, questionId) {
+            const input = document.getElementById(`ch${chapterId}-q${questionId}`);
+            const resultDiv = document.getElementById(`ch${chapterId}-result${questionId}`);
+            
+            if (!input) {
+                const radio = document.querySelector(`input[name="ch${chapterId}-q${questionId}"]:checked`);
+                if (radio) {
+                    checkRadioAnswer(chapterId, questionId, radio.value, resultDiv);
+                } else {
+                    resultDiv.textContent = '请选择一个选项';
+                    resultDiv.className = 'quiz-result incorrect';
+                    resultDiv.style.display = 'flex';
+                }
+                return;
+            }
+            
+            const userAnswer = input.value.trim().toLowerCase();
+            const correct = correctAnswers[chapterId][questionId].toLowerCase();
+            
+            if (userAnswer.includes(correct)) {
+                resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">回答正确！</span>';
+                resultDiv.className = 'quiz-result correct';
+                
+                const stats = LearningStats.get();
+                stats.correctAnswers = (stats.correctAnswers || 0) + 1;
+                LearningStats.save(stats);
+            } else {
+                resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">回答错误，请重试</span>';
+                resultDiv.className = 'quiz-result incorrect';
+            }
+            resultDiv.style.display = 'flex';
+        }
+
+        function checkRadioAnswer(chapterId, questionId, value, resultDiv) {
+            const correct = correctAnswers[chapterId][questionId];
+            
+            if (value.toLowerCase() === correct.toLowerCase()) {
+                resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">回答正确！</span>';
+                resultDiv.className = 'quiz-result correct';
+                
+                const stats = LearningStats.get();
+                stats.correctAnswers = (stats.correctAnswers || 0) + 1;
+                LearningStats.save(stats);
+            } else {
+                resultDiv.innerHTML = '<span class="result-icon">❌</span><span class="result-text">回答错误，请重试</span>';
+                resultDiv.className = 'quiz-result incorrect';
+            }
+            resultDiv.style.display = 'flex';
+        }
+
+        function toggleAnswer(chapterId, questionId) {
+            const answerBox = document.getElementById(`ch${chapterId}-answer${questionId}`);
+            answerBox.classList.toggle('show');
+        }
+
+        function copyCode(codeId) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'toast show';
+                toast.textContent = '代码已复制到剪贴板';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            });
+        }
+
+        function updateStats() {
+            const stats = LearningStats.get();
+            const completedCount = (stats.languagesProgress['python'] || []).length;
+            const totalCount = chapters.length;
+            const percent = Math.round((completedCount / totalCount) * 100);
+            
+            const bookmarks = JSON.parse(localStorage.getItem('python_bookmarks') || '[]');
+            
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('progressPercent').textContent = `${percent}%`;
+            document.getElementById('progressFill').style.width = `${percent}%`;
+            document.getElementById('bookmarkCount').textContent = bookmarks.length;
+        }
+
+        function searchTutorial() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const sections = document.querySelectorAll('.chapter-section');
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(query)) {
+                    section.style.display = 'block';
+                } else {
+                    if (!section.classList.contains('active')) {
+                        section.style.display = 'none';
+                    }
+                }
+            });
+            
+            if (query) {
+                document.querySelector('.sidebar').style.display = 'none';
+                document.querySelector('.main-content').style.marginLeft = '0';
+            } else {
+                document.querySelector('.sidebar').style.display = 'block';
+                document.querySelector('.main-content').style.marginLeft = '280px';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const themeText = document.getElementById('themeText');
+            
+            if (currentTheme === 'dark') {
+                html.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                themeText.textContent = '深色模式';
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeText.textContent = '浅色模式';
+            }
+        }
+
+        function checkTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const html = document.documentElement;
+            const themeText = document.getElementById('themeText');
+            
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeText.textContent = '浅色模式';
+            } else {
+                themeText.textContent = '深色模式';
+            }
+        }
+
+        function showStats() {
+            const stats = LearningStats.get();
+            const hours = Math.floor(stats.totalStudyTime / 3600);
+            const minutes = Math.floor((stats.totalStudyTime % 3600) / 60);
+            
+            alert(`学习统计：
+总学习时间：${hours}小时${minutes}分钟
+完成章节：${stats.chaptersCompleted.length}个
+连续学习：${stats.dailyStreak}天
+正确答题：${stats.correctAnswers || 0}道`);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

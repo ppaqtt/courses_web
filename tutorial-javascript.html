@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript教程 - 编程语言学习平台</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a2e;
+            --text-secondary: #4a4a68;
+            --text-muted: #8a8a9a;
+            --accent-color: #667eea;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #e4e4e7;
+            --text-secondary: #a1a1aa;
+            --text-muted: #71717a;
+            --accent-color: #818cf8;
+            --success-color: #34d399;
+            --error-color: #f87171;
+            --warning-color: #fbbf24;
+            --border-color: #3f3f5a;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .progress-bar {
+            margin-top: 20px;
+            height: 10px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-card {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 20px;
+        }
+
+        .sidebar-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chapter-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .chapter-item.completed::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .chapter-item.active.completed::before {
+            color: white;
+        }
+
+        .chapter-number {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .chapter-title {
+            font-size: 0.95rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .search-box::placeholder {
+            color: var(--text-muted);
+        }
+
+        .theme-toggle, .note-toggle {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover, .note-toggle:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .content-area {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .chapter-header h2 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-btn.favorite {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .action-btn.favorite.active {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .action-btn.complete {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .action-btn.complete:hover {
+            opacity: 0.9;
+        }
+
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section h3 {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section p {
+            margin: 0 0 10px 0;
+            color: var(--text-secondary);
+        }
+
+        .section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: var(--text-secondary);
+        }
+
+        .section li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block.light {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .code-block pre {
+            margin: 0;
+            color: #d4d4d4;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block.light pre {
+            color: var(--text-primary);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #8a8a9a;
+            font-size: 0.85rem;
+        }
+
+        .code-lang {
+            background: rgba(255,255,255,0.1);
+            padding: 3px 10px;
+            border-radius: 5px;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #8a8a9a;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .error-example {
+            border-left: 4px solid var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .error-example .error-title {
+            color: var(--error-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .quiz-section {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .quiz-section h4 {
+            margin: 0 0 20px 0;
+            font-size: 1.2rem;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-question p {
+            font-weight: 600;
+            margin: 0 0 15px 0;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            padding: 12px 15px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-color);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .quiz-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+
+        .quiz-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .quiz-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .quiz-btn:hover {
+            opacity: 0.9;
+        }
+
+        .answer-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid var(--success-color);
+            display: none;
+        }
+
+        .answer-section.show {
+            display: block;
+        }
+
+        .answer-section h5 {
+            margin: 0 0 10px 0;
+            color: var(--success-color);
+        }
+
+        .notes-panel {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            margin-top: 30px;
+        }
+
+        .notes-panel h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .notes-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .nav-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: var(--accent-color);
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent-color);
+        }
+
+        .tips-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px 20px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .tips-box .tips-icon {
+            color: var(--warning-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .search-results {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+        }
+
+        .search-result-item {
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .search-result-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .search-result-item .result-title {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .search-result-item .result-chapter {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                position: static;
+            }
+            
+            .chapter-list {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1>📚 JavaScript教程</h1>
+                    <p>从零开始学习JavaScript，掌握前端开发核心技能</p>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                        🌙 深色模式
+                    </button>
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="progress-text" id="progressText">已完成 0/10 章节</div>
+        </div>
+
+        <div class="main-layout">
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <input type="text" class="search-box" id="searchInput" placeholder="🔍 搜索教程内容..." oninput="handleSearch()">
+                    <h3>📖 章节列表</h3>
+                    <ul class="chapter-list" id="chapterList"></ul>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3>🎯 学习进度</h3>
+                    <div id="sidebarProgress"></div>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div id="chapterContent"></div>
+                
+                <div class="nav-buttons">
+                    <button class="nav-btn secondary" id="prevBtn" onclick="navigateChapter(-1)">
+                        ⬅️ 上一章
+                    </button>
+                    <button class="nav-btn" id="nextBtn" onclick="navigateChapter(1)">
+                        下一章 ➡️
+                    </button>
+                </div>
+
+                <div class="notes-panel" id="notesPanel">
+                    <h3>📝 我的笔记</h3>
+                    <textarea class="notes-textarea" id="notesTextarea" placeholder="在这里记录你的学习笔记..."></textarea>
+                    <div class="notes-actions">
+                        <button class="action-btn complete" onclick="saveNotes()">💾 保存笔记</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-results" id="searchResults"></div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const chapters = [
+            {
+                id: 1,
+                title: '入门介绍',
+                icon: '🚀',
+                content: {
+                    intro: '<p>JavaScript是一种轻量级的脚本语言，广泛用于Web开发。它可以在浏览器中运行，为网页添加交互功能。</p><p>JavaScript最初由Netscape公司开发，现在已成为Web开发的核心技术之一，与HTML和CSS并称Web三大核心技术。</p>',
+                    points: [
+                        'JavaScript是一种解释型语言，不需要编译',
+                        '它是动态类型语言，变量类型在运行时确定',
+                        'JavaScript可以操作DOM，实现页面交互',
+                        '它支持面向对象、函数式等多种编程范式'
+                    ],
+                    codeExample: `// 第一个JavaScript程序
+console.log("Hello, World!");
+
+// 在网页中显示消息
+document.write("欢迎学习JavaScript！");`,
+                    errorExample: {
+                        code: `// 错误示例：缺少分号可能导致问题
+console.log("Hello")
+console.log("World")`,
+                        message: '虽然JavaScript允许省略分号，但在某些情况下会导致意外行为。建议始终使用分号。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: 'JavaScript主要用于什么？',
+                        options: ['服务器端开发', '网页交互功能', '数据库管理', '操作系统开发'],
+                        answer: 1
+                    },
+                    answer: '正确答案：网页交互功能。JavaScript是Web前端开发的核心语言，用于为网页添加动态效果和交互功能。'
+                }
+            },
+            {
+                id: 2,
+                title: '变量与数据类型',
+                icon: '📦',
+                content: {
+                    intro: '<p>变量是存储数据的容器。JavaScript中有三种声明变量的方式：var、let和const。</p>',
+                    points: [
+                        'var：函数作用域，存在变量提升',
+                        'let：块级作用域，推荐使用',
+                        'const：块级作用域，常量，不能重新赋值',
+                        'JavaScript有7种基本数据类型：undefined、null、boolean、number、string、symbol、bigint',
+                        '还有一种引用类型：object'
+                    ],
+                    codeExample: `// 变量声明
+let name = "张三";
+const age = 25;
+var isStudent = true;
+
+// 数据类型
+let num = 100;           // number
+let str = "Hello";       // string
+let bool = false;        // boolean
+let obj = { name: "John" }; // object
+let arr = [1, 2, 3];     // array (也是object)
+let undef;               // undefined
+let n = null;            // null`,
+                    errorExample: {
+                        code: `// 错误示例：const变量不能重新赋值
+const PI = 3.14;
+PI = 3.14159; // TypeError: Assignment to constant variable`,
+                        message: 'const声明的变量不能重新赋值，但如果是对象或数组，可以修改其内部属性或元素。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: '使用let声明的变量有什么作用域？',
+                        answer: '块级作用域'
+                    },
+                    answer: '正确答案：块级作用域。let声明的变量只在其所在的块（如if、for、{}）内有效。'
+                }
+            },
+            {
+                id: 3,
+                title: '流程控制',
+                icon: '🔀',
+                content: {
+                    intro: '<p>流程控制语句用于控制代码的执行顺序，包括条件语句和循环语句。</p>',
+                    points: [
+                        'if-else：条件判断',
+                        'switch：多条件分支',
+                        'for：循环执行',
+                        'while：条件循环',
+                        'do-while：至少执行一次的循环',
+                        'break/continue：控制循环流程'
+                    ],
+                    codeExample: `// if-else语句
+let score = 85;
+if (score >= 90) {
+    console.log("优秀");
+} else if (score >= 60) {
+    console.log("及格");
+} else {
+    console.log("不及格");
+}
+
+// for循环
+for (let i = 0; i < 5; i++) {
+    console.log("数字: " + i);
+}
+
+// switch语句
+let day = 3;
+switch (day) {
+    case 1:
+        console.log("星期一");
+        break;
+    case 2:
+        console.log("星期二");
+        break;
+    default:
+        console.log("其他");
+}`,
+                    errorExample: {
+                        code: `// 错误示例：switch中忘记break
+let num = 1;
+switch (num) {
+    case 1:
+        console.log("一");
+    case 2:
+        console.log("二"); // 会被执行
+        break;
+}`,
+                        message: 'switch语句中每个case分支结束后需要使用break，否则会继续执行下一个case。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: '以下哪个循环至少执行一次？',
+                        options: ['for循环', 'while循环', 'do-while循环', 'for...in循环'],
+                        answer: 2
+                    },
+                    answer: '正确答案：do-while循环。do-while循环先执行循环体，再判断条件，因此至少执行一次。'
+                }
+            },
+            {
+                id: 4,
+                title: '函数定义',
+                icon: '⚙️',
+                content: {
+                    intro: '<p>函数是一段可重复使用的代码块。JavaScript中有多种定义函数的方式。</p>',
+                    points: [
+                        '函数声明：function name() {}',
+                        '函数表达式：const name = function() {}',
+                        '箭头函数：const name = () => {}',
+                        '函数可以有参数和返回值',
+                        '箭头函数没有自己的this'
+                    ],
+                    codeExample: `// 函数声明
+function greet(name) {
+    return "Hello, " + name;
+}
+
+// 函数表达式
+const add = function(a, b) {
+    return a + b;
+};
+
+// 箭头函数
+const multiply = (a, b) => a * b;
+
+// 默认参数
+function sayHello(name = "Guest") {
+    console.log("Hello, " + name);
+}
+
+// 调用函数
+console.log(greet("张三"));
+console.log(add(5, 3));
+console.log(multiply(4, 6));
+sayHello(); // Hello, Guest`,
+                    errorExample: {
+                        code: `// 错误示例：箭头函数中使用this
+const person = {
+    name: "John",
+    greet: () => {
+        console.log(this.name); // undefined
+    }
+};
+person.greet();`,
+                        message: '箭头函数没有自己的this，它会捕获定义时外层的this。在对象方法中应使用普通函数。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: '箭头函数的简写形式中，如果只有一个参数，可以省略什么？',
+                        answer: '括号'
+                    },
+                    answer: '正确答案：括号。当箭头函数只有一个参数时，可以省略括号，如：const double = x => x * 2;'
+                }
+            },
+            {
+                id: 5,
+                title: '数组与对象',
+                icon: '📊',
+                content: {
+                    intro: '<p>数组和对象是JavaScript中最重要的数据结构。数组用于存储有序集合，对象用于存储键值对。</p>',
+                    points: [
+                        '数组：有序的元素集合，使用[]创建',
+                        '对象：键值对的集合，使用{}创建',
+                        '数组常用方法：push、pop、shift、unshift、map、filter、reduce',
+                        '对象访问：点语法 obj.key 或方括号 obj["key"]',
+                        '对象解构：const {name, age} = obj'
+                    ],
+                    codeExample: `// 数组操作
+let fruits = ["苹果", "香蕉", "橙子"];
+fruits.push("葡萄"); // 添加元素
+fruits.pop(); // 删除最后一个元素
+
+// 数组方法
+let numbers = [1, 2, 3, 4, 5];
+let doubled = numbers.map(n => n * 2); // [2, 4, 6, 8, 10]
+let even = numbers.filter(n => n % 2 === 0); // [2, 4]
+let sum = numbers.reduce((a, b) => a + b, 0); // 15
+
+// 对象操作
+let person = {
+    name: "张三",
+    age: 25,
+    sayHello: function() {
+        console.log("Hello, " + this.name);
+    }
+};
+
+// 对象解构
+const { name, age } = person;
+console.log(name, age);`,
+                    errorExample: {
+                        code: `// 错误示例：使用for-in遍历数组
+let arr = [10, 20, 30];
+arr.custom = "test";
+
+for (let i in arr) {
+    console.log(arr[i]); // 10, 20, 30, test
+}`,
+                        message: 'for-in会遍历对象的所有可枚举属性，包括自定义属性。遍历数组应使用for、for-of或forEach。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: '哪个数组方法会返回一个新数组，包含满足条件的所有元素？',
+                        options: ['map', 'filter', 'reduce', 'forEach'],
+                        answer: 1
+                    },
+                    answer: '正确答案：filter。filter方法创建一个新数组，包含所有通过测试函数的元素。'
+                }
+            },
+            {
+                id: 6,
+                title: 'DOM操作',
+                icon: '🌐',
+                content: {
+                    intro: '<p>DOM（文档对象模型）是HTML文档的编程接口。JavaScript可以通过DOM操作网页内容。</p>',
+                    points: [
+                        'document.getElementById：通过ID获取元素',
+                        'document.querySelector：通过选择器获取元素',
+                        'element.innerHTML：修改元素内容',
+                        'element.style：修改元素样式',
+                        'addEventListener：添加事件监听器',
+                        'appendChild/removeChild：添加/删除子元素'
+                    ],
+                    codeExample: `// 获取元素
+const title = document.getElementById("main-title");
+const paragraph = document.querySelector(".content p");
+const buttons = document.querySelectorAll("button");
+
+// 修改内容
+title.textContent = "新标题";
+paragraph.innerHTML = "<strong>加粗文本</strong>";
+
+// 修改样式
+title.style.color = "blue";
+title.style.fontSize = "24px";
+
+// 添加事件监听器
+const btn = document.querySelector("#my-btn");
+btn.addEventListener("click", function() {
+    alert("按钮被点击了！");
+});
+
+// 创建和添加元素
+const newDiv = document.createElement("div");
+newDiv.textContent = "新创建的div";
+document.body.appendChild(newDiv);`,
+                    errorExample: {
+                        code: `// 错误示例：在DOM加载前操作元素
+<script>
+    const element = document.getElementById("my-element");
+    element.textContent = "Hello"; // TypeError: element is null
+</script>
+<div id="my-element"></div>`,
+                        message: '脚本执行时DOM可能还未加载完成，应将脚本放在body末尾或使用DOMContentLoaded事件。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: '获取页面中所有class为"item"的元素应该使用哪个方法？',
+                        answer: 'document.querySelectorAll'
+                    },
+                    answer: '正确答案：document.querySelectorAll。querySelectorAll返回匹配选择器的所有元素节点列表。'
+                }
+            },
+            {
+                id: 7,
+                title: '异步编程',
+                icon: '⏳',
+                content: {
+                    intro: '<p>JavaScript是单线程语言，但可以通过异步编程处理耗时操作，如网络请求、文件读写等。</p>',
+                    points: [
+                        '回调函数：将函数作为参数传递',
+                        'Promise：处理异步操作的对象',
+                        'async/await：Promise的语法糖',
+                        'fetch：发送网络请求',
+                        'setTimeout/setInterval：定时器'
+                    ],
+                    codeExample: `// 使用Promise
+function fetchData() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const data = { name: "张三", age: 25 };
+            resolve(data);
+            // reject(new Error("获取数据失败"));
+        }, 1000);
+    });
+}
+
+fetchData()
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+
+// 使用async/await
+async function getData() {
+    try {
+        const data = await fetchData();
+        console.log(data);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+getData();
+
+// 使用fetch发送请求
+fetch("https://api.example.com/data")
+    .then(response => response.json())
+    .then(data => console.log(data));`,
+                    errorExample: {
+                        code: `// 错误示例：在普通函数中使用await
+function myFunction() {
+    const data = await fetchData(); // SyntaxError
+    console.log(data);
+}`,
+                        message: 'await只能在async函数中使用。需要将函数声明为async：async function myFunction() {...}'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: 'Promise有几种状态？',
+                        options: ['1种', '2种', '3种', '4种'],
+                        answer: 2
+                    },
+                    answer: '正确答案：3种。Promise有三种状态：pending（进行中）、fulfilled（已成功）、rejected（已失败）。'
+                }
+            },
+            {
+                id: 8,
+                title: 'ES6+特性',
+                icon: '✨',
+                content: {
+                    intro: '<p>ES6（ECMAScript 2015）及后续版本引入了许多新特性，使JavaScript更强大、更简洁。</p>',
+                    points: [
+                        'let/const：块级作用域变量',
+                        '箭头函数：更简洁的函数写法',
+                        '解构赋值：从数组/对象提取值',
+                        '模板字符串：支持多行和表达式',
+                        '类：面向对象编程',
+                        '模块：import/export'
+                    ],
+                    codeExample: `// 模板字符串
+const name = "张三";
+const greeting = \`你好，${name}！
+今天是${new Date().toLocaleDateString()}。\`;
+
+// 解构赋值
+const [a, b, ...rest] = [1, 2, 3, 4, 5]; // a=1, b=2, rest=[3,4,5]
+const { name: userName, age } = { name: "李四", age: 30 };
+
+// 类
+class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    greet() {
+        console.log(\`Hello, I'm \${this.name}\`);
+    }
+}
+
+const person = new Person("王五", 28);
+person.greet();
+
+// 展开运算符
+const arr1 = [1, 2, 3];
+const arr2 = [...arr1, 4, 5]; // [1, 2, 3, 4, 5]
+
+const obj1 = { a: 1 };
+const obj2 = { ...obj1, b: 2 }; // { a: 1, b: 2 }`,
+                    errorExample: {
+                        code: `// 错误示例：类中的方法不能使用function关键字
+class Car {
+    function drive() { // SyntaxError
+        console.log("Driving...");
+    }
+}`,
+                        message: 'ES6类中的方法定义不需要function关键字，直接写方法名即可。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: '展开运算符使用什么符号？',
+                        answer: '...'
+                    },
+                    answer: '正确答案：...（三个点）。展开运算符可以展开数组或对象，用于复制、合并等操作。'
+                }
+            },
+            {
+                id: 9,
+                title: '错误处理',
+                icon: '🛡️',
+                content: {
+                    intro: '<p>错误处理是编程中重要的一环。JavaScript提供了try-catch-finally语句来捕获和处理错误。</p>',
+                    points: [
+                        'try：包裹可能出错的代码',
+                        'catch：捕获错误并处理',
+                        'finally：无论是否出错都会执行',
+                        'throw：主动抛出错误',
+                        'Error对象：包含错误信息'
+                    ],
+                    codeExample: `// try-catch基本用法
+try {
+    const result = riskyOperation();
+    console.log(result);
+} catch (error) {
+    console.error("发生错误：", error.message);
+} finally {
+    console.log("无论是否出错都会执行");
+}
+
+// 主动抛出错误
+function divide(a, b) {
+    if (b === 0) {
+        throw new Error("除数不能为零");
+    }
+    return a / b;
+}
+
+try {
+    const result = divide(10, 0);
+} catch (error) {
+    console.error(error.message); // "除数不能为零"
+}
+
+// 自定义错误类型
+class ValidationError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "ValidationError";
+    }
+}
+
+throw new ValidationError("输入格式错误");`,
+                    errorExample: {
+                        code: `// 错误示例：空catch块
+try {
+    riskyOperation();
+} catch (error) {
+    // 什么都不做
+}`,
+                        message: '空的catch块会忽略错误，这是不好的做法。至少应该记录错误信息。'
+                    },
+                    quiz: {
+                        type: 'multiple',
+                        question: 'finally块在什么情况下执行？',
+                        options: ['只有出错时', '只有成功时', '无论是否出错', '永远不执行'],
+                        answer: 2
+                    },
+                    answer: '正确答案：无论是否出错。finally块中的代码总是会执行，通常用于清理资源。'
+                }
+            },
+            {
+                id: 10,
+                title: '综合实战',
+                icon: '🎯',
+                content: {
+                    intro: '<p>现在让我们创建一个完整的待办事项应用，综合运用前面学到的知识。</p>',
+                    points: [
+                        '使用DOM操作创建界面',
+                        '使用数组存储待办事项',
+                        '使用事件监听器处理用户交互',
+                        '使用localStorage持久化数据',
+                        '实现添加、删除、标记完成功能'
+                    ],
+                    codeExample: `// 待办事项应用完整代码
+const todoInput = document.getElementById("todo-input");
+const addBtn = document.getElementById("add-btn");
+const todoList = document.getElementById("todo-list");
+
+// 从localStorage加载数据
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+// 渲染待办事项
+function renderTodos() {
+    todoList.innerHTML = "";
+    todos.forEach((todo, index) => {
+        const li = document.createElement("li");
+        li.className = todo.completed ? "completed" : "";
+        li.innerHTML = \`
+            <input type="checkbox" \${todo.completed ? "checked" : ""} 
+                   onchange="toggleTodo(\${index})">
+            <span>\${todo.text}</span>
+            <button onclick="deleteTodo(\${index})">删除</button>
+        \`;
+        todoList.appendChild(li);
+    });
+    saveTodos();
+}
+
+// 添加待办事项
+function addTodo() {
+    const text = todoInput.value.trim();
+    if (text) {
+        todos.push({ text, completed: false });
+        todoInput.value = "";
+        renderTodos();
+    }
+}
+
+// 切换完成状态
+function toggleTodo(index) {
+    todos[index].completed = !todos[index].completed;
+    renderTodos();
+}
+
+// 删除待办事项
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    renderTodos();
+}
+
+// 保存到localStorage
+function saveTodos() {
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// 事件监听
+addBtn.addEventListener("click", addTodo);
+todoInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") addTodo();
+});
+
+// 初始化渲染
+renderTodos();`,
+                    errorExample: {
+                        code: `// 错误示例：忘记解析JSON
+const todos = localStorage.getItem("todos");
+todos.push({ text: "new todo" }); // TypeError: todos.push is not a function`,
+                        message: 'localStorage存储的是字符串，需要使用JSON.parse()解析为数组或对象。'
+                    },
+                    quiz: {
+                        type: 'text',
+                        question: '如何将JavaScript对象保存到localStorage？',
+                        answer: 'JSON.stringify'
+                    },
+                    answer: '正确答案：JSON.stringify()。localStorage只能存储字符串，需要使用JSON.stringify()将对象转换为字符串。'
+                }
+            }
+        ];
+
+        let currentChapter = 0;
+        const STORAGE_KEY = 'javascript_tutorial_progress';
+        const FAVORITES_KEY = 'javascript_tutorial_favorites';
+        const NOTES_KEY = 'javascript_tutorial_notes';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProgress();
+            renderChapterList();
+            renderChapter();
+            loadNotes();
+            initTheme();
+        });
+
+        function loadProgress() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                const progress = JSON.parse(saved);
+                chapters.forEach((ch, index) => {
+                    ch.completed = progress.completed.includes(index + 1);
+                });
+                currentChapter = progress.current || 0;
+            }
+        }
+
+        function saveProgress() {
+            const completed = chapters.filter(ch => ch.completed).map(ch => ch.id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                completed,
+                current: currentChapter
+            }));
+            updateProgressUI();
+        }
+
+        function updateProgressUI() {
+            const completedCount = chapters.filter(ch => ch.completed).length;
+            const percentage = (completedCount / chapters.length) * 100;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+            document.getElementById('progressText').textContent = `已完成 ${completedCount}/${chapters.length} 章节`;
+            
+            const sidebarProgress = document.getElementById('sidebarProgress');
+            sidebarProgress.innerHTML = `
+                <div style="height: 10px; background: var(--bg-secondary); border-radius: 5px; overflow: hidden; margin-bottom: 10px;">
+                    <div style="height: 100%; width: ${percentage}%; background: var(--accent-color); border-radius: 5px;"></div>
+                </div>
+                <div style="font-size: 0.9rem; color: var(--text-muted);">${completedCount}/${chapters.length} 章节</div>
+            `;
+        }
+
+        function renderChapterList() {
+            const list = document.getElementById('chapterList');
+            list.innerHTML = chapters.map((ch, index) => `
+                <li class="chapter-item ${index === currentChapter ? 'active' : ''} ${ch.completed ? 'completed' : ''}" 
+                    onclick="goToChapter(${index})">
+                    <span class="chapter-number">${ch.id}.</span>
+                    <span class="chapter-title">${ch.icon} ${ch.title}</span>
+                </li>
+            `).join('');
+        }
+
+        function renderChapter() {
+            const chapter = chapters[currentChapter];
+            const content = document.getElementById('chapterContent');
+            const quizId = `quiz-${chapter.id}`;
+            
+            content.innerHTML = `
+                <div class="chapter-header">
+                    <div>
+                        <h2>${chapter.icon} 第${chapter.id}章：${chapter.title}</h2>
+                        <p style="color: var(--text-muted); margin-top: 5px;">JavaScript学习教程</p>
+                    </div>
+                    <div class="chapter-actions">
+                        <button class="action-btn favorite ${isFavorite(chapter.id) ? 'active' : ''}" 
+                                onclick="toggleFavorite(${chapter.id})">
+                            ${isFavorite(chapter.id) ? '❤️' : '🤍'} 收藏
+                        </button>
+                        <button class="action-btn complete" onclick="markChapterComplete()">
+                            ${chapter.completed ? '✅ 已完成' : '✓ 标记完成'}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>📖 知识点讲解</h3>
+                    ${chapter.content.intro}
+                    <div class="highlight-box">
+                        <strong>核心要点：</strong>
+                        <ul>
+                            ${chapter.content.points.map(p => `<li>${p}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>💻 代码示例</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">JavaScript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                        </div>
+                        <pre>${escapeHtml(chapter.content.codeExample)}</pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>❌ 错误示例</h3>
+                    <div class="error-example">
+                        <div class="error-title">常见错误</div>
+                        <div class="code-block light" style="margin: 10px 0;">
+                            <pre>${escapeHtml(chapter.content.errorExample.code)}</pre>
+                        </div>
+                        <p><strong>错误原因：</strong>${chapter.content.errorExample.message}</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3>📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <p>${chapter.content.quiz.question}</p>
+                            ${chapter.content.quiz.type === 'multiple' ? `
+                                <div class="quiz-options">
+                                    ${chapter.content.quiz.options.map((opt, idx) => `
+                                        <div class="quiz-option" onclick="selectOption(this, ${idx}, ${chapter.content.quiz.answer}, '${quizId}')">
+                                            ${String.fromCharCode(65 + idx)}. ${opt}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : `
+                                <input type="text" class="quiz-input" id="${quizId}-input" placeholder="输入你的答案...">
+                                <button class="quiz-btn" onclick="checkTextAnswer('${quizId}', '${chapter.content.quiz.answer}')">检查答案</button>
+                            `}
+                        </div>
+                        <div class="answer-section" id="${quizId}-answer">
+                            <h5>✓ 答案解析</h5>
+                            <p>${chapter.content.answer}</p>
+                        </div>
+                    </div>
+                </div>
+
+                ${chapter.id === 10 ? `
+                    <div class="section">
+                        <div class="tips-box">
+                            <span class="tips-icon">🎊</span>
+                            恭喜你完成了JavaScript教程的所有章节！现在你可以尝试创建自己的项目来巩固所学知识。
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+
+            renderChapterList();
+            updateNavButtons();
+            updateProgressUI();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function copyCode(btn) {
+            const code = btn.closest('.code-block').querySelector('pre').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                btn.textContent = '已复制';
+                setTimeout(() => btn.textContent = '复制', 2000);
+            });
+        }
+
+        function selectOption(el, selected, correct, quizId) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            el.classList.add('selected');
+            
+            if (selected === correct) {
+                el.classList.add('correct');
+                document.getElementById(`${quizId}-answer`).classList.add('show');
+            } else {
+                el.classList.add('incorrect');
+            }
+        }
+
+        function checkTextAnswer(quizId, correctAnswer) {
+            const input = document.getElementById(`${quizId}-input`);
+            const userAnswer = input.value.trim().toLowerCase();
+            
+            if (userAnswer === correctAnswer.toLowerCase()) {
+                input.style.borderColor = 'var(--success-color)';
+                document.getElementById(`${quizId}-answer`).classList.add('show');
+            } else {
+                input.style.borderColor = 'var(--error-color)';
+                input.value = '';
+                input.placeholder = '答案不正确，请重试...';
+            }
+        }
+
+        function goToChapter(index) {
+            if (index >= 0 && index < chapters.length) {
+                currentChapter = index;
+                renderChapter();
+                document.getElementById('searchResults').classList.remove('show');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function navigateChapter(direction) {
+            goToChapter(currentChapter + direction);
+        }
+
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentChapter === 0;
+            document.getElementById('nextBtn').disabled = currentChapter === chapters.length - 1;
+        }
+
+        function markChapterComplete() {
+            chapters[currentChapter].completed = !chapters[currentChapter].completed;
+            saveProgress();
+            renderChapter();
+            
+            LearningStats.recordChapterCompletion('javascript', currentChapter + 1);
+        }
+
+        function isFavorite(chapterId) {
+            const favorites = localStorage.getItem(FAVORITES_KEY);
+            if (!favorites) return false;
+            return JSON.parse(favorites).includes(chapterId);
+        }
+
+        function toggleFavorite(chapterId) {
+            let favorites = localStorage.getItem(FAVORITES_KEY);
+            favorites = favorites ? JSON.parse(favorites) : [];
+            
+            const index = favorites.indexOf(chapterId);
+            if (index === -1) {
+                favorites.push(chapterId);
+            } else {
+                favorites.splice(index, 1);
+            }
+            
+            localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+            renderChapter();
+        }
+
+        function loadNotes() {
+            const notes = localStorage.getItem(NOTES_KEY);
+            if (notes) {
+                document.getElementById('notesTextarea').value = notes;
+            }
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('notesTextarea').value;
+            localStorage.setItem(NOTES_KEY, notes);
+            
+            const btn = document.querySelector('.notes-actions button');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ 已保存';
+            setTimeout(() => btn.textContent = originalText, 2000);
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('tutorial_theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                updateThemeButton(savedTheme);
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('tutorial_theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeToggle');
+            btn.textContent = theme === 'dark' ? '☀️ 浅色模式' : '🌙 深色模式';
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (!query) {
+                resultsContainer.classList.remove('show');
+                return;
+            }
+
+            const results = [];
+            chapters.forEach((chapter, chapterIndex) => {
+                const content = JSON.stringify(chapter.content).toLowerCase();
+                if (chapter.title.toLowerCase().includes(query) || content.includes(query)) {
+                    results.push({
+                        chapterIndex,
+                        title: chapter.title,
+                        snippet: getSearchSnippet(chapter, query)
+                    });
+                }
+            });
+
+            if (results.length > 0) {
+                resultsContainer.innerHTML = `
+                    <h3 style="margin-bottom: 15px;">🔍 搜索结果 (${results.length})</h3>
+                    ${results.map(r => `
+                        <div class="search-result-item" onclick="goToChapter(${r.chapterIndex})">
+                            <div class="result-title">第${r.chapterIndex + 1}章：${r.title}</div>
+                            ${r.snippet ? `<div class="result-chapter">${r.snippet}</div>` : ''}
+                        </div>
+                    `).join('')}
+                `;
+                resultsContainer.classList.add('show');
+            } else {
+                resultsContainer.innerHTML = '<p style="color: var(--text-muted);">未找到相关内容</p>';
+                resultsContainer.classList.add('show');
+            }
+        }
+
+        function getSearchSnippet(chapter, query) {
+            const text = chapter.content.intro + ' ' + chapter.content.points.join(' ');
+            const index = text.toLowerCase().indexOf(query);
+            if (index !== -1) {
+                const start = Math.max(0, index - 30);
+                const end = Math.min(text.length, index + query.length + 30);
+                return '...' + text.substring(start, end) + '...';
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>

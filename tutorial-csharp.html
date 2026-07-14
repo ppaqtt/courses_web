@@ -1,0 +1,2965 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C# 教程 - 编程语言学习</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --primary-color: #512bd4;
+            --accent-color: #8b5cf6;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f5f3ff;
+            --bg-card: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+        }
+
+        .dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --bg-card: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #512bd4, #8b5cf6);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-color);
+        }
+
+        .progress-bar {
+            flex: 1;
+            max-width: 300px;
+            height: 20px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #512bd4, #8b5cf6);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 20px;
+            top: 200px;
+            width: 250px;
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow-md);
+            overflow-y: auto;
+            max-height: calc(100vh - 250px);
+        }
+
+        .sidebar h3 {
+            margin-top: 0;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .chapter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .chapter-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 8px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chapter-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .chapter-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .chapter-item.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 280px;
+        }
+
+        .chapter {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chapter-number {
+            background: var(--accent-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .chapter-title {
+            font-size: 1.8rem;
+            margin: 0;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-text {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: inherit;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+
+        .code-lang {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .code-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #d4d4d4;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .error-block {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--error-color);
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin: 15px 0;
+        }
+
+        .error-title {
+            color: var(--error-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .quiz-section {
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .quiz-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .question-text {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin-bottom: 15px;
+        }
+
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .quiz-result {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .quiz-result.correct {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            display: block;
+        }
+
+        .quiz-result.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+            display: block;
+        }
+
+        .answer-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .answer-section.show {
+            display: block;
+        }
+
+        .answer-title {
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+        }
+
+        .notes-section {
+            margin-top: 30px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            padding: 25px;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notes-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .completion-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .highlight {
+            background: rgba(139, 92, 246, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 1000px) {
+            .sidebar {
+                position: static;
+                width: auto;
+                max-height: 300px;
+                margin-bottom: 30px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .progress-bar {
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ C# 编程语言教程</h1>
+            <p>从入门到精通，系统学习C#编程</p>
+        </div>
+
+        <div class="toolbar">
+            <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
+            <button class="btn btn-primary" onclick="toggleDarkMode()">
+                <span id="themeIcon">🌙</span>
+                <span id="themeText">暗黑模式</span>
+            </button>
+            <button class="btn btn-secondary" onclick="showBookmarks()">
+                📑 收藏夹
+            </button>
+            <button class="btn btn-secondary" onclick="showProgress()">
+                📊 学习进度
+            </button>
+        </div>
+
+        <div class="sidebar">
+            <h3>📚 章节导航</h3>
+            <ul class="chapter-list" id="chapterList">
+                <li class="chapter-item" data-chapter="1" onclick="scrollToChapter(1)">1. 入门介绍与环境搭建</li>
+                <li class="chapter-item" data-chapter="2" onclick="scrollToChapter(2)">2. 基本语法</li>
+                <li class="chapter-item" data-chapter="3" onclick="scrollToChapter(3)">3. 流程控制</li>
+                <li class="chapter-item" data-chapter="4" onclick="scrollToChapter(4)">4. 集合与泛型</li>
+                <li class="chapter-item" data-chapter="5" onclick="scrollToChapter(5)">5. 面向对象</li>
+                <li class="chapter-item" data-chapter="6" onclick="scrollToChapter(6)">6. 继承与接口</li>
+                <li class="chapter-item" data-chapter="7" onclick="scrollToChapter(7)">7. 异常处理</li>
+                <li class="chapter-item" data-chapter="8" onclick="scrollToChapter(8)">8. 文件与流</li>
+                <li class="chapter-item" data-chapter="9" onclick="scrollToChapter(9)">9. LINQ查询</li>
+                <li class="chapter-item" data-chapter="10" onclick="scrollToChapter(10)">10. 综合实战</li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div id="ch1" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">1</div>
+                    <h2 class="chapter-title">入门介绍与环境搭建</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(1)" id="bookmark1">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 知识点讲解</h3>
+                    <div class="content-text">
+                        <p>C# 是由微软公司开发的一种现代、通用、面向对象的编程语言。它是 .NET 框架的主要编程语言，广泛应用于 Windows 应用开发、Web 开发、移动应用开发和游戏开发。</p>
+                        <p><strong>C# 的特点：</strong></p>
+                        <ul>
+                            <li>简单易学，语法与 C/C++ 相似</li>
+                            <li>完全面向对象</li>
+                            <li>类型安全</li>
+                            <li>自动内存管理（垃圾回收）</li>
+                            <li>跨平台支持（.NET Core/.NET 5+）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">💻 环境搭建</h3>
+                    <div class="content-text">
+                        <p>要开始学习 C#，需要安装以下工具：</p>
+                        <ol>
+                            <li><strong>Visual Studio</strong> 或 <strong>Visual Studio Code</strong></li>
+                            <li><strong>.NET SDK</strong>（运行时和开发工具）</li>
+                        </ol>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code1-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code1-1"><code># 检查 .NET 版本
+dotnet --version
+
+# 创建新项目
+dotnet new console -n MyFirstApp
+
+# 进入项目目录
+cd MyFirstApp
+
+# 运行项目
+dotnet run</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">✅ 第一个程序</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code1-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code1-2"><code>using System;
+
+namespace MyFirstApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+            Console.WriteLine("欢迎学习 C#！");
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：缺少 using 语句</div>
+                        <pre><code>// 错误：没有导入 System 命名空间
+// Console 类在 System 命名空间中
+
+namespace MyFirstApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello"); // 编译错误！
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. C# 程序的入口方法是什么？</div>
+                            <input type="text" class="answer-input" id="q1-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(1, 1)">检查答案</button>
+                            <div class="quiz-result" id="result1-1"></div>
+                            <div class="answer-section" id="answer1-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p><code>static void Main(string[] args)</code> 是 C# 程序的入口方法。</p>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. 如何编译并运行 C# 控制台应用？</div>
+                            <input type="text" class="answer-input" id="q1-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(1, 2)">检查答案</button>
+                            <div class="quiz-result" id="result1-2"></div>
+                            <div class="answer-section" id="answer1-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p>使用 <code>dotnet run</code> 命令可以编译并运行项目。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(1)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes1" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(1)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch2" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">2</div>
+                    <h2 class="chapter-title">基本语法</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(2)" id="bookmark2">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 数据类型</h3>
+                    <div class="content-text">
+                        <p>C# 是强类型语言，每个变量都必须声明其类型。C# 支持以下数据类型：</p>
+                        <ul>
+                            <li><strong>值类型：</strong>int, double, bool, char, decimal 等</li>
+                            <li><strong>引用类型：</strong>string, object, class 等</li>
+                        </ul>
+                    </div>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code2-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code2-1"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        // 值类型
+        int age = 25;
+        double height = 1.75;
+        bool isStudent = true;
+        char grade = 'A';
+        decimal price = 99.99m;
+        
+        // 引用类型
+        string name = "张三";
+        
+        Console.WriteLine($"姓名: {name}");
+        Console.WriteLine($"年龄: {age}");
+        Console.WriteLine($"身高: {height}m");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 变量与常量</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code2-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code2-2"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        // 变量 - 值可以改变
+        int count = 10;
+        count = 20;
+        Console.WriteLine($"count = {count}");
+        
+        // 常量 - 值不能改变
+        const double PI = 3.14159;
+        Console.WriteLine($"π = {PI}");
+        
+        // 只读变量
+        readonly string version = "1.0.0";
+        Console.WriteLine($"版本: {version}");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 运算符</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code2-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code2-3"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        int a = 10, b = 3;
+        
+        // 算术运算符
+        Console.WriteLine($"a + b = {a + b}");
+        Console.WriteLine($"a - b = {a - b}");
+        Console.WriteLine($"a * b = {a * b}");
+        Console.WriteLine($"a / b = {a / b}");
+        Console.WriteLine($"a % b = {a % b}");
+        
+        // 复合赋值
+        a += 5;
+        Console.WriteLine($"a += 5 = {a}");
+        
+        // 自增自减
+        int c = 5;
+        Console.WriteLine($"c++ = {c++}");
+        Console.WriteLine($"++c = {++c}");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：类型不匹配</div>
+                        <pre><code>// 错误：不能将 double 隐式转换为 int
+int num = 3.14; // 编译错误！
+
+// 正确做法：显式转换
+int num = (int)3.14;
+// 或使用 Convert 类
+int num = Convert.ToInt32(3.14);</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 以下哪个是值类型？</div>
+                            <select class="answer-input" id="q2-1">
+                                <option value="">请选择...</option>
+                                <option value="string">string</option>
+                                <option value="int">int</option>
+                                <option value="object">object</option>
+                                <option value="array">array</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="checkAnswer(2, 1)">检查答案</button>
+                            <div class="quiz-result" id="result2-1"></div>
+                            <div class="answer-section" id="answer2-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p><code>int</code> 是值类型。string、object、array 都是引用类型。</p>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. const 和 readonly 的区别是什么？</div>
+                            <input type="text" class="answer-input" id="q2-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(2, 2)">检查答案</button>
+                            <div class="quiz-result" id="result2-2"></div>
+                            <div class="answer-section" id="answer2-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p><code>const</code> 在编译时确定值，必须在声明时初始化；<code>readonly</code> 在运行时确定值，可以在构造函数中初始化。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(2)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes2" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(2)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch3" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">3</div>
+                    <h2 class="chapter-title">流程控制</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(3)" id="bookmark3">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 条件语句</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code3-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code3-1"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        int score = 85;
+        
+        if (score >= 90)
+        {
+            Console.WriteLine("优秀！");
+        }
+        else if (score >= 80)
+        {
+            Console.WriteLine("良好");
+        }
+        else if (score >= 60)
+        {
+            Console.WriteLine("及格");
+        }
+        else
+        {
+            Console.WriteLine("不及格");
+        }
+        
+        // switch 语句
+        string grade = "B";
+        switch (grade)
+        {
+            case "A":
+                Console.WriteLine("优秀");
+                break;
+            case "B":
+                Console.WriteLine("良好");
+                break;
+            case "C":
+                Console.WriteLine("及格");
+                break;
+            default:
+                Console.WriteLine("未知");
+                break;
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 循环语句</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code3-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code3-2"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        // for 循环
+        Console.WriteLine("for 循环：");
+        for (int i = 1; i <= 5; i++)
+        {
+            Console.WriteLine($"数字 {i}");
+        }
+        
+        // while 循环
+        Console.WriteLine("\nwhile 循环：");
+        int count = 1;
+        while (count <= 5)
+        {
+            Console.WriteLine($"计数 {count}");
+            count++;
+        }
+        
+        // do-while 循环
+        Console.WriteLine("\ndo-while 循环：");
+        int x = 1;
+        do
+        {
+            Console.WriteLine($"值 {x}");
+            x++;
+        } while (x <= 5);
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 跳转语句</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code3-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code3-3"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        // break - 跳出循环
+        for (int i = 1; i <= 10; i++)
+        {
+            if (i == 5) break;
+            Console.WriteLine($"break: {i}");
+        }
+        
+        // continue - 跳过当前迭代
+        Console.WriteLine("\ncontinue 示例：");
+        for (int i = 1; i <= 5; i++)
+        {
+            if (i == 3) continue;
+            Console.WriteLine($"continue: {i}");
+        }
+        
+        // return - 退出方法
+        Console.WriteLine("这行会执行");
+        return;
+        Console.WriteLine("这行不会执行");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：无限循环</div>
+                        <pre><code>// 错误：条件永远为真，导致无限循环
+int i = 0;
+while (i < 10)
+{
+    Console.WriteLine(i);
+    // 忘记 i++，导致无限循环！
+}
+
+// 正确做法：
+int i = 0;
+while (i < 10)
+{
+    Console.WriteLine(i);
+    i++; // 必须有迭代更新
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 使用 for 循环输出 1 到 100 之间的所有偶数。</div>
+                            <textarea class="answer-input" id="q3-1" rows="5" placeholder="输入代码..."></textarea>
+                            <button class="btn btn-primary" onclick="checkAnswer(3, 1)">检查答案</button>
+                            <div class="quiz-result" id="result3-1"></div>
+                            <div class="answer-section" id="answer3-1">
+                                <div class="answer-title">参考答案：</div>
+                                <pre><code>for (int i = 2; i <= 100; i += 2)
+{
+    Console.WriteLine(i);
+}</code></pre>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. break 和 continue 的区别是什么？</div>
+                            <input type="text" class="answer-input" id="q3-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(3, 2)">检查答案</button>
+                            <div class="quiz-result" id="result3-2"></div>
+                            <div class="answer-section" id="answer3-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p><code>break</code> 会完全跳出循环，而 <code>continue</code> 只是跳过当前迭代，继续下一次循环。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(3)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes3" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(3)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch4" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">4</div>
+                    <h2 class="chapter-title">集合与泛型</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(4)" id="bookmark4">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 数组</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code4-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code4-1"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        // 声明数组
+        int[] numbers = new int[5];
+        
+        // 初始化数组
+        numbers[0] = 10;
+        numbers[1] = 20;
+        numbers[2] = 30;
+        numbers[3] = 40;
+        numbers[4] = 50;
+        
+        // 简化初始化
+        string[] fruits = { "苹果", "香蕉", "橙子", "葡萄" };
+        
+        // 遍历数组
+        Console.WriteLine("数组元素：");
+        foreach (string fruit in fruits)
+        {
+            Console.WriteLine(fruit);
+        }
+        
+        // 获取数组长度
+        Console.WriteLine($"数组长度: {fruits.Length}");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 List<T> 泛型集合</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code4-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code4-2"><code>using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        // 创建 List
+        List<string> names = new List<string>();
+        
+        // 添加元素
+        names.Add("张三");
+        names.Add("李四");
+        names.Add("王五");
+        
+        // 添加多个元素
+        names.AddRange(new string[] { "赵六", "钱七" });
+        
+        // 访问元素
+        Console.WriteLine($"第一个人: {names[0]}");
+        
+        // 遍历
+        foreach (string name in names)
+        {
+            Console.WriteLine(name);
+        }
+        
+        // 查找元素
+        bool contains = names.Contains("李四");
+        Console.WriteLine($"包含李四: {contains}");
+        
+        // 删除元素
+        names.Remove("王五");
+        
+        // 排序
+        names.Sort();
+        
+        Console.WriteLine("\n排序后：");
+        foreach (string name in names)
+        {
+            Console.WriteLine(name);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 Dictionary<TKey, TValue></h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code4-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code4-3"><code>using System;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        // 创建字典
+        Dictionary<string, int> scores = new Dictionary<string, int>();
+        
+        // 添加键值对
+        scores["张三"] = 95;
+        scores["李四"] = 88;
+        scores["王五"] = 92;
+        
+        // 访问值
+        Console.WriteLine($"张三的分数: {scores["张三"]}");
+        
+        // 遍历字典
+        Console.WriteLine("\n所有成绩：");
+        foreach (KeyValuePair<string, int> pair in scores)
+        {
+            Console.WriteLine($"{pair.Key}: {pair.Value}分");
+        }
+        
+        // 检查键是否存在
+        if (scores.ContainsKey("李四"))
+        {
+            Console.WriteLine("\n李四存在");
+        }
+        
+        // 获取所有键和值
+        Console.WriteLine("\n所有学生：");
+        foreach (string name in scores.Keys)
+        {
+            Console.WriteLine(name);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：访问不存在的字典键</div>
+                        <pre><code>// 错误：访问不存在的键会抛出 KeyNotFoundException
+Dictionary<string, int> dict = new Dictionary<string, int>();
+dict["张三"] = 90;
+int score = dict["李四"]; // 运行时异常！
+
+// 正确做法：使用 TryGetValue
+int score;
+if (dict.TryGetValue("李四", out score))
+{
+    Console.WriteLine(score);
+}
+else
+{
+    Console.WriteLine("键不存在");
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 数组和 List 的主要区别是什么？</div>
+                            <input type="text" class="answer-input" id="q4-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(4, 1)">检查答案</button>
+                            <div class="quiz-result" id="result4-1"></div>
+                            <div class="answer-section" id="answer4-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>数组的大小是固定的，创建后不能改变；List 的大小是动态的，可以随时添加或删除元素。</p>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. 如何安全地获取 Dictionary 中不存在的键的值？</div>
+                            <input type="text" class="answer-input" id="q4-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(4, 2)">检查答案</button>
+                            <div class="quiz-result" id="result4-2"></div>
+                            <div class="answer-section" id="answer4-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p>使用 <code>TryGetValue</code> 方法可以安全地获取值，如果键不存在不会抛出异常。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(4)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes4" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(4)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch5" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">5</div>
+                    <h2 class="chapter-title">面向对象</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(5)" id="bookmark5">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 类与对象</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code5-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code5-1"><code>using System;
+
+// 定义类
+class Person
+{
+    // 字段（成员变量）
+    private string name;
+    private int age;
+    
+    // 属性
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
+    
+    public int Age
+    {
+        get { return age; }
+        set 
+        { 
+            if (value >= 0 && value <= 150)
+                age = value;
+            else
+                Console.WriteLine("无效的年龄");
+        }
+    }
+    
+    // 构造函数
+    public Person(string name, int age)
+    {
+        this.name = name;
+        this.age = age;
+    }
+    
+    // 方法
+    public void Introduce()
+    {
+        Console.WriteLine($"我叫{name}，今年{age}岁");
+    }
+    
+    public void Birthday()
+    {
+        age++;
+        Console.WriteLine($"生日快乐！现在{age}岁了");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        // 创建对象
+        Person p1 = new Person("张三", 25);
+        
+        // 调用方法
+        p1.Introduce();
+        p1.Birthday();
+        
+        // 使用属性
+        p1.Name = "张小三";
+        Console.WriteLine($"新名字: {p1.Name}");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 方法重载</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code5-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code5-2"><code>using System;
+
+class Calculator
+{
+    // 方法重载 - 不同参数类型
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+    
+    public double Add(double a, double b)
+    {
+        return a + b;
+    }
+    
+    // 方法重载 - 不同参数数量
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+    
+    public string Add(string a, string b)
+    {
+        return a + b;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Calculator calc = new Calculator();
+        
+        Console.WriteLine(calc.Add(10, 20));           // 30
+        Console.WriteLine(calc.Add(3.5, 2.5));         // 6.0
+        Console.WriteLine(calc.Add(1, 2, 3));          // 6
+        Console.WriteLine(calc.Add("Hello ", "World")); // Hello World
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 静态成员</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code5-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code5-3"><code>using System;
+
+class Counter
+{
+    // 静态字段 - 所有对象共享
+    public static int TotalCount = 0;
+    
+    // 实例字段 - 每个对象独有
+    public int InstanceCount = 0;
+    
+    public Counter()
+    {
+        TotalCount++;
+        InstanceCount++;
+    }
+    
+    // 静态方法
+    public static void ShowTotal()
+    {
+        Console.WriteLine($"总计数: {TotalCount}");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Counter c1 = new Counter();
+        Counter c2 = new Counter();
+        Counter c3 = new Counter();
+        
+        Console.WriteLine($"c1.InstanceCount: {c1.InstanceCount}"); // 1
+        Console.WriteLine($"c2.InstanceCount: {c2.InstanceCount}"); // 1
+        Console.WriteLine($"c3.InstanceCount: {c3.InstanceCount}"); // 1
+        
+        // 访问静态成员
+        Console.WriteLine($"Counter.TotalCount: {Counter.TotalCount}"); // 3
+        Counter.ShowTotal(); // 总计数: 3
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：实例方法访问静态成员</div>
+                        <pre><code>// 错误：在静态方法中访问实例成员
+class MyClass
+{
+    public int instanceField = 10;
+    public static int staticField = 20;
+    
+    public static void StaticMethod()
+    {
+        Console.WriteLine(staticField); // ✅ 可以
+        Console.WriteLine(instanceField); // ❌ 错误！不能在静态方法中访问实例成员
+    }
+    
+    public void InstanceMethod()
+    {
+        Console.WriteLine(staticField); // ✅ 可以
+        Console.WriteLine(instanceField); // ✅ 可以
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 字段和属性的区别是什么？</div>
+                            <input type="text" class="answer-input" id="q5-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(5, 1)">检查答案</button>
+                            <div class="quiz-result" id="result5-1"></div>
+                            <div class="answer-section" id="answer5-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>字段是类的基本变量，通常是私有的；属性提供了对字段的访问控制，可以在 get/set 中添加验证逻辑。</p>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. 什么是方法重载？</div>
+                            <input type="text" class="answer-input" id="q5-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(5, 2)">检查答案</button>
+                            <div class="quiz-result" id="result5-2"></div>
+                            <div class="answer-section" id="answer5-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p>方法重载是指在同一个类中定义多个同名方法，但参数列表（类型、数量、顺序）不同。编译器根据调用时的参数来决定调用哪个方法。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(5)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes5" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(5)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch6" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">6</div>
+                    <h2 class="chapter-title">继承与接口</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(6)" id="bookmark6">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 继承</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code6-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code6-1"><code>using System;
+
+// 基类（父类）
+class Animal
+{
+    protected string name;
+    
+    public Animal(string name)
+    {
+        this.name = name;
+    }
+    
+    public virtual void Eat()
+    {
+        Console.WriteLine($"{name} 在吃东西");
+    }
+    
+    public void Sleep()
+    {
+        Console.WriteLine($"{name} 在睡觉");
+    }
+}
+
+// 派生类（子类）
+class Dog : Animal
+{
+    public Dog(string name) : base(name) { }
+    
+    // 重写父类方法
+    public override void Eat()
+    {
+        Console.WriteLine($"{name} 在啃骨头");
+    }
+    
+    // 新增方法
+    public void Bark()
+    {
+        Console.WriteLine($"{name} 在汪汪叫");
+    }
+}
+
+class Cat : Animal
+{
+    public Cat(string name) : base(name) { }
+    
+    public override void Eat()
+    {
+        Console.WriteLine($"{name} 在吃鱼");
+    }
+    
+    public void Meow()
+    {
+        Console.WriteLine($"{name} 在喵喵叫");
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        Dog dog = new Dog("旺财");
+        dog.Eat();   // 调用重写的方法
+        dog.Bark();  // 调用子类特有的方法
+        dog.Sleep(); // 调用父类方法
+        
+        Cat cat = new Cat("咪咪");
+        cat.Eat();
+        cat.Meow();
+        
+        // 多态
+        Animal animal = new Dog("小黑");
+        animal.Eat(); // 调用 Dog 的 Eat 方法
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 接口</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code6-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code6-2"><code>using System;
+
+// 定义接口
+interface IFlyable
+{
+    void Fly();
+    int MaxAltitude { get; }
+}
+
+interface ISwimmable
+{
+    void Swim();
+    double MaxDepth { get; }
+}
+
+// 实现接口
+class Bird : IFlyable
+{
+    public string Name { get; set; }
+    
+    public Bird(string name)
+    {
+        Name = name;
+    }
+    
+    public void Fly()
+    {
+        Console.WriteLine($"{Name} 在飞翔");
+    }
+    
+    public int MaxAltitude => 10000;
+}
+
+class Duck : IFlyable, ISwimmable
+{
+    public string Name { get; set; }
+    
+    public Duck(string name)
+    {
+        Name = name;
+    }
+    
+    public void Fly()
+    {
+        Console.WriteLine($"{Name} 在低空飞行");
+    }
+    
+    public int MaxAltitude => 500;
+    
+    public void Swim()
+    {
+        Console.WriteLine($"{Name} 在游泳");
+    }
+    
+    public double MaxDepth => 2.0;
+}
+
+class Program
+{
+    static void Main()
+    {
+        Bird eagle = new Bird("老鹰");
+        eagle.Fly();
+        Console.WriteLine($"最大飞行高度: {eagle.MaxAltitude}米");
+        
+        Duck duck = new Duck("唐老鸭");
+        duck.Fly();
+        duck.Swim();
+        
+        // 使用接口引用
+        IFlyable flyable = duck;
+        flyable.Fly();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 abstract 抽象类</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code6-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code6-3"><code>using System;
+
+// 抽象类
+abstract class Shape
+{
+    public abstract double Area { get; }
+    public abstract double Perimeter { get; }
+    
+    public void DisplayInfo()
+    {
+        Console.WriteLine($"面积: {Area}, 周长: {Perimeter}");
+    }
+}
+
+class Circle : Shape
+{
+    public double Radius { get; set; }
+    
+    public Circle(double radius)
+    {
+        Radius = radius;
+    }
+    
+    public override double Area => Math.PI * Radius * Radius;
+    public override double Perimeter => 2 * Math.PI * Radius;
+}
+
+class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+    
+    public Rectangle(double width, double height)
+    {
+        Width = width;
+        Height = height;
+    }
+    
+    public override double Area => Width * Height;
+    public override double Perimeter => 2 * (Width + Height);
+}
+
+class Program
+{
+    static void Main()
+    {
+        Shape circle = new Circle(5);
+        circle.DisplayInfo();
+        
+        Shape rectangle = new Rectangle(4, 6);
+        rectangle.DisplayInfo();
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：多重继承</div>
+                        <pre><code>// 错误：C# 不支持类的多重继承
+class A { }
+class B { }
+class C : A, B { } // ❌ 编译错误！
+
+// 正确做法：使用接口
+interface IA { }
+interface IB { }
+class C : IA, IB { } // ✅ 可以实现多个接口</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 类和接口的主要区别是什么？</div>
+                            <input type="text" class="answer-input" id="q6-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(6, 1)">检查答案</button>
+                            <div class="quiz-result" id="result6-1"></div>
+                            <div class="answer-section" id="answer6-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>类可以包含实现（方法体）和状态（字段），只能单继承；接口只定义方法签名，不包含实现，可以多实现。</p>
+                            </div>
+                        </div>
+                        <div class="quiz-question">
+                            <div class="question-text">2. virtual 和 abstract 的区别是什么？</div>
+                            <input type="text" class="answer-input" id="q6-2" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(6, 2)">检查答案</button>
+                            <div class="quiz-result" id="result6-2"></div>
+                            <div class="answer-section" id="answer6-2">
+                                <div class="answer-title">参考答案：</div>
+                                <p><code>virtual</code> 方法有默认实现，可以被子类重写；<code>abstract</code> 方法没有实现，必须在子类中重写，且只能在抽象类中定义。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(6)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes6" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(6)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch7" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">7</div>
+                    <h2 class="chapter-title">异常处理</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(7)" id="bookmark7">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 try-catch 语句</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code7-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code7-1"><code>using System;
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            // 可能抛出异常的代码
+            int[] numbers = { 1, 2, 3 };
+            Console.WriteLine(numbers[5]); // 索引越界
+            
+            int result = 10 / 0; // 除零错误
+        }
+        catch (IndexOutOfRangeException ex)
+        {
+            Console.WriteLine($"索引越界: {ex.Message}");
+        }
+        catch (DivideByZeroException ex)
+        {
+            Console.WriteLine($"除零错误: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"其他错误: {ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("无论是否发生异常，都会执行");
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 自定义异常</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code7-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code7-2"><code>using System;
+
+// 自定义异常
+class InvalidAgeException : Exception
+{
+    public InvalidAgeException(string message) : base(message) { }
+    
+    public InvalidAgeException(string message, Exception inner) 
+        : base(message, inner) { }
+}
+
+class Person
+{
+    private int age;
+    
+    public int Age
+    {
+        get { return age; }
+        set
+        {
+            if (value < 0 || value > 150)
+                throw new InvalidAgeException($"年龄 {value} 无效");
+            age = value;
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            Person p = new Person();
+            p.Age = 200; // 抛出自定义异常
+        }
+        catch (InvalidAgeException ex)
+        {
+            Console.WriteLine($"自定义异常: {ex.Message}");
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：空 catch 块</div>
+                        <pre><code>// 错误：吞掉异常，无法调试
+try
+{
+    int result = 10 / 0;
+}
+catch (Exception)
+{
+    // 空块，异常被吞掉！
+}
+
+// 正确做法：至少记录异常信息
+try
+{
+    int result = 10 / 0;
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"错误: {ex.Message}");
+    throw; // 重新抛出异常
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. try-catch-finally 中，finally 块在什么情况下执行？</div>
+                            <input type="text" class="answer-input" id="q7-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(7, 1)">检查答案</button>
+                            <div class="quiz-result" id="result7-1"></div>
+                            <div class="answer-section" id="answer7-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>finally 块无论是否发生异常都会执行，通常用于资源清理（如关闭文件、释放连接）。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(7)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes7" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(7)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch8" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">8</div>
+                    <h2 class="chapter-title">文件与流</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(8)" id="bookmark8">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 文件读写</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code8-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code8-1"><code>using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string path = "example.txt";
+        
+        // 写入文件
+        string content = "Hello, C# File I/O!";
+        File.WriteAllText(path, content);
+        Console.WriteLine("文件写入成功");
+        
+        // 读取文件
+        string readContent = File.ReadAllText(path);
+        Console.WriteLine($"文件内容: {readContent}");
+        
+        // 写入多行
+        string[] lines = { "第一行", "第二行", "第三行" };
+        File.WriteAllLines("lines.txt", lines);
+        
+        // 读取多行
+        string[] readLines = File.ReadAllLines("lines.txt");
+        foreach (string line in readLines)
+        {
+            Console.WriteLine(line);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 使用 StreamReader/StreamWriter</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code8-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code8-2"><code>using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        // 使用 StreamWriter 写入
+        using (StreamWriter writer = new StreamWriter("stream.txt"))
+        {
+            writer.WriteLine("第一行");
+            writer.WriteLine("第二行");
+            writer.Write("第三行");
+        }
+        
+        // 使用 StreamReader 读取
+        using (StreamReader reader = new StreamReader("stream.txt"))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                Console.WriteLine(line);
+            }
+        }
+        
+        // 读取全部内容
+        using (StreamReader reader = new StreamReader("stream.txt"))
+        {
+            string content = reader.ReadToEnd();
+            Console.WriteLine("\n全部内容:");
+            Console.WriteLine(content);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 文件操作</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code8-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code8-3"><code>using System;
+using System.IO;
+
+class Program
+{
+    static void Main()
+    {
+        string sourceFile = "example.txt";
+        string destFile = "copy.txt";
+        
+        // 复制文件
+        File.Copy(sourceFile, destFile, overwrite: true);
+        Console.WriteLine("文件复制成功");
+        
+        // 移动文件
+        File.Move(destFile, "renamed.txt");
+        Console.WriteLine("文件移动成功");
+        
+        // 删除文件
+        if (File.Exists("renamed.txt"))
+        {
+            File.Delete("renamed.txt");
+            Console.WriteLine("文件删除成功");
+        }
+        
+        // 创建目录
+        Directory.CreateDirectory("MyFolder");
+        Console.WriteLine("目录创建成功");
+        
+        // 获取目录中的文件
+        string[] files = Directory.GetFiles(".");
+        Console.WriteLine("\n当前目录文件:");
+        foreach (string file in files)
+        {
+            Console.WriteLine(file);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：忘记关闭流</div>
+                        <pre><code>// 错误：忘记关闭流，可能导致资源泄漏
+StreamWriter writer = new StreamWriter("file.txt");
+writer.WriteLine("Hello");
+// 忘记 writer.Close() 或 writer.Dispose()
+
+// 正确做法：使用 using 语句自动释放资源
+using (StreamWriter writer = new StreamWriter("file.txt"))
+{
+    writer.WriteLine("Hello");
+} // 自动调用 Dispose()</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. using 语句的作用是什么？</div>
+                            <input type="text" class="answer-input" id="q8-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(8, 1)">检查答案</button>
+                            <div class="quiz-result" id="result8-1"></div>
+                            <div class="answer-section" id="answer8-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>using 语句确保实现 IDisposable 接口的对象在使用完毕后自动调用 Dispose() 方法，释放资源（如文件流、数据库连接）。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(8)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes8" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(8)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch9" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">9</div>
+                    <h2 class="chapter-title">LINQ查询</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(9)" id="bookmark9">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 LINQ 基础</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code9-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code9-1"><code>using System;
+using System.Linq;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        
+        // 查询语法
+        var evenNumbers = from num in numbers
+                          where num % 2 == 0
+                          select num;
+        
+        // 方法语法
+        var oddNumbers = numbers.Where(n => n % 2 != 0);
+        
+        Console.WriteLine("偶数:");
+        foreach (int num in evenNumbers)
+        {
+            Console.WriteLine(num);
+        }
+        
+        Console.WriteLine("\n奇数:");
+        foreach (int num in oddNumbers)
+        {
+            Console.WriteLine(num);
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 LINQ 常用操作</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code9-2')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code9-2"><code>using System;
+using System.Linq;
+using System.Collections.Generic;
+
+class Program
+{
+    static void Main()
+    {
+        List<string> fruits = new List<string> { "apple", "banana", "orange", "grape", "mango" };
+        
+        // Where - 过滤
+        var shortNames = fruits.Where(f => f.Length <= 5);
+        
+        // OrderBy - 排序
+        var sortedFruits = fruits.OrderBy(f => f.Length);
+        
+        // Select - 投影
+        var upperFruits = fruits.Select(f => f.ToUpper());
+        
+        // First/FirstOrDefault
+        string first = fruits.First();
+        string firstLong = fruits.FirstOrDefault(f => f.Length > 10);
+        
+        // Count
+        int count = fruits.Count;
+        int longCount = fruits.Count(f => f.Length > 5);
+        
+        // Sum/Average/Max/Min
+        List<int> nums = new List<int> { 10, 20, 30, 40, 50 };
+        int sum = nums.Sum();
+        double avg = nums.Average();
+        int max = nums.Max();
+        int min = nums.Min();
+        
+        Console.WriteLine($"总和: {sum}, 平均: {avg}, 最大: {max}, 最小: {min}");
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📌 LINQ to Objects</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code9-3')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code9-3"><code>using System;
+using System.Linq;
+using System.Collections.Generic;
+
+class Student
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public double Score { get; set; }
+}
+
+class Program
+{
+    static void Main()
+    {
+        List<Student> students = new List<Student>
+        {
+            new Student { Name = "张三", Age = 20, Score = 95 },
+            new Student { Name = "李四", Age = 21, Score = 88 },
+            new Student { Name = "王五", Age = 19, Score = 92 },
+            new Student { Name = "赵六", Age = 22, Score = 85 }
+        };
+        
+        // 查询成绩大于90的学生
+        var excellentStudents = from s in students
+                               where s.Score > 90
+                               orderby s.Score descending
+                               select new { s.Name, s.Score };
+        
+        Console.WriteLine("优秀学生:");
+        foreach (var s in excellentStudents)
+        {
+            Console.WriteLine($"{s.Name}: {s.Score}分");
+        }
+        
+        // 分组
+        var groupedByAge = students.GroupBy(s => s.Age);
+        Console.WriteLine("\n按年龄分组:");
+        foreach (var group in groupedByAge)
+        {
+            Console.WriteLine($"年龄 {group.Key}: {group.Count()}人");
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">❌ 错误示例</h3>
+                    <div class="error-block">
+                        <div class="error-title">常见错误：忘记引用 System.Linq</div>
+                        <pre><code>// 错误：没有导入 System.Linq 命名空间
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        List<int> nums = new List<int> { 1, 2, 3 };
+        var result = nums.Where(n => n > 1); // ❌ 编译错误！
+    }
+}
+
+// 正确做法：添加 using System.Linq;
+using System;
+using System.Linq;
+
+class Program
+{
+    static void Main()
+    {
+        List<int> nums = new List<int> { 1, 2, 3 };
+        var result = nums.Where(n => n > 1); // ✅ 可以
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. LINQ 查询语法和方法语法有什么区别？</div>
+                            <input type="text" class="answer-input" id="q9-1" placeholder="输入答案...">
+                            <button class="btn btn-primary" onclick="checkAnswer(9, 1)">检查答案</button>
+                            <div class="quiz-result" id="result9-1"></div>
+                            <div class="answer-section" id="answer9-1">
+                                <div class="answer-title">参考答案：</div>
+                                <p>查询语法类似 SQL，可读性更好；方法语法使用 Lambda 表达式，更灵活。两者功能等价，编译器会将查询语法转换为方法调用。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(9)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes9" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(9)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+
+            <div id="ch10" class="chapter">
+                <div class="chapter-header">
+                    <div class="chapter-number">10</div>
+                    <h2 class="chapter-title">综合实战</h2>
+                    <div class="chapter-actions">
+                        <button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(10)" id="bookmark10">⭐</button>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">🎯 项目：学生管理系统</h3>
+                    <div class="content-text">
+                        <p>我们将创建一个完整的学生管理系统，包含以下功能：</p>
+                        <ul>
+                            <li>添加学生信息</li>
+                            <li>查询学生信息</li>
+                            <li>修改学生信息</li>
+                            <li>删除学生信息</li>
+                            <li>成绩统计</li>
+                            <li>数据持久化（文件存储）</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">💻 完整代码</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-lang">C#</span>
+                            <div class="code-actions">
+                                <button class="copy-btn" onclick="copyCode('code10-1')">复制</button>
+                            </div>
+                        </div>
+                        <pre id="code10-1"><code>using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+
+class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public string Gender { get; set; }
+    public double Score { get; set; }
+    
+    public override string ToString()
+    {
+        return $"ID: {Id}, 姓名: {Name}, 年龄: {Age}, 性别: {Gender}, 成绩: {Score}";
+    }
+}
+
+class StudentManager
+{
+    private List<Student> students = new List<Student>();
+    private const string filePath = "students.txt";
+    private int nextId = 1;
+    
+    public StudentManager()
+    {
+        LoadStudents();
+    }
+    
+    public void AddStudent(Student student)
+    {
+        student.Id = nextId++;
+        students.Add(student);
+        SaveStudents();
+        Console.WriteLine("学生添加成功！");
+    }
+    
+    public Student GetStudentById(int id)
+    {
+        return students.FirstOrDefault(s => s.Id == id);
+    }
+    
+    public List<Student> SearchStudents(string keyword)
+    {
+        return students.Where(s => 
+            s.Name.Contains(keyword) || 
+            s.Gender.Contains(keyword)
+        ).ToList();
+    }
+    
+    public bool UpdateStudent(int id, Student updatedStudent)
+    {
+        var student = GetStudentById(id);
+        if (student != null)
+        {
+            student.Name = updatedStudent.Name;
+            student.Age = updatedStudent.Age;
+            student.Gender = updatedStudent.Gender;
+            student.Score = updatedStudent.Score;
+            SaveStudents();
+            return true;
+        }
+        return false;
+    }
+    
+    public bool DeleteStudent(int id)
+    {
+        var student = GetStudentById(id);
+        if (student != null)
+        {
+            students.Remove(student);
+            SaveStudents();
+            return true;
+        }
+        return false;
+    }
+    
+    public void ShowAllStudents()
+    {
+        if (students.Count == 0)
+        {
+            Console.WriteLine("暂无学生信息");
+            return;
+        }
+        foreach (var student in students)
+        {
+            Console.WriteLine(student);
+        }
+    }
+    
+    public void ShowStatistics()
+    {
+        if (students.Count == 0) return;
+        
+        Console.WriteLine($"\n统计信息：");
+        Console.WriteLine($"总人数: {students.Count}");
+        Console.WriteLine($"平均成绩: {students.Average(s => s.Score):F2}");
+        Console.WriteLine($"最高成绩: {students.Max(s => s.Score)}");
+        Console.WriteLine($"最低成绩: {students.Min(s => s.Score)}");
+        
+        var genderGroups = students.GroupBy(s => s.Gender);
+        foreach (var group in genderGroups)
+        {
+            Console.WriteLine($"{group.Key}: {group.Count()}人");
+        }
+    }
+    
+    private void SaveStudents()
+    {
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine(nextId);
+            foreach (var student in students)
+            {
+                writer.WriteLine($"{student.Id},{student.Name},{student.Age},{student.Gender},{student.Score}");
+            }
+        }
+    }
+    
+    private void LoadStudents()
+    {
+        if (!File.Exists(filePath)) return;
+        
+        using (StreamReader reader = new StreamReader(filePath))
+        {
+            string line;
+            if ((line = reader.ReadLine()) != null)
+            {
+                nextId = int.Parse(line);
+            }
+            
+            while ((line = reader.ReadLine()) != null)
+            {
+                string[] parts = line.Split(',');
+                students.Add(new Student
+                {
+                    Id = int.Parse(parts[0]),
+                    Name = parts[1],
+                    Age = int.Parse(parts[2]),
+                    Gender = parts[3],
+                    Score = double.Parse(parts[4])
+                });
+            }
+        }
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        StudentManager manager = new StudentManager();
+        bool exit = false;
+        
+        while (!exit)
+        {
+            Console.WriteLine("\n========== 学生管理系统 ==========");
+            Console.WriteLine("1. 添加学生");
+            Console.WriteLine("2. 查询学生");
+            Console.WriteLine("3. 修改学生");
+            Console.WriteLine("4. 删除学生");
+            Console.WriteLine("5. 显示所有学生");
+            Console.WriteLine("6. 统计信息");
+            Console.WriteLine("7. 退出");
+            Console.Write("请选择操作: ");
+            
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    AddStudentMenu(manager);
+                    break;
+                case "2":
+                    SearchStudentMenu(manager);
+                    break;
+                case "3":
+                    UpdateStudentMenu(manager);
+                    break;
+                case "4":
+                    DeleteStudentMenu(manager);
+                    break;
+                case "5":
+                    manager.ShowAllStudents();
+                    break;
+                case "6":
+                    manager.ShowStatistics();
+                    break;
+                case "7":
+                    exit = true;
+                    break;
+                default:
+                    Console.WriteLine("无效选项，请重新选择");
+                    break;
+            }
+        }
+    }
+    
+    static void AddStudentMenu(StudentManager manager)
+    {
+        Console.Write("请输入姓名: ");
+        string name = Console.ReadLine();
+        Console.Write("请输入年龄: ");
+        int age = int.Parse(Console.ReadLine());
+        Console.Write("请输入性别: ");
+        string gender = Console.ReadLine();
+        Console.Write("请输入成绩: ");
+        double score = double.Parse(Console.ReadLine());
+        
+        manager.AddStudent(new Student
+        {
+            Name = name,
+            Age = age,
+            Gender = gender,
+            Score = score
+        });
+    }
+    
+    static void SearchStudentMenu(StudentManager manager)
+    {
+        Console.Write("请输入搜索关键字: ");
+        string keyword = Console.ReadLine();
+        var results = manager.SearchStudents(keyword);
+        
+        if (results.Count == 0)
+        {
+            Console.WriteLine("未找到匹配的学生");
+        }
+        else
+        {
+            foreach (var student in results)
+            {
+                Console.WriteLine(student);
+            }
+        }
+    }
+    
+    static void UpdateStudentMenu(StudentManager manager)
+    {
+        Console.Write("请输入学生ID: ");
+        int id = int.Parse(Console.ReadLine());
+        
+        Console.Write("请输入新姓名: ");
+        string name = Console.ReadLine();
+        Console.Write("请输入新年龄: ");
+        int age = int.Parse(Console.ReadLine());
+        Console.Write("请输入新性别: ");
+        string gender = Console.ReadLine();
+        Console.Write("请输入新成绩: ");
+        double score = double.Parse(Console.ReadLine());
+        
+        if (manager.UpdateStudent(id, new Student
+        {
+            Name = name,
+            Age = age,
+            Gender = gender,
+            Score = score
+        }))
+        {
+            Console.WriteLine("学生信息更新成功");
+        }
+        else
+        {
+            Console.WriteLine("未找到该学生");
+        }
+    }
+    
+    static void DeleteStudentMenu(StudentManager manager)
+    {
+        Console.Write("请输入学生ID: ");
+        int id = int.Parse(Console.ReadLine());
+        
+        if (manager.DeleteStudent(id))
+        {
+            Console.WriteLine("学生删除成功");
+        }
+        else
+        {
+            Console.WriteLine("未找到该学生");
+        }
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">📝 练习题</h3>
+                    <div class="quiz-section">
+                        <div class="quiz-question">
+                            <div class="question-text">1. 扩展学生管理系统，添加按成绩排序的功能。</div>
+                            <textarea class="answer-input" id="q10-1" rows="8" placeholder="输入代码..."></textarea>
+                            <button class="btn btn-primary" onclick="checkAnswer(10, 1)">检查答案</button>
+                            <div class="quiz-result" id="result10-1"></div>
+                            <div class="answer-section" id="answer10-1">
+                                <div class="answer-title">参考答案：</div>
+                                <pre><code>public List<Student> GetStudentsOrderedByScore(bool descending = true)
+{
+    return descending 
+        ? students.OrderByDescending(s => s.Score).ToList()
+        : students.OrderBy(s => s.Score).ToList();
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <div class="notes-title">📒 我的笔记</div>
+                        <button class="btn btn-secondary" onclick="saveNotes(10)">保存笔记</button>
+                    </div>
+                    <textarea class="notes-textarea" id="notes10" placeholder="在这里记录学习笔记..."></textarea>
+                </div>
+
+                <button class="btn btn-primary completion-btn" onclick="markChapterComplete(10)">
+                    ✅ 标记为已完成
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script>
+        const CORRECT_ANSWERS = {
+            1: { 1: 'main', 2: 'dotnet' },
+            2: { 1: 'int', 2: 'const' },
+            3: { 1: 'for', 2: 'break' },
+            4: { 1: '数组', 2: 'trygetvalue' },
+            5: { 1: '字段', 2: '重载' },
+            6: { 1: '类', 2: 'virtual' },
+            7: { 1: 'finally' },
+            8: { 1: 'using' },
+            9: { 1: '查询' },
+            10: { 1: 'orderby' }
+        };
+
+        let darkMode = localStorage.getItem('darkMode') === 'true';
+        
+        function init() {
+            loadProgress();
+            loadBookmarks();
+            loadNotes();
+            applyTheme();
+            KeyboardShortcuts.init();
+        }
+
+        function applyTheme() {
+            if (darkMode) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeText').textContent = '浅色模式';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('themeIcon').textContent = '🌙';
+                document.getElementById('themeText').textContent = '暗黑模式';
+            }
+        }
+
+        function toggleDarkMode() {
+            darkMode = !darkMode;
+            localStorage.setItem('darkMode', darkMode);
+            applyTheme();
+        }
+
+        function scrollToChapter(chapter) {
+            const element = document.getElementById(`ch${chapter}`);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+            updateActiveChapter(chapter);
+        }
+
+        function updateActiveChapter(chapter) {
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const item = document.querySelector(`.chapter-item[data-chapter="${chapter}"]`);
+            if (item) {
+                item.classList.add('active');
+            }
+        }
+
+        function searchTutorial() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const chapters = document.querySelectorAll('.chapter');
+            
+            chapters.forEach(chapter => {
+                const content = chapter.textContent.toLowerCase();
+                if (content.includes(query)) {
+                    chapter.style.display = 'block';
+                } else {
+                    chapter.style.display = 'none';
+                }
+            });
+        }
+
+        function copyCode(codeId) {
+            const code = document.getElementById(codeId).textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('代码已复制到剪贴板！');
+            });
+        }
+
+        function checkAnswer(chapter, question) {
+            const input = document.getElementById(`q${chapter}-${question}`);
+            const result = document.getElementById(`result${chapter}-${question}`);
+            const answer = document.getElementById(`answer${chapter}-${question}`);
+            
+            if (!input || !result || !answer) return;
+            
+            const userAnswer = input.value.trim().toLowerCase();
+            const correctAnswers = CORRECT_ANSWERS[chapter]?.[question];
+            
+            if (correctAnswers && userAnswer.includes(correctAnswers)) {
+                result.textContent = '✅ 正确！';
+                result.className = 'quiz-result correct';
+                answer.classList.add('show');
+                LearningStats.recordChapterCompletion('csharp', chapter);
+            } else {
+                result.textContent = '❌ 错误，请重试';
+                result.className = 'quiz-result incorrect';
+            }
+        }
+
+        function markChapterComplete(chapter) {
+            LearningStats.recordChapterCompletion('csharp', chapter);
+            updateProgress();
+            
+            const chapterItem = document.querySelector(`.chapter-item[data-chapter="${chapter}"]`);
+            if (chapterItem) {
+                chapterItem.classList.add('completed');
+            }
+            
+            alert(`第 ${chapter} 章已标记为完成！`);
+        }
+
+        function updateProgress() {
+            const stats = LearningStats.get();
+            const csharpProgress = stats.languagesProgress['csharp'] || [];
+            const completed = csharpProgress.length;
+            const total = 10;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.querySelectorAll('.chapter-item').forEach((item, index) => {
+                if (csharpProgress.includes(index + 1)) {
+                    item.classList.add('completed');
+                }
+            });
+        }
+
+        function loadProgress() {
+            updateProgress();
+        }
+
+        function toggleBookmark(chapter) {
+            const bookmarks = JSON.parse(localStorage.getItem('csharp_bookmarks') || '[]');
+            const index = bookmarks.indexOf(chapter);
+            const btn = document.getElementById(`bookmark${chapter}`);
+            
+            if (index === -1) {
+                bookmarks.push(chapter);
+                btn.style.color = '#f59e0b';
+                alert('已添加到收藏夹！');
+            } else {
+                bookmarks.splice(index, 1);
+                btn.style.color = '';
+                alert('已从收藏夹移除！');
+            }
+            
+            localStorage.setItem('csharp_bookmarks', JSON.stringify(bookmarks));
+        }
+
+        function loadBookmarks() {
+            const bookmarks = JSON.parse(localStorage.getItem('csharp_bookmarks') || '[]');
+            bookmarks.forEach(chapter => {
+                const btn = document.getElementById(`bookmark${chapter}`);
+                if (btn) {
+                    btn.style.color = '#f59e0b';
+                }
+            });
+        }
+
+        function showBookmarks() {
+            const bookmarks = JSON.parse(localStorage.getItem('csharp_bookmarks') || '[]');
+            if (bookmarks.length === 0) {
+                alert('收藏夹为空！');
+                return;
+            }
+            
+            let message = '已收藏的章节：\n';
+            bookmarks.forEach(chapter => {
+                message += `第 ${chapter} 章\n`;
+            });
+            alert(message);
+        }
+
+        function saveNotes(chapter) {
+            const notes = document.getElementById(`notes${chapter}`).value;
+            const allNotes = JSON.parse(localStorage.getItem('csharp_notes') || '{}');
+            allNotes[chapter] = notes;
+            localStorage.setItem('csharp_notes', JSON.stringify(allNotes));
+            alert('笔记已保存！');
+        }
+
+        function loadNotes() {
+            const allNotes = JSON.parse(localStorage.getItem('csharp_notes') || '{}');
+            for (let i = 1; i <= 10; i++) {
+                const notes = document.getElementById(`notes${i}`);
+                if (notes && allNotes[i]) {
+                    notes.value = allNotes[i];
+                }
+            }
+        }
+
+        function showProgress() {
+            const stats = LearningStats.get();
+            const csharpProgress = stats.languagesProgress['csharp'] || [];
+            const completed = csharpProgress.length;
+            const total = 10;
+            const percentage = Math.round((completed / total) * 100);
+            
+            alert(`C# 学习进度：${completed}/${total} (${percentage}%)`);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

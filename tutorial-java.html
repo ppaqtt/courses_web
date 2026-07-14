@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java教程 - 学习中心</title>
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <style>
+        :root {
+            --accent-color: #667eea;
+            --bg-primary: #f8fafc;
+            --bg-secondary: #f1f5f9;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #475569;
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            transition: all 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .header .progress-bar {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sidebar {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 20px;
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar-search {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-search input {
+            width: 100%;
+            padding: 10px 35px 10px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .sidebar-search .search-icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 5px;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--accent-color);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .sidebar-nav a.completed {
+            color: var(--success-color);
+        }
+
+        .sidebar-nav a.favorited {
+            color: var(--warning-color);
+        }
+
+        .chapter {
+            background: var(--bg-card);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chapter-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .chapter-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chapter-actions button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .chapter-actions button:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .chapter-actions button.active {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .chapter-content {
+            line-height: 1.8;
+        }
+
+        .chapter-content h3 {
+            color: var(--accent-color);
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .chapter-content h4 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .chapter-content p {
+            margin-bottom: 15px;
+        }
+
+        .chapter-content ul, .chapter-content ol {
+            margin-bottom: 15px;
+            padding-left: 25px;
+        }
+
+        .chapter-content li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block code {
+            color: inherit;
+        }
+
+        .code-block .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .code-block .copy-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .code-keyword { color: #569cd6; }
+        .code-string { color: #ce9178; }
+        .code-comment { color: #6a9955; }
+        .code-number { color: #b5cea8; }
+        .code-class { color: #4ec9b0; }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .error-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--error-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .quiz-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .quiz-section h4 {
+            margin: 0 0 15px 0;
+        }
+
+        .quiz-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quiz-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .quiz-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            padding: 10px 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-color);
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--accent-color);
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .quiz-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .quiz-btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            background: var(--accent-color);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            background: #5a67d8;
+        }
+
+        .quiz-answer {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            display: none;
+        }
+
+        .quiz-answer.show {
+            display: block;
+        }
+
+        .quiz-answer.correct {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .quiz-answer.incorrect {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .notes-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .notes-section h4 {
+            margin: 0 0 15px 0;
+        }
+
+        .notes-textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        .notes-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            background: var(--accent-color);
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .notes-btn:hover {
+            background: #5a67d8;
+        }
+
+        .notes-saved {
+            margin-top: 10px;
+            color: var(--success-color);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .notes-saved.show {
+            display: block;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .completion-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            background: var(--success-color);
+            color: white;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .completion-btn:hover {
+            background: #059669;
+        }
+
+        .completion-btn.completed {
+            background: var(--text-muted);
+            cursor: not-allowed;
+        }
+
+        .progress-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            padding: 15px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .scroll-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            background: #5a67d8;
+        }
+
+        .chapter-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.85rem;
+            margin-right: 10px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-card:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+
+        .feature-name {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>☕ Java教程</h1>
+                <p>从入门到精通，系统学习Java编程语言</p>
+            </div>
+            <div class="progress-info">
+                <span id="progressText">已完成 0/10 章节</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="showFeature('video')">📹 视频教程</button>
+                <button class="btn btn-secondary" onclick="showFeature('api')">📖 API文档</button>
+                <button class="btn btn-secondary" onclick="showFeature('assignment')">📝 作业</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="sidebar-search">
+                    <input type="text" id="searchInput" placeholder="搜索教程内容..." oninput="handleSearch()">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div style="margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color);">
+                    <h4 style="margin: 0 0 10px 0; font-size: 0.9rem;">快捷功能</h4>
+                    <div class="feature-card" onclick="showFeature('bookmark')">
+                        <span class="feature-icon">🔖</span>
+                        <div>
+                            <div class="feature-name">书签</div>
+                            <div class="feature-desc">继续上次学习</div>
+                        </div>
+                    </div>
+                    <div class="feature-card" onclick="showFeature('stats')">
+                        <span class="feature-icon">📊</span>
+                        <div>
+                            <div class="feature-name">学习统计</div>
+                            <div class="feature-desc">查看学习进度</div>
+                        </div>
+                    </div>
+                    <div class="feature-card" onclick="showFeature('achievements')">
+                        <span class="feature-icon">🏆</span>
+                        <div>
+                            <div class="feature-name">成就系统</div>
+                            <div class="feature-desc">解锁学习成就</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin: 0 0 15px 0; font-size: 0.9rem;">📚 章节列表</h4>
+                <ul class="sidebar-nav" id="chapterNav"></ul>
+            </div>
+
+            <div class="content-area">
+                <div id="ch1" class="chapter">
+                    <div class="chapter-header">
+                        <h2><span class="chapter-number">1</span>入门介绍与环境搭建</h2>
+                        <div class="chapter-actions">
+                            <button id="fav1" onclick="toggleFavorite(1)">⭐ 收藏</button>
+                            <button onclick="BookmarkManager.save('java', 1)">🔖 书签</button>
+                        </div>
+                    </div>
+                    <div class="chapter-content">
+                        <h3>📌 本章要点</h3>
+                        <ul>
+                            <li>了解Java语言的特点和历史</li>
+                            <li>安装JDK并配置环境变量</li>
+                            <li>编写第一个Java程序</li>
+                            <li>使用IDE（IntelliJ IDEA/Eclipse）</li>
+                        </ul>
+
+                        <h3>1.1 Java语言概述</h3>
+                        <p>Java是一种广泛使用的高级编程语言，由Sun Microsystems于1995年发布。Java具有跨平台、面向对象、安全性高等特点，被广泛应用于企业级开发、移动应用（Android）、大数据处理等领域。</p>
+                        <p>Java的核心优势：</p>
+                        <ul>
+                            <li><strong>跨平台性</strong>：一次编写，随处运行（Write Once, Run Anywhere）</li>
+                            <li><strong>面向对象</strong>：支持封装、继承、多态等OOP特性</li>
+                            <li><strong>自动内存管理</strong>：垃圾回收机制</li>
+                            <li><strong>安全性</strong>：内置安全机制</li>
+                        </ul>
+
+                        <h3>1.2 JDK安装与环境配置</h3>
+                        <p>JDK（Java Development Kit）是Java开发环境的核心组件，包含编译器、调试器等工具。</p>
+                        <ol>
+                            <li>访问<a href="https://www.oracle.com/java/technologies/downloads/" target="_blank">Oracle官网</a>下载JDK</li>
+                            <li>安装JDK到指定目录</li>
+                            <li>配置环境变量：
+                                <ul>
+                                    <li>Windows：设置JAVA_HOME和Path</li>
+                                    <li>Linux/Mac：配置~/.bashrc或~/.zshrc</li>
+                                </ul>
+                            </li>
+                            <li>验证安装：在终端输入<code>java -version</code>和<code>javac -version</code></li>
+                        </ol>
+
+                        <h3>1.3 编写第一个Java程序</h3>
+                        <p>创建一个简单的Hello World程序：</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">HelloWorld</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-class">System</span>.out.println(<span class="code-string">"Hello, World!"</span>);
+    }
+}</code></pre>
+                        </div>
+
+                        <h4>编译与运行</h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-comment"># 编译</span>
+javac HelloWorld.java
+
+<span class="code-comment"># 运行</span>
+java HelloWorld
+
+<span class="code-comment"># 输出</span>
+Hello, World!</code></pre>
+                        </div>
+
+                        <h3>1.4 常见错误示例</h3>
+                        <div class="error-box">
+                            <strong>❌ 错误1：类名与文件名不一致</strong><br>
+                            如果文件名为Hello.java，但类名为HelloWorld，编译会失败。<br>
+                            <strong>解决方案</strong>：确保类名与文件名完全一致（包括大小写）。
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误2：缺少main方法</strong><br>
+                            Java程序需要一个main方法作为入口点。<br>
+                            <strong>解决方案</strong>：添加public static void main(String[] args)方法。
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误3：未配置环境变量</strong><br>
+                            运行javac时提示"不是内部或外部命令"。<br>
+                            <strong>解决方案</strong>：正确配置JAVA_HOME和Path环境变量。
+                        </div>
+
+                        <div class="quiz-section">
+                            <h4>📝 练习题</h4>
+                            
+                            <div class="quiz-item">
+                                <div class="quiz-question">1. Java语言的核心特点是什么？（多选）</div>
+                                <div class="quiz-options">
+                                    <div class="quiz-option" onclick="selectOption(this, 1, 'a')">A. 跨平台性</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 1, 'b')">B. 面向对象</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 1, 'c')">C. 手动内存管理</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 1, 'd')">D. 安全性</div>
+                                </div>
+                                <button class="quiz-btn" onclick="checkAnswer(1)">提交答案</button>
+                                <div class="quiz-answer" id="answer1"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">2. 以下哪个是正确的main方法签名？</div>
+                                <div class="quiz-options">
+                                    <div class="quiz-option" onclick="selectOption(this, 2, 'a')">A. public void main(String args)</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 2, 'b')">B. public static void main(String[] args)</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 2, 'c')">C. static public main(String[] args)</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 2, 'd')">D. void main(String args[])</div>
+                                </div>
+                                <button class="quiz-btn" onclick="checkAnswer(2)">提交答案</button>
+                                <div class="quiz-answer" id="answer2"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">3. 简述Java程序的编译和运行过程。</div>
+                                <textarea class="quiz-input" id="quiz3" placeholder="输入你的答案..."></textarea>
+                                <button class="quiz-btn" onclick="showTextAnswer(3)">查看答案</button>
+                                <div class="quiz-answer" id="answer3"></div>
+                            </div>
+                        </div>
+
+                        <div class="notes-section">
+                            <h4>📒 学习笔记</h4>
+                            <textarea class="notes-textarea" id="notes1" placeholder="记录本章的学习心得..."></textarea>
+                            <button class="notes-btn" onclick="saveNotes(1)">保存笔记</button>
+                            <div class="notes-saved" id="notesSaved1">✓ 笔记已保存</div>
+                        </div>
+
+                        <button class="completion-btn" id="complete1" onclick="markChapterComplete(1)">✓ 标记本章完成</button>
+                    </div>
+                </div>
+
+                <div id="ch2" class="chapter">
+                    <div class="chapter-header">
+                        <h2><span class="chapter-number">2</span>基本语法</h2>
+                        <div class="chapter-actions">
+                            <button id="fav2" onclick="toggleFavorite(2)">⭐ 收藏</button>
+                            <button onclick="BookmarkManager.save('java', 2)">🔖 书签</button>
+                        </div>
+                    </div>
+                    <div class="chapter-content">
+                        <h3>📌 本章要点</h3>
+                        <ul>
+                            <li>变量与数据类型</li>
+                            <li>运算符与表达式</li>
+                            <li>类型转换</li>
+                            <li>注释</li>
+                        </ul>
+
+                        <h3>2.1 数据类型</h3>
+                        <p>Java是强类型语言，每个变量必须声明其类型。Java的数据类型分为两大类：</p>
+                        <ul>
+                            <li><strong>基本类型（Primitive Types）</strong>：byte, short, int, long, float, double, boolean, char</li>
+                            <li><strong>引用类型（Reference Types）</strong>：类、接口、数组等</li>
+                        </ul>
+
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">DataTypes</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// 整数类型</span>
+        <span class="code-keyword">byte</span> b = <span class="code-number">100</span>;
+        <span class="code-keyword">short</span> s = <span class="code-number">32000</span>;
+        <span class="code-keyword">int</span> i = <span class="code-number">1000000</span>;
+        <span class="code-keyword">long</span> l = <span class="code-number">10000000000L</span>;
+        
+        <span class="code-comment">// 浮点类型</span>
+        <span class="code-keyword">float</span> f = <span class="code-number">3.14f</span>;
+        <span class="code-keyword">double</span> d = <span class="code-number">3.1415926</span>;
+        
+        <span class="code-comment">// 字符和布尔</span>
+        <span class="code-keyword">char</span> c = <span class="code-string">'A'</span>;
+        <span class="code-keyword">boolean</span> flag = <span class="code-keyword">true</span>;
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>2.2 变量与常量</h3>
+                        <p>变量是存储数据的容器，常量是不可变的值。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">Variables</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// 变量声明与赋值</span>
+        <span class="code-keyword">int</span> age = <span class="code-number">25</span>;
+        <span class="code-keyword">String</span> name = <span class="code-string">"张三"</span>;
+        
+        <span class="code-comment">// 常量（final关键字）</span>
+        <span class="code-keyword">final</span> <span class="code-keyword">double</span> PI = <span class="code-number">3.14159</span>;
+        
+        <span class="code-comment">// 变量修改</span>
+        age = <span class="code-number">26</span>;
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>2.3 运算符</h3>
+                        <p>Java支持多种运算符：</p>
+                        <ul>
+                            <li><strong>算术运算符</strong>：+ - * / %</li>
+                            <li><strong>赋值运算符</strong>：= += -= *= /= %=</li>
+                            <li><strong>比较运算符</strong>：== != > < >= <=</li>
+                            <li><strong>逻辑运算符</strong>：&& || !</li>
+                            <li><strong>位运算符</strong>：& | ^ ~ << >> >>></li>
+                        </ul>
+
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">Operators</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-keyword">int</span> a = <span class="code-number">10</span>, b = <span class="code-number">3</span>;
+        
+        <span class="code-class">System</span>.out.println(a + b); <span class="code-comment">// 13</span>
+        <span class="code-class">System</span>.out.println(a - b); <span class="code-comment">// 7</span>
+        <span class="code-class">System</span>.out.println(a * b); <span class="code-comment">// 30</span>
+        <span class="code-class">System</span>.out.println(a / b); <span class="code-comment">// 3（整数除法）</span>
+        <span class="code-class">System</span>.out.println(a % b); <span class="code-comment">// 1（取模）</span>
+        
+        <span class="code-comment">// 自增自减</span>
+        <span class="code-class">System</span>.out.println(a++); <span class="code-comment">// 10，然后a=11</span>
+        <span class="code-class">System</span>.out.println(++a); <span class="code-comment">// 12</span>
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>2.4 类型转换</h3>
+                        <p>Java中的类型转换分为隐式转换（自动转换）和显式转换（强制转换）。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">TypeConversion</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// 隐式转换：小类型转大类型</span>
+        <span class="code-keyword">int</span> num = <span class="code-number">100</span>;
+        <span class="code-keyword">double</span> decimal = num; <span class="code-comment">// 自动转换</span>
+        
+        <span class="code-comment">// 显式转换：大类型转小类型</span>
+        <span class="code-keyword">double</span> pi = <span class="code-number">3.14</span>;
+        <span class="code-keyword">int</span> approx = (<span class="code-keyword">int</span>) pi; <span class="code-comment">// 强制转换，approx = 3</span>
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>2.5 常见错误示例</h3>
+                        <div class="error-box">
+                            <strong>❌ 错误1：变量未初始化</strong><br>
+                            Java要求变量在使用前必须初始化。<br>
+                            <code>int x; System.out.println(x); // 编译错误</code>
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误2：类型不匹配</strong><br>
+                            不能直接将double赋值给int。<br>
+                            <code>int a = 3.14; // 编译错误，需要强制转换</code>
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误3：整数除法</strong><br>
+                            两个整数相除结果仍是整数，小数部分被丢弃。<br>
+                            <code>System.out.println(5 / 2); // 输出2，不是2.5</code><br>
+                            <strong>解决方案</strong>：将其中一个数转为double。
+                        </div>
+
+                        <div class="quiz-section">
+                            <h4>📝 练习题</h4>
+                            
+                            <div class="quiz-item">
+                                <div class="quiz-question">1. Java有几种基本数据类型？</div>
+                                <div class="quiz-options">
+                                    <div class="quiz-option" onclick="selectOption(this, 21, 'a')">A. 6种</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 21, 'b')">B. 8种</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 21, 'c')">C. 10种</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 21, 'd')">D. 4种</div>
+                                </div>
+                                <button class="quiz-btn" onclick="checkAnswer(21)">提交答案</button>
+                                <div class="quiz-answer" id="answer21"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">2. 以下代码的输出结果是什么？</div>
+                                <div class="code-block" style="background: var(--bg-secondary);"><pre><code>int a = 5, b = 2;
+System.out.println(a / b);
+System.out.println(a % b);</code></pre></div>
+                                <div class="quiz-options">
+                                    <div class="quiz-option" onclick="selectOption(this, 22, 'a')">A. 2.5 和 1</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 22, 'b')">B. 2 和 1</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 22, 'c')">C. 2 和 0</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 22, 'd')">D. 2.5 和 0</div>
+                                </div>
+                                <button class="quiz-btn" onclick="checkAnswer(22)">提交答案</button>
+                                <div class="quiz-answer" id="answer22"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">3. 什么是隐式转换和显式转换？举例说明。</div>
+                                <textarea class="quiz-input" id="quiz23" placeholder="输入你的答案..."></textarea>
+                                <button class="quiz-btn" onclick="showTextAnswer(23)">查看答案</button>
+                                <div class="quiz-answer" id="answer23"></div>
+                            </div>
+                        </div>
+
+                        <div class="notes-section">
+                            <h4>📒 学习笔记</h4>
+                            <textarea class="notes-textarea" id="notes2" placeholder="记录本章的学习心得..."></textarea>
+                            <button class="notes-btn" onclick="saveNotes(2)">保存笔记</button>
+                            <div class="notes-saved" id="notesSaved2">✓ 笔记已保存</div>
+                        </div>
+
+                        <button class="completion-btn" id="complete2" onclick="markChapterComplete(2)">✓ 标记本章完成</button>
+                    </div>
+                </div>
+
+                <div id="ch3" class="chapter">
+                    <div class="chapter-header">
+                        <h2><span class="chapter-number">3</span>流程控制</h2>
+                        <div class="chapter-actions">
+                            <button id="fav3" onclick="toggleFavorite(3)">⭐ 收藏</button>
+                            <button onclick="BookmarkManager.save('java', 3)">🔖 书签</button>
+                        </div>
+                    </div>
+                    <div class="chapter-content">
+                        <h3>📌 本章要点</h3>
+                        <ul>
+                            <li>条件语句（if-else）</li>
+                            <li>分支语句（switch）</li>
+                            <li>循环语句（for, while, do-while）</li>
+                            <li>跳转语句（break, continue, return）</li>
+                        </ul>
+
+                        <h3>3.1 条件语句</h3>
+                        <p>if-else语句用于根据条件执行不同的代码块。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">IfElse</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-keyword">int</span> score = <span class="code-number">85</span>;
+        
+        <span class="code-keyword">if</span> (score >= <span class="code-number">90</span>) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"优秀"</span>);
+        } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (score >= <span class="code-number">80</span>) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"良好"</span>);
+        } <span class="code-keyword">else</span> <span class="code-keyword">if</span> (score >= <span class="code-number">60</span>) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"及格"</span>);
+        } <span class="code-keyword">else</span> {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"不及格"</span>);
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>3.2 分支语句</h3>
+                        <p>switch语句用于多条件分支，Java 7+支持String类型。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">SwitchCase</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-class">String</span> day = <span class="code-string">"Monday"</span>;
+        
+        <span class="code-keyword">switch</span> (day) {
+            <span class="code-keyword">case</span> <span class="code-string">"Monday"</span>:
+            <span class="code-keyword">case</span> <span class="code-string">"Tuesday"</span>:
+            <span class="code-keyword">case</span> <span class="code-string">"Wednesday"</span>:
+            <span class="code-keyword">case</span> <span class="code-string">"Thursday"</span>:
+            <span class="code-keyword">case</span> <span class="code-string">"Friday"</span>:
+                <span class="code-class">System</span>.out.println(<span class="code-string">"工作日"</span>);
+                <span class="code-keyword">break</span>;
+            <span class="code-keyword">case</span> <span class="code-string">"Saturday"</span>:
+            <span class="code-keyword">case</span> <span class="code-string">"Sunday"</span>:
+                <span class="code-class">System</span>.out.println(<span class="code-string">"周末"</span>);
+                <span class="code-keyword">break</span>;
+            <span class="code-keyword">default</span>:
+                <span class="code-class">System</span>.out.println(<span class="code-string">"无效日期"</span>);
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>3.3 循环语句</h3>
+                        <p>Java提供三种循环结构：for、while和do-while。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">Loops</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// for循环</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">1</span>; i <= <span class="code-number">5</span>; i++) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"for: "</span> + i);
+        }
+        
+        <span class="code-comment">// while循环</span>
+        <span class="code-keyword">int</span> j = <span class="code-number">1</span>;
+        <span class="code-keyword">while</span> (j <= <span class="code-number">5</span>) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"while: "</span> + j);
+            j++;
+        }
+        
+        <span class="code-comment">// do-while循环（至少执行一次）</span>
+        <span class="code-keyword">int</span> k = <span class="code-number">1</span>;
+        <span class="code-keyword">do</span> {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"do-while: "</span> + k);
+            k++;
+        } <span class="code-keyword">while</span> (k <= <span class="code-number">5</span>);
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>3.4 跳转语句</h3>
+                        <p>break、continue和return用于控制程序流程。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">JumpStatements</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// break：跳出循环</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">1</span>; i <= <span class="code-number">10</span>; i++) {
+            <span class="code-keyword">if</span> (i == <span class="code-number">5</span>) <span class="code-keyword">break</span>;
+            <span class="code-class">System</span>.out.println(i); <span class="code-comment">// 输出1-4</span>
+        }
+        
+        <span class="code-comment">// continue：跳过当前循环</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">1</span>; i <= <span class="code-number">10</span>; i++) {
+            <span class="code-keyword">if</span> (i % <span class="code-number">2</span> == <span class="code-number">0</span>) <span class="code-keyword">continue</span>;
+            <span class="code-class">System</span>.out.println(i); <span class="code-comment">// 输出奇数</span>
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>3.5 常见错误示例</h3>
+                        <div class="error-box">
+                            <strong>❌ 错误1：switch语句中缺少break</strong><br>
+                            忘记break会导致"fall through"，多个case会被执行。<br>
+                            <strong>解决方案</strong>：在每个case末尾添加break。
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误2：死循环</strong><br>
+                            循环条件永远为true会导致程序无限运行。<br>
+                            <code>while (true) { ... } // 除非内部有break</code>
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误3：for循环中初始化变量类型错误</strong><br>
+                            <code>for (int i = 0; i < 10; i++) { ... }</code>是正确的，<br>
+                            <code>for (i = 0; i < 10; i++) { ... }</code>需要提前声明i。
+                        </div>
+
+                        <div class="quiz-section">
+                            <h4>📝 练习题</h4>
+                            
+                            <div class="quiz-item">
+                                <div class="quiz-question">1. switch语句可以用于哪些类型？（多选）</div>
+                                <div class="quiz-options">
+                                    <div class="quiz-option" onclick="selectOption(this, 31, 'a')">A. int</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 31, 'b')">B. String</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 31, 'c')">C. double</div>
+                                    <div class="quiz-option" onclick="selectOption(this, 31, 'd')">D. char</div>
+                                </div>
+                                <button class="quiz-btn" onclick="checkAnswer(31)">提交答案</button>
+                                <div class="quiz-answer" id="answer31"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">2. for循环和while循环的区别是什么？</div>
+                                <textarea class="quiz-input" id="quiz32" placeholder="输入你的答案..."></textarea>
+                                <button class="quiz-btn" onclick="showTextAnswer(32)">查看答案</button>
+                                <div class="quiz-answer" id="answer32"></div>
+                            </div>
+
+                            <div class="quiz-item">
+                                <div class="quiz-question">3. 使用for循环计算1到100的累加和。</div>
+                                <textarea class="quiz-input" id="quiz33" placeholder="输入代码..."></textarea>
+                                <button class="quiz-btn" onclick="showTextAnswer(33)">查看答案</button>
+                                <div class="quiz-answer" id="answer33"></div>
+                            </div>
+                        </div>
+
+                        <div class="notes-section">
+                            <h4>📒 学习笔记</h4>
+                            <textarea class="notes-textarea" id="notes3" placeholder="记录本章的学习心得..."></textarea>
+                            <button class="notes-btn" onclick="saveNotes(3)">保存笔记</button>
+                            <div class="notes-saved" id="notesSaved3">✓ 笔记已保存</div>
+                        </div>
+
+                        <button class="completion-btn" id="complete3" onclick="markChapterComplete(3)">✓ 标记本章完成</button>
+                    </div>
+                </div>
+
+                <div id="ch4" class="chapter">
+                    <div class="chapter-header">
+                        <h2><span class="chapter-number">4</span>数组与集合</h2>
+                        <div class="chapter-actions">
+                            <button id="fav4" onclick="toggleFavorite(4)">⭐ 收藏</button>
+                            <button onclick="BookmarkManager.save('java', 4)">🔖 书签</button>
+                        </div>
+                    </div>
+                    <div class="chapter-content">
+                        <h3>📌 本章要点</h3>
+                        <ul>
+                            <li>数组的声明与使用</li>
+                            <li>二维数组</li>
+                            <li>ArrayList的使用</li>
+                            <li>HashMap的使用</li>
+                            <li>Collections工具类</li>
+                        </ul>
+
+                        <h3>4.1 数组</h3>
+                        <p>数组是存储相同类型元素的固定大小容器。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">ArrayExample</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// 声明数组</span>
+        <span class="code-keyword">int</span>[] numbers = <span class="code-keyword">new</span> <span class="code-keyword">int</span>[<span class="code-number">5</span>];
+        
+        <span class="code-comment">// 初始化数组</span>
+        numbers[<span class="code-number">0</span>] = <span class="code-number">10</span>;
+        numbers[<span class="code-number">1</span>] = <span class="code-number">20</span>;
+        numbers[<span class="code-number">2</span>] = <span class="code-number">30</span>;
+        numbers[<span class="code-number">3</span>] = <span class="code-number">40</span>;
+        numbers[<span class="code-number">4</span>] = <span class="code-number">50</span>;
+        
+        <span class="code-comment">// 简化初始化</span>
+        <span class="code-keyword">int</span>[] scores = {<span class="code-number">85</span>, <span class="code-number">90</span>, <span class="code-number">78</span>, <span class="code-number">92</span>};
+        
+        <span class="code-comment">// 遍历数组</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">0</span>; i < scores.length; i++) {
+            <span class="code-class">System</span>.out.println(scores[i]);
+        }
+        
+        <span class="code-comment">// 增强for循环</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> score : scores) {
+            <span class="code-class">System</span>.out.println(score);
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>4.2 二维数组</h3>
+                        <p>二维数组可以看作是数组的数组，常用于表示表格数据。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">TwoDArray</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-comment">// 创建3x3的二维数组</span>
+        <span class="code-keyword">int</span>[][] matrix = {
+            {<span class="code-number">1</span>, <span class="code-number">2</span>, <span class="code-number">3</span>},
+            {<span class="code-number">4</span>, <span class="code-number">5</span>, <span class="code-number">6</span>},
+            {<span class="code-number">7</span>, <span class="code-number">8</span>, <span class="code-number">9</span>}
+        };
+        
+        <span class="code-comment">// 遍历二维数组</span>
+        <span class="code-keyword">for</span> (<span class="code-keyword">int</span> i = <span class="code-number">0</span>; i < matrix.length; i++) {
+            <span class="code-keyword">for</span> (<span class="code-keyword">int</span> j = <span class="code-number">0</span>; j < matrix[i].length; j++) {
+                <span class="code-class">System</span>.out.print(matrix[i][j] + <span class="code-string">" "</span>);
+            }
+            <span class="code-class">System</span>.out.println();
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>4.3 ArrayList</h3>
+                        <p>ArrayList是Java集合框架中最常用的动态数组实现。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">import</span> java.util.ArrayList;
+<span class="code-keyword">import</span> java.util.List;
+
+<span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">ArrayListExample</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-class">List</span><<span class="code-class">String</span>> fruits = <span class="code-keyword">new</span> <span class="code-class">ArrayList</span><>();
+        
+        <span class="code-comment">// 添加元素</span>
+        fruits.add(<span class="code-string">"Apple"</span>);
+        fruits.add(<span class="code-string">"Banana"</span>);
+        fruits.add(<span class="code-string">"Orange"</span>);
+        
+        <span class="code-comment">// 获取元素</span>
+        <span class="code-class">System</span>.out.println(fruits.get(<span class="code-number">0</span>)); <span class="code-comment">// Apple</span>
+        
+        <span class="code-comment">// 修改元素</span>
+        fruits.set(<span class="code-number">1</span>, <span class="code-string">"Grape"</span>);
+        
+        <span class="code-comment">// 删除元素</span>
+        fruits.remove(<span class="code-number">2</span>);
+        
+        <span class="code-comment">// 遍历</span>
+        <span class="code-keyword">for</span> (<span class="code-class">String</span> fruit : fruits) {
+            <span class="code-class">System</span>.out.println(fruit);
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>4.4 HashMap</h3>
+                        <p>HashMap是基于哈希表的键值对集合。</p>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode(this)">复制</button>
+                            <pre><code><span class="code-keyword">import</span> java.util.HashMap;
+<span class="code-keyword">import</span> java.util.Map;
+
+<span class="code-keyword">public</span> <span class="code-keyword">class</span> <span class="code-class">HashMapExample</span> {
+    <span class="code-keyword">public</span> <span class="code-keyword">static</span> <span class="code-keyword">void</span> <span class="code-keyword">main</span>(<span class="code-class">String</span>[] args) {
+        <span class="code-class">Map</span><<span class="code-class">String</span>, <span class="code-keyword">Integer</span>> ages = <span class="code-keyword">new</span> <span class="code-class">HashMap</span><>();
+        
+        <span class="code-comment">// 添加键值对</span>
+        ages.put(<span class="code-string">"Alice"</span>, <span class="code-number">25</span>);
+        ages.put(<span class="code-string">"Bob"</span>, <span class="code-number">30</span>);
+        ages.put(<span class="code-string">"Charlie"</span>, <span class="code-number">35</span>);
+        
+        <span class="code-comment">// 获取值</span>
+        <span class="code-class">System</span>.out.println(ages.get(<span class="code-string">"Bob"</span>)); <span class="code-comment">// 30</span>
+        
+        <span class="code-comment">// 遍历</span>
+        <span class="code-keyword">for</span> (<span class="code-class">Map</span>.Entry<<span class="code-class">String</span>, <span class="code-keyword">Integer</span>> entry : ages.entrySet()) {
+            <span class="code-class">System</span>.out.println(entry.getKey() + <span class="code-string">": "</span> + entry.getValue());
+        }
+        
+        <span class="code-comment">// 检查键是否存在</span>
+        <span class="code-keyword">if</span> (ages.containsKey(<span class="code-string">"Alice"</span>)) {
+            <span class="code-class">System</span>.out.println(<span class="code-string">"Alice exists"</span>);
+        }
+    }
+}</code></pre>
+                        </div>
+
+                        <h3>4.5 常见错误示例</h3>
+                        <div class="error-box">
+                            <strong>❌ 错误1：数组越界异常</strong><br>
+                            访问超出数组长度的索引会抛出ArrayIndexOutOfBoundsException。<br>
+                            <code>int[] arr = new int[5]; arr[5] = 10; // 错误</code>
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误2：使用原始类型ArrayList</strong><br>
+                            不指定泛型类型会导致类型不安全。<br>
+                            <code>ArrayList list = new ArrayList(); // 不推荐</code><br>
+                            <strong>解决方案</strong>：使用<code>ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();</code>
+                        </div>
+                        <div class="error-box">
+                            <strong>❌ 错误3：ArrayList使用
