@@ -366,10 +366,10 @@ public class NamingConvention {
         byte b = 127;
         short s = 32000;
         int i = 100000;
-        long l = 10000000000L;  // long需加L后缀
+        long l = 10000000000L;
 
-        float f = 3.14f;        // float需加f后缀
-        double d = 3.14159265;  // double默认
+        float f = 3.14f;
+        double d = 3.14159265;
 
         char c = 'A';
         char unicode = '\u0041';
@@ -428,13 +428,13 @@ public class NamingConvention {
                         </div>
                     </div>
                     <pre id="ch6-code1"><code>public class VariableDemo {
-    static int classVar;          // 成员变量-有默认值0
-    static final double PI = 3.14159; // 常量
+    static int classVar;
+    static final double PI = 3.14159;
 
     public static void main(String[] args) {
-        int age = 25;             // 局部变量-必须初始化
+        int age = 25;
         String name = "Java";
-        final int MAX_AGE = 150;  // 常量
+        final int MAX_AGE = 150;
 
         System.out.println("姓名: " + name);
         System.out.println("PI: " + PI);
@@ -489,16 +489,13 @@ public class NamingConvention {
                     </div>
                     <pre id="ch7-code1"><code>public class TypeConversion {
     public static void main(String[] args) {
-        // 自动类型转换
         int i = 100;
         long l = i;
         double d = l;
 
-        // 强制类型转换
         double pi = 3.14159;
-        int intPi = (int) pi;  // 3
+        int intPi = (int) pi;
 
-        // 字符串与基本类型转换
         String s1 = String.valueOf(100);
         int num = Integer.parseInt("200");
         double dbl = Double.parseDouble("3.14");
@@ -556,17 +553,17 @@ public class NamingConvention {
                     <pre id="ch8-code1"><code>public class ArithmeticOps {
     public static void main(String[] args) {
         int a = 17, b = 5;
-        System.out.println("加法: " + (a + b));  // 22
-        System.out.println("除法: " + (a / b));  // 3
-        System.out.println("取余: " + (a % b));  // 2
+        System.out.println("加法: " + (a + b));
+        System.out.println("除法: " + (a / b));
+        System.out.println("取余: " + (a % b));
 
         int x = 10;
-        System.out.println("x++: " + (x++));    // 10
-        System.out.println("++x: " + (++x));    // 12
+        System.out.println("x++: " + (x++));
+        System.out.println("++x: " + (++x));
 
         int n = 10;
-        n += 5;  // n = 15
-        n *= 2;  // n = 30
+        n += 5;
+        n *= 2;
         System.out.println("n: " + n);
     }
 }</code></pre>
@@ -619,14 +616,13 @@ public class NamingConvention {
                     <pre id="ch9-code1"><code>public class LogicOps {
     public static void main(String[] args) {
         int a = 10, b = 20;
-        System.out.println("a == b: " + (a == b));  // false
-        System.out.println("a != b: " + (a != b));  // true
+        System.out.println("a == b: " + (a == b));
+        System.out.println("a != b: " + (a != b));
 
         boolean x = true, y = false;
-        System.out.println("x && y: " + (x && y));  // false
-        System.out.println("x || y: " + (x || y));  // true
+        System.out.println("x && y: " + (x && y));
+        System.out.println("x || y: " + (x || y));
 
-        // 短路特性
         int[] arr = {1, 2, 3};
         int idx = 5;
         if (idx < arr.length && arr[idx] > 0) {
@@ -634,7 +630,7 @@ public class NamingConvention {
         }
 
         int max = (a > b) ? a : b;
-        System.out.println("较大值: " + max);  // 20
+        System.out.println("较大值: " + max);
     }
 }</code></pre>
                 </div>
@@ -696,7 +692,6 @@ public class NamingConvention {
             System.out.println("不及格");
         }
 
-        // 嵌套if
         int age = 25;
         boolean hasLicense = true;
         if (age >= 18) {
@@ -762,7 +757,6 @@ public class NamingConvention {
             default: System.out.println("其他"); break;
         }
 
-        // JDK7+ 支持String
         String color = "red";
         switch (color) {
             case "red": System.out.println("红色"); break;
@@ -887,19 +881,16 @@ System.out.println(result);</div>
                     </div>
                     <pre id="ch13-code1"><code>public class WhileDemo {
     public static void main(String[] args) {
-        // while循环
         int target = 7, guess = 1;
         while (guess != target) { guess++; }
         System.out.println("找到: " + guess);
 
-        // do-while
         int count = 0;
         do {
             System.out.println("执行第 " + (count+1) + " 次");
             count++;
         } while (count < 3);
 
-        // 数字位数
         int num = 12345, digits = 0, temp = num;
         while (temp > 0) { temp /= 10; digits++; }
         System.out.println(num + " 有 " + digits + " 位");
@@ -953,7 +944,6 @@ System.out.println(result);</div>
                     </div>
                     <pre id="ch14-code1"><code>public class BreakContinue {
     public static void main(String[] args) {
-        // break
         for (int i = 1; i <= 100; i++) {
             if (i % 7 == 0) {
                 System.out.println("找到: " + i);
@@ -961,14 +951,12 @@ System.out.println(result);</div>
             }
         }
 
-        // continue - 跳过偶数
         for (int i = 1; i <= 10; i++) {
             if (i % 2 == 0) continue;
             System.out.print(i + " ");
         }
         System.out.println();
 
-        // 带标签的break
         outer:
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -1114,7 +1102,6 @@ for (int i = 0; i < arr.length; i++) {
             System.out.println();
         }
 
-        // 不规则数组
         int[][] jagged = new int[3][];
         jagged[0] = new int[]{1, 2};
         jagged[1] = new int[]{3, 4, 5};
@@ -1176,17 +1163,17 @@ for (int i = 0; i < 3; i++) {
         String s2 = "Hello";
         String s3 = new String("Hello");
 
-        System.out.println(s1 == s2);       // true
-        System.out.println(s1 == s3);       // false
-        System.out.println(s1.equals(s3));  // true
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s3);
+        System.out.println(s1.equals(s3));
 
         String greeting = s1 + " World";
         String formatted = String.format("姓名: %s, 年龄: %d", "Java", 25);
 
         String original = "Java";
         String modified = original.replace('a', 'o');
-        System.out.println(original);   // Java
-        System.out.println(modified);   // Jovo
+        System.out.println(original);
+        System.out.println(modified);
     }
 }</code></pre>
                 </div>
@@ -2201,10 +2188,10 @@ public class FileOperations {
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>定义：</strong><code>class Box<T> {}</code></li>
-                        <li><strong>使用：</strong><code>Box<String> box = new Box<>();</code></li>
-                        <li><strong>泛型方法：</strong><code>public <T> T method(T t) {}</code></li>
-                        <li><strong>通配符：</strong><code>?</code>, <code>? extends T</code>, <code>? super T</code></li>
+                        <li><strong>定义：</strong>参数化类型，使类型安全</li>
+                        <li><strong>使用：</strong><code>&lt;T&gt;</code>表示类型参数</li>
+                        <li><strong>通配符：</strong><code>&lt;?&gt;</code>表示任意类型</li>
+                        <li><strong>类型边界：</strong><code>&lt;T extends Number&gt;</code>限制类型</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2214,53 +2201,49 @@ public class FileOperations {
                             <button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch31-code1"><code>public class GenericBox<T> {
-    private T value;
+                    <pre id="ch31-code1"><code>public class GenericBox&lt;T&gt; {
+    private T item;
 
-    public void set(T value) {
-        this.value = value;
+    public void set(T item) {
+        this.item = item;
     }
 
     public T get() {
-        return value;
+        return item;
     }
 
-    public static <T> void print(T[] array) {
-        for (T item : array) {
-            System.out.println(item);
+    public static &lt;E&gt; void printArray(E[] array) {
+        for (E element : array) {
+            System.out.println(element);
         }
     }
 
     public static void main(String[] args) {
-        GenericBox<String> strBox = new GenericBox<>();
-        strBox.set("Hello");
-        System.out.println(strBox.get());
+        GenericBox&lt;String&gt; stringBox = new GenericBox&lt;&gt;();
+        stringBox.set("Hello");
+        System.out.println(stringBox.get());
 
-        GenericBox<Integer> intBox = new GenericBox<>();
-        intBox.set(42);
-        System.out.println(intBox.get());
-
-        String[] names = {"张三", "李四", "王五"};
-        GenericBox.print(names);
+        Integer[] numbers = {1, 2, 3};
+        GenericBox.printArray(numbers);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>泛型类型擦除：</strong>运行时类型信息丢失</p>
-                    <p><strong>基本类型不能作为类型参数：</strong>需使用包装类</p>
+                    <p><strong>泛型数组：</strong>不能创建泛型数组</p>
+                    <p><strong>类型擦除：</strong>运行时泛型信息被擦除</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 创建一个泛型方法swap，交换数组中两个元素的位置。</div>
+                    <div class="question">1. 创建一个泛型栈类。</div>
                     <textarea class="answer-textarea" id="ch31-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(31,1)">检查答案</button>
                     <div id="ch31-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(31,1)">查看答案</button>
-                    <div id="ch31-answer1" class="answer-box">public static <T> void swap(T[] arr, int i, int j) {
-    T temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+                    <div id="ch31-answer1" class="answer-box">public class GenericStack&lt;T&gt; {
+    private List&lt;T&gt; elements = new ArrayList&lt;&gt;();
+    public void push(T item) { elements.add(item); }
+    public T pop() { return elements.remove(elements.size() - 1); }
 }</div>
                 </div>
                 <div class="note-section">
@@ -2281,10 +2264,10 @@ public class FileOperations {
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>List：</strong>有序可重复，如ArrayList、LinkedList</li>
-                        <li><strong>Set：</strong>无序不可重复，如HashSet、TreeSet</li>
-                        <li><strong>Map：</strong>键值对，如HashMap、TreeMap</li>
-                        <li><strong>Collections：</strong>集合工具类</li>
+                        <li><strong>List：</strong>有序可重复（ArrayList, LinkedList）</li>
+                        <li><strong>Set：</strong>无序不重复（HashSet, TreeSet）</li>
+                        <li><strong>Map：</strong>键值对（HashMap, TreeMap）</li>
+                        <li><strong>遍历方式：</strong>迭代器、for-each、Stream API</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2298,45 +2281,38 @@ public class FileOperations {
 
 public class CollectionDemo {
     public static void main(String[] args) {
-        List<String> list = new ArrayList<>();
+        List&lt;String&gt; list = new ArrayList&lt;&gt;();
         list.add("Apple");
         list.add("Banana");
         list.add("Apple");
-        System.out.println(list);
+        System.out.println("List: " + list);
 
-        Set<Integer> set = new HashSet<>();
-        set.add(1);
-        set.add(2);
-        set.add(1);
-        System.out.println(set);
+        Set&lt;String&gt; set = new HashSet&lt;&gt;(list);
+        System.out.println("Set: " + set);
 
-        Map<String, Integer> map = new HashMap<>();
-        map.put("张三", 25);
-        map.put("李四", 30);
-        System.out.println(map.get("张三"));
+        Map&lt;String, Integer&gt; map = new HashMap&lt;&gt;();
+        map.put("Alice", 25);
+        map.put("Bob", 30);
 
-        for (String key : map.keySet()) {
-            System.out.println(key + ": " + map.get(key));
+        for (Map.Entry&lt;String, Integer&gt; entry : map.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
         }
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>遍历集合时修改：</strong>会抛出ConcurrentModificationException</p>
-                    <p><strong>HashMap线程不安全：</strong>多线程环境应用ConcurrentHashMap</p>
+                    <p><strong>遍历修改：</strong>遍历时不能直接修改集合</p>
+                    <p><strong>HashMap线程安全：</strong>HashMap不是线程安全的</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 如何遍历HashMap中的所有键值对？</div>
-                    <textarea class="answer-textarea" id="ch32-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 如何从List中移除重复元素？</div>
+                    <input type="text" class="answer-input" id="ch32-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(32,1)">检查答案</button>
                     <div id="ch32-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(32,1)">查看答案</button>
-                    <div id="ch32-answer1" class="answer-box">for (Map.Entry<K, V> entry : map.entrySet()) {
-    K key = entry.getKey();
-    V value = entry.getValue();
-}</div>
+                    <div id="ch32-answer1" class="answer-box">new ArrayList<>(new HashSet<>(list))</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2350,16 +2326,16 @@ public class CollectionDemo {
                 </div>
             </div>
 
-            <!-- 第33章 Lambda表达式 -->
+            <!-- 第33章 多线程 -->
             <div id="ch33" class="chapter-section">
-                <h2>33. Lambda表达式 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+                <h2>33. 多线程 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>语法：</strong><code>(参数) -> { 表达式 }</code></li>
-                        <li><strong>函数式接口：</strong>只有一个抽象方法的接口</li>
-                        <li><strong>常用接口：</strong>Consumer, Supplier, Predicate, Function</li>
-                        <li><strong>Stream API：</strong>配合Lambda进行集合操作</li>
+                        <li><strong>创建方式：</strong>继承Thread或实现Runnable</li>
+                        <li><strong>线程状态：</strong>新建、就绪、运行、阻塞、死亡</li>
+                        <li><strong>同步：</strong>synchronized关键字</li>
+                        <li><strong>线程池：</strong>ExecutorService</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2369,44 +2345,52 @@ public class CollectionDemo {
                             <button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch33-code1"><code>import java.util.*;
-import java.util.stream.Collectors;
+                    <pre id="ch33-code1"><code>public class ThreadDemo {
+    static class Counter {
+        private int count = 0;
+        public synchronized void increment() {
+            count++;
+        }
+        public int getCount() { return count; }
+    }
 
-public class LambdaDemo {
-    public static void main(String[] args) {
-        List<String> names = Arrays.asList("张三", "李四", "王五", "赵六");
+    public static void main(String[] args) throws InterruptedException {
+        Counter counter = new Counter();
 
-        names.forEach(name -> System.out.println(name));
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
 
-        List<String> filtered = names.stream()
-            .filter(name -> name.length() == 2)
-            .map(String::toUpperCase)
-            .collect(Collectors.toList());
-        System.out.println(filtered);
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        });
 
-        Runnable runnable = () -> System.out.println("Running...");
-        runnable.run();
+        t1.start();
+        t2.start();
+        t1.join();
+        t2.join();
 
-        Comparator<Integer> comparator = (a, b) -> b - a;
-        List<Integer> nums = Arrays.asList(3, 1, 4, 1, 5);
-        nums.sort(comparator);
-        System.out.println(nums);
+        System.out.println("最终计数: " + counter.getCount());
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>非函数式接口：</strong>Lambda只能用于函数式接口</p>
-                    <p><strong>访问非final变量：</strong>Lambda中访问的局部变量必须是effectively final</p>
+                    <p><strong>竞态条件：</strong>多个线程同时访问共享资源</p>
+                    <p><strong>死锁：</strong>线程互相等待对方释放锁</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 使用Lambda表达式对列表中的数字求和。</div>
-                    <textarea class="answer-textarea" id="ch33-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 如何停止一个线程？</div>
+                    <input type="text" class="answer-input" id="ch33-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(33,1)">检查答案</button>
                     <div id="ch33-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(33,1)">查看答案</button>
-                    <div id="ch33-answer1" class="answer-box">int sum = nums.stream().mapToInt(Integer::intValue).sum();</div>
+                    <div id="ch33-answer1" class="answer-box">使用volatile标志位，不要用stop()</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2420,16 +2404,16 @@ public class LambdaDemo {
                 </div>
             </div>
 
-            <!-- 第34章 线程基础 -->
+            <!-- 第34章 Lambda表达式 -->
             <div id="ch34" class="chapter-section">
-                <h2>34. 线程基础 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+                <h2>34. Lambda表达式 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>创建方式：</strong>继承Thread类或实现Runnable接口</li>
-                        <li><strong>启动：</strong><code>thread.start()</code></li>
-                        <li><strong>状态：</strong>New, Runnable, Blocked, Waiting, Terminated</li>
-                        <li><strong>同步：</strong><code>synchronized</code>关键字</li>
+                        <li><strong>语法：</strong><code>(参数) -&gt; 表达式</code></li>
+                        <li><strong>函数式接口：</strong>只有一个抽象方法的接口</li>
+                        <li><strong>方法引用：</strong><code>ClassName::methodName</code></li>
+                        <li><strong>Stream API：</strong>配合Lambda进行数据处理</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2439,59 +2423,41 @@ public class LambdaDemo {
                             <button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch34-code1"><code>public class ThreadDemo {
-    static class MyThread extends Thread {
-        @Override
-        public void run() {
-            for (int i = 0; i < 5; i++) {
-                System.out.println("Thread: " + i);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+                    <pre id="ch34-code1"><code>import java.util.*;
+import java.util.stream.*;
 
-    static class MyRunnable implements Runnable {
-        @Override
-        public void run() {
-            for (int i = 0; i < 5; i++) {
-                System.out.println("Runnable: " + i);
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
+public class LambdaDemo {
     public static void main(String[] args) {
-        new MyThread().start();
-        new Thread(new MyRunnable()).start();
+        List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Charlie");
 
-        Thread t = new Thread(() -> {
-            System.out.println("Lambda线程");
-        });
-        t.start();
+        names.forEach(name -> System.out.println(name));
+
+        List&lt;String&gt; filtered = names.stream()
+            .filter(name -> name.length() > 3)
+            .map(String::toUpperCase)
+            .collect(Collectors.toList());
+        System.out.println(filtered);
+
+        int sum = Arrays.stream(new int[]{1, 2, 3, 4, 5})
+            .filter(n -> n % 2 == 0)
+            .sum();
+        System.out.println("偶数和: " + sum);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>调用run()代替start()：</strong>不会启动新线程，只是普通方法调用</p>
-                    <p><strong>线程安全：</strong>多个线程访问共享资源时需同步</p>
+                    <p><strong>变量捕获：</strong>Lambda中使用的外部变量必须是final或effectively final</p>
+                    <p><strong>返回类型：</strong>单表达式无需return，代码块需要</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 创建线程的三种方式是什么？</div>
-                    <input type="text" class="answer-input" id="ch34-q1" placeholder="输入答案...">
+                    <div class="question">1. 使用Stream API求列表最大值。</div>
+                    <textarea class="answer-textarea" id="ch34-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(34,1)">检查答案</button>
                     <div id="ch34-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(34,1)">查看答案</button>
-                    <div id="ch34-answer1" class="answer-box">1.继承Thread类 2.实现Runnable接口 3.实现Callable接口</div>
+                    <div id="ch34-answer1" class="answer-box">list.stream().max(Integer::compare).get()</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2505,17 +2471,16 @@ public class LambdaDemo {
                 </div>
             </div>
 
-            <!-- 第35章 Java常用类 -->
+            <!-- 第35章 Java模块系统 -->
             <div id="ch35" class="chapter-section">
-                <h2>35. Java常用类 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+                <h2>35. Java模块系统 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>Object：</strong>所有类的父类，包含equals()、hashCode()、toString()</li>
-                        <li><strong>StringBuilder/StringBuffer：</strong>可变字符串</li>
-                        <li><strong>包装类：</strong>Integer、Double等，自动装箱拆箱</li>
-                        <li><strong>Math：</strong>数学运算工具类</li>
-                        <li><strong>Date/Calendar：</strong>日期时间处理</li>
+                        <li><strong>module-info.java：</strong>模块描述文件</li>
+                        <li><strong>exports：</strong>导出包给其他模块</li>
+                        <li><strong>requires：</strong>声明依赖其他模块</li>
+                        <li><strong>Java 9+特性：</strong>模块化JDK</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2525,53 +2490,38 @@ public class LambdaDemo {
                             <button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch35-code1"><code>import java.time.*;
-import java.util.*;
+                    <pre id="ch35-code1"><code>// module-info.java
+module com.example.myapp {
+    requires java.base;
+    requires java.logging;
+    exports com.example.myapp.api;
+    exports com.example.myapp.service to com.example.consumer;
+}
 
-public class CommonClasses {
+// 使用模块
+package com.example.myapp;
+
+public class ModuleDemo {
     public static void main(String[] args) {
-        // 自动装箱拆箱
-        Integer i = 100;
-        int j = i;
-
-        // StringBuilder
-        StringBuilder sb = new StringBuilder();
-        sb.append("Hello").append(" ").append("World");
-        System.out.println(sb.toString());
-
-        // Math
-        System.out.println(Math.max(3, 5));
-        System.out.println(Math.random());
-        System.out.println(Math.PI);
-
-        // 日期时间
-        LocalDate today = LocalDate.now();
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println("今天: " + today);
-        System.out.println("现在: " + now);
-
-        // 对象方法
-        Person p1 = new Person("张三", 25);
-        Person p2 = new Person("张三", 25);
-        System.out.println(p1.equals(p2));
-        System.out.println(p1.hashCode());
-        System.out.println(p1.toString());
+        Module module = ModuleDemo.class.getModule();
+        System.out.println("模块名: " + module.getName());
+        System.out.println("模块描述符: " + module.getDescriptor());
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>Integer缓存：</strong>-128到127之间的值使用缓存</p>
-                    <p><strong>equals与hashCode：</strong>重写equals时应同时重写hashCode</p>
+                    <p><strong>导出包：</strong>未导出的包不能被其他模块访问</p>
+                    <p><strong>循环依赖：</strong>模块之间不能有循环依赖</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. Integer a = 127; Integer b = 127; a == b 的结果？</div>
+                    <div class="question">1. 如何声明一个模块依赖？</div>
                     <input type="text" class="answer-input" id="ch35-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(35,1)">检查答案</button>
                     <div id="ch35-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(35,1)">查看答案</button>
-                    <div id="ch35-answer1" class="answer-box">true（Integer缓存-128到127）</div>
+                    <div id="ch35-answer1" class="answer-box">requires 模块名;</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2586,109 +2536,7 @@ public class CommonClasses {
             </div>
 
         </div>
-    </div>
-
-    <script src="js/tutorial-common.js"></script>
-    <script src="js/tutorial-extensions.js"></script>
-    <script>
-        const chapters = [
-            {id:1, title:"Java简介与历史"},
-            {id:2, title:"Java开发环境搭建"},
-            {id:3, title:"第一个Java程序"},
-            {id:4, title:"Java基本语法"},
-            {id:5, title:"数据类型"},
-            {id:6, title:"变量与常量"},
-            {id:7, title:"运算符"},
-            {id:8, title:"表达式与语句"},
-            {id:9, title:"条件语句"},
-            {id:10, title:"循环语句"},
-            {id:11, title:"跳转语句"},
-            {id:12, title:"方法基础"},
-            {id:13, title:"递归"},
-            {id:14, title:"数组概述"},
-            {id:15, title:"一维数组"},
-            {id:16, title:"多维数组"},
-            {id:17, title:"字符串基础"},
-            {id:18, title:"字符串方法"},
-            {id:19, title:"方法定义与调用"},
-            {id:20, title:"方法重载"},
-            {id:21, title:"面向对象基础"},
-            {id:22, title:"构造方法"},
-            {id:23, title:"this关键字"},
-            {id:24, title:"继承"},
-            {id:25, title:"方法重写"},
-            {id:26, title:"多态"},
-            {id:27, title:"抽象类"},
-            {id:28, title:"接口"},
-            {id:29, title:"异常处理"},
-            {id:30, title:"文件操作"},
-            {id:31, title:"泛型"},
-            {id:32, title:"集合框架"},
-            {id:33, title:"Lambda表达式"},
-            {id:34, title:"线程基础"},
-            {id:35, title:"Java常用类"}
-        ];
-
-        function goToChapter(chapterNum) {
-            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('ch' + chapterNum).classList.add('active');
-            document.querySelector('.sidebar').classList.remove('sidebar-open');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function markCompleted(chapterNum) {
-            const btn = document.getElementById('completeBtn' + chapterNum);
-            if (btn.innerText.includes('✅')) {
-                btn.innerText = '🔄 标记为未完成';
-                btn.classList.remove('completed');
-            } else {
-                btn.innerText = '✅ 已完成';
-                btn.classList.add('completed');
-            }
-        }
-
-        function toggleBookmark(chapterNum) {
-            const btn = document.getElementById('bookmarkBtn' + chapterNum);
-            if (btn.style.color === 'gold') {
-                btn.style.color = '';
-            } else {
-                btn.style.color = 'gold';
-            }
-        }
-
-        function copyCode(elementId) {
-            const code = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                alert('代码已复制到剪贴板！');
-            });
-        }
-
-        function checkAnswer(chapterNum, questionNum) {
-            const answer = document.getElementById('ch' + chapterNum + '-q' + questionNum).value;
-            const resultDiv = document.getElementById('ch' + chapterNum + '-result' + questionNum);
-            resultDiv.innerText = '答案已提交！';
-            resultDiv.style.color = '#4CAF50';
-        }
-
-        function toggleAnswer(chapterNum, questionNum) {
-            const answerBox = document.getElementById('ch' + chapterNum + '-answer' + questionNum);
-            answerBox.style.display = answerBox.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function saveNote(chapterNum) {
-            const note = document.getElementById('ch' + chapterNum + '-note').value;
-            localStorage.setItem('note_ch' + chapterNum, note);
-            alert('笔记已保存！');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            chapters.forEach(ch => {
-                const note = localStorage.getItem('note_ch' + ch.id);
-                if (note) {
-                    document.getElementById('ch' + ch.id + '-note').value = note;
-                }
-            });
-        });
-    </script>
-</body>
+        <script src="js/tutorial-common.js"></script>
+        <script src="js/tutorial-extensions.js"></script>
+    </body>
 </html>

@@ -319,7 +319,7 @@ int main() {
     cout &lt;&lt; boolalpha;
     cout &lt;&lt; "a &gt; b: " &lt;&lt; (a &gt; b) &lt;&lt; endl;
     cout &lt;&lt; "a == b: " &lt;&lt; (a == b) &lt;&lt; endl;
-    cout &lt;&lt; "(a &lt; b) && (b &gt; 0): " &lt;&lt; ((a &lt; b) && (b &gt; 0)) &lt;&lt; endl;
+    cout &lt;&lt; "(a &lt; b) &amp;&amp; (b &gt; 0): " &lt;&lt; ((a &lt; b) &amp;&amp; (b &gt; 0)) &lt;&lt; endl;
     cout &lt;&lt; "(a &gt; b) || (b &gt; 0): " &lt;&lt; ((a &gt; b) || (b &gt; 0)) &lt;&lt; endl;
     return 0;
 }</code></pre></div>
@@ -338,7 +338,7 @@ int main() {
         <ul>
             <li><strong>位运算符：</strong>&（按位与）、|（按位或）、^（按位异或）、~（按位取反）</li>
             <li><strong>移位运算符：</strong>&lt;&lt;（左移，相当于×2）、&gt;&gt;（右移，相当于÷2）</li>
-            <li><strong>常用技巧：</strong>判断奇偶 <code>n & 1</code>、交换变量 <code>a ^= b; b ^= a; a ^= b;</code></li>
+            <li><strong>常用技巧：</strong>判断奇偶 <code>n &amp; 1</code>、交换变量 <code>a ^= b; b ^= a; a ^= b;</code></li>
             <li><strong>位掩码：</strong>设置/清除/翻转特定位，广泛用于标志位操作</li>
         </ul>
     </div>
@@ -1327,7 +1327,6 @@ int main() {
 
         </div>
     </div>
-
     <script src="js/tutorial-common.js"></script>
     <script src="js/tutorial-extensions.js"></script>
 </body>

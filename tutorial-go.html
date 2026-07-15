@@ -79,7 +79,7 @@
 
             <div id="ch1" class="chapter-section active">
                 <h2>1. Go语言简介 <button class="bookmark-btn" onclick="toggleBookmark(1)" id="bookmarkBtn1">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go的诞生：</strong>由Google的Robert Griesemer、Rob Pike和Ken Thompson于2007年设计，2009年开源，2012年发布1.0</li><li><strong>设计目标：</strong>解决大型软件工程的开发效率，兼顾编译型性能和解释型开发速度</li><li><strong>核心特性：</strong>静态类型、编译型、原生并发、垃圾回收、简洁语法、快速编译</li><li><strong>应用领域：</strong>云计算(Docker/K8s)、微服务、网络编程、DevOps、区块链</li><li><strong>语言哲学：</strong>少即是多——减少特性降低复杂度，没有继承、没有异常</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go的诞生：</strong>由Google的Robert Griesemer、Rob Pike和Ken Thompson于2007年设计，2009年开源，2012年发布1.0版本</li><li><strong>设计目标：</strong>解决大型软件工程的开发效率问题，兼顾编译型语言的性能和解释型语言的开发速度</li><li><strong>核心特性：</strong>静态类型、编译型语言、原生并发支持、垃圾回收、简洁语法、快速编译</li><li><strong>应用领域：</strong>云计算(Docker/Kubernetes)、微服务架构、网络编程、DevOps工具、区块链</li><li><strong>语言哲学：</strong>少即是多——通过减少语言特性来降低复杂度，没有继承、没有异常处理机制</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch1-code1')">📋 复制</button></div></div><pre id="ch1-code1"><code>package main
 
 import "fmt"
@@ -90,7 +90,7 @@ func main() {
     version := "1.22"
     fmt.Printf("当前Go版本: %s\n", version)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>混淆Go与C++：Go是全新设计的语言，没有类和继承</p><p>误以为Go是脚本语言：Go是编译型语言，但<code>go run</code>可简化过程</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>混淆Go与C++：Go是全新设计的语言，没有类和继承概念</p><p>误以为Go是脚本语言：Go是编译型语言，但<code>go run</code>命令可简化编译运行过程</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go语言的三位创始人分别是谁？</div><input type="text" class="answer-input" id="ch1-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(1,1)">检查答案</button><div id="ch1-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(1,1)">查看答案</button><div id="ch1-answer1" class="answer-box">Robert Griesemer、Rob Pike、Ken Thompson</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch1-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(1)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
@@ -99,8 +99,8 @@ func main() {
 
             <div id="ch2" class="chapter-section">
                 <h2>2. 开发环境配置 <button class="bookmark-btn" onclick="toggleBookmark(2)" id="bookmarkBtn2">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>安装Go：</strong>从golang.org/dl下载安装包，推荐最新稳定版</li><li><strong>环境变量：</strong>GOPATH工作空间、GOROOT安装路径、PATH添加bin目录</li><li><strong>Go模块：</strong>1.11引入模块系统，1.16后默认，使用go.mod管理依赖</li><li><strong>IDE推荐：</strong>VS Code+Go扩展、GoLand、Vim+vim-go</li></ul></div>
-                <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch2-code1')">📋 复制</button></div></div><pre id="ch2-code1"><code># 检查Go版本
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>安装Go：</strong>从golang.org/dl下载安装包，推荐安装最新稳定版</li><li><strong>环境变量：</strong>GOPATH工作空间、GOROOT安装路径、PATH添加bin目录</li><li><strong>Go模块：</strong>1.11版本引入模块系统，1.16版本后默认启用，使用go.mod管理依赖</li><li><strong>IDE推荐：</strong>VS Code+Go扩展、GoLand、Vim+vim-go插件</li></ul></div>
+                <div class="code-block"><div class="code-header"><span class="code-lang">bash</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch2-code1')">📋 复制</button></div></div><pre id="ch2-code1"><code># 检查Go版本
 go version
 
 # 初始化模块
@@ -117,7 +117,7 @@ go build -o myapp main.go
 # 格式化和检查
 go fmt ./...
 go vet ./...</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记go mod init：没有模块无法管理依赖</p><p>未设置GOPATH：模块模式下可任意目录开发</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记执行go mod init：没有模块无法管理依赖</p><p>未设置GOPATH：在模块模式下可以在任意目录开发，不需要GOPATH</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">初始化Go模块的命令是什么？</div><input type="text" class="answer-input" id="ch2-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(2,1)">检查答案</button><div id="ch2-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(2,1)">查看答案</button><div id="ch2-answer1" class="answer-box">go mod init 模块路径</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch2-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(2)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
@@ -126,7 +126,7 @@ go vet ./...</code></pre></div>
 
             <div id="ch3" class="chapter-section">
                 <h2>3. 第一个Go程序 <button class="bookmark-btn" onclick="toggleBookmark(3)" id="bookmarkBtn3">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>package声明：</strong>每个Go文件必须以package开头，可执行程序入口包必须是<code>main</code></li><li><strong>import导入：</strong>导入标准库或第三方包，未使用的导入会编译错误</li><li><strong>main函数：</strong>程序入口，无参数无返回值，必须在main包中</li><li><strong>语句规则：</strong>不需要分号，左大括号不能单独一行</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>package声明：</strong>每个Go文件必须以package开头，可执行程序的入口包必须是<code>main</code></li><li><strong>import导入：</strong>导入标准库或第三方包，未使用的导入会导致编译错误</li><li><strong>main函数：</strong>程序入口函数，无参数无返回值，必须定义在main包中</li><li><strong>语句规则：</strong>不需要分号结尾，左大括号不能单独放在一行</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch3-code1')">📋 复制</button></div></div><pre id="ch3-code1"><code>package main
 
 import "fmt"
@@ -138,7 +138,7 @@ func main() {
     a, b := 10, 20
     fmt.Printf("%d + %d = %d\n", a, b, a+b)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>左大括号换行：<code>func main()\n{</code>是错误的</p><p>未使用的导入：编译失败</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>左大括号换行：<code>func main()\n{</code>是错误的写法</p><p>导入的包未使用：会导致编译失败</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写程序输出你的名字和年龄</div><textarea class="answer-textarea" id="ch3-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(3,1)">检查答案</button><div id="ch3-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(3,1)">查看答案</button><div id="ch3-answer1" class="answer-box">package main
 
 import "fmt"
@@ -155,7 +155,7 @@ func main() {
 
             <div id="ch4" class="chapter-section">
                 <h2>4. 包与导入 <button class="bookmark-btn" onclick="toggleBookmark(4)" id="bookmarkBtn4">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>包的概念：</strong>Go通过package组织代码，同目录文件必须同包</li><li><strong>可见性规则：</strong>大写字母开头=导出(public)，小写=未导出(private)</li><li><strong>导入方式：</strong>单行、多行、别名、点导入</li><li><strong>常用标准库：</strong>fmt、os、strings、net/http</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>包的概念：</strong>Go通过package组织代码，同一目录下的文件必须属于同一个包</li><li><strong>可见性规则：</strong>大写字母开头的标识符是导出(public)的，小写字母开头是未导出(private)的</li><li><strong>导入方式：</strong>单行导入、多行导入、别名导入、点导入</li><li><strong>常用标准库：</strong>fmt、os、strings、net/http等</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch4-code1')">📋 复制</button></div></div><pre id="ch4-code1"><code>package main
 
 import (
@@ -171,7 +171,7 @@ func main() {
     fmt.Println(strings.ToUpper("hello go"))
     fmt.Println(time.Now().Format("2006-01-02 15:04:05"))
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>循环导入：Go不允许循环依赖</p><p>导入未使用：编译错误，可用<code>_</code>空白标识符</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>循环导入：Go不允许包之间存在循环依赖</p><p>导入了未使用的包：编译错误，可用<code>_</code>空白标识符忽略</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go中如何区分导出和未导出的标识符？</div><input type="text" class="answer-input" id="ch4-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(4,1)">检查答案</button><div id="ch4-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(4,1)">查看答案</button><div id="ch4-answer1" class="answer-box">大写字母开头为导出(public)，小写字母开头为未导出(private)</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch4-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(4)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
@@ -180,7 +180,7 @@ func main() {
 
             <div id="ch5" class="chapter-section">
                 <h2>5. 变量声明 <button class="bookmark-btn" onclick="toggleBookmark(5)" id="bookmarkBtn5">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>var声明：</strong><code>var name type = value</code>，类型可省略</li><li><strong>短变量声明：</strong><code>name := value</code>，只能在函数内使用</li><li><strong>零值机制：</strong>数值0、字符串""、布尔false、引用类型nil</li><li><strong>多重赋值：</strong><code>a, b := 1, 2</code>，支持交换<code>a, b = b, a</code></li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>var声明：</strong><code>var name type = value</code>，类型可以省略，由编译器推断</li><li><strong>短变量声明：</strong><code>name := value</code>，只能在函数内部使用</li><li><strong>零值机制：</strong>数值类型为0、字符串为""、布尔为false、引用类型为nil</li><li><strong>多重赋值：</strong><code>a, b := 1, 2</code>，支持交换操作<code>a, b = b, a</code></li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch5-code1')">📋 复制</button></div></div><pre id="ch5-code1"><code>package main
 
 import "fmt"
@@ -189,16 +189,16 @@ func main() {
     var name string = "Go"
     var age int = 14
     var city = "Beijing"
-    var count int      // 0
-    var message string // ""
-    var flag bool      // false
+    var count int      // 零值: 0
+    var message string // 零值: ""
+    var flag bool      // 零值: false
     lang := "Go语言"
     version := 1.22
     a, b := 10, 20
     a, b = b, a
     fmt.Println(name, age, city, count, flag, lang, version, a, b)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>函数外使用:=：必须使用var声明</p><p>声明后未使用：编译错误</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>在函数外部使用:=：必须使用var声明</p><p>声明变量后未使用：编译错误</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用短变量声明交换两个变量的值</div><textarea class="answer-textarea" id="ch5-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(5,1)">检查答案</button><div id="ch5-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(5,1)">查看答案</button><div id="ch5-answer1" class="answer-box">a, b := 10, 20
 a, b = b, a</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch5-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(5)">保存笔记</button></div>
@@ -208,7 +208,7 @@ a, b = b, a</div></div>
 
             <div id="ch6" class="chapter-section">
                 <h2>6. 常量与iota <button class="bookmark-btn" onclick="toggleBookmark(6)" id="bookmarkBtn6">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>const声明：</strong>常量在编译时确定，不能修改</li><li><strong>iota枚举器：</strong>const块中每新增一行iota加1，从0开始</li><li><strong>iota技巧：</strong>跳过值<code>_ = iota</code>、位运算<code>1 << iota</code></li><li><strong>无类型常量：</strong>常量可不指定类型，需要时自动转换</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>const声明：</strong>常量在编译时确定，程序运行时不能修改</li><li><strong>iota枚举器：</strong>在const块中每新增一行iota值加1，从0开始</li><li><strong>iota技巧：</strong>跳过值使用<code>_ = iota</code>、位运算<code>1 << iota</code></li><li><strong>无类型常量：</strong>常量可以不指定类型，需要时自动转换</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch6-code1')">📋 复制</button></div></div><pre id="ch6-code1"><code>package main
 
 import "fmt"
@@ -236,7 +236,7 @@ func main() {
     fmt.Println("Monday =", Monday)
     fmt.Println("All =", ReadPermission|WritePermission|ExecutePermission)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>const块外使用iota：编译错误</p><p>常量用函数赋值：<code>const t = time.Now()</code>错误</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>在const块外使用iota：编译错误</p><p>常量用函数赋值：<code>const t = time.Now()</code>是错误的，因为time.Now()在运行时执行</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用iota定义文件权限常量：读(1)、写(2)、执行(4)</div><textarea class="answer-textarea" id="ch6-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(6,1)">检查答案</button><div id="ch6-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(6,1)">查看答案</button><div id="ch6-answer1" class="answer-box">const (
     Read    = 1 << iota // 1
     Write               // 2
@@ -249,7 +249,7 @@ func main() {
 
             <div id="ch7" class="chapter-section">
                 <h2>7. 基本数据类型 <button class="bookmark-btn" onclick="toggleBookmark(7)" id="bookmarkBtn7">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>整数类型：</strong>int8~int64、uint8~uint64，int/uint与平台相关</li><li><strong>浮点类型：</strong>float32(约6位精度)、float64(约15位精度)</li><li><strong>布尔类型：</strong>bool，只有true和false</li><li><strong>字符串类型：</strong>string，UTF-8编码，不可变</li><li><strong>byte与rune：</strong>byte是uint8别名，rune是int32别名</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>整数类型：</strong>int8~int64、uint8~uint64，int/uint与平台相关</li><li><strong>浮点类型：</strong>float32(约6位精度)、float64(约15位精度)</li><li><strong>布尔类型：</strong>bool，只有true和false两个值</li><li><strong>字符串类型：</strong>string，UTF-8编码，不可变</li><li><strong>byte与rune：</strong>byte是uint8的别名，rune是int32的别名</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch7-code1')">📋 复制</button></div></div><pre id="ch7-code1"><code>package main
 
 import "fmt"
@@ -263,7 +263,7 @@ func main() {
     fmt.Printf("字符: %c, Unicode: %U\n", ch, ch)
     fmt.Println(i, f64, b, s, len(s))
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>整数溢出：int8最大127</p><p>字符串长度：len("中文")返回6(字节数)不是2</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>整数溢出：int8最大127，超出范围会编译错误或运行时panic</p><p>字符串长度：len("中文")返回6(字节数)而不是2(字符数)</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">byte和rune分别是什么类型的别名？</div><input type="text" class="answer-input" id="ch7-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(7,1)">检查答案</button><div id="ch7-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(7,1)">查看答案</button><div id="ch7-answer1" class="answer-box">byte是uint8的别名，rune是int32的别名</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch7-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(7)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
@@ -272,7 +272,7 @@ func main() {
 
             <div id="ch8" class="chapter-section">
                 <h2>8. 类型转换 <button class="bookmark-btn" onclick="toggleBookmark(8)" id="bookmarkBtn8">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>显式转换：</strong>Go没有隐式转换，必须<code>T(v)</code></li><li><strong>数值间转换：</strong><code>int(float64)</code>，注意精度丢失</li><li><strong>字符串转换：</strong><code>string([]byte)</code>、strconv.Itoa等</li><li><strong>strconv包：</strong>Atoi、Itoa、FormatFloat等</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>显式转换：</strong>Go没有隐式类型转换，必须使用<code>T(v)</code>语法</li><li><strong>数值间转换：</strong><code>int(float64)</code>，注意精度丢失问题</li><li><strong>字符串转换：</strong><code>string([]byte)</code>、strconv.Itoa等</li><li><strong>strconv包：</strong>提供Atoi、Itoa、FormatFloat等转换函数</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch8-code1')">📋 复制</button></div></div><pre id="ch8-code1"><code>package main
 
 import (
@@ -291,7 +291,7 @@ func main() {
     data := []byte("Hello")
     fmt.Println(string(data))
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>隐式转换：<code>var i int = 3.14</code>不允许</p><p>精度丢失：大数转换需注意</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>隐式转换：<code>var i int = 3.14</code>不允许</p><p>精度丢失：大数值转换时需要注意</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">将字符串"123"转换为整数并加1输出</div><textarea class="answer-textarea" id="ch8-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(8,1)">检查答案</button><div id="ch8-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(8,1)">查看答案</button><div id="ch8-answer1" class="answer-box">n, _ := strconv.Atoi("123")
 fmt.Println(n + 1) // 124</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch8-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(8)">保存笔记</button></div>
@@ -315,7 +315,7 @@ func main() {
     fmt.Println("x++:", x)
     fmt.Println("6 << 2 =", 6<<2)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>j = i++是错误的，i++是语句</p><p>整数除以0会panic</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>j = i++是错误的，i++是语句不能作为表达式</p><p>整数除以0会导致panic</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">计算17除以5的商和余数</div><input type="text" class="answer-input" id="ch9-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(9,1)">检查答案</button><div id="ch9-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(9,1)">查看答案</button><div id="ch9-answer1" class="answer-box">商: 17/5=3, 余数: 17%5=2</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch9-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(9)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
@@ -324,7 +324,7 @@ func main() {
 
             <div id="ch10" class="chapter-section">
                 <h2>10. 比较与逻辑运算符 <button class="bookmark-btn" onclick="toggleBookmark(10)" id="bookmarkBtn10">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>比较运算符：</strong>==、!=、<、>、<=、>=</li><li><strong>逻辑运算符：</strong>&&与、||或、!非</li><li><strong>短路求值：</strong>&&左false不执行右，||左true不执行右</li><li><strong>可比较类型：</strong>相同类型才能比较</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>比较运算符：</strong>==、!=、<、>、<=、>=</li><li><strong>逻辑运算符：</strong>&&与、||或、!非</li><li><strong>短路求值：</strong>&&左边为false不执行右边，||左边为true不执行右边</li><li><strong>可比较类型：</strong>只有相同类型的值才能比较</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch10-code1')">📋 复制</button></div></div><pre id="ch10-code1"><code>package main
 
 import "fmt"
@@ -342,7 +342,7 @@ func main() {
         fmt.Println("短路保护")
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>比较不同类型：编译错误</p><p>slice/map不能用==比较</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>比较不同类型的值：编译错误</p><p>slice和map不能用==比较</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">Go中逻辑运算符短路求值的含义？</div><input type="text" class="answer-input" id="ch10-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(10,1)">检查答案</button><div id="ch10-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(10,1)">查看答案</button><div id="ch10-answer1" class="answer-box">&&左边为false则右边不执行；||左边为true则右边不执行</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch10-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(10)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
@@ -351,7 +351,7 @@ func main() {
 
             <div id="ch11" class="chapter-section">
                 <h2>11. if语句 <button class="bookmark-btn" onclick="toggleBookmark(11)" id="bookmarkBtn11">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本if：</strong>条件不需要括号，大括号必须有</li><li><strong>if-else：</strong>else必须与if的}在同一行</li><li><strong>if-else if-else：</strong>多条件链式判断</li><li><strong>初始化语句：</strong><code>if stmt; condition {}</code>，变量作用域限if块内</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>基本if：</strong>条件不需要括号，大括号必须存在</li><li><strong>if-else：</strong>else必须与if的}在同一行</li><li><strong>if-else if-else：</strong>多条件链式判断</li><li><strong>初始化语句：</strong><code>if stmt; condition {}</code>，变量作用域仅限于if块内</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch11-code1')">📋 复制</button></div></div><pre id="ch11-code1"><code>package main
 
 import "fmt"
@@ -369,7 +369,7 @@ func main() {
         fmt.Printf("%d是偶数\n", num)
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>else换行：必须与}同行</p><p>条件加括号：不推荐但语法正确</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>else换行：必须与}在同一行</p><p>条件加括号：虽然语法正确但不推荐</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用if初始化语句判断偶数</div><textarea class="answer-textarea" id="ch11-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(11,1)">检查答案</button><div id="ch11-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(11,1)">查看答案</button><div id="ch11-answer1" class="answer-box">if n := 42; n%2 == 0 {
     fmt.Println("偶数")
 } else {
@@ -382,7 +382,7 @@ func main() {
 
             <div id="ch12" class="chapter-section">
                 <h2>12. switch语句 <button class="bookmark-btn" onclick="toggleBookmark(12)" id="bookmarkBtn12">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>自动break：</strong>默认每个case自动终止</li><li><strong>fallthrough：</strong>继续执行下一个case</li><li><strong>多值匹配：</strong><code>case 1, 2, 3:</code></li><li><strong>无条件switch：</strong>相当于if-else链</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>自动break：</strong>默认每个case执行完自动终止</li><li><strong>fallthrough：</strong>继续执行下一个case</li><li><strong>多值匹配：</strong><code>case 1, 2, 3:</code></li><li><strong>无条件switch：</strong>相当于if-else链</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch12-code1')">📋 复制</button></div></div><pre id="ch12-code1"><code>package main
 
 import "fmt"
@@ -405,7 +405,7 @@ func main() {
         fmt.Println("良好")
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记fallthrough：默认不穿透</p><p>case类型不匹配：编译错误</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记fallthrough：默认不会穿透到下一个case</p><p>case类型不匹配：编译错误</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">用switch判断月份所属季节</div><textarea class="answer-textarea" id="ch12-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(12,1)">检查答案</button><div id="ch12-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(12,1)">查看答案</button><div id="ch12-answer1" class="answer-box">switch month {
 case 3, 4, 5: fmt.Println("春季")
 case 6, 7, 8: fmt.Println("夏季")
@@ -419,7 +419,7 @@ case 12, 1, 2: fmt.Println("冬季")
 
             <div id="ch13" class="chapter-section">
                 <h2>13. for循环 <button class="bookmark-btn" onclick="toggleBookmark(13)" id="bookmarkBtn13">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go唯一循环：</strong>只有for，没有while</li><li><strong>经典for：</strong><code>for init; cond; post {}</code></li><li><strong>条件for：</strong><code>for cond {}</code>相当于while</li><li><strong>range迭代：</strong><code>for i, v := range col {}</code></li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>Go唯一循环：</strong>只有for循环，没有while和do-while</li><li><strong>经典for：</strong><code>for init; cond; post {}</code></li><li><strong>条件for：</strong><code>for cond {}</code>相当于while循环</li><li><strong>range迭代：</strong><code>for i, v := range col {}</code></li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch13-code1')">📋 复制</button></div></div><pre id="ch13-code1"><code>package main
 
 import "fmt"
@@ -437,7 +437,7 @@ func main() {
         fmt.Printf("%d: %d\n", i, v)
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>range返回值副本：修改不影响原切片</p><p>循环变量捕获问题（Go 1.22前）</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>range返回值是副本：修改v不影响原切片</p><p>循环变量捕获问题（Go 1.22之前版本）</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">使用for循环计算1到100的和</div><textarea class="answer-textarea" id="ch13-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(13,1)">检查答案</button><div id="ch13-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(13,1)">查看答案</button><div id="ch13-answer1" class="answer-box">sum := 0
 for i := 1; i <= 100; i++ {
     sum += i
@@ -450,7 +450,7 @@ fmt.Println(sum) // 5050</div></div>
 
             <div id="ch14" class="chapter-section">
                 <h2>14. break与continue <button class="bookmark-btn" onclick="toggleBookmark(14)" id="bookmarkBtn14">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>break：</strong>终止当前循环</li><li><strong>continue：</strong>跳过当前迭代</li><li><strong>标签break：</strong><code>break Label</code>跳出外层</li><li><strong>标签continue：</strong><code>continue Label</code>继续外层</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>break：</strong>终止当前循环</li><li><strong>continue：</strong>跳过当前迭代</li><li><strong>标签break：</strong><code>break Label</code>跳出外层循环</li><li><strong>标签continue：</strong><code>continue Label</code>继续外层循环</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch14-code1')">📋 复制</button></div></div><pre id="ch14-code1"><code>package main
 
 import "fmt"
@@ -474,7 +474,7 @@ outer:
         }
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>标签未定义：编译错误</p><p>误用goto：不推荐</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>使用未定义的标签：编译错误</p><p>误用goto：不推荐使用</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">找出第一个能被7整除且大于100的数</div><textarea class="answer-textarea" id="ch14-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(14,1)">检查答案</button><div id="ch14-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(14,1)">查看答案</button><div id="ch14-answer1" class="answer-box">for i := 101; ; i++ {
     if i%7 == 0 {
         fmt.Println(i) // 105
@@ -488,7 +488,7 @@ outer:
 
             <div id="ch15" class="chapter-section">
                 <h2>15. 数组 <button class="bookmark-btn" onclick="toggleBookmark(15)" id="bookmarkBtn15">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>声明：</strong><code>var arr [5]int</code>，长度是类型一部分</li><li><strong>初始化：</strong><code>[5]int{1,2,3}</code>、<code>[...]int{1,2,3}</code></li><li><strong>值类型：</strong>赋值和传参复制整个数组</li><li><strong>长度固定：</strong>不可改变，实际更常用切片</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>声明：</strong><code>var arr [5]int</code>，长度是类型的一部分</li><li><strong>初始化：</strong><code>[5]int{1,2,3}</code>、<code>[...]int{1,2,3}</code></li><li><strong>值类型：</strong>赋值和传参时复制整个数组</li><li><strong>长度固定：</strong>不可改变，实际开发中更常用切片</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch15-code1')">📋 复制</button></div></div><pre id="ch15-code1"><code>package main
 
 import "fmt"
@@ -504,8 +504,8 @@ func main() {
     }
     fmt.Println(colors, arr)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>长度不同类型不同：<code>[3]int</code>和<code>[5]int</code>不同</p><p>顺序初始化缺字段：编译错误</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">声明5元素字符串数组并range遍历</div><textarea class="answer-textarea" id="ch15-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(15,1)">检查答案</button><div id="ch15-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(15,1)">查看答案</button><div id="ch15-answer1" class="answer-box">fruits := [5]string{"苹果","香蕉","橙子","葡萄","西瓜"}
+                <div class="error-block"><h4>❌ 常见错误</h4><p>长度不同类型不同：<code>[3]int</code>和<code>[5]int</code>是不同类型</p><p>顺序初始化缺少字段：编译错误</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">声明5元素字符串数组并使用range遍历</div><textarea class="answer-textarea" id="ch15-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(15,1)">检查答案</button><div id="ch15-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(15,1)">查看答案</button><div id="ch15-answer1" class="answer-box">fruits := [5]string{"苹果","香蕉","橙子","葡萄","西瓜"}
 for i, v := range fruits {
     fmt.Printf("%d: %s\n", i, v)
 }</div></div>
@@ -516,7 +516,7 @@ for i, v := range fruits {
 
             <div id="ch16" class="chapter-section">
                 <h2>16. 切片基础 <button class="bookmark-btn" onclick="toggleBookmark(16)" id="bookmarkBtn16">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片vs数组：</strong>动态长度引用类型，底层指向数组</li><li><strong>创建：</strong>make([]T, len, cap)、[]T{}、从数组切片</li><li><strong>三个属性：</strong>指针、len、cap</li><li><strong>nil切片：</strong>var声明初始为nil</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片vs数组：</strong>切片是动态长度的引用类型，底层指向数组</li><li><strong>创建：</strong>make([]T, len, cap)、[]T{}、从数组切片</li><li><strong>三个属性：</strong>指针、len(长度)、cap(容量)</li><li><strong>nil切片：</strong>使用var声明时初始化为nil</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch16-code1')">📋 复制</button></div></div><pre id="ch16-code1"><code>package main
 
 import "fmt"
@@ -534,8 +534,8 @@ func main() {
     b[0] = 100
     fmt.Println(a[0]) // 100
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记接收append返回值</p><p>切片越界访问会panic</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建空切片，追加3个元素输出len和cap</div><textarea class="answer-textarea" id="ch16-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(16,1)">检查答案</button><div id="ch16-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(16,1)">查看答案</button><div id="ch16-answer1" class="answer-box">s := make([]int, 0)
+                <div class="error-block"><h4>❌ 常见错误</h4><p>忘记接收append的返回值</p><p>切片越界访问会导致panic</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">创建空切片，追加3个元素后输出len和cap</div><textarea class="answer-textarea" id="ch16-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(16,1)">检查答案</button><div id="ch16-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(16,1)">查看答案</button><div id="ch16-answer1" class="answer-box">s := make([]int, 0)
 s = append(s, 1, 2, 3)
 fmt.Println(len(s), cap(s))</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch16-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(16)">保存笔记</button></div>
@@ -545,7 +545,7 @@ fmt.Println(len(s), cap(s))</div></div>
 
             <div id="ch17" class="chapter-section">
                 <h2>17. 切片高级操作 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片表达式：</strong><code>s[low:high:max]</code>控制容量</li><li><strong>copy函数：</strong><code>copy(dst, src)</code></li><li><strong>删除元素：</strong><code>append(s[:i], s[i+1:]...)</code></li><li><strong>二维切片：</strong><code>[][]int</code>需逐行初始化</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>切片表达式：</strong><code>s[low:high:max]</code>控制容量</li><li><strong>copy函数：</strong><code>copy(dst, src)</code></li><li><strong>删除元素：</strong><code>append(s[:i], s[i+1:]...)</code></li><li><strong>二维切片：</strong><code>[][]int</code>需要逐行初始化</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch17-code1')">📋 复制</button></div></div><pre id="ch17-code1"><code>package main
 
 import "fmt"
@@ -565,7 +565,7 @@ func main() {
     fmt.Println(matrix)
 }</code></pre></div>
                 <div class="error-block"><h4>❌ 常见错误</h4><p>共享底层数组：修改可能互相影响</p><p>append可能触发扩容导致引用失效</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">删除切片索引1的元素</div><textarea class="answer-textarea" id="ch17-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(17,1)">检查答案</button><div id="ch17-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(17,1)">查看答案</button><div id="ch17-answer1" class="answer-box">s := []int{10, 20, 30, 40}
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">删除切片索引1位置的元素</div><textarea class="answer-textarea" id="ch17-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(17,1)">检查答案</button><div id="ch17-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(17,1)">查看答案</button><div id="ch17-answer1" class="answer-box">s := []int{10, 20, 30, 40}
 s = append(s[:1], s[2:]...)
 fmt.Println(s) // [10 30 40]</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch17-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(17)">保存笔记</button></div>
@@ -575,7 +575,7 @@ fmt.Println(s) // [10 30 40]</div></div>
 
             <div id="ch18" class="chapter-section">
                 <h2>18. map映射 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>创建：</strong><code>make(map[K]V)</code>、<code>map[K]V{}</code></li><li><strong>操作：</strong>存取、delete、检查<code>val, ok := m[key]</code></li><li><strong>遍历：</strong>range，顺序不确定</li><li><strong>nil map：</strong>写入会panic，需make初始化</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>创建：</strong><code>make(map[K]V)</code>、<code>map[K]V{}</code></li><li><strong>操作：</strong>存取、delete、检查<code>val, ok := m[key]</code></li><li><strong>遍历：</strong>使用range，遍历顺序不确定</li><li><strong>nil map：</strong>写入会panic，需要先make初始化</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch18-code1')">📋 复制</button></div></div><pre id="ch18-code1"><code>package main
 
 import "fmt"
@@ -593,8 +593,8 @@ func main() {
     }
     fmt.Println(colors)
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>nil map写入panic</p><p>map非线程安全，并发需sync.Mutex或sync.Map</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">统计字符串中每个字符出现次数</div><textarea class="answer-textarea" id="ch18-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button><div id="ch18-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button><div id="ch18-answer1" class="answer-box">s := "hello"
+                <div class="error-block"><h4>❌ 常见错误</h4><p>向nil map写入会panic</p><p>map非线程安全，并发需要sync.Mutex或sync.Map</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">统计字符串中每个字符出现的次数</div><textarea class="answer-textarea" id="ch18-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button><div id="ch18-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button><div id="ch18-answer1" class="answer-box">s := "hello"
 count := make(map[rune]int)
 for _, ch := range s { count[ch]++ }
 fmt.Println(count)</div></div>
@@ -605,7 +605,7 @@ fmt.Println(count)</div></div>
 
             <div id="ch19" class="chapter-section">
                 <h2>19. 字符串操作 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>字符串本质：</strong>不可变字节切片，UTF-8编码</li><li><strong>strings包：</strong>Contains、Split、Join、Replace等</li><li><strong>strconv包：</strong>Atoi、Itoa等转换</li><li><strong>遍历：</strong><code>for _, r := range s</code>按rune</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>字符串本质：</strong>不可变的字节切片，UTF-8编码</li><li><strong>strings包：</strong>Contains、Split、Join、Replace等</li><li><strong>strconv包：</strong>Atoi、Itoa等转换函数</li><li><strong>遍历：</strong><code>for _, r := range s</code>按rune遍历</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch19-code1')">📋 复制</button></div></div><pre id="ch19-code1"><code>package main
 
 import (
@@ -623,7 +623,7 @@ func main() {
         fmt.Printf("%d: %c\n", i, r)
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>字符串不可变：不能s[0]='h'</p><p>len返回字节数非字符数</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>字符串不可变：不能直接修改s[0]='h'</p><p>len返回字节数而非字符数</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">反转字符串"Hello, 世界"</div><textarea class="answer-textarea" id="ch19-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(19,1)">检查答案</button><div id="ch19-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(19,1)">查看答案</button><div id="ch19-answer1" class="answer-box">runes := []rune("Hello, 世界")
 for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
     runes[i], runes[j] = runes[j], runes[i]
@@ -636,7 +636,7 @@ fmt.Println(string(runes))</div></div>
 
             <div id="ch20" class="chapter-section">
                 <h2>20. 函数定义 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>函数声明：</strong><code>func name(params) returnType</code></li><li><strong>参数传递：</strong>值传递默认，指针可修改原值</li><li><strong>命名返回值：</strong><code>func f() (q, r int)</code></li><li><strong>函数是一等公民：</strong>可赋值给变量、作参数和返回值</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>函数声明：</strong><code>func name(params) returnType</code></li><li><strong>参数传递：</strong>默认值传递，指针可修改原值</li><li><strong>命名返回值：</strong><code>func f() (q, r int)</code></li><li><strong>函数是一等公民：</strong>可赋值给变量、作参数和返回值</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch20-code1')">📋 复制</button></div></div><pre id="ch20-code1"><code>package main
 
 import "fmt"
@@ -668,7 +668,7 @@ func main() {
 
             <div id="ch21" class="chapter-section">
                 <h2>21. defer语句 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>延迟执行：</strong>函数返回前执行，后进先出</li><li><strong>用途：</strong>资源释放、文件关闭、锁释放</li><li><strong>参数求值：</strong>defer时立即求值</li><li><strong>典型模式：</strong>open→defer close→操作</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>延迟执行：</strong>函数返回前执行，后进先出顺序</li><li><strong>用途：</strong>资源释放、文件关闭、锁释放</li><li><strong>参数求值：</strong>defer时立即求值，执行时使用</li><li><strong>典型模式：</strong>open→defer close→操作</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch21-code1')">📋 复制</button></div></div><pre id="ch21-code1"><code>package main
 
 import "fmt"
@@ -684,7 +684,6 @@ func main() {
 func example() {
     f, _ := os.Open("file.txt")
     defer f.Close()
-    // 使用文件...
 }</code></pre></div>
                 <div class="error-block"><h4>❌ 常见错误</h4><p>defer顺序：后进先出</p><p>循环中defer可能导致资源泄漏</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">上述代码输出顺序是什么？</div><textarea class="answer-textarea" id="ch21-q1" placeholder="输入答案..."></textarea><button class="btn btn-primary" onclick="checkAnswer(21,1)">检查答案</button><div id="ch21-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(21,1)">查看答案</button><div id="ch21-answer1" class="answer-box">Start → End → Third → Second → First</div></div>
@@ -695,7 +694,7 @@ func example() {
 
             <div id="ch22" class="chapter-section">
                 <h2>22. panic与recover <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>panic：</strong>运行时异常，终止程序</li><li><strong>recover：</strong>捕获panic，恢复程序</li><li><strong>使用场景：</strong>严重错误处理、测试</li><li><strong>最佳实践：</strong>不用panic处理预期错误</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>panic：</strong>运行时异常，终止程序执行</li><li><strong>recover：</strong>捕获panic，恢复程序运行</li><li><strong>使用场景：</strong>严重错误处理、测试框架</li><li><strong>最佳实践：</strong>不用panic处理预期错误</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch22-code1')">📋 复制</button></div></div><pre id="ch22-code1"><code>package main
 
 import "fmt"
@@ -720,7 +719,7 @@ func main() {
         fmt.Println("Result:", res)
     }
 }</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>recover必须在defer中</p><p>不要滥用panic</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>recover必须在defer中调用</p><p>不要滥用panic处理业务错误</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写安全函数捕获数组越界panic</div><textarea class="answer-textarea" id="ch22-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(22,1)">检查答案</button><div id="ch22-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(22,1)">查看答案</button><div id="ch22-answer1" class="answer-box">func safeGet(arr []int, idx int) (int, error) {
     defer func() {
         if r := recover(); r != nil {
@@ -1050,7 +1049,7 @@ func (c *Cache) Set(key string, value interface{}) {
 
             <div id="ch31" class="chapter-section">
                 <h2>31. 文件操作 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>os包：</strong>Open、Create、Remove</li><li><strong>ioutil包：</strong>ReadFile、WriteFile（已废弃）</li><li><strong>bufio包：</strong>带缓冲读写</li><li><strong>defer：</strong>确保文件关闭</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>os包：</strong>Open、Create、Remove</li><li><strong>os.ReadFile：</strong>读取整个文件</li><li><strong>bufio包：</strong>带缓冲读写</li><li><strong>defer：</strong>确保文件关闭</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">go</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button></div></div><pre id="ch31-code1"><code>package main
 
 import (
@@ -1146,7 +1145,7 @@ json.Unmarshal([]byte(jsonStr), &people)</div></div>
 
 import (
     "fmt"
-    "io/ioutil"
+    "io"
     "net/http"
 )
 
@@ -1157,7 +1156,7 @@ func main() {
     }
     defer resp.Body.Close()
     
-    body, _ := ioutil.ReadAll(resp.Body)
+    body, _ := io.ReadAll(resp.Body)
     fmt.Println(string(body))
     
     client := &http.Client{
