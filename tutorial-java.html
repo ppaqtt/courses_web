@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Java教程 - 从零开始学习Java编程</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tutorial-style.css">
     <link rel="stylesheet" href="tutorial-features.css">
     <link rel="stylesheet" href="tutorial-extensions.css">
     <style>
+        /* Java教程页面特有样式 */
         :root {
             --bg-primary: #ffffff;
             --bg-secondary: #f8fafc;
@@ -44,154 +46,25 @@
             --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
             --code-bg: #0f172a;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
         .header {
             background: linear-gradient(135deg, #e76f00, #5382a1);
             color: white; padding: 40px 20px; border-radius: 20px;
             margin-bottom: 30px; text-align: center;
         }
-        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .header p { opacity: 0.9; font-size: 1.1rem; }
-        .toolbar {
-            display: flex; flex-wrap: wrap; gap: 10px; background: var(--bg-card);
-            padding: 15px; border-radius: 15px; margin-bottom: 30px;
-            box-shadow: var(--shadow-md); align-items: center;
-        }
-        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
-        .toolbar-right { display: flex; gap: 10px; }
-        .search-box {
-            padding: 10px 15px; border: 1px solid var(--border-color);
-            border-radius: 25px; background: var(--bg-secondary);
-            color: var(--text-primary); width: 300px; font-size: 1rem; outline: none;
-        }
-        .search-box:focus { border-color: var(--accent-color); }
-        .btn {
-            padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;
-            font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px;
-        }
-        .btn-primary { background: var(--accent-color); color: white; }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .btn-secondary:hover { background: rgba(231,111,0,0.1); color: var(--accent-color); }
         .progress-bar-wrap {
             flex: 1; height: 8px; background: var(--bg-secondary);
             border-radius: 10px; overflow: hidden; margin: 0 20px; min-width: 100px;
         }
-        .progress-fill {
-            height: 100%; background: linear-gradient(90deg, #e76f00, #5382a1);
-            border-radius: 10px; transition: width 0.3s ease;
-        }
-        .sidebar {
-            position: fixed; left: 20px; top: 200px; width: 260px;
-            background: var(--bg-card); border-radius: 15px; padding: 20px;
-            box-shadow: var(--shadow-md); overflow-y: auto;
-            max-height: calc(100vh - 220px); z-index: 10;
-        }
-        .sidebar h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .chapter-list { list-style: none; padding: 0; margin: 0; }
-        .chapter-item {
-            padding: 8px 12px; margin-bottom: 2px; border-radius: 8px; cursor: pointer;
-            transition: all 0.3s; display: flex; justify-content: space-between;
-            align-items: center; font-size: 0.85rem;
-        }
-        .chapter-item:hover { background: rgba(231,111,0,0.1); }
-        .chapter-item.active { background: var(--accent-color); color: white; }
         .chapter-item.completed .ch-text { text-decoration: line-through; opacity: 0.7; }
         .chapter-item.active.completed .ch-text { text-decoration: none; opacity: 1; }
         .ch-icon { font-size: 0.85rem; }
-        .main-content { margin-left: 290px; }
-        .chapter-section {
-            background: var(--bg-card); border-radius: 15px; padding: 30px;
-            margin-bottom: 30px; box-shadow: var(--shadow-md); display: none;
-        }
-        .chapter-section.active { display: block; }
-        .chapter-section h2 { font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .chapter-section h3 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 12px; }
         .chapter-section h4 { font-size: 1.1rem; margin-top: 18px; margin-bottom: 8px; color: var(--text-secondary); }
-        .section-content { margin-bottom: 20px; color: var(--text-secondary); line-height: 1.8; }
-        .section-content ul, .section-content ol { padding-left: 20px; margin: 10px 0; }
-        .section-content li { margin-bottom: 6px; }
-        .section-content code { background: rgba(231,111,0,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .code-block {
-            background: var(--code-bg); color: #e2e8f0; padding: 20px;
-            border-radius: 12px; margin: 15px 0; overflow-x: auto; position: relative;
-        }
-        .code-block pre { margin: 0; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; font-size: 0.9rem; line-height: 1.6; }
-        .code-block code { color: inherit; }
-        .code-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #334155;
-        }
-        .code-lang { font-size: 0.85rem; color: #94a3b8; }
-        .code-actions { display: flex; gap: 8px; }
-        .code-btn {
-            background: rgba(255,255,255,0.1); border: none; color: #e2e8f0;
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.85rem;
-        }
-        .code-btn:hover { background: rgba(255,255,255,0.2); }
-        .error-block {
-            background: rgba(239,68,68,0.08); border-left: 4px solid var(--danger-color);
-            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
-        }
-        .error-block h4 { color: var(--danger-color); margin-top: 0; }
-        .error-block code { background: rgba(239,68,68,0.1); padding: 2px 5px; border-radius: 4px; }
-        .practice-section {
-            background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2);
-            border-radius: 15px; padding: 25px; margin: 20px 0;
-        }
-        .practice-section h4 { color: var(--success-color); margin-top: 0; }
-        .question { margin-bottom: 12px; font-weight: 500; }
-        .answer-input {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; margin-bottom: 12px;
-        }
-        .answer-textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; margin-bottom: 12px; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace;
-            min-height: 80px;
-        }
-        .answer-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-        .option-label {
-            display: flex; align-items: center; gap: 10px; padding: 10px;
-            background: var(--bg-secondary); border-radius: 10px; cursor: pointer;
-        }
-        .option-label:hover { background: rgba(231,111,0,0.1); }
-        .option-label input[type="radio"] { accent-color: var(--accent-color); }
-        .quiz-result { padding: 12px; border-radius: 10px; margin-top: 12px; display: none; align-items: center; gap: 8px; }
-        .quiz-result.correct { background: rgba(16,185,129,0.1); color: var(--success-color); display: flex; }
-        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--danger-color); display: flex; }
-        .show-answer-btn {
-            background: var(--bg-secondary); border: 1px solid var(--border-color);
-            padding: 8px 16px; border-radius: 8px; cursor: pointer;
-            color: var(--text-secondary); margin-top: 8px;
-        }
-        .show-answer-btn:hover { background: rgba(231,111,0,0.1); color: var(--accent-color); }
         .answer-box {
             background: rgba(231,111,0,0.08); border: 1px solid rgba(231,111,0,0.2);
             padding: 12px; border-radius: 10px; margin-top: 10px; display: none;
             font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; white-space: pre-wrap;
         }
         .answer-box.show { display: block; }
-        .note-section {
-            background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2);
-            border-radius: 15px; padding: 20px; margin: 20px 0;
-        }
-        .note-section h4 { color: var(--warning-color); margin-top: 0; }
-        .note-textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; min-height: 80px; margin-bottom: 10px;
-        }
         .save-note-btn {
             background: var(--warning-color); color: white; border: none;
             padding: 10px 20px; border-radius: 10px; cursor: pointer;
@@ -225,20 +98,8 @@
         .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
         .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
         .nav-btn-secondary:hover:not(:disabled) { background: rgba(231,111,0,0.1); color: var(--accent-color); }
-        .tip-box {
-            background: rgba(14,165,233,0.05); border-left: 4px solid #0ea5e9;
-            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
-        }
-        .toast {
-            position: fixed; bottom: 20px; right: 20px; padding: 12px 24px;
-            border-radius: 10px; color: white; font-size: 1rem; z-index: 9999; opacity: 0;
-        }
-        .toast.show { opacity: 1; background: var(--accent-color); }
         @media (max-width: 1024px) {
-            .sidebar { position: static; width: 100%; max-height: 200px; margin-bottom: 20px; }
-            .main-content { margin-left: 0; }
             .progress-bar-wrap { display: none; }
-            .search-box { width: 100%; }
         }
     </style>
 </head>

@@ -4,126 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript教程 - 编程语言学习平台</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="tutorial-style.css">
     <link rel="stylesheet" href="tutorial-features.css">
     <link rel="stylesheet" href="tutorial-extensions.css">
     <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a2e;
-            --text-secondary: #4a4a68;
-            --text-muted: #8a8a9a;
-            --accent-color: #667eea;
-            --success-color: #10b981;
-            --error-color: #ef4444;
-            --warning-color: #f59e0b;
-            --border-color: #e5e7eb;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-        }
-        [data-theme="dark"] {
-            --bg-primary: #0f0f23;
-            --bg-secondary: #1a1a2e;
-            --bg-card: #16213e;
-            --text-primary: #e4e4e7;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --accent-color: #818cf8;
-            --success-color: #34d399;
-            --error-color: #f87171;
-            --warning-color: #fbbf24;
-            --border-color: #3f3f5a;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        .header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white; padding: 40px 30px; border-radius: 20px;
-            margin-bottom: 30px; position: relative;
-        }
-        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-        .header h1 { font-size: 2.5rem; margin: 0; }
-        .header p { opacity: 0.9; font-size: 1.1rem; margin-top: 10px; }
+        /* JavaScript教程页面特有样式 */
+        :root { --error-color: var(--danger-color); }
+        .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; position: relative; z-index: 1; }
         .header-actions { display: flex; gap: 15px; align-items: center; }
-        .progress-bar { margin-top: 20px; height: 10px; background: rgba(255,255,255,0.3); border-radius: 5px; overflow: hidden; }
-        .progress-fill { height: 100%; background: white; border-radius: 5px; transition: width 0.5s ease; }
-        .progress-text { margin-top: 8px; font-size: 0.9rem; opacity: 0.9; }
         .main-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; }
-        .sidebar {
-            position: sticky; top: 20px; height: fit-content;
-            max-height: calc(100vh - 40px); overflow-y: auto;
-        }
-        .sidebar::-webkit-scrollbar { width: 6px; }
-        .sidebar::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-        .sidebar-card {
-            background: var(--bg-card); border-radius: 15px; padding: 20px;
-            box-shadow: var(--shadow-md); margin-bottom: 20px;
-        }
+        .sidebar-card { background: var(--bg-card); border-radius: 15px; padding: 20px; box-shadow: var(--shadow-md); margin-bottom: 20px; }
         .sidebar-card h3 { margin: 0 0 15px 0; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
-        .chapter-list { list-style: none; padding: 0; margin: 0; }
-        .chapter-item {
-            padding: 8px 10px; border-radius: 8px; cursor: pointer; margin-bottom: 2px;
-            transition: all 0.2s; display: flex; align-items: center; gap: 6px; font-size: 0.82rem;
-        }
-        .chapter-item:hover { background: var(--bg-secondary); }
-        .chapter-item.active { background: var(--accent-color); color: white; }
-        .chapter-item.completed::before { content: '✓'; color: var(--success-color); font-weight: bold; font-size: 0.75rem; flex-shrink: 0; }
-        .chapter-item.active.completed::before { color: white; }
-        .chapter-number { font-size: 0.75rem; opacity: 0.7; flex-shrink: 0; min-width: 20px; }
-        .chapter-title { font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .search-box {
-            width: 100%; padding: 12px 15px; border: 1px solid var(--border-color); border-radius: 10px;
-            background: var(--bg-secondary); color: var(--text-primary); font-size: 1rem;
-            box-sizing: border-box; margin-bottom: 15px;
-        }
-        .search-box::placeholder { color: var(--text-muted); }
-        .theme-toggle {
-            padding: 10px 18px; border: none; border-radius: 10px;
-            background: rgba(255,255,255,0.2); color: white; cursor: pointer;
-            font-size: 0.95rem; transition: all 0.2s; display: flex; align-items: center; gap: 8px;
-        }
-        .theme-toggle:hover { background: rgba(255,255,255,0.3); }
         .content-area { background: var(--bg-card); border-radius: 15px; padding: 30px; box-shadow: var(--shadow-md); }
-        .chapter-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border-color);
-            flex-wrap: wrap; gap: 15px;
-        }
+        .chapter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border-color); flex-wrap: wrap; gap: 15px; }
         .chapter-header h2 { font-size: 1.8rem; margin: 0; }
         .chapter-actions { display: flex; gap: 10px; }
-        .action-btn {
-            padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer;
-            font-size: 0.9rem; transition: all 0.2s; display: flex; align-items: center; gap: 5px;
-        }
-        .action-btn.favorite { background: var(--bg-secondary); color: var(--text-secondary); }
-        .action-btn.favorite.active { background: #fef3c7; color: #d97706; }
-        .action-btn.complete { background: var(--success-color); color: white; }
-        .action-btn.complete:hover { opacity: 0.9; }
+        .chapter-title { font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .section { margin-bottom: 35px; }
         .section h3 { font-size: 1.4rem; color: var(--accent-color); margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; }
         .section p { margin: 0 0 10px 0; color: var(--text-secondary); }
         .section ul { margin: 0; padding-left: 20px; color: var(--text-secondary); }
         .section li { margin-bottom: 8px; }
-        .code-block { background: #1e1e1e; border-radius: 10px; padding: 20px; margin: 15px 0; overflow-x: auto; position: relative; }
         .code-block.light { background: var(--bg-secondary); border: 1px solid var(--border-color); }
-        .code-block pre { margin: 0; color: #d4d4d4; font-family: 'Fira Code', 'Consolas', monospace; font-size: 0.86rem; line-height: 1.6; white-space: pre-wrap; word-break: break-all; }
         .code-block.light pre { color: var(--text-primary); }
-        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; color: #8a8a9a; font-size: 0.85rem; }
-        .code-lang { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 5px; }
         .copy-btn { background: rgba(255,255,255,0.1); border: none; color: #8a8a9a; padding: 5px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s; }
         .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
         .error-example { border-left: 4px solid var(--error-color); background: rgba(239, 68, 68, 0.1); padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
@@ -151,10 +55,6 @@
         .notes-textarea:focus { outline: none; border-color: var(--accent-color); }
         .notes-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px; }
         .nav-buttons { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 20px; border-top: 2px solid var(--border-color); }
-        .nav-btn { padding: 15px 30px; border: none; border-radius: 10px; background: var(--accent-color); color: white; cursor: pointer; font-size: 1rem; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
-        .nav-btn:hover { opacity: 0.9; }
-        .nav-btn.secondary { background: var(--bg-secondary); color: var(--text-secondary); }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .highlight-box { background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1)); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 10px; padding: 20px; margin: 15px 0; }
         .highlight-box strong { color: var(--accent-color); }
         .tips-box { background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning-color); padding: 15px 20px; border-radius: 0 10px 10px 0; margin: 15px 0; }
@@ -169,14 +69,9 @@
             .main-layout { grid-template-columns: 1fr; }
             .sidebar { position: static; max-height: none; }
             .chapter-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 5px; }
-            .header h1 { font-size: 1.8rem; }
             .content-area { padding: 20px; }
-            .chapter-header h2 { font-size: 1.4rem; }
         }
         @media (max-width: 600px) {
-            .container { padding: 10px; }
-            .header { padding: 25px 20px; }
-            .header h1 { font-size: 1.5rem; }
             .nav-btn { padding: 10px 18px; font-size: 0.9rem; }
             .chapter-list { grid-template-columns: 1fr; }
         }
