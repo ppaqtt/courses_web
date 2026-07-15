@@ -3,13 +3,14 @@
  * 包含：视频教程、语音朗读、代码历史、调试器、作业系统、代码审查、
  * 学习小组、知识点分析、学习曲线、推荐系统、API文档、代码模板、
  * 键盘快捷键、代码折叠、项目模板、代码挑战、自定义主题、学习目标
+ * 简洁专业设计风格 v3.0
  */
 
 /* ==================== 视频教程样式 ==================== */
 .video-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .video-card {
@@ -17,30 +18,31 @@
     gap: 15px;
     background: var(--bg-card);
     padding: 15px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background var(--transition-fast);
+    border: 1px solid var(--border-color);
 }
 
 .video-card:hover {
-    transform: translateX(5px);
-    box-shadow: var(--shadow-md);
+    background: var(--bg-hover);
 }
 
 .video-thumbnail {
     width: 120px;
     height: 70px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 8px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    border: 1px solid var(--border-color);
 }
 
 .play-icon {
     font-size: 2rem;
-    color: white;
+    color: var(--accent-color);
 }
 
 .video-duration {
@@ -50,7 +52,7 @@
     background: rgba(0,0,0,0.7);
     color: white;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.75rem;
 }
 
@@ -77,44 +79,49 @@
 }
 
 .video-player {
-    background: #1a1a2e;
-    border-radius: 10px;
+    background: var(--code-bg);
+    border-radius: var(--radius-md);
     padding: 40px;
     margin: 20px 0;
+    border: 1px solid var(--code-border);
 }
 
 .video-placeholder {
     text-align: center;
-    color: #d4d4d4;
+    color: var(--text-muted);
 }
 
 .big-play-icon {
     font-size: 4rem;
     margin-bottom: 15px;
+    color: var(--accent-color);
 }
 
 .video-url {
     font-size: 0.85rem;
-    color: #667eea;
+    color: var(--accent-color);
     margin-top: 10px;
 }
 
 /* ==================== 语音朗读按钮 ==================== */
 .speak-btn {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: white;
+    background: var(--success-color);
+    color: var(--text-inverse);
     border: none;
-    padding: 10px 20px;
-    border-radius: 25px;
+    padding: 8px 16px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: all 0.3s;
+    transition: background var(--transition-fast);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .speak-btn:hover {
-    transform: scale(1.05);
+    background: var(--success-color);
+    opacity: 0.9;
 }
 
 /* ==================== 代码执行历史 ==================== */
@@ -128,13 +135,14 @@
 .history-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .history-item {
     background: var(--bg-card);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
 }
 
 .history-meta {
@@ -145,10 +153,11 @@
 
 .history-lang {
     background: var(--accent-color);
-    color: white;
+    color: var(--text-inverse);
     padding: 3px 10px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .history-time {
@@ -159,20 +168,21 @@
 .history-code {
     background: var(--code-bg);
     color: var(--code-text);
-    padding: 10px;
-    border-radius: 6px;
+    padding: 12px;
+    border-radius: var(--radius-md);
     font-family: 'Consolas', monospace;
     font-size: 0.85rem;
     overflow-x: auto;
     max-height: 100px;
     overflow-y: auto;
+    border: 1px solid var(--code-border);
 }
 
 .history-output {
-    background: rgba(34, 197, 94, 0.1);
+    background: var(--success-bg);
     color: var(--success-color);
     padding: 10px;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     margin-top: 10px;
     font-family: 'Consolas', monospace;
     font-size: 0.85rem;
@@ -181,8 +191,9 @@
 /* ==================== 代码调试器 ==================== */
 .debugger-panel {
     background: var(--bg-card);
-    border-radius: 15px;
+    border-radius: var(--radius-lg);
     padding: 20px;
+    border: 1px solid var(--border-color);
 }
 
 .debugger-controls {
@@ -194,17 +205,19 @@
 .debug-btn {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    padding: 10px 15px;
-    border-radius: 8px;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.2s;
+    transition: all var(--transition-fast);
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .debug-btn:hover {
-    background: var(--accent-color);
-    color: white;
-    border-color: var(--accent-color);
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: #d1d5db;
 }
 
 .breakpoints-section, .variables-section {
@@ -214,6 +227,8 @@
 .breakpoints-section h4, .variables-section h4 {
     color: var(--text-primary);
     margin-bottom: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .breakpoints-list {
@@ -223,11 +238,12 @@
 }
 
 .breakpoint-item {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--error-color);
+    background: var(--danger-bg);
+    color: var(--danger-color);
     padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.85rem;
+    font-weight: 500;
 }
 
 .breakpoint-item button {
@@ -235,38 +251,40 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: var(--error-color);
+    color: var(--danger-color);
 }
 
 .variables-list {
     background: var(--bg-secondary);
     padding: 10px;
-    border-radius: 6px;
+    border-radius: var(--radius-md);
 }
 
 .variables-list div {
     padding: 5px 0;
     font-family: 'Consolas', monospace;
     font-size: 0.85rem;
+    color: var(--text-secondary);
 }
 
 /* ==================== 作业系统 ==================== */
 .assignments-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .assignment-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
     border-left: 4px solid var(--accent-color);
 }
 
 .assignment-card.completed {
     border-left-color: var(--success-color);
-    background: rgba(34, 197, 94, 0.05);
+    background: var(--success-bg);
 }
 
 .assignment-header {
@@ -278,14 +296,17 @@
 
 .assignment-header h4 {
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .assignment-points {
     background: var(--accent-color);
-    color: white;
+    color: var(--text-inverse);
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .assignment-meta {
@@ -301,8 +322,9 @@
 .review-form {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     margin-bottom: 20px;
+    border: 1px solid var(--border-color);
 }
 
 .review-form textarea {
@@ -310,22 +332,33 @@
     min-height: 100px;
     padding: 12px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--bg-secondary);
     color: var(--text-primary);
     margin-bottom: 10px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.review-form textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    background: var(--bg-card);
 }
 
 .reviews-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .review-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
 }
 
 .review-header {
@@ -336,10 +369,11 @@
 
 .review-lang {
     background: var(--accent-color);
-    color: white;
+    color: var(--text-inverse);
     padding: 3px 10px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .review-time {
@@ -351,31 +385,39 @@
     background: var(--code-bg);
     color: var(--code-text);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-family: 'Consolas', monospace;
     font-size: 0.85rem;
     overflow-x: auto;
     margin-bottom: 15px;
+    border: 1px solid var(--code-border);
 }
 
 .review-comments {
-    background: rgba(102, 126, 234, 0.1);
+    background: var(--info-bg);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text-primary);
+    border-left: 3px solid var(--info-color);
 }
 
 /* ==================== 学习小组 ==================== */
 .groups-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
+    gap: 12px;
 }
 
 .group-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.group-card:hover {
+    border-color: #d1d5db;
 }
 
 .group-header {
@@ -387,26 +429,31 @@
 
 .group-header h4 {
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .group-members {
     background: var(--bg-secondary);
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* ==================== 知识点掌握度 ==================== */
 .mastery-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .mastery-item {
     background: var(--bg-card);
     padding: 15px 20px;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
 }
 
 .mastery-header {
@@ -421,23 +468,23 @@
 }
 
 .mastery-value {
-    font-weight: bold;
+    font-weight: 600;
     color: var(--accent-color);
 }
 
 .mastery-bar {
     height: 8px;
     background: var(--bg-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-full);
     overflow: hidden;
     margin-bottom: 5px;
 }
 
 .mastery-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    border-radius: 4px;
-    transition: width 0.3s;
+    background: var(--accent-color);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
 }
 
 .mastery-level {
@@ -449,13 +496,16 @@
 .chart-container {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     margin-bottom: 20px;
+    border: 1px solid var(--border-color);
 }
 
 .chart-container h4 {
     color: var(--text-primary);
     margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .bar-chart {
@@ -476,10 +526,10 @@
 
 .bar {
     width: 40px;
-    background: linear-gradient(180deg, #667eea, #764ba2);
-    border-radius: 8px 8px 0 0;
+    background: var(--accent-color);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
     position: relative;
-    transition: height 0.5s;
+    transition: height 0.3s ease;
 }
 
 .bar-value {
@@ -489,6 +539,7 @@
     transform: translateX(-50%);
     font-size: 0.75rem;
     color: var(--text-primary);
+    font-weight: 500;
 }
 
 .bar-label {
@@ -517,14 +568,14 @@
     gap: 15px;
     background: var(--bg-card);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background var(--transition-fast);
+    border: 1px solid var(--border-color);
 }
 
 .recommendation-card:hover {
-    transform: translateX(5px);
-    box-shadow: var(--shadow-sm);
+    background: var(--bg-hover);
 }
 
 .rec-icon {
@@ -534,6 +585,8 @@
 .rec-content h4 {
     color: var(--text-primary);
     margin-bottom: 5px;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .rec-content p {
@@ -548,35 +601,46 @@
 
 .api-search input {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 14px;
     border: 1px solid var(--border-color);
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     background: var(--bg-secondary);
     color: var(--text-primary);
-    font-size: 1rem;
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+}
+
+.api-search input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    background-color: var(--bg-card);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .api-categories {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .api-category {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
 }
 
 .api-category h4 {
     color: var(--text-primary);
     margin-bottom: 15px;
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .api-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .api-item {
@@ -586,7 +650,12 @@
     gap: 10px;
     padding: 10px 15px;
     background: var(--bg-secondary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+}
+
+.api-item:hover {
+    background: var(--bg-hover);
 }
 
 .api-name {
@@ -603,20 +672,26 @@
 
 .api-desc {
     font-size: 0.9rem;
-    color: var(--text-primary);
+    color: var(--text-secondary);
 }
 
 /* ==================== 代码模板 ==================== */
 .templates-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
+    gap: 12px;
 }
 
 .template-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.template-card:hover {
+    border-color: #d1d5db;
 }
 
 .template-header {
@@ -635,17 +710,18 @@
     background: var(--code-bg);
     color: var(--code-text);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     font-family: 'Consolas', monospace;
     font-size: 0.85rem;
     overflow-x: auto;
+    border: 1px solid var(--code-border);
 }
 
 /* ==================== 键盘快捷键 ==================== */
 .shortcuts-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
 }
 
 .shortcut-item {
@@ -655,17 +731,20 @@
     gap: 5px;
     padding: 15px 25px;
     background: var(--bg-card);
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     min-width: 140px;
+    border: 1px solid var(--border-color);
 }
 
 .shortcut-key {
     background: var(--bg-secondary);
     padding: 8px 15px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-family: 'Consolas', monospace;
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .shortcut-action {
@@ -676,12 +755,19 @@
 /* ==================== 代码折叠 ==================== */
 .fold-btn {
     background: var(--bg-secondary);
-    border: none;
+    border: 1px solid var(--border-color);
     padding: 5px 10px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.8rem;
     margin-bottom: 5px;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+}
+
+.fold-btn:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
 }
 
 .code-block.collapsed {
@@ -698,19 +784,26 @@
     background: var(--bg-secondary);
     padding: 5px 10px;
     font-size: 0.8rem;
+    color: var(--text-muted);
 }
 
 /* ==================== 项目模板 ==================== */
 .project-templates {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
+    gap: 12px;
 }
 
 .project-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+}
+
+.project-card:hover {
+    border-color: #d1d5db;
 }
 
 .project-header {
@@ -722,27 +815,30 @@
 
 .project-header h4 {
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .project-difficulty {
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .project-difficulty.beginner {
-    background: rgba(34, 197, 94, 0.1);
+    background: var(--success-bg);
     color: var(--success-color);
 }
 
 .project-difficulty.intermediate {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: var(--warning-bg);
+    color: var(--warning-color);
 }
 
 .project-difficulty.advanced {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--error-color);
+    background: var(--danger-bg);
+    color: var(--danger-color);
 }
 
 .project-features {
@@ -755,28 +851,30 @@
 .feature-tag {
     background: var(--bg-secondary);
     padding: 4px 10px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.8rem;
+    color: var(--text-secondary);
 }
 
 /* ==================== 代码挑战 ==================== */
 .challenges-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 15px;
+    gap: 12px;
 }
 
 .challenge-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all var(--transition-fast);
+    border: 1px solid var(--border-color);
 }
 
 .challenge-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
+    border-color: #d1d5db;
+    background: var(--bg-hover);
 }
 
 .challenge-header {
@@ -788,27 +886,30 @@
 
 .challenge-header h4 {
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .challenge-difficulty {
     padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 500;
 }
 
 .challenge-difficulty.easy {
-    background: rgba(34, 197, 94, 0.1);
+    background: var(--success-bg);
     color: var(--success-color);
 }
 
 .challenge-difficulty.medium {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: var(--warning-bg);
+    color: var(--warning-color);
 }
 
 .challenge-difficulty.hard {
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--error-color);
+    background: var(--danger-bg);
+    color: var(--danger-color);
 }
 
 .challenge-modal {
@@ -818,7 +919,7 @@
 .test-cases {
     background: var(--bg-secondary);
     padding: 15px;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     margin: 15px 0;
 }
 
@@ -828,6 +929,7 @@
     padding: 8px 0;
     border-bottom: 1px solid var(--border-color);
     font-size: 0.9rem;
+    color: var(--text-secondary);
 }
 
 .test-case:last-child {
@@ -839,11 +941,18 @@
     min-height: 150px;
     padding: 15px;
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     background: var(--code-bg);
     color: var(--code-text);
     font-family: 'Consolas', monospace;
     font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.code-editor-small textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .challenge-result {
@@ -854,7 +963,7 @@
 .theme-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 12px;
 }
 
 .theme-card {
@@ -864,44 +973,48 @@
     gap: 10px;
     padding: 15px;
     background: var(--bg-card);
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     cursor: pointer;
     border: 2px solid transparent;
-    transition: all 0.3s;
+    transition: all var(--transition-fast);
 }
 
 .theme-card:hover {
     border-color: var(--border-color);
+    background: var(--bg-hover);
 }
 
 .theme-card.active {
     border-color: var(--accent-color);
+    background: var(--bg-active);
 }
 
 .theme-preview {
     width: 60px;
     height: 60px;
     border-radius: 50%;
+    border: 1px solid var(--border-color);
 }
 
 /* ==================== 学习目标 ==================== */
 .goals-list {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
     margin-top: 15px;
 }
 
 .goal-card {
     background: var(--bg-card);
     padding: 20px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
     border-left: 4px solid var(--accent-color);
 }
 
 .goal-card.completed {
     border-left-color: var(--success-color);
-    background: rgba(34, 197, 94, 0.05);
+    background: var(--success-bg);
 }
 
 .goal-header {
@@ -913,21 +1026,24 @@
 
 .goal-header h4 {
     color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
 }
 
 .goal-status {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: var(--radius-full);
+    font-weight: 500;
 }
 
 .goal-card .goal-status {
-    background: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background: var(--warning-bg);
+    color: var(--warning-color);
 }
 
 .goal-card.completed .goal-status {
-    background: rgba(34, 197, 94, 0.1);
+    background: var(--success-bg);
     color: var(--success-color);
 }
 
@@ -948,14 +1064,15 @@
     flex: 1;
     height: 8px;
     background: var(--bg-secondary);
-    border-radius: 4px;
+    border-radius: var(--radius-full);
     overflow: hidden;
 }
 
 .goal-progress .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    border-radius: 4px;
+    background: var(--accent-color);
+    border-radius: var(--radius-full);
+    transition: width 0.3s ease;
 }
 
 .goal-actions {
