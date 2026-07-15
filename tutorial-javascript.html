@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript教程 - 编程语言学习平台</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="tutorial-style.css">
-    <link rel="stylesheet" href="tutorial-features.css">
-    <link rel="stylesheet" href="tutorial-extensions.css">
+    <link rel="stylesheet" href="css/tutorial-style.css">
+    <link rel="stylesheet" href="css/tutorial-features.css">
+    <link rel="stylesheet" href="css/tutorial-extensions.css">
     <style>
         /* JavaScript教程页面特有样式 */
         :root { --error-color: var(--danger-color); }
@@ -124,8 +124,8 @@
         <div class="search-results" id="searchResults"></div>
     </div>
 
-    <script src="tutorial-common.js"></script>
-    <script src="tutorial-extensions.js"></script>
+    <script src="js/tutorial-common.js"></script>
+    <script src="js/tutorial-extensions.js"></script>
     <script>
     const chapters = [
         {id:1,title:'JavaScript简介',icon:'🚀',content:{intro:'<p>JavaScript（简称JS）是一种轻量级、解释型的编程语言，最初被设计用于为网页添加交互功能。如今，JavaScript已发展成为一种全栈语言，不仅运行在浏览器端，还可以通过Node.js在服务器端运行。</p>',points:['JavaScript由Brendan Eich于1995年创建，最初命名为Mocha，后改为LiveScript，最终定名JavaScript','JavaScript与Java是两种完全不同的语言，虽然名称相似但设计理念不同','JavaScript是Web开发的三大核心技术之一（HTML、CSS、JavaScript）','JavaScript是一种动态类型、基于原型的多范式语言，支持面向对象、函数式和事件驱动编程','ECMAScript是JavaScript的标准化规范，ES6（2015）是重要的版本里程碑'],codeExample:`// JavaScript简介示例\nconsole.log("Hello, JavaScript!");\nconsole.log("当前时间:", new Date().toLocaleString());\n\n// 面向对象\nclass Animal {\n    constructor(name) { this.name = name; }\n    speak() { return "我是" + this.name; }\n}\n\n// 函数式\nconst numbers = [1, 2, 3, 4, 5];\nconst doubled = numbers.map(n => n * 2);\nconsole.log("函数式编程:", doubled);`,errorExample:{code:`// 错误示例：混淆JavaScript和Java\n// Java代码（不能在浏览器中运行）\npublic class Hello {\n    public static void main(String[] args) {\n        System.out.println("Hello");\n    }\n}\n// JavaScript代码（可以在浏览器中运行）\nconsole.log("Hello");`,message:'JavaScript和Java是两种完全不同的语言。JavaScript是脚本语言，主要运行在浏览器中；Java是编译型语言，需要JVM运行。不要因为名称相似而混淆它们。'},quiz:{type:'multiple',question:'JavaScript最初被设计用于什么目的？',options:['服务器端编程','网页交互功能','移动应用开发','数据库管理'],answer:1},answer:'正确答案：网页交互功能。JavaScript最初由Netscape公司开发，目的是为网页添加动态交互功能，使网页不再是静态的文档。'}},
