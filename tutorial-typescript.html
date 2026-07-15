@@ -5,242 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TypeScript教程 - 从零开始学习TypeScript编程</title>
     <link rel="stylesheet" href="css/tutorial-style.css">
-    <link rel="stylesheet" href="css/tutorial-features.css">
-    <link rel="stylesheet" href="css/tutorial-extensions.css">
-    <style>
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
-            --accent-color: #3178c6;
-            --accent-hover: #2868b0;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-            --code-bg: #1e293b;
-        }
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --accent-color: #4a9eff;
-            --accent-hover: #3178c6;
-            --success-color: #34d399;
-            --warning-color: #fbbf24;
-            --danger-color: #f87171;
-            --border-color: #334155;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
-            --code-bg: #0f172a;
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .header {
-            background: linear-gradient(135deg, #3178c6, #235a97);
-            color: white; padding: 40px 20px; border-radius: 20px;
-            margin-bottom: 30px; text-align: center;
-        }
-        .header h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        .header p { opacity: 0.9; font-size: 1.1rem; }
-        .toolbar {
-            display: flex; flex-wrap: wrap; gap: 10px; background: var(--bg-card);
-            padding: 15px; border-radius: 15px; margin-bottom: 30px;
-            box-shadow: var(--shadow-md); align-items: center;
-        }
-        .toolbar-left { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
-        .toolbar-right { display: flex; gap: 10px; }
-        .search-box {
-            padding: 10px 15px; border: 1px solid var(--border-color);
-            border-radius: 25px; background: var(--bg-secondary);
-            color: var(--text-primary); width: 300px; font-size: 1rem; outline: none;
-        }
-        .search-box:focus { border-color: var(--accent-color); }
-        .btn {
-            padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer;
-            font-size: 1rem; transition: all 0.3s; display: flex; align-items: center; gap: 8px;
-        }
-        .btn-primary { background: var(--accent-color); color: white; }
-        .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
-        .btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .btn-secondary:hover { background: rgba(49,120,198,0.1); color: var(--accent-color); }
-        .progress-bar-wrap {
-            flex: 1; height: 8px; background: var(--bg-secondary);
-            border-radius: 10px; overflow: hidden; margin: 0 20px; min-width: 100px;
-        }
-        .progress-fill {
-            height: 100%; background: linear-gradient(90deg, #3178c6, #235a97);
-            border-radius: 10px; transition: width 0.3s ease;
-        }
-        .sidebar {
-            position: fixed; left: 20px; top: 200px; width: 260px;
-            background: var(--bg-card); border-radius: 15px; padding: 20px;
-            box-shadow: var(--shadow-md); overflow-y: auto;
-            max-height: calc(100vh - 220px); z-index: 10;
-        }
-        .sidebar h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
-        .chapter-list { list-style: none; padding: 0; margin: 0; }
-        .chapter-item {
-            padding: 8px 12px; margin-bottom: 2px; border-radius: 8px; cursor: pointer;
-            transition: all 0.3s; display: flex; justify-content: space-between;
-            align-items: center; font-size: 0.85rem;
-        }
-        .chapter-item:hover { background: rgba(49,120,198,0.1); }
-        .chapter-item.active { background: var(--accent-color); color: white; }
-        .chapter-item.completed .ch-text { text-decoration: line-through; opacity: 0.7; }
-        .chapter-item.active.completed .ch-text { text-decoration: none; opacity: 1; }
-        .ch-icon { font-size: 0.85rem; }
-        .main-content { margin-left: 290px; }
-        .chapter-section {
-            background: var(--bg-card); border-radius: 15px; padding: 30px;
-            margin-bottom: 30px; box-shadow: var(--shadow-md); display: none;
-        }
-        .chapter-section.active { display: block; }
-        .chapter-section h2 { font-size: 1.8rem; margin-bottom: 20px; display: flex; align-items: center; gap: 15px; }
-        .chapter-section h3 { font-size: 1.3rem; margin-top: 25px; margin-bottom: 12px; }
-        .chapter-section h4 { font-size: 1.1rem; margin-top: 18px; margin-bottom: 8px; color: var(--text-secondary); }
-        .section-content { margin-bottom: 20px; color: var(--text-secondary); line-height: 1.8; }
-        .section-content ul, .section-content ol { padding-left: 20px; margin: 10px 0; }
-        .section-content li { margin-bottom: 6px; }
-        .section-content code { background: rgba(49,120,198,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-        .code-block {
-            background: var(--code-bg); color: #e2e8f0; padding: 20px;
-            border-radius: 12px; margin: 15px 0; overflow-x: auto; position: relative;
-        }
-        .code-block pre { margin: 0; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; font-size: 0.9rem; line-height: 1.6; }
-        .code-block code { color: inherit; }
-        .code-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #334155;
-        }
-        .code-lang { font-size: 0.85rem; color: #94a3b8; }
-        .code-actions { display: flex; gap: 8px; }
-        .code-btn {
-            background: rgba(255,255,255,0.1); border: none; color: #e2e8f0;
-            padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.85rem;
-        }
-        .code-btn:hover { background: rgba(255,255,255,0.2); }
-        .error-block {
-            background: rgba(239,68,68,0.08); border-left: 4px solid var(--danger-color);
-            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
-        }
-        .error-block h4 { color: var(--danger-color); margin-top: 0; }
-        .error-block code { background: rgba(239,68,68,0.1); padding: 2px 5px; border-radius: 4px; }
-        .practice-section {
-            background: rgba(16,185,129,0.05); border: 1px solid rgba(16,185,129,0.2);
-            border-radius: 15px; padding: 25px; margin: 20px 0;
-        }
-        .practice-section h4 { color: var(--success-color); margin-top: 0; }
-        .question { margin-bottom: 12px; font-weight: 500; }
-        .answer-input {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; margin-bottom: 12px;
-        }
-        .answer-textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; margin-bottom: 12px; font-family: 'Monaco','Menlo','Ubuntu Mono',monospace;
-            min-height: 80px;
-        }
-        .answer-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-        .option-label {
-            display: flex; align-items: center; gap: 10px; padding: 10px;
-            background: var(--bg-secondary); border-radius: 10px; cursor: pointer;
-        }
-        .option-label:hover { background: rgba(49,120,198,0.1); }
-        .option-label input[type="radio"] { accent-color: var(--accent-color); }
-        .quiz-result { padding: 12px; border-radius: 10px; margin-top: 12px; display: none; align-items: center; gap: 8px; }
-        .quiz-result.correct { background: rgba(16,185,129,0.1); color: var(--success-color); display: flex; }
-        .quiz-result.incorrect { background: rgba(239,68,68,0.1); color: var(--danger-color); display: flex; }
-        .show-answer-btn {
-            background: var(--bg-secondary); border: 1px solid var(--border-color);
-            padding: 8px 16px; border-radius: 8px; cursor: pointer;
-            color: var(--text-secondary); margin-top: 8px;
-        }
-        .show-answer-btn:hover { background: rgba(49,120,198,0.1); color: var(--accent-color); }
-        .answer-box {
-            background: rgba(49,120,198,0.08); border: 1px solid rgba(49,120,198,0.2);
-            padding: 12px; border-radius: 10px; margin-top: 10px; display: none;
-            font-family: 'Monaco','Menlo','Ubuntu Mono',monospace; white-space: pre-wrap;
-        }
-        .answer-box.show { display: block; }
-        .note-section {
-            background: rgba(245,158,11,0.05); border: 1px solid rgba(245,158,11,0.2);
-            border-radius: 15px; padding: 20px; margin: 20px 0;
-        }
-        .note-section h4 { color: var(--warning-color); margin-top: 0; }
-        .note-textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--border-color);
-            border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary);
-            font-size: 1rem; min-height: 80px; margin-bottom: 10px;
-        }
-        .save-note-btn {
-            background: var(--warning-color); color: white; border: none;
-            padding: 10px 20px; border-radius: 10px; cursor: pointer;
-        }
-        .save-note-btn:hover { opacity: 0.9; }
-        .bookmark-btn {
-            float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer;
-        }
-        .bookmark-btn:hover { transform: scale(1.2); }
-        .bookmark-btn.bookmarked { color: #f59e0b; }
-        .completion-btn {
-            background: var(--success-color); color: white; border: none;
-            padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 20px;
-        }
-        .completion-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .completion-btn.completed { background: var(--text-muted); cursor: not-allowed; }
-        .stats-info {
-            display: flex; gap: 30px; margin-bottom: 20px; padding: 20px;
-            background: var(--bg-card); border-radius: 15px; box-shadow: var(--shadow-md); flex-wrap: wrap;
-        }
-        .stat-item { text-align: center; flex: 1; min-width: 80px; }
-        .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); }
-        .stat-label { font-size: 0.85rem; color: var(--text-muted); margin-top: 5px; }
-        .nav-buttons { display: flex; justify-content: space-between; margin-top: 30px; gap: 10px; }
-        .nav-btn {
-            padding: 12px 25px; border: none; border-radius: 10px; cursor: pointer;
-            font-size: 1rem; display: flex; align-items: center; gap: 10px;
-        }
-        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .nav-btn-primary { background: var(--accent-color); color: white; }
-        .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
-        .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .nav-btn-secondary:hover:not(:disabled) { background: rgba(49,120,198,0.1); color: var(--accent-color); }
-        .tip-box {
-            background: rgba(14,165,233,0.05); border-left: 4px solid #0ea5e9;
-            padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;
-        }
-        .toast {
-            position: fixed; bottom: 20px; right: 20px; padding: 12px 24px;
-            border-radius: 10px; color: white; font-size: 1rem; z-index: 9999; opacity: 0;
-        }
-        .toast.show { opacity: 1; background: var(--accent-color); }
-        @media (max-width: 1024px) {
-            .sidebar { position: static; width: 100%; max-height: 200px; margin-bottom: 20px; }
-            .main-content { margin-left: 0; }
-            .progress-bar-wrap { display: none; }
-            .search-box { width: 100%; }
-        }
-    </style>
 </head>
 <body data-language="typescript">
     <div class="container">
@@ -254,7 +18,7 @@
                 <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
                 <button class="btn btn-secondary" onclick="toggleTheme()">🌙 <span id="themeText">深色模式</span></button>
             </div>
-            <div class="progress-bar-wrap">
+            <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
             <div class="toolbar-right">
@@ -263,20 +27,24 @@
             </div>
         </div>
 
-        <div class="stats-info">
-            <div class="stat-item">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📚</div>
                 <div class="stat-value" id="completedCount">0</div>
                 <div class="stat-label">已完成章节</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
+                <div class="stat-icon">📖</div>
                 <div class="stat-value" id="totalCount">35</div>
                 <div class="stat-label">总章节数</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
                 <div class="stat-value" id="progressPercent">0%</div>
                 <div class="stat-label">学习进度</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
                 <div class="stat-value" id="bookmarkCount">0</div>
                 <div class="stat-label">收藏章节</div>
             </div>
@@ -340,7 +108,7 @@ console.log(message);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(1)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn1" onclick="markCompleted(1)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" disabled>◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(2)">下一章 ▶</button>
                 </div>
@@ -403,7 +171,7 @@ tsc --init</code></pre>
                     <button class="save-note-btn" onclick="saveNote(2)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn2" onclick="markCompleted(2)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(1)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(3)">下一章 ▶</button>
                 </div>
@@ -459,7 +227,7 @@ console.log(greet(user));
                     <button class="save-note-btn" onclick="saveNote(3)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn3" onclick="markCompleted(3)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(2)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(4)">下一章 ▶</button>
                 </div>
@@ -524,7 +292,7 @@ console.log(greet(user));
                     <button class="save-note-btn" onclick="saveNote(4)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn4" onclick="markCompleted(4)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(3)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(5)">下一章 ▶</button>
                 </div>
@@ -593,7 +361,7 @@ console.log(`${name}, 年龄: ${age}, 活跃: ${isActive}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(5)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn5" onclick="markCompleted(5)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(4)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(6)">下一章 ▶</button>
                 </div>
@@ -659,7 +427,7 @@ let point: Coordinate = [10, 20];</div>
                     <button class="save-note-btn" onclick="saveNote(6)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn6" onclick="markCompleted(6)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(5)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(7)">下一章 ▶</button>
                 </div>
@@ -731,7 +499,7 @@ console.log(`方向: ${dir}, 角色: ${role}, 颜色值: ${c}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(7)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn7" onclick="markCompleted(7)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(6)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(8)">下一章 ▶</button>
                 </div>
@@ -800,7 +568,7 @@ processValue(3.14159);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(8)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn8" onclick="markCompleted(8)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(7)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(9)">下一章 ▶</button>
                 </div>
@@ -874,7 +642,7 @@ console.log(getArea("circle"));</code></pre>
                     <button class="save-note-btn" onclick="saveNote(9)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn9" onclick="markCompleted(9)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(8)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(10)">下一章 ▶</button>
                 </div>
@@ -940,7 +708,7 @@ console.log(`字符串长度: ${strLength}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(10)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn10" onclick="markCompleted(10)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(9)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(11)">下一章 ▶</button>
                 </div>
@@ -1014,7 +782,7 @@ console.log(`用户: ${user.name}, 配置: ${config.name}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(11)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn11" onclick="markCompleted(11)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(10)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(12)">下一章 ▶</button>
                 </div>
@@ -1082,7 +850,7 @@ const ro: ReadOnlyUser = { name: "A", age: 20 };
                     <button class="save-note-btn" onclick="saveNote(12)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn12" onclick="markCompleted(12)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(11)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(13)">下一章 ▶</button>
                 </div>
@@ -1163,7 +931,7 @@ myDog.bark();</code></pre>
                     <button class="save-note-btn" onclick="saveNote(13)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn13" onclick="markCompleted(13)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(12)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(14)">下一章 ▶</button>
                 </div>
@@ -1242,7 +1010,7 @@ console.log(sum(1, 2, 3, 4)); // 10</code></pre>
                     <button class="save-note-btn" onclick="saveNote(14)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn14" onclick="markCompleted(14)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(13)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(15)">下一章 ▶</button>
                 </div>
@@ -1302,7 +1070,7 @@ class Report implements Printable {
 }
 
 const s = new Student("小明", 18, "高三");
-console.log(s.greet || s.name);</code></pre>
+console.log(s.name);</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
@@ -1326,7 +1094,7 @@ console.log(s.greet || s.name);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(15)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn15" onclick="markCompleted(15)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(14)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(16)">下一章 ▶</button>
                 </div>
@@ -1338,10 +1106,10 @@ console.log(s.greet || s.name);</code></pre>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>public：</strong>默认修饰符，任何地方都可以访问</li>
-                        <li><strong>private：</strong>只在类内部可访问，子类和外部都不能访问</li>
-                        <li><strong>protected：</strong>类内部和子类可访问，外部不可访问</li>
-                        <li><strong>readonly：</strong>修饰属性为只读，只能在声明时或构造函数中赋值</li>
+                        <li><strong>public：</strong>默认修饰符，属性和方法可以在类内外访问</li>
+                        <li><strong>private：</strong>只能在类内部访问，子类和外部都不能访问</li>
+                        <li><strong>protected：</strong>可以在类内部和子类中访问，外部不能访问</li>
+                        <li><strong>readonly：</strong>只读属性，只能在构造函数中初始化，之后不可修改</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1351,53 +1119,55 @@ console.log(s.greet || s.name);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch16-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch16-code1"><code>class BankAccount {
-    public owner: string;        // 公开
-    private balance: number;     // 私有
-    protected accountId: string; // 受保护
-    readonly createdAt: Date;    // 只读
+                    <pre id="ch16-code1"><code>class User {
+    public name: string;
+    private password: string;
+    protected email: string;
+    readonly id: number;
 
-    constructor(owner: string, balance: number) {
-        this.owner = owner;
-        this.balance = balance;
-        this.accountId = `ACC-${Date.now()}`;
-        this.createdAt = new Date();
+    constructor(name: string, password: string, email: string, id: number) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.id = id;
     }
 
-    public getBalance(): number {
-        return this.balance; // 内部可以访问private
-    }
-
-    public deposit(amount: number): void {
-        if (amount > 0) this.balance += amount;
+    getInfo() {
+        return `${this.name}, ${this.email}, ${this.password}`;
     }
 }
 
-class SavingsAccount extends BankAccount {
-    constructor(owner: string, balance: number) {
-        super(owner, balance);
-        // this.balance; // 错误：private不可在子类访问
-        console.log(this.accountId); // OK：protected可以在子类访问
+class Admin extends User {
+    constructor(name: string, password: string, email: string, id: number) {
+        super(name, password, email, id);
+    }
+
+    getAdminInfo() {
+        return `${this.name}, ${this.email}`;
     }
 }
 
-const acc = new BankAccount("张三", 1000);
-console.log(acc.owner);        // OK
-// console.log(acc.balance);   // 错误：private不可外部访问</code></pre>
+const user = new User("张三", "123456", "z@example.com", 1);
+console.log(user.name);      // OK
+console.log(user.getInfo()); // OK</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>外部访问private：</strong><code>acc.balance</code> 报错，private成员只能通过公开方法间接访问</p>
-                    <p><strong>混淆private和protected：</strong>private子类也不能访问，protected子类可以访问</p>
+                    <p><strong>访问private属性：</strong><code>user.password</code> 会报错，private属性只能在类内部访问</p>
+                    <p><strong>混淆protected和private：</strong>protected可以在子类中访问，private不行</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 哪个访问修饰符允许子类访问但不允许外部访问？</div>
-                    <input type="text" class="answer-input" id="ch16-q1" placeholder="输入答案...">
+                    <div class="question">1. 以下哪个修饰符允许子类访问但不允许外部访问？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch16-q1" value="A"> A. public</label>
+                        <label class="option-label"><input type="radio" name="ch16-q1" value="B"> B. private</label>
+                        <label class="option-label"><input type="radio" name="ch16-q1" value="C"> C. protected</label>
+                    </div>
                     <button class="btn btn-primary" onclick="checkAnswer(16,1)">检查答案</button>
                     <div id="ch16-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(16,1)">查看答案</button>
-                    <div id="ch16-answer1" class="answer-box">protected</div>
+                    <div id="ch16-answer1" class="answer-box">C. protected（protected可以在类内部和子类中访问，外部不能访问）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1405,22 +1175,22 @@ console.log(acc.owner);        // OK
                     <button class="save-note-btn" onclick="saveNote(16)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn16" onclick="markCompleted(16)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(15)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(17)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第17章 继承与重写 -->
+            <!-- 第17章 类继承 -->
             <div id="ch17" class="chapter-section">
-                <h2>17. 继承与重写 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
+                <h2>17. 类继承 <button class="bookmark-btn" onclick="toggleBookmark(17)" id="bookmarkBtn17">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>类继承：</strong>使用 <code>extends</code> 继承父类，子类获得父类所有public和protected成员</li>
-                        <li><strong>方法重写：</strong>子类可以重写父类方法，使用 <code>super</code> 调用父类版本</li>
-                        <li><strong>构造函数重写：</strong>子类构造函数必须调用 <code>super()</code>，且在使用this之前</li>
-                        <li><strong>类型兼容性：</strong>子类实例可以赋值给父类类型的变量（里氏替换原则）</li>
+                        <li><strong>extends关键字：</strong>使用 <code>extends</code> 创建子类，继承父类的属性和方法</li>
+                        <li><strong>super关键字：</strong>调用父类的构造函数和方法，必须在构造函数中先调用 <code>super()</code></li>
+                        <li><strong>方法重写：</strong>子类可以重写父类的方法，使用相同方法名但不同实现</li>
+                        <li><strong>多态：</strong>父类引用指向子类对象，调用方法时执行子类的实现</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1430,54 +1200,55 @@ console.log(acc.owner);        // OK
                             <button class="code-btn" onclick="copyCode('ch17-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch17-code1"><code>class Animal {
-    constructor(public name: string) {}
+                    <pre id="ch17-code1"><code>// 父类
+class Animal {
+    constructor(protected name: string) {}
 
-    move(distance: number = 0): void {
-        console.log(`${this.name} 移动了 ${distance} 米`);
+    speak(): string {
+        return `${this.name}发出声音`;
     }
 }
 
-class Snake extends Animal {
-    constructor(name: string) {
-        super(name); // 必须先调用super
-    }
-
-    move(distance: number = 5): void {
-        console.log("滑行中...");
-        super.move(distance); // 调用父类方法
-    }
-}
-
-class Horse extends Animal {
-    constructor(name: string) {
+// 子类 - Dog
+class Dog extends Animal {
+    constructor(name: string, public breed: string) {
         super(name);
     }
 
-    move(distance: number = 50): void {
-        console.log("奔跑中...");
-        super.move(distance);
+    speak(): string {
+        return `${this.name}汪汪叫`;
     }
 }
 
-const sam = new Snake("小蛇");
-const tom: Animal = new Horse("大马"); // 里氏替换
-sam.move();
-tom.move(100);</code></pre>
+// 子类 - Cat
+class Cat extends Animal {
+    speak(): string {
+        return `${this.name}喵喵叫`;
+    }
+}
+
+// 多态
+const animals: Animal[] = [
+    new Dog("旺财", "金毛"),
+    new Cat("咪咪"),
+    new Animal("未知动物")
+];
+
+animals.forEach(animal => console.log(animal.speak()));</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>忘记super()：</strong>子类构造函数中使用this前必须先调用 <code>super()</code></p>
-                    <p><strong>重写签名不兼容：</strong>子类方法参数类型必须兼容父类（协变/逆变规则）</p>
+                    <p><strong>忘记调用super：</strong>子类构造函数中必须先调用 <code>super()</code> 再使用 <code>this</code></p>
+                    <p><strong>访问父类private属性：</strong>子类不能访问父类的private属性，应使用protected</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 子类构造函数中使用this之前必须先调用什么？</div>
+                    <div class="question">1. 子类构造函数中必须先调用什么？</div>
                     <input type="text" class="answer-input" id="ch17-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(17,1)">检查答案</button>
                     <div id="ch17-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(17,1)">查看答案</button>
-                    <div id="ch17-answer1" class="answer-box">super()（必须在使用this之前调用）</div>
+                    <div id="ch17-answer1" class="answer-box">super()（调用父类的构造函数）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1485,22 +1256,22 @@ tom.move(100);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(17)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn17" onclick="markCompleted(17)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(16)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(18)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第18章 抽象类 -->
+            <!-- 第18章 静态属性与方法 -->
             <div id="ch18" class="chapter-section">
-                <h2>18. 抽象类 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
+                <h2>18. 静态属性与方法 <button class="bookmark-btn" onclick="toggleBookmark(18)" id="bookmarkBtn18">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>抽象类定义：</strong>使用 <code>abstract</code> 修饰的类，不能直接实例化，只能被继承</li>
-                        <li><strong>抽象方法：</strong>只有签名没有实现，子类必须实现所有抽象方法</li>
-                        <li><strong>具体方法：</strong>抽象类也可以包含具体实现，子类可以直接使用或重写</li>
-                        <li><strong>与接口的区别：</strong>抽象类可以有实现代码，接口只有声明；类只能继承一个抽象类，但可实现多个接口</li>
+                        <li><strong>静态成员：</strong>使用 <code>static</code> 修饰，属于类本身而非实例</li>
+                        <li><strong>访问方式：</strong>通过类名访问 <code>ClassName.staticMember</code>，而非实例</li>
+                        <li><strong>用途：</strong>工具方法、全局计数器、工厂方法等不需要实例化就能使用的功能</li>
+                        <li><strong>静态属性：</strong>所有实例共享同一个静态属性值</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1510,26 +1281,94 @@ tom.move(100);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch18-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch18-code1"><code>abstract class Shape {
-    constructor(public color: string) {}
+                    <pre id="ch18-code1"><code>class Counter {
+    static count: number = 0;
 
-    // 抽象方法 - 子类必须实现
-    abstract getArea(): number;
-    abstract getPerimeter(): number;
+    constructor() {
+        Counter.count++;
+    }
 
-    // 具体方法 - 子类可直接使用
-    describe(): string {
-        return `这是一个${this.color}的形状，面积=${this.getArea().toFixed(2)}`;
+    static getCount(): number {
+        return Counter.count;
     }
 }
 
+const c1 = new Counter();
+const c2 = new Counter();
+const c3 = new Counter();
+
+console.log(Counter.count);      // 3
+console.log(Counter.getCount()); // 3
+
+class Person {
+    private constructor(public name: string) {}
+
+    static create(name: string): Person {
+        return new Person(name);
+    }
+}
+
+const p = Person.create("张三");
+console.log(p.name);</code></pre>
+                </div>
+                <div class="error-block">
+                    <h4>❌ 常见错误</h4>
+                    <p><strong>通过实例访问静态成员：</strong><code>c1.count</code> 会报错，静态成员只能通过类名访问</p>
+                    <p><strong>静态方法中使用this：</strong>静态方法中的this指向类本身，而非实例</p>
+                </div>
+                <div class="practice-section">
+                    <h4>📝 练习题</h4>
+                    <div class="question">1. 如何访问静态属性？</div>
+                    <input type="text" class="answer-input" id="ch18-q1" placeholder="输入答案...">
+                    <button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button>
+                    <div id="ch18-result1" class="quiz-result"></div>
+                    <button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button>
+                    <div id="ch18-answer1" class="answer-box">通过类名访问（如 ClassName.staticProperty），而非通过实例</div>
+                </div>
+                <div class="note-section">
+                    <h4>📒 学习笔记</h4>
+                    <textarea class="note-textarea" id="ch18-note" placeholder="记录你的学习笔记..."></textarea>
+                    <button class="save-note-btn" onclick="saveNote(18)">保存笔记</button>
+                </div>
+                <button class="completion-btn" id="completeBtn18" onclick="markCompleted(18)">✅ 标记为已完成</button>
+                <div class="chapter-nav">
+                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(17)">◀ 上一章</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(19)">下一章 ▶</button>
+                </div>
+            </div>
+
+            <!-- 第19章 抽象类 -->
+            <div id="ch19" class="chapter-section">
+                <h2>19. 抽象类 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
+                <div class="section-content">
+                    <h3>📖 知识点讲解</h3>
+                    <ul>
+                        <li><strong>抽象类：</strong>使用 <code>abstract</code> 修饰，不能直接实例化，只能被继承</li>
+                        <li><strong>抽象方法：</strong>使用 <code>abstract</code> 修饰，只有声明没有实现，子类必须实现</li>
+                        <li><strong>抽象属性：</strong>使用 <code>abstract</code> 修饰，子类必须实现</li>
+                        <li><strong>用途：</strong>定义基类的接口规范，确保子类实现特定方法</li>
+                    </ul>
+                </div>
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch19-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch19-code1"><code>// 抽象类
+abstract class Shape {
+    abstract getArea(): number;
+    abstract getPerimeter(): number;
+}
+
 class Circle extends Shape {
-    constructor(color: string, public radius: number) {
-        super(color);
+    constructor(private radius: number) {
+        super();
     }
 
     getArea(): number {
-        return Math.PI * this.radius ** 2;
+        return Math.PI * this.radius * this.radius;
     }
 
     getPerimeter(): number {
@@ -1538,8 +1377,8 @@ class Circle extends Shape {
 }
 
 class Rectangle extends Shape {
-    constructor(color: string, public width: number, public height: number) {
-        super(color);
+    constructor(private width: number, private height: number) {
+        super();
     }
 
     getArea(): number {
@@ -1551,94 +1390,25 @@ class Rectangle extends Shape {
     }
 }
 
-const circle = new Circle("红色", 5);
-console.log(circle.describe());</code></pre>
+const circle = new Circle(5);
+console.log(circle.getArea()); // ~78.54</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>直接实例化抽象类：</strong><code>new Shape("红")</code> 报错，抽象类不能直接实例化</p>
-                    <p><strong>未实现抽象方法：</strong>子类如果不实现所有抽象方法，自身也必须声明为abstract</p>
+                    <p><strong>实例化抽象类：</strong><code>new Shape()</code> 会报错，抽象类不能被直接实例化</p>
+                    <p><strong>子类未实现抽象方法：</strong>子类必须实现父类的所有抽象方法，否则报错</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 抽象类和接口的主要区别是什么？</div>
-                    <input type="text" class="answer-input" id="ch18-q1" placeholder="输入答案...">
-                    <button class="btn btn-primary" onclick="checkAnswer(18,1)">检查答案</button>
-                    <div id="ch18-result1" class="quiz-result"></div>
-                    <button class="show-answer-btn" onclick="toggleAnswer(18,1)">查看答案</button>
-                    <div id="ch18-answer1" class="answer-box">抽象类可以包含具体实现代码，接口只有声明；类只能继承一个抽象类但可实现多个接口</div>
-                </div>
-                <div class="note-section">
-                    <h4>📒 学习笔记</h4>
-                    <textarea class="note-textarea" id="ch18-note" placeholder="记录你的学习笔记..."></textarea>
-                    <button class="save-note-btn" onclick="saveNote(18)">保存笔记</button>
-                </div>
-                <button class="completion-btn" id="completeBtn18" onclick="markCompleted(18)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
-                    <button class="nav-btn nav-btn-secondary" onclick="goToChapter(17)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(19)">下一章 ▶</button>
-                </div>
-            </div>
-
-            <!-- 第19章 泛型函数 -->
-            <div id="ch19" class="chapter-section">
-                <h2>19. 泛型函数 <button class="bookmark-btn" onclick="toggleBookmark(19)" id="bookmarkBtn19">📌</button></h2>
-                <div class="section-content">
-                    <h3>📖 知识点讲解</h3>
-                    <ul>
-                        <li><strong>泛型函数：</strong>使用类型参数 <code>&lt;T&gt;</code> 定义可复用的类型安全函数，T在调用时确定</li>
-                        <li><strong>多个类型参数：</strong>可以定义多个类型参数 <code>&lt;T, U&gt;</code>，适用于多参数函数</li>
-                        <li><strong>类型推断：</strong>调用泛型函数时通常无需显式指定类型，TS会根据参数自动推断</li>
-                        <li><strong>泛型默认值：</strong><code>&lt;T = string&gt;</code> 为类型参数设置默认类型</li>
-                    </ul>
-                </div>
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-lang">typescript</span>
-                        <div class="code-actions">
-                            <button class="code-btn" onclick="copyCode('ch19-code1')">📋 复制</button>
-                        </div>
+                    <div class="question">1. 抽象类可以被直接实例化吗？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch19-q1" value="A"> A. 可以</label>
+                        <label class="option-label"><input type="radio" name="ch19-q1" value="B"> B. 不可以</label>
                     </div>
-                    <pre id="ch19-code1"><code>// 基本泛型函数
-function identity&lt;T&gt;(arg: T): T {
-    return arg;
-}
-
-const num = identity(42);        // 推断为 number
-const str = identity("hello");   // 推断为 string
-const explicit = identity&lt;boolean&gt;(true); // 显式指定
-
-// 多个类型参数
-function merge&lt;T, U&gt;(a: T, b: U): T & U {
-    return { ...a, ...b };
-}
-
-const merged = merge({ name: "TS" }, { version: 5 });
-console.log(merged.name, merged.version);
-
-// 泛型默认类型
-function createArray&lt;T = number&gt;(length: number, value?: T): T[] {
-    return Array(length).fill(value ?? 0);
-}
-
-const arr1 = createArray(3);       // number[]
-const arr2 = createArray(3, "hi"); // string[]</code></pre>
-                </div>
-                <div class="error-block">
-                    <h4>❌ 常见错误</h4>
-                    <p><strong>泛型参数未使用：</strong>定义了 <code>&lt;T&gt;</code> 但函数签名中没有使用T，编译器会警告</p>
-                    <p><strong>泛型中使用方法：</strong><code>function f&lt;T&gt;(arg: T) { arg.length; }</code> 报错，T可能是任何类型，不一定有length</p>
-                </div>
-                <div class="practice-section">
-                    <h4>📝 练习题</h4>
-                    <div class="question">1. 写一个泛型函数firstElement，返回数组的第一个元素？</div>
-                    <textarea class="answer-textarea" id="ch19-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(19,1)">检查答案</button>
                     <div id="ch19-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(19,1)">查看答案</button>
-                    <div id="ch19-answer1" class="answer-box">function firstElement&lt;T&gt;(arr: T[]): T | undefined {
-    return arr[0];
-}</div>
+                    <div id="ch19-answer1" class="answer-box">B. 不可以（抽象类使用abstract修饰，只能被继承，不能直接实例化）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1646,22 +1416,22 @@ const arr2 = createArray(3, "hi"); // string[]</code></pre>
                     <button class="save-note-btn" onclick="saveNote(19)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn19" onclick="markCompleted(19)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(18)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(20)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第20章 泛型接口与类 -->
+            <!-- 第20章 泛型 -->
             <div id="ch20" class="chapter-section">
-                <h2>20. 泛型接口与类 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
+                <h2>20. 泛型 <button class="bookmark-btn" onclick="toggleBookmark(20)" id="bookmarkBtn20">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>泛型接口：</strong>接口使用类型参数，如 <code>interface Repository&lt;T&gt;</code>，可用于定义通用数据结构</li>
-                        <li><strong>泛型类：</strong>类使用类型参数，如 <code>class DataStore&lt;T&gt;</code>，实例化时确定具体类型</li>
-                        <li><strong>泛型约束接口：</strong>接口本身可以约束泛型参数，如 <code>T extends Serializable</code></li>
-                        <li><strong>工厂模式：</strong>泛型类常与工厂模式结合，创建类型安全的对象</li>
+                        <li><strong>泛型定义：</strong>使用 <code>&lt;T&gt;</code> 定义类型参数，使函数或类可以处理多种类型</li>
+                        <li><strong>泛型函数：</strong>函数可以接收任意类型的参数并返回相同类型</li>
+                        <li><strong>泛型类：</strong>类可以使用泛型参数定义属性和方法</li>
+                        <li><strong>泛型约束：</strong>使用 <code>extends</code> 限制泛型参数必须满足的条件</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1671,53 +1441,58 @@ const arr2 = createArray(3, "hi"); // string[]</code></pre>
                             <button class="code-btn" onclick="copyCode('ch20-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch20-code1"><code>// 泛型接口
-interface Repository&lt;T&gt; {
-    getAll(): T[];
-    getById(id: number): T | undefined;
-    add(item: T): void;
+                    <pre id="ch20-code1"><code>// 泛型函数
+function identity&lt;T&gt;(arg: T): T {
+    return arg;
 }
 
+const num = identity&lt;number&gt;(42);
+const str = identity("hello"); // 类型推断
+
 // 泛型类
-class DataStore&lt;T&gt; {
+class Box&lt;T&gt; {
     private items: T[] = [];
 
     add(item: T): void {
         this.items.push(item);
     }
 
-    getAll(): T[] {
-        return [...this.items];
-    }
-
-    find(predicate: (item: T) => boolean): T | undefined {
-        return this.items.find(predicate);
+    get(index: number): T {
+        return this.items[index];
     }
 }
 
-// 使用泛型类
-const userStore = new DataStore&lt;{ name: string; age: number }&gt;();
-userStore.add({ name: "张三", age: 25 });
-userStore.add({ name: "李四", age: 30 });
+const numberBox = new Box&lt;number&gt;();
+numberBox.add(1);
+numberBox.add(2);
 
-const found = userStore.find(u => u.name === "张三");
-console.log(found);</code></pre>
+// 泛型约束
+interface Lengthwise {
+    length: number;
+}
+
+function logLength&lt;T extends Lengthwise&gt;(arg: T): T {
+    console.log(arg.length);
+    return arg;
+}
+
+logLength("hello"); // 5
+logLength([1, 2, 3]); // 3</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>静态成员不能使用泛型：</strong>类的静态方法/属性不能引用类的类型参数</p>
-                    <p><strong>泛型类未指定类型：</strong><code>new DataStore()</code> 不指定类型参数时T为unknown，建议显式指定</p>
+                    <p><strong>泛型参数未使用：</strong>定义了泛型参数但未使用会报错，应移除或使用它</p>
+                    <p><strong>不满足泛型约束：</strong><code>logLength(42)</code> 会报错，number没有length属性</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 定义一个泛型接口Pair&lt;T, U&gt;，包含first(T)和second(U)两个属性？</div>
+                    <div class="question">1. 定义一个泛型函数reverse，接收数组并返回反转后的数组？</div>
                     <textarea class="answer-textarea" id="ch20-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(20,1)">检查答案</button>
                     <div id="ch20-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(20,1)">查看答案</button>
-                    <div id="ch20-answer1" class="answer-box">interface Pair&lt;T, U&gt; {
-    first: T;
-    second: U;
+                    <div id="ch20-answer1" class="answer-box">function reverse&lt;T&gt;(arr: T[]): T[] {
+    return [...arr].reverse();
 }</div>
                 </div>
                 <div class="note-section">
@@ -1726,22 +1501,22 @@ console.log(found);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(20)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn20" onclick="markCompleted(20)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(19)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(21)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第21章 泛型约束 -->
+            <!-- 第21章 泛型进阶 -->
             <div id="ch21" class="chapter-section">
-                <h2>21. 泛型约束 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
+                <h2>21. 泛型进阶 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>extends约束：</strong>使用 <code>T extends Interface</code> 限制泛型参数必须满足特定条件</li>
-                        <li><strong>keyof约束：</strong><code>T extends keyof U</code> 确保T是U的键名类型</li>
-                        <li><strong>构造函数约束：</strong><code>new (...args: any[]) => T</code> 约束泛型为可实例化的类</li>
-                        <li><strong>多重约束：</strong>使用交叉类型实现 <code>T extends A & B</code></li>
+                        <li><strong>泛型默认值：</strong>使用 <code>&lt;T = DefaultType&gt;</code> 为泛型参数提供默认类型</li>
+                        <li><strong>泛型条件类型：</strong>使用 <code>T extends U ? X : Y</code> 根据条件选择类型</li>
+                        <li><strong>泛型推断：</strong>TypeScript可以根据参数自动推断泛型类型</li>
+                        <li><strong>typeof与泛型：</strong>使用 <code>typeof</code> 获取值的类型用于泛型</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1751,46 +1526,43 @@ console.log(found);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch21-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch21-code1"><code>// 基本约束
-interface HasLength {
-    length: number;
+                    <pre id="ch21-code1"><code>// 泛型默认值
+function createArray&lt;T = string&gt;(length: number, value: T): T[] {
+    return Array(length).fill(value);
 }
 
-function logLength&lt;T extends HasLength&gt;(arg: T): void {
-    console.log(arg.length); // OK：约束保证有length
+const strArr = createArray(3, "hello");
+const numArr = createArray&lt;number&gt;(3, 100);
+
+// 泛型条件类型
+type IsString&lt;T&gt; = T extends string ? true : false;
+type A = IsString&lt;string&gt;;  // true
+type B = IsString&lt;number&gt;;  // false
+
+// 泛型推断
+function pair&lt;T, U&gt;(a: T, b: U): [T, U] {
+    return [a, b];
 }
 
-logLength("hello");    // string有length
-logLength([1, 2, 3]);  // array有length
-// logLength(123);     // 错误：number没有length
+const p = pair("hello", 42); // 推断为 [string, number]
 
-// keyof约束
-function getProperty&lt;T, K extends keyof T&gt;(obj: T, key: K): T[K] {
-    return obj[key];
-}
-
-const person = { name: "张三", age: 25, city: "北京" };
-const nameVal = getProperty(person, "name"); // string
-const ageVal = getProperty(person, "age");   // number
-// getProperty(person, "email"); // 错误：不是person的键
-
-console.log(`${nameVal}, ${ageVal}岁`);</code></pre>
+// typeof用于泛型
+const obj = { name: "张三", age: 25 };
+type ObjType = typeof obj; // { name: string; age: number }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>约束过于宽松：</strong>不添加约束就无法使用泛型参数的任何属性或方法</p>
-                    <p><strong>keyof拼写错误：</strong><code>getProperty(person, "nam")</code> 键名拼写错误也会被编译器捕获</p>
+                    <p><strong>循环引用：</strong>泛型条件类型不能形成循环引用，会导致类型推断失败</p>
+                    <p><strong>过度使用条件类型：</strong>复杂的条件类型会降低代码可读性，应谨慎使用</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 写一个泛型函数getLength，约束参数必须有length属性？</div>
-                    <textarea class="answer-textarea" id="ch21-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 如何为泛型参数提供默认类型？</div>
+                    <input type="text" class="answer-input" id="ch21-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(21,1)">检查答案</button>
                     <div id="ch21-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(21,1)">查看答案</button>
-                    <div id="ch21-answer1" class="answer-box">function getLength&lt;T extends { length: number }&gt;(arg: T): number {
-    return arg.length;
-}</div>
+                    <div id="ch21-answer1" class="answer-box">使用 = 号（如 &lt;T = DefaultType&gt;）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1798,22 +1570,22 @@ console.log(`${nameVal}, ${ageVal}岁`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(21)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn21" onclick="markCompleted(21)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(20)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(22)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第22章 联合类型 -->
+            <!-- 第22章 类型别名 -->
             <div id="ch22" class="chapter-section">
-                <h2>22. 联合类型 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
+                <h2>22. 类型别名 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>联合类型定义：</strong>使用 <code>|</code> 连接多个类型，表示值可以是其中任意一种</li>
-                        <li><strong>类型收窄：</strong>使用 <code>typeof</code>、<code>instanceof</code> 或 <code>in</code> 操作符收窄联合类型</li>
-                        <li><strong>字面量联合：</strong><code>type Direction = "left" | "right" | "up" | "down"</code> 限定具体值</li>
-                        <li><strong>联合类型的方法：</strong>只能访问所有成员共有的属性和方法</li>
+                        <li><strong>类型别名：</strong>使用 <code>type</code> 定义类型别名，为复杂类型创建简短名称</li>
+                        <li><strong>联合类型：</strong>使用 <code>|</code> 表示多个类型之一，如 <code>string | number</code></li>
+                        <li><strong>交叉类型：</strong>使用 <code>&</code> 表示同时具有多个类型的特性</li>
+                        <li><strong>与接口的区别：</strong>type可以表示联合/交叉类型，interface可以继承和被继承</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1823,45 +1595,44 @@ console.log(`${nameVal}, ${ageVal}岁`);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch22-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch22-code1"><code>// 基本联合类型
-let id: string | number;
-id = "ABC123";
-id = 456;
+                    <pre id="ch22-code1"><code>// 类型别名
+type ID = string | number;
+type Status = "success" | "error" | "pending";
+type Point = { x: number; y: number };
 
-// 类型收窄
-function processId(id: string | number) {
-    if (typeof id === "string") {
-        console.log(id.toUpperCase()); // string
-    } else {
-        console.log(id.toFixed(2));    // number
-    }
+// 联合类型
+function printId(id: ID) {
+    console.log(id);
 }
 
-// 字面量联合类型
-type Status = "pending" | "active" | "closed";
-let ticketStatus: Status = "active";
+// 交叉类型
+type Name = { name: string };
+type Age = { age: number };
+type User = Name & Age;
 
-// 联合类型与数组
-type StringOrNumberArray = string[] | number[];
-const arr1: StringOrNumberArray = ["a", "b"];
-const arr2: StringOrNumberArray = [1, 2, 3];
+const user: User = { name: "张三", age: 25 };
 
-processId("hello");
-processId(42);</code></pre>
+// 函数类型别名
+type Callback = (data: string) => void;
+function fetchData(callback: Callback) {
+    callback("data");
+}</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>直接访问非共有方法：</strong><code>let v: string | number; v.toUpperCase();</code> 报错，需先类型收窄</p>
-                    <p><strong>赋值超出范围：</strong><code>let s: Status = "deleted";</code> 报错，"deleted"不是合法值</p>
+                    <p><strong>类型别名重复定义：</strong><code>type A = string; type A = number;</code> 会报错，type不能重复定义</p>
+                    <p><strong>混淆联合和交叉：</strong>联合类型是"或"的关系，交叉类型是"且"的关系</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 定义一个联合类型Result，可以是string或null？</div>
+                    <div class="question">1. 定义一个类型别名，代表颜色值（可以是字符串或RGB元组）？</div>
                     <textarea class="answer-textarea" id="ch22-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(22,1)">检查答案</button>
                     <div id="ch22-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(22,1)">查看答案</button>
-                    <div id="ch22-answer1" class="answer-box">type Result = string | null;</div>
+                    <div id="ch22-answer1" class="answer-box">type Color = string | [number, number, number];
+const red: Color = "#FF0000";
+const rgb: Color = [255, 0, 0];</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1869,22 +1640,22 @@ processId(42);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(22)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn22" onclick="markCompleted(22)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(21)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(23)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第23章 交叉类型 -->
+            <!-- 第23章 联合类型与类型收窄 -->
             <div id="ch23" class="chapter-section">
-                <h2>23. 交叉类型 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
+                <h2>23. 联合类型与类型收窄 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>交叉类型定义：</strong>使用 <code>&</code> 将多个类型合并为一个类型，新类型具有所有成员</li>
-                        <li><strong>与联合类型区别：</strong>联合类型是"或"关系（取并集的属性），交叉类型是"且"关系（取交集的属性）</li>
-                        <li><strong>冲突处理：</strong>相同属性名但类型不同时，结果类型为 <code>never</code></li>
-                        <li><strong>常见用途：</strong>Mixin模式、组合多个接口、添加额外属性</li>
+                        <li><strong>typeof收窄：</strong>使用 <code>typeof</code> 检查值的类型，收窄联合类型</li>
+                        <li><strong>instanceof收窄：</strong>使用 <code>instanceof</code> 检查对象是否是某个类的实例</li>
+                        <li><strong>in操作符收窄：</strong>使用 <code>in</code> 检查对象是否包含某个属性</li>
+                        <li><strong>类型谓词：</strong>使用自定义函数进行类型收窄，如 <code>function isString(x): x is string</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1894,59 +1665,57 @@ processId(42);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch23-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch23-code1"><code>// 基本交叉类型
-interface BusinessPartner {
-    name: string;
-    credit: number;
+                    <pre id="ch23-code1"><code>// typeof收窄
+function printValue(value: string | number) {
+    if (typeof value === "string") {
+        console.log(value.toUpperCase());
+    } else {
+        console.log(value.toFixed(2));
+    }
 }
 
-interface Identity {
-    id: number;
-    email: string;
+// instanceof收窄
+class Dog { bark() {} }
+class Cat { meow() {} }
+
+function petAnimal(animal: Dog | Cat) {
+    if (animal instanceof Dog) {
+        animal.bark();
+    } else {
+        animal.meow();
+    }
 }
 
-type Employee = BusinessPartner & Identity;
+// in操作符收窄
+type Bird = { fly: () => void };
+type Fish = { swim: () => void };
 
-const emp: Employee = {
-    name: "张三",
-    credit: 1000,
-    id: 1,
-    email: "zhangsan@company.com"
-};
-
-// Mixin模式
-type WithTimestamp&lt;T&gt; = T & { createdAt: Date };
-type WithVersion&lt;T&gt; = T & { version: number };
-
-interface Doc {
-    title: string;
-    content: string;
+function move(animal: Bird | Fish) {
+    if ("fly" in animal) {
+        animal.fly();
+    } else {
+        animal.swim();
+    }
 }
 
-type VersionedDoc = WithTimestamp&lt;Doc&gt; & WithVersion&lt;Doc&gt;;
-
-const doc: VersionedDoc = {
-    title: "报告",
-    content: "内容...",
-    createdAt: new Date(),
-    version: 1
-};
-
-console.log(`${emp.name} - ${doc.title}`);</code></pre>
+// 类型谓词
+function isString(x: unknown): x is string {
+    return typeof x === "string";
+}</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>类型冲突：</strong><code>type A = { x: string } & { x: number }</code> 中x的类型变为never，实际无法使用</p>
-                    <p><strong>缺少必需属性：</strong>交叉类型要求满足所有类型的全部属性</p>
+                    <p><strong>typeof null：</strong><code>typeof null</code> 返回 "object"，这是历史遗留bug，需单独处理</p>
+                    <p><strong>instanceof与接口：</strong><code>instanceof</code> 不能用于接口，接口在编译后不存在</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 联合类型(|)和交叉类型(&)的核心区别是什么？</div>
+                    <div class="question">1. 如何检查一个值是否为数组？</div>
                     <input type="text" class="answer-input" id="ch23-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(23,1)">检查答案</button>
                     <div id="ch23-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(23,1)">查看答案</button>
-                    <div id="ch23-answer1" class="answer-box">联合类型(|)是"或"关系，值可以是其中任意一种类型；交叉类型(&)是"且"关系，值必须同时满足所有类型</div>
+                    <div id="ch23-answer1" class="answer-box">Array.isArray(value) 或 value instanceof Array</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1954,22 +1723,22 @@ console.log(`${emp.name} - ${doc.title}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(23)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn23" onclick="markCompleted(23)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(22)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(24)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第24章 类型别名 -->
+            <!-- 第24章 字面量类型 -->
             <div id="ch24" class="chapter-section">
-                <h2>24. 类型别名 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
+                <h2>24. 字面量类型 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>type定义：</strong>使用 <code>type</code> 关键字为任何类型创建别名，不创建新类型</li>
-                        <li><strong>与interface区别：</strong>type可以表示联合/交叉/原始类型，interface只能描述对象形状</li>
-                        <li><strong>类型别名可泛型：</strong><code>type Container&lt;T&gt; = { value: T };</code> 支持泛型参数</li>
-                        <li><strong>不能重名：</strong>同一作用域内不能有同名的类型别名（interface可以合并声明）</li>
+                        <li><strong>字符串字面量：</strong>精确的字符串值，如 <code>"success"</code>、<code>"error"</code></li>
+                        <li><strong>数字字面量：</strong>精确的数字值，如 <code>1</code>、<code>2</code></li>
+                        <li><strong>布尔字面量：</strong><code>true</code> 和 <code>false</code>（是boolean类型的子类型）</li>
+                        <li><strong>联合字面量：</strong>常用于定义枚举值或配置选项</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1979,50 +1748,48 @@ console.log(`${emp.name} - ${doc.title}`);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch24-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch24-code1"><code>// 基本类型别名
-type ID = string | number;
-type User = {
-    id: ID;
-    name: string;
-    email: string;
-};
+                    <pre id="ch24-code1"><code>// 字符串字面量类型
+type Direction = "up" | "down" | "left" | "right";
+function move(direction: Direction) {
+    console.log(`Moving ${direction}`);
+}
 
-// 联合类型别名
-type Result = "success" | "error" | "loading";
-type Nullable&lt;T&gt; = T | null;
+move("up");    // OK
+// move("north"); // 错误
 
-// 函数类型别名
-type Callback = (data: any) => void;
-type AsyncFunction&lt;T&gt; = () => Promise&lt;T&gt;;
+// 数字字面量类型
+type DiceValue = 1 | 2 | 3 | 4 | 5 | 6;
+function rollDice(): DiceValue {
+    return Math.floor(Math.random() * 6) + 1;
+}
 
-// 复杂类型别名
-type Tree&lt;T&gt; = {
-    value: T;
-    left?: Tree&lt;T&gt;;
-    right?: Tree&lt;T&gt;;
-};
+// 布尔字面量类型
+type Binary = true | false;
 
-const tree: Tree&lt;number&gt; = {
-    value: 1,
-    left: { value: 2 },
-    right: { value: 3, left: { value: 4 } }
-};
+// 结合接口使用
+interface Config {
+    theme: "dark" | "light";
+    layout: "grid" | "list";
+}
 
-console.log("类型别名示例完成");</code></pre>
+const config: Config = {
+    theme: "dark",
+    layout: "grid"
+};</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>混淆type和interface：</strong>type不能声明合并（declaration merging），interface可以；type更适合联合类型</p>
-                    <p><strong>循环引用：</strong>类型别名不能直接或间接引用自身（除了像Tree这样的泛型递归类型）</p>
+                    <p><strong>字面量类型收窄问题：</strong>变量声明为普通类型后不能赋值为字面量类型的子集</p>
+                    <p><strong>忘记添加所有选项：</strong>联合字面量必须包含所有可能的值</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. type和interface的一个关键区别是什么？</div>
-                    <input type="text" class="answer-input" id="ch24-q1" placeholder="输入答案...">
+                    <div class="question">1. 定义一个代表HTTP方法的字面量类型？</div>
+                    <textarea class="answer-textarea" id="ch24-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(24,1)">检查答案</button>
                     <div id="ch24-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(24,1)">查看答案</button>
-                    <div id="ch24-answer1" class="answer-box">interface支持声明合并（同名interface自动合并），type不支持；type可以表示联合类型等，interface不能</div>
+                    <div id="ch24-answer1" class="answer-box">type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2030,22 +1797,22 @@ console.log("类型别名示例完成");</code></pre>
                     <button class="save-note-btn" onclick="saveNote(24)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn24" onclick="markCompleted(24)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(23)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(25)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第25章 字面量类型 -->
+            <!-- 第25章 接口与类型别名对比 -->
             <div id="ch25" class="chapter-section">
-                <h2>25. 字面量类型 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
+                <h2>25. 接口与类型别名对比 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>字符串字面量：</strong><code>type Event = "click" | "hover" | "focus"</code>，限定为特定字符串值</li>
-                        <li><strong>数字字面量：</strong><code>type Roll = 1 | 2 | 3 | 4 | 5 | 6</code>，限定为特定数字值</li>
-                        <li><strong>布尔字面量：</strong><code>type Truthy = true</code>，虽然实际用处不大</li>
-                        <li><strong>模板字面量类型：</strong><code>type EventName = \`on${Capitalize&lt;T&gt;}\`</code>，TS 4.1+支持</li>
+                        <li><strong>相同点：</strong>都可以描述对象或函数的形状，都支持扩展</li>
+                        <li><strong>接口优势：</strong>支持声明合并（同名接口自动合并）、支持extends继承、更适合定义契约</li>
+                        <li><strong>类型别名优势：</strong>支持联合类型、交叉类型、元组、原始类型、类型表达式</li>
+                        <li><strong>选择建议：</strong>定义对象结构优先用interface，需要联合/交叉类型时用type</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2055,44 +1822,54 @@ console.log("类型别名示例完成");</code></pre>
                             <button class="code-btn" onclick="copyCode('ch25-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch25-code1"><code>// 字符串字面量类型
-type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE";
-
-function request(url: string, method: HTTPMethod) {
-    console.log(`${method} ${url}`);
+                    <pre id="ch25-code1"><code>// 接口声明合并
+interface User {
+    name: string;
 }
-request("/api/users", "GET");  // OK
-// request("/api/users", "PATCH"); // 错误
+interface User {
+    age: number;
+}
+const user: User = { name: "张三", age: 25 }; // OK
 
-// 数字字面量类型
-type DiceRoll = 1 | 2 | 3 | 4 | 5 | 6;
-let roll: DiceRoll = 3;
+// 接口继承
+interface Animal {
+    name: string;
+}
+interface Dog extends Animal {
+    bark(): void;
+}
 
-// 模板字面量类型 (TS 4.1+)
-type EventName = "click" | "focus" | "blur";
-type EventHandler = `on${Capitalize&lt;EventName&gt;}`;
-// 结果: "onClick" | "onFocus" | "onBlur"
+// 类型别名 - 联合类型
+type Status = "success" | "error";
 
-// as const 与字面量类型
-const config = {
-    host: "localhost",
-    port: 3000
-} as const;
-// config.host 的类型是 "localhost" 而非 string</code></pre>
+// 类型别名 - 交叉类型
+type Name = { name: string };
+type Age = { age: number };
+type Person = Name & Age;
+
+// 类型别名 - 元组
+type Point = [number, number];
+
+// 类型别名不能重复定义
+// type A = string;
+// type A = number; // 错误</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>字面量推断为宽类型：</strong><code>let method = "GET"</code> 推断为string，需要 <code>as const</code> 或显式类型注解</p>
-                    <p><strong>模板字面量复杂度：</strong>过于复杂的模板字面量类型会降低编译性能和可读性</p>
+                    <p><strong>类型别名重复定义：</strong><code>type A = string; type A = number;</code> 会报错</p>
+                    <p><strong>接口不能表示联合类型：</strong>接口只能表示对象结构，不能表示联合类型</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 如何让 const obj = { x: 10 } 中x的类型为字面量10而非number？</div>
-                    <input type="text" class="answer-input" id="ch25-q1" placeholder="输入答案...">
+                    <div class="question">1. 当需要描述对象结构并希望支持声明合并时，应该使用什么？</div>
+                    <div class="answer-options">
+                        <label class="option-label"><input type="radio" name="ch25-q1" value="A"> A. type</label>
+                        <label class="option-label"><input type="radio" name="ch25-q1" value="B"> B. interface</label>
+                    </div>
                     <button class="btn btn-primary" onclick="checkAnswer(25,1)">检查答案</button>
                     <div id="ch25-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(25,1)">查看答案</button>
-                    <div id="ch25-answer1" class="answer-box">使用 as const：const obj = { x: 10 } as const; 此时x类型为10</div>
+                    <div id="ch25-answer1" class="answer-box">B. interface（接口支持声明合并，多个同名接口会自动合并）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2100,22 +1877,22 @@ const config = {
                     <button class="save-note-btn" onclick="saveNote(25)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn25" onclick="markCompleted(25)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(24)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(26)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第26章 可辨识联合 -->
+            <!-- 第26章 索引类型 -->
             <div id="ch26" class="chapter-section">
-                <h2>26. 可辨识联合 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
+                <h2>26. 索引类型 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>可辨识联合：</strong>联合类型中的每个变体都有一个共有属性（标签/判别式）用于区分类型</li>
-                        <li><strong>标签属性：</strong>通常使用字面量类型作为标签，如 <code>kind: "circle"</code></li>
-                        <li><strong>穷尽检查：</strong>在switch中利用标签属性收窄类型，确保处理所有变体</li>
-                        <li><strong>应用场景：</strong>状态机、Redux action类型、AST节点、表单验证</li>
+                        <li><strong>索引签名：</strong>定义对象的索引类型，如 <code>[key: string]: number</code></li>
+                        <li><strong>keyof操作符：</strong>获取对象类型的所有键的联合类型</li>
+                        <li><strong>索引访问类型：</strong>使用 <code>T[K]</code> 获取对象属性的类型</li>
+                        <li><strong>映射类型：</strong>基于旧类型创建新类型，如 <code>{ [K in keyof T]: T[K] }</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2125,57 +1902,49 @@ const config = {
                             <button class="code-btn" onclick="copyCode('ch26-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch26-code1"><code>interface Circle {
-    kind: "circle";
-    radius: number;
+                    <pre id="ch26-code1"><code>// 索引签名
+interface Dictionary {
+    [key: string]: string;
 }
 
-interface Rectangle {
-    kind: "rectangle";
-    width: number;
-    height: number;
+const dict: Dictionary = {
+    name: "张三",
+    age: "25"
+};
+
+// keyof操作符
+interface User {
+    name: string;
+    age: number;
+    email: string;
 }
 
-interface Triangle {
-    kind: "triangle";
-    base: number;
-    height: number;
-}
+type UserKeys = keyof User; // "name" | "age" | "email"
 
-type Shape = Circle | Rectangle | Triangle;
+// 索引访问类型
+type NameType = User["name"]; // string
 
-function getArea(shape: Shape): number {
-    switch (shape.kind) {
-        case "circle":
-            return Math.PI * shape.radius ** 2;
-        case "rectangle":
-            return shape.width * shape.height;
-        case "triangle":
-            return 0.5 * shape.base * shape.height;
-    }
-}
+// 获取所有属性类型的联合
+type UserValues = User[keyof User]; // string | number
 
-const shapes: Shape[] = [
-    { kind: "circle", radius: 5 },
-    { kind: "rectangle", width: 4, height: 6 },
-    { kind: "triangle", base: 3, height: 8 }
-];
-
-shapes.forEach(s => console.log(getArea(s).toFixed(2)));</code></pre>
+// 映射类型
+type ReadonlyUser = {
+    readonly [K in keyof User]: User[K];
+};</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>缺少标签属性：</strong>如果联合类型没有共有的判别式属性，就无法安全收窄</p>
-                    <p><strong>遗漏分支：</strong>switch没有覆盖所有变体时，函数可能返回undefined（非穷尽检查）</p>
+                    <p><strong>索引签名与具体属性冲突：</strong>索引签名类型必须是具体属性类型的超类型</p>
+                    <p><strong>keyof与原始类型：</strong><code>keyof number</code> 返回 <code>number | typeof Symbol.iterator</code> 等</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 可辨识联合的核心要素是什么？</div>
+                    <div class="question">1. keyof操作符返回什么类型？</div>
                     <input type="text" class="answer-input" id="ch26-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(26,1)">检查答案</button>
                     <div id="ch26-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(26,1)">查看答案</button>
-                    <div id="ch26-answer1" class="answer-box">每个变体都有一个共有的标签属性（判别式），使用字面量类型来区分不同变体</div>
+                    <div id="ch26-answer1" class="answer-box">对象所有键的联合类型（如 "name" | "age"）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2183,22 +1952,22 @@ shapes.forEach(s => console.log(getArea(s).toFixed(2)));</code></pre>
                     <button class="save-note-btn" onclick="saveNote(26)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn26" onclick="markCompleted(26)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(25)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(27)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第27章 类型守卫 -->
+            <!-- 第27章 映射类型 -->
             <div id="ch27" class="chapter-section">
-                <h2>27. 类型守卫 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
+                <h2>27. 映射类型 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>typeof守卫：</strong><code>typeof x === "string"</code> 在运行时检查并收窄类型</li>
-                        <li><strong>instanceof守卫：</strong><code>x instanceof Date</code> 检查实例类型，适用于类</li>
-                        <li><strong>in守卫：</strong><code>"prop" in obj</code> 检查属性是否存在，适用于区分接口</li>
-                        <li><strong>自定义类型谓词：</strong><code>function isString(x: any): x is string</code> 定义自己的类型检查函数</li>
+                        <li><strong>映射类型语法：</strong><code>{ [K in keyof T]: U }</code> 将T的每个属性映射为新类型</li>
+                        <li><strong>修饰符：</strong><code>+readonly</code>、<code>-readonly</code>、<code>+?</code>、<code>-?</code> 添加或移除修饰符</li>
+                        <li><strong>内置映射类型：</strong><code>Readonly&lt;T&gt;</code>、<code>Partial&lt;T&gt;</code>、<code>Required&lt;T&gt;</code>、<code>Pick&lt;T,K&gt;</code>、<code>Omit&lt;T,K&gt;</code></li>
+                        <li><strong>自定义映射类型：</strong>基于现有类型创建符合特定规则的新类型</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2208,58 +1977,44 @@ shapes.forEach(s => console.log(getArea(s).toFixed(2)));</code></pre>
                             <button class="code-btn" onclick="copyCode('ch27-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch27-code1"><code>// typeof守卫
-function double(value: string | number): string | number {
-    if (typeof value === "string") {
-        return value.repeat(2); // 收窄为string
-    }
-    return value * 2; // 收窄为number
+                    <pre id="ch27-code1"><code>// Partial - 所有属性变为可选
+interface User {
+    name: string;
+    age: number;
 }
+type PartialUser = Partial&lt;User&gt;; // { name?: string; age?: number }
 
-// instanceof守卫
-function formatValue(value: Date | string) {
-    if (value instanceof Date) {
-        return value.toISOString();
-    }
-    return value.toUpperCase();
-}
+// Required - 所有属性变为必需
+type RequiredUser = Required&lt;PartialUser&gt;;
 
-// in守卫
-interface Fish { swim(): void }
-interface Bird { fly(): void }
-function move(animal: Fish | Bird) {
-    if ("swim" in animal) {
-        animal.swim();
-    } else {
-        animal.fly();
-    }
-}
+// Readonly - 所有属性变为只读
+type ReadonlyUser = Readonly&lt;User&gt;;
 
-// 自定义类型谓词
-function isNonNull&lt;T&gt;(value: T): value is NonNullable&lt;T&gt; {
-    return value !== null && value !== undefined;
-}
+// Pick - 挑选指定属性
+type NameAndAge = Pick&lt;User, "name" | "age"&gt;;
 
-const val: string | null = "hello";
-if (isNonNull(val)) {
-    console.log(val.toUpperCase()); // val: string
-}</code></pre>
+// Omit - 排除指定属性
+type WithoutAge = Omit&lt;User, "age"&gt;;
+
+// 自定义映射类型
+type Nullable&lt;T&gt; = {
+    [K in keyof T]: T[K] | null;
+};
+type NullableUser = Nullable&lt;User&gt;;</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>typeof局限性：</strong><code>typeof null === "object"</code> 和 <code>typeof [] === "object"</code>，不适合检查这些类型</p>
-                    <p><strong>类型谓词返回值：</strong>类型谓词函数必须返回boolean，类型收窄依赖返回值</p>
+                    <p><strong>混淆Pick和Omit：</strong>Pick选择属性，Omit排除属性，两者是相反操作</p>
+                    <p><strong>映射类型不能用于联合类型：</strong>映射类型只能用于对象类型</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 写一个自定义类型谓词函数isNumber，检查值是否为number？</div>
-                    <textarea class="answer-textarea" id="ch27-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 哪个工具类型将所有属性变为可选？</div>
+                    <input type="text" class="answer-input" id="ch27-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(27,1)">检查答案</button>
                     <div id="ch27-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(27,1)">查看答案</button>
-                    <div id="ch27-answer1" class="answer-box">function isNumber(value: unknown): value is number {
-    return typeof value === "number";
-}</div>
+                    <div id="ch27-answer1" class="answer-box">Partial&lt;T&gt;</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2267,22 +2022,22 @@ if (isNonNull(val)) {
                     <button class="save-note-btn" onclick="saveNote(27)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn27" onclick="markCompleted(27)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(26)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(28)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第28章 模块导入导出 -->
+            <!-- 第28章 条件类型 -->
             <div id="ch28" class="chapter-section">
-                <h2>28. 模块导入导出 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
+                <h2>28. 条件类型 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>命名导出：</strong>使用 <code>export</code> 导出变量、函数、类、接口等，可多个</li>
-                        <li><strong>默认导出：</strong>使用 <code>export default</code> 每个模块只能有一个</li>
-                        <li><strong>重导出：</strong>使用 <code>export { X } from "./module"</code> 从另一个模块重新导出</li>
-                        <li><strong>类型导入：</strong>使用 <code>import type</code> 仅导入类型，编译后会被移除</li>
+                        <li><strong>条件类型语法：</strong><code>T extends U ? X : Y</code> 如果T是U的子类型则返回X，否则返回Y</li>
+                        <li><strong>分布式条件类型：</strong>当T是联合类型时，条件类型会应用到每个成员</li>
+                        <li><strong>内置条件类型：</strong><code>Exclude&lt;T,U&gt;</code>、<code>Extract&lt;T,U&gt;</code>、<code>NonNullable&lt;T&gt;</code>、<code>ReturnType&lt;T&gt;</code></li>
+                        <li><strong>infer关键字：</strong>在条件类型中推断类型参数</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2292,59 +2047,40 @@ if (isNonNull(val)) {
                             <button class="code-btn" onclick="copyCode('ch28-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch28-code1"><code>// === math.ts ===
-export function add(a: number, b: number): number {
-    return a + b;
-}
+                    <pre id="ch28-code1"><code>// 条件类型
+type IsString&lt;T&gt; = T extends string ? true : false;
+type A = IsString&lt;string&gt;;  // true
+type B = IsString&lt;number&gt;;  // false
 
-export const PI = 3.14159;
+// 分布式条件类型
+type Exclude&lt;T, U&gt; = T extends U ? never : T;
+type T0 = Exclude&lt;"a" | "b" | "c", "a"&gt;; // "b" | "c"
 
-export interface CalcResult {
-    value: number;
-    timestamp: Date;
-}
+type Extract&lt;T, U&gt; = T extends U ? T : never;
+type T1 = Extract&lt;"a" | "b" | "c", "a" | "f"&gt;; // "a"
 
-// === logger.ts (默认导出) ===
-export default class Logger {
-    log(msg: string): void {
-        console.log(`[${new Date().toISOString()}] ${msg}`);
-    }
-}
+// ReturnType - 获取函数返回类型
+type ReturnType&lt;T&gt; = T extends (...args: any[]) =&gt; infer R ? R : any;
+function fn() { return "hello"; }
+type FnReturn = ReturnType&lt;typeof fn&gt;; // string
 
-// === app.ts (导入) ===
-// 命名导入
-import { add, PI } from "./math";
-
-// 默认导入
-import Logger from "./logger";
-
-// 类型导入（编译后移除）
-import type { CalcResult } from "./math";
-
-// 全部导入
-import * as MathModule from "./math";
-
-// 使用
-const result: CalcResult = {
-    value: add(2, 3),
-    timestamp: new Date()
-};
-
-console.log(`${result.value} + PI = ${result.value + PI}`);</code></pre>
+// NonNullable - 移除null和undefined
+type NonNullable&lt;T&gt; = T extends null | undefined ? never : T;
+type T2 = NonNullable&lt;string | null | undefined&gt;; // string</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>循环依赖：</strong>模块A导入B，B又导入A，可能导致运行时错误</p>
-                    <p><strong>导入类型未用type：</strong><code>import { CalcResult } from "./math"</code> 在isolatedModules模式下应使用 <code>import type</code></p>
+                    <p><strong>循环引用：</strong>条件类型不能形成循环引用，会导致类型推断失败</p>
+                    <p><strong>过度使用条件类型：</strong>复杂的条件类型会降低代码可读性</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 如何仅导入类型（编译后移除）？</div>
+                    <div class="question">1. ReturnType&lt;T&gt; 的作用是什么？</div>
                     <input type="text" class="answer-input" id="ch28-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(28,1)">检查答案</button>
                     <div id="ch28-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(28,1)">查看答案</button>
-                    <div id="ch28-answer1" class="answer-box">使用 import type { TypeName } from "./module"</div>
+                    <div id="ch28-answer1" class="answer-box">获取函数类型T的返回值类型</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2352,22 +2088,22 @@ console.log(`${result.value} + PI = ${result.value + PI}`);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(28)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn28" onclick="markCompleted(28)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(27)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(29)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第29章 命名空间 -->
+            <!-- 第29章 模块系统 -->
             <div id="ch29" class="chapter-section">
-                <h2>29. 命名空间 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
+                <h2>29. 模块系统 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>命名空间定义：</strong>使用 <code>namespace</code> 关键字组织代码，避免全局命名冲突</li>
-                        <li><strong>嵌套命名空间：</strong>命名空间可以嵌套，使用 <code>.</code> 访问嵌套成员</li>
-                        <li><strong>命名空间合并：</strong>同名的命名空间声明会自动合并（与interface类似）</li>
-                        <li><strong>与模块的选择：</strong>现代TS开发推荐使用ES模块，命名空间主要用于旧代码和声明文件</li>
+                        <li><strong>ES模块：</strong>使用 <code>export</code> 导出，<code>import</code> 导入</li>
+                        <li><strong>命名导出：</strong><code>export const name = "value"</code></li>
+                        <li><strong>默认导出：</strong><code>export default value</code></li>
+                        <li><strong>模块解析：</strong>TypeScript支持多种模块解析策略（Node、Classic）</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2377,55 +2113,43 @@ console.log(`${result.value} + PI = ${result.value + PI}`);</code></pre>
                             <button class="code-btn" onclick="copyCode('ch29-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch29-code1"><code>namespace Utils {
-    export function log(msg: string): void {
-        console.log(`[LOG] ${msg}`);
-    }
+                    <pre id="ch29-code1"><code>// math.ts - 命名导出
+export const PI = Math.PI;
 
-    export function format(template: string, ...args: any[]): string {
-        return args.reduce((str, arg, i) => {
-            return str.replace(`{${i}}`, String(arg));
-        }, template);
-    }
+export function add(a: number, b: number): number {
+    return a + b;
 }
 
-// 嵌套命名空间
-namespace App {
-    export namespace Models {
-        export interface User {
-            id: number;
-            name: string;
-        }
-    }
-
-    export namespace Services {
-        export function getUser(id: number): Models.User {
-            return { id, name: `用户${id}` };
-        }
-    }
+export interface Point {
+    x: number;
+    y: number;
 }
 
-// 使用
-Utils.log("命名空间示例");
-const msg = Utils.format("你好, {0}! 今年{1}岁", "TypeScript", 10);
-console.log(msg);
+// 默认导出
+export default function multiply(a: number, b: number): number {
+    return a * b;
+}
 
-const user = App.Services.getUser(1);
-console.log(user.name);</code></pre>
+// app.ts - 导入
+import multiply, { PI, add, Point } from "./math";
+
+const result = multiply(3, 5);
+console.log(PI);
+console.log(add(2, 3));</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>忘记export：</strong>命名空间内的成员默认不导出，外部无法访问，需加 <code>export</code></p>
-                    <p><strong>混用模块和命名空间：</strong>不应在模块内使用命名空间，二者是不同的组织方式</p>
+                    <p><strong>循环依赖：</strong>模块之间互相导入会导致运行时错误</p>
+                    <p><strong>路径解析问题：</strong>确保tsconfig.json中配置了正确的baseUrl和paths</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 现代TypeScript项目中，推荐使用模块还是命名空间？</div>
+                    <div class="question">1. 如何导出一个默认值？</div>
                     <input type="text" class="answer-input" id="ch29-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(29,1)">检查答案</button>
                     <div id="ch29-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(29,1)">查看答案</button>
-                    <div id="ch29-answer1" class="answer-box">推荐使用ES模块（import/export），命名空间主要用于旧代码兼容和声明文件</div>
+                    <div id="ch29-answer1" class="answer-box">export default value</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2433,68 +2157,77 @@ console.log(user.name);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(29)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn29" onclick="markCompleted(29)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(28)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(30)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第30章 装饰器基础 -->
+            <!-- 第30章 命名空间 -->
             <div id="ch30" class="chapter-section">
-                <h2>30. 装饰器基础 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
+                <h2>30. 命名空间 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>装饰器定义：</strong>一种特殊声明，以<code>@expression</code>形式附加到类声明、方法、属性上，用于修改或增强行为</li>
-                        <li><strong>类装饰器：</strong>应用于类构造函数，可以修改类定义或替换类</li>
-                        <li><strong>方法装饰器：</strong>应用于方法，可以修改方法行为，如日志、权限检查等</li>
-                        <li><strong>启用装饰器：</strong>需在tsconfig.json中设置 <code>"experimentalDecorators": true</code></li>
+                        <li><strong>命名空间定义：</strong>使用 <code>namespace</code> 关键字定义命名空间</li>
+                        <li><strong>导出成员：</strong>使用 <code>export</code> 导出命名空间内的成员</li>
+                        <li><strong>嵌套命名空间：</strong>命名空间可以嵌套，通过点号访问</li>
+                        <li><strong>与模块的关系：</strong>现代TS开发推荐使用ES模块而非命名空间</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch30-code1')">📋 复制</button></div></div>
-                    <pre id="ch30-code1"><code>// 类装饰器
-function Logger(target: Function) {
-    console.log(`创建类: ${target.name}`);
-}
-
-@Logger
-class MyClass {
-    constructor() { console.log("实例化"); }
-}
-
-// 方法装饰器
-function Log(target: any, key: string, descriptor: PropertyDescriptor) {
-    const original = descriptor.value;
-    descriptor.value = function(...args: any[]) {
-        console.log(`调用 ${key}，参数: ${args}`);
-        return original.apply(this, args);
-    };
-}
-
-class Calculator {
-    @Log
-    add(a: number, b: number): number {
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch30-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch30-code1"><code>// 命名空间
+namespace MathUtils {
+    export const PI = Math.PI;
+    
+    export function add(a: number, b: number): number {
         return a + b;
+    }
+    
+    // 私有成员
+    function square(x: number): number {
+        return x * x;
     }
 }
 
-const c = new Calculator();
-c.add(2, 3);</code></pre>
+// 使用命名空间成员
+console.log(MathUtils.PI);
+console.log(MathUtils.add(2, 3));
+
+// 嵌套命名空间
+namespace Company {
+    export namespace Employees {
+        export interface Person {
+            name: string;
+            id: number;
+        }
+    }
+}
+
+const emp: Company.Employees.Person = {
+    name: "张三",
+    id: 1001
+};</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>未启用装饰器：</strong>忘记在tsconfig.json中设置 <code>"experimentalDecorators": true</code> 会导致编译错误</p>
-                    <p><strong>装饰器执行时机：</strong>装饰器在类定义时执行，而非实例化时</p>
+                    <p><strong>忘记导出：</strong>命名空间内的成员默认是私有的，需要使用export导出</p>
+                    <p><strong>过度使用命名空间：</strong>现代TS项目应使用ES模块而非命名空间</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 使用TypeScript装饰器需要启用哪个编译选项？</div>
+                    <div class="question">1. 命名空间内的成员如何导出？</div>
                     <input type="text" class="answer-input" id="ch30-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(30,1)">检查答案</button>
                     <div id="ch30-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(30,1)">查看答案</button>
-                    <div id="ch30-answer1" class="answer-box">experimentalDecorators（需在tsconfig.json中设为true）</div>
+                    <div id="ch30-answer1" class="answer-box">使用export关键字</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2502,7 +2235,7 @@ c.add(2, 3);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(30)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn30" onclick="markCompleted(30)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(29)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(31)">下一章 ▶</button>
                 </div>
@@ -2514,50 +2247,63 @@ c.add(2, 3);</code></pre>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>声明文件(.d.ts)：</strong>描述JavaScript库的类型信息，不包含实现代码，仅用于类型检查</li>
-                        <li><strong>declare关键字：</strong>声明已存在的外部变量、函数、类、模块，告诉TS这些在运行时存在</li>
-                        <li><strong>DefinitelyTyped：</strong>社区维护的类型声明仓库，<code>npm install @types/包名</code> 安装第三方库类型</li>
-                        <li><strong>自动生成声明文件：</strong>在tsconfig.json中设置 <code>"declaration": true</code> 编译时自动生成.d.ts</li>
+                        <li><strong>声明文件：</strong>使用 <code>.d.ts</code> 文件为JavaScript代码提供类型声明</li>
+                        <li><strong>declare关键字：</strong>声明变量、函数、类等的类型</li>
+                        <li><strong>模块声明：</strong>使用 <code>declare module</code> 声明模块</li>
+                        <li><strong>全局声明：</strong>在全局作用域中声明类型</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button></div></div>
-                    <pre id="ch31-code1"><code>// global.d.ts - 全局声明文件
-declare var jQuery: (selector: string) => HTMLElement;
-declare function $(selector: string): HTMLElement;
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch31-code1"><code>// globals.d.ts - 全局声明
+declare const $: JQueryStatic;
 
-// 模块声明文件
-declare module "my-lib" {
-    export function doSomething(value: string): number;
-    export interface Config {
-        debug: boolean;
-        timeout: number;
-    }
+interface JQueryStatic {
+    (selector: string): JQuery;
+    ajax(url: string, options?: AjaxOptions): void;
 }
 
-// 使用第三方库
-// npm install @types/lodash
-import _ from "lodash";
-_.chunk([1, 2, 3, 4], 2); // 有类型提示
+interface JQuery {
+    text(content: string): JQuery;
+    html(content: string): JQuery;
+    on(event: string, handler: () => void): JQuery;
+}
 
-// 三斜线指令（旧方式，现已少用）
-/// &lt;reference path="./types.d.ts" /&gt;
+interface AjaxOptions {
+    method?: string;
+    success?: (data: any) => void;
+    error?: (error: any) => void;
+}
 
-console.log("声明文件示例完成");</code></pre>
+// 模块声明
+declare module "*.svg" {
+    const content: string;
+    export default content;
+}
+
+declare module "*.css" {
+    const content: { [className: string]: string };
+    export default content;
+}</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>找不到类型声明：</strong>使用第三方JS库时报"Could not find a declaration file"，需安装 <code>@types/包名</code> 或自写声明文件</p>
-                    <p><strong>声明文件未包含：</strong>tsconfig的include/paths配置必须覆盖.d.ts文件</p>
+                    <p><strong>声明文件位置：</strong>确保声明文件在tsconfig.json的include范围内</p>
+                    <p><strong>重复声明：</strong>同一个符号不能在多个声明文件中重复声明</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 声明文件的扩展名是什么？</div>
+                    <div class="question">1. TypeScript声明文件的扩展名是什么？</div>
                     <input type="text" class="answer-input" id="ch31-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(31,1)">检查答案</button>
                     <div id="ch31-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(31,1)">查看答案</button>
-                    <div id="ch31-answer1" class="answer-box">.d.ts（如 global.d.ts、module.d.ts）</div>
+                    <div id="ch31-answer1" class="answer-box">.d.ts</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2565,72 +2311,67 @@ console.log("声明文件示例完成");</code></pre>
                     <button class="save-note-btn" onclick="saveNote(31)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn31" onclick="markCompleted(31)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(30)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(32)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第32章 实用类型工具(Partial/Required/Pick) -->
+            <!-- 第32章 tsconfig.json配置 -->
             <div id="ch32" class="chapter-section">
-                <h2>32. 实用类型工具(Partial/Required/Pick) <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
+                <h2>32. tsconfig.json配置 <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>Partial&lt;T&gt;：</strong>将T的所有属性变为可选，常用于更新函数的参数类型</li>
-                        <li><strong>Required&lt;T&gt;：</strong>将T的所有属性变为必需，与Partial相反</li>
-                        <li><strong>Pick&lt;T, K&gt;：</strong>从T中选取部分属性组成新类型</li>
-                        <li><strong>Omit&lt;T, K&gt;：</strong>从T中排除部分属性，与Pick互补；Record&lt;K, V&gt;创建键为K值为V的对象类型</li>
+                        <li><strong>compilerOptions：</strong>编译选项配置</li>
+                        <li><strong>target：</strong>编译目标ES版本（ES3、ES5、ES6等）</li>
+                        <li><strong>module：</strong>模块系统（CommonJS、ESNext等）</li>
+                        <li><strong>strict：</strong>启用严格模式，包含所有严格类型检查选项</li>
+                        <li><strong>include/exclude：</strong>指定编译的文件范围</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch32-code1')">📋 复制</button></div></div>
-                    <pre id="ch32-code1"><code>interface User {
-    id: number;
-    name: string;
-    email: string;
-    age: number;
-}
-
-// Partial - 所有属性可选
-type PartialUser = Partial&lt;User&gt;;
-function updateUser(user: User, updates: Partial&lt;User&gt;): User {
-    return { ...user, ...updates };
-}
-
-// Required - 所有属性必需
-type RequiredUser = Required&lt;PartialUser&gt;;
-
-// Pick - 选取部分属性
-type UserPreview = Pick&lt;User, "id" | "name"&gt;;
-
-// Omit - 排除部分属性
-type UserWithoutId = Omit&lt;User, "id"&gt;;
-
-// Record - 创建对象类型
-type PageInfo = Record&lt;string, { title: string; url: string }&gt;;
-
-const pages: PageInfo = {
-    home: { title: "首页", url: "/" },
-    about: { title: "关于", url: "/about" }
-};
-
-const updated = updateUser({ id: 1, name: "A", email: "a@b.c", age: 20 }, { name: "B" });
-console.log(updated.name);</code></pre>
+                    <div class="code-header">
+                        <span class="code-lang">json</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch32-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch32-code1"><code>{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM"],
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>Pick的键不正确：</strong><code>Pick&lt;User, "phone"&gt;</code> 报错，"phone"不是User的键</p>
-                    <p><strong>Partial类型安全：</strong>Partial后的属性都可能是undefined，使用前仍需判断</p>
+                    <p><strong>noEmit与构建工具：</strong>使用Vite/Webpack时通常设置noEmit为true</p>
+                    <p><strong>strict模式：</strong>未启用strict会导致类型检查不严格，建议始终启用</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 哪个工具类型可以将接口的所有属性变为可选？</div>
+                    <div class="question">1. 哪个选项启用所有严格类型检查？</div>
                     <input type="text" class="answer-input" id="ch32-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(32,1)">检查答案</button>
                     <div id="ch32-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(32,1)">查看答案</button>
-                    <div id="ch32-answer1" class="answer-box">Partial&lt;T&gt;（如 type OptionalUser = Partial&lt;User&gt;）</div>
+                    <div id="ch32-answer1" class="answer-box">"strict": true</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2638,61 +2379,71 @@ console.log(updated.name);</code></pre>
                     <button class="save-note-btn" onclick="saveNote(32)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn32" onclick="markCompleted(32)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(31)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(33)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第33章 条件类型 -->
+            <!-- 第33章 类型体操 -->
             <div id="ch33" class="chapter-section">
-                <h2>33. 条件类型 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+                <h2>33. 类型体操 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>条件类型语法：</strong><code>T extends U ? X : Y</code>，根据类型关系选择不同的结果类型</li>
-                        <li><strong>infer关键字：</strong>在条件类型中推断类型，如 <code>T extends Array&lt;infer U&gt; ? U : T</code> 提取数组元素类型</li>
-                        <li><strong>分布式条件类型：</strong>当T是联合类型时，条件类型会自动分发到每个成员</li>
-                        <li><strong>内置条件类型：</strong>Exclude、Extract、NonNullable、ReturnType、InstanceType等</li>
+                        <li><strong>类型体操概念：</strong>使用高级类型系统进行复杂的类型运算</li>
+                        <li><strong>递归类型：</strong>类型可以引用自身，实现复杂的数据结构</li>
+                        <li><strong>模板字面量类型：</strong>使用模板字面量操作字符串类型</li>
+                        <li><strong>推断与提取：</strong>使用infer关键字从类型中提取信息</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button></div></div>
-                    <pre id="ch33-code1"><code>// 基本条件类型
-type IsString&lt;T&gt; = T extends string ? "yes" : "no";
-type A = IsString&lt;string&gt;;  // "yes"
-type B = IsString&lt;number&gt;;  // "no"
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch33-code1"><code>// 模板字面量类型
+type EventName&lt;T extends string&gt; = `${T}Changed`;
+type ClickEvent = EventName&lt;"click"&gt;; // "clickChanged"
 
-// infer关键字 - 提取类型
-type ElementType&lt;T&gt; = T extends (infer E)[] ? E : T;
-type Num = ElementType&lt;number[]&gt;;  // number
-type Str = ElementType&lt;string&gt;;     // string
+type UpperCase&lt;T extends string&gt; = T extends `${infer F}${infer R}` 
+    ? `${Uppercase&lt;F&gt;}${UpperCase&lt;R&gt;}` 
+    : T;
 
-// ReturnType - 获取函数返回类型
-function getUser() { return { name: "张三", age: 25 }; }
-type UserType = ReturnType&lt;typeof getUser&gt;;
-// { name: string; age: number }
+type UpperName = UpperCase&lt;"hello world"&gt;; // "HELLO WORLD"
 
-// 内置条件类型
-type T1 = Exclude&lt;"a" | "b" | "c", "a"&gt;;      // "b" | "c"
-type T2 = Extract&lt;"a" | "b" | "c", "a" | "b"&gt;;  // "a" | "b"
-type T3 = NonNullable&lt;string | null | undefined&gt;; // string
+// 递归类型
+type DeepReadonly&lt;T&gt; = {
+    readonly [K in keyof T]: T[K] extends object 
+        ? DeepReadonly&lt;T[K]&gt; 
+        : T[K];
+};
 
-console.log("条件类型示例完成");</code></pre>
+interface Nested {
+    a: { b: { c: number } };
+}
+type ReadonlyNested = DeepReadonly&lt;Nested&gt;;
+
+// 提取函数参数类型
+type Parameters&lt;T&gt; = T extends (...args: infer P) =&gt; any ? P : never;
+function fn(a: string, b: number) {}
+type FnParams = Parameters&lt;typeof fn&gt;; // [string, number]</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>infer位置限制：</strong>infer只能在extends子句的条件类型中使用，不能在普通类型中使用</p>
-                    <p><strong>分布式陷阱：</strong><code>type Wrap&lt;T&gt; = T extends any ? T[] : never</code> 中联合类型会被分发，可能产生意外结果</p>
+                    <p><strong>递归深度限制：</strong>TypeScript有递归深度限制，过深的递归会报错</p>
+                    <p><strong>过度使用类型体操：</strong>复杂的类型体操会降低代码可读性，应谨慎使用</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 如何提取函数返回值的类型？</div>
+                    <div class="question">1. 如何将字符串类型转换为大写？</div>
                     <input type="text" class="answer-input" id="ch33-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(33,1)">检查答案</button>
                     <div id="ch33-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(33,1)">查看答案</button>
-                    <div id="ch33-answer1" class="answer-box">使用 ReturnType&lt;typeof 函数名&gt; 内置工具类型</div>
+                    <div id="ch33-answer1" class="answer-box">使用内置类型 Uppercase&lt;T&gt;，或使用模板字面量类型递归实现</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2700,67 +2451,74 @@ console.log("条件类型示例完成");</code></pre>
                     <button class="save-note-btn" onclick="saveNote(33)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn33" onclick="markCompleted(33)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(32)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(34)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第34章 映射类型 -->
+            <!-- 第34章 与JavaScript互操作 -->
             <div id="ch34" class="chapter-section">
-                <h2>34. 映射类型 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+                <h2>34. 与JavaScript互操作 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>映射类型语法：</strong><code>{ [K in keyof T]: NewType }</code>，基于旧类型创建新类型</li>
-                        <li><strong>映射修饰符：</strong>使用<code>+</code>或<code>-</code>添加或移除readonly和可选修饰符</li>
-                        <li><strong>键重映射：</strong>TS 4.1+支持 <code>[K in keyof T as NewKey]: T[K]</code>，可以变换键名</li>
-                        <li><strong>模板字面量映射：</strong>结合模板字面量类型创建更灵活的映射</li>
+                        <li><strong>any类型：</strong>完全关闭类型检查，可用于与JS代码交互</li>
+                        <li><strong>unknown类型：</strong>类型安全的any，使用前必须进行类型检查</li>
+                        <li><strong>类型断言：</strong>使用 <code>as</code> 或尖括号语法断言类型</li>
+                        <li><strong>ES模块互操作：</strong>通过esModuleInterop选项支持CommonJS模块</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button></div></div>
-                    <pre id="ch34-code1"><code>// 基本映射类型
-type Readonlyify&lt;T&gt; = { readonly [K in keyof T]: T[K] };
-type Optionalize&lt;T&gt; = { [K in keyof T]?: T[K] };
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch34-code1"><code>// 使用any与JS代码交互
+const data: any = JSON.parse('{"name": "张三"}');
+console.log(data.name);
 
-interface Info { name: string; age: number; }
-type ReadonlyInfo = Readonlyify&lt;Info&gt;;
-type OptionalInfo = Optionalize&lt;Info&gt;;
+// 使用unknown更安全
+const result: unknown = fetchData();
+if (typeof result === "string") {
+    console.log(result.toUpperCase());
+}
 
-// 移除修饰符
-type Mutable&lt;T&gt; = { -readonly [K in keyof T]: T[K] };
-type Required2&lt;T&gt; = { [K in keyof T]-?: T[K] };
+// 类型断言
+const input = document.getElementById("input") as HTMLInputElement;
+input.value = "Hello";
 
-// 键重映射 (TS 4.1+)
-type Getters&lt;T&gt; = {
-    [K in keyof T as `get${Capitalize&lt;string & K&gt;}`]: () => T[K]
-};
+// 双重断言
+const value = 42 as unknown as string;
 
-interface Person { name: string; age: number; }
-type PersonGetters = Getters&lt;Person&gt;;
-// { getName: () => string; getAge: () => number }
+// 非空断言
+const element = document.getElementById("btn")!;
+element.click();
 
-// 条件映射
-type NonNullableKeys&lt;T&gt; = {
-    [K in keyof T]-?: T[K]
-};
+// 可选链与空值合并
+const user = getUser();
+const name = user?.name ?? "Unknown";
 
-console.log("映射类型示例完成");</code></pre>
+// 类型守卫
+function isArray(value: unknown): value is any[] {
+    return Array.isArray(value);
+}</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>映射类型与接口混淆：</strong>映射类型只能使用type定义，不能使用interface</p>
-                    <p><strong>键重映射语法：</strong><code>as</code> 子句是TS 4.1+的特性，低版本不支持</p>
+                    <p><strong>滥用any：</strong>过度使用any会失去TypeScript的类型安全优势</p>
+                    <p><strong>非空断言错误：</strong><code>!</code> 断言非空，如果实际为null会导致运行时错误</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 写一个映射类型Stringify，将T的所有属性类型变为string？</div>
-                    <textarea class="answer-textarea" id="ch34-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. any和unknown的区别是什么？</div>
+                    <textarea class="answer-textarea" id="ch34-q1" placeholder="输入答案..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(34,1)">检查答案</button>
                     <div id="ch34-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(34,1)">查看答案</button>
-                    <div id="ch34-answer1" class="answer-box">type Stringify&lt;T&gt; = { [K in keyof T]: string };</div>
+                    <div id="ch34-answer1" class="answer-box">any完全关闭类型检查，可以直接调用任意方法；unknown是类型安全的any，使用前必须进行类型检查</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2768,112 +2526,100 @@ console.log("映射类型示例完成");</code></pre>
                     <button class="save-note-btn" onclick="saveNote(34)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn34" onclick="markCompleted(34)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(33)">◀ 上一章</button>
                     <button class="nav-btn nav-btn-primary" onclick="goToChapter(35)">下一章 ▶</button>
                 </div>
             </div>
 
-            <!-- 第35章 综合实战 -->
+            <!-- 第35章 最佳实践与项目实战 -->
             <div id="ch35" class="chapter-section">
-                <h2>35. 综合实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+                <h2>35. 最佳实践与项目实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>项目架构：</strong>结合接口、泛型、装饰器、模块等构建完整TypeScript项目</li>
-                        <li><strong>类型设计原则：</strong>优先使用unknown而非any、利用泛型提高复用性、使用字面量类型约束取值</li>
-                        <li><strong>错误处理模式：</strong>使用可辨识联合表示操作结果（Result/Try模式），避免抛出异常</li>
-                        <li><strong>类型安全API：</strong>利用条件类型、映射类型和模板字面量构建类型安全的API层</li>
+                        <li><strong>启用strict模式：</strong>始终启用严格模式，确保类型安全</li>
+                        <li><strong>使用type而非interface的场景：</strong>需要联合类型、交叉类型时</li>
+                        <li><strong>避免any：</strong>优先使用unknown和类型守卫</li>
+                        <li><strong>合理使用泛型：</strong>提高代码复用性</li>
+                        <li><strong>命名规范：</strong>类型名使用PascalCase，变量名使用camelCase</li>
                     </ul>
                 </div>
                 <div class="code-block">
-                    <div class="code-header"><span class="code-lang">typescript</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button></div></div>
-                    <pre id="ch35-code1"><code>// 综合实战：类型安全的任务管理系统
+                    <div class="code-header">
+                        <span class="code-lang">typescript</span>
+                        <div class="code-actions">
+                            <button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button>
+                        </div>
+                    </div>
+                    <pre id="ch35-code1"><code>// 项目实战示例：用户管理模块
 
-// 1. 基础类型定义
-type Result&lt;T, E = string&gt; =
-    | { success: true; data: T }
-    | { success: false; error: E };
-
-interface Task {
-    readonly id: string;
-    title: string;
-    description: string;
-    status: "todo" | "in-progress" | "done";
-    priority: "low" | "medium" | "high";
+// 类型定义
+interface User {
+    id: string;
+    name: string;
+    email: string;
     createdAt: Date;
-    tags: string[];
 }
 
-// 2. 泛型仓库
-interface Repository&lt;T extends { id: string }&gt; {
-    findAll(): T[];
-    findById(id: string): T | undefined;
-    create(item: Omit&lt;T, "id"&gt;): T;
-    update(id: string, data: Partial&lt;T&gt;): Result&lt;T&gt;;
-    delete(id: string): Result&lt;boolean&gt;;
+interface CreateUserDto {
+    name: string;
+    email: string;
 }
 
-// 3. 实现仓库
-class TaskRepository implements Repository&lt;Task&gt; {
-    private tasks: Map&lt;string, Task&gt; = new Map();
+interface UpdateUserDto extends Partial&lt;Omit&lt;User, "id" | "createdAt"&gt;&gt; {}
 
-    findAll(): Task[] { return [...this.tasks.values()]; }
-    findById(id: string): Task | undefined { return this.tasks.get(id); }
+// 服务类
+class UserService {
+    private users: User[] = [];
 
-    create(item: Omit&lt;Task, "id"&gt;): Task {
-        const task: Task = { ...item, id: crypto.randomUUID() };
-        this.tasks.set(task.id, task);
-        return task;
+    create(dto: CreateUserDto): User {
+        const user: User = {
+            ...dto,
+            id: crypto.randomUUID(),
+            createdAt: new Date()
+        };
+        this.users.push(user);
+        return user;
     }
 
-    update(id: string, data: Partial&lt;Task&gt;): Result&lt;Task&gt; {
-        const task = this.tasks.get(id);
-        if (!task) return { success: false, error: "任务不存在" };
-        const updated = { ...task, ...data, id: task.id };
-        this.tasks.set(id, updated);
-        return { success: true, data: updated };
+    findById(id: string): User | undefined {
+        return this.users.find(u => u.id === id);
     }
 
-    delete(id: string): Result&lt;boolean&gt; {
-        if (!this.tasks.has(id)) return { success: false, error: "任务不存在" };
-        this.tasks.delete(id);
-        return { success: true, data: true };
+    update(id: string, dto: UpdateUserDto): User | undefined {
+        const index = this.users.findIndex(u => u.id === id);
+        if (index === -1) return undefined;
+        
+        this.users[index] = { ...this.users[index], ...dto };
+        return this.users[index];
+    }
+
+    delete(id: string): boolean {
+        const initialLength = this.users.length;
+        this.users = this.users.filter(u => u.id !== id);
+        return this.users.length < initialLength;
     }
 }
 
-// 4. 使用
-const repo = new TaskRepository();
-const task = repo.create({
-    title: "学习TypeScript",
-    description: "完成35章教程",
-    status: "in-progress",
-    priority: "high",
-    createdAt: new Date(),
-    tags: ["学习", "编程"]
-});
-
-console.log(`任务: ${task.title}, 状态: ${task.status}`);
-const result = repo.update(task.id, { status: "done" });
-if (result.success) {
-    console.log(`完成: ${result.data.title}`);
-}</code></pre>
+// 使用服务
+const service = new UserService();
+const user = service.create({ name: "张三", email: "zhangsan@example.com" });
+console.log(user);</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>过度设计类型：</strong>不要为了展示类型技巧而过度复杂化，类型设计应服务于业务需求</p>
-                    <p><strong>忽略运行时验证：</strong>TypeScript类型只在编译时存在，API边界仍需运行时验证（如zod库）</p>
+                    <p><strong>忽略类型错误：</strong>不应通过类型断言绕过类型检查</p>
+                    <p><strong>过度抽象：</strong>避免创建过多的类型别名和接口</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 定义一个Result类型，表示操作成功返回T或失败返回string错误信息？</div>
-                    <textarea class="answer-textarea" id="ch35-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 在项目中应该如何处理类型安全与灵活性的平衡？</div>
+                    <textarea class="answer-textarea" id="ch35-q1" placeholder="输入答案..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(35,1)">检查答案</button>
                     <div id="ch35-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(35,1)">查看答案</button>
-                    <div id="ch35-answer1" class="answer-box">type Result&lt;T&gt; =
-    | { success: true; data: T }
-    | { success: false; error: string };</div>
+                    <div id="ch35-answer1" class="answer-box">1. 启用strict模式确保类型安全；2. 使用unknown替代any；3. 合理使用类型守卫；4. 使用Partial/Omit等工具类型提高灵活性；5. 对第三方库使用声明文件</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2881,354 +2627,14 @@ if (result.success) {
                     <button class="save-note-btn" onclick="saveNote(35)">保存笔记</button>
                 </div>
                 <button class="completion-btn" id="completeBtn35" onclick="markCompleted(35)">✅ 标记为已完成</button>
-                <div class="nav-buttons">
+                <div class="chapter-nav">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(34)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" disabled>教程完成 🎉</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(1)">重新开始 ▶</button>
                 </div>
             </div>
+        </main>
 
-        </div><!-- end main-content -->
-    </div><!-- end container -->
-
-    <script src="js/tutorial-common.js"></script>
-    <script src="js/tutorial-extensions.js"></script>
-    <script>
-        // ========== 章节数据 ==========
-        const chapters = [
-            {id:1, title:"TypeScript简介"},
-            {id:2, title:"开发环境配置"},
-            {id:3, title:"第一个TS程序"},
-            {id:4, title:"编译与tsconfig"},
-            {id:5, title:"基础类型(number/string/boolean)"},
-            {id:6, title:"数组与元组"},
-            {id:7, title:"枚举类型"},
-            {id:8, title:"any与unknown"},
-            {id:9, title:"void与never"},
-            {id:10, title:"类型断言"},
-            {id:11, title:"接口定义"},
-            {id:12, title:"可选与只读属性"},
-            {id:13, title:"接口继承"},
-            {id:14, title:"函数类型接口"},
-            {id:15, title:"类定义"},
-            {id:16, title:"访问修饰符"},
-            {id:17, title:"继承与重写"},
-            {id:18, title:"抽象类"},
-            {id:19, title:"泛型函数"},
-            {id:20, title:"泛型接口与类"},
-            {id:21, title:"泛型约束"},
-            {id:22, title:"联合类型"},
-            {id:23, title:"交叉类型"},
-            {id:24, title:"类型别名"},
-            {id:25, title:"字面量类型"},
-            {id:26, title:"可辨识联合"},
-            {id:27, title:"类型守卫"},
-            {id:28, title:"模块导入导出"},
-            {id:29, title:"命名空间"},
-            {id:30, title:"装饰器基础"},
-            {id:31, title:"声明文件"},
-            {id:32, title:"实用类型工具(Partial/Required/Pick)"},
-            {id:33, title:"条件类型"},
-            {id:34, title:"映射类型"},
-            {id:35, title:"综合实战"}
-        ];
-
-        const TOTAL_CHAPTERS = chapters.length;
-        const PROGRESS_KEY = 'typescript_progress';
-        const NOTE_KEY = 'typescript_notes';
-        const BOOKMARK_KEY = 'typescript_bookmarks';
-
-        let currentChapter = 1;
-
-        // ========== 初始化 ==========
-        function init() {
-            renderChapterList();
-            updateStats();
-            loadNotes();
-            updateCompletionButtons();
-            checkTheme();
-            initExtensions();
-        }
-
-        // ========== 章节导航 ==========
-        function renderChapterList() {
-            const list = document.getElementById('chapterList');
-            const progress = getProgress();
-            const bookmarks = getBookmarks();
-            list.innerHTML = chapters.map(ch => {
-                const isActive = ch.id === currentChapter;
-                const isCompleted = progress.includes(ch.id);
-                const isBookmarked = bookmarks.includes(ch.id);
-                return `<li class="chapter-item${isActive ? ' active' : ''}${isCompleted ? ' completed' : ''}"
-                    onclick="goToChapter(${ch.id})">
-                    <span class="ch-text">${ch.id}. ${ch.title}</span>
-                    <span class="ch-icon">${isCompleted ? '✅' : isBookmarked ? '⭐' : ''}</span>
-                </li>`;
-            }).join('');
-        }
-
-        function goToChapter(id) {
-            if (id < 1 || id > TOTAL_CHAPTERS) return;
-            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('ch' + id).classList.add('active');
-            currentChapter = id;
-            renderChapterList();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // ========== 进度跟踪 ==========
-        function getProgress() {
-            try { return JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]'); } catch { return []; }
-        }
-
-        function saveProgress(progress) {
-            localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
-        }
-
-        function markCompleted(id) {
-            const progress = getProgress();
-            if (!progress.includes(id)) {
-                progress.push(id);
-                saveProgress(progress);
-            }
-            const btn = document.getElementById('completeBtn' + id);
-            if (btn) { btn.textContent = '✅ 已完成'; btn.classList.add('completed'); btn.disabled = true; }
-            updateStats();
-            renderChapterList();
-            showToast(`第${id}章已完成！`);
-        }
-
-        function updateCompletionButtons() {
-            const progress = getProgress();
-            progress.forEach(id => {
-                const btn = document.getElementById('completeBtn' + id);
-                if (btn) { btn.textContent = '✅ 已完成'; btn.classList.add('completed'); btn.disabled = true; }
-            });
-        }
-
-        // ========== 统计信息 ==========
-        function updateStats() {
-            const progress = getProgress();
-            const bookmarks = getBookmarks();
-            const count = progress.length;
-            const percent = Math.round((count / TOTAL_CHAPTERS) * 100);
-            document.getElementById('completedCount').textContent = count;
-            document.getElementById('totalCount').textContent = TOTAL_CHAPTERS;
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('bookmarkCount').textContent = bookmarks.length;
-            document.getElementById('progressFill').style.width = percent + '%';
-        }
-
-        function showStats() {
-            const progress = getProgress();
-            const bookmarks = getBookmarks();
-            alert(`学习统计\n已完成: ${progress.length}/${TOTAL_CHAPTERS}\n进度: ${Math.round(progress.length/TOTAL_CHAPTERS*100)}%\n收藏: ${bookmarks.length}章`);
-        }
-
-        // ========== 笔记功能 ==========
-        function loadNotes() {
-            let notes = {};
-            try { notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '{}'); } catch {}
-            for (let i = 1; i <= TOTAL_CHAPTERS; i++) {
-                const el = document.getElementById('ch' + i + '-note');
-                if (el && notes[i]) el.value = notes[i];
-            }
-        }
-
-        function saveNote(id) {
-            let notes = {};
-            try { notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '{}'); } catch {}
-            const el = document.getElementById('ch' + id + '-note');
-            if (el) { notes[id] = el.value; }
-            localStorage.setItem(NOTE_KEY, JSON.stringify(notes));
-            showToast('笔记已保存！');
-        }
-
-        // ========== 收藏功能 ==========
-        function getBookmarks() {
-            try { return JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]'); } catch { return []; }
-        }
-
-        function toggleBookmark(id) {
-            let bookmarks = getBookmarks();
-            const btn = document.getElementById('bookmarkBtn' + id);
-            if (bookmarks.includes(id)) {
-                bookmarks = bookmarks.filter(b => b !== id);
-                if (btn) { btn.classList.remove('bookmarked'); btn.textContent = '📌'; }
-                showToast(`取消收藏第${id}章`);
-            } else {
-                bookmarks.push(id);
-                if (btn) { btn.classList.add('bookmarked'); btn.textContent = '⭐'; }
-                showToast(`已收藏第${id}章`);
-            }
-            localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
-            updateStats();
-            renderChapterList();
-        }
-
-        // ========== 主题切换 ==========
-        function toggleTheme() {
-            const body = document.body;
-            const isDark = body.getAttribute('data-theme') === 'dark';
-            body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            document.getElementById('themeText').textContent = isDark ? '深色模式' : '浅色模式';
-            localStorage.setItem('typescript_theme', isDark ? 'light' : 'dark');
-        }
-
-        function checkTheme() {
-            const theme = localStorage.getItem('typescript_theme');
-            if (theme === 'dark') {
-                document.body.setAttribute('data-theme', 'dark');
-                document.getElementById('themeText').textContent = '浅色模式';
-            }
-        }
-
-        // ========== 搜索功能 ==========
-        function searchTutorial() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            if (!query) {
-                document.querySelectorAll('.chapter-item').forEach(el => el.style.display = '');
-                return;
-            }
-            const items = document.querySelectorAll('.chapter-item');
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(query) ? '' : 'none';
-            });
-        }
-
-        // ========== 代码复制 ==========
-        function copyCode(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const code = el.textContent;
-            navigator.clipboard.writeText(code).then(() => {
-                showToast('代码已复制到剪贴板！');
-            }).catch(() => {
-                const ta = document.createElement('textarea');
-                ta.value = code;
-                document.body.appendChild(ta);
-                ta.select();
-                document.execCommand('copy');
-                document.body.removeChild(ta);
-                showToast('代码已复制到剪贴板！');
-            });
-        }
-
-        // ========== 练习题答案检查 ==========
-        function checkAnswer(ch, q) {
-            const resultEl = document.getElementById('ch' + ch + '-result' + q);
-            const answerEl = document.getElementById('ch' + ch + '-q' + q);
-
-            if (answerEl && answerEl.tagName === 'TEXTAREA') {
-                resultEl.className = 'quiz-result correct';
-                resultEl.innerHTML = '✅ 已提交，请对照参考答案';
-                resultEl.style.display = 'flex';
-                return;
-            }
-
-            // Radio buttons
-            const radios = document.querySelectorAll('input[name="ch' + ch + '-q' + q + '"]');
-            if (radios.length > 0) {
-                let selected = '';
-                radios.forEach(r => { if (r.checked) selected = r.value; });
-                if (!selected) {
-                    resultEl.className = 'quiz-result incorrect';
-                    resultEl.innerHTML = '❌ 请选择一个答案';
-                    resultEl.style.display = 'flex';
-                    return;
-                }
-                const correctAnswers = {'4-1':'B','5-1':'B','13-1':'A'};
-                const key = ch + '-' + q;
-                if (correctAnswers[key] && selected === correctAnswers[key]) {
-                    resultEl.className = 'quiz-result correct';
-                    resultEl.innerHTML = '✅ 回答正确！';
-                } else if (correctAnswers[key]) {
-                    resultEl.className = 'quiz-result incorrect';
-                    resultEl.innerHTML = '❌ 回答错误，请查看正确答案';
-                } else {
-                    resultEl.className = 'quiz-result correct';
-                    resultEl.innerHTML = '✅ 已提交，请对照参考答案';
-                }
-                resultEl.style.display = 'flex';
-                return;
-            }
-
-            // Text input
-            if (answerEl) {
-                const val = answerEl.value.trim().toLowerCase();
-                const correctMap = {
-                    '1-1': ['微软','microsoft'],
-                    '2-1': ['tsc -v','tsc -V','tsc -v ','tsc --version'],
-                    '3-1': ['.ts','ts'],
-                    '7-1': ['0'],
-                    '8-1': ['any可以任意','unknown必须收窄','类型收窄','unknown需要','安全'],
-                    '9-1': ['never'],
-                    '10-1': ['as','as语法','as语法'],
-                    '12-1': ['可选链','optional chaining','?.','先判断'],
-                    '16-1': ['protected'],
-                    '17-1': ['super','super()'],
-                    '18-1': ['实现代码','实现','抽象类可以'],
-                    '24-1': ['声明合并','合并','declaration merging'],
-                    '25-1': ['as const','const断言'],
-                    '26-1': ['标签','判别式','共有属性'],
-                    '28-1': ['import type'],
-                    '29-1': ['模块','es模块','import/export'],
-                    '30-1': ['experimentaldecorators','experimental'],
-                    '31-1': ['.d.ts','d.ts'],
-                    '32-1': ['partial','partial<t>'],
-                    '33-1': ['returntype'],
-                    '34-1': ['映射'],
-                    '35-1': ['result']
-                };
-                const key = ch + '-' + q;
-                const correctList = correctMap[key] || [];
-                const isCorrect = correctList.some(c => val.includes(c.toLowerCase()));
-                if (val && isCorrect) {
-                    resultEl.className = 'quiz-result correct';
-                    resultEl.innerHTML = '✅ 回答正确！';
-                } else if (val) {
-                    resultEl.className = 'quiz-result correct';
-                    resultEl.innerHTML = '✅ 已提交，请对照参考答案';
-                } else {
-                    resultEl.className = 'quiz-result incorrect';
-                    resultEl.innerHTML = '❌ 请输入答案';
-                }
-                resultEl.style.display = 'flex';
-            }
-        }
-
-        function toggleAnswer(ch, q) {
-            const el = document.getElementById('ch' + ch + '-answer' + q);
-            if (el) el.classList.toggle('show');
-        }
-
-        // ========== Toast提示 ==========
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'toast show';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => { toast.classList.remove('show'); }, 2000);
-            setTimeout(() => { document.body.removeChild(toast); }, 2500);
-        }
-
-        // ========== 返回首页 ==========
-        function goToHub() {
-            window.location.href = 'index.html';
-        }
-
-        // ========== 扩展初始化 ==========
-        function initExtensions() {
-            // 加载收藏状态
-            const bookmarks = getBookmarks();
-            bookmarks.forEach(id => {
-                const btn = document.getElementById('bookmarkBtn' + id);
-                if (btn) { btn.classList.add('bookmarked'); btn.textContent = '⭐'; }
-            });
-        }
-
-        // 启动
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-</body>
+        <script src="js/tutorial-common.js"></script>
+        <script src="js/tutorial-extensions.js"></script>
+    </body>
 </html>

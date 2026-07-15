@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/tutorial-style.css">
     <style>
-        /* Python 特定颜色变量 */
         :root {
             --accent-color: #667eea;
         }
@@ -15,7 +14,6 @@
             --accent-color: #818cf8;
         }
 
-        /* 页面特有组件样式（tutorial-style.css 中未定义） */
         .stats-info { display: flex; gap: 30px; margin-bottom: 20px; padding: 20px; background: var(--bg-card); border-radius: 15px; box-shadow: var(--shadow-md); flex-wrap: wrap; justify-content: center; }
         .stat-item { text-align: center; }
         .stat-value { font-size: 1.8rem; font-weight: bold; color: var(--accent-color); }
@@ -424,7 +422,7 @@ print(1 < x < 10)  # True</code></pre></div>
             </div>
             <div id="ch13" class="chapter-section">
                 <h2>13. 赋值与位运算符 <button class="bookmark-btn" onclick="toggleBookmark(13)" id="bookmarkBtn13">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>赋值运算符：</strong>=、+=、-=、*=、/=、//=、%=、**=、&=、|=、^=、<<=、>>=</li><li><strong>位运算符：</strong>&（与）、|（或）、^（异或）、~（取反）、<<（左移）、>>（右移）</li><li><strong>海象运算符：</strong>:=（Python 3.8+）在表达式中赋值</li><li><strong>位运算应用：</strong>权限控制、标志位、快速计算2的幂</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>赋值运算符：</strong>=、+=、-=、*=、/=、//=、%=、**=、&amp;=、|=、^=、&lt;&lt;=、&gt;&gt;=</li><li><strong>位运算符：</strong>&amp;（与）、|（或）、^（异或）、~（取反）、&lt;&lt;（左移）、&gt;&gt;（右移）</li><li><strong>海象运算符：</strong>:=（Python 3.8+）在表达式中赋值</li><li><strong>位运算应用：</strong>权限控制、标志位、快速计算2的幂</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">python</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch13-code1')">📋 复制</button></div></div><pre id="ch13-code1"><code># 位运算
 print(5 & 3)    # 1   101 & 011 = 001
 print(5 | 3)    # 7   101 | 011 = 111
@@ -439,8 +437,8 @@ def is_even(n):
 
 print(is_even(4))  # True
 print(is_even(7))  # False</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>混淆逻辑运算与位运算：& 是位与，and 是逻辑与，在条件判断中应使用and</p><p>负数位移：-1 >> 1 结果是-1，不是0</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">8 << 2 的结果是什么？</div><input type="text" class="answer-input" id="ch13-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(13,1)">检查答案</button><div id="ch13-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(13,1)">查看答案</button><div id="ch13-answer1" class="answer-box">32（8左移2位，相当于8*4）</div></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>混淆逻辑运算与位运算：&amp; 是位与，and 是逻辑与，在条件判断中应使用and</p><p>负数位移：-1 &gt;&gt; 1 结果是-1，不是0</p></div>
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">8 &lt;&lt; 2 的结果是什么？</div><input type="text" class="answer-input" id="ch13-q1" placeholder="输入答案..."><button class="btn btn-primary" onclick="checkAnswer(13,1)">检查答案</button><div id="ch13-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(13,1)">查看答案</button><div id="ch13-answer1" class="answer-box">32（8左移2位，相当于8*4）</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch13-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(13)">保存笔记</button></div>
                 <button class="completion-btn" id="completeBtn13" onclick="markCompleted(13)">✅ 标记为已完成</button>
                 <div class="nav-buttons"><button class="nav-btn nav-btn-secondary" onclick="goToChapter(12)">◀ 上一章</button><button class="nav-btn nav-btn-primary" onclick="goToChapter(14)">下一章 ▶</button></div>
@@ -469,7 +467,7 @@ if money >= 50:
     else:
         print("普通价")</code></pre></div>
                 <div class="error-block"><h4>❌ 常见错误</h4><p>忘记冒号：if age >= 18 缺少冒号，应为 if age >= 18:</p><p>缩进不一致：同一代码块的缩进必须一致，混用空格和Tab会报错</p></div>
-                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写if语句：如果temperature > 38，输出"发烧"</div><textarea class="answer-textarea" id="ch14-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(14,1)">检查答案</button><div id="ch14-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(14,1)">查看答案</button><div id="ch14-answer1" class="answer-box">temperature = 39
+                <div class="practice-section"><h4>📝 练习题</h4><div class="question">编写if语句：如果temperature &gt; 38，输出"发烧"</div><textarea class="answer-textarea" id="ch14-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(14,1)">检查答案</button><div id="ch14-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(14,1)">查看答案</button><div id="ch14-answer1" class="answer-box">temperature = 39
 if temperature > 38:
     print("发烧")</div></div>
                 <div class="note-section"><h4>📒 学习笔记</h4><textarea class="note-textarea" id="ch14-note" placeholder="记录你的学习笔记..."></textarea><button class="save-note-btn" onclick="saveNote(14)">保存笔记</button></div>
@@ -492,7 +490,7 @@ elif score >= 60:
 else:
     grade = "F"
 print(f"等级: {grade}")  # B</code></pre></div>
-                <div class="error-block"><h4>❌ 常见错误</h4><p>条件重叠：if x > 5: ... elif x > 3: ... 当x=6时只执行第一个分支</p><p>遗漏else：忘记处理所有条件都不满足的情况</p></div>
+                <div class="error-block"><h4>❌ 常见错误</h4><p>条件重叠：if x &gt; 5: ... elif x &gt; 3: ... 当x=6时只执行第一个分支</p><p>遗漏else：忘记处理所有条件都不满足的情况</p></div>
                 <div class="practice-section"><h4>📝 练习题</h4><div class="question">用elif实现：根据月份输出季节（3-5春，6-8夏，9-11秋，12-2冬）</div><textarea class="answer-textarea" id="ch15-q1" placeholder="输入代码..."></textarea><button class="btn btn-primary" onclick="checkAnswer(15,1)">检查答案</button><div id="ch15-result1" class="quiz-result"></div><button class="show-answer-btn" onclick="toggleAnswer(15,1)">查看答案</button><div id="ch15-answer1" class="answer-box">month = 4
 if 3 <= month <= 5:
     print("春季")
@@ -924,7 +922,7 @@ print(random.randint(1, 100))</div></div>
             </div>
             <div id="ch31" class="chapter-section">
                 <h2>31. 包管理 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
-                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>包结构：</strong>包含__init__.py的目录即为包，__init__.py可以为空</li><li><strong>pip工具：</strong>install安装、uninstall卸载、list列出、freeze导出依赖</li><li><strong>requirements.txt：</strong>pip freeze > requirements.txt导出，pip install -r安装</li><li><strong>虚拟环境：</strong>venv创建隔离环境，避免全局包污染</li></ul></div>
+                <div class="section-content"><h3>🌟 知识点讲解</h3><ul><li><strong>包结构：</strong>包含__init__.py的目录即为包，__init__.py可以为空</li><li><strong>pip工具：</strong>install安装、uninstall卸载、list列出、freeze导出依赖</li><li><strong>requirements.txt：</strong>pip freeze &gt; requirements.txt导出，pip install -r安装</li><li><strong>虚拟环境：</strong>venv创建隔离环境，避免全局包污染</li></ul></div>
                 <div class="code-block"><div class="code-header"><span class="code-lang">python</span><div class="code-actions"><button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button></div></div><pre id="ch31-code1"><code># pip常用命令
 pip install requests          # 安装包
 pip install requests==2.28.0  # 指定版本
@@ -1100,47 +1098,7 @@ except ZeroDivisionError:
         const TOTAL_CHAPTERS = 35;
         const chapters = [{id:1,title:"Python简介与历史",icon:"🐍"},{id:2,title:"安装与环境配置",icon:"⚙️"},{id:3,title:"第一个Python程序",icon:"🚀"},{id:4,title:"注释与代码规范",icon:"📝"},{id:5,title:"变量与赋值",icon:"📦"},{id:6,title:"数字类型(int,float,complex)",icon:"🔢"},{id:7,title:"字符串基础",icon:"🔤"},{id:8,title:"字符串高级操作",icon:"🔧"},{id:9,title:"布尔类型与None",icon:"✅"},{id:10,title:"类型转换",icon:"🔄"},{id:11,title:"算术运算符",icon:"➕"},{id:12,title:"比较与逻辑运算符",icon:"⚖️"},{id:13,title:"赋值与位运算符",icon:"💻"},{id:14,title:"if条件语句",icon:"🔀"},{id:15,title:"elif与else",icon:"🔄"},{id:16,title:"三元表达式",icon:"❓"},{id:17,title:"for循环",icon:"🔁"},{id:18,title:"while循环",icon:"🔂"},{id:19,title:"break与continue",icon:"⏹️"},{id:20,title:"列表基础",icon:"📋"},{id:21,title:"列表高级操作",icon:"⚡"},{id:22,title:"元组",icon:"🔒"},{id:23,title:"字典基础",icon:"📖"},{id:24,title:"字典高级操作",icon:"🔧"},{id:25,title:"集合",icon:"🎯"},{id:26,title:"函数定义与调用",icon:"📝"},{id:27,title:"函数参数(默认/可变/关键字)",icon:"⚙️"},{id:28,title:"匿名函数Lambda",icon:"λ"},{id:29,title:"变量作用域",icon:"🌍"},{id:30,title:"模块导入",icon:"📦"},{id:31,title:"包管理",icon:"📁"},{id:32,title:"类与对象",icon:"🏗️"},{id:33,title:"继承与多态",icon:"🔗"},{id:34,title:"文件读写",icon:"📄"},{id:35,title:"异常处理",icon:"🛡️"}];
 
-        const correctAnswers = {1:{1:"guido van rossum"},2:{1:"python -m venv 环境名"},3:{1:"name = "张三"
-age = 20
-print(f"我叫{name}，今年{age}岁")"},4:{1:"按PEP 8规范，类名应该使用哪种命名风格？"},5:{1:"a, b = b, a"},6:{1:"2 ** 20"},7:{1:""python"[::-1]"},8:{1:"" ".join(["python","is","awesome"])"},9:{1:"bool("")的值是什么？"},10:{1:"int(float("3.14"))"},11:{1:"-3（整除向下取整）"},12:{1:"true（and优先级高于or）"},13:{1:"32（8左移2位，相当于8*4）"},14:{1:"temperature = 39
-if temperature > 38:
-    print("发烧")"},15:{1:"month = 4
-if 3 <= month <= 5:
-    print("春季")
-elif 6 <= month <= 8:
-    print("夏季")
-elif 9 <= month <= 11:
-    print("秋季")
-else:
-    print("冬季")"},16:{1:""偶数" if n % 2 == 0 else "奇数""},17:{1:"for i, v in enumerate(["a","b","c"]):
-    print(f"{i}: {v}")"},18:{1:"total = 0
-i = 1
-while i <= 100:
-    total += i
-    i += 1
-print(total)"},19:{1:"for i in range(1, 21):
-    if i % 3 == 0:
-        continue
-    print(i)"},20:{1:"nums = list(range(1, 11))
-nums.pop(2)  # 或 del nums[2]"},21:{1:"[x**2 for x in range(1, 21) if x % 2 == 0]"},22:{1:"a, b = b, a"},23:{1:"students = {"张三": 90, "李四": 85, "王五": 95}
-for name, score in students.items():
-    print(f"{name}: {score}分")"},24:{1:"{x: x**2 for x in range(1, 6)}"},25:{1:"set([1,2,3,4]) & set([3,4,5,6])"},26:{1:"def is_palindrome(s):
-    return s == s[::-1]"},27:{1:"def average(*args):
-    return sum(args) / len(args) if args else 0"},28:{1:"list(map(lambda x: x + 10, [1, 2, 3]))"},29:{1:"global"},30:{1:"import random
-print(random.randint(1, 100))"},31:{1:"pip freeze > requirements.txt"},32:{1:"class Circle:
-    def __init__(self, radius):
-        self.radius = radius
-    def area(self):
-        return 3.14 * self.radius ** 2"},33:{1:"class Student(Person):
-    def __init__(self, name, age, school):
-        super().__init__(name, age)
-        self.school = school"},34:{1:"fruits = ["a", "b", "c"]
-with open("fruits.txt", "w") as f:
-    for fruit in fruits:
-        f.write(fruit + "\n")"},35:{1:"try:
-    result = 10 / 0
-except ZeroDivisionError:
-    print("错误: 不能除以零")"},};
+        const correctAnswers = {1:{1:"guido van rossum"},2:{1:"python -m venv 环境名"},3:{1:"name = \"张三\"\nage = 20\nprint(f\"我叫{name}，今年{age}岁\")"},4:{1:"B"},5:{1:"a, b = b, a"},6:{1:"2 ** 20"},7:{1:"\"python\"[::-1]"},8:{1:"\" \".join([\"python\",\"is\",\"awesome\"])"},9:{1:"B"},10:{1:"int(float(\"3.14\"))"},11:{1:"-3"},12:{1:"true"},13:{1:"32"},14:{1:"temperature = 39\nif temperature > 38:\n    print(\"发烧\")"},15:{1:"month = 4\nif 3 <= month <= 5:\n    print(\"春季\")\nelif 6 <= month <= 8:\n    print(\"夏季\")\nelif 9 <= month <= 11:\n    print(\"秋季\")\nelse:\n    print(\"冬季\")"},16:{1:"\"偶数\" if n % 2 == 0 else \"奇数\""},17:{1:"for i, v in enumerate([\"a\",\"b\",\"c\"]):\n    print(f\"{i}: {v}\")"},18:{1:"total = 0\ni = 1\nwhile i <= 100:\n    total += i\n    i += 1\nprint(total)"},19:{1:"for i in range(1, 21):\n    if i % 3 == 0:\n        continue\n    print(i)"},20:{1:"nums = list(range(1, 11))\nnums.pop(2)"},21:{1:"[x**2 for x in range(1, 21) if x % 2 == 0]"},22:{1:"a, b = b, a"},23:{1:"students = {\"张三\": 90, \"李四\": 85, \"王五\": 95}\nfor name, score in students.items():\n    print(f\"{name}: {score}分\")"},24:{1:"{x: x**2 for x in range(1, 6)}"},25:{1:"set([1,2,3,4]) & set([3,4,5,6])"},26:{1:"def is_palindrome(s):\n    return s == s[::-1]"},27:{1:"def average(*args):\n    return sum(args) / len(args) if args else 0"},28:{1:"list(map(lambda x: x + 10, [1, 2, 3]))"},29:{1:"global"},30:{1:"import random\nprint(random.randint(1, 100))"},31:{1:"pip freeze > requirements.txt"},32:{1:"class Circle:\n    def __init__(self, radius):\n        self.radius = radius\n    def area(self):\n        return 3.14 * self.radius ** 2"},33:{1:"class Student(Person):\n    def __init__(self, name, age, school):\n        super().__init__(name, age)\n        self.school = school"},34:{1:"fruits = [\"a\", \"b\", \"c\"]\nwith open(\"fruits.txt\", \"w\") as f:\n    for fruit in fruits:\n        f.write(fruit + \"\\n\")"},35:{1:"try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"错误: 不能除以零\")"},};
 
         function init() {
             renderChapterList();
@@ -1186,7 +1144,6 @@ except ZeroDivisionError:
                 if (!stats.languagesProgress['python'].includes(chapterId)) stats.languagesProgress['python'].push(chapterId);
                 LearningStats.save(stats);
                 LearningStats.checkAchievements();
-                // Also save to python_progress for explicit tracking
                 const progress = JSON.parse(localStorage.getItem('python_progress') || '{"completed":[]}');
                 if (!progress.completed.includes(chapterId)) progress.completed.push(chapterId);
                 localStorage.setItem('python_progress', JSON.stringify(progress));
@@ -1211,7 +1168,6 @@ except ZeroDivisionError:
         function loadProgress() {
             const stats = LearningStats.get();
             const completed = stats.chaptersCompleted || [];
-            // Also check python_progress localStorage key
             const progress = JSON.parse(localStorage.getItem('python_progress') || '{"completed":[]}');
             chapters.forEach(ch => {
                 const key = 'python_' + ch.id;
@@ -1309,7 +1265,6 @@ except ZeroDivisionError:
             const progress = JSON.parse(localStorage.getItem('python_progress') || '{"completed":[]}');
             const completedFromStats = stats.languagesProgress['python'] || [];
             const completedFromProgress = progress.completed || [];
-            // Merge both sources
             const allCompleted = [...new Set([...completedFromStats, ...completedFromProgress])];
             const completedCount = allCompleted.length;
             const percent = Math.round((completedCount / TOTAL_CHAPTERS) * 100);

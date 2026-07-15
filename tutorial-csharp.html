@@ -4,80 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>C# 教程 - 从入门到精通（35章）</title>
-    <link rel="stylesheet" href="css/tutorial-features.css">
-    <link rel="stylesheet" href="css/tutorial-extensions.css">
-    <style>
-        :root{--primary-color:#512bd4;--accent-color:#8b5cf6;--bg-primary:#fff;--bg-secondary:#f5f3ff;--bg-card:#fff;--text-primary:#1f2937;--text-secondary:#6b7280;--text-muted:#9ca3af;--border-color:#e5e7eb;--shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow-md:0 4px 6px rgba(0,0,0,.1);--shadow-lg:0 10px 15px rgba(0,0,0,.1);--success-color:#10b981;--error-color:#ef4444;--warning-color:#f59e0b}
-        .dark-mode{--bg-primary:#111827;--bg-secondary:#1f2937;--bg-card:#1f2937;--text-primary:#f9fafb;--text-secondary:#d1d5db;--text-muted:#9ca3af;--border-color:#374151;--shadow-sm:0 1px 2px rgba(0,0,0,.3);--shadow-md:0 4px 6px rgba(0,0,0,.3);--shadow-lg:0 10px 15px rgba(0,0,0,.3)}
-        *{box-sizing:border-box}
-        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg-primary);color:var(--text-primary);margin:0;padding:0;transition:background .3s,color .3s}
-        .container{max-width:1200px;margin:0 auto;padding:20px}
-        .header{background:linear-gradient(135deg,#512bd4,#8b5cf6);color:#fff;padding:40px 20px;border-radius:20px;margin-bottom:30px;text-align:center}
-        .header h1{font-size:2.5rem;margin-bottom:10px}
-        .header p{opacity:.9;font-size:1.1rem}
-        .toolbar{display:flex;flex-wrap:wrap;gap:15px;align-items:center;margin-bottom:30px;background:var(--bg-card);padding:15px;border-radius:15px;box-shadow:var(--shadow-md)}
-        .search-box{flex:1;min-width:250px;padding:12px 20px;border:2px solid var(--border-color);border-radius:10px;font-size:1rem;background:var(--bg-secondary);color:var(--text-primary);transition:border-color .3s}
-        .search-box:focus{outline:none;border-color:var(--accent-color)}
-        .btn{padding:12px 25px;border:none;border-radius:10px;font-size:1rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;gap:8px}
-        .btn-primary{background:var(--accent-color);color:#fff}
-        .btn-primary:hover{background:#7c3aed;transform:translateY(-2px)}
-        .btn-secondary{background:var(--bg-secondary);color:var(--text-secondary)}
-        .btn-secondary:hover{background:rgba(139,92,246,.1);color:var(--accent-color)}
-        .progress-bar-container{display:flex;align-items:center;gap:10px;flex:1;max-width:300px}
-        .progress-bar{flex:1;height:20px;background:var(--bg-secondary);border-radius:10px;overflow:hidden}
-        .progress-fill{height:100%;background:linear-gradient(90deg,#512bd4,#8b5cf6);border-radius:10px;transition:width .5s;width:0%}
-        .progress-text{font-size:.9rem;color:var(--text-secondary);white-space:nowrap}
-        .sidebar{position:fixed;left:20px;top:200px;width:260px;background:var(--bg-card);border-radius:15px;padding:20px;box-shadow:var(--shadow-md);overflow-y:auto;max-height:calc(100vh - 250px);z-index:100}
-        .sidebar h3{margin-top:0;padding-bottom:15px;border-bottom:2px solid var(--border-color);font-size:1rem}
-        .chapter-list{list-style:none;padding:0;margin:0}
-        .chapter-item{padding:6px 10px;border-radius:8px;cursor:pointer;margin-bottom:3px;transition:all .3s;font-size:.82rem;display:flex;justify-content:space-between;align-items:center}
-        .chapter-item:hover{background:var(--bg-secondary)}
-        .chapter-item.completed{background:rgba(16,185,129,.1);color:var(--success-color)}
-        .chapter-item.active{background:var(--accent-color);color:#fff}
-        .chapter-item .check{font-size:.7rem}
-        .main-content{margin-left:290px}
-        .chapter{background:var(--bg-card);border-radius:15px;padding:30px;margin-bottom:30px;box-shadow:var(--shadow-md)}
-        .chapter.hidden{display:none}
-        .chapter-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
-        .chapter-number{background:var(--accent-color);color:#fff;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.2rem;flex-shrink:0}
-        .chapter-title{font-size:1.8rem;margin:0;flex:1;margin-left:15px}
-        .chapter-actions{display:flex;gap:10px}
-        .section{margin-bottom:30px}
-        .section-title{font-size:1.3rem;color:var(--primary-color);margin-bottom:15px;display:flex;align-items:center;gap:10px}
-        .content-text{line-height:1.8;color:var(--text-secondary);margin-bottom:15px}
-        .content-text ul,.content-text ol{padding-left:20px}
-        .content-text li{margin-bottom:5px}
-        .code-block{background:#1e1e1e;color:#d4d4d4;padding:20px;border-radius:12px;overflow-x:auto;margin:15px 0;position:relative}
-        .dark-mode .code-block{background:#0d1117}
-        .code-block pre{margin:0;font-family:Consolas,Monaco,monospace;font-size:.92rem;line-height:1.6}
-        .code-block code{color:inherit}
-        .code-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid #333}
-        .code-lang{color:#8b5cf6;font-weight:600}
-        .code-actions{display:flex;gap:10px}
-        .copy-btn{background:rgba(255,255,255,.1);border:none;color:#d4d4d4;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:.85rem;transition:background .3s}
-        .copy-btn:hover{background:rgba(255,255,255,.2)}
-        .error-block{background:rgba(239,68,68,.1);border-left:4px solid var(--error-color);padding:15px;border-radius:0 10px 10px 0;margin:15px 0}
-        .error-title{color:var(--error-color);font-weight:600;margin-bottom:10px}
-        .error-block pre{background:none;padding:0;margin:0;font-family:Consolas,Monaco,monospace;font-size:.88rem;line-height:1.5;color:var(--text-secondary);white-space:pre-wrap}
-        .quiz-section{background:var(--bg-secondary);border-radius:15px;padding:25px;margin:20px 0}
-        .quiz-question{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border-color)}
-        .question-text{margin-bottom:15px;font-weight:500}
-        .answer-input{width:100%;padding:12px;border:2px solid var(--border-color);border-radius:10px;font-size:1rem;background:var(--bg-primary);color:var(--text-primary);margin-bottom:15px;font-family:inherit}
-        .answer-input:focus{outline:none;border-color:var(--accent-color)}
-        .quiz-result{padding:15px;border-radius:10px;margin-top:15px;display:none}
-        .quiz-result.correct{background:rgba(16,185,129,.1);color:var(--success-color);display:block}
-        .quiz-result.incorrect{background:rgba(239,68,68,.1);color:var(--error-color);display:block}
-        .answer-section{margin-top:20px;padding:20px;background:rgba(139,92,246,.1);border-radius:10px;display:none}
-        .answer-section.show{display:block}
-        .answer-title{font-weight:600;color:var(--accent-color);margin-bottom:10px}
-        .notes-section{margin-top:30px;background:var(--bg-secondary);border-radius:15px;padding:25px}
-        .notes-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-        .notes-title{font-size:1.2rem;font-weight:600}
-        .notes-textarea{width:100%;height:120px;padding:15px;border:2px solid var(--border-color);border-radius:10px;font-size:1rem;background:var(--bg-primary);color:var(--text-primary);resize:vertical;font-family:inherit}
-        .notes-textarea:focus{outline:none;border-color:var(--accent-color)}
-        .completion-btn{margin-top:20px;width:100%;padding:15px;font-size:1.1rem;font-weight:600}
-        @media(max-width:1000px){.sidebar{position:static;width:auto;max-height:300px;margin-bottom:30px}.main-content{margin-left:0}.toolbar{flex-direction:column;align-items:stretch}.progress-bar-container{max-width:none}}
-    </style>
+    <link rel="stylesheet" href="css/tutorial-style.css">
 </head>
 <body data-language="csharp">
 <div class="container">
@@ -86,12 +13,16 @@
         <p>35章完整教程 · 从入门到精通 · 系统学习C#编程</p>
     </div>
     <div class="toolbar">
-        <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
-        <button class="btn btn-primary" onclick="toggleDarkMode()"><span id="themeIcon">🌙</span><span id="themeText">暗黑模式</span></button>
-        <button class="btn btn-secondary" onclick="showBookmarks()">📑 收藏夹</button>
-        <button class="btn btn-secondary" onclick="showProgress()">📊 学习进度</button>
-        <div class="progress-bar-container">
-            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div class="toolbar-left">
+            <input type="text" class="search-box" id="searchInput" placeholder="搜索教程内容..." oninput="searchTutorial()">
+        </div>
+        <div class="toolbar-right">
+            <button class="btn btn-primary" onclick="toggleDarkMode()">🌙 暗黑模式</button>
+            <button class="btn btn-secondary" onclick="showBookmarks()">📑 收藏夹</button>
+            <button class="btn btn-secondary" onclick="showProgress()">📊 学习进度</button>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
             <span class="progress-text" id="progressText">0/35</span>
         </div>
     </div>
@@ -105,345 +36,1615 @@
 <script src="js/tutorial-common.js"></script>
 <script src="js/tutorial-extensions.js"></script>
 <script>
-const TOTAL=35,PK='csharp_progress',NK='csharp_notes',BK='csharp_bookmarks',DK='csharp_darkmode';
+const TOTAL = 35;
+const PK = 'csharp_progress';
+const NK = 'csharp_notes';
+const BK = 'csharp_bookmarks';
+const DK = 'csharp_darkmode';
 
-const chapters=[
-{id:1,t:'C#简介与.NET',p:['C#由微软Anders Hejlsberg主导开发，2000年发布，是现代、类型安全、面向对象的语言。','.NET平台包含CLR（公共语言运行时）和FCL（框架类库），提供跨语言互操作性。','.NET演进：.NET Framework→.NET Core→.NET 5/6/7/8，当前统一为.NET 8。','应用领域：Web(ASP.NET Core)、桌面(WPF/WinForms)、移动(MAUI)、游戏(Unity)、云(Azure)。','语言特性：强类型、GC、泛型、LINQ、异步、模式匹配等。'],
-c:`using System;\nnamespace CSharpIntro\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n            Console.WriteLine("欢迎来到C#世界！");\n            Console.WriteLine($"当前.NET版本: {Environment.Version}");\n            Console.WriteLine($"操作系统: {Environment.OSVersion}");\n            Console.WriteLine($"64位系统: {Environment.Is64BitOperatingSystem}");\n        }\n    }\n}`,
-et:'Main方法签名错误',ec:`// 错误：Main首字母小写\nstatic void main(string[] args) // ❌ C#区分大小写\n\n// 正确：Main首字母大写\nstatic void Main(string[] args) // ✅\n\n// .NET 6+支持顶级语句\nConsole.WriteLine("Hello"); // ✅`,
+const chapters = [
+{id:1,t:'C#简介与.NET平台',p:['C#由微软Anders Hejlsberg主导开发，2000年发布，是现代、类型安全、面向对象的编程语言。','.NET平台包含CLR（公共语言运行时）和FCL（框架类库），提供跨语言互操作性。','.NET演进历程：.NET Framework→.NET Core→.NET 5/6/7/8，当前统一为.NET 8及后续版本。','应用领域广泛：Web开发(ASP.NET Core)、桌面应用(WPF/WinForms)、移动开发(MAUI)、游戏开发(Unity)、云计算(Azure)。','核心语言特性：强类型、自动垃圾回收(GC)、泛型、LINQ、异步编程、模式匹配等。'],
+c:`using System;
+namespace CSharpIntro
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("欢迎来到C#世界！");
+            Console.WriteLine($"当前.NET版本: {Environment.Version}");
+            Console.WriteLine($"操作系统: {Environment.OSVersion}");
+            Console.WriteLine($"64位系统: {Environment.Is64BitOperatingSystem}");
+        }
+    }
+}`,
+et:'Main方法签名错误',ec:`// 错误：Main首字母小写
+static void main(string[] args) // ❌ C#区分大小写
+
+// 正确：Main首字母大写
+static void Main(string[] args) // ✅
+
+// .NET 6+支持顶级语句
+Console.WriteLine("Hello"); // ✅`,
 q:[{q:'C#运行在什么平台上？两个核心组件是什么？',a:'运行在.NET平台上，核心组件是CLR（公共语言运行时）和FCL（框架类库）。'}]},
 
-{id:2,t:'开发环境配置',p:['安装.NET SDK后可在终端使用dotnet命令创建、编译、运行项目。','IDE选择：VS 2022(Windows)、VS Code(轻量跨平台+C# Dev Kit)、Rider(JetBrains)。','项目类型：console、classlib、webapi、xunit等，用dotnet new创建。','NuGet包管理：dotnet add package添加第三方库。'],
-c:`# 检查.NET SDK版本\ndotnet --version\n\n# 创建控制台项目\ndotnet new console -n MyFirstApp\n\n# 运行项目\ncd MyFirstApp\ndotnet run\n\n# 添加NuGet包\ndotnet add package Newtonsoft.Json\n\n# 发布\ndotnet publish -c Release`,
-et:'未安装SDK运行dotnet命令',ec:`// 错误：终端提示"dotnet不是内部或外部命令"\n// 解决：1.下载.NET SDK 2.安装后重启终端 3.dotnet --version验证`,
+{id:2,t:'开发环境配置',p:['安装.NET SDK后可在终端使用dotnet命令创建、编译、运行项目。','IDE选择：Visual Studio 2022(Windows)、VS Code(轻量跨平台+C# Dev Kit扩展)、JetBrains Rider(跨平台)。','项目类型：console(控制台)、classlib(类库)、webapi(Web API)、xunit(测试)等，使用dotnet new命令创建。','NuGet包管理：通过dotnet add package命令添加第三方库。'],
+c:`# 检查.NET SDK版本
+dotnet --version
+
+# 创建控制台项目
+dotnet new console -n MyFirstApp
+
+# 运行项目
+cd MyFirstApp
+dotnet run
+
+# 添加NuGet包
+dotnet add package Newtonsoft.Json
+
+# 发布项目
+dotnet publish -c Release`,
+et:'未安装SDK运行dotnet命令',ec:`// 错误：终端提示"dotnet不是内部或外部命令"
+// 解决方法：1.下载.NET SDK 2.安装后重启终端 3.运行dotnet --version验证`},
 q:[{q:'写出创建名为HelloCSharp的控制台项目并运行的命令',a:'dotnet new console -n HelloCSharp && cd HelloCSharp && dotnet run'}]},
 
-{id:3,t:'第一个C#程序',p:['程序结构：using声明→namespace→class→Main方法，这是基本骨架。','顶级语句(.NET 6+)：无需显式定义namespace/class/Main。','Console类：WriteLine输出、ReadLine读取输入。','字符串插值：$前缀，花括号中嵌入变量，如$"{name}你好"。'],
-c:`using System;\nnamespace HelloWorld\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n            Console.WriteLine("请输入你的名字：");\n            string name = Console.ReadLine();\n            Console.WriteLine($"你好，{name}！欢迎学习C#！");\n            Console.WriteLine("当前时间: " + DateTime.Now);\n        }\n    }\n}`,
-et:'缺少using或分号',ec:`// 错误1：缺少using System\nConsole.WriteLine("Hello"); // ❌ Console未定义\n// 错误2：缺少分号\nConsole.WriteLine("Hello") // ❌\n// 正确\nusing System;\nConsole.WriteLine("Hello"); // ✅`,
+{id:3,t:'第一个C#程序',p:['程序结构：using声明→namespace命名空间→class类→Main方法，这是C#程序的基本骨架。','顶级语句(.NET 6+)：无需显式定义namespace、class、Main方法。','Console类：WriteLine输出到控制台、ReadLine读取用户输入。','字符串插值：使用$前缀，在花括号中嵌入变量，如$"{name}你好"。'],
+c:`using System;
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("请输入你的名字：");
+            string name = Console.ReadLine();
+            Console.WriteLine($"你好，{name}！欢迎学习C#！");
+            Console.WriteLine("当前时间: " + DateTime.Now);
+        }
+    }
+}`,
+et:'缺少using或分号',ec:`// 错误1：缺少using System
+Console.WriteLine("Hello"); // ❌ Console未定义
+// 错误2：缺少分号
+Console.WriteLine("Hello") // ❌
+// 正确写法
+using System;
+Console.WriteLine("Hello"); // ✅`},
 q:[{q:'编写程序读取用户年龄，输出"你今年X岁，10年后X+10岁"',a:'Console.WriteLine("请输入年龄：");\nint age=int.Parse(Console.ReadLine());\nConsole.WriteLine($"你今年{age}岁，10年后{age+10}岁");'}]},
 
-{id:4,t:'注释与命名规范',p:['单行注释//，多行/* */，XML文档注释///可生成API文档。','PascalCase：类名、方法名、属性名；camelCase：局部变量、参数；_camelCase：私有字段。','接口以I前开头如IRepository，常量全大写如MAX_SIZE。','命名原则：有意义、避免缩写、不用C#关键字。'],
-c:`using System;\n/// <summary>学生管理类</summary>\nclass StudentManager\n{\n    private int _studentCount; // 私有字段\n    public int StudentCount { get; set; } // 属性PascalCase\n    \n    /* 添加学生方法 */\n    public void AddStudent(string name, int age) // 方法PascalCase\n    {\n        int maxAge = 150; // 局部变量camelCase\n    }\n}\ninterface IStudentRepository // 接口I前缀\n{ Student GetStudent(int id); }`,
-et:'命名不规范',ec:`// ❌ 不规范\nclass student_manager { }  // 应StudentManager\nint Num = 150;             // 局部变量应num\nstring s = "张三";         // 应name\n// ✅ 规范\nclass StudentManager { }\nint num = 150;\nstring name = "张三";`,
+{id:4,t:'注释与命名规范',p:['单行注释//，多行注释/* */，XML文档注释///可生成API文档。','PascalCase：类名、方法名、属性名；camelCase：局部变量、方法参数；_camelCase：私有字段。','接口以I前缀开头如IRepository，常量全大写如MAX_SIZE。','命名原则：有意义、避免缩写、不使用C#关键字。'],
+c:`using System;
+/// <summary>学生管理类</summary>
+class StudentManager
+{
+    private int _studentCount; // 私有字段
+    public int StudentCount { get; set; } // 属性PascalCase
+    
+    /* 添加学生方法 */
+    public void AddStudent(string name, int age) // 方法PascalCase
+    {
+        int maxAge = 150; // 局部变量camelCase
+    }
+}
+interface IStudentRepository // 接口I前缀
+{ 
+    Student GetStudent(int id); 
+}`,
+et:'命名不规范',ec:`// ❌ 不规范命名
+class student_manager { }  // 应改为StudentManager
+int Num = 150;             // 局部变量应改为num
+string s = "张三";         // 应改为name
+// ✅ 规范命名
+class StudentManager { }
+int num = 150;
+string name = "张三";`},
 q:[{q:'指出不规范命名：class user_info、int Num、interface repository',a:'user_info→UserInfo(PascalCase无下划线)；Num→num(camelCase)；repository→IRepository(I前缀)'}]},
 
-{id:5,t:'基本数据类型',p:['整数：sbyte/byte(8位)、short/ushort(16位)、int/uint(32位)、long/ulong(64位)。','浮点：float(7位精度,f后缀)、double(15位精度,默认)、decimal(28位精度,m后缀,财务)。','布尔bool只有true/false，不可用0/1替代。','char单字符(单引号)、string字符串(双引号,引用类型)。','值类型在栈上(int,double,bool,char,struct)，引用类型在堆上(string,object,class)。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int age = 25;\n        long pop = 7800000000L;\n        float price = 19.99f;\n        double pi = 3.14159265358979;\n        decimal money = 9999.99m;\n        bool isStudent = true;\n        char grade = 'A';\n        string name = "张三";\n        Console.WriteLine($"int占{sizeof(int)}字节");\n        Console.WriteLine($"{name}成绩{grade}，年龄{age}");\n        Console.WriteLine($"价格: {money:C}");\n    }\n}`,
-et:'浮点后缀遗漏和精度问题',ec:`float f = 3.14;   // ❌ 默认double\nfloat f = 3.14f;  // ✅ 加f后缀\ndouble a = 0.1+0.2;\nif(a==0.3){}      // ❌ 精度问题\nif(Math.Abs(a-0.3)<0.0001){} // ✅`,
-q:[{q:'存储商品价格应用什么类型？为什么？',a:'用decimal(后缀m)，float/double有精度问题，decimal 28-29位精度专为财务设计。'}]},
+{id:5,t:'基本数据类型',p:['整数类型：sbyte/byte(8位)、short/ushort(16位)、int/uint(32位)、long/ulong(64位)。','浮点类型：float(7位精度,f后缀)、double(15位精度,默认)、decimal(28位精度,m后缀,适合财务计算)。','布尔类型bool只有true/false两个值，不可用0/1替代。','char单字符(单引号)、string字符串(双引号,引用类型)。','值类型在栈上分配(int,double,bool,char,struct)，引用类型在堆上分配(string,object,class)。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int age = 25;
+        long population = 7800000000L;
+        float price = 19.99f;
+        double pi = 3.14159265358979;
+        decimal money = 9999.99m;
+        bool isStudent = true;
+        char grade = 'A';
+        string name = "张三";
+        
+        Console.WriteLine($"int占{sizeof(int)}字节");
+        Console.WriteLine($"{name}成绩{grade}，年龄{age}");
+        Console.WriteLine($"价格: {money:C}");
+    }
+}`,
+et:'浮点后缀遗漏和精度问题',ec:`float f = 3.14;   // ❌ 默认是double类型
+float f = 3.14f;  // ✅ 添加f后缀
+double a = 0.1 + 0.2;
+if(a == 0.3){}      // ❌ 精度问题
+if(Math.Abs(a - 0.3) < 0.0001){} // ✅ 比较差值`},
+q:[{q:'存储商品价格应用什么类型？为什么？',a:'使用decimal(后缀m)，因为float/double存在精度问题，decimal有28-29位精度专为财务计算设计。'}]},
 
-{id:6,t:'变量与常量',p:['变量：类型 变量名=值; 先声明后使用。','var：编译器推断类型，必须初始化，var x=10等同于int x=10。','const：编译时常量，声明时赋值，不可修改，隐式静态。','readonly：运行时常量，构造函数中赋值后不可修改。'],
-c:`using System;\nclass Config\n{\n    public const string AppName = "MyApp";\n    public readonly DateTime CreateTime;\n    public Config() { CreateTime = DateTime.Now; }\n}\nclass Program\n{\n    static void Main()\n    {\n        int count = 10;\n        var age = 25; var msg = "Hello";\n        const double PI = 3.14159;\n        Console.WriteLine($"应用: {Config.AppName}");\n        Console.WriteLine($"PI = {PI}");\n    }\n}`,
-et:'var和const使用不当',ec:`var x;          // ❌ 必须初始化\nvar x = 10;     // ✅\nconst int MAX;  // ❌ 必须赋初值\nconst int MAX = 100; // ✅\nMAX = 200;      // ❌ 常量不可修改`,
-q:[{q:'const和readonly的区别？',a:'const编译时确定值，隐式静态，声明时赋值；readonly运行时确定，可在构造函数中赋值，实例字段。'}]},
+{id:6,t:'变量与常量',p:['变量声明：类型 变量名=值; 必须先声明后使用。','var关键字：编译器自动推断类型，必须初始化，var x=10等同于int x=10。','const：编译时常量，声明时必须赋值，不可修改，隐式静态。','readonly：运行时常量，可在构造函数中赋值后不可修改。'],
+c:`using System;
+class Config
+{
+    public const string AppName = "MyApp";
+    public readonly DateTime CreateTime;
+    
+    public Config() 
+    { 
+        CreateTime = DateTime.Now; 
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        int count = 10;
+        var age = 25; 
+        var message = "Hello";
+        const double PI = 3.14159;
+        
+        Console.WriteLine($"应用名称: {Config.AppName}");
+        Console.WriteLine($"PI = {PI}");
+    }
+}`,
+et:'var和const使用不当',ec:`var x;          // ❌ var必须初始化
+var x = 10;     // ✅
+const int MAX;  // ❌ const必须赋初值
+const int MAX = 100; // ✅
+MAX = 200;      // ❌ 常量不可修改`},
+q:[{q:'const和readonly的区别？',a:'const编译时确定值，隐式静态，声明时必须赋值；readonly运行时确定，可在构造函数中赋值，实例字段。'}]},
 
-{id:7,t:'类型转换',p:['隐式转换：小范围→大范围自动转换(int→long, float→double)，不丢精度。','显式转换：(类型)值，大→小可能丢精度或溢出。','Convert类：Convert.ToInt32/ToString等，安全的类型转换。','Parse/TryParse：字符串→数值，Parse失败抛异常，TryParse返回bool更安全。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int num = 100; long bigNum = num; // 隐式\n        double pi = 3.14; int i = (int)pi; // 显式，i=3\n        int cvt = Convert.ToInt32("123");\n        int parsed = int.Parse("456");\n        if (int.TryParse("abc", out int result))\n            Console.WriteLine(result);\n        else\n            Console.WriteLine("解析失败");\n    }\n}`,
-et:'无效字符串解析',ec:`int n = int.Parse("hello"); // ❌ FormatException\n// 正确：TryParse\nif(int.TryParse("hello",out int r))\n    Console.WriteLine(r);\nelse Console.WriteLine("无效数字"); // ✅`,
-q:[{q:'安全将字符串转整数，无效时提示',a:'string input=Console.ReadLine();\nif(int.TryParse(input,out int num)) Console.WriteLine(num);\nelse Console.WriteLine("请输入有效数字");'}]},
+{id:7,t:'类型转换',p:['隐式转换：小范围类型→大范围类型自动转换(int→long, float→double)，不会丢失精度。','显式转换：(类型)值，大范围→小范围可能丢失精度或溢出。','Convert类：Convert.ToInt32/ToString等，提供安全的类型转换方法。','Parse/TryParse：字符串→数值转换，Parse失败抛出异常，TryParse返回bool更安全。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int num = 100; 
+        long bigNum = num; // 隐式转换
+        
+        double pi = 3.14; 
+        int i = (int)pi; // 显式转换，i=3
+        
+        int converted = Convert.ToInt32("123");
+        int parsed = int.Parse("456");
+        
+        if (int.TryParse("abc", out int result))
+            Console.WriteLine(result);
+        else
+            Console.WriteLine("解析失败");
+    }
+}`,
+et:'无效字符串解析',ec:`int n = int.Parse("hello"); // ❌ 抛出FormatException
+// 正确：使用TryParse
+if(int.TryParse("hello", out int r))
+    Console.WriteLine(r);
+else 
+    Console.WriteLine("无效数字"); // ✅`},
+q:[{q:'安全将字符串转整数，无效时提示用户',a:'string input = Console.ReadLine();\nif(int.TryParse(input, out int num)) \n    Console.WriteLine(num);\nelse \n    Console.WriteLine("请输入有效数字");'}]},
 
-{id:8,t:'运算符',p:['算术：+ - * / %，整数除法截断，注意溢出用checked。','关系：== != > < >= <=，返回bool，浮点不用==。','逻辑：&&(短路与)、||(短路或)、!(非)。','赋值：= += -= *= /= %= ??=，??空合并，?.空条件，?:三元。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int a=17, b=5;\n        Console.WriteLine($"17/5={a/b}");   // 3\n        Console.WriteLine($"17%5={a%b}");     // 2\n        int x=5;\n        Console.WriteLine($"x++={x++}"); // 5\n        Console.WriteLine($"++x={++x}"); // 7\n        string cat = 20>=18 ? "成年":"未成年";\n        string name = null;\n        Console.WriteLine(name ?? "匿名");\n        string s = null;\n        Console.WriteLine($"长度:{s?.Length}");\n    }\n}`,
-et:'整数除法丢精度',ec:`double r = 1/2;      // ❌ 结果0\ndouble r = 1.0/2;    // ✅ 0.5\ndouble r = (double)1/2; // ✅ 0.5`,
+{id:8,t:'运算符',p:['算术运算符：+ - * / %，整数除法会截断小数部分，注意溢出使用checked。','关系运算符：== != > < >= <=，返回bool值，浮点类型不建议用==比较。','逻辑运算符：&&(短路与)、||(短路或)、!(非)。','赋值运算符：= += -= *= /= %= ??=，??空合并运算符，?.空条件运算符，?:三元运算符。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int a = 17, b = 5;
+        Console.WriteLine($"17/5={a/b}");   // 3
+        Console.WriteLine($"17%5={a%b}");     // 2
+        
+        int x = 5;
+        Console.WriteLine($"x++={x++}"); // 5
+        Console.WriteLine($"++x={++x}"); // 7
+        
+        string category = 20 >= 18 ? "成年" : "未成年";
+        string name = null;
+        Console.WriteLine(name ?? "匿名");
+        
+        string s = null;
+        Console.WriteLine($"长度:{s?.Length}");
+    }
+}`,
+et:'整数除法丢失精度',ec:`double r = 1 / 2;      // ❌ 结果是0
+double r = 1.0 / 2;    // ✅ 结果是0.5
+double r = (double)1 / 2; // ✅ 结果是0.5`},
 q:[{q:'10/3和10.0/3的结果分别是什么？',a:'10/3=3(整数除法截断)；10.0/3=3.333...(至少一个浮点操作数)。'}]},
 
-{id:9,t:'if-else语句',p:['语法：if(条件){}else{}，条件必须bool，不能用整数。','else if链：多条件依次判断，命中后跳过后续。','嵌套if：if内嵌if，建议不超过3层。','C#条件必须是bool：if(1)不允许，必须if(true)。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int score=85;\n        if(score>=90) Console.WriteLine("优秀");\n        else if(score>=80) Console.WriteLine("良好");\n        else if(score>=60) Console.WriteLine("及格");\n        else Console.WriteLine("不及格");\n        // 嵌套\n        int age=25; bool lic=true;\n        if(age>=18){\n            if(lic) Console.WriteLine("可驾驶");\n            else Console.WriteLine("需考驾照");\n        }\n    }\n}`,
-et:'条件使用非bool值',ec:`int c=5;\nif(c){}     // ❌ 不能用int作条件\nif(c=5){}   // ❌ 赋值不是比较\nif(c>0){}   // ✅ 比较返回bool\nif(c==5){}  // ✅`,
-q:[{q:'编写判断闰年的程序',a:'int y=int.Parse(Console.ReadLine());\nif((y%4==0&&y%100!=0)||y%400==0) Console.WriteLine($"{y}是闰年");\nelse Console.WriteLine($"{y}不是闰年");'}]},
+{id:9,t:'if-else语句',p:['语法：if(条件){}else{}，条件必须是bool类型，不能用整数。','else if链：多条件依次判断，命中后跳过后续条件判断。','嵌套if：if语句内部嵌套if语句，建议嵌套不超过3层。','C#条件必须是bool：if(1)不允许，必须写成if(true)或if(condition)。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int score = 85;
+        if(score >= 90) Console.WriteLine("优秀");
+        else if(score >= 80) Console.WriteLine("良好");
+        else if(score >= 60) Console.WriteLine("及格");
+        else Console.WriteLine("不及格");
+        
+        // 嵌套if示例
+        int age = 25; 
+        bool hasLicense = true;
+        if(age >= 18)
+        {
+            if(hasLicense) Console.WriteLine("可驾驶");
+            else Console.WriteLine("需考驾照");
+        }
+    }
+}`,
+et:'条件使用非bool值',ec:`int c = 5;
+if(c){}     // ❌ 不能用int作条件
+if(c = 5){}   // ❌ 这是赋值不是比较
+if(c > 0){}   // ✅ 比较返回bool
+if(c == 5){}  // ✅ 相等比较`},
+q:[{q:'编写判断闰年的程序',a:'int year = int.Parse(Console.ReadLine());\nif((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) \n    Console.WriteLine($"{year}是闰年");\nelse \n    Console.WriteLine($"{year}不是闰年");'}]},
 
-{id:10,t:'switch语句',p:['基本：switch(表达式){case值:break;default:break;}，每个case必须break。','支持类型：int、string、enum、bool。','模式匹配(C#7+)：case when条件、case类型模式。','switch表达式(C#8+)：value switch{模式=>结果,...}，更简洁。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        string day="Monday";\n        switch(day){\n            case "Monday": case "Tuesday": case "Wednesday":\n            case "Thursday": case "Friday":\n                Console.WriteLine("工作日"); break;\n            case "Saturday": case "Sunday":\n                Console.WriteLine("周末"); break;\n            default: Console.WriteLine("无效"); break;\n        }\n        int s=85;\n        string g = s switch{ >=90=>"A", >=80=>"B", >=70=>"C", >=60=>"D", _=>"F" };\n        Console.WriteLine($"等级:{g}");\n    }\n}`,
-et:'case穿透缺少break',ec:`switch(x){\ncase 1: Console.WriteLine("一"); // ❌ 缺break\ncase 2: Console.WriteLine("二"); break;\n}\n// 正确：合并case\ncase 1: case 2: Console.WriteLine("一或二"); break; // ✅`,
-q:[{q:'用switch表达式根据月份返回天数(2月28)',a:'int days = month switch{ 2=>28, 4 or 6 or 9 or 11=>30, _=>31 };'}]},
+{id:10,t:'switch语句',p:['基本语法：switch(表达式){case值:break;default:break;}，每个case必须有break。','支持的类型：int、string、enum、bool等。','模式匹配(C#7+)：case when条件模式、case类型模式。','switch表达式(C#8+)：value switch{模式=>结果,...}，更简洁的写法。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        string day = "Monday";
+        switch(day)
+        {
+            case "Monday": case "Tuesday": case "Wednesday":
+            case "Thursday": case "Friday":
+                Console.WriteLine("工作日"); 
+                break;
+            case "Saturday": case "Sunday":
+                Console.WriteLine("周末"); 
+                break;
+            default: 
+                Console.WriteLine("无效"); 
+                break;
+        }
+        
+        int score = 85;
+        string grade = score switch
+        { 
+            >= 90 => "A", 
+            >= 80 => "B", 
+            >= 70 => "C", 
+            >= 60 => "D", 
+            _ => "F" 
+        };
+        Console.WriteLine($"等级:{grade}");
+    }
+}`,
+et:'case穿透缺少break',ec:`switch(x)
+{
+    case 1: Console.WriteLine("一"); // ❌ 缺少break会穿透
+    case 2: Console.WriteLine("二"); break;
+}
+// 正确：合并case
+case 1: case 2: Console.WriteLine("一或二"); break; // ✅`},
+q:[{q:'用switch表达式根据月份返回天数(2月按28天算)',a:'int days = month switch{ 2 => 28, 4 or 6 or 9 or 11 => 30, _ => 31 };'}]},
 
-{id:11,t:'for循环',p:['语法：for(初始化;条件;迭代){}，三部分可省略。','流程：初始化→判条件→执行体→迭代→判条件→...','嵌套for：二维遍历，注意性能。','break跳出循环，continue跳过当次迭代。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int sum=0;\n        for(int i=1;i<=10;i++) sum+=i;\n        Console.WriteLine($"1-10和:{sum}");\n        // 九九乘法表\n        for(int i=1;i<=9;i++){\n            for(int j=1;j<=i;j++)\n                Console.Write($"{j}×{i}={i*j}\\t");\n            Console.WriteLine();\n        }\n        for(int i=1;i<=10;i++){\n            if(i==3) continue;\n            if(i==8) break;\n            Console.Write(i+" "); // 1 2 4 5 6 7\n        }\n    }\n}`,
-et:'循环条件错误导致死循环',ec:`for(int i=0;i<10;i--){} // ❌ i递减，永远<10\nfor(int i=0;i<10;i++){} // ✅ i递增`,
-q:[{q:'输出1-100中能被3整除但不能被5整除的数',a:'for(int i=1;i<=100;i++) if(i%3==0&&i%5!=0) Console.WriteLine(i);'}]},
+{id:11,t:'for循环',p:['语法：for(初始化;条件;迭代){}，三部分都可省略。','执行流程：初始化→判断条件→执行循环体→迭代→判断条件→...','嵌套for：二维遍历场景常用，注意性能影响。','break跳出整个循环，continue跳过当前次迭代。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int sum = 0;
+        for(int i = 1; i <= 10; i++) 
+            sum += i;
+        Console.WriteLine($"1-10和:{sum}");
+        
+        // 九九乘法表
+        for(int i = 1; i <= 9; i++)
+        {
+            for(int j = 1; j <= i; j++)
+                Console.Write($"{j}×{i}={i*j}\t");
+            Console.WriteLine();
+        }
+        
+        for(int i = 1; i <= 10; i++)
+        {
+            if(i == 3) continue;
+            if(i == 8) break;
+            Console.Write(i + " "); // 1 2 4 5 6 7
+        }
+    }
+}`,
+et:'循环条件错误导致死循环',ec:`for(int i = 0; i < 10; i--){} // ❌ i递减，永远小于10
+for(int i = 0; i < 10; i++){} // ✅ i递增`},
+q:[{q:'输出1-100中能被3整除但不能被5整除的数',a:'for(int i = 1; i <= 100; i++)\n    if(i % 3 == 0 && i % 5 != 0)\n        Console.WriteLine(i);'}]},
 
-{id:12,t:'while与do-while',p:['while：先判后执行，可能0次执行。','do-while：先执行后判，至少1次，末尾有分号。','选择：确定至少一次用do-while，否则用while。','常用：读取输入直到有效、游戏循环等。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        // while猜数字\n        int target=42,guess;\n        while(true){\n            guess=int.Parse(Console.ReadLine());\n            if(guess==target){Console.WriteLine("对了!");break;}\n            else if(guess<target) Console.WriteLine("太小");\n            else Console.WriteLine("太大");\n        }\n        // do-while：至少执行一次\n        int n;\n        do{Console.Write("输入正整数:");n=int.Parse(Console.ReadLine());}\n        while(n<=0);\n        Console.WriteLine($"你输入:{n}");\n    }\n}`,
-et:'忘记更新循环变量',ec:`int i=0;\nwhile(i<10){Console.WriteLine(i);} // ❌ 死循环，缺i++\nwhile(i<10){Console.WriteLine(i);i++;} // ✅`,
-q:[{q:'用while计算1+2+...+n',a:'int n=int.Parse(Console.ReadLine()),sum=0,i=1;\nwhile(i<=n){sum+=i;i++;}\nConsole.WriteLine($"和:{sum}");'}]},
+{id:12,t:'while与do-while',p:['while循环：先判断条件后执行，可能0次执行。','do-while循环：先执行后判断条件，至少执行1次，末尾有分号。','选择建议：确定至少执行一次用do-while，否则用while。','常见用途：读取用户输入直到有效、游戏主循环等。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        // while猜数字游戏
+        int target = 42, guess;
+        while(true)
+        {
+            guess = int.Parse(Console.ReadLine());
+            if(guess == target)
+            {
+                Console.WriteLine("对了!");
+                break;
+            }
+            else if(guess < target) 
+                Console.WriteLine("太小");
+            else 
+                Console.WriteLine("太大");
+        }
+        
+        // do-while：至少执行一次
+        int n;
+        do
+        {
+            Console.Write("输入正整数:");
+            n = int.Parse(Console.ReadLine());
+        }
+        while(n <= 0);
+        Console.WriteLine($"你输入:{n}");
+    }
+}`,
+et:'忘记更新循环变量',ec:`int i = 0;
+while(i < 10)
+{
+    Console.WriteLine(i);
+} // ❌ 死循环，缺少i++
 
-{id:13,t:'foreach循环',p:['语法：foreach(类型 变量 in 集合){}，自动遍历每个元素。','适用：数组、List、Dictionary等IEnumerable。','只读：不能修改元素值(值类型)，不能增删集合。','与for对比：更简洁安全，但无法获取索引。'],
-c:`using System;\nusing System.Collections.Generic;\nclass Program\n{\n    static void Main()\n    {\n        string[] fruits={"苹果","香蕉","橙子"};\n        foreach(string f in fruits) Console.WriteLine(f);\n        List<int> scores=new List<int>{95,88,92};\n        int total=0;\n        foreach(int s in scores) total+=s;\n        Console.WriteLine($"平均:{(double)total/scores.Count:F1}");\n        var ages=new Dictionary<string,int>{{"张三",20},{"李四",22}};\n        foreach(var kv in ages) Console.WriteLine($"{kv.Key}:{kv.Value}岁");\n    }\n}`,
-et:'foreach中修改集合',ec:`List<int> nums=new List<int>{1,2,3,4,5};\nforeach(int n in nums) if(n%2==0) nums.Remove(n); // ❌ 异常\n// 正确：RemoveAll\nnums.RemoveAll(n=>n%2==0); // ✅\n// 或倒序for\nfor(int i=nums.Count-1;i>=0;i--) if(nums[i]%2==0) nums.RemoveAt(i); // ✅`,
-q:[{q:'foreach中能否修改集合元素？为什么？',a:'不能修改值类型元素(迭代变量只读)，也不能增删(抛异常)。需修改用for循环，需删除用RemoveAll或倒序for。'}]},
+while(i < 10)
+{
+    Console.WriteLine(i);
+    i++;
+} // ✅`},
+q:[{q:'用while计算1+2+...+n',a:'int n = int.Parse(Console.ReadLine()), sum = 0, i = 1;\nwhile(i <= n)\n{\n    sum += i;\n    i++;\n}\nConsole.WriteLine($"和:{sum}");'}]},
 
-{id:14,t:'一维数组',p:['声明：int[] arr=new int[5];或int[] arr={1,2,3};大小固定。','索引从0开始，越界抛IndexOutOfRangeException。','Array.Sort/Reverse/IndexOf/Clear等静态方法。','遍历：for(可用索引)或foreach(只读)。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int[] arr={85,92,76,95,88};\n        Array.Sort(arr);\n        Console.WriteLine("排序:"+string.Join(",",arr));\n        Array.Reverse(arr);\n        Console.WriteLine("反转:"+string.Join(",",arr));\n        Console.WriteLine($"92的索引:{Array.IndexOf(arr,92)}");\n        int max=arr[0],min=arr[0],sum=0;\n        foreach(int s in arr){max=Math.Max(max,s);min=Math.Min(min,s);sum+=s;}\n        Console.WriteLine($"最大:{max},最小:{min},平均:{(double)sum/arr.Length:F1}");\n    }\n}`,
-et:'数组越界',ec:`int[] arr={1,2,3};\nConsole.WriteLine(arr[3]); // ❌ 越界，最大索引2\nConsole.WriteLine(arr[arr.Length-1]); // ✅ 最后元素\nConsole.WriteLine(arr[^1]); // ✅ C#8+从末尾索引`,
-q:[{q:'输入5个整数，输出最大、最小和平均值',a:'int[] n=new int[5];\nfor(int i=0;i<5;i++) n[i]=int.Parse(Console.ReadLine());\nint mx=n[0],mn=n[0],s=0;\nforeach(int x in n){mx=Math.Max(mx,x);mn=Math.Min(mn,x);s+=x;}\nConsole.WriteLine($"最大:{mx},最小:{mn},平均:{(double)s/5}");'}]},
+{id:13,t:'foreach循环',p:['语法：foreach(类型 变量 in 集合){}，自动遍历每个元素。','适用范围：数组、List、Dictionary等实现IEnumerable接口的集合。','只读特性：不能修改元素值(值类型)，不能增删集合元素。','与for对比：更简洁安全，但无法获取索引。'],
+c:`using System;
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        string[] fruits = {"苹果","香蕉","橙子"};
+        foreach(string f in fruits) 
+            Console.WriteLine(f);
+        
+        List<int> scores = new List<int>{95, 88, 92};
+        int total = 0;
+        foreach(int s in scores) 
+            total += s;
+        Console.WriteLine($"平均:{(double)total/scores.Count:F1}");
+        
+        var ages = new Dictionary<string, int>
+        {
+            {"张三", 20},
+            {"李四", 22}
+        };
+        foreach(var kv in ages) 
+            Console.WriteLine($"{kv.Key}:{kv.Value}岁");
+    }
+}`,
+et:'foreach中修改集合',ec:`List<int> nums = new List<int>{1, 2, 3, 4, 5};
+foreach(int n in nums) 
+    if(n % 2 == 0) nums.Remove(n); // ❌ 抛出异常
 
-{id:15,t:'多维数组',p:['矩形数组：int[,] arr=new int[3,4];每行同长，用[,]访问。','交错数组：int[][] arr=new int[3][];每行可不同长，用[][]访问。','GetLength(0)行数，GetLength(1)列数。','遍历：嵌套for循环。'],
-c:`using System;\nclass Program\n{\n    static void Main()\n    {\n        int[,] m={{1,2,3},{4,5,6},{7,8,9}};\n        Console.WriteLine($"行:{m.GetLength(0)},列:{m.GetLength(1)}");\n        for(int i=0;i<m.GetLength(0);i++){\n            for(int j=0;j<m.GetLength(1);j++)\n                Console.Write($"{m[i,j]}\\t");\n            Console.WriteLine();\n        }\n        int[][] jag=new int[3][];\n        jag[0]=new int[]{1,2}; jag[1]=new int[]{3,4,5}; jag[2]=new int[]{6};\n        for(int i=0;i<jag.Length;i++){\n            for(int j=0;j<jag[i].Length;j++) Console.Write(jag[i][j]+" ");\n            Console.WriteLine();\n        }\n    }\n}`,
-et:'混淆矩形和交错数组语法',ec:`int[,] r=new int[3,4];\nr[0][1]=5; // ❌ 矩形不能用[][]\nr[0,1]=5;  // ✅\nint[][] j=new int[3][];\nj[0,1]=5;  // ❌ 交错不能用[,]\nj[0][1]=5; // ✅(需先初始化j[0])`,
-q:[{q:'3x3矩阵计算主对角线元素之和',a:'int[,] m={{1,2,3},{4,5,6},{7,8,9}}; int s=0;\nfor(int i=0;i<3;i++) s+=m[i,i];\nConsole.WriteLine($"主对角线和:{s}"); //15'}]},
+// 正确方法：RemoveAll
+nums.RemoveAll(n => n % 2 == 0); // ✅
 
-{id:16,t:'字符串操作',p:['string不可变：每次"修改"创建新字符串，频繁操作用StringBuilder。','常用：Length,Substring,Split,Join,Replace,Trim,ToUpper/ToLower,Contains。','比较：==值比较，Equals，CompareTo。','StringBuilder：Append/Insert/Remove/Replace，频繁拼接性能优。','格式化：$"{value}"插值，ToString("格式")。'],
-c:`using System;\nusing System.Text;\nclass Program\n{\n    static void Main()\n    {\n        string s="  Hello, C# World!  ";\n        Console.WriteLine($"长度:{s.Length}");\n        Console.WriteLine($"Trim:'{s.Trim()}'");\n        Console.WriteLine($"大写:{s.ToUpper()}");\n        Console.WriteLine($"包含C#:{s.Contains("C#")}");\n        Console.WriteLine($"子串:{s.Substring(4,5)}");\n        string[] fs="苹果,香蕉,橙子".Split(',');\n        Console.WriteLine(string.Join(" | ",fs));\n        Console.WriteLine(s.Replace("C#","CSharp"));\n        StringBuilder sb=new StringBuilder();\n        for(int i=0;i<1000;i++) sb.Append($"行{i},");\n        Console.WriteLine($"{99.9:C}"); // ¥99.90\n    }\n}`,
-et:'循环中用+拼接字符串',ec:`string s="";\nfor(int i=0;i<10000;i++) s+=i; // ❌ 创建10000个临时对象\nStringBuilder sb=new StringBuilder();\nfor(int i=0;i<10000;i++) sb.Append(i); // ✅\nstring result=sb.ToString();`,
-q:[{q:'统计句子中每个单词出现次数',a:'var words="hello world hello csharp".Split(' ');\nvar c=new Dictionary<string,int>();\nforeach(var w in words) c[w]=c.GetValueOrDefault(w,0)+1;\nforeach(var kv in c) Console.WriteLine($"{kv.Key}:{kv.Value}次");'}]},
+// 或使用倒序for循环
+for(int i = nums.Count - 1; i >= 0; i--) 
+    if(nums[i] % 2 == 0) nums.RemoveAt(i); // ✅`},
+q:[{q:'foreach中能否修改集合元素？为什么？',a:'不能修改值类型元素(迭代变量是只读副本)，也不能增删集合(会抛出InvalidOperationException)。需修改用for循环，需删除用RemoveAll或倒序for。'}]},
 
-{id:17,t:'方法定义',p:['声明：访问修饰符 返回类型 方法名(参数列表){方法体}。','参数传递：值参数(默认)、ref引用参数、out输出参数、params可变参数。','return返回结果，void无返回值。','递归：方法调用自身，必须有终止条件。'],
-c:`using System;\nclass Calculator\n{\n    public int Add(int a,int b)=>a+b;\n    public void Swap(ref int a,ref int b){int t=a;a=b;b=t;}\n    public void Divide(int a,int b,out int q,out int r){q=a/b;r=a%b;}\n    public int Sum(params int[] nums){int t=0;foreach(int n in nums)t+=n;return t;}\n    public long Factorial(int n)=>n<=1?1:n*Factorial(n-1);\n}\nclass Program\n{\n    static void Main()\n    {\n        var c=new Calculator();\n        Console.WriteLine(c.Add(3,5));\n        int x=10,y=20;c.Swap(ref x,ref y);Console.WriteLine($"x={x},y={y}");\n        c.Divide(17,5,out int q,out int r);Console.WriteLine($"17÷5={q}余{r}");\n        Console.WriteLine(c.Sum(1,2,3,4,5));\n        Console.WriteLine($"5!={c.Factorial(5)}");\n    }\n}`,
-et:'ref/out参数未初始化',ec:`int a; // 未赋值\nc.Swap(ref a, ref b); // ❌ ref必须先初始化\nint a=10; // ✅\nc.Swap(ref a, ref b);\n// out不需要预先初始化\nc.Divide(17,5,out int q,out int r); // ✅`,
-q:[{q:'ref和out参数的区别',a:'ref调用前必须初始化，方法内可不修改；out调用前不需要初始化，方法内必须赋值。ref双向传递，out返回多个值。'}]},
+{id:14,t:'一维数组',p:['声明方式：int[] arr = new int[5];或int[] arr = {1,2,3};数组大小固定。','索引从0开始，越界访问抛出IndexOutOfRangeException。','Array类静态方法：Sort/Reverse/IndexOf/Clear等。','遍历方式：for(可用索引)或foreach(只读)。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int[] arr = {85, 92, 76, 95, 88};
+        
+        Array.Sort(arr);
+        Console.WriteLine("排序:" + string.Join(",", arr));
+        
+        Array.Reverse(arr);
+        Console.WriteLine("反转:" + string.Join(",", arr));
+        
+        Console.WriteLine($"92的索引:{Array.IndexOf(arr, 92)}");
+        
+        int max = arr[0], min = arr[0], sum = 0;
+        foreach(int s in arr)
+        {
+            max = Math.Max(max, s);
+            min = Math.Min(min, s);
+            sum += s;
+        }
+        Console.WriteLine($"最大:{max},最小:{min},平均:{(double)sum/arr.Length:F1}");
+    }
+}`,
+et:'数组越界访问',ec:`int[] arr = {1, 2, 3};
+Console.WriteLine(arr[3]); // ❌ 越界，最大索引是2
 
-{id:18,t:'方法重载',p:['重载：同名方法，参数列表不同(类型/数量/顺序)，与返回类型无关。','编译器根据调用参数选择最匹配版本。','常见场景：同一操作不同参数类型，不同参数数量。','ref/out也构成重载差异。'],
-c:`using System;\nclass Printer\n{\n    public void Print(int v){Console.WriteLine($"整数:{v}");}\n    public void Print(double v){Console.WriteLine($"浮点:{v:F2}");}\n    public void Print(string v){Console.WriteLine($"字符串:{v}");}\n    public int Max(int a,int b)=>a>b?a:b;\n    public int Max(int a,int b,int c)=>Max(Max(a,b),c);\n}\nclass Program\n{\n    static void Main()\n    {\n        var p=new Printer();\n        p.Print(42); p.Print(3.14); p.Print("Hello");\n        Console.WriteLine(new Printer().Max(3,5));\n        Console.WriteLine(new Printer().Max(3,5,8));\n    }\n}`,
-et:'仅返回类型不同的重载',ec:`int GetValue(){return 1;}\ndouble GetValue(){return 1.0;} // ❌ 仅返回类型不同\nint GetValue(int x){return x;} // ✅ 参数不同\ndouble GetValue(double x){return x;} // ✅`,
-q:[{q:'void Set(int x)和int Set(int x)是否合法重载？',a:'不合法，仅返回类型不同不构成重载，编译器无法根据返回类型区分。'}]},
+Console.WriteLine(arr[arr.Length - 1]); // ✅ 获取最后一个元素
+Console.WriteLine(arr[^1]); // ✅ C#8+支持从末尾索引`},
+q:[{q:'输入5个整数，输出最大值、最小值和平均值',a:'int[] nums = new int[5];\nfor(int i = 0; i < 5; i++) \n    nums[i] = int.Parse(Console.ReadLine());\nint mx = nums[0], mn = nums[0], s = 0;\nforeach(int x in nums)\n{\n    mx = Math.Max(mx, x);\n    mn = Math.Min(mn, x);\n    s += x;\n}\nConsole.WriteLine($"最大:{mx},最小:{mn},平均:{(double)s/5}");'}]},
 
-{id:19,t:'可选与命名参数',p:['可选参数：声明时指定默认值，如void Foo(int x,int y=10)。','命名参数：调用时用参数名:值，可任意顺序。','可选参数必须在必选参数之后，默认值必须是编译时常量。','命名参数可跳过可选参数，提高可读性。'],
-c:`using System;\nclass Config\n{\n    public void Create(string name,string ext=".txt",bool overwrite=false)\n    {\n        Console.WriteLine($"创建:{name}{ext},覆盖:{overwrite}");\n    }\n}\nclass Program\n{\n    static void Main()\n    {\n        var c=new Config();\n        c.Create("data");                    // data.txt,覆盖:False\n        c.Create("log",".log");              // log.log,覆盖:False\n        c.Create("config",overwrite:true);    // config.txt,覆盖:True\n        c.Create(ext:".tmp",name:"cache");    // cache.tmp,覆盖:False\n    }\n}`,
-et:'可选参数在必选前',ec:`void Foo(int x=1,int y){} // ❌ 可选在必选前\nvoid Foo(int y,int x=1){} // ✅\nFoo(10);     // y=10,x=1\nFoo(10,20);  // y=10,x=20`,
-q:[{q:'Foo(int a,int b=5,int c=10)只传a和c=20怎么写？',a:'Foo(a: 1, c: 20); 或 Foo(1, c: 20); b用默认值5。'}]},
+{id:15,t:'多维数组',p:['矩形数组：int[,] arr = new int[3,4];每行长度相同，用[,]访问。','交错数组：int[][] arr = new int[3][];每行可不同长度，用[][]访问。','GetLength(0)获取行数，GetLength(1)获取列数。','遍历方式：嵌套for循环。'],
+c:`using System;
+class Program
+{
+    static void Main()
+    {
+        int[,] matrix = {{1,2,3},{4,5,6},{7,8,9}};
+        Console.WriteLine($"行:{matrix.GetLength(0)},列:{matrix.GetLength(1)}");
+        
+        for(int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for(int j = 0; j < matrix.GetLength(1); j++)
+                Console.Write($"{matrix[i,j]}\t");
+            Console.WriteLine();
+        }
+        
+        int[][] jagged = new int[3][];
+        jagged[0] = new int[]{1, 2}; 
+        jagged[1] = new int[]{3, 4, 5}; 
+        jagged[2] = new int[]{6};
+        
+        for(int i = 0; i < jagged.Length; i++)
+        {
+            for(int j = 0; j < jagged[i].Length; j++) 
+                Console.Write(jagged[i][j] + " ");
+            Console.WriteLine();
+        }
+    }
+}`,
+et:'混淆矩形和交错数组语法',ec:`int[,] rect = new int[3, 4];
+rect[0][1] = 5; // ❌ 矩形数组不能用[][]访问
+rect[0, 1] = 5;  // ✅
 
-{id:20,t:'类与对象',p:['类是蓝图，对象是实例，用new创建。','访问修饰符：public/private/protected/internal。','字段(存储数据，通常private)vs属性(受控访问，get/set)。','this关键字：引用当前实例，区分同名参数。'],
-c:`using System;\nclass Person\n{\n    private string _name; private int _age;\n    public string Name{get=>_name;set=>_name=value;}\n    public int Age{get=>_age;set{if(value>=0&&value<=150)_age=value;else Console.WriteLine("年龄无效");}}\n    public Person(string name,int age){_name=name;_age=age;}\n    public void Introduce()=>Console.WriteLine($"我叫{_name}，{_age}岁");\n}\nclass Program\n{\n    static void Main()\n    {\n        var p=new Person("张三",25);\n        p.Introduce();\n        p.Age=-5; // 年龄无效\n        p.Name="李四"; p.Introduce();\n    }\n}`,
-et:'直接暴露public字段',ec:`class Person{public int Age;} // ❌ 无验证\nPerson p=new Person(); p.Age=-100; // 可赋任意值\nclass Person{private int _age; // ✅\npublic int Age{get=>_age;set{if(value>=0)_age=value;}}}`,
-q:[{q:'类和对象的关系？如何创建对象？',a:'类是模板/蓝图，对象是类的实例。用new创建：Person p=new Person("张三",25);'}]},
+int[][] jagged = new int[3][];
+jagged[0, 1] = 5;  // ❌ 交错数组不能用[,]访问
+jagged[0][1] = 5; // ✅(需先初始化jagged[0])`},
+q:[{q:'3x3矩阵计算主对角线元素之和',a:'int[,] m = {{1,2,3},{4,5,6},{7,8,9}}; int s = 0;\nfor(int i = 0; i < 3; i++) \n    s += m[i, i];\nConsole.WriteLine($"主对角线和:{s}"); // 结果15'}]},
 
-{id:21,t:'属性(Property)',p:['自动属性：public string Name{get;set;}编译器自动生成字段。','只读属性：只有get或get+init。','init访问器(C#9+)：只在初始化时赋值。','表达式体属性：public string Info=>$"{Name}({Id})";'],
-c:`using System;\nclass Student\n{\n    public string Name{get;set;}\n    public int Id{get;set;}\n    public DateTime EnrollDate{get;}=DateTime.Now;\n    public string Major{get;init;}\n    public string Info=>$"{Name}(ID:{Id})";\n    private double _score;\n    public double Score{get=>_score;set=>_score=value>=0&&value<=100?value:throw new ArgumentException();}\n}\nclass Program\n{\n    static void Main()\n    {\n        var s=new Student{Name="张三",Id=1001,Major="计算机"};\n        s.Score=95;\n        // s.Major="数学"; // ❌ init不可再赋值\n        Console.WriteLine(s.Info);\n    }\n}`,
-et:'类外修改只读属性',ec:`var s=new Student();\ns.EnrollDate=DateTime.Now; // ❌ 只读不可赋值\npublic DateTime EnrollDate{get;}=DateTime.Now; // ✅ 声明时赋值`,
-q:[{q:'get/set、get/init、只有get各适用场景？',a:'get/set：可读写随时修改；get/init：初始化后不可变，适合配置；只有get：完全只读，构造/声明时确定。'}]},
+{id:16,t:'字符串操作',p:['string不可变性：每次"修改"都会创建新字符串，频繁操作用StringBuilder。','常用方法：Length, Substring, Split, Join, Replace, Trim, ToUpper/ToLower, Contains。','比较方式：==值比较，Equals方法，CompareTo方法。','StringBuilder：Append/Insert/Remove/Replace，频繁字符串拼接性能更优。','格式化：$"{value}"插值，ToString("格式")方法。'],
+c:`using System;
+using System.Text;
+class Program
+{
+    static void Main()
+    {
+        string s = "  Hello, C# World!  ";
+        Console.WriteLine($"长度:{s.Length}");
+        Console.WriteLine($"Trim:'{s.Trim()}'");
+        Console.WriteLine($"大写:{s.ToUpper()}");
+        Console.WriteLine($"包含C#:{s.Contains("C#")}");
+        Console.WriteLine($"子串:{s.Substring(4, 5)}");
+        
+        string[] fruits = "苹果,香蕉,橙子".Split(',');
+        Console.WriteLine(string.Join(" | ", fruits));
+        Console.WriteLine(s.Replace("C#", "CSharp"));
+        
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < 1000; i++) 
+            sb.Append($"行{i},");
+        
+        Console.WriteLine($"{99.9:C}"); // ¥99.90
+    }
+}`,
+et:'循环中用+拼接字符串',ec:`string s = "";
+for(int i = 0; i < 10000; i++) 
+    s += i; // ❌ 创建10000个临时对象，性能差
 
-{id:22,t:'构造函数',p:['构造函数：与类同名无返回类型，new时自动调用初始化对象。','不定义时编译器生成无参默认构造函数，自定义后不再生成。','构造函数链：this()调用其他构造函数减少重复。','静态构造函数：static修饰，只执行一次，初始化静态成员。'],
-c:`using System;\nclass Rectangle\n{\n    public double W{get;set;} public double H{get;set;}\n    public static int Count{get;private set;}\n    public Rectangle():this(1,1){}\n    public Rectangle(double side):this(side,side){}\n    public Rectangle(double w,double h){W=w;H=h;Count++;}\n    static Rectangle(){Count=0;Console.WriteLine("静态构造执行");}\n    public double Area()=>W*H;\n}\nclass Program\n{\n    static void Main()\n    {\n        var r1=new Rectangle();var r2=new Rectangle(5);var r3=new Rectangle(4,6);\n        Console.WriteLine($"r1:{r1.Area()},r2:{r2.Area()},r3:{r3.Area()}");\n        Console.WriteLine($"创建了{Rectangle.Count}个矩形");\n    }\n}`,
-et:'定义有参构造后无参构造消失',ec:`class Foo{public Foo(int x){}}\nvar f=new Foo(); // ❌ 无参构造不存在\npublic Foo(){} // ✅ 显式定义\nvar f=new Foo(0); // ✅ 使用已有构造`,
+StringBuilder sb = new StringBuilder();
+for(int i = 0; i < 10000; i++) 
+    sb.Append(i); // ✅ 性能优异
+string result = sb.ToString();`},
+q:[{q:'统计句子中每个单词出现次数',a:'var words = "hello world hello csharp".Split(" ");\nvar count = new Dictionary<string, int>();\nforeach(var w in words)\n    count[w] = count.GetValueOrDefault(w, 0) + 1;\nforeach(var kv in count) \n    Console.WriteLine($"{kv.Key}:{kv.Value}次");'}]},
+
+{id:17,t:'方法定义',p:['声明语法：访问修饰符 返回类型 方法名(参数列表){方法体}。','参数传递：值参数(默认)、ref引用参数、out输出参数、params可变参数。','return语句返回结果，void表示无返回值。','递归：方法调用自身，必须有终止条件。'],
+c:`using System;
+class Calculator
+{
+    public int Add(int a, int b) => a + b;
+    
+    public void Swap(ref int a, ref int b)
+    {
+        int temp = a;
+        a = b;
+        b = temp;
+    }
+    
+    public void Divide(int a, int b, out int quotient, out int remainder)
+    {
+        quotient = a / b;
+        remainder = a % b;
+    }
+    
+    public int Sum(params int[] nums)
+    {
+        int total = 0;
+        foreach(int n in nums) 
+            total += n;
+        return total;
+    }
+    
+    public long Factorial(int n) => n <= 1 ? 1 : n * Factorial(n - 1);
+}
+class Program
+{
+    static void Main()
+    {
+        var calc = new Calculator();
+        Console.WriteLine(calc.Add(3, 5));
+        
+        int x = 10, y = 20;
+        calc.Swap(ref x, ref y);
+        Console.WriteLine($"x={x},y={y}");
+        
+        calc.Divide(17, 5, out int q, out int r);
+        Console.WriteLine($"17÷5={q}余{r}");
+        
+        Console.WriteLine(calc.Sum(1, 2, 3, 4, 5));
+        Console.WriteLine($"5!={calc.Factorial(5)}");
+    }
+}`,
+et:'ref/out参数未初始化',ec:`int a; // 未赋值
+calc.Swap(ref a, ref b); // ❌ ref参数必须先初始化
+
+int a = 10; // ✅
+calc.Swap(ref a, ref b);
+
+// out参数不需要预先初始化
+calc.Divide(17, 5, out int q, out int r); // ✅`},
+q:[{q:'ref和out参数的区别',a:'ref调用前必须初始化，方法内可不修改；out调用前不需要初始化，方法内必须赋值。ref双向传递，out主要用于返回多个值。'}]},
+
+{id:18,t:'方法重载',p:['重载概念：同名方法，参数列表不同(类型/数量/顺序)，与返回类型无关。','编译器根据调用时的参数选择最匹配的版本。','常见场景：同一操作支持不同参数类型、不同参数数量。','ref/out也构成重载差异。'],
+c:`using System;
+class Printer
+{
+    public void Print(int v) 
+    { 
+        Console.WriteLine($"整数:{v}"); 
+    }
+    
+    public void Print(double v) 
+    { 
+        Console.WriteLine($"浮点:{v:F2}"); 
+    }
+    
+    public void Print(string v) 
+    { 
+        Console.WriteLine($"字符串:{v}"); 
+    }
+    
+    public int Max(int a, int b) => a > b ? a : b;
+    
+    public int Max(int a, int b, int c) => Max(Max(a, b), c);
+}
+class Program
+{
+    static void Main()
+    {
+        var p = new Printer();
+        p.Print(42); 
+        p.Print(3.14); 
+        p.Print("Hello");
+        
+        Console.WriteLine(new Printer().Max(3, 5));
+        Console.WriteLine(new Printer().Max(3, 5, 8));
+    }
+}`,
+et:'仅返回类型不同的重载',ec:`int GetValue() { return 1; }
+double GetValue() { return 1.0; } // ❌ 仅返回类型不同不构成重载
+
+int GetValue(int x) { return x; } // ✅ 参数列表不同
+double GetValue(double x) { return x; } // ✅ 参数列表不同`},
+q:[{q:'void Set(int x)和int Set(int x)是否合法重载？',a:'不合法，仅返回类型不同不构成重载，编译器无法根据返回类型区分调用。'}]},
+
+{id:19,t:'可选与命名参数',p:['可选参数：声明时指定默认值，如void Foo(int x, int y = 10)。','命名参数：调用时使用参数名:值形式，可按任意顺序传递。','可选参数必须在必选参数之后，默认值必须是编译时常量。','命名参数可跳过可选参数，提高代码可读性。'],
+c:`using System;
+class Config
+{
+    public void Create(string name, string ext = ".txt", bool overwrite = false)
+    {
+        Console.WriteLine($"创建:{name}{ext},覆盖:{overwrite}");
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        var c = new Config();
+        c.Create("data");                    // data.txt,覆盖:False
+        c.Create("log", ".log");              // log.log,覆盖:False
+        c.Create("config", overwrite: true);    // config.txt,覆盖:True
+        c.Create(ext: ".tmp", name: "cache");    // cache.tmp,覆盖:False
+    }
+}`,
+et:'可选参数在必选参数之前',ec:`void Foo(int x = 1, int y) {} // ❌ 可选参数不能在必选参数之前
+void Foo(int y, int x = 1) {} // ✅
+
+Foo(10);     // y=10, x=1
+Foo(10, 20);  // y=10, x=20`},
+q:[{q:'Foo(int a, int b = 5, int c = 10)只传a和c=20怎么写？',a:'Foo(a: 1, c: 20); 或 Foo(1, c: 20); b使用默认值5。'}]},
+
+{id:20,t:'类与对象',p:['类是蓝图/模板，对象是类的实例，使用new关键字创建。','访问修饰符：public(公开)/private(私有)/protected(受保护)/internal(内部)。','字段(存储数据，通常private)vs属性(受控访问，get/set)。','this关键字：引用当前实例，区分同名参数。'],
+c:`using System;
+class Person
+{
+    private string _name; 
+    private int _age;
+    
+    public string Name
+    { 
+        get => _name; 
+        set => _name = value; 
+    }
+    
+    public int Age
+    { 
+        get => _age; 
+        set 
+        { 
+            if(value >= 0 && value <= 150) 
+                _age = value; 
+            else 
+                Console.WriteLine("年龄无效"); 
+        } 
+    }
+    
+    public Person(string name, int age)
+    {
+        _name = name;
+        _age = age;
+    }
+    
+    public void Introduce() => Console.WriteLine($"我叫{_name}，{_age}岁");
+}
+class Program
+{
+    static void Main()
+    {
+        var p = new Person("张三", 25);
+        p.Introduce();
+        
+        p.Age = -5; // 年龄无效
+        p.Name = "李四"; 
+        p.Introduce();
+    }
+}`,
+et:'直接暴露public字段',ec:`class Person { public int Age; } // ❌ 无验证逻辑
+Person p = new Person(); 
+p.Age = -100; // 可赋任意值
+
+class Person 
+{ 
+    private int _age; // ✅ 使用私有字段+属性
+    public int Age
+    { 
+        get => _age; 
+        set 
+        { 
+            if(value >= 0) 
+                _age = value; 
+        } 
+    } 
+}`},
+q:[{q:'类和对象的关系？如何创建对象？',a:'类是模板/蓝图，对象是类的实例。使用new关键字创建：Person p = new Person("张三", 25);'}]},
+
+{id:21,t:'属性(Property)',p:['自动属性：public string Name { get; set; }编译器自动生成私有字段。','只读属性：只有get访问器或get+init访问器。','init访问器(C#9+)：只在初始化时赋值，之后不可修改。','表达式体属性：public string Info => $"{Name}({Id})";'],
+c:`using System;
+class Student
+{
+    public string Name { get; set; }
+    public int Id { get; set; }
+    public DateTime EnrollDate { get; } = DateTime.Now;
+    public string Major { get; init; }
+    public string Info => $"{Name}(ID:{Id})";
+    
+    private double _score;
+    public double Score
+    { 
+        get => _score; 
+        set => _score = value >= 0 && value <= 100 ? value : throw new ArgumentException(); 
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        var s = new Student { Name = "张三", Id = 1001, Major = "计算机" };
+        s.Score = 95;
+        // s.Major = "数学"; // ❌ init访问器不可再赋值
+        Console.WriteLine(s.Info);
+    }
+}`,
+et:'类外修改只读属性',ec:`var s = new Student();
+s.EnrollDate = DateTime.Now; // ❌ 只读属性不可赋值
+
+public DateTime EnrollDate { get; } = DateTime.Now; // ✅ 声明时赋值`},
+q:[{q:'get/set、get/init、只有get各适用什么场景？',a:'get/set：可读写随时修改；get/init：初始化后不可变，适合配置项；只有get：完全只读，构造/声明时确定。'}]},
+
+{id:22,t:'构造函数',p:['构造函数：与类同名无返回类型，new创建对象时自动调用用于初始化。','不定义构造函数时编译器生成无参默认构造函数，自定义后不再生成。','构造函数链：this()调用其他构造函数减少重复代码。','静态构造函数：static修饰，只执行一次，用于初始化静态成员。'],
+c:`using System;
+class Rectangle
+{
+    public double Width { get; set; } 
+    public double Height { get; set; }
+    public static int Count { get; private set; }
+    
+    public Rectangle() : this(1, 1) { }
+    public Rectangle(double side) : this(side, side) { }
+    public Rectangle(double w, double h)
+    {
+        Width = w;
+        Height = h;
+        Count++;
+    }
+    
+    static Rectangle()
+    {
+        Count = 0;
+        Console.WriteLine("静态构造执行");
+    }
+    
+    public double Area() => Width * Height;
+}
+class Program
+{
+    static void Main()
+    {
+        var r1 = new Rectangle();
+        var r2 = new Rectangle(5);
+        var r3 = new Rectangle(4, 6);
+        
+        Console.WriteLine($"r1:{r1.Area()},r2:{r2.Area()},r3:{r3.Area()}");
+        Console.WriteLine($"创建了{Rectangle.Count}个矩形");
+    }
+}`,
+et:'定义有参构造后无参构造消失',ec:`class Foo { public Foo(int x) {} }
+var f = new Foo(); // ❌ 无参构造函数不存在
+
+public Foo() {} // ✅ 显式定义无参构造
+var f = new Foo(0); // ✅ 使用已有构造`},
 q:[{q:'什么是构造函数链？好处？',a:'一个构造函数调用另一个(用:this())，避免重复代码，初始化逻辑集中在主构造函数。'}]},
 
-{id:23,t:'继承',p:['语法：class子类:父类{}，C#只支持单继承，可多接口。','virtual/override：父类virtual标记，子类override重写，运行时多态。','base关键字：调用父类构造base()、访问父类成员base.Method()。','sealed：密封类不可继承，密封方法不可再重写。'],
-c:`using System;\nclass Animal\n{\n    public string Name{get;set;}\n    public Animal(string name)=>Name=name;\n    public virtual void Speak()=>Console.WriteLine($"{Name}发出声音");\n}\nclass Dog:Animal\n{\n    public Dog(string name):base(name){}\n    public override void Speak()=>Console.WriteLine($"{Name}:汪汪！");\n    public void Fetch()=>Console.WriteLine($"{Name}捡球");\n}\nclass Cat:Animal\n{\n    public Cat(string name):base(name){}\n    public override void Speak()=>Console.WriteLine($"{Name}:喵~");\n}\nclass Program\n{\n    static void Main()\n    {\n        Animal[] zoo={new Dog("旺财"),new Cat("咪咪")};\n        foreach(var a in zoo) a.Speak(); // 多态\n    }\n}`,
-et:'重写不用override',ec:`class Dog:Animal{\npublic void Speak(){} // ❌ 隐藏非重写，无override\n}\npublic override void Speak(){} // ✅ 多态生效\npublic new void Speak(){} // 不推荐，父类引用调不到`,
-q:[{q:'override和new的区别？',a:'override重写虚方法，父类引用调用执行子类版本(多态)；new隐藏父类方法，父类引用仍执行父类版本。应优先override。'}]},
+{id:23,t:'继承',p:['语法：class 子类:父类{}，C#只支持单继承，可实现多个接口。','virtual/override：父类用virtual标记，子类用override重写，实现运行时多态。','base关键字：调用父类构造函数base()、访问父类成员base.Method()。','sealed：密封类不可继承，密封方法不可再被重写。'],
+c:`using System;
+class Animal
+{
+    public string Name { get; set; }
+    
+    public Animal(string name) => Name = name;
+    
+    public virtual void Speak() => Console.WriteLine($"{Name}发出声音");
+}
+class Dog : Animal
+{
+    public Dog(string name) : base(name) { }
+    
+    public override void Speak() => Console.WriteLine($"{Name}:汪汪！");
+    
+    public void Fetch() => Console.WriteLine($"{Name}捡球");
+}
+class Cat : Animal
+{
+    public Cat(string name) : base(name) { }
+    
+    public override void Speak() => Console.WriteLine($"{Name}:喵~");
+}
+class Program
+{
+    static void Main()
+    {
+        Animal[] zoo = { new Dog("旺财"), new Cat("咪咪") };
+        foreach(var a in zoo) 
+            a.Speak(); // 多态：调用实际类型的方法
+    }
+}`,
+et:'重写时不用override',ec:`class Dog : Animal
+{
+    public void Speak() {} // ❌ 隐藏而非重写，无override
+}
 
-{id:24,t:'多态',p:['多态：同一接口不同实现，通过virtual/override/abstract实现运行时多态。','向上转型：子类→父类，自动安全。','向下转型：父类→子类，需(Dog)a或a as Dog，可能失败。','is/as模式：is判断类型，as尝试转换，C#7+用is Type var。'],
-c:`using System;\nabstract class Shape{public abstract double Area();}\nclass Circle:Shape{public double R{get;set;}public Circle(double r)=>R=r;public override double Area()=>Math.PI*R*R;}\nclass Rect:Shape{public double W,H;public Rect(double w,double h){W=w;H=h;}public override double Area()=>W*H;}\nclass Program\n{\n    static void Main()\n    {\n        Shape[] s={new Circle(5),new Rect(4,6)};\n        foreach(Shape sh in s){\n            Console.WriteLine($"{sh.GetType().Name}面积:{sh.Area():F2}");\n            if(sh is Circle c) Console.WriteLine($"  半径:{c.R}");\n        }\n    }\n}`,
-et:'向下转型不检查类型',ec:`Shape s=new Circle(5);\nRect r=(Rect)s; // ❌ InvalidCastException\nif(s is Rect) r=(Rect)s; // ✅\nRect r2=s as Rect; if(r2!=null){} // ✅\nif(s is Rect r3){} // ✅ 模式匹配推荐`,
-q:[{q:'什么是多态？C#如何实现？',a:'同一操作不同对象产生不同行为。通过virtual/override实现：父类声明virtual，子类override重写，父类引用调用时执行子类版本。'}]},
+public override void Speak() {} // ✅ 多态生效
 
-{id:25,t:'抽象类',p:['abstract修饰，不能实例化，可包含抽象方法和具体方法。','抽象方法只有声明无实现，子类必须override。','vs接口：抽象类可有字段和实现，单继承；接口只定义契约，多实现。','设计选择：is-a关系+共同代码用抽象类，定义能力用接口。'],
-c:`using System;\nabstract class Shape\n{\n    public string Color{get;set;}="白色";\n    public abstract double Area();\n    public abstract double Perimeter();\n    public void Display()=>Console.WriteLine($"{GetType().Name}({Color}):面积={Area():F2},周长={Perimeter():F2}");\n}\nclass Circle:Shape\n{\n    public double R;public Circle(double r)=>R=r;\n    public override double Area()=>Math.PI*R*R;\n    public override double Perimeter()=>2*Math.PI*R;\n}\nclass Program\n{\n    static void Main(){Shape c=new Circle{R=5,Color="红"};c.Display();}\n}`,
-et:'抽象类实例化或子类未实现抽象方法',ec:`var s=new Shape(); // ❌ 抽象类不能实例化\nclass Bad:Shape{public override double Area()=>0;} // ❌ 缺Perimeter\nclass Good:Shape{public override double Area()=>0;public override double Perimeter()=>0;} // ✅`,
+public new void Speak() {} // 不推荐，父类引用无法调用`},
+q:[{q:'override和new的区别？',a:'override重写虚方法，父类引用调用时执行子类版本(多态)；new隐藏父类方法，父类引用仍执行父类版本。应优先使用override。'}]},
+
+{id:24,t:'多态',p:['多态概念：同一接口不同实现，通过virtual/override/abstract实现运行时多态。','向上转型：子类→父类，自动且安全。','向下转型：父类→子类，需(Dog)a或a as Dog，可能失败。','is/as模式匹配：is判断类型，as尝试转换，C#7+支持is Type var语法。'],
+c:`using System;
+abstract class Shape
+{ 
+    public abstract double Area(); 
+}
+
+class Circle : Shape
+{ 
+    public double Radius { get; set; } 
+    public Circle(double r) => Radius = r; 
+    public override double Area() => Math.PI * Radius * Radius; 
+}
+
+class Rectangle : Shape
+{ 
+    public double Width, Height; 
+    public Rectangle(double w, double h) { Width = w; Height = h; } 
+    public override double Area() => Width * Height; 
+}
+
+class Program
+{
+    static void Main()
+    {
+        Shape[] shapes = { new Circle(5), new Rectangle(4, 6) };
+        
+        foreach(Shape sh in shapes)
+        {
+            Console.WriteLine($"{sh.GetType().Name}面积:{sh.Area():F2}");
+            if(sh is Circle c) 
+                Console.WriteLine($"  半径:{c.Radius}");
+        }
+    }
+}`,
+et:'向下转型不检查类型',ec:`Shape s = new Circle(5);
+Rectangle r = (Rectangle)s; // ❌ InvalidCastException
+
+if(s is Rectangle) 
+    r = (Rectangle)s; // ✅
+
+Rectangle r2 = s as Rectangle; 
+if(r2 != null) {} // ✅
+
+if(s is Rectangle r3) {} // ✅ 模式匹配推荐写法`},
+q:[{q:'什么是多态？C#如何实现？',a:'同一操作对不同对象产生不同行为。通过virtual/override实现：父类声明virtual，子类override重写，父类引用调用时执行子类版本。'}]},
+
+{id:25,t:'抽象类',p:['abstract修饰，不能实例化，可包含抽象方法和具体方法。','抽象方法只有声明无实现，子类必须override实现。','vs接口：抽象类可有字段和实现，单继承；接口只定义契约，多实现。','设计选择：is-a关系+共享代码用抽象类，定义能力用接口。'],
+c:`using System;
+abstract class Shape
+{
+    public string Color { get; set; } = "白色";
+    
+    public abstract double Area();
+    public abstract double Perimeter();
+    
+    public void Display() => Console.WriteLine($"{GetType().Name}({Color}):面积={Area():F2},周长={Perimeter():F2}");
+}
+class Circle : Shape
+{
+    public double Radius;
+    public Circle(double r) => Radius = r;
+    
+    public override double Area() => Math.PI * Radius * Radius;
+    public override double Perimeter() => 2 * Math.PI * Radius;
+}
+class Program
+{
+    static void Main()
+    {
+        Shape c = new Circle { Radius = 5, Color = "红" };
+        c.Display();
+    }
+}`,
+et:'抽象类实例化或子类未实现抽象方法',ec:`var s = new Shape(); // ❌ 抽象类不能实例化
+
+class Bad : Shape 
+{ 
+    public override double Area() => 0; 
+} // ❌ 缺少Perimeter实现
+
+class Good : Shape 
+{ 
+    public override double Area() => 0; 
+    public override double Perimeter() => 0; 
+} // ✅`},
 q:[{q:'抽象类和接口核心区别？何时用抽象类？',a:'抽象类可有字段和实现(单继承)，接口只定义签名无实现(多实现)。有is-a关系且子类共享代码用抽象类；定义能力契约或需多继承用接口。'}]},
 
-{id:26,t:'接口',p:['interface IName{void Method();}，成员默认public无实现(C#8前)。','多接口实现：class Bat:IMammal,IFlyable{}弥补单继承。','C#8+默认实现：接口可提供方法默认实现。','vs抽象类：接口=能做什么(能力)，抽象类=是什么(本质)。'],
-c:`using System;\ninterface IDrawable{void Draw();}\ninterface IResizable{void Resize(double f);}\ninterface IColorable{string Color{get;set;}}\nclass Rect:IDrawable,IResizable,IColorable\n{\n    public double W{get;set;} public double H{get;set;} public string Color{get;set;}="黑";\n    public void Draw()=>Console.WriteLine($"绘制{Color}矩形({W}x{H})");\n    public void Resize(double f){W*=f;H*=f;}\n}\nclass Program\n{\n    static void Main()\n    {\n        var r=new Rect{W=10,H=5,Color="红"};\n        r.Draw(); r.Resize(2); r.Draw();\n        IDrawable d=r; d.Draw();\n        if(r is IColorable c) Console.WriteLine(c.Color);\n    }\n}`,
-et:'接口实例化或未实现所有成员',ec:`IDrawable d=new IDrawable(); // ❌ 接口不能实例化\nclass Bad:IDrawable{public void Draw(){}} // ✅ 实现了IDrawable\nclass Bad2:IDrawable,IResizable{public void Draw(){} /* 缺Resize ❌ */}`,
-q:[{q:'一个类能继承几个类？实现几个接口？',a:'只能继承1个类(单继承)，可实行多个接口。禁多类继承避免菱形问题，多接口无此问题因为无实现。'}]},
+{id:26,t:'接口',p:['interface IName { void Method(); }，成员默认public无实现(C#8前)。','多接口实现：class Bat : IMammal, IFlyable {}弥补单继承限制。','C#8+默认实现：接口可提供方法默认实现。','vs抽象类：接口=能做什么(能力)，抽象类=是什么(本质)。'],
+c:`using System;
+interface IDrawable { void Draw(); }
+interface IResizable { void Resize(double factor); }
+interface IColorable { string Color { get; set; } }
 
-{id:27,t:'泛型',p:['泛型类：class Stack<T>{}，T是类型参数，使用时Stack<int>。','泛型方法：void Swap<T>(ref T a,ref T b)。','约束where T:struct/class/new()/基类/接口。','优势：类型安全、代码复用、无装箱开销。'],
-c:`using System;\nclass Stack<T>\n{\n    private T[] _items; private int _top=-1;\n    public Stack(int cap=10){_items=new T[cap];}\n    public void Push(T item){if(_top==_items.Length-1)Array.Resize(ref _items,_items.Length*2);_items[++_top]=item;}\n    public T Pop()=>_top>=0?_items[_top--]:throw new InvalidOperationException("栈空");\n    public int Count=>_top+1;\n}\nstatic class Utils{public static T Max<T>(T a,T b)where T:IComparable<T>=>a.CompareTo(b)>=0?a:b;}\nclass Program\n{\n    static void Main()\n    {\n        var s=new Stack<int>();s.Push(10);s.Push(20);Console.WriteLine(s.Pop());\n        Console.WriteLine(Utils.Max(3,7)); Console.WriteLine(Utils.Max("abc","xyz"));\n    }\n}`,
-et:'泛型类型未满足约束',ec:`class Factory<T>where T:new(){public T Create()=>new T();}\nvar f=new Factory<string>(); // ✅ string有无参构造\nvar f2=new Factory<Shape>(); // ❌ 抽象类不满足new()约束`,
+class Rectangle : IDrawable, IResizable, IColorable
+{
+    public double Width { get; set; } 
+    public double Height { get; set; } 
+    public string Color { get; set; } = "黑";
+    
+    public void Draw() => Console.WriteLine($"绘制{Color}矩形({Width}x{Height})");
+    
+    public void Resize(double factor)
+    {
+        Width *= factor;
+        Height *= factor;
+    }
+}
+class Program
+{
+    static void Main()
+    {
+        var r = new Rectangle { Width = 10, Height = 5, Color = "红" };
+        r.Draw(); 
+        r.Resize(2); 
+        r.Draw();
+        
+        IDrawable d = r; 
+        d.Draw();
+        
+        if(r is IColorable c) 
+            Console.WriteLine(c.Color);
+    }
+}`,
+et:'接口实例化或未实现所有成员',ec:`IDrawable d = new IDrawable(); // ❌ 接口不能实例化
+
+class Bad : IDrawable 
+{ 
+    public void Draw() {} 
+} // ✅ 实现了IDrawable
+
+class Bad2 : IDrawable, IResizable 
+{ 
+    public void Draw() {} 
+    /* 缺少Resize方法 ❌ */ 
+}`},
+q:[{q:'一个类能继承几个类？实现几个接口？',a:'只能继承1个类(单继承)，可实现多个接口。禁止多类继承避免菱形继承问题，多接口无此问题因为接口无实现。'}]},
+
+{id:27,t:'泛型',p:['泛型类：class Stack<T>{}，T是类型参数，使用时Stack<int>。','泛型方法：void Swap<T>(ref T a, ref T b)。','泛型约束where T:struct/class/new()/基类/接口。','优势：类型安全、代码复用、无装箱开销。'],
+c:`using System;
+class Stack<T>
+{
+    private T[] _items; 
+    private int _top = -1;
+    
+    public Stack(int capacity = 10) 
+    { 
+        _items = new T[capacity]; 
+    }
+    
+    public void Push(T item)
+    {
+        if(_top == _items.Length - 1) 
+            Array.Resize(ref _items, _items.Length * 2);
+        _items[++_top] = item;
+    }
+    
+    public T Pop() => _top >= 0 ? _items[_top--] : throw new InvalidOperationException("栈空");
+    
+    public int Count => _top + 1;
+}
+
+static class Utils
+{
+    public static T Max<T>(T a, T b) where T : IComparable<T>
+        => a.CompareTo(b) >= 0 ? a : b;
+}
+
+class Program
+{
+    static void Main()
+    {
+        var s = new Stack<int>();
+        s.Push(10);
+        s.Push(20);
+        Console.WriteLine(s.Pop());
+        
+        Console.WriteLine(Utils.Max(3, 7)); 
+        Console.WriteLine(Utils.Max("abc", "xyz"));
+    }
+}`,
+et:'泛型类型未满足约束',ec:`class Factory<T> where T : new() 
+{ 
+    public T Create() => new T(); 
+}
+
+var f = new Factory<string>(); // ✅ string有无参构造函数
+var f2 = new Factory<Shape>(); // ❌ 抽象类不满足new()约束`},
 q:[{q:'三种常用泛型约束及作用',a:'where T:struct 限制值类型；where T:class 限制引用类型；where T:new() 限制有无参构造函数，可new T()。'}]},
 
-{id:28,t:'List集合',p:['List<T>：动态数组，自动扩容，最常用泛型集合。','常用：Add/AddRange/Insert/Remove/RemoveAt/Contains/IndexOf/Sort/Find。','遍历：for(可索引修改)/foreach(只读)/ForEach方法。','Capacity(内部数组大小)vs Count(实际元素数)。'],
-c:`using System; using System.Collections.Generic;\nclass Program\n{\n    static void Main()\n    {\n        var nums=new List<int>{5,3,8,1,9};\n        nums.Add(7); nums.AddRange(new[]{2,6});\n        nums.Insert(0,0); nums.Remove(8); nums.RemoveAt(0);\n        Console.WriteLine($"含5:{nums.Contains(5)}");\n        int first=nums.Find(n=>n>6);\n        var bigs=nums.FindAll(n=>n>5);\n        nums.Sort(); nums.Reverse();\n        Console.WriteLine(string.Join(",",nums));\n        nums.ForEach(n=>Console.Write(n+" "));\n        Console.WriteLine($\"\\nCount:{nums.Count},Cap:{nums.Capacity}\");\n    }\n}`,
-et:'遍历时删除元素',ec:`foreach(var n in nums) if(n<5) nums.Remove(n); // ❌ 异常\nnums.RemoveAll(n=>n<5); // ✅\nfor(int i=nums.Count-1;i>=0;i--) if(nums[i]<5) nums.RemoveAt(i); // ✅`,
-q:[{q:'Capacity和Count区别？何时关注Capacity？',a:'Count是实际元素数，Capacity是内部数组容量。频繁添加时Capacity成倍增长导致内存分配，预知大小可指定初始容量减少扩容。'}]},
+{id:28,t:'List集合',p:['List<T>：动态数组，自动扩容，最常用的泛型集合。','常用方法：Add/AddRange/Insert/Remove/RemoveAt/Contains/IndexOf/Sort/Find。','遍历方式：for(可索引修改)/foreach(只读)/ForEach方法。','Capacity(内部数组大小)vs Count(实际元素数)。'],
+c:`using System; 
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        var nums = new List<int>{5, 3, 8, 1, 9};
+        
+        nums.Add(7); 
+        nums.AddRange(new[]{2, 6});
+        nums.Insert(0, 0); 
+        nums.Remove(8); 
+        nums.RemoveAt(0);
+        
+        Console.WriteLine($"含5:{nums.Contains(5)}");
+        
+        int first = nums.Find(n => n > 6);
+        var bigs = nums.FindAll(n => n > 5);
+        
+        nums.Sort(); 
+        nums.Reverse();
+        
+        Console.WriteLine(string.Join(",", nums));
+        nums.ForEach(n => Console.Write(n + " "));
+        Console.WriteLine($"\nCount:{nums.Count},Cap:{nums.Capacity}");
+    }
+}`,
+et:'遍历时删除元素',ec:`foreach(var n in nums) 
+    if(n < 5) nums.Remove(n); // ❌ 抛出异常
 
-{id:29,t:'Dictionary集合',p:['Dictionary<TKey,TValue>：键值对，键唯一，查找O(1)。','增删改：dict[key]=value添加/修改，Add添加(存在抛异常)，Remove删除。','安全获取：TryGetValue、ContainsKey、GetValueOrDefault。','遍历：foreach KeyValuePair，Keys，Values。'],
-c:`using System; using System.Collections.Generic;\nclass Program\n{\n    static void Main()\n    {\n        var s=new Dictionary<string,int>{{"张三",95},{"李四",88}};\n        s["王五"]=92; s.Add("赵六",85); s["张三"]=98;\n        if(s.TryGetValue("钱七",out int v)) Console.WriteLine(v);\n        else Console.WriteLine("不存在");\n        Console.WriteLine($"含张三:{s.ContainsKey("张三")}");\n        s.Remove("李四");\n        foreach(var kv in s) Console.WriteLine($"{kv.Key}:{kv.Value}分");\n        Console.WriteLine(string.Join(",",s.Keys));\n        Console.WriteLine(string.Join(",",s.Values));\n    }\n}`,
-et:'访问不存在的键',ec:`var d=new Dictionary<string,int>(); d["张三"]=90;\nint v=d["李四"]; // ❌ KeyNotFoundException\nif(d.TryGetValue("李四",out int v2)){} // ✅\nint v3=d.GetValueOrDefault("李四",0); // ✅`,
-q:[{q:'Dictionary查找为何O(1)？何时退化为O(n)？',a:'内部哈希表通过键哈希值直接定位。大量哈希冲突时退化为O(n)，好的哈希函数和合理容量可避免。'}]},
+nums.RemoveAll(n => n < 5); // ✅
 
-{id:30,t:'异常处理',p:['try-catch-finally：try放可能异常代码，catch捕获处理，finally必执行。','异常层次：Exception→SystemException→具体异常(DivideByZeroException等)。','自定义异常：继承Exception类，提供构造函数。','最佳实践：不吞异常、最小try范围、具体catch在前、finally释放资源。'],
-c:`using System;\nclass InvalidAgeException:Exception\n{\n    public InvalidAgeException(string msg):base(msg){}\n}\nclass Person\n{\n    private int _age;\n    public int Age{get=>_age;set{if(value<0||value>150)throw new InvalidAgeException($"年龄{value}无效");_age=value;}}\n}\nclass Program\n{\n    static void Main()\n    {\n        try{var p=new Person();p.Age=200;}\n        catch(InvalidAgeException ex){Console.WriteLine($"自定义异常:{ex.Message}");}\n        catch(Exception ex){Console.WriteLine($"其他错误:{ex.Message}");}\n        finally{Console.WriteLine("无论如何执行");}\n    }\n}`,
-et:'空catch块吞异常',ec:`try{int r=10/0;}catch(Exception){} // ❌ 异常被吞\ntry{int r=10/0;}\ncatch(Exception ex){Console.WriteLine(ex.Message);throw;} // ✅ 记录并重抛`,
-q:[{q:'finally何时执行？有什么用？',a:'无论是否异常都执行，通常用于资源清理(关闭文件、释放连接)。即使try中有return也执行。'}]},
+for(int i = nums.Count - 1; i >= 0; i--) 
+    if(nums[i] < 5) nums.RemoveAt(i); // ✅`},
+q:[{q:'Capacity和Count区别？何时关注Capacity？',a:'Count是实际元素数，Capacity是内部数组容量。频繁添加时Capacity成倍增长导致内存分配，预知大小可指定初始容量减少扩容次数。'}]},
 
-{id:31,t:'文件操作',p:['System.IO命名空间：File、Directory、Path、StreamReader/StreamWriter。','File类：ReadAllText/WriteAllText/ReadAllLines/WriteAllLines/Copy/Move/Delete。','StreamReader/StreamWriter：流式读写，using语句自动释放。','Directory类：CreateDirectory/GetFiles/GetDirectories/Delete/Exists。'],
-c:`using System; using System.IO;\nclass Program\n{\n    static void Main()\n    {\n        string path="test.txt";\n        File.WriteAllText(path,"Hello,文件操作！");\n        Console.WriteLine(File.ReadAllText(path));\n        File.WriteAllLines("lines.txt",new[]{"第一行","第二行","第三行"});\n        foreach(string line in File.ReadAllLines("lines.txt")) Console.WriteLine(line);\n        using(var w=new StreamWriter("stream.txt")){w.WriteLine("流式写入1");w.WriteLine("流式写入2");}\n        using(var r=new StreamReader("stream.txt")){string l;while((l=r.ReadLine())!=null)Console.WriteLine(l);}\n        Directory.CreateDirectory("MyDir");\n        foreach(string f in Directory.GetFiles(".")) Console.WriteLine(f);\n    }\n}`,
-et:'忘记关闭流',ec:`StreamWriter w=new StreamWriter("f.txt");\nw.WriteLine("Hello"); // ❌ 忘记Close/Dispose\nusing(var w=new StreamWriter("f.txt")){w.WriteLine("Hello");} // ✅ 自动Dispose`,
-q:[{q:'using语句的作用？',a:'确保IDisposable对象使用后自动调用Dispose()释放资源，即使发生异常。等价于try-finally。'}]},
+{id:29,t:'Dictionary集合',p:['Dictionary<TKey,TValue>：键值对集合，键唯一，查找O(1)。','增删改：dict[key]=value添加/修改，Add添加(存在抛异常)，Remove删除。','安全获取：TryGetValue、ContainsKey、GetValueOrDefault。','遍历：foreach遍历KeyValuePair，Keys属性，Values属性。'],
+c:`using System; 
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        var scores = new Dictionary<string, int>
+        {
+            {"张三", 95},
+            {"李四", 88}
+        };
+        
+        scores["王五"] = 92; 
+        scores.Add("赵六", 85); 
+        scores["张三"] = 98; // 修改
+        
+        if(scores.TryGetValue("钱七", out int v)) 
+            Console.WriteLine(v);
+        else 
+            Console.WriteLine("不存在");
+        
+        Console.WriteLine($"含张三:{scores.ContainsKey("张三")}");
+        
+        scores.Remove("李四");
+        
+        foreach(var kv in scores) 
+            Console.WriteLine($"{kv.Key}:{kv.Value}分");
+        
+        Console.WriteLine(string.Join(",", scores.Keys));
+        Console.WriteLine(string.Join(",", scores.Values));
+    }
+}`,
+et:'访问不存在的键',ec:`var d = new Dictionary<string, int>(); 
+d["张三"] = 90;
 
-{id:32,t:'LINQ基础',p:['LINQ：Language Integrated Query，语言集成查询，统一查询语法。','查询语法：from x in collection where条件 select x，类似SQL。','方法语法：collection.Where(x=>条件).Select(x=>投影)，更灵活。','需要using System.Linq;，两者功能等价。'],
-c:`using System; using System.Linq; using System.Collections.Generic;\nclass Program\n{\n    static void Main()\n    {\n        var nums=new List<int>{1,2,3,4,5,6,7,8,9,10};\n        // 查询语法\n        var even=from n in nums where n%2==0 select n;\n        // 方法语法\n        var odd=nums.Where(n=>n%2!=0);\n        Console.WriteLine("偶数:"+string.Join(",",even));\n        Console.WriteLine("奇数:"+string.Join(",",odd));\n        var fruits=new[]{"apple","banana","orange","grape","mango"};\n        var short_=fruits.Where(f=>f.Length<=5);\n        var sorted=fruits.OrderBy(f=>f.Length);\n        var upper=fruits.Select(f=>f.ToUpper());\n        Console.WriteLine($"总和:{nums.Sum()},平均:{nums.Average():F1}");\n        Console.WriteLine($"最大:{nums.Max()},最小:{nums.Min()}");\n    }\n}`,
-et:'忘记using System.Linq',ec:`using System;\nvar r=nums.Where(n=>n>1); // ❌ 缺少Linq命名空间\nusing System.Linq; // ✅ 添加后Where等方法可用`,
-q:[{q:'查询语法和方法语法的区别？',a:'查询语法类似SQL可读性好；方法语法用Lambda更灵活。功能等价，编译器将查询语法转为方法调用。'}]},
+int v = d["李四"]; // ❌ KeyNotFoundException
 
-{id:33,t:'LINQ查询',p:['Where过滤、OrderBy/OrderByDescending排序、Select投影。','First/FirstOrDefault/Last/LastOrDefault/Single/SingleOrDefault。','GroupBy分组、Join连接、Distinct去重、Any/All判断。','聚合：Count/Sum/Min/Max/Average，ToDictionary/ToList。'],
-c:`using System; using System.Linq; using System.Collections.Generic;\nclass Student{public string Name{get;set;}public int Age{get;set;}public double Score{get;set;}}\nclass Program\n{\n    static void Main()\n    {\n        var ss=new List<Student>{\n            new{Name="张三",Age=20,Score=95},\n            new{Name="李四",Age=21,Score=88},\n            new{Name="王五",Age=19,Score=92},\n            new{Name="赵六",Age=22,Score=85}\n        };\n        var top=from s in ss where s.Score>90 orderby s.Score descending select new{s.Name,s.Score};\n        Console.WriteLine("优秀学生:");\n        foreach(var s in top) Console.WriteLine($"{s.Name}:{s.Score}");\n        var groups=ss.GroupBy(s=>s.Age);\n        foreach(var g in groups) Console.WriteLine($"年龄{g.Key}:{g.Count()}人");\n        Console.WriteLine($"有人超90:{ss.Any(s=>s.Score>90)}");\n        Console.WriteLine($"都超80:{ss.All(s=>s.Score>80)}");\n    }\n}`,
-et:'First在空序列上调用',ec:`var empty=new List<int>();\nempty.First(); // ❌ 抛InvalidOperationException\nempty.FirstOrDefault(); // ✅ 返回0(默认值)\nempty.FirstOrDefault()?? -1; // 对引用类型返回null`,
-q:[{q:'First和FirstOrDefault的区别？',a:'First无元素时抛异常；FirstOrDefault返回默认值(值类型0，引用类型null)。不确定有无元素时用FirstOrDefault更安全。'}]},
+if(d.TryGetValue("李四", out int v2)) {} // ✅
 
-{id:34,t:'委托与事件',p:['委托：delegate类型安全的函数指针，可引用方法，支持多播(+=)。','内置委托：Action(无返回)、Func<TReturn>(有返回)、Predicate<bool>。','事件：event修饰的委托，发布-订阅模式，仅类内可触发。','Lambda表达式：=>简写匿名方法，常用于LINQ和事件处理。'],
-c:`using System;\nclass Publisher\n{\n    public event Action<string> OnMessage;\n    public void Send(string msg)=>OnMessage?.Invoke(msg);\n}\nclass Program\n{\n    static void Main()\n    {\n        // 自定义委托\n        Func<int,int,int> add=(a,b)=>a+b;\n        Console.WriteLine(add(3,5));\n        // Action\n        Action<string> log=msg=>Console.WriteLine($"[LOG]{msg}");\n        log("测试");\n        // 事件\n        var pub=new Publisher();\n        pub.OnMessage+=msg=>Console.WriteLine($"收到:{msg}");\n        pub.OnMessage+=msg=>Console.WriteLine($"记录:{msg}");\n        pub.Send("你好！");\n        // 多播委托\n        Action multilog=null;\n        multilog+=()=>Console.WriteLine("处理器1");\n        multilog+=()=>Console.WriteLine("处理器2");\n        multilog?.Invoke();\n    }\n}`,
-et:'事件在类外触发',ec:`class Pub{public event Action OnEvent;}\nvar p=new Pub();\np.OnEvent?.Invoke(); // ❌ 事件只能在声明类内触发\n// 正确：通过公共方法触发\nclass Pub{\n    public event Action OnEvent;\n    public void Trigger()=>OnEvent?.Invoke(); // ✅\n}`,
-q:[{q:'委托和事件的区别？',a:'委托是类型安全的函数指针，可多播；事件是基于委托的发布-订阅机制，用event修饰，只能在声明类内触发，外部只能订阅(+=)或取消(-=)，更安全封装。'}]},
+int v3 = d.GetValueOrDefault("李四", 0); // ✅`},
+q:[{q:'Dictionary查找为何O(1)？何时退化为O(n)？',a:'内部使用哈希表通过键的哈希值直接定位。大量哈希冲突时退化为O(n)，好的哈希函数和合理容量可避免。'}]},
 
-{id:35,t:'综合实战',p:['综合运用类、继承、接口、泛型集合、LINQ、异常处理、文件操作。','设计学生管理系统：增删改查、成绩统计、数据持久化。','使用面向对象设计：Student类、IRepository接口、StudentManager类。','实战要点：合理分层、异常处理、数据验证、代码组织。'],
-c:`using System; using System.Collections.Generic; using System.Linq; using System.IO;\n\nclass Student\n{\n    public int Id{get;set;} public string Name{get;set;} public int Age{get;set;}\n    public string Gender{get;set;} public double Score{get;set;}\n    public override string ToString()=>$"ID:{Id},姓名:{Name},年龄:{Age},性别:{Gender},成绩:{Score}";\n}\n\ninterface IStudentRepository\n{\n    void Add(Student s); Student GetById(int id); List<Student> Search(string kw);\n    bool Update(int id,Student s); bool Delete(int id); List<Student> GetAll();\n}\n\nclass StudentManager:IStudentRepository\n{\n    private List<Student> _students=new List<Student>();\n    private int _nextId=1;\n    public void Add(Student s){s.Id=_nextId++;_students.Add(s);Save();}\n    public Student GetById(int id)=>_students.FirstOrDefault(s=>s.Id==id);\n    public List<Student> Search(string kw)=>_students.Where(s=>s.Name.Contains(kw)||s.Gender.Contains(kw)).ToList();\n    public bool Update(int id,Student u){var s=GetById(id);if(s==null)return false;s.Name=u.Name;s.Age=u.Age;s.Gender=u.Gender;s.Score=u.Score;Save();return true;}\n    public bool Delete(int id){var s=GetById(id);if(s==null)return false;_students.Remove(s);Save();return true;}\n    public List<Student> GetAll()=>_students;\n    public void ShowStats()\n    {\n        if(!_students.Any())return;\n        Console.WriteLine($"总人数:{_students.Count},平均:{_students.Average(s=>s.Score):F1},最高:{_students.Max(s=>s.Score)},最低:{_students.Min(s=>s.Score)}");\n    }\n    private void Save(){File.WriteAllLines("students.dat",_students.Select(s=>$"{s.Id},{s.Name},{s.Age},{s.Gender},{s.Score}"));}\n    public void Load(){if(!File.Exists("students.dat"))return;_students=File.ReadAllLines("students.dat").Select(l=>{var p=l.Split(',');return new Student{Id=int.Parse(p[0]),Name=p[1],Age=int.Parse(p[2]),Gender=p[3],Score=double.Parse(p[4])};}).ToList();_nextId=_students.Any()?_students.Max(s=>s.Id)+1:1;}\n}\n\nclass Program\n{\n    static void Main()\n    {\n        var mgr=new StudentManager(); mgr.Load();\n        mgr.Add(new Student{Name="张三",Age=20,Gender="男",Score=95});\n        mgr.Add(new Student{Name="李四",Age=21,Gender="女",Score=88});\n        mgr.Add(new Student{Name="王五",Age=19,Gender="男",Score=92});\n        Console.WriteLine("所有学生:");\n        foreach(var s in mgr.GetAll()) Console.WriteLine(s);\n        mgr.ShowStats();\n        var r=mgr.Search("张");\n        Console.WriteLine($"搜索'张':{r.Count}条");\n    }\n}`,
-et:'未实现接口所有方法',ec:`class Bad:IStudentRepository{\n    public void Add(Student s){} // 只实现一个\n    // 其他方法缺失 ❌\n}\n// 必须实现所有接口成员\nclass Good:IStudentRepository{\n    public void Add(Student s){}\n    public Student GetById(int id)=>null;\n    public List<Student> Search(string kw)=>new();\n    public bool Update(int id,Student s)=>false;\n    public bool Delete(int id)=>false;\n    public List<Student> GetAll()=>new();\n} // ✅`,
-q:[{q:'设计学生管理系统用到了哪些C#特性？',a:'类与对象(Student)、接口(IStudentRepository)、继承(实现接口)、泛型集合(List)、LINQ查询(Where/OrderBy/Average等)、异常处理、文件操作(File类)、Lambda表达式。'}]}
-];
-
-// ==================== 动态生成章节 ====================
-function renderAllChapters(){
-    const mc=document.getElementById('mainContent');
-    const cl=document.getElementById('chapterList');
-    let html='',nav='';
-    chapters.forEach((ch,i)=>{
-        const n=ch.id;
-        // 导航
-        nav+=`<li class="chapter-item" data-chapter="${n}" onclick="scrollToChapter(${n})"><span>${n}. ${ch.t}</span><span class="check" id="chk${n}"></span></li>`;
-        // 章节HTML
-        html+=`<div id="ch${n}" class="chapter">
-<div class="chapter-header"><div class="chapter-number">${n}</div><h2 class="chapter-title">${ch.t}</h2><div class="chapter-actions"><button class="btn btn-secondary bookmark-btn" onclick="toggleBookmark(${n})" id="bookmark${n}">⭐</button></div></div>
-<div class="section"><h3 class="section-title">📌 知识点讲解</h3><div class="content-text"><ul>${ch.p.map(pt=>`<li>${pt}</li>`).join('')}</ul></div></div>
-<div class="section"><h3 class="section-title">💻 代码示例</h3><div class="code-block"><div class="code-header"><span class="code-lang">C#</span><div class="code-actions"><button class="copy-btn" onclick="copyCode('code${n}')">复制</button></div></div><pre id="code${n}"><code>${escHtml(ch.c)}</code></pre></div></div>
-<div class="section"><h3 class="section-title">❌ 错误示例</h3><div class="error-block"><div class="error-title">${ch.et}</div><pre>${escHtml(ch.ec)}</pre></div></div>
-<div class="section"><h3 class="section-title">📝 练习题</h3><div class="quiz-section">${ch.q.map((qq,j)=>`<div class="quiz-question"><div class="question-text">${j+1}. ${qq.q}</div>${qq.a.length>100?`<textarea class="answer-input" id="q${n}-${j+1}" rows="4" placeholder="输入代码..."></textarea>`:`<input type="text" class="answer-input" id="q${n}-${j+1}" placeholder="输入答案...">`}<button class="btn btn-primary" onclick="checkAnswer(${n},${j+1})">检查答案</button><div class="quiz-result" id="result${n}-${j+1}"></div><div class="answer-section" id="answer${n}-${j+1}"><div class="answer-title">参考答案：</div><p>${escHtml(qq.a)}</p></div></div>`).join('')}</div></div>
-<div class="notes-section"><div class="notes-header"><div class="notes-title">📒 我的笔记</div><button class="btn btn-secondary" onclick="saveNotes(${n})">保存笔记</button></div><textarea class="notes-textarea" id="notes${n}" placeholder="在这里记录学习笔记..."></textarea></div>
-<button class="btn btn-primary completion-btn" onclick="markChapterComplete(${n})">✅ 标记为已完成</button></div>`;
-    });
-    mc.innerHTML=html;
-    cl.innerHTML=nav;
+{id:30,t:'异常处理',p:['try-catch-finally：try放置可能异常的代码，catch捕获处理，finally必定执行。','异常层次：Exception→SystemException→具体异常(DivideByZeroException等)。','自定义异常：继承Exception类，提供构造函数。','最佳实践：不吞异常、最小化try范围、具体catch在前、finally释放资源。'],
+c:`using System;
+class InvalidAgeException : Exception
+{
+    public InvalidAgeException(string message) : base(message) { }
 }
 
-function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
-// ==================== 进度跟踪 ====================
-function getProgress(){return JSON.parse(localStorage.getItem(PK)||'[]');}
-function saveProgress(p){localStorage.setItem(PK,JSON.stringify(p));}
-
-function markChapterComplete(n){
-    let p=getProgress();
-    if(!p.includes(n)){p.push(n);saveProgress(p);}
-    updateProgressUI();
-    const item=document.querySelector(`.chapter-item[data-chapter="${n}"]`);
-    if(item)item.classList.add('completed');
-    document.getElementById('chk'+n).textContent='✓';
-    alert(`第${n}章已标记为完成！`);
-}
-
-function updateProgressUI(){
-    const p=getProgress();
-    const pct=Math.round(p.length/TOTAL*100);
-    document.getElementById('progressFill').style.width=pct+'%';
-    document.getElementById('progressText').textContent=`${p.length}/${TOTAL}`;
-    p.forEach(n=>{
-        const item=document.querySelector(`.chapter-item[data-chapter="${n}"]`);
-        if(item)item.classList.add('completed');
-        const chk=document.getElementById('chk'+n);
-        if(chk)chk.textContent='✓';
-    });
-}
-
-function showProgress(){
-    const p=getProgress();
-    alert(`C#学习进度：${p.length}/${TOTAL} (${Math.round(p.length/TOTAL*100)}%)\n已完成：第${p.join(',')}章`);
-}
-
-// ==================== 笔记功能 ====================
-function saveNotes(n){
-    const notes=JSON.parse(localStorage.getItem(NK)||'{}');
-    notes[n]=document.getElementById('notes'+n).value;
-    localStorage.setItem(NK,JSON.stringify(notes));
-    alert('笔记已保存！');
-}
-function loadNotes(){
-    const notes=JSON.parse(localStorage.getItem(NK)||'{}');
-    for(let i=1;i<=TOTAL;i++){
-        const el=document.getElementById('notes'+i);
-        if(el&&notes[i])el.value=notes[i];
+class Person
+{
+    private int _age;
+    
+    public int Age
+    { 
+        get => _age; 
+        set 
+        { 
+            if(value < 0 || value > 150) 
+                throw new InvalidAgeException($"年龄{value}无效"); 
+            _age = value; 
+        } 
     }
 }
 
-// ==================== 收藏功能 ====================
-function getBookmarks(){return JSON.parse(localStorage.getItem(BK)||'[]');}
-function toggleBookmark(n){
-    let bm=getBookmarks();const idx=bm.indexOf(n);
-    const btn=document.getElementById('bookmark'+n);
-    if(idx===-1){bm.push(n);if(btn)btn.style.color='#f59e0b';alert('已收藏！');}
-    else{bm.splice(idx,1);if(btn)btn.style.color='';alert('已取消收藏');}
-    localStorage.setItem(BK,JSON.stringify(bm));
-}
-function loadBookmarks(){
-    getBookmarks().forEach(n=>{
-        const btn=document.getElementById('bookmark'+n);
-        if(btn)btn.style.color='#f59e0b';
-    });
-}
-function showBookmarks(){
-    const bm=getBookmarks();
-    if(!bm.length){alert('收藏夹为空！');return;}
-    let msg='已收藏章节：\n';
-    bm.forEach(n=>{const ch=chapters.find(c=>c.id===n);msg+=`第${n}章 ${ch?ch.t:''}\n`;});
-    alert(msg);
+class Program
+{
+    static void Main()
+    {
+        try
+        {
+            var p = new Person();
+            p.Age = 200;
+        }
+        catch(InvalidAgeException ex)
+        {
+            Console.WriteLine($"自定义异常:{ex.Message}");
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"其他错误:{ex.Message}");
+        }
+        finally
+        {
+            Console.WriteLine("无论如何执行");
+        }
+    }
+}`,
+et:'空catch块吞异常',ec:`try { int r = 10 / 0; } catch(Exception) {} // ❌ 异常被吞掉
+
+try { int r = 10 / 0; }
+catch(Exception ex)
+{ 
+    Console.WriteLine(ex.Message); 
+    throw; 
+} // ✅ 记录并重抛`},
+q:[{q:'finally何时执行？有什么用？',a:'无论是否发生异常都执行，通常用于资源清理(关闭文件、释放数据库连接)。即使try中有return语句也会执行。'}]},
+
+{id:31,t:'文件操作',p:['System.IO命名空间：File、Directory、Path、StreamReader/StreamWriter。','File类：ReadAllText/WriteAllText/ReadAllLines/WriteAllLines/Copy/Move/Delete。','StreamReader/StreamWriter：流式读写，using语句自动释放资源。','Directory类：CreateDirectory/GetFiles/GetDirectories/Delete/Exists。'],
+c:`using System; 
+using System.IO;
+class Program
+{
+    static void Main()
+    {
+        string path = "test.txt";
+        
+        File.WriteAllText(path, "Hello,文件操作！");
+        Console.WriteLine(File.ReadAllText(path));
+        
+        File.WriteAllLines("lines.txt", new[]{"第一行", "第二行", "第三行"});
+        foreach(string line in File.ReadAllLines("lines.txt")) 
+            Console.WriteLine(line);
+        
+        using(var w = new StreamWriter("stream.txt"))
+        {
+            w.WriteLine("流式写入1");
+            w.WriteLine("流式写入2");
+        }
+        
+        using(var r = new StreamReader("stream.txt"))
+        {
+            string line;
+            while((line = r.ReadLine()) != null)
+                Console.WriteLine(line);
+        }
+        
+        Directory.CreateDirectory("MyDir");
+        foreach(string f in Directory.GetFiles(".")) 
+            Console.WriteLine(f);
+    }
+}`,
+et:'忘记关闭流',ec:`StreamWriter w = new StreamWriter("f.txt");
+w.WriteLine("Hello"); // ❌ 忘记Close/Dispose
+
+using(var w = new StreamWriter("f.txt"))
+{
+    w.WriteLine("Hello");
+} // ✅ 自动Dispose`},
+q:[{q:'using语句的作用？',a:'确保IDisposable对象使用后自动调用Dispose()释放资源，即使发生异常。等价于try-finally结构。'}]},
+
+{id:32,t:'LINQ基础',p:['LINQ：Language Integrated Query，语言集成查询，统一查询语法。','查询语法：from x in collection where条件 select x，类似SQL。','方法语法：collection.Where(x=>条件).Select(x=>投影)，更灵活。','需要using System.Linq;，两种语法功能等价。'],
+c:`using System; 
+using System.Linq; 
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        var nums = new List<int>{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        
+        // 查询语法
+        var even = from n in nums where n % 2 == 0 select n;
+        
+        // 方法语法
+        var odd = nums.Where(n => n % 2 != 0);
+        
+        Console.WriteLine("偶数:" + string.Join(",", even));
+        Console.WriteLine("奇数:" + string.Join(",", odd));
+        
+        var fruits = new[]{"apple", "banana", "orange", "grape", "mango"};
+        var shortFruits = fruits.Where(f => f.Length <= 5);
+        var sorted = fruits.OrderBy(f => f.Length);
+        var upper = fruits.Select(f => f.ToUpper());
+        
+        Console.WriteLine($"总和:{nums.Sum()},平均:{nums.Average():F1}");
+        Console.WriteLine($"最大:{nums.Max()},最小:{nums.Min()}");
+    }
+}`,
+et:'忘记using System.Linq',ec:`using System;
+var r = nums.Where(n => n > 1); // ❌ 缺少Linq命名空间
+
+using System.Linq; // ✅ 添加后Where等方法可用`},
+q:[{q:'查询语法和方法语法的区别？',a:'查询语法类似SQL可读性好；方法语法使用Lambda更灵活。功能等价，编译器将查询语法转换为方法调用。'}]},
+
+{id:33,t:'LINQ进阶',p:['GroupBy：按指定键分组，返回IGrouping<TKey,TElement>。','Join：内连接，类似SQL JOIN。','OrderBy/ThenBy：多级排序。','SelectMany：扁平化解嵌套集合。','聚合函数：Sum/Average/Count/Max/Min。'],
+c:`using System; 
+using System.Linq; 
+using System.Collections.Generic;
+class Program
+{
+    static void Main()
+    {
+        var students = new[]
+        {
+            new { Name = "张三", Major = "计算机", Score = 95 },
+            new { Name = "李四", Major = "数学", Score = 88 },
+            new { Name = "王五", Major = "计算机", Score = 92 },
+            new { Name = "赵六", Major = "数学", Score = 85 }
+        };
+        
+        // 分组
+        var grouped = students.GroupBy(s => s.Major);
+        foreach(var group in grouped)
+        {
+            Console.WriteLine($"{group.Key}:");
+            foreach(var s in group)
+                Console.WriteLine($"  {s.Name}");
+        }
+        
+        // 排序
+        var sorted = students.OrderByDescending(s => s.Score).ThenBy(s => s.Name);
+        
+        // 投影
+        var names = students.Select(s => s.Name);
+        
+        // 统计
+        var avgScore = students.Where(s => s.Major == "计算机").Average(s => s.Score);
+        Console.WriteLine($"计算机平均分:{avgScore:F1}");
+    }
+}`,
+et:'LINQ延迟执行',ec:`var result = nums.Where(n => n > 5);
+nums.Add(100); // ❌ 修改原集合影响查询结果
+// 如果需要立即执行
+var list = nums.Where(n => n > 5).ToList(); // ✅ 立即执行`},
+q:[{q:'LINQ的延迟执行是什么？',a:'查询定义时不执行，实际枚举时才执行。好处是可组合多个操作，只在需要时才遍历数据源。'}]},
+
+{id:34,t:'异步编程',p:['async/await：简化异步代码编写，避免回调地狱。','Task<T>：表示异步操作，返回值；Task：无返回值。','await：等待异步操作完成，释放线程。','异步方法命名约定：方法名以Async结尾。'],
+c:`using System; 
+using System.Threading.Tasks;
+class Program
+{
+    static async Task Main()
+    {
+        Console.WriteLine("开始异步操作...");
+        
+        string result = await FetchDataAsync();
+        Console.WriteLine($"获取数据: {result}");
+        
+        await ProcessAsync();
+        
+        Console.WriteLine("异步操作完成");
+    }
+    
+    static async Task<string> FetchDataAsync()
+    {
+        await Task.Delay(1000); // 模拟网络延迟
+        return "Hello Async";
+    }
+    
+    static async Task ProcessAsync()
+    {
+        await Task.Run(() => 
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                Console.WriteLine($"处理 {i+1}/5");
+                System.Threading.Thread.Sleep(200);
+            }
+        });
+    }
+}`,
+et:'同步方法调用异步方法',ec:`static void Main()
+{
+    FetchDataAsync(); // ❌ 未等待，可能在完成前结束
+    
+    // 正确
+    Task.Run(async () => await FetchDataAsync()).Wait(); // ✅
+    // 或使用async Main
+    static async Task Main() // ✅ .NET Core支持
+    {
+        await FetchDataAsync();
+    }`},
+q:[{q:'async/await的工作原理？',a:'async标记方法为异步，await暂停方法执行并返回线程，等待完成后继续执行。编译器生成状态机处理上下文切换。'}]},
+
+{id:35,t:'综合实战项目',p:['项目结构：分层架构(Model→Service→UI)。','功能需求：学生信息管理系统。','核心功能：增删改查(CRUD)、数据持久化。','技术要点：泛型集合、LINQ查询、文件操作、异常处理。'],
+c:`using System; 
+using System.Collections.Generic; 
+using System.Linq; 
+using System.IO;
+
+class Student
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public int Age { get; set; }
+    public string Major { get; set; }
 }
 
-// ==================== 主题切换 ====================
-function applyTheme(){
-    const dark=localStorage.getItem(DK)==='true';
-    document.body.classList.toggle('dark-mode',dark);
-    document.getElementById('themeIcon').textContent=dark?'☀️':'🌙';
-    document.getElementById('themeText').textContent=dark?'浅色模式':'暗黑模式';
-}
-function toggleDarkMode(){
-    const dark=localStorage.getItem(DK)!=='true';
-    localStorage.setItem(DK,dark);
-    applyTheme();
-}
-
-// ==================== 搜索功能 ====================
-function searchTutorial(){
-    const q=document.getElementById('searchInput').value.toLowerCase();
-    document.querySelectorAll('.chapter').forEach(ch=>{
-        ch.style.display=ch.textContent.toLowerCase().includes(q)||q===''?'block':'none';
-    });
-}
-
-// ==================== 导航 ====================
-function scrollToChapter(n){
-    const el=document.getElementById('ch'+n);
-    if(el)el.scrollIntoView({behavior:'smooth'});
-    document.querySelectorAll('.chapter-item').forEach(i=>i.classList.remove('active'));
-    const item=document.querySelector(`.chapter-item[data-chapter="${n}"]`);
-    if(item)item.classList.add('active');
-}
-
-// ==================== 代码复制 ====================
-function copyCode(id){
-    const el=document.getElementById(id);
-    if(el){navigator.clipboard.writeText(el.textContent).then(()=>alert('代码已复制！'));}
-}
-
-// ==================== 答案检查 ====================
-function checkAnswer(ch,q){
-    const input=document.getElementById(`q${ch}-${q}`);
-    const result=document.getElementById(`result${ch}-${q}`);
-    const answer=document.getElementById(`answer${ch}-${q}`);
-    if(!input||!result)return;
-    const val=input.value.trim();
-    if(val.length>0){
-        result.textContent='✅ 已提交，查看参考答案';
-        result.className='quiz-result correct';
-        if(answer)answer.classList.add('show');
-        LearningStats.recordChapterCompletion('csharp',ch);
-    }else{
-        result.textContent='❌ 请先输入答案';
-        result.className='quiz-result incorrect';
+class StudentService
+{
+    private List<Student> _students = new List<Student>();
+    private string _filePath = "students.txt";
+    
+    public StudentService() => LoadFromFile();
+    
+    public List<Student> GetAll() => _students.ToList();
+    
+    public Student GetById(int id) => _students.FirstOrDefault(s => s.Id == id);
+    
+    public void Add(Student s)
+    {
+        s.Id = _students.Count > 0 ? _students.Max(s => s.Id) + 1 : 1;
+        _students.Add(s);
+        SaveToFile();
+    }
+    
+    public void Update(Student s)
+    {
+        var idx = _students.FindIndex(st => st.Id == s.Id);
+        if(idx >= 0)
+        {
+            _students[idx] = s;
+            SaveToFile();
+        }
+    }
+    
+    public void Delete(int id)
+    {
+        _students.RemoveAll(s => s.Id == id);
+        SaveToFile();
+    }
+    
+    private void SaveToFile()
+    {
+        var lines = _students.Select(s => $"{s.Id},{s.Name},{s.Age},{s.Major}");
+        File.WriteAllLines(_filePath, lines);
+    }
+    
+    private void LoadFromFile()
+    {
+        if(File.Exists(_filePath))
+        {
+            foreach(var line in File.ReadAllLines(_filePath))
+            {
+                var parts = line.Split(',');
+                _students.Add(new Student
+                {
+                    Id = int.Parse(parts[0]),
+                    Name = parts[1],
+                    Age = int.Parse(parts[2]),
+                    Major = parts[3]
+                });
+            }
+        }
     }
 }
+class Program
+{
+    static void Main()
+    {
+        var service = new StudentService();
+        service.Add(new Student{Name="张三", Age=20, Major="计算机"});
+        foreach(var s in service.GetAll())
+            Console.WriteLine($"ID:{s.Id},姓名:{s.Name},年龄:{s.Age},专业:{s.Major}");
+    }
+}`,
+et:'文件读写异常处理',ec:`// 错误：未处理文件读写异常
+File.WriteAllText(path, data); // ❌ 可能抛异常
 
-// ==================== 初始化 ====================
-function init(){
-    renderAllChapters();
-    applyTheme();
-    updateProgressUI();
-    loadBookmarks();
+// 正确：添加异常处理
+try
+{
+    File.WriteAllText(path, data);
+}
+catch(IOException ex)
+{
+    Console.WriteLine($"文件写入失败:{ex.Message}");
+} // ✅`},
+q:[{q:'综合项目中数据持久化如何实现？',a:'使用File类的WriteAllLines/ReadAllLines方法，将学生数据序列化为CSV格式存储，加载时解析CSV并重建对象列表。'}]}];
+
+function init() {
+    renderSidebar();
+    renderContent();
+    loadProgress();
     loadNotes();
-    KeyboardShortcuts.init();
+    loadDarkMode();
 }
 
-document.addEventListener('DOMContentLoaded',init);
-</script>
-</body>
-</html>
+function renderSidebar() {
+    const list = document.getElementById('chapterList');
+    list.innerHTML = chapters.map(ch => `
+        <li class="chapter-item" id="ch_${ch.id}" onclick="showChapter(${ch.id})">
+            <span class="ch-title"><span class="chapter-number">${ch.id}</span>${ch.t}</span>
+            <span class="check" id="check_${ch.id}"></span>
+        </li>
+    `).join('');
+}
+
+function renderContent() {
+    const content = document.getElementById('mainContent');
+    content.innerHTML = chapters.map(ch => `
+        <div class="chapter-section" id="ch${ch.id}">
+            <h2><span class="tag tag-accent">第${ch.id}章</span> ${ch.t}</h2>
+            <div class="section-content">
+                <ul>${ch.p.map(p => `<li>${p}</li>`).join('')}</ul>
+            </div>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">csharp</span>
+                    <div class="code-actions">
+                        <button class="code-btn" onclick="copyCode('code_${ch.id}')">复制</button>
+                    </div>
+                </div>
+                <pre id="code_${ch.id}"><code>${escapeHtml(ch.c)}</code></pre>
+            </div>
+            <div class="error-block">
+                <h4>${ch.et}</h4>
+                <pre><code>${escapeHtml(ch.ec)}</code></pre>
+            </div>
+            <div class="practice-section">
+                <h4>💻 练习题</h4>
+                ${ch.q.map((q, idx) => `
+                    <div class="quiz-question">
+                        <div class="question">${q.q}</div>
+                        <textarea class="answer-textarea" id="ans_${ch.id}_${idx}" placeholder="输入你的答案..."></textarea>
+                        <button class="btn btn-primary" onclick="checkAnswer(${ch.id}, ${idx})">检查答案</button>
+                        <div class="quiz-result" id="res_${ch.id}_${idx}"></div>
+                        <button class="show-answer-btn" onclick="toggleAnswer(${ch.id}, ${idx})">查看答案</button>
+                        <div class="answer-section" id="ans_sec_${ch.id}_${idx}">
+                            <div class="answer-title">参考答案</div>
+                            <pre>${escapeHtml(q.a)}</pre>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="note-section">
+                <h4>📝 学习笔记</h4>
+                <textarea class="note-textarea" id="note_${ch.id}" placeholder="记录学习笔记..." oninput="saveNote(${ch.id})"></textarea>
+            </div>
+            <button class="btn btn-primary w-full" onclick="markComplete(${ch.id})">✅ 标记完成</button>
+            <div class="chapter-nav">
+                <button class="nav-btn" onclick="prevChapter(${ch.id})" ${ch.id == 1 ? 'disabled' : ''}>◀ 上一章</button>
+                <button class="nav-btn" onclick="nextChapter(${ch.id})" ${ch.id == TOTAL ? 'disabled' : ''}>下一章 ▶</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function escapeHtml(text) {
+    return text.replace(/&/g, '&amp;')
+               .replace(/</g, '&lt;')
+               .replace(/>/g, '&gt;')
+               .replace(/"/g, '&quot;');
+}
+
+function showChapter(id) {
+    document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.chapter-item').forEach(el => el.classList.remove('active'));
+    document.getElementById('ch' + id).classList.add('active');
+    document.getElementById('ch_' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function prevChapter(id) {
+    if(id > 1) showChapter(id - 1);
+}
+
+function nextChapter(id) {
+    if(id < TOTAL) showChapter(id + 1);
+}
+
+function copyCode(id) {
+    const code = document.getElementById(id).textContent;
+    navigator.clipboard.writeText(code).then(() => {
+        const toast = document.createElement('div');
+        toast.className = 'toast show';
+        toast.textContent = '代码已复制';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    });
+}
+
+function checkAnswer(chId, qIdx) {
+    const userAns = document.getElementById('ans_' + chId + '_' + qIdx).value.trim();
+    const correctAns = chapters.find(c => c.id == chId).q[qIdx].a;
+    const result = document.getElementById('res_' + chId + '_' + qIdx);
+    
+    if(userAns.toLowerCase() === correctAns.toLowerCase()) {
+        result.className = 'quiz-result correct';
+        result.innerHTML = '✅ 正确！';
+    } else {
+        result.className = 'quiz-result incorrect';
+        result.innerHTML = '❌ 不正确，请重试';
+    }
+}
+
+function toggleAnswer(chId, qIdx) {
+    const sec = document.getElementById('ans_sec_' + chId + '_' + qIdx);
+    sec.classList.toggle('show');
+}
+
+function markComplete(id) {
+    const progress = getProgress();
+    if(!progress.includes(id)) {
+        progress.push(id);
+        localStorage.setItem(PK, JSON.stringify(progress));
+    }
+    updateProgressUI();
+    document.getElementById('ch_' + id).classList.add('completed');
+}
+
+function getProgress() {
+    const stored = localStorage.getItem(PK);
+    return stored ? JSON.parse(stored) : [];
+}
+
+function loadProgress() {
+    const progress = getProgress();
+    updateProgressUI();
+    progress.forEach(id => {
+        document.getElementById('ch_' + id)?.classList.add('completed');
+    });
+}
+
+function updateProgressUI() {
+    const progress = getProgress();
+    const percent = Math.round((progress.length / TOTAL) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressText').textContent = progress.length + '/' + TOTAL;
+}
+
+function saveNote(id) {
+    const notes = getNotes();
+    notes[id] = document.getElementById('note_' + id).value;
+    localStorage.setItem(NK, JSON.stringify(notes));
+}
+
+function getNotes() {
+    const stored = localStorage.getItem(NK);
+    return stored ? JSON.parse(stored) : {};
+}
+
+function loadNotes() {
+    const notes = getNotes();
+    Object.keys(notes).forEach(id => {
+        const el = document.getElementById('note_' + id);
+        if(el) el.value = notes[id];
+    });
+}
+
+function toggleDarkMode() {
+    const isDark = document.body.dataset.theme === 'dark';
+    document.body.dataset.theme = isDark ? 'light' : 'dark';
+    localStorage.setItem(DK, !isDark);
+}
+
+function loadDarkMode() {
+    const isDark = localStorage.getItem(DK) === 'true';
+    document.body.dataset.theme = isDark ? 'dark' : 'light';
+}
+
+function searchTutorial() {
+    const query = document.getElementById('searchInput').value.toLowerCase();
+    const items = document.querySelectorAll('.chapter-item');
+    items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(query) ? '' : 'none';
+    });
+}
+
+function showBookmarks() {
+    alert('收藏夹功能开发中...');
+}
+
+function showProgress() {
+    const progress = getProgress();
+    alert(`已完成章节：${progress.length}/${TOTAL}\n进度：${Math.round(progress.length/TOTAL*100)}%`);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+showChapter(1);

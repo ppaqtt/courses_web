@@ -6,45 +6,10 @@
     <title>Java教程 - 从零开始学习Java编程</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/tutorial-style.css">
-    <link rel="stylesheet" href="css/tutorial-features.css">
-    <link rel="stylesheet" href="css/tutorial-extensions.css">
     <style>
-        /* Java教程页面特有样式 */
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-card: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --text-muted: #94a3b8;
             --accent-color: #e76f00;
             --accent-hover: #c45e00;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-            --code-bg: #1e293b;
-        }
-        [data-theme="dark"] {
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --accent-color: #f89820;
-            --accent-hover: #e76f00;
-            --success-color: #34d399;
-            --warning-color: #fbbf24;
-            --danger-color: #f87171;
-            --border-color: #334155;
-            --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.3);
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.3);
-            --code-bg: #0f172a;
         }
         .header {
             background: linear-gradient(135deg, #e76f00, #5382a1);
@@ -55,10 +20,6 @@
             flex: 1; height: 8px; background: var(--bg-secondary);
             border-radius: 10px; overflow: hidden; margin: 0 20px; min-width: 100px;
         }
-        .chapter-item.completed .ch-text { text-decoration: line-through; opacity: 0.7; }
-        .chapter-item.active.completed .ch-text { text-decoration: none; opacity: 1; }
-        .ch-icon { font-size: 0.85rem; }
-        .chapter-section h4 { font-size: 1.1rem; margin-top: 18px; margin-bottom: 8px; color: var(--text-secondary); }
         .answer-box {
             background: rgba(231,111,0,0.08); border: 1px solid rgba(231,111,0,0.2);
             padding: 12px; border-radius: 10px; margin-top: 10px; display: none;
@@ -69,17 +30,14 @@
             background: var(--warning-color); color: white; border: none;
             padding: 10px 20px; border-radius: 10px; cursor: pointer;
         }
-        .save-note-btn:hover { opacity: 0.9; }
         .bookmark-btn {
             float: right; background: none; border: none; font-size: 1.4rem; cursor: pointer;
         }
-        .bookmark-btn:hover { transform: scale(1.2); }
         .bookmark-btn.bookmarked { color: #f59e0b; }
         .completion-btn {
             background: var(--success-color); color: white; border: none;
             padding: 12px 25px; border-radius: 10px; cursor: pointer; font-size: 1rem; margin-top: 20px;
         }
-        .completion-btn:hover { opacity: 0.9; transform: translateY(-2px); }
         .completion-btn.completed { background: var(--text-muted); cursor: not-allowed; }
         .stats-info {
             display: flex; gap: 30px; margin-bottom: 20px; padding: 20px;
@@ -95,9 +53,7 @@
         }
         .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .nav-btn-primary { background: var(--accent-color); color: white; }
-        .nav-btn-primary:hover:not(:disabled) { opacity: 0.9; }
         .nav-btn-secondary { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); }
-        .nav-btn-secondary:hover:not(:disabled) { background: rgba(231,111,0,0.1); color: var(--accent-color); }
         @media (max-width: 1024px) {
             .progress-bar-wrap { display: none; }
         }
@@ -157,10 +113,10 @@
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>Java的诞生：</strong>Java由Sun Microsystems公司的James Gosling于1995年推出，最初名为Oak，后改名为Java</li>
-                    <li><strong>核心理念：</strong>"Write Once, Run Anywhere"（一次编写，到处运行），通过JVM实现跨平台</li>
-                    <li><strong>主要特性：</strong>面向对象、平台无关、自动垃圾回收、强类型、多线程支持</li>
-                    <li><strong>应用领域：</strong>企业级应用、Android开发、大数据处理、Web服务、嵌入式系统</li>
-                    <li><strong>版本演进：</strong>从JDK 1.0到最新的LTS版本，每6个月发布一个新版本</li>
+                        <li><strong>核心理念：</strong>"Write Once, Run Anywhere"（一次编写，到处运行），通过JVM实现跨平台</li>
+                        <li><strong>主要特性：</strong>面向对象、平台无关、自动垃圾回收、强类型、多线程支持</li>
+                        <li><strong>应用领域：</strong>企业级应用、Android开发、大数据处理、Web服务、嵌入式系统</li>
+                        <li><strong>版本演进：</strong>从JDK 1.0到最新的LTS版本，每6个月发布一个新版本</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -211,9 +167,9 @@ public class HelloWorld {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>JDK vs JRE：</strong>JDK（Java Development Kit）包含开发工具和JRE；JRE仅包含运行环境</li>
-                    <li><strong>JVM：</strong>Java Virtual Machine，负责将字节码翻译为机器码执行，是跨平台的核心</li>
-                    <li><strong>环境变量：</strong>JAVA_HOME指向JDK安装目录，PATH需要包含bin目录</li>
-                    <li><strong>编译执行：</strong><code>javac</code>编译.java为.class字节码，<code>java</code>运行字节码</li>
+                        <li><strong>JVM：</strong>Java Virtual Machine，负责将字节码翻译为机器码执行，是跨平台的核心</li>
+                        <li><strong>环境变量：</strong>JAVA_HOME指向JDK安装目录，PATH需要包含bin目录</li>
+                        <li><strong>编译执行：</strong><code>javac</code>编译.java为.class字节码，<code>java</code>运行字节码</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -272,9 +228,9 @@ export PATH=$JAVA_HOME/bin:$PATH</code></pre>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>程序结构：</strong>Java程序由类(class)组成，每个程序至少有一个类，且必须包含main方法</li>
-                    <li><strong>main方法：</strong><code>public static void main(String[] args)</code> 是程序执行的起点</li>
-                    <li><strong>输出语句：</strong><code>System.out.println()</code> 输出并换行，<code>System.out.print()</code> 不换行</li>
-                    <li><strong>编译运行：</strong>先javac编译生成.class文件，再java运行</li>
+                        <li><strong>main方法：</strong><code>public static void main(String[] args)</code> 是程序执行的起点</li>
+                        <li><strong>输出语句：</strong><code>System.out.println()</code> 输出并换行，<code>System.out.print()</code> 不换行</li>
+                        <li><strong>编译运行：</strong>先javac编译生成.class文件，再java运行</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -326,9 +282,9 @@ export PATH=$JAVA_HOME/bin:$PATH</code></pre>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>单行注释：</strong><code>// 注释内容</code>，用于简短说明</li>
-                    <li><strong>多行注释：</strong><code>/* 注释内容 */</code>，用于多行说明</li>
-                    <li><strong>文档注释：</strong><code>/** 注释内容 */</code>，可由javadoc工具生成API文档</li>
-                    <li><strong>命名规范：</strong>类名大驼峰(MyClass)、方法/变量小驼峰(myMethod)、常量全大写(MAX_VALUE)、包名全小写</li>
+                        <li><strong>多行注释：</strong><code>/* 注释内容 */</code>，用于多行说明</li>
+                        <li><strong>文档注释：</strong><code>/** 注释内容 */</code>，可由javadoc工具生成API文档</li>
+                        <li><strong>命名规范：</strong>类名大驼峰(MyClass)、方法/变量小驼峰(myMethod)、常量全大写(MAX_VALUE)、包名全小写</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -392,10 +348,10 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>整数类型：</strong>byte(1字节)、short(2字节)、int(4字节，默认)、long(8字节)</li>
-                    <li><strong>浮点类型：</strong>float(4字节)、double(8字节，默认)</li>
-                    <li><strong>字符类型：</strong>char(2字节)，存储Unicode字符</li>
-                    <li><strong>布尔类型：</strong>boolean，只有true和false两个值</li>
-                    <li><strong>注意：</strong>Java基本类型有固定大小，不随平台变化</li>
+                        <li><strong>浮点类型：</strong>float(4字节)、double(8字节，默认)</li>
+                        <li><strong>字符类型：</strong>char(2字节)，存储Unicode字符</li>
+                        <li><strong>布尔类型：</strong>boolean，只有true和false两个值</li>
+                        <li><strong>注意：</strong>Java基本类型有固定大小，不随平台变化</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -459,9 +415,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>变量声明：</strong><code>数据类型 变量名 = 值;</code>，Java是强类型语言</li>
-                    <li><strong>局部变量：</strong>方法内声明，必须初始化后才能使用</li>
-                    <li><strong>成员变量：</strong>类中声明，有默认初始值(int为0, boolean为false, 对象为null)</li>
-                    <li><strong>常量：</strong>使用 <code>final</code> 关键字修饰，赋值后不可修改，命名全大写</li>
+                        <li><strong>局部变量：</strong>方法内声明，必须初始化后才能使用</li>
+                        <li><strong>成员变量：</strong>类中声明，有默认初始值(int为0, boolean为false, 对象为null)</li>
+                        <li><strong>常量：</strong>使用 <code>final</code> 关键字修饰，赋值后不可修改，命名全大写</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -519,9 +475,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>自动类型转换：</strong>小范围→大范围(byte→short→int→long→float→double)</li>
-                    <li><strong>强制类型转换：</strong>大范围→小范围，需显式 <code>(目标类型)值</code>，可能丢失精度</li>
-                    <li><strong>字符串转换：</strong><code>String.valueOf()</code>转字符串，<code>Integer.parseInt()</code>转基本类型</li>
-                    <li><strong>注意：</strong>boolean不参与类型转换</li>
+                        <li><strong>强制类型转换：</strong>大范围→小范围，需显式 <code>(目标类型)值</code>，可能丢失精度</li>
+                        <li><strong>字符串转换：</strong><code>String.valueOf()</code>转字符串，<code>Integer.parseInt()</code>转基本类型</li>
+                        <li><strong>注意：</strong>boolean不参与类型转换</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -585,9 +541,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>基本运算：</strong><code>+ - * / %</code> 加、减、乘、除、取余</li>
-                    <li><strong>整数除法：</strong>两个int相除结果仍为int，小数部分被截断</li>
-                    <li><strong>自增自减：</strong><code>++</code> 和 <code>--</code>，分前缀(先变后用)和后缀(先用后变)</li>
-                    <li><strong>复合赋值：</strong><code>+= -= *= /= %=</code>，如 <code>a += b</code> 等价于 <code>a = a + b</code></li>
+                        <li><strong>整数除法：</strong>两个int相除结果仍为int，小数部分被截断</li>
+                        <li><strong>自增自减：</strong><code>++</code> 和 <code>--</code>，分前缀(先变后用)和后缀(先用后变)</li>
+                        <li><strong>复合赋值：</strong><code>+= -= *= /= %=</code>，如 <code>a += b</code> 等价于 <code>a = a + b</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -648,9 +604,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>关系运算符：</strong><code>== != > < >= <=</code>，结果为boolean值</li>
-                    <li><strong>逻辑运算符：</strong><code>&&</code>（短路与）、<code>||</code>（短路或）、<code>!</code>（非）</li>
-                    <li><strong>短路特性：</strong><code>&&</code>左边为false则右边不执行；<code>||</code>左边为true则右边不执行</li>
-                    <li><strong>三元运算符：</strong><code>条件 ? 值1 : 值2</code></li>
+                        <li><strong>逻辑运算符：</strong><code>&&</code>（短路与）、<code>||</code>（短路或）、<code>!</code>（非）</li>
+                        <li><strong>短路特性：</strong><code>&&</code>左边为false则右边不执行；<code>||</code>左边为true则右边不执行</li>
+                        <li><strong>三元运算符：</strong><code>条件 ? 值1 : 值2</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -667,17 +623,17 @@ public class NamingConvention {
         System.out.println("a != b: " + (a != b));  // true
 
         boolean x = true, y = false;
-        System.out.println("x &amp;&amp; y: " + (x &amp;&amp; y));  // false
+        System.out.println("x && y: " + (x && y));  // false
         System.out.println("x || y: " + (x || y));  // true
 
         // 短路特性
         int[] arr = {1, 2, 3};
         int idx = 5;
-        if (idx &lt; arr.length &amp;&amp; arr[idx] &gt; 0) {
+        if (idx < arr.length && arr[idx] > 0) {
             System.out.println("安全访问");
         }
 
-        int max = (a &gt; b) ? a : b;
+        int max = (a > b) ? a : b;
         System.out.println("较大值: " + max);  // 20
     }
 }</code></pre>
@@ -715,9 +671,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>if语句：</strong><code>if (条件) { 代码块 }</code>，条件为true时执行</li>
-                    <li><strong>if-else：</strong>条件为true执行if块，false执行else块</li>
-                    <li><strong>if-else if-else：</strong>多条件分支，依次判断</li>
-                    <li><strong>注意：</strong>条件必须是boolean表达式，不能用0/1</li>
+                        <li><strong>if-else：</strong>条件为true执行if块，false执行else块</li>
+                        <li><strong>if-else if-else：</strong>多条件分支，依次判断</li>
+                        <li><strong>注意：</strong>条件必须是boolean表达式，不能用0/1</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -730,11 +686,11 @@ public class NamingConvention {
                     <pre id="ch10-code1"><code>public class IfElseDemo {
     public static void main(String[] args) {
         int score = 85;
-        if (score &gt;= 90) {
+        if (score >= 90) {
             System.out.println("优秀");
-        } else if (score &gt;= 80) {
+        } else if (score >= 80) {
             System.out.println("良好");
-        } else if (score &gt;= 60) {
+        } else if (score >= 60) {
             System.out.println("及格");
         } else {
             System.out.println("不及格");
@@ -743,7 +699,7 @@ public class NamingConvention {
         // 嵌套if
         int age = 25;
         boolean hasLicense = true;
-        if (age &gt;= 18) {
+        if (age >= 18) {
             if (hasLicense) System.out.println("可以驾车");
         }
     }
@@ -784,9 +740,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>基本语法：</strong>switch(表达式)匹配case值，支持byte/short/int/char/String(JDK7+)/枚举</li>
-                    <li><strong>break重要性：</strong>没有break会穿透到下一个case继续执行</li>
-                    <li><strong>default：</strong>所有case都不匹配时执行</li>
-                    <li><strong>JDK14+增强：</strong>switch表达式，用<code>-></code>箭头语法</li>
+                        <li><strong>break重要性：</strong>没有break会穿透到下一个case继续执行</li>
+                        <li><strong>default：</strong>所有case都不匹配时执行</li>
+                        <li><strong>JDK14+增强：</strong>switch表达式，用<code>-></code>箭头语法</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -848,9 +804,9 @@ public class NamingConvention {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>基本for：</strong><code>for(初始化; 条件; 更新) { 循环体 }</code></li>
-                    <li><strong>增强for：</strong><code>for(类型 变量 : 数组/集合)</code>，也叫for-each</li>
-                    <li><strong>执行顺序：</strong>初始化→条件判断→循环体→更新→条件判断→...</li>
-                    <li><strong>死循环：</strong><code>for(;;)</code> 等价于 <code>while(true)</code></li>
+                        <li><strong>增强for：</strong><code>for(类型 变量 : 数组/集合)</code>，也叫for-each</li>
+                        <li><strong>执行顺序：</strong>初始化→条件判断→循环体→更新→条件判断→...</li>
+                        <li><strong>死循环：</strong><code>for(;;)</code> 等价于 <code>while(true)</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -862,13 +818,13 @@ public class NamingConvention {
                     </div>
                     <pre id="ch12-code1"><code>public class ForLoop {
     public static void main(String[] args) {
-        for (int i = 1; i &lt;= 5; i++) {
+        for (int i = 1; i <= 5; i++) {
             System.out.print(i + " ");
         }
         System.out.println();
 
         int sum = 0;
-        for (int i = 1; i &lt;= 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             sum += i;
         }
         System.out.println("1-100的和: " + sum);
@@ -917,9 +873,9 @@ System.out.println(result);</div>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>while：</strong>先判断后执行，可能一次不执行</li>
-                    <li><strong>do-while：</strong>先执行后判断，至少执行一次</li>
-                    <li><strong>选择原则：</strong>循环次数确定用for，不确定用while</li>
-                    <li><strong>注意：</strong>do-while末尾的分号不要忘记</li>
+                        <li><strong>do-while：</strong>先执行后判断，至少执行一次</li>
+                        <li><strong>选择原则：</strong>循环次数确定用for，不确定用while</li>
+                        <li><strong>注意：</strong>do-while末尾的分号不要忘记</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -941,11 +897,11 @@ System.out.println(result);</div>
         do {
             System.out.println("执行第 " + (count+1) + " 次");
             count++;
-        } while (count &lt; 3);
+        } while (count < 3);
 
         // 数字位数
         int num = 12345, digits = 0, temp = num;
-        while (temp &gt; 0) { temp /= 10; digits++; }
+        while (temp > 0) { temp /= 10; digits++; }
         System.out.println(num + " 有 " + digits + " 位");
     }
 }</code></pre>
@@ -983,9 +939,9 @@ System.out.println(result);</div>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>break：</strong>跳出当前循环，循环立即终止</li>
-                    <li><strong>continue：</strong>跳过本次循环剩余代码，进入下一次迭代</li>
-                    <li><strong>带标签的break：</strong><code>break 标签名;</code> 可跳出多层嵌套循环</li>
-                    <li><strong>标签语法：</strong><code>标签名:</code> 放在循环前</li>
+                        <li><strong>continue：</strong>跳过本次循环剩余代码，进入下一次迭代</li>
+                        <li><strong>带标签的break：</strong><code>break 标签名;</code> 可跳出多层嵌套循环</li>
+                        <li><strong>标签语法：</strong><code>标签名:</code> 放在循环前</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -998,7 +954,7 @@ System.out.println(result);</div>
                     <pre id="ch14-code1"><code>public class BreakContinue {
     public static void main(String[] args) {
         // break
-        for (int i = 1; i &lt;= 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             if (i % 7 == 0) {
                 System.out.println("找到: " + i);
                 break;
@@ -1006,7 +962,7 @@ System.out.println(result);</div>
         }
 
         // continue - 跳过偶数
-        for (int i = 1; i &lt;= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             if (i % 2 == 0) continue;
             System.out.print(i + " ");
         }
@@ -1014,9 +970,9 @@ System.out.println(result);</div>
 
         // 带标签的break
         outer:
-        for (int i = 0; i &lt; 3; i++) {
-            for (int j = 0; j &lt; 3; j++) {
-                if (i == 1 &amp;&amp; j == 1) break outer;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i == 1 && j == 1) break outer;
                 System.out.print("(" + i + "," + j + ") ");
             }
         }
@@ -1061,9 +1017,9 @@ System.out.println(result);</div>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>声明与初始化：</strong><code>int[] arr = new int[5];</code> 或 <code>int[] arr = {1,2,3};</code></li>
-                    <li><strong>索引：</strong>从0开始，最大索引为length-1</li>
-                    <li><strong>默认值：</strong>int默认0，boolean默认false，对象默认null</li>
-                    <li><strong>长度：</strong><code>arr.length</code> 是属性而非方法</li>
+                        <li><strong>索引：</strong>从0开始，最大索引为length-1</li>
+                        <li><strong>默认值：</strong>int默认0，boolean默认false，对象默认null</li>
+                        <li><strong>长度：</strong><code>arr.length</code> 是属性而非方法</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1081,7 +1037,7 @@ System.out.println(result);</div>
 
         String[] names = {"Alice", "Bob", "Charlie"};
 
-        for (int i = 0; i &lt; scores.length; i++) {
+        for (int i = 0; i < scores.length; i++) {
             System.out.println("成绩" + i + ": " + scores[i]);
         }
 
@@ -1131,9 +1087,9 @@ for (int i = 0; i < arr.length; i++) {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>声明：</strong><code>int[][] matrix = new int[3][4];</code> 3行4列</li>
-                    <li><strong>不规则数组：</strong>每行长度可不同</li>
-                    <li><strong>初始化：</strong><code>int[][] m = {{1,2},{3,4},{5,6}};</code></li>
-                    <li><strong>本质：</strong>二维数组是"数组的数组"</li>
+                        <li><strong>不规则数组：</strong>每行长度可不同</li>
+                        <li><strong>初始化：</strong><code>int[][] m = {{1,2},{3,4},{5,6}};</code></li>
+                        <li><strong>本质：</strong>二维数组是"数组的数组"</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1151,8 +1107,8 @@ for (int i = 0; i < arr.length; i++) {
             {7, 8, 9}
         };
 
-        for (int i = 0; i &lt; matrix.length; i++) {
-            for (int j = 0; j &lt; matrix[i].length; j++) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
                 System.out.print(matrix[i][j] + " ");
             }
             System.out.println();
@@ -1202,9 +1158,9 @@ for (int i = 0; i < 3; i++) {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>不可变性：</strong>String对象创建后内容不可改变</li>
-                    <li><strong>创建方式：</strong>字面量 <code>"hello"</code> 或 <code>new String("hello")</code></li>
-                    <li><strong>字符串池：</strong>字面量创建的字符串存储在常量池中，相同内容共享</li>
-                    <li><strong>== vs equals：</strong><code>==</code>比较引用地址，<code>equals()</code>比较内容</li>
+                        <li><strong>创建方式：</strong>字面量 <code>"hello"</code> 或 <code>new String("hello")</code></li>
+                        <li><strong>字符串池：</strong>字面量创建的字符串存储在常量池中，相同内容共享</li>
+                        <li><strong>== vs equals：</strong><code>==</code>比较引用地址，<code>equals()</code>比较内容</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1267,9 +1223,9 @@ for (int i = 0; i < 3; i++) {
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>查询：</strong><code>length()</code>, <code>charAt(i)</code>, <code>indexOf(s)</code>, <code>contains(s)</code></li>
-                    <li><strong>截取：</strong><code>substring(begin)</code>, <code>substring(begin, end)</code></li>
-                    <li><strong>转换：</strong><code>toUpperCase()</code>, <code>toLowerCase()</code>, <code>trim()</code>, <code>replace()</code></li>
-                    <li><strong>分割连接：</strong><code>split(regex)</code>, <code>String.join()</code></li>
+                        <li><strong>截取：</strong><code>substring(begin)</code>, <code>substring(begin, end)</code></li>
+                        <li><strong>转换：</strong><code>toUpperCase()</code>, <code>toLowerCase()</code>, <code>trim()</code>, <code>replace()</code></li>
+                        <li><strong>分割连接：</strong><code>split(regex)</code>, <code>String.join()</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1333,9 +1289,9 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                     <h3>📖 知识点讲解</h3>
                     <ul>
                         <li><strong>方法结构：</strong><code>修饰符 返回类型 方法名(参数列表) { 方法体 }</code></li>
-                    <li><strong>返回值：</strong>有返回值用<code>return</code>，无返回值用<code>void</code></li>
-                    <li><strong>参数传递：</strong>基本类型传值，引用类型传引用</li>
-                    <li><strong>递归：</strong>方法调用自身，必须有终止条件</li>
+                        <li><strong>返回值：</strong>有返回值用<code>return</code>，无返回值用<code>void</code></li>
+                        <li><strong>参数传递：</strong>基本类型传值，引用类型传引用</li>
+                        <li><strong>递归：</strong>方法调用自身，必须有终止条件</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1355,7 +1311,7 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
     }
 
     public static long factorial(int n) {
-        if (n &lt;= 1) return 1;
+        if (n <= 1) return 1;
         return n * factorial(n - 1);
     }
 
@@ -1400,10 +1356,10 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>定义：</strong>同名方法，参数列表不同（类型、个数、顺序）</li>
-                    <li><strong>与返回值无关：</strong>仅返回值不同不构成重载</li>
-                    <li><strong>典型示例：</strong><code>System.out.println()</code> 就是重载</li>
-                    <li><strong>好处：</strong>统一接口，减少方法名记忆负担</li>
+                        <li><strong>定义：</strong>同一个类中，方法名相同但参数列表不同</li>
+                        <li><strong>参数列表不同：</strong>参数个数、类型、顺序不同</li>
+                        <li><strong>返回类型：</strong>不能仅靠返回类型区分重载</li>
+                        <li><strong>调用：</strong>根据实参类型和个数自动匹配</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1413,31 +1369,44 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                             <button class="code-btn" onclick="copyCode('ch20-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch20-code1"><code>public class OverloadDemo {
-    public static int add(int a, int b) { return a + b; }
-    public static int add(int a, int b, int c) { return a + b + c; }
-    public static double add(double a, double b) { return a + b; }
+                    <pre id="ch20-code1"><code>public class MethodOverload {
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    public static double add(double a, double b) {
+        return a + b;
+    }
+
+    public static int add(int a, int b, int c) {
+        return a + b + c;
+    }
+
+    public static String add(String a, String b) {
+        return a + b;
+    }
 
     public static void main(String[] args) {
-        System.out.println(add(1, 2));       // 3
-        System.out.println(add(1, 2, 3));    // 6
-        System.out.println(add(1.5, 2.3));   // 3.8
+        System.out.println(add(3, 5));
+        System.out.println(add(3.5, 2.5));
+        System.out.println(add(1, 2, 3));
+        System.out.println(add("Hello", " World"));
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>仅返回值不同：</strong>编译错误，参数列表必须不同</p>
-                    <p><strong>参数名不同不算重载：</strong><code>add(int x, int y)</code> 和 <code>add(int a, int b)</code> 签名相同</p>
+                    <p><strong>仅返回类型不同：</strong><code>int add()</code> 和 <code>double add()</code> 不算重载</p>
+                    <p><strong>参数名不同：</strong><code>add(int a)</code> 和 <code>add(int b)</code> 不算重载</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 方法重载的三个条件是什么？</div>
+                    <div class="question">1. 判断：void print(int x) 和 void print(double x) 是否构成重载？</div>
                     <input type="text" class="answer-input" id="ch20-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(20,1)">检查答案</button>
                     <div id="ch20-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(20,1)">查看答案</button>
-                    <div id="ch20-answer1" class="answer-box">方法名相同、参数列表不同（类型/个数/顺序）、与返回值无关</div>
+                    <div id="ch20-answer1" class="answer-box">是（参数类型不同）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1451,16 +1420,16 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                 </div>
             </div>
 
-            <!-- 第21章 可变参数 -->
+            <!-- 第21章 面向对象基础 -->
             <div id="ch21" class="chapter-section">
-                <h2>21. 可变参数 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
+                <h2>21. 面向对象基础 <button class="bookmark-btn" onclick="toggleBookmark(21)" id="bookmarkBtn21">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>语法：</strong><code>类型... 参数名</code>，如 <code>int... nums</code></li>
-                    <li><strong>本质：</strong>可变参数在方法内部被当作数组处理</li>
-                    <li><strong>规则：</strong>一个方法最多一个可变参数，且必须是最后一个参数</li>
-                    <li><strong>调用：</strong>可以传0个或多个参数，也可以直接传数组</li>
+                        <li><strong>类与对象：</strong>类是模板，对象是实例</li>
+                        <li><strong>封装：</strong>将数据和方法封装在一起，隐藏内部实现</li>
+                        <li><strong>继承：</strong>子类继承父类的属性和方法</li>
+                        <li><strong>多态：</strong>同一接口多种实现方式</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1470,36 +1439,60 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                             <button class="code-btn" onclick="copyCode('ch21-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch21-code1"><code>public class VarArgsDemo {
-    public static int sum(int... nums) {
-        int total = 0;
-        for (int n : nums) total += n;
-        return total;
+                    <pre id="ch21-code1"><code>public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public void introduce() {
+        System.out.println("我叫" + name + "，今年" + age + "岁");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setAge(int age) {
+        if (age > 0) {
+            this.age = age;
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println(sum(1, 2, 3));        // 6
-        System.out.println(sum(10, 20, 30, 40)); // 100
-        System.out.println(sum());               // 0
+        Person p = new Person("张三", 25);
+        p.introduce();
+        p.setAge(26);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>可变参数不在最后：</strong>编译错误，可变参数必须是最后一个</p>
-                    <p><strong>多个可变参数：</strong>编译错误，最多一个可变参数</p>
+                    <p><strong>忘记new：</strong><code>Person p;</code> p是null，需 <code>new Person()</code></p>
+                    <p><strong>访问私有字段：</strong>不能直接访问private字段，需通过getter/setter</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 写一个可变参数方法max，返回所有参数中的最大值。</div>
+                    <div class="question">1. 创建一个Car类，包含品牌和价格属性，以及drive方法。</div>
                     <textarea class="answer-textarea" id="ch21-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(21,1)">检查答案</button>
                     <div id="ch21-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(21,1)">查看答案</button>
-                    <div id="ch21-answer1" class="answer-box">public static int max(int... nums) {
-    int m = nums[0];
-    for (int n : nums) if (n > m) m = n;
-    return m;
+                    <div id="ch21-answer1" class="answer-box">public class Car {
+    private String brand;
+    private double price;
+
+    public Car(String brand, double price) {
+        this.brand = brand;
+        this.price = price;
+    }
+
+    public void drive() {
+        System.out.println(brand + "正在行驶");
+    }
 }</div>
                 </div>
                 <div class="note-section">
@@ -1514,16 +1507,16 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                 </div>
             </div>
 
-            <!-- 第22章 类与对象 -->
+            <!-- 第22章 构造方法 -->
             <div id="ch22" class="chapter-section">
-                <h2>22. 类与对象 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
+                <h2>22. 构造方法 <button class="bookmark-btn" onclick="toggleBookmark(22)" id="bookmarkBtn22">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>类是模板：</strong>定义对象的属性(字段)和行为(方法)</li>
-                    <li><strong>对象是实例：</strong>通过 <code>new 类名()</code> 创建</li>
-                    <li><strong>封装：</strong>用private保护字段，通过getter/setter访问</li>
-                    <li><strong>引用类型：</strong>对象变量存储的是引用(地址)</li>
+                        <li><strong>定义：</strong>与类名相同，无返回类型，用于初始化对象</li>
+                        <li><strong>默认构造：</strong>无参构造，未定义时编译器自动生成</li>
+                        <li><strong>重载：</strong>可定义多个构造方法，参数列表不同</li>
+                        <li><strong>this调用：</strong><code>this()</code>调用其他构造方法</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1533,47 +1526,50 @@ String reversed = new StringBuilder(s).reverse().toString();</div>
                             <button class="code-btn" onclick="copyCode('ch22-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch22-code1"><code>class Student {
+                    <pre id="ch22-code1"><code>public class Student {
     private String name;
     private int age;
+    private String grade;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public int getAge() { return age; }
-    public void setAge(int age) { if (age &gt; 0) this.age = age; }
-
-    public void study(String subject) {
-        System.out.println(name + "正在学习" + subject);
+    public Student() {
+        this.name = "未知";
+        this.age = 0;
     }
-}
 
-public class ClassDemo {
+    public Student(String name) {
+        this(name, 0);
+    }
+
+    public Student(String name, int age) {
+        this(name, age, "一年级");
+    }
+
+    public Student(String name, int age, String grade) {
+        this.name = name;
+        this.age = age;
+        this.grade = grade;
+    }
+
     public static void main(String[] args) {
         Student s1 = new Student();
-        s1.setName("张三");
-        s1.setAge(20);
-        System.out.println(s1.getName());
-        s1.study("Java");
+        Student s2 = new Student("李四");
+        Student s3 = new Student("王五", 18, "高三");
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>访问private字段：</strong>编译错误，private字段只能在类内部访问</p>
-                    <p><strong>引用比较内容：</strong>应用equals()而非==比较对象内容</p>
+                    <p><strong>构造方法有返回值：</strong><code>public void Student() {}</code> 不是构造方法</p>
+                    <p><strong>this()位置错误：</strong>必须在构造方法第一行</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 创建一个Circle类，包含半径属性和计算面积的方法。</div>
-                    <textarea class="answer-textarea" id="ch22-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. 类中定义了带参构造后，还能使用new ClassName()吗？</div>
+                    <input type="text" class="answer-input" id="ch22-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(22,1)">检查答案</button>
                     <div id="ch22-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(22,1)">查看答案</button>
-                    <div id="ch22-answer1" class="answer-box">class Circle {
-    private double radius;
-    public void setRadius(double r) { radius = r; }
-    public double getArea() { return Math.PI * radius * radius; }
-}</div>
+                    <div id="ch22-answer1" class="answer-box">不能（除非显式定义无参构造）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1587,16 +1583,16 @@ public class ClassDemo {
                 </div>
             </div>
 
-            <!-- 第23章 构造方法 -->
+            <!-- 第23章 this关键字 -->
             <div id="ch23" class="chapter-section">
-                <h2>23. 构造方法 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
+                <h2>23. this关键字 <button class="bookmark-btn" onclick="toggleBookmark(23)" id="bookmarkBtn23">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>特点：</strong>与类同名、无返回值、new时自动调用</li>
-                    <li><strong>默认构造：</strong>不写构造方法时编译器自动提供无参构造</li>
-                    <li><strong>构造重载：</strong>可以定义多个构造方法</li>
-                    <li><strong>this()：</strong>调用其他构造方法，必须在首行</li>
+                        <li><strong>指代当前对象：</strong>在方法中引用调用该方法的对象</li>
+                        <li><strong>区分字段和参数：</strong><code>this.name = name;</code></li>
+                        <li><strong>调用其他方法：</strong><code>this.method();</code></li>
+                        <li><strong>调用构造方法：</strong><code>this();</code> 必须在第一行</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1606,44 +1602,45 @@ public class ClassDemo {
                             <button class="code-btn" onclick="copyCode('ch23-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch23-code1"><code>class Person {
+                    <pre id="ch23-code1"><code>public class Person {
     private String name;
-    private int age;
 
-    public Person() { this("未知", 0); }
-    public Person(String name) { this(name, 18); }
-    public Person(String name, int age) {
+    public Person(String name) {
         this.name = name;
-        this.age = age;
     }
 
-    @Override
-    public String toString() { return name + "(" + age + "岁)"; }
-}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-public class ConstructorDemo {
+    public void printInfo() {
+        System.out.println("姓名: " + this.name);
+        this.sayHello();
+    }
+
+    public void sayHello() {
+        System.out.println("Hello, " + this.name);
+    }
+
     public static void main(String[] args) {
-        Person p1 = new Person();
-        Person p2 = new Person("张三");
-        Person p3 = new Person("李四", 25);
-        System.out.println(p1);
-        System.out.println(p3);
+        Person p = new Person("赵六");
+        p.printInfo();
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>定义有参构造后无参构造消失：</strong>需手动添加无参构造</p>
-                    <p><strong>this()不在首行：</strong>编译错误，this()必须在第一行</p>
+                    <p><strong>静态方法中用this：</strong>静态方法属于类，不属于对象</p>
+                    <p><strong>字段名与参数名相同时忘记this：</strong><code>name = name;</code> 参数赋值给参数</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 如果一个类只定义了有参构造方法，还能用无参构造创建对象吗？</div>
+                    <div class="question">1. 在静态方法中能否使用this关键字？为什么？</div>
                     <input type="text" class="answer-input" id="ch23-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(23,1)">检查答案</button>
                     <div id="ch23-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(23,1)">查看答案</button>
-                    <div id="ch23-answer1" class="answer-box">不能。定义了有参构造后，编译器不再提供默认无参构造，需手动添加。</div>
+                    <div id="ch23-answer1" class="answer-box">不能，静态方法属于类，不依赖对象实例，没有this指向</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1657,16 +1654,16 @@ public class ConstructorDemo {
                 </div>
             </div>
 
-            <!-- 第24章 this关键字 -->
+            <!-- 第24章 继承 -->
             <div id="ch24" class="chapter-section">
-                <h2>24. this关键字 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
+                <h2>24. 继承 <button class="bookmark-btn" onclick="toggleBookmark(24)" id="bookmarkBtn24">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>引用当前对象：</strong><code>this.字段</code> 区分成员变量和局部变量</li>
-                    <li><strong>调用构造方法：</strong><code>this(参数)</code> 必须在首行</li>
-                    <li><strong>传递当前对象：</strong><code>method(this)</code></li>
-                    <li><strong>返回当前对象：</strong><code>return this;</code> 实现链式调用</li>
+                        <li><strong>extends：</strong><code>class Child extends Parent</code></li>
+                        <li><strong>单继承：</strong>Java只支持单继承</li>
+                        <li><strong>super：</strong>调用父类的构造方法或方法</li>
+                        <li><strong>继承内容：</strong>继承父类非private的属性和方法</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1676,44 +1673,60 @@ public class ConstructorDemo {
                             <button class="code-btn" onclick="copyCode('ch24-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch24-code1"><code>class Builder {
-    private String name;
-    private int age;
+                    <pre id="ch24-code1"><code>public class Animal {
+    protected String name;
 
-    public Builder setName(String name) {
+    public Animal(String name) {
         this.name = name;
-        return this;  // 链式调用
     }
 
-    public Builder setAge(int age) {
-        this.age = age;
-        return this;
+    public void eat() {
+        System.out.println(name + "正在吃东西");
+    }
+}
+
+public class Dog extends Animal {
+    public Dog(String name) {
+        super(name);
+    }
+
+    public void bark() {
+        System.out.println(name + "汪汪叫");
     }
 
     @Override
-    public String toString() { return name + "(" + age + ")"; }
-}
+    public void eat() {
+        super.eat();
+        System.out.println("吃狗粮");
+    }
 
-public class ThisDemo {
     public static void main(String[] args) {
-        Builder b = new Builder().setName("Java").setAge(25);
-        System.out.println(b);
+        Dog dog = new Dog("旺财");
+        dog.eat();
+        dog.bark();
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>静态方法中使用this：</strong>编译错误，static属于类不属于对象</p>
-                    <p><strong>this()和super()同时使用：</strong>两者都必须在首行，不能同时出现</p>
+                    <p><strong>多继承：</strong>Java不支持多重继承，可用接口实现</p>
+                    <p><strong>访问父类private：</strong>子类不能访问父类private字段</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. this关键字的三个主要用途是什么？</div>
-                    <input type="text" class="answer-input" id="ch24-q1" placeholder="输入答案...">
+                    <div class="question">1. 创建Student类继承Person类，添加grade属性。</div>
+                    <textarea class="answer-textarea" id="ch24-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(24,1)">检查答案</button>
                     <div id="ch24-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(24,1)">查看答案</button>
-                    <div id="ch24-answer1" class="answer-box">1. 引用当前对象的成员 2. 调用本类其他构造方法 3. 作为返回值实现链式调用</div>
+                    <div id="ch24-answer1" class="answer-box">public class Student extends Person {
+    private String grade;
+
+    public Student(String name, int age, String grade) {
+        super(name, age);
+        this.grade = grade;
+    }
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1727,16 +1740,16 @@ public class ThisDemo {
                 </div>
             </div>
 
-            <!-- 第25章 static关键字 -->
+            <!-- 第25章 方法重写 -->
             <div id="ch25" class="chapter-section">
-                <h2>25. static关键字 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
+                <h2>25. 方法重写 <button class="bookmark-btn" onclick="toggleBookmark(25)" id="bookmarkBtn25">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>静态变量：</strong>类级别共享，所有对象共用一份</li>
-                    <li><strong>静态方法：</strong>属于类，不能访问非static成员</li>
-                    <li><strong>静态代码块：</strong><code>static { ... }</code> 类加载时执行一次</li>
-                    <li><strong>静态导入：</strong><code>import static java.lang.Math.PI;</code></li>
+                        <li><strong>定义：</strong>子类重写父类的方法，方法名、参数列表、返回类型相同</li>
+                        <li><strong>@Override：</strong>可选注解，编译器检查是否正确重写</li>
+                        <li><strong>访问权限：</strong>子类重写方法的访问权限不能比父类更严格</li>
+                        <li><strong>调用父类方法：</strong><code>super.method()</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1746,38 +1759,65 @@ public class ThisDemo {
                             <button class="code-btn" onclick="copyCode('ch25-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch25-code1"><code>class Counter {
-    static int count = 0;
+                    <pre id="ch25-code1"><code>public class Shape {
+    public double getArea() {
+        return 0;
+    }
 
-    static { System.out.println("Counter类已加载"); }
-
-    public Counter() { count++; }
-
-    public static int getCount() { return count; }
+    public void draw() {
+        System.out.println("绘制图形");
+    }
 }
 
-public class StaticDemo {
+public class Circle extends Shape {
+    private double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    @Override
+    public double getArea() {
+        return Math.PI * radius * radius;
+    }
+
+    @Override
+    public void draw() {
+        super.draw();
+        System.out.println("绘制圆形");
+    }
+
     public static void main(String[] args) {
-        new Counter();
-        new Counter();
-        new Counter();
-        System.out.println("创建对象数: " + Counter.getCount());
+        Circle c = new Circle(5);
+        System.out.println("面积: " + c.getArea());
+        c.draw();
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>静态方法访问非静态成员：</strong>编译错误，静态方法不能访问实例变量</p>
-                    <p><strong>用对象调用静态方法：</strong>不推荐，应使用类名调用</p>
+                    <p><strong>参数列表不同：</strong>参数个数或类型不同不是重写，是重载</p>
+                    <p><strong>返回类型不兼容：</strong>子类返回类型必须是父类的子类</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 静态方法能否访问非静态变量？为什么？</div>
-                    <input type="text" class="answer-input" id="ch25-q1" placeholder="输入答案...">
+                    <div class="question">1. 创建Rectangle类继承Shape，重写getArea方法。</div>
+                    <textarea class="answer-textarea" id="ch25-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(25,1)">检查答案</button>
                     <div id="ch25-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(25,1)">查看答案</button>
-                    <div id="ch25-answer1" class="answer-box">不能。静态方法属于类，不依赖对象；非静态变量属于对象，需要对象才能访问。</div>
+                    <div id="ch25-answer1" class="answer-box">public class Rectangle extends Shape {
+    private double width, height;
+
+    public Rectangle(double w, double h) {
+        width = w; height = h;
+    }
+
+    @Override
+    public double getArea() {
+        return width * height;
+    }
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1791,16 +1831,16 @@ public class StaticDemo {
                 </div>
             </div>
 
-            <!-- 第26章 继承 -->
+            <!-- 第26章 多态 -->
             <div id="ch26" class="chapter-section">
-                <h2>26. 继承 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
+                <h2>26. 多态 <button class="bookmark-btn" onclick="toggleBookmark(26)" id="bookmarkBtn26">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>语法：</strong><code>class 子类 extends 父类</code>，Java只支持单继承</li>
-                    <li><strong>可继承：</strong>public/protected成员、同包默认权限成员</li>
-                    <li><strong>不可继承：</strong>private成员、构造方法</li>
-                    <li><strong>super：</strong>引用父类成员，<code>super()</code>调用父类构造</li>
+                        <li><strong>定义：</strong>父类引用指向子类对象</li>
+                        <li><strong>向上转型：</strong><code>Shape s = new Circle();</code></li>
+                        <li><strong>向下转型：</strong><code>Circle c = (Circle)s;</code></li>
+                        <li><strong>instanceof：</strong>判断对象是否为某个类的实例</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1810,50 +1850,37 @@ public class StaticDemo {
                             <button class="code-btn" onclick="copyCode('ch26-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch26-code1"><code>class Animal {
-    protected String name;
-    public Animal(String name) { this.name = name; }
-    public void eat() { System.out.println(name + "在吃东西"); }
-}
-
-class Dog extends Animal {
-    private String breed;
-    public Dog(String name, String breed) {
-        super(name);
-        this.breed = breed;
-    }
-    public void bark() { System.out.println(name + "在汪汪叫"); }
-}
-
-public class InheritanceDemo {
+                    <pre id="ch26-code1"><code>public class PolymorphismDemo {
     public static void main(String[] args) {
-        Dog dog = new Dog("旺财", "金毛");
-        dog.eat();
-        dog.bark();
+        Shape[] shapes = {
+            new Circle(5),
+            new Rectangle(4, 6),
+            new Circle(3)
+        };
+
+        for (Shape s : shapes) {
+            System.out.println("面积: " + s.getArea());
+            if (s instanceof Circle) {
+                Circle c = (Circle) s;
+                System.out.println("是圆形");
+            }
+        }
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>子类构造不调用super：</strong>父类没有无参构造时，子类必须显式调用super(参数)</p>
-                    <p><strong>多重继承：</strong>Java不支持，需使用接口</p>
+                    <p><strong>错误的向下转型：</strong>非该类型实例强转会抛出ClassCastException</p>
+                    <p><strong>调用子类特有方法：</strong>父类引用不能调用子类特有方法</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 创建Vehicle父类和Car子类，Vehicle有speed属性和run方法。</div>
-                    <textarea class="answer-textarea" id="ch26-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. Shape s = new Circle(); s.getArea() 调用的是哪个类的方法？</div>
+                    <input type="text" class="answer-input" id="ch26-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(26,1)">检查答案</button>
                     <div id="ch26-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(26,1)">查看答案</button>
-                    <div id="ch26-answer1" class="answer-box">class Vehicle {
-    protected int speed;
-    public Vehicle(int speed) { this.speed = speed; }
-    public void run() { System.out.println("速度: " + speed); }
-}
-class Car extends Vehicle {
-    private String brand;
-    public Car(int speed, String brand) { super(speed); this.brand = brand; }
-}</div>
+                    <div id="ch26-answer1" class="answer-box">Circle类的getArea()方法（运行时多态）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1867,16 +1894,16 @@ class Car extends Vehicle {
                 </div>
             </div>
 
-            <!-- 第27章 方法重写 -->
+            <!-- 第27章 抽象类 -->
             <div id="ch27" class="chapter-section">
-                <h2>27. 方法重写 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
+                <h2>27. 抽象类 <button class="bookmark-btn" onclick="toggleBookmark(27)" id="bookmarkBtn27">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>定义：</strong>子类重新定义父类的方法</li>
-                    <li><strong>@Override：</strong>注解标记重写，编译器检查</li>
-                    <li><strong>规则：</strong>方法签名相同、返回值相同或子类、访问权限不能缩小</li>
-                    <li><strong>与重载区别：</strong>重写是父子类间同方法不同实现</li>
+                        <li><strong>abstract：</strong>修饰类和方法</li>
+                        <li><strong>抽象方法：</strong>只有声明没有实现的方法</li>
+                        <li><strong>抽象类：</strong>包含抽象方法的类，不能实例化</li>
+                        <li><strong>子类：</strong>必须实现父类所有抽象方法</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1886,46 +1913,59 @@ class Car extends Vehicle {
                             <button class="code-btn" onclick="copyCode('ch27-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch27-code1"><code>class Shape {
-    public double getArea() { return 0; }
+                    <pre id="ch27-code1"><code>public abstract class Animal {
+    protected String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public abstract void makeSound();
+
+    public void sleep() {
+        System.out.println(name + "在睡觉");
+    }
 }
 
-class Circle extends Shape {
-    private double radius;
-    public Circle(double r) { radius = r; }
+public class Cat extends Animal {
+    public Cat(String name) {
+        super(name);
+    }
+
     @Override
-    public double getArea() { return Math.PI * radius * radius; }
-}
+    public void makeSound() {
+        System.out.println(name + "喵喵叫");
+    }
 
-class Rectangle extends Shape {
-    private double w, h;
-    public Rectangle(double w, double h) { this.w = w; this.h = h; }
-    @Override
-    public double getArea() { return w * h; }
-}
-
-public class OverrideDemo {
     public static void main(String[] args) {
-        Shape s1 = new Circle(5);
-        Shape s2 = new Rectangle(4, 6);
-        System.out.println(s1.getArea());
-        System.out.println(s2.getArea());
+        Animal cat = new Cat("咪咪");
+        cat.makeSound();
+        cat.sleep();
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>方法签名不一致：</strong>变成重载而非重写</p>
-                    <p><strong>降低访问权限：</strong>编译错误，不能缩小访问范围</p>
+                    <p><strong>实例化抽象类：</strong><code>new Animal();</code> 编译错误</p>
+                    <p><strong>子类未实现所有抽象方法：</strong>子类也必须声明为abstract</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 方法重写(Override)和方法重载(Overload)的区别？</div>
-                    <input type="text" class="answer-input" id="ch27-q1" placeholder="输入答案...">
+                    <div class="question">1. 创建抽象类Vehicle，包含抽象方法run()，然后创建Car类实现它。</div>
+                    <textarea class="answer-textarea" id="ch27-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(27,1)">检查答案</button>
                     <div id="ch27-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(27,1)">查看答案</button>
-                    <div id="ch27-answer1" class="answer-box">重写：父子类间，方法签名完全相同，运行时多态。重载：同类中同名不同参数，编译时多态。</div>
+                    <div id="ch27-answer1" class="answer-box">public abstract class Vehicle {
+    public abstract void run();
+}
+
+public class Car extends Vehicle {
+    @Override
+    public void run() {
+        System.out.println("汽车在行驶");
+    }
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -1939,16 +1979,16 @@ public class OverrideDemo {
                 </div>
             </div>
 
-            <!-- 第28章 多态 -->
+            <!-- 第28章 接口 -->
             <div id="ch28" class="chapter-section">
-                <h2>28. 多态 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
+                <h2>28. 接口 <button class="bookmark-btn" onclick="toggleBookmark(28)" id="bookmarkBtn28">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>前提：</strong>继承、方法重写、父类引用指向子类对象</li>
-                    <li><strong>向上转型：</strong><code>Animal a = new Dog();</code> 自动转换</li>
-                    <li><strong>向下转型：</strong><code>Dog d = (Dog) a;</code> 需强转，用instanceof检查</li>
-                    <li><strong>动态绑定：</strong>运行时根据实际对象类型调用方法</li>
+                        <li><strong>interface：</strong><code>public interface Flyable {}</code></li>
+                        <li><strong>抽象方法：</strong>默认是public abstract</li>
+                        <li><strong>常量：</strong>默认是public static final</li>
+                        <li><strong>实现：</strong><code>class Bird implements Flyable</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -1958,46 +1998,47 @@ public class OverrideDemo {
                             <button class="code-btn" onclick="copyCode('ch28-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch28-code1"><code>class Animal2 {
-    public void speak() { System.out.println("动物叫声"); }
-}
-class Cat extends Animal2 {
-    @Override
-    public void speak() { System.out.println("喵喵"); }
-}
-class Dog2 extends Animal2 {
-    @Override
-    public void speak() { System.out.println("汪汪"); }
-    public void fetch() { System.out.println("捡球"); }
+                    <pre id="ch28-code1"><code>public interface Flyable {
+    int MAX_HEIGHT = 10000;
+    void fly();
 }
 
-public class PolymorphismDemo {
+public interface Swimmable {
+    void swim();
+}
+
+public class Duck implements Flyable, Swimmable {
+    @Override
+    public void fly() {
+        System.out.println("鸭子飞");
+    }
+
+    @Override
+    public void swim() {
+        System.out.println("鸭子游泳");
+    }
+
     public static void main(String[] args) {
-        Animal2 a1 = new Cat();
-        Animal2 a2 = new Dog2();
-        a1.speak();  // 喵喵
-        a2.speak();  // 汪汪
-
-        if (a2 instanceof Dog2) {
-            Dog2 d = (Dog2) a2;
-            d.fetch();
-        }
+        Duck duck = new Duck();
+        duck.fly();
+        duck.swim();
+        System.out.println(Flyable.MAX_HEIGHT);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>不安全向下转型：</strong>ClassCastException运行时异常</p>
-                    <p><strong>父类引用调用子类特有方法：</strong>编译错误</p>
+                    <p><strong>接口中写普通方法：</strong>接口中不能有非抽象方法（Java 8之前）</p>
+                    <p><strong>继承接口：</strong>应用implements，不是extends</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 什么是向上转型？需要强制转换吗？</div>
+                    <div class="question">1. 一个类可以实现多个接口吗？</div>
                     <input type="text" class="answer-input" id="ch28-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(28,1)">检查答案</button>
                     <div id="ch28-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(28,1)">查看答案</button>
-                    <div id="ch28-answer1" class="answer-box">将子类对象赋给父类引用，自动完成，不需要强制转换。</div>
+                    <div id="ch28-answer1" class="answer-box">可以（Java支持多实现）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2011,16 +2052,16 @@ public class PolymorphismDemo {
                 </div>
             </div>
 
-            <!-- 第29章 抽象类 -->
+            <!-- 第29章 异常处理 -->
             <div id="ch29" class="chapter-section">
-                <h2>29. 抽象类 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
+                <h2>29. 异常处理 <button class="bookmark-btn" onclick="toggleBookmark(29)" id="bookmarkBtn29">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>定义：</strong>用<code>abstract</code>修饰的类，不能实例化</li>
-                    <li><strong>抽象方法：</strong>只有声明没有实现，子类必须实现</li>
-                    <li><strong>可以有具体方法：</strong>抽象类可包含具体方法和构造方法</li>
-                    <li><strong>与普通类区别：</strong>不能new、可以有抽象方法</li>
+                        <li><strong>try-catch：</strong>捕获异常</li>
+                        <li><strong>finally：</strong>无论是否发生异常都会执行</li>
+                        <li><strong>throw：</strong>主动抛出异常</li>
+                        <li><strong>throws：</strong>声明方法可能抛出的异常</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2030,42 +2071,39 @@ public class PolymorphismDemo {
                             <button class="code-btn" onclick="copyCode('ch29-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch29-code1"><code>abstract class Graphic {
-    protected String color;
-    public Graphic(String color) { this.color = color; }
-    public abstract double getArea();  // 抽象方法
-    public void showInfo() {  // 具体方法
-        System.out.println("颜色: " + color + ", 面积: " + getArea());
+                    <pre id="ch29-code1"><code>public class ExceptionDemo {
+    public static int divide(int a, int b) throws ArithmeticException {
+        if (b == 0) {
+            throw new ArithmeticException("除数不能为0");
+        }
+        return a / b;
     }
-}
 
-class Triangle extends Graphic {
-    private double base, height;
-    public Triangle(String c, double b, double h) { super(c); base = b; height = h; }
-    @Override
-    public double getArea() { return 0.5 * base * height; }
-}
-
-public class AbstractDemo {
     public static void main(String[] args) {
-        Graphic g = new Triangle("红色", 6, 4);
-        g.showInfo();
+        try {
+            int result = divide(10, 0);
+            System.out.println("结果: " + result);
+        } catch (ArithmeticException e) {
+            System.out.println("发生异常: " + e.getMessage());
+        } finally {
+            System.out.println("finally块执行");
+        }
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>实例化抽象类：</strong>编译错误，抽象类不能直接创建对象</p>
-                    <p><strong>子类未实现抽象方法：</strong>编译错误，必须实现所有抽象方法</p>
+                    <p><strong>空catch块：</strong>捕获异常但不处理，问题被隐藏</p>
+                    <p><strong>顺序错误：</strong>先catch子类再catch父类</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 抽象类和普通类的两个主要区别？</div>
+                    <div class="question">1. finally块是否一定执行？</div>
                     <input type="text" class="answer-input" id="ch29-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(29,1)">检查答案</button>
                     <div id="ch29-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(29,1)">查看答案</button>
-                    <div id="ch29-answer1" class="answer-box">1. 抽象类不能实例化 2. 抽象类可以包含抽象方法</div>
+                    <div id="ch29-answer1" class="answer-box">不一定（System.exit()会终止JVM，finally不执行）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2079,16 +2117,16 @@ public class AbstractDemo {
                 </div>
             </div>
 
-            <!-- 第30章 接口 -->
+            <!-- 第30章 文件操作 -->
             <div id="ch30" class="chapter-section">
-                <h2>30. 接口 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
+                <h2>30. 文件操作 <button class="bookmark-btn" onclick="toggleBookmark(30)" id="bookmarkBtn30">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>定义：</strong><code>interface</code> 定义纯抽象契约，方法默认public abstract</li>
-                    <li><strong>实现：</strong><code>class 类 implements 接口</code></li>
-                    <li><strong>多实现：</strong>一个类可实现多个接口</li>
-                    <li><strong>JDK8+：</strong>可有default方法和static方法</li>
+                        <li><strong>File类：</strong>表示文件或目录路径</li>
+                        <li><strong>字节流：</strong>InputStream/OutputStream</li>
+                        <li><strong>字符流：</strong>Reader/Writer</li>
+                        <li><strong>Files工具类：</strong>Java 7新增的文件操作工具</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2098,44 +2136,52 @@ public class AbstractDemo {
                             <button class="code-btn" onclick="copyCode('ch30-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch30-code1"><code>interface Flyable {
-    void fly();
-    default void land() { System.out.println("着陆"); }
-}
+                    <pre id="ch30-code1"><code>import java.io.*;
+import java.nio.file.*;
 
-interface Swimmable {
-    void swim();
-}
+public class FileOperations {
+    public static void main(String[] args) throws IOException {
+        Path path = Paths.get("example.txt");
 
-class Duck implements Flyable, Swimmable {
-    @Override
-    public void fly() { System.out.println("鸭子飞翔"); }
-    @Override
-    public void swim() { System.out.println("鸭子游泳"); }
-}
+        Files.write(path, "Hello, Java!".getBytes());
+        String content = new String(Files.readAllBytes(path));
+        System.out.println(content);
 
-public class InterfaceDemo {
-    public static void main(String[] args) {
-        Duck d = new Duck();
-        d.fly();
-        d.swim();
-        d.land();
+        File file = new File("data.txt");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("第一行");
+            writer.newLine();
+            writer.write("第二行");
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>未实现接口所有方法：</strong>编译错误，除非类是抽象类</p>
-                    <p><strong>接口中写构造方法：</strong>编译错误，接口不能有构造方法</p>
+                    <p><strong>忘记关闭流：</strong>资源泄露，应用try-with-resources</p>
+                    <p><strong>字符编码问题：</strong>读取中文时需指定UTF-8编码</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 接口和抽象类的三个主要区别？</div>
-                    <input type="text" class="answer-input" id="ch30-q1" placeholder="输入答案...">
+                    <div class="question">1. 使用try-with-resources语法读取文件内容。</div>
+                    <textarea class="answer-textarea" id="ch30-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(30,1)">检查答案</button>
                     <div id="ch30-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(30,1)">查看答案</button>
-                    <div id="ch30-answer1" class="answer-box">1. 接口可多实现，抽象类只能单继承 2. 接口不能有构造方法 3. 接口方法默认public abstract，抽象类可有具体方法</div>
+                    <div id="ch30-answer1" class="answer-box">try (BufferedReader br = new BufferedReader(
+    new FileReader("file.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        System.out.println(line);
+    }
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2149,16 +2195,16 @@ public class InterfaceDemo {
                 </div>
             </div>
 
-            <!-- 第31章 异常处理 -->
+            <!-- 第31章 泛型 -->
             <div id="ch31" class="chapter-section">
-                <h2>31. 异常处理 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
+                <h2>31. 泛型 <button class="bookmark-btn" onclick="toggleBookmark(31)" id="bookmarkBtn31">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>try-catch-finally：</strong>捕获并处理异常，finally块始终执行</li>
-                    <li><strong>throws：</strong>方法签名中声明可能抛出的异常</li>
-                    <li><strong>throw：</strong>主动抛出异常对象</li>
-                    <li><strong>异常体系：</strong>Throwable → Error(系统级) / Exception(可处理) → RuntimeException(非检查) / 其他(检查)</li>
+                        <li><strong>定义：</strong><code>class Box<T> {}</code></li>
+                        <li><strong>使用：</strong><code>Box<String> box = new Box<>();</code></li>
+                        <li><strong>泛型方法：</strong><code>public <T> T method(T t) {}</code></li>
+                        <li><strong>通配符：</strong><code>?</code>, <code>? extends T</code>, <code>? super T</code></li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2168,45 +2214,54 @@ public class InterfaceDemo {
                             <button class="code-btn" onclick="copyCode('ch31-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch31-code1"><code>public class ExceptionDemo {
-    public static int divide(int a, int b) throws ArithmeticException {
-        if (b == 0) throw new ArithmeticException("除数不能为0");
-        return a / b;
+                    <pre id="ch31-code1"><code>public class GenericBox<T> {
+    private T value;
+
+    public void set(T value) {
+        this.value = value;
+    }
+
+    public T get() {
+        return value;
+    }
+
+    public static <T> void print(T[] array) {
+        for (T item : array) {
+            System.out.println(item);
+        }
     }
 
     public static void main(String[] args) {
-        try {
-            int result = divide(10, 0);
-            System.out.println("结果: " + result);
-        } catch (ArithmeticException e) {
-            System.out.println("捕获异常: " + e.getMessage());
-        } finally {
-            System.out.println("finally始终执行");
-        }
+        GenericBox<String> strBox = new GenericBox<>();
+        strBox.set("Hello");
+        System.out.println(strBox.get());
 
-        // 多重catch
-        try {
-            int[] arr = {1, 2};
-            arr[5] = 10;
-        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            System.out.println("异常: " + e);
-        }
+        GenericBox<Integer> intBox = new GenericBox<>();
+        intBox.set(42);
+        System.out.println(intBox.get());
+
+        String[] names = {"张三", "李四", "王五"};
+        GenericBox.print(names);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>catch顺序错误：</strong>子类异常必须写在父类异常前面，否则编译错误</p>
-                    <p><strong>finally中return：</strong>会覆盖try中的返回值，应避免</p>
+                    <p><strong>泛型类型擦除：</strong>运行时类型信息丢失</p>
+                    <p><strong>基本类型不能作为类型参数：</strong>需使用包装类</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 检查型异常和非检查型异常的区别？</div>
-                    <input type="text" class="answer-input" id="ch31-q1" placeholder="输入答案...">
+                    <div class="question">1. 创建一个泛型方法swap，交换数组中两个元素的位置。</div>
+                    <textarea class="answer-textarea" id="ch31-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(31,1)">检查答案</button>
                     <div id="ch31-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(31,1)">查看答案</button>
-                    <div id="ch31-answer1" class="answer-box">检查型异常必须try-catch或throws声明；非检查型(RuntimeException及其子类)不需要强制处理</div>
+                    <div id="ch31-answer1" class="answer-box">public static <T> void swap(T[] arr, int i, int j) {
+    T temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2220,16 +2275,16 @@ public class InterfaceDemo {
                 </div>
             </div>
 
-            <!-- 第32章 集合框架List -->
+            <!-- 第32章 集合框架 -->
             <div id="ch32" class="chapter-section">
-                <h2>32. 集合框架List <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
+                <h2>32. 集合框架 <button class="bookmark-btn" onclick="toggleBookmark(32)" id="bookmarkBtn32">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>List接口：</strong>有序可重复的集合，常用ArrayList和LinkedList</li>
-                    <li><strong>ArrayList：</strong>基于动态数组，随机访问快，增删慢</li>
-                    <li><strong>LinkedList：</strong>基于双向链表，增删快，随机访问慢</li>
-                    <li><strong>泛型：</strong><code>List&lt;String&gt; list = new ArrayList&lt;&gt;()</code> 指定元素类型</li>
+                        <li><strong>List：</strong>有序可重复，如ArrayList、LinkedList</li>
+                        <li><strong>Set：</strong>无序不可重复，如HashSet、TreeSet</li>
+                        <li><strong>Map：</strong>键值对，如HashMap、TreeMap</li>
+                        <li><strong>Collections：</strong>集合工具类</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2239,47 +2294,49 @@ public class InterfaceDemo {
                             <button class="code-btn" onclick="copyCode('ch32-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch32-code1"><code>import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
+                    <pre id="ch32-code1"><code>import java.util.*;
 
-public class ListDemo {
+public class CollectionDemo {
     public static void main(String[] args) {
-        List&lt;String&gt; fruits = new ArrayList&lt;&gt;();
-        fruits.add("苹果");
-        fruits.add("香蕉");
-        fruits.add("橘子");
-        fruits.add(1, "葡萄");  // 指定位置插入
+        List<String> list = new ArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add("Apple");
+        System.out.println(list);
 
-        System.out.println("第一个: " + fruits.get(0));
-        System.out.println("包含香蕉: " + fruits.contains("香蕉"));
-        System.out.println("大小: " + fruits.size());
+        Set<Integer> set = new HashSet<>();
+        set.add(1);
+        set.add(2);
+        set.add(1);
+        System.out.println(set);
 
-        fruits.remove("橘子");
-        Collections.sort(fruits);
+        Map<String, Integer> map = new HashMap<>();
+        map.put("张三", 25);
+        map.put("李四", 30);
+        System.out.println(map.get("张三"));
 
-        for (String f : fruits) {
-            System.out.println(f);
+        for (String key : map.keySet()) {
+            System.out.println(key + ": " + map.get(key));
         }
-
-        // 遍历
-        fruits.forEach(System.out::println);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>ConcurrentModificationException：</strong>遍历时用list.remove()修改集合，应使用迭代器remove()</p>
-                    <p><strong>索引越界：</strong><code>list.get(list.size())</code> 越界，最大索引为size()-1</p>
+                    <p><strong>遍历集合时修改：</strong>会抛出ConcurrentModificationException</p>
+                    <p><strong>HashMap线程不安全：</strong>多线程环境应用ConcurrentHashMap</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. ArrayList和LinkedList的主要区别？</div>
-                    <input type="text" class="answer-input" id="ch32-q1" placeholder="输入答案...">
+                    <div class="question">1. 如何遍历HashMap中的所有键值对？</div>
+                    <textarea class="answer-textarea" id="ch32-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(32,1)">检查答案</button>
                     <div id="ch32-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(32,1)">查看答案</button>
-                    <div id="ch32-answer1" class="answer-box">ArrayList基于动态数组，随机访问O(1)，增删O(n)；LinkedList基于双向链表，增删O(1)，随机访问O(n)</div>
+                    <div id="ch32-answer1" class="answer-box">for (Map.Entry<K, V> entry : map.entrySet()) {
+    K key = entry.getKey();
+    V value = entry.getValue();
+}</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2293,16 +2350,16 @@ public class ListDemo {
                 </div>
             </div>
 
-            <!-- 第33章 集合框架Map -->
+            <!-- 第33章 Lambda表达式 -->
             <div id="ch33" class="chapter-section">
-                <h2>33. 集合框架Map <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
+                <h2>33. Lambda表达式 <button class="bookmark-btn" onclick="toggleBookmark(33)" id="bookmarkBtn33">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>Map接口：</strong>键值对映射，键唯一，常用HashMap</li>
-                    <li><strong>HashMap：</strong>基于哈希表，查找O(1)，无序</li>
-                    <li><strong>TreeMap：</strong>基于红黑树，按key排序</li>
-                    <li><strong>常用方法：</strong><code>put()</code>, <code>get()</code>, <code>containsKey()</code>, <code>keySet()</code>, <code>entrySet()</code></li>
+                        <li><strong>语法：</strong><code>(参数) -> { 表达式 }</code></li>
+                        <li><strong>函数式接口：</strong>只有一个抽象方法的接口</li>
+                        <li><strong>常用接口：</strong>Consumer, Supplier, Predicate, Function</li>
+                        <li><strong>Stream API：</strong>配合Lambda进行集合操作</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2312,55 +2369,44 @@ public class ListDemo {
                             <button class="code-btn" onclick="copyCode('ch33-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch33-code1"><code>import java.util.HashMap;
-import java.util.Map;
+                    <pre id="ch33-code1"><code>import java.util.*;
+import java.util.stream.Collectors;
 
-public class MapDemo {
+public class LambdaDemo {
     public static void main(String[] args) {
-        Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
-        scores.put("张三", 90);
-        scores.put("李四", 85);
-        scores.put("王五", 92);
+        List<String> names = Arrays.asList("张三", "李四", "王五", "赵六");
 
-        System.out.println("张三成绩: " + scores.get("张三"));
-        System.out.println("包含王五: " + scores.containsKey("王五"));
+        names.forEach(name -> System.out.println(name));
 
-        // 遍历 - keySet
-        for (String key : scores.keySet()) {
-            System.out.println(key + ": " + scores.get(key));
-        }
+        List<String> filtered = names.stream()
+            .filter(name -> name.length() == 2)
+            .map(String::toUpperCase)
+            .collect(Collectors.toList());
+        System.out.println(filtered);
 
-        // 遍历 - entrySet（推荐）
-        for (Map.Entry&lt;String, Integer&gt; entry : scores.entrySet()) {
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-        }
+        Runnable runnable = () -> System.out.println("Running...");
+        runnable.run();
 
-        // 默认值
-        int score = scores.getOrDefault("赵六", 0);
-        System.out.println("赵六: " + score);
+        Comparator<Integer> comparator = (a, b) -> b - a;
+        List<Integer> nums = Arrays.asList(3, 1, 4, 1, 5);
+        nums.sort(comparator);
+        System.out.println(nums);
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>key为null：</strong>HashMap允许一个null键，TreeMap不允许</p>
-                    <p><strong>修改遍历中的Map：</strong>可能抛出ConcurrentModificationException</p>
+                    <p><strong>非函数式接口：</strong>Lambda只能用于函数式接口</p>
+                    <p><strong>访问非final变量：</strong>Lambda中访问的局部变量必须是effectively final</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 写出遍历Map的两种方式。</div>
+                    <div class="question">1. 使用Lambda表达式对列表中的数字求和。</div>
                     <textarea class="answer-textarea" id="ch33-q1" placeholder="输入代码..."></textarea>
                     <button class="btn btn-primary" onclick="checkAnswer(33,1)">检查答案</button>
                     <div id="ch33-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(33,1)">查看答案</button>
-                    <div id="ch33-answer1" class="answer-box">// 方式1: keySet
-for (String key : map.keySet()) {
-    System.out.println(key + ": " + map.get(key));
-}
-// 方式2: entrySet（推荐）
-for (Map.Entry<String, Integer> e : map.entrySet()) {
-    System.out.println(e.getKey() + " = " + e.getValue());
-}</div>
+                    <div id="ch33-answer1" class="answer-box">int sum = nums.stream().mapToInt(Integer::intValue).sum();</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2374,16 +2420,16 @@ for (Map.Entry<String, Integer> e : map.entrySet()) {
                 </div>
             </div>
 
-            <!-- 第34章 文件IO -->
+            <!-- 第34章 线程基础 -->
             <div id="ch34" class="chapter-section">
-                <h2>34. 文件IO <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
+                <h2>34. 线程基础 <button class="bookmark-btn" onclick="toggleBookmark(34)" id="bookmarkBtn34">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>字节流：</strong>InputStream/OutputStream，处理二进制数据</li>
-                    <li><strong>字符流：</strong>Reader/Writer，处理文本数据</li>
-                    <li><strong>缓冲流：</strong>BufferedReader/BufferedWriter，提高读写效率</li>
-                    <li><strong>try-with-resources：</strong>自动关闭资源，JDK7+特性</li>
+                        <li><strong>创建方式：</strong>继承Thread类或实现Runnable接口</li>
+                        <li><strong>启动：</strong><code>thread.start()</code></li>
+                        <li><strong>状态：</strong>New, Runnable, Blocked, Waiting, Terminated</li>
+                        <li><strong>同步：</strong><code>synchronized</code>关键字</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2393,55 +2439,59 @@ for (Map.Entry<String, Integer> e : map.entrySet()) {
                             <button class="code-btn" onclick="copyCode('ch34-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch34-code1"><code>import java.io.*;
-import java.nio.file.*;
-
-public class FileIODemo {
-    public static void main(String[] args) {
-        String filePath = "test.txt";
-
-        // 写文件
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write("Hello, Java IO!");
-            writer.newLine();
-            writer.write("第二行内容");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // 读文件
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+                    <pre id="ch34-code1"><code>public class ThreadDemo {
+    static class MyThread extends Thread {
+        @Override
+        public void run() {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Thread: " + i);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+    }
 
-        // Files工具类 (NIO)
-        try {
-            String content = Files.readString(Path.of(filePath));
-            System.out.println("内容: " + content);
-        } catch (IOException e) {
-            e.printStackTrace();
+    static class MyRunnable implements Runnable {
+        @Override
+        public void run() {
+            for (int i = 0; i < 5; i++) {
+                System.out.println("Runnable: " + i);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+    }
+
+    public static void main(String[] args) {
+        new MyThread().start();
+        new Thread(new MyRunnable()).start();
+
+        Thread t = new Thread(() -> {
+            System.out.println("Lambda线程");
+        });
+        t.start();
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>忘记关闭流：</strong>资源泄露，应使用try-with-resources自动关闭</p>
-                    <p><strong>FileNotFound：</strong>文件路径错误或文件不存在，需检查路径</p>
+                    <p><strong>调用run()代替start()：</strong>不会启动新线程，只是普通方法调用</p>
+                    <p><strong>线程安全：</strong>多个线程访问共享资源时需同步</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 字节流和字符流的区别？</div>
+                    <div class="question">1. 创建线程的三种方式是什么？</div>
                     <input type="text" class="answer-input" id="ch34-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(34,1)">检查答案</button>
                     <div id="ch34-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(34,1)">查看答案</button>
-                    <div id="ch34-answer1" class="answer-box">字节流(InputStream/OutputStream)按字节读写，处理二进制；字符流(Reader/Writer)按字符读写，处理文本，自动处理编码转换。</div>
+                    <div id="ch34-answer1" class="answer-box">1.继承Thread类 2.实现Runnable接口 3.实现Callable接口</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2455,17 +2505,17 @@ public class FileIODemo {
                 </div>
             </div>
 
-            <!-- 第35章 综合实战 -->
+            <!-- 第35章 Java常用类 -->
             <div id="ch35" class="chapter-section">
-                <h2>35. 综合实战 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
+                <h2>35. Java常用类 <button class="bookmark-btn" onclick="toggleBookmark(35)" id="bookmarkBtn35">📌</button></h2>
                 <div class="section-content">
                     <h3>📖 知识点讲解</h3>
                     <ul>
-                        <li><strong>项目目标：</strong>综合运用所学知识，开发一个学生成绩管理系统</li>
-                    <li><strong>面向对象：</strong>设计Student类、GradeManager类，体现封装、继承、多态</li>
-                    <li><strong>集合框架：</strong>使用List和Map存储和管理数据</li>
-                    <li><strong>异常处理：</strong>对非法输入进行验证和处理</li>
-                    <li><strong>文件IO：</strong>实现数据的持久化存储</li>
+                        <li><strong>Object：</strong>所有类的父类，包含equals()、hashCode()、toString()</li>
+                        <li><strong>StringBuilder/StringBuffer：</strong>可变字符串</li>
+                        <li><strong>包装类：</strong>Integer、Double等，自动装箱拆箱</li>
+                        <li><strong>Math：</strong>数学运算工具类</li>
+                        <li><strong>Date/Calendar：</strong>日期时间处理</li>
                     </ul>
                 </div>
                 <div class="code-block">
@@ -2475,102 +2525,53 @@ public class FileIODemo {
                             <button class="code-btn" onclick="copyCode('ch35-code1')">📋 复制</button>
                         </div>
                     </div>
-                    <pre id="ch35-code1"><code>import java.util.*;
-import java.io.*;
+                    <pre id="ch35-code1"><code>import java.time.*;
+import java.util.*;
 
-class Student {
-    private String id;
-    private String name;
-    private Map&lt;String, Double&gt; scores = new HashMap&lt;&gt;();
-
-    public Student(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public void addScore(String subject, double score) {
-        if (score &lt; 0 || score &gt; 100)
-            throw new IllegalArgumentException("分数应在0-100之间");
-        scores.put(subject, score);
-    }
-
-    public double getAverage() {
-        return scores.values().stream()
-            .mapToDouble(Double::doubleValue).average().orElse(0);
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s(%s) 平均分: %.1f", name, id, getAverage());
-    }
-
-    public String getName() { return name; }
-    public String getId() { return id; }
-}
-
-class GradeManager {
-    private List&lt;Student&gt; students = new ArrayList&lt;&gt;();
-
-    public void addStudent(Student s) { students.add(s); }
-
-    public Student findById(String id) {
-        return students.stream()
-            .filter(s -&gt; s.getId().equals(id)).findFirst().orElse(null);
-    }
-
-    public void showAll() {
-        students.forEach(System.out::println);
-    }
-
-    public void saveToFile(String path) throws IOException {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(path))) {
-            for (Student s : students) pw.println(s);
-        }
-    }
-}
-
-public class StudentSystem {
+public class CommonClasses {
     public static void main(String[] args) {
-        GradeManager mgr = new GradeManager();
+        // 自动装箱拆箱
+        Integer i = 100;
+        int j = i;
 
-        Student s1 = new Student("001", "张三");
-        s1.addScore("Java", 92);
-        s1.addScore("数学", 88);
-        mgr.addStudent(s1);
+        // StringBuilder
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hello").append(" ").append("World");
+        System.out.println(sb.toString());
 
-        Student s2 = new Student("002", "李四");
-        s2.addScore("Java", 85);
-        s2.addScore("数学", 95);
-        mgr.addStudent(s2);
+        // Math
+        System.out.println(Math.max(3, 5));
+        System.out.println(Math.random());
+        System.out.println(Math.PI);
 
-        mgr.showAll();
+        // 日期时间
+        LocalDate today = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("今天: " + today);
+        System.out.println("现在: " + now);
 
-        try {
-            mgr.saveToFile("grades.txt");
-            System.out.println("数据已保存");
-        } catch (IOException e) {
-            System.out.println("保存失败: " + e.getMessage());
-        }
+        // 对象方法
+        Person p1 = new Person("张三", 25);
+        Person p2 = new Person("张三", 25);
+        System.out.println(p1.equals(p2));
+        System.out.println(p1.hashCode());
+        System.out.println(p1.toString());
     }
 }</code></pre>
                 </div>
                 <div class="error-block">
                     <h4>❌ 常见错误</h4>
-                    <p><strong>设计不合理：</strong>应遵循单一职责原则，不要把所有逻辑写在一个类中</p>
-                    <p><strong>缺少异常处理：</strong>用户输入和文件操作都可能出现异常，必须处理</p>
+                    <p><strong>Integer缓存：</strong>-128到127之间的值使用缓存</p>
+                    <p><strong>equals与hashCode：</strong>重写equals时应同时重写hashCode</p>
                 </div>
                 <div class="practice-section">
                     <h4>📝 练习题</h4>
-                    <div class="question">1. 为StudentSystem添加按姓名搜索学生的功能。</div>
-                    <textarea class="answer-textarea" id="ch35-q1" placeholder="输入代码..."></textarea>
+                    <div class="question">1. Integer a = 127; Integer b = 127; a == b 的结果？</div>
+                    <input type="text" class="answer-input" id="ch35-q1" placeholder="输入答案...">
                     <button class="btn btn-primary" onclick="checkAnswer(35,1)">检查答案</button>
                     <div id="ch35-result1" class="quiz-result"></div>
                     <button class="show-answer-btn" onclick="toggleAnswer(35,1)">查看答案</button>
-                    <div id="ch35-answer1" class="answer-box">public List<Student> findByName(String name) {
-    return students.stream()
-        .filter(s -> s.getName().contains(name))
-        .collect(Collectors.toList());
-}</div>
+                    <div id="ch35-answer1" class="answer-box">true（Integer缓存-128到127）</div>
                 </div>
                 <div class="note-section">
                     <h4>📒 学习笔记</h4>
@@ -2580,283 +2581,114 @@ public class StudentSystem {
                 <button class="completion-btn" id="completeBtn35" onclick="markCompleted(35)">✅ 标记为已完成</button>
                 <div class="nav-buttons">
                     <button class="nav-btn nav-btn-secondary" onclick="goToChapter(34)">◀ 上一章</button>
-                    <button class="nav-btn nav-btn-primary" disabled>下一章 ▶</button>
+                    <button class="nav-btn nav-btn-primary" onclick="goToChapter(1)">返回第一章 ▶</button>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script src="js/tutorial-common.js"></script>
     <script src="js/tutorial-extensions.js"></script>
     <script>
-        // 章节列表
         const chapters = [
             {id:1, title:"Java简介与历史"},
-            {id:2, title:"JDK安装配置"},
+            {id:2, title:"Java开发环境搭建"},
             {id:3, title:"第一个Java程序"},
-            {id:4, title:"注释与命名规范"},
-            {id:5, title:"基本数据类型"},
+            {id:4, title:"Java基本语法"},
+            {id:5, title:"数据类型"},
             {id:6, title:"变量与常量"},
-            {id:7, title:"类型转换"},
-            {id:8, title:"算术运算符"},
-            {id:9, title:"关系与逻辑运算符"},
-            {id:10, title:"if-else语句"},
-            {id:11, title:"switch语句"},
-            {id:12, title:"for循环"},
-            {id:13, title:"while与do-while"},
-            {id:14, title:"break与continue"},
+            {id:7, title:"运算符"},
+            {id:8, title:"表达式与语句"},
+            {id:9, title:"条件语句"},
+            {id:10, title:"循环语句"},
+            {id:11, title:"跳转语句"},
+            {id:12, title:"方法基础"},
+            {id:13, title:"递归"},
+            {id:14, title:"数组概述"},
             {id:15, title:"一维数组"},
             {id:16, title:"多维数组"},
             {id:17, title:"字符串基础"},
             {id:18, title:"字符串方法"},
             {id:19, title:"方法定义与调用"},
             {id:20, title:"方法重载"},
-            {id:21, title:"可变参数"},
-            {id:22, title:"类与对象"},
-            {id:23, title:"构造方法"},
-            {id:24, title:"this关键字"},
-            {id:25, title:"static关键字"},
-            {id:26, title:"继承"},
-            {id:27, title:"方法重写"},
-            {id:28, title:"多态"},
-            {id:29, title:"抽象类"},
-            {id:30, title:"接口"},
-            {id:31, title:"异常处理"},
-            {id:32, title:"集合框架List"},
-            {id:33, title:"集合框架Map"},
-            {id:34, title:"文件IO"},
-            {id:35, title:"综合实战"}
+            {id:21, title:"面向对象基础"},
+            {id:22, title:"构造方法"},
+            {id:23, title:"this关键字"},
+            {id:24, title:"继承"},
+            {id:25, title:"方法重写"},
+            {id:26, title:"多态"},
+            {id:27, title:"抽象类"},
+            {id:28, title:"接口"},
+            {id:29, title:"异常处理"},
+            {id:30, title:"文件操作"},
+            {id:31, title:"泛型"},
+            {id:32, title:"集合框架"},
+            {id:33, title:"Lambda表达式"},
+            {id:34, title:"线程基础"},
+            {id:35, title:"Java常用类"}
         ];
 
-        const TOTAL_CHAPTERS = chapters.length;
-        const PROGRESS_KEY = 'java_progress';
-        const NOTE_KEY = 'java_notes';
-        const BOOKMARK_KEY = 'java_bookmarks';
-
-        let currentChapter = 1;
-
-        // 初始化
-        function init() {
-            renderChapterList();
-            updateStats();
-            loadNotes();
-            updateCompletionButtons();
-            checkTheme();
-            initExtensions();
-        }
-
-        // 渲染章节导航
-        function renderChapterList() {
-            const list = document.getElementById('chapterList');
-            const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
-            const bookmarks = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
-
-            list.innerHTML = chapters.map(ch => {
-                const isCompleted = progress.includes(ch.id);
-                const isBookmarked = bookmarks.includes(ch.id);
-                const isActive = ch.id === currentChapter;
-                return `<li class="chapter-item ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}"
-                    onclick="goToChapter(${ch.id})">
-                    <span class="ch-text">${ch.id}. ${ch.title}</span>
-                    <span class="ch-icon">${isCompleted ? '✅' : isBookmarked ? '📌' : ''}</span>
-                </li>`;
-            }).join('');
-        }
-
-        // 跳转章节
-        function goToChapter(id) {
-            if (id < 1 || id > TOTAL_CHAPTERS) return;
-            document.querySelectorAll('.chapter-section').forEach(s => s.classList.remove('active'));
-            document.getElementById('ch' + id).classList.add('active');
-            currentChapter = id;
-            renderChapterList();
+        function goToChapter(chapterNum) {
+            document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('ch' + chapterNum).classList.add('active');
+            document.querySelector('.sidebar').classList.remove('sidebar-open');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 标记完成
-        function markCompleted(id) {
-            const btn = document.getElementById('completeBtn' + id);
-            const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
-            if (!progress.includes(id)) {
-                progress.push(id);
-                localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
-                btn.textContent = '✅ 已完成';
+        function markCompleted(chapterNum) {
+            const btn = document.getElementById('completeBtn' + chapterNum);
+            if (btn.innerText.includes('✅')) {
+                btn.innerText = '🔄 标记为未完成';
+                btn.classList.remove('completed');
+            } else {
+                btn.innerText = '✅ 已完成';
                 btn.classList.add('completed');
-                LearningStats.recordChapterCompletion('java', id);
             }
-            renderChapterList();
-            updateStats();
         }
 
-        // 更新完成按钮状态
-        function updateCompletionButtons() {
-            const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
-            chapters.forEach(ch => {
-                const btn = document.getElementById('completeBtn' + ch.id);
-                if (btn && progress.includes(ch.id)) {
-                    btn.textContent = '✅ 已完成';
-                    btn.classList.add('completed');
-                }
-            });
-        }
-
-        // 收藏
-        function toggleBookmark(id) {
-            const bookmarks = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
-            const btn = document.getElementById('bookmarkBtn' + id);
-            const idx = bookmarks.indexOf(id);
-            if (idx === -1) {
-                bookmarks.push(id);
-                btn.classList.add('bookmarked');
+        function toggleBookmark(chapterNum) {
+            const btn = document.getElementById('bookmarkBtn' + chapterNum);
+            if (btn.style.color === 'gold') {
+                btn.style.color = '';
             } else {
-                bookmarks.splice(idx, 1);
-                btn.classList.remove('bookmarked');
+                btn.style.color = 'gold';
             }
-            localStorage.setItem(BOOKMARK_KEY, JSON.stringify(bookmarks));
-            renderChapterList();
-            updateStats();
         }
 
-        // 保存笔记
-        function saveNote(id) {
-            const textarea = document.getElementById('ch' + id + '-note');
-            const notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '{}');
-            notes[id] = textarea.value;
-            localStorage.setItem(NOTE_KEY, JSON.stringify(notes));
-            showToast('笔记已保存');
-        }
-
-        // 加载笔记
-        function loadNotes() {
-            const notes = JSON.parse(localStorage.getItem(NOTE_KEY) || '{}');
-            chapters.forEach(ch => {
-                const textarea = document.getElementById('ch' + ch.id + '-note');
-                if (textarea && notes[ch.id]) {
-                    textarea.value = notes[ch.id];
-                }
-            });
-        }
-
-        // 检查答案
-        function checkAnswer(chapterId, questionId) {
-            const resultDiv = document.getElementById(`ch${chapterId}-result${questionId}`);
-            const input = document.getElementById(`ch${chapterId}-q${questionId}`);
-
-            if (!input) {
-                // radio类型
-                const radios = document.querySelectorAll(`input[name="ch${chapterId}-q${questionId}"]`);
-                let selected = '';
-                radios.forEach(r => { if (r.checked) selected = r.value; });
-                if (!selected) {
-                    resultDiv.innerHTML = '<span class="result-icon">⚠️</span><span class="result-text">请先选择答案</span>';
-                    resultDiv.className = 'quiz-result incorrect';
-                    return;
-                }
-            }
-
-            resultDiv.innerHTML = '<span class="result-icon">✅</span><span class="result-text">已提交，点击"查看答案"核对</span>';
-            resultDiv.className = 'quiz-result correct';
-        }
-
-        // 切换答案显示
-        function toggleAnswer(chapterId, questionId) {
-            const answerBox = document.getElementById(`ch${chapterId}-answer${questionId}`);
-            answerBox.classList.toggle('show');
-        }
-
-        // 复制代码
-        function copyCode(codeId) {
-            const code = document.getElementById(codeId).textContent;
+        function copyCode(elementId) {
+            const code = document.getElementById(elementId).innerText;
             navigator.clipboard.writeText(code).then(() => {
-                showToast('代码已复制到剪贴板');
+                alert('代码已复制到剪贴板！');
             });
         }
 
-        // 显示提示
-        function showToast(msg) {
-            const toast = document.createElement('div');
-            toast.className = 'toast show';
-            toast.textContent = msg;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+        function checkAnswer(chapterNum, questionNum) {
+            const answer = document.getElementById('ch' + chapterNum + '-q' + questionNum).value;
+            const resultDiv = document.getElementById('ch' + chapterNum + '-result' + questionNum);
+            resultDiv.innerText = '答案已提交！';
+            resultDiv.style.color = '#4CAF50';
         }
 
-        // 更新统计
-        function updateStats() {
-            const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
-            const bookmarks = JSON.parse(localStorage.getItem(BOOKMARK_KEY) || '[]');
-            const percent = Math.round((progress.length / TOTAL_CHAPTERS) * 100);
-
-            document.getElementById('completedCount').textContent = progress.length;
-            document.getElementById('progressPercent').textContent = percent + '%';
-            document.getElementById('progressFill').style.width = percent + '%';
-            document.getElementById('bookmarkCount').textContent = bookmarks.length;
+        function toggleAnswer(chapterNum, questionNum) {
+            const answerBox = document.getElementById('ch' + chapterNum + '-answer' + questionNum);
+            answerBox.style.display = answerBox.style.display === 'none' ? 'block' : 'none';
         }
 
-        // 搜索
-        function searchTutorial() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const sections = document.querySelectorAll('.chapter-section');
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('mainContent');
-
-            if (query) {
-                sections.forEach(s => {
-                    const content = s.textContent.toLowerCase();
-                    s.style.display = content.includes(query) ? 'block' : 'none';
-                });
-                sidebar.style.display = 'none';
-                main.style.marginLeft = '0';
-            } else {
-                sections.forEach(s => {
-                    s.style.display = s.classList.contains('active') ? 'block' : 'none';
-                });
-                sidebar.style.display = 'block';
-                main.style.marginLeft = '290px';
-            }
+        function saveNote(chapterNum) {
+            const note = document.getElementById('ch' + chapterNum + '-note').value;
+            localStorage.setItem('note_ch' + chapterNum, note);
+            alert('笔记已保存！');
         }
 
-        // 主题切换
-        function toggleTheme() {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const themeText = document.getElementById('themeText');
-
-            if (current === 'dark') {
-                html.removeAttribute('data-theme');
-                localStorage.setItem('theme', 'light');
-                themeText.textContent = '深色模式';
-            } else {
-                html.setAttribute('data-theme', 'dark');
-                localStorage.setItem('theme', 'dark');
-                themeText.textContent = '浅色模式';
-            }
-        }
-
-        function checkTheme() {
-            const saved = localStorage.getItem('theme');
-            const themeText = document.getElementById('themeText');
-            if (saved === 'dark') {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeText.textContent = '浅色模式';
-            }
-        }
-
-        // 统计信息
-        function showStats() {
-            const stats = LearningStats.get();
-            const hours = Math.floor(stats.totalStudyTime / 3600);
-            const minutes = Math.floor((stats.totalStudyTime % 3600) / 60);
-            const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) || '[]');
-            alert(`学习统计：\n总学习时间：${hours}小时${minutes}分钟\n已完成章节：${progress.length}/${TOTAL_CHAPTERS}\n连续学习：${stats.dailyStreak}天\n正确答题：${stats.correctAnswers || 0}道`);
-        }
-
-        // 返回首页
-        function goToHub() {
-            window.location.href = 'tutorial-hub.html';
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', function() {
+            chapters.forEach(ch => {
+                const note = localStorage.getItem('note_ch' + ch.id);
+                if (note) {
+                    document.getElementById('ch' + ch.id + '-note').value = note;
+                }
+            });
+        });
     </script>
 </body>
 </html>

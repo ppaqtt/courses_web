@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/tutorial-features.css">
     <link rel="stylesheet" href="css/tutorial-extensions.css">
     <style>
-        /* JavaScript教程页面特有样式 */
         :root { --error-color: var(--danger-color); }
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; position: relative; z-index: 1; }
         .header-actions { display: flex; gap: 15px; align-items: center; }
@@ -158,7 +157,7 @@
         {id:28,title:'async/await',icon:'⏳',content:{intro:'<p>async/await是ES2017引入的异步编程语法糖，让异步代码看起来像同步代码。</p>',points:['async函数：在函数前加async关键字，函数自动返回Promise','await表达式：暂停async函数执行，等待Promise解决','await只能在async函数内部使用','错误处理使用try-catch，比.then().catch()更直观','多个独立异步操作应使用Promise.all()并行执行'],codeExample:`// async函数\nasync function getUser() {\n    return "张三"; // 自动包装为Promise\n}\ngetUser().then(name => console.log(name));\n\n// await等待Promise\nfunction delay(ms) {\n    return new Promise(r => setTimeout(r, ms));\n}\nasync function demo() {\n    console.log("开始");\n    await delay(1000);\n    console.log("1秒后");\n}\ndemo();\n\n// 实际应用\nasync function fetchUserData() {\n    try {\n        let response = await fetch("/api/users");\n        if (!response.ok) throw new Error(\`HTTP \${response.status}\`);\n        let data = await response.json();\n        return data;\n    } catch (error) {\n        console.error("获取失败:", error);\n        return null;\n    }\n}\n\n// 并行执行\nasync function loadAll() {\n    let [users, posts] = await Promise.all([\n        fetch("/api/users").then(r => r.json()),\n        fetch("/api/posts").then(r => r.json())\n    ]);\n    console.log(users, posts);\n}`,errorExample:{code:`// 错误示例：在普通函数中使用await\nfunction getData() {\n    // const result = await fetch("/api"); // SyntaxError!\n}\n\n// 修正：添加async\nasync function getData() {\n    const result = await fetch("/api");\n    return result;\n}\n\n// 错误示例：顺序await不依赖的操作\nasync function slow() {\n    let a = await fetchA(); // 等1秒\n    let b = await fetchB(); // 再等1秒，总共2秒\n}\n\n// 修正：并行执行\nasync function fast() {\n    let [a, b] = await Promise.all([fetchA(), fetchB()]);\n    // 总共1秒\n}`,message:'await只能在async函数中使用。不依赖彼此的异步操作应该用Promise.all()并行执行。'},quiz:{type:'multiple',question:'async函数的返回值是什么？',options:['undefined','原始值','Promise','函数'],answer:2},answer:'正确答案：Promise。async函数总是返回一个Promise，即使返回原始值也会被自动包装。'}},
         {id:29,title:'fetch API',icon:'🌐',content:{intro:'<p>fetch是现代浏览器提供的网络请求API，基于Promise设计，替代了传统的XMLHttpRequest。</p>',points:['fetch()返回Promise，第一个参数是URL','GET请求是默认方式，POST/PUT需设置method、headers、body','Response对象需调用.json()、.text()等方法解析','fetch只在网络错误时reject，HTTP错误状态码不会reject','需要手动检查response.ok来处理HTTP错误'],codeExample:`// GET请求\nasync function getUsers() {\n    try {\n        let res = await fetch("https://api.example.com/users");\n        if (!res.ok) throw new Error(\`HTTP \${res.status}\`);\n        let data = await res.json();\n        console.log(data);\n    } catch (e) {\n        console.error("请求失败:", e);\n    }\n}\n\n// POST请求\nasync function createUser() {\n    let res = await fetch("https://api.example.com/users", {\n        method: "POST",\n        headers: { "Content-Type": "application/json" },\n        body: JSON.stringify({ name: "张三", age: 25 })\n    });\n    return await res.json();\n}\n\n// DELETE请求\nasync function deleteUser(id) {\n    let res = await fetch(\`/api/users/\${id}\`, { method: "DELETE" });\n    return res.ok;\n}\n\n// 封装通用请求\nasync function request(url, options = {}) {\n    const res = await fetch(url, {\n        headers: { "Content-Type": "application/json", ...options.headers },\n        ...options\n    });\n    if (!res.ok) throw new Error(\`HTTP \${res.status}\`);\n    return res.json();\n}`,errorExample:{code:`// 错误示例：fetch不会因HTTP错误而reject\nlet res = await fetch("/api/not-found");\n// HTTP 404但fetch不会reject！\nconsole.log(res.ok);    // false\nconsole.log(res.status);// 404\n\n// 修正：手动检查\nif (!res.ok) {\n    throw new Error(\`请求失败: \${res.status}\`);\n}\n\n// 错误示例：忘记await response.json()\nlet data = res.json(); // 返回Promise不是数据！\n\n// 修正\nlet data = await res.json();`,message:'fetch不会因为HTTP 4xx/5xx错误而reject。必须检查response.ok。response.json()返回Promise需要await。'},quiz:{type:'multiple',question:'fetch遇到HTTP 404错误时会怎样？',options:['抛出异常','返回response且ok为false','返回null','自动重试'],answer:1},answer:'正确答案：返回response且ok为false。fetch不会因HTTP错误状态码而reject。'}},
         {id:30,title:'类与构造函数',icon:'🏗️',content:{intro:'<p>ES6引入了class语法，提供了更清晰的面向对象编程方式。class本质上是构造函数的语法糖。</p>',points:['class声明：class Name { constructor() {} method() {} }','constructor是构造方法，new时自动调用','继承使用extends关键字，子类用super()调用父类构造函数','static关键字定义静态方法，只能通过类名调用','私有字段使用#前缀（ES2022）'],codeExample:`// 基本类定义\nclass Person {\n    constructor(name, age) {\n        this.name = name;\n        this.age = age;\n    }\n    greet() {\n        return \`你好，我是\${this.name}，\${this.age}岁\`;\n    }\n    static create(name, age) {\n        return new Person(name, age);\n    }\n}\nlet p = new Person("张三", 25);\nconsole.log(p.greet());\n\n// 继承\nclass Student extends Person {\n    constructor(name, age, grade) {\n        super(name, age); // 必须先调用super\n        this.grade = grade;\n    }\n    study() { return \`\${this.name}正在学习\`; }\n    greet() { return super.greet() + \`，\${this.grade}年级\`; }\n}\nlet s = new Student("王五", 12, 6);\nconsole.log(s.greet());\n\n// 私有字段\nclass Account {\n    #balance;\n    constructor(init) { this.#balance = init; }\n    deposit(amt) { this.#balance += amt; }\n    get balance() { return this.#balance; }\n}\nlet acc = new Account(100);\nacc.deposit(50);\nconsole.log(acc.balance); // 150\n// console.log(acc.#balance); // SyntaxError!`,errorExample:{code:`// 错误示例：子类构造函数忘记调用super\nclass Animal {\n    constructor(name) { this.name = name; }\n}\nclass Dog extends Animal {\n    constructor(name, breed) {\n        this.breed = breed; // ReferenceError!\n    }\n}\n\n// 修正：先调用super()\nclass Dog2 extends Animal {\n    constructor(name, breed) {\n        super(name);\n        this.breed = breed;\n    }\n}\n\n// 错误示例：类方法之间使用逗号\nclass Wrong {\n    method1() {},  // SyntaxError\n    method2() {}\n}\n// 修正：类方法之间不需要逗号\nclass Right {\n    method1() {}\n    method2() {}\n}`,message:'子类constructor中必须先调用super()才能使用this。类方法之间不需要逗号分隔。'},quiz:{type:'text',question:'子类构造函数中必须先调用什么？',answer:'super()'},answer:'正确答案：super()。在子类的constructor中使用this之前，必须先调用super()初始化父类部分。'}},
-        {id:31,title:'模块导入导出',icon:'📦',content:{intro:'<p>ES6模块系统让JavaScript代码可以被拆分成独立的文件，通过import和export实现代码组织和复用。</p>',points:['命名导出：export const/function/class，可以有多个','默认导出：export default，每个模块只能有一个','命名导入：import { name } from "./module"','默认导入：import name from "./module"，无需花括号','script标签需添加type="module"才能使用ES模块'],codeExample:`// ========== math.js ==========\nexport const PI = 3.14159;\nexport function add(a, b) { return a + b; }\nexport function multiply(a, b) { return a * b; }\nexport default function subtract(a, b) { return a - b; }\n\n// ========== app.js ==========\n// 导入默认导出\nimport subtract from "./math.js";\n\n// 导入命名导出\nimport { PI, add, multiply } from "./math.js";\n\n// 导入所有\nimport * as math from "./math.js";\nconsole.log(math.PI);\nconsole.log(math.add(1, 2));\n\n// 导入时重命名\nimport { add as sum } from "./math.js";\n\n// 同时导入默认和命名\nimport sub, { PI, add } from "./math.js";\n\n// 动态导入\nasync function loadModule() {\n    const math = await import("./math.js");\n    console.log(math.add(2, 3));\n}\n\n// HTML中使用\n// <script type="module" src="app.js"></script>`,errorExample:{code:`// 错误示例1：忘记添加type="module"\n// <script src="app.js"></script>  // SyntaxError!\n\n// 修正\n// <script type="module" src="app.js"></script>\n\n// 错误示例2：默认导入使用花括号\nimport { subtract } from "./math.js"; // undefined!\n\n// 修正：默认导入不需要花括号\nimport subtract from "./math.js";`,message:'使用ES模块时script标签必须添加type="module"。默认导入不需要花括号，命名导入需要花括号。'},quiz:{type:'multiple',question:'一个模块可以有多个默认导出吗？',options:['可以','不可以','最多3个','取决于模块大小'],answer:1},answer:'正确答案：不可以。每个模块只能有一个默认导出（export default）。'},},
+        {id:31,title:'模块导入导出',icon:'📦',content:{intro:'<p>ES6模块系统让JavaScript代码可以被拆分成独立的文件，通过import和export实现代码组织和复用。</p>',points:['命名导出：export const/function/class，可以有多个','默认导出：export default，每个模块只能有一个','命名导入：import { name } from "./module"','默认导入：import name from "./module"，无需花括号','script标签需添加type="module"才能使用ES模块'],codeExample:`// ========== math.js ==========\nexport const PI = 3.14159;\nexport function add(a, b) { return a + b; }\nexport function multiply(a, b) { return a * b; }\nexport default function subtract(a, b) { return a - b; }\n\n// ========== app.js ==========\n// 导入默认导出\nimport subtract from "./math.js";\n\n// 导入命名导出\nimport { PI, add, multiply } from "./math.js";\n\n// 导入所有\nimport * as math from "./math.js";\nconsole.log(math.PI);\nconsole.log(math.add(1, 2));\n\n// 导入时重命名\nimport { add as sum } from "./math.js";\n\n// 同时导入默认和命名\nimport sub, { PI, add } from "./math.js";\n\n// 动态导入\nasync function loadModule() {\n    const math = await import("./math.js");\n    console.log(math.add(2, 3));\n}\n\n// HTML中使用\n// <script type="module" src="app.js"></script>`,errorExample:{code:`// 错误示例1：忘记添加type="module"\n// <script src="app.js"></script>  // SyntaxError!\n\n// 修正\n// <script type="module" src="app.js"></script>\n\n// 错误示例2：默认导入使用花括号\nimport { subtract } from "./math.js"; // undefined!\n\n// 修正：默认导入不需要花括号\nimport subtract from "./math.js";`,message:'使用ES模块时script标签必须添加type="module"。默认导入不需要花括号，命名导入需要花括号。'},quiz:{type:'multiple',question:'一个模块可以有多个默认导出吗？',options:['可以','不可以','最多3个','取决于模块大小'],answer:1},answer:'正确答案：不可以。每个模块只能有一个默认导出（export default）。'}},
         {id:32,title:'错误处理try-catch',icon:'🛡️',content:{intro:'<p>错误处理是保证程序健壮性的重要机制。JavaScript通过try-catch-finally语句捕获和处理运行时错误。</p>',points:['try块：包裹可能出错的代码','catch块：捕获错误并处理，接收Error对象','finally块：无论是否出错都会执行，用于清理资源','throw语句：主动抛出错误（推荐Error对象）','常见错误类型：TypeError、ReferenceError、SyntaxError、RangeError'],codeExample:`// 基本try-catch\ntry {\n    let result = JSON.parse("invalid json");\n} catch (error) {\n    console.error("解析失败:", error.message);\n} finally {\n    console.log("无论成功失败都执行");\n}\n\n// 主动抛出错误\nfunction divide(a, b) {\n    if (typeof a !== "number" || typeof b !== "number") {\n        throw new TypeError("参数必须是数字");\n    }\n    if (b === 0) throw new RangeError("除数不能为零");\n    return a / b;\n}\n\ntry {\n    console.log(divide(10, 2)); // 5\n} catch (error) {\n    console.error(error.name + ":", error.message);\n}\n\n// 自定义错误类型\nclass ValidationError extends Error {\n    constructor(field, message) {\n        super(message);\n        this.name = "ValidationError";\n        this.field = field;\n    }\n}\n\ntry {\n    throw new ValidationError("name", "用户名不能为空");\n} catch (e) {\n    if (e instanceof ValidationError) {\n        console.log(\`字段\${e.field}错误\`);\n    } else { throw e; }\n}`,errorExample:{code:`// 错误示例：空的catch块吞噬错误\ntry {\n    riskyOperation();\n} catch (error) {\n    // 什么都不做 - 非常危险！\n}\n\n// 修正：至少记录错误\ntry {\n    riskyOperation();\n} catch (error) {\n    console.error("操作失败:", error);\n}\n\n// 错误示例：catch中不区分错误类型\ntry {\n    JSON.parse(data);\n} catch (e) {\n    console.log("JSON解析失败"); // 可能是其他错误！\n}\n\n// 修正：区分错误类型\ntry {\n    JSON.parse(data);\n} catch (e) {\n    if (e instanceof SyntaxError) {\n        console.log("JSON格式错误");\n    } else { throw e; }\n}`,message:'空catch块会吞噬错误使调试困难。应该至少记录错误信息。catch块中应该区分错误类型，将不认识的错误重新抛出。'},quiz:{type:'multiple',question:'finally块在什么情况下执行？',options:['只有出错时','只有成功时','无论是否出错','只在return之前'],answer:2},answer:'正确答案：无论是否出错。finally块中的代码总是会执行，通常用于释放资源等清理操作。'}},
         {id:33,title:'JSON操作',icon:'📋',content:{intro:'<p>JSON（JavaScript Object Notation）是轻量级的数据交换格式，在Web开发中广泛用于API数据传输。</p>',points:['JSON.stringify()：将JavaScript对象转换为JSON字符串','JSON.parse()：将JSON字符串解析为JavaScript对象','JSON支持：字符串、数字、布尔值、null、对象、数组','JSON不支持：undefined、函数、Symbol、循环引用','stringify的第二、三个参数可以用于筛选和格式化'],codeExample:`// JSON.stringify\nlet user = {\n    name: "张三", age: 25,\n    hobbies: ["阅读", "编程"],\n    address: { city: "北京" }\n};\nlet jsonStr = JSON.stringify(user);\nconsole.log(jsonStr);\n\n// 格式化输出\nlet pretty = JSON.stringify(user, null, 2);\nconsole.log(pretty);\n\n// 筛选属性\nlet filtered = JSON.stringify(user, ["name", "age"]);\nconsole.log(filtered);\n\n// JSON.parse\nlet str = '{"name":"李四","age":30}';\nlet parsed = JSON.parse(str);\nconsole.log(parsed.name); // "李四"\n\n// parse的reviver参数\nlet data = JSON.parse(str, (key, value) => {\n    if (key === "age") return value + 1;\n    return value;\n});\nconsole.log(data.age); // 31\n\n// 深拷贝\nlet original = { a: 1, b: { c: 2 } };\nlet copy = JSON.parse(JSON.stringify(original));\ncopy.b.c = 99;\nconsole.log(original.b.c); // 2（不受影响）`,errorExample:{code:`// 错误示例：JSON不支持undefined和函数\nlet obj = { name: "张三", age: undefined, greet: function() {} };\nconsole.log(JSON.stringify(obj)); // '{"name":"张三"}'\n\n// 错误示例：循环引用\nlet a = {}, b = {};\na.ref = b; b.ref = a;\n// JSON.stringify(a); // TypeError!\n\n// 错误示例：单引号不合法\n// JSON.parse("{'name':'张三'}"); // SyntaxError\n// 修正：双引号\nJSON.parse('{"name": "张三"}');`,message:'JSON.stringify会忽略undefined、函数和Symbol。循环引用会导致TypeError。JSON格式要求字符串必须使用双引号。'},quiz:{type:'text',question:'JSON中的字符串必须使用什么引号？',answer:'双引号'},answer:'正确答案：双引号。JSON规范要求字符串和属性名必须使用双引号。'}},
         {id:34,title:'本地存储(localStorage)',icon:'💾',content:{intro:'<p>Web Storage API提供了浏览器本地存储能力，包括localStorage（持久存储）和sessionStorage（会话存储）。</p>',points:['localStorage：持久存储，关闭浏览器后数据仍然保留','sessionStorage：会话存储，关闭标签页后数据清除','存储容量约5MB，只能存储字符串，对象需JSON序列化','API：setItem()、getItem()、removeItem()、clear()','storage事件：当localStorage变化时其他标签页可以监听到'],codeExample:`// 基本操作\nlocalStorage.setItem("username", "张三");\nlocalStorage.setItem("theme", "dark");\nlet username = localStorage.getItem("username");\nconsole.log(username); // "张三"\nlocalStorage.removeItem("theme");\n// localStorage.clear();\n\n// 存储对象\nlet settings = { theme: "dark", language: "zh", fontSize: 16 };\nlocalStorage.setItem("settings", JSON.stringify(settings));\nlet saved = JSON.parse(localStorage.getItem("settings"));\nconsole.log(saved.theme); // "dark"\n\n// 遍历所有存储项\nfor (let i = 0; i < localStorage.length; i++) {\n    let key = localStorage.key(i);\n    console.log(\`\${key}: \${localStorage.getItem(key)}\`);\n}\n\n// 封装工具函数\nfunction savePref(key, value) {\n    try { localStorage.setItem(key, JSON.stringify(value)); }\n    catch (e) { console.error("存储失败:", e); }\n}\nfunction getPref(key, defaultVal) {\n    try {\n        let v = localStorage.getItem(key);\n        return v ? JSON.parse(v) : defaultVal;\n    } catch (e) { return defaultVal; }\n}\n\n// 监听其他标签页变化\nwindow.addEventListener("storage", (e) => {\n    console.log("变化:", e.key, e.oldValue, "->", e.newValue);\n});`,errorExample:{code:`// 错误示例：直接存储对象\nlet obj = { name: "张三" };\nlocalStorage.setItem("user", obj);\nconsole.log(localStorage.getItem("user")); // "[object Object]"\n\n// 修正：使用JSON序列化\nlocalStorage.setItem("user", JSON.stringify(obj));\nlet user = JSON.parse(localStorage.getItem("user"));\nconsole.log(user.name); // "张三"\n\n// 错误示例：存储空间不足\n// 大量数据可能超出5MB限制\ntry {\n    localStorage.setItem("bigData", hugeString);\n} catch (e) {\n    console.error("存储空间不足:", e);\n}`,message:'localStorage只能存储字符串，对象必须使用JSON.stringify序列化。读取时用JSON.parse反序列化。注意5MB的存储限制。'},quiz:{type:'multiple',question:'localStorage和sessionStorage的主要区别是什么？',options:['容量不同','API不同','localStorage持久保存，sessionStorage会话结束清除','安全性不同'],answer:2},answer:'正确答案：localStorage持久保存，sessionStorage会话结束清除。localStorage关闭浏览器后数据仍然保留，sessionStorage关闭标签页后数据清除。'}},
@@ -198,51 +197,51 @@
     function updateProgressUI() {
         const completedCount = chapters.filter(ch => ch.completed).length;
         const percentage = (completedCount / chapters.length) * 100;
-        document.getElementById('progressFill').style.width = `${percentage}%`;
-        document.getElementById('progressText').textContent = `已完成 ${completedCount}/${chapters.length} 章节`;
-        document.getElementById('sidebarProgress').innerHTML = `
+        document.getElementById('progressFill').style.width = \`\${percentage}%\`;
+        document.getElementById('progressText').textContent = \`已完成 \${completedCount}/\${chapters.length} 章节\`;
+        document.getElementById('sidebarProgress').innerHTML = \`
             <div style="height:10px;background:var(--bg-secondary);border-radius:5px;overflow:hidden;margin-bottom:10px;">
-                <div style="height:100%;width:${percentage}%;background:var(--accent-color);border-radius:5px;transition:width 0.5s;"></div>
+                <div style="height:100%;width:\${percentage}%;background:var(--accent-color);border-radius:5px;transition:width 0.5s;"></div>
             </div>
-            <div style="font-size:0.9rem;color:var(--text-muted);">${completedCount}/${chapters.length} 章节</div>`;
+            <div style="font-size:0.9rem;color:var(--text-muted);">\${completedCount}/\${chapters.length} 章节</div>\`;
     }
 
     function renderChapterList() {
         const list = document.getElementById('chapterList');
-        list.innerHTML = chapters.map((ch, index) => `
-            <li class="chapter-item ${index === currentChapter ? 'active' : ''} ${ch.completed ? 'completed' : ''}"
-                onclick="goToChapter(${index})">
-                <span class="chapter-number">${ch.id}.</span>
-                <span class="chapter-title">${ch.icon} ${ch.title}</span>
+        list.innerHTML = chapters.map((ch, index) => \`
+            <li class="chapter-item \${index === currentChapter ? 'active' : ''} \${ch.completed ? 'completed' : ''}"
+                onclick="goToChapter(\${index})">
+                <span class="chapter-number">\${ch.id}.</span>
+                <span class="chapter-title">\${ch.icon} \${ch.title}</span>
             </li>
-        `).join('');
+        \`).join('');
     }
 
     function renderChapter() {
         const chapter = chapters[currentChapter];
         const content = document.getElementById('chapterContent');
-        const quizId = `quiz-${chapter.id}`;
-        content.innerHTML = `
+        const quizId = \`quiz-\${chapter.id}\`;
+        content.innerHTML = \`
             <div class="chapter-header">
                 <div>
-                    <h2>${chapter.icon} 第${chapter.id}章：${chapter.title}</h2>
+                    <h2>\${chapter.icon} 第\${chapter.id}章：\${chapter.title}</h2>
                     <p style="color:var(--text-muted);margin-top:5px;">JavaScript学习教程</p>
                 </div>
                 <div class="chapter-actions">
-                    <button class="action-btn favorite ${isFavorite(chapter.id)?'active':''}" onclick="toggleFavorite(${chapter.id})">
-                        ${isFavorite(chapter.id)?'❤️':'🤍'} 收藏
+                    <button class="action-btn favorite \${isFavorite(chapter.id)?'active':''}" onclick="toggleFavorite(\${chapter.id})">
+                        \${isFavorite(chapter.id)?'❤️':'🤍'} 收藏
                     </button>
                     <button class="action-btn complete" onclick="markChapterComplete()">
-                        ${chapter.completed?'✅ 已完成':'✓ 标记完成'}
+                        \${chapter.completed?'✅ 已完成':'✓ 标记完成'}
                     </button>
                 </div>
             </div>
             <div class="section">
                 <h3>📖 知识点讲解</h3>
-                ${chapter.content.intro}
+                \${chapter.content.intro}
                 <div class="highlight-box">
                     <strong>核心要点：</strong>
-                    <ul>${chapter.content.points.map(p=>`<li>${p}</li>`).join('')}</ul>
+                    <ul>\${chapter.content.points.map(p=>\`<li>\${p}</li>\`).join('')}</ul>
                 </div>
             </div>
             <div class="section">
@@ -252,7 +251,7 @@
                         <span class="code-lang">JavaScript</span>
                         <button class="copy-btn" onclick="copyCode(this)">复制</button>
                     </div>
-                    <pre>${escapeHtml(chapter.content.codeExample)}</pre>
+                    <pre>\${escapeHtml(chapter.content.codeExample)}</pre>
                 </div>
             </div>
             <div class="section">
@@ -260,37 +259,37 @@
                 <div class="error-example">
                     <div class="error-title">常见错误</div>
                     <div class="code-block light" style="margin:10px 0;">
-                        <pre>${escapeHtml(chapter.content.errorExample.code)}</pre>
+                        <pre>\${escapeHtml(chapter.content.errorExample.code)}</pre>
                     </div>
-                    <p><strong>错误原因：</strong>${chapter.content.errorExample.message}</p>
+                    <p><strong>错误原因：</strong>\${chapter.content.errorExample.message}</p>
                 </div>
             </div>
             <div class="section">
                 <h3>📝 练习题</h3>
                 <div class="quiz-section">
                     <div class="quiz-question">
-                        <p>${chapter.content.quiz.question}</p>
-                        ${chapter.content.quiz.type==='multiple'?`
+                        <p>\${chapter.content.quiz.question}</p>
+                        \${chapter.content.quiz.type==='multiple'?\`
                             <div class="quiz-options">
-                                ${chapter.content.quiz.options.map((opt,idx)=>`
-                                    <div class="quiz-option" onclick="selectOption(this,${idx},${chapter.content.quiz.answer},'${quizId}')">
-                                        ${String.fromCharCode(65+idx)}. ${opt}
+                                \${chapter.content.quiz.options.map((opt,idx)=>\`
+                                    <div class="quiz-option" onclick="selectOption(this,\${idx},\${chapter.content.quiz.answer},'\${quizId}')">
+                                        \${String.fromCharCode(65+idx)}. \${opt}
                                     </div>
-                                `).join('')}
+                                \`).join('')}
                             </div>
-                        `:`
-                            <input type="text" class="quiz-input" id="${quizId}-input" placeholder="输入你的答案...">
-                            <button class="quiz-btn" onclick="checkTextAnswer('${quizId}','${chapter.content.quiz.answer}')">检查答案</button>
-                        `}
+                        \`:\`
+                            <input type="text" class="quiz-input" id="\${quizId}-input" placeholder="输入你的答案...">
+                            <button class="quiz-btn" onclick="checkTextAnswer('\${quizId}','\${chapter.content.quiz.answer}')">检查答案</button>
+                        \`}
                     </div>
-                    <div class="answer-section" id="${quizId}-answer">
+                    <div class="answer-section" id="\${quizId}-answer">
                         <h5>✓ 答案解析</h5>
-                        <p>${chapter.content.answer}</p>
+                        <p>\${chapter.content.answer}</p>
                     </div>
                 </div>
             </div>
-            ${chapter.id===35?`<div class="section"><div class="tips-box"><span class="tips-icon">🎊</span>恭喜你完成了JavaScript教程的所有章节！现在你可以尝试创建自己的项目来巩固所学知识。</div></div>`:''}
-        `;
+            \${chapter.id===35?\`<div class="section"><div class="tips-box"><span class="tips-icon">🎊</span>恭喜你完成了JavaScript教程的所有章节！现在你可以尝试创建自己的项目来巩固所学知识。</div></div>\`:''}
+        \`;
         renderChapterList();
         updateNavButtons();
         updateProgressUI();
@@ -315,17 +314,17 @@
         el.classList.add('selected');
         if (selected === correct) {
             el.classList.add('correct');
-            document.getElementById(`${quizId}-answer`).classList.add('show');
+            document.getElementById(\`\${quizId}-answer\`).classList.add('show');
         } else {
             el.classList.add('incorrect');
         }
     }
 
     function checkTextAnswer(quizId, correctAnswer) {
-        const input = document.getElementById(`${quizId}-input`);
+        const input = document.getElementById(\`\${quizId}-input\`);
         if (input.value.trim().toLowerCase() === correctAnswer.toLowerCase()) {
             input.style.borderColor = 'var(--success-color)';
-            document.getElementById(`${quizId}-answer`).classList.add('show');
+            document.getElementById(\`\${quizId}-answer\`).classList.add('show');
         } else {
             input.style.borderColor = 'var(--error-color)';
             input.value = '';
@@ -412,11 +411,11 @@
             }
         });
         if (results.length > 0) {
-            resultsContainer.innerHTML = `<h3 style="margin-bottom:15px;">🔍 搜索结果 (${results.length})</h3>` +
-                results.map(r => `<div class="search-result-item" onclick="goToChapter(${r.chapterIndex})">
-                    <div class="result-title">第${r.chapterIndex+1}章：${r.title}</div>
-                    ${r.snippet?`<div class="result-chapter">${r.snippet}</div>`:''}
-                </div>`).join('');
+            resultsContainer.innerHTML = \`<h3 style="margin-bottom:15px;">🔍 搜索结果 (\${results.length})</h3>\` +
+                results.map(r => \`<div class="search-result-item" onclick="goToChapter(\${r.chapterIndex})">
+                    <div class="result-title">第\${r.chapterIndex+1}章：\${r.title}</div>
+                    \${r.snippet?\`<div class="result-chapter">\${r.snippet}</div>\`:''}
+                </div>\`).join('');
         } else {
             resultsContainer.innerHTML = '<p style="color:var(--text-muted);">未找到相关内容</p>';
         }
