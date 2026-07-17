@@ -79,6 +79,14 @@ class RunoobTutorial {
                 </div>
             </nav>
             
+            <!-- 进度条 -->
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">学习进度: 0%</div>
+            </div>
+            
             <!-- 主内容区 -->
             <div class="main-wrapper">
                 <!-- 左侧边栏 -->
@@ -209,6 +217,18 @@ class RunoobTutorial {
         `).join('');
     }
     
+    updateProgress() {
+        const progress = this.getProgress();
+        const total = this.chapters.length;
+        const completed = progress.length;
+        const percent = Math.round((completed / total) * 100);
+        
+        const fill = document.getElementById('progressFill');
+        const text = document.getElementById('progressText');
+        if (fill) fill.style.width = percent + '%';
+        if (text) text.textContent = '学习进度: ' + percent + '% (' + completed + '/' + total + ')';
+    }
+    
     showChapter(id) {
         // 隐藏所有章节
         document.querySelectorAll('.chapter-content').forEach(el => {
@@ -233,6 +253,7 @@ class RunoobTutorial {
         
         this.currentChapter = id;
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.updateProgress();
     }
     
     prevChapter() {
@@ -290,7 +311,7 @@ class RunoobTutorial {
         const statusEl = document.getElementById('status_' + id);
         if (statusEl) {
             statusEl.textContent = '✅ 已完成';
-            statusEl.style.color = '#4CAF50';
+            statusEl.style.color = '#10b981';
         }
         
         const menuEl = document.getElementById('menu_' + id);
@@ -312,7 +333,7 @@ class RunoobTutorial {
             const statusEl = document.getElementById('status_' + id);
             if (statusEl) {
                 statusEl.textContent = '✅ 已完成';
-                statusEl.style.color = '#4CAF50';
+                statusEl.style.color = '#10b981';
             }
             
             const menuEl = document.getElementById('menu_' + id);
