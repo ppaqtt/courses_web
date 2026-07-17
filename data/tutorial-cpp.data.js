@@ -1,0 +1,678 @@
+window.TUTORIAL_DATA_cpp = 
+[
+  {
+    "id": 1,
+    "t": "C++简介与历史",
+    "p": [
+      "C++的诞生：1979年Bjarne Stroustrup在C语言基础上增加类、虚函数等面向对象特性，1983年正式命名为C++",
+      "标准演进：C++98（首个标准）→ C++03 → C++11（重大革新）→ C++14 → C++17 → C++20 → C++23",
+      "多范式支持：C++同时支持过程式编程、面向对象编程、泛型编程和函数式编程",
+      "应用领域：系统软件、游戏开发、嵌入式系统、高性能计算、金融建模、编译器开发",
+      "C与C++关系：C++是C的超集（几乎所有合法C代码也是合法C++代码），但C++增加了类型检查、类、模板等"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello, C++!\" << endl;\n    cout << \"C++ is a powerful language!\" << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "忘记 #include <iostream> 会导致编译错误，因为 cout 和 endl 定义在该头文件中。",
+    "q": [
+      {
+        "q": "C++最初被称为什么？",
+        "a": "C with Classes（带类的C）"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "开发环境配置",
+    "p": [
+      "编译器选择：Windows推荐MSVC或MinGW；Linux推荐GCC；macOS推荐Clang",
+      "IDE选择：Visual Studio、CLion、VS Code + C++扩展、Code::Blocks",
+      "编译流程：源文件(.cpp) → 预处理 → 编译 → 汇编 → 链接 → 可执行文件",
+      "CMake构建：跨平台构建工具，管理大型项目的编译配置"
+    ],
+    "c": "# Linux安装GCC\nsudo apt-get install g++\n\n# macOS安装Clang\nxcode-select --install\n\n# 验证安装\ng++ --version\n\n# 编译运行\ng++ -o hello hello.cpp\n./hello",
+    "et": "常见错误",
+    "ec": "在Windows下直接使用 gcc 编译C++文件会报错，应改为 g++ hello.cpp。",
+    "q": [
+      {
+        "q": "以下哪个不是C++编译器？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "第一个C++程序",
+    "p": [
+      "程序结构：#include指令、using声明、main函数、语句和返回值",
+      "main函数：程序入口，返回int类型，0表示正常退出",
+      "输入输出：cout用于输出（配合<<运算符），cin用于输入（配合>>运算符）",
+      "命名空间：std命名空间包含标准库的所有组件"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int age;\n    cout << \"请输入你的年龄: \";\n    cin >> age;\n    cout << \"你的年龄是: \" << age << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "int main() 写成 void main() 虽然某些编译器允许，但不符合C++标准。",
+    "q": [
+      {
+        "q": "编写一个程序，输出你的姓名和学号。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "注释与命名空间",
+    "p": [
+      "单行注释：以 // 开头，到行尾结束",
+      "多行注释：以 /* 开头，*/ 结束，可跨越多行",
+      "命名空间定义：namespace MyNS { ... } 封装相关代码",
+      "using声明：using namespace std; 或 using std::cout;"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nnamespace Math {\n    double PI = 3.14159;\n    int square(int x) { return x * x; }\n}\n\nint main() {\n    cout << \"PI = \" << Math::PI << endl;\n    cout << \"5^2 = \" << Math::square(5) << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "多行注释不能嵌套，会导致编译错误。",
+    "q": [
+      {
+        "q": "C++有哪两种注释方式？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "基本数据类型",
+    "p": [
+      "整数类型：short(2字节)、int(4字节)、long(4/8字节)、long long(8字节)，各有signed/unsigned版本",
+      "浮点类型：float(4字节，约7位精度)、double(8字节，约15位精度)、long double",
+      "字符类型：char(1字节)、wchar_t、char16_t、char32_t",
+      "布尔类型：bool，值为true或false",
+      "sizeof运算符：获取类型或变量占用的字节数"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 42;\n    double pi = 3.14159;\n    char ch = 'A';\n    bool flag = true;\n\n    cout << \"int大小: \" << sizeof(int) << \" 字节\" << endl;\n    cout << \"double大小: \" << sizeof(double) << \" 字节\" << endl;\n    cout << \"char: \" << ch << \" ASCII: \" << (int)ch << endl;\n    cout << \"bool: \" << flag << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "将浮点数赋值给int类型会丢失小数部分，编译器可能发出警告。应使用显式类型转换。",
+    "q": [
+      {
+        "q": "sizeof(char)在C++中一定是多少字节？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "变量与常量",
+    "p": [
+      "变量声明与初始化：int x = 10;（拷贝初始化）、int x{10};（列表初始化，C++11）",
+      "const常量：const int MAX = 100; 必须在声明时初始化，之后不能修改",
+      "constexpr（C++11）：编译期常量，constexpr int SIZE = 10;",
+      "宏定义常量：#define PI 3.14（不推荐，优先使用const）"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int age = 25;\n    const double PI = 3.14159;\n    constexpr int SIZE = 10;\n\n    cout << \"age = \" << age << endl;\n    cout << \"PI = \" << PI << endl;\n    cout << \"SIZE = \" << SIZE << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "未初始化的局部变量使用未定义行为，输出不确定的值。应始终初始化变量。",
+    "q": [
+      {
+        "q": "const和#define定义常量有什么区别？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "类型转换",
+    "p": [
+      "隐式转换：小类型→大类型自动转换，如int→double",
+      "C风格转换：(double)x，功能强大但不够安全",
+      "static_cast：编译期转换，static_cast<double>(x)，最常用",
+      "dynamic_cast：运行时多态类型转换，用于继承体系中的向下转型",
+      "const_cast/reinterpret_cast：去除const限定/重新解释位模式"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 7, b = 2;\n\n    double r1 = a / b;\n    double r2 = (double)a / b;\n    double r3 = static_cast<double>(a) / b;\n\n    cout << \"r1 = \" << r1 << endl;\n    cout << \"r2 = \" << r2 << endl;\n    cout << \"r3 = \" << r3 << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "整数除法丢失精度：double r = 7 / 2; 结果为3.0而非3.5。",
+    "q": [
+      {
+        "q": "C++11推荐的四种具名转换运算符是什么？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "算术运算符",
+    "p": [
+      "基本运算：+（加）、-（减）、*（乘）、/（除）、%（取模）",
+      "自增自减：++（自增）、--（自减），分前缀和后缀形式",
+      "复合赋值：+=、-=、*=、/=、%=",
+      "运算符优先级：* / % 高于 + -，可用括号改变"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 3;\n    cout << \"a + b = \" << a + b << endl;\n    cout << \"a - b = \" << a - b << endl;\n    cout << \"a * b = \" << a * b << endl;\n    cout << \"a / b = \" << a / b << endl;\n    cout << \"a % b = \" << a % b << endl;\n\n    int c = 5;\n    cout << \"c++ = \" << c++ << endl;\n    cout << \"++c = \" << ++c << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "对浮点数使用取模运算符：double x = 5.5 % 2; 编译错误，%只能用于整数操作数。",
+    "q": [
+      {
+        "q": "int x=5; cout &lt;&lt; x++ &lt;&lt; ++x; 输出什么？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "关系与逻辑运算符",
+    "p": [
+      "关系运算符：==、!=、<、>、<=、>=，返回bool值",
+      "逻辑运算符：&&（与）、||（或）、!（非）",
+      "短路求值：&&左边为false时不再计算右边；||左边为true时不再计算右边",
+      "C++20宇宙飞船运算符：<=> 三路比较运算符"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 10, b = 20;\n    cout << boolalpha;\n    cout << \"a > b: \" << (a > b) << endl;\n    cout << \"a == b: \" << (a == b) << endl;\n    cout << \"(a < b) && (b > 0): \" << ((a < b) && (b > 0)) << endl;\n    cout << \"(a > b) || (b > 0): \" << ((a > b) || (b > 0)) << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "将 == 写成 =：if (x = 5) 是赋值而非比较。",
+    "q": [
+      {
+        "q": "逻辑与(&&)的短路求值是什么意思？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "位运算符",
+    "p": [
+      "位运算符：&（按位与）、|（按位或）、^（按位异或）、~（按位取反）",
+      "移位运算符：<<（左移，相当于×2）、>>（右移，相当于÷2）",
+      "常用技巧：判断奇偶 n & 1、交换变量 a ^= b; b ^= a; a ^= b;",
+      "位掩码：设置/清除/翻转特定位，广泛用于标志位操作"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    unsigned int a = 0b1100;\n    unsigned int b = 0b1010;\n\n    cout << \"a & b = \" << (a & b) << endl;\n    cout << \"a | b = \" << (a | b) << endl;\n    cout << \"a ^ b = \" << (a ^ b) << endl;\n    cout << \"a << 1 = \" << (a << 1) << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "对有符号数使用右移：负数右移行为由实现定义，建议对位运算使用无符号类型。",
+    "q": [
+      {
+        "q": "如何用位运算判断一个整数是否为2的幂？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "if-else语句",
+    "p": [
+      "基本形式：if (条件) { ... } else { ... }",
+      "多重分支：if-else if-else链，从上到下依次判断",
+      "嵌套if：if内部可以嵌套另一个if，注意缩进和花括号",
+      "三目运算符：条件 ? 值1 : 值2，简洁的条件表达式"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int score;\n    cout << \"输入成绩: \";\n    cin >> score;\n\n    if (score >= 90) {\n        cout << \"优秀\" << endl;\n    } else if (score >= 80) {\n        cout << \"良好\" << endl;\n    } else if (score >= 60) {\n        cout << \"及格\" << endl;\n    } else {\n        cout << \"不及格\" << endl;\n    }\n\n    string result = (score >= 60) ? \"通过\" : \"未通过\";\n    cout << result << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "在if后加分号：if (x > 0); 空语句，后面的代码块会无条件执行。",
+    "q": [
+      {
+        "q": "用if-else编写判断闰年的程序。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "switch语句",
+    "p": [
+      "基本语法：switch(表达式) { case 值: 语句; break; ... default: 语句; }",
+      "break的作用：跳出switch，否则会穿透到下一个case（fall-through）",
+      "表达式限制：必须是整数类型或枚举类型",
+      "C++17特性：[[fallthrough]]属性显式标记有意穿透"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int day;\n    cout << \"输入星期(1-7): \";\n    cin >> day;\n\n    switch (day) {\n        case 1: cout << \"星期一\" << endl; break;\n        case 2: cout << \"星期二\" << endl; break;\n        case 3: cout << \"星期三\" << endl; break;\n        case 6:\n        case 7: cout << \"周末\" << endl; break;\n        default: cout << \"无效输入\" << endl; break;\n    }\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "忘记写break导致fall-through：输入1时可能输出多个结果。",
+    "q": [
+      {
+        "q": "switch的表达式可以是string类型吗？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "for循环",
+    "p": [
+      "经典for：for(初始化; 条件; 更新) { 循环体 }",
+      "范围for（C++11）：for(类型 变量 : 容器) { 循环体 }，遍历容器元素",
+      "无限循环：for(;;) 或 for(;true;)",
+      "多变量控制：for(int i=0, j=10; i<j; i++, j--)"
+    ],
+    "c": "#include <iostream>\n#include <vector>\nusing namespace std;\n\nint main() {\n    int sum = 0;\n    for (int i = 1; i <= 100; i++) {\n        sum += i;\n    }\n    cout << \"1+2+...+100 = \" << sum << endl;\n\n    vector<int> nums = {1, 2, 3, 4, 5};\n    for (int n : nums) {\n        cout << n << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "循环条件写错导致死循环：for(int i=0; i<10; i--) 应为 i++。",
+    "q": [
+      {
+        "q": "用for循环计算10的阶乘(10!)。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "while与do-while",
+    "p": [
+      "while：while(条件) { 循环体 }，先判断后执行",
+      "do-while：do { 循环体 } while(条件);，先执行后判断，至少执行一次",
+      "选择依据：已知次数用for，未知次数用while，至少一次用do-while"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int num = 12345, count = 0, temp = num;\n    while (temp > 0) {\n        temp /= 10;\n        count++;\n    }\n    cout << num << \" 有 \" << count << \" 位\" << endl;\n\n    int choice;\n    do {\n        cout << \"1.开始 2.设置 0.退出\" << endl;\n        cout << \"请选择: \";\n        cin >> choice;\n    } while (choice != 0);\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "do-while末尾忘记分号：缺少最后的 ;，会导致编译错误。",
+    "q": [
+      {
+        "q": "while和do-while的关键区别是什么？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "break与continue",
+    "p": [
+      "break：立即跳出当前循环或switch语句",
+      "continue：跳过本次循环的剩余语句，直接进入下一次迭代",
+      "嵌套循环：break和continue只影响最内层的循环"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    for (int i = 1; i <= 100; i++) {\n        if (i % 7 == 0) {\n            cout << \"第一个: \" << i << endl;\n            break;\n        }\n    }\n\n    for (int i = 1; i <= 10; i++) {\n        if (i % 2 == 0) continue;\n        cout << i << \" \";\n    }\n    cout << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "在嵌套循环中期望break跳出外层循环，但break只能跳出最内层。",
+    "q": [
+      {
+        "q": "用continue实现输出1-50中不被3整除的数。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "一维数组",
+    "p": [
+      "声明与初始化：int arr[5];、int arr[] = {1,2,3};",
+      "下标访问：从0开始，arr[0]是第一个元素",
+      "数组大小：必须在编译期确定（C风格），变长数组不是标准C++",
+      "越界访问：不检查边界，越界访问是未定义行为"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int scores[] = {85, 92, 78, 95, 88};\n    int n = sizeof(scores) / sizeof(scores[0]);\n\n    int sum = 0;\n    for (int i = 0; i < n; i++) {\n        sum += scores[i];\n    }\n    double avg = static_cast<double>(sum) / n;\n    cout << \"平均分: \" << avg << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "数组越界访问：int arr[5]; arr[5] = 10; 下标5已越界（有效范围0-4）。",
+    "q": [
+      {
+        "q": "编写程序找出数组中的最大值。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "多维数组",
+    "p": [
+      "声明：int matrix[3][4]; 3行4列的二维数组",
+      "初始化：int m[2][3] = {{1,2,3},{4,5,6}};",
+      "内存布局：按行优先存储，连续内存",
+      "作为函数参数：必须指定除第一维外的所有维度"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int matrix[3][3] = {\n        {1, 2, 3},\n        {4, 5, 6},\n        {7, 8, 9}\n    };\n\n    for (int i = 0; i < 3; i++) {\n        for (int j = 0; j < 3; j++) {\n            cout << matrix[i][j] << \" \";\n        }\n        cout << endl;\n    }\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "初始化时维度不匹配：第一行元素数量超过声明的列数，编译错误。",
+    "q": [
+      {
+        "q": "编写程序计算3×3矩阵对角线元素之和。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "C风格字符串",
+    "p": [
+      "声明与初始化：char str[] = \"hello\"; 自动添加'\\0'，数组大小为6",
+      "常用函数：strlen、strcpy、strcat、strcmp（需<cstring>）",
+      "安全性：strcpy/strcat不检查缓冲区大小，推荐使用strncpy/strncat",
+      "输入输出：cin/cout可处理C字符串，但cin遇到空格停止"
+    ],
+    "c": "#include <iostream>\n#include <cstring>\nusing namespace std;\n\nint main() {\n    char str1[] = \"Hello\";\n    char str2[] = \" World\";\n    char result[50];\n\n    strcpy(result, str1);\n    strcat(result, str2);\n    cout << result << endl;\n    cout << \"长度: \" << strlen(result) << endl;\n    cout << \"比较: \" << strcmp(str1, str2) << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "数组太小导致缓冲区溢出：目标数组不足以容纳源字符串。",
+    "q": [
+      {
+        "q": "strlen(\"abc\")返回值是多少？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "string类",
+    "p": [
+      "声明与初始化：string s = \"hello\";、string s(5, 'a');",
+      "常用操作：+（拼接）、=（赋值）、==（比较）、[]（下标访问）",
+      "成员函数：length/size、substr、find、replace、insert、erase、c_str",
+      "输入：cin>>s（遇空格停）、getline(cin,s)（读整行）"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nint main() {\n    string s1 = \"Hello\";\n    string s2 = \" World\";\n    string s3 = s1 + s2;\n\n    cout << s3 << endl;\n    cout << \"长度: \" << s3.length() << endl;\n    cout << \"子串: \" << s3.substr(0, 5) << endl;\n    cout << \"查找: \" << s3.find(\"World\") << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "用==比较C字符串是比较指针而非内容，应使用strcmp或改用string。",
+    "q": [
+      {
+        "q": "编写程序反转一个string。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "函数定义与调用",
+    "p": [
+      "定义：返回类型 函数名(参数列表) { 函数体 }",
+      "声明与定义：声明（原型）告诉编译器函数签名，定义提供实现",
+      "值传递与引用传递：值传递拷贝参数，引用传递操作原变量",
+      "返回值：void函数不返回值，其他类型必须有return语句"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint factorial(int n);\n\nint main() {\n    cout << \"5! = \" << factorial(5) << endl;\n    return 0;\n}\n\nint factorial(int n) {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}",
+    "et": "常见错误",
+    "ec": "函数使用在定义之前且没有声明：编译器不知道函数的存在。",
+    "q": [
+      {
+        "q": "编写一个函数判断素数。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "函数重载",
+    "p": [
+      "重载条件：同名函数的参数类型、个数或顺序不同",
+      "返回类型不参与重载：仅返回类型不同的同名函数不能重载",
+      "名称修饰：编译器内部为重载函数生成唯一名称",
+      "重载解析：精确匹配→类型提升匹配→标准转换匹配→用户定义转换匹配"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint add(int a, int b) { return a + b; }\ndouble add(double a, double b) { return a + b; }\nint add(int a, int b, int c) { return a + b + c; }\n\nint main() {\n    cout << add(1, 2) << endl;\n    cout << add(1.5, 2.5) << endl;\n    cout << add(1, 2, 3) << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "仅返回类型不同的重载：int foo(int x); 和 double foo(int x); 编译错误。",
+    "q": [
+      {
+        "q": "编写重载函数area，分别计算圆面积和矩形面积。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "指针",
+    "p": [
+      "声明：int *p; p是指向int的指针",
+      "取地址符：& 获取变量的内存地址",
+      "解引用：* 访问指针指向的内容",
+      "空指针：nullptr（C++11），表示指针不指向任何对象",
+      "void指针：void * 可指向任意类型，但解引用前必须转换"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int x = 10;\n    int *p = &x;\n\n    cout << \"x = \" << x << endl;\n    cout << \"&x = \" << &x << endl;\n    cout << \"p = \" << p << endl;\n    cout << \"*p = \" << *p << endl;\n\n    *p = 20;\n    cout << \"x = \" << x << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "使用未初始化的指针或空指针解引用会导致程序崩溃。",
+    "q": [
+      {
+        "q": "用指针交换两个整数变量的值。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "指针与数组",
+    "p": [
+      "数组名即指针：arr[i] 等价于 *(arr+i)",
+      "指针运算：指针+1指向下一个元素（跳过整个对象）",
+      "指针比较：指向同一数组的指针可比较大小",
+      "数组退化为指针：数组作为函数参数时退化为指针，丢失长度信息"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nvoid printArray(int *arr, int n) {\n    for (int *p = arr; p < arr + n; p++) {\n        cout << *p << \" \";\n    }\n    cout << endl;\n}\n\nint main() {\n    int arr[] = {1, 2, 3, 4, 5};\n    int *p = arr;\n\n    cout << *p << endl;\n    cout << *(p + 2) << endl;\n    printArray(arr, 5);\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "在函数中用sizeof(arr)获取数组大小：数组已退化为指针，结果是指针大小。",
+    "q": [
+      {
+        "q": "用指针遍历数组并计算所有元素之和。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "引用",
+    "p": [
+      "声明：int &ref = x; ref是x的引用",
+      "必须初始化：声明引用时必须绑定到一个变量",
+      "不可重绑定：一旦绑定，引用始终指向同一变量",
+      "常引用：const int &ref = x; 不能通过引用修改原变量",
+      "引用作函数参数：避免拷贝，可修改实参"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nvoid swap(int &a, int &b) {\n    int temp = a;\n    a = b;\n    b = temp;\n}\n\nint main() {\n    int x = 10, y = 20;\n    cout << \"x=\" << x << \", y=\" << y << endl;\n    swap(x, y);\n    cout << \"x=\" << x << \", y=\" << y << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "引用未初始化：int &ref; 编译错误。",
+    "q": [
+      {
+        "q": "引用和指针的区别是什么？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "动态内存分配",
+    "p": [
+      "new：int *p = new int; 分配单个对象",
+      "new[]：int *arr = new int[10]; 分配数组",
+      "delete：delete p; 释放单个对象",
+      "delete[]：delete[] arr; 释放数组",
+      "内存泄漏：分配的内存未释放会导致内存泄漏",
+      "智能指针：C++11推荐使用unique_ptr/shared_ptr管理动态内存"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int *p = new int(10);\n    cout << *p << endl;\n    delete p;\n\n    int n;\n    cout << \"输入数组大小: \";\n    cin >> n;\n    int *arr = new int[n];\n    for (int i = 0; i < n; i++) {\n        arr[i] = i + 1;\n    }\n    delete[] arr;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "用delete释放数组或用delete[]释放单个对象，会导致未定义行为。",
+    "q": [
+      {
+        "q": "编写程序动态分配二维数组。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "结构体",
+    "p": [
+      "定义：struct Person { string name; int age; };",
+      "访问成员：使用.运算符访问成员",
+      "结构体指针：使用->运算符访问成员",
+      "结构体数组：存储多个结构体对象",
+      "构造函数：结构体也可以有构造函数和成员函数"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nstruct Student {\n    string name;\n    int age;\n    float score;\n};\n\nint main() {\n    Student s = {\"Tom\", 18, 95.5};\n    cout << s.name << \", \" << s.age << \", \" << s.score << endl;\n\n    Student *p = &s;\n    cout << p->name << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "忘记在结构体定义末尾加分号：struct X { int x }; 缺少最后的;。",
+    "q": [
+      {
+        "q": "定义一个Point结构体表示坐标，编写计算两点距离的函数。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "类与对象",
+    "p": [
+      "类定义：class MyClass { private: ... public: ... };",
+      "访问控制：public（公开）、private（私有）、protected（保护）",
+      "构造函数：与类同名，无返回值，用于初始化对象",
+      "析构函数：与类同名加~，用于清理资源",
+      "对象创建：MyClass obj; 或 MyClass *p = new MyClass();"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Person {\nprivate:\n    string name;\n    int age;\npublic:\n    Person(string n, int a) : name(n), age(a) {}\n    void introduce() {\n        cout << \"My name is \" << name << \", I'm \" << age << \" years old.\" << endl;\n    }\n};\n\nint main() {\n    Person p(\"Alice\", 25);\n    p.introduce();\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "在类外部定义成员函数时忘记作用域限定符：void introduce() 应为 void Person::introduce()。",
+    "q": [
+      {
+        "q": "定义一个Circle类，包含半径和计算面积的方法。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "构造函数与析构函数",
+    "p": [
+      "默认构造函数：无参数或所有参数都有默认值",
+      "带参数构造函数：初始化对象时提供初始值",
+      "拷贝构造函数：用已有对象初始化新对象，Person(const Person &other)",
+      "初始化列表：ClassName(): member1(v1), member2(v2) {}",
+      "析构函数：释放动态分配的资源"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass MyClass {\nprivate:\n    int *data;\npublic:\n    MyClass(int n) : data(new int(n)) {\n        cout << \"Constructor called\" << endl;\n    }\n    ~MyClass() {\n        delete data;\n        cout << \"Destructor called\" << endl;\n    }\n};\n\nint main() {\n    {\n        MyClass obj(10);\n    }\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "未定义析构函数导致内存泄漏：类成员包含动态分配内存但未释放。",
+    "q": [
+      {
+        "q": "什么是拷贝构造函数？何时调用？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "继承",
+    "p": [
+      "继承语法：class Derived : public Base { ... };",
+      "访问控制：public继承保持基类成员访问级别",
+      "protected成员：基类protected成员可被派生类访问",
+      "构造顺序：先调用基类构造函数，再调用派生类构造函数",
+      "析构顺序：先调用派生类析构函数，再调用基类析构函数"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Animal {\nprotected:\n    string name;\npublic:\n    Animal(string n) : name(n) {}\n    void speak() {\n        cout << \"Animal speaks\" << endl;\n    }\n};\n\nclass Dog : public Animal {\npublic:\n    Dog(string n) : Animal(n) {}\n    void speak() {\n        cout << name << \" says Woof!\" << endl;\n    }\n};\n\nint main() {\n    Dog d(\"Buddy\");\n    d.speak();\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "派生类构造函数忘记调用基类构造函数：Dog(string n) {} // Animal未初始化。",
+    "q": [
+      {
+        "q": "定义Shape基类和Circle、Rectangle派生类。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "多态与虚函数",
+    "p": [
+      "虚函数：基类中用virtual声明的函数，派生类可重写",
+      "纯虚函数：virtual void func() = 0; 无实现，使类成为抽象类",
+      "虚析构函数：virtual ~Base(); 确保正确调用派生类析构函数",
+      "运行时多态：通过基类指针/引用调用虚函数，根据实际对象类型决定"
+    ],
+    "c": "#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Shape {\npublic:\n    virtual double getArea() = 0;\n    virtual ~Shape() {}\n};\n\nclass Circle : public Shape {\nprivate:\n    double radius;\npublic:\n    Circle(double r) : radius(r) {}\n    double getArea() override {\n        return 3.14159 * radius * radius;\n    }\n};\n\nvoid printArea(Shape *s) {\n    cout << \"Area: \" << s->getArea() << endl;\n}\n\nint main() {\n    Circle c(5);\n    printArea(&c);\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "基类析构函数不是虚函数：通过基类指针delete派生类对象时，派生类析构函数不会被调用。",
+    "q": [
+      {
+        "q": "什么是纯虚函数？包含纯虚函数的类叫什么？",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "模板",
+    "p": [
+      "函数模板：template<typename T> T max(T a, T b)",
+      "类模板：template<typename T> class MyClass",
+      "模板实例化：max(1, 2) 或 max<double>(1.5, 2.5)",
+      "模板特化：为特定类型提供专门实现"
+    ],
+    "c": "#include <iostream>\nusing namespace std;\n\ntemplate<typename T>\nT add(T a, T b) {\n    return a + b;\n}\n\ntemplate<typename T>\nclass Stack {\nprivate:\n    T arr[100];\n    int top;\npublic:\n    Stack() : top(-1) {}\n    void push(T x) { arr[++top] = x; }\n    T pop() { return arr[top--]; }\n};\n\nint main() {\n    cout << add(1, 2) << endl;\n    cout << add(1.5, 2.5) << endl;\n\n    Stack<int> s;\n    s.push(10);\n    s.push(20);\n    cout << s.pop() << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "模板代码不能放在.cpp文件中单独编译，应放在头文件中。",
+    "q": [
+      {
+        "q": "编写一个通用的模板函数swap。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "STL容器",
+    "p": [
+      "序列容器：vector、list、deque、array",
+      "关联容器：map、set、unordered_map、unordered_set",
+      "容器适配器：stack、queue、priority_queue",
+      "常用操作：push_back、pop_back、size、empty、clear"
+    ],
+    "c": "#include <iostream>\n#include <vector>\n#include <map>\n#include <algorithm>\nusing namespace std;\n\nint main() {\n    vector<int> v = {3, 1, 4, 1, 5, 9};\n    v.push_back(2);\n    sort(v.begin(), v.end());\n    for (int n : v) cout << n << \" \";\n    cout << endl;\n\n    map<string, int> m;\n    m[\"Alice\"] = 25;\n    m[\"Bob\"] = 30;\n    cout << \"Alice: \" << m[\"Alice\"] << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "对空vector使用下标访问：vector<int> v; v[0] = 1; 未定义行为。",
+    "q": [
+      {
+        "q": "使用vector和algorithm库实现数组排序。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "STL算法",
+    "p": [
+      "排序算法：sort、stable_sort、partial_sort",
+      "查找算法：find、binary_search、lower_bound",
+      "数值算法：accumulate、count、min_element",
+      "变换算法：transform、reverse、copy"
+    ],
+    "c": "#include <iostream>\n#include <vector>\n#include <algorithm>\n#include <numeric>\nusing namespace std;\n\nint main() {\n    vector<int> v = {3, 1, 4, 1, 5, 9};\n\n    sort(v.begin(), v.end());\n    auto it = find(v.begin(), v.end(), 5);\n    if (it != v.end()) cout << \"Found: \" << *it << endl;\n\n    int sum = accumulate(v.begin(), v.end(), 0);\n    cout << \"Sum: \" << sum << endl;\n\n    reverse(v.begin(), v.end());\n    for (int n : v) cout << n << \" \";\n    cout << endl;\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "对未排序的容器使用binary_search：二分查找要求容器已排序。",
+    "q": [
+      {
+        "q": "使用STL算法统计vector中大于10的元素个数。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "文件操作",
+    "p": [
+      "文件流类型：ifstream（读）、ofstream（写）、fstream（读写）",
+      "打开模式：ios::in、ios::out、ios::app、ios::binary",
+      "文本文件操作：<<写入、>>读取、getline读取整行",
+      "二进制文件操作：read、write、seekg、seekp"
+    ],
+    "c": "#include <iostream>\n#include <fstream>\n#include <string>\nusing namespace std;\n\nint main() {\n    ofstream out(\"test.txt\");\n    out << \"Hello, World!\" << endl;\n    out.close();\n\n    ifstream in(\"test.txt\");\n    string line;\n    if (in.is_open()) {\n        while (getline(in, line)) {\n            cout << line << endl;\n        }\n        in.close();\n    }\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "文件打开失败未检查：应使用if (!file.is_open())检查。",
+    "q": [
+      {
+        "q": "编写程序读取文件并统计行数。",
+        "a": ""
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "异常处理",
+    "p": [
+      "throw：抛出异常，throw \"Error!\";",
+      "try-catch：捕获和处理异常",
+      "catch(...)：捕获所有类型的异常",
+      "标准异常：std::exception及其派生类（std::runtime_error等）",
+      "noexcept（C++11）：声明函数不会抛出异常"
+    ],
+    "c": "#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\nint divide(int a, int b) {\n    if (b == 0) {\n        throw runtime_error(\"Division by zero\");\n    }\n    return a / b;\n}\n\nint main() {\n    try {\n        cout << divide(10, 0) << endl;\n    } catch (const runtime_error &e) {\n        cout << \"Error: \" << e.what() << endl;\n    } catch (...) {\n        cout << \"Unknown error\" << endl;\n    }\n    return 0;\n}",
+    "et": "常见错误",
+    "ec": "抛出异常后未被捕获：程序会调用std::terminate终止。",
+    "q": [
+      {
+        "q": "编写程序处理数组越界异常。",
+        "a": ""
+      }
+    ]
+  }
+];

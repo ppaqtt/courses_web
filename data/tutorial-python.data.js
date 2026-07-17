@@ -1,0 +1,666 @@
+window.TUTORIAL_DATA_python = 
+[
+  {
+    "id": 1,
+    "t": "1. Python简介与历史",
+    "p": [
+      "Python的诞生：Python由Guido van Rossum于1989年底发明，1991年首次发布，名字来源于英国喜剧团体Monty Python",
+      "设计哲学：强调代码可读性和简洁性，'优雅'、'明确'、'简单'是Python的设计核心",
+      "版本演进：Python 2.x于2000年发布，Python 3.x于2008年发布，Python 2已于2020年停止维护",
+      "应用领域：Web开发、数据科学、人工智能、自动化运维、科学计算、网络爬虫等",
+      "语言特点：解释型、动态类型、强类型、面向对象、跨平台、丰富的标准库"
+    ],
+    "c": "# Python之禅 - 输入 import this 查看\nimport this\n\n# 查看Python版本\nimport sys\nprint(sys.version)\nprint(sys.version_info)\n\n# 第一个Python程序\nprint(\"Hello, World!\")\nprint(\"欢迎使用Python教程！\")",
+    "et": "❌ 常见错误",
+    "ec": "混淆Python 2和Python 3：print \"hello\" 是Python 2语法，Python 3必须使用 print(\"hello\")\n中文编码问题：在Python 2中需要声明 # -*- coding: utf-8 -*-，Python 3默认UTF-8编码",
+    "q": [
+      {
+        "q": "Python的创始人是谁？",
+        "a": "Guido van Rossum"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "2. 安装与环境配置",
+    "p": [
+      "下载安装：从python.org下载对应操作系统的安装包，安装时务必勾选'Add Python to PATH'",
+      "虚拟环境：使用venv创建隔离的Python环境，避免不同项目间的依赖冲突",
+      "包管理器pip：pip是Python的包管理工具，用于安装和管理第三方库",
+      "IDE选择：推荐VS Code、PyCharm、Jupyter Notebook等开发工具"
+    ],
+    "c": "# 检查Python版本\npython --version\npython3 --version\n\n# 创建虚拟环境\npython -m venv myproject_env\n\n# 激活虚拟环境（Windows）\nmyproject_env\\Scripts\\activate\n\n# 激活虚拟环境（macOS/Linux）\nsource myproject_env/bin/activate\n\n# 使用pip安装包\npip install requests\npip install numpy pandas matplotlib\n\n# 查看已安装的包\npip list\npip freeze > requirements.txt",
+    "et": "❌ 常见错误",
+    "ec": "忘记勾选'Add Python to PATH'：导致命令行无法识别python命令，需要手动添加环境变量\n全局安装包：不使用虚拟环境直接安装包，可能导致版本冲突。应始终使用虚拟环境",
+    "q": [
+      {
+        "q": "创建虚拟环境的命令是什么？",
+        "a": "python -m venv 环境名"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "3. 第一个Python程序",
+    "p": [
+      "Hello World：使用print()函数输出文本，这是所有编程语言的入门仪式",
+      "交互式模式：在终端输入python进入交互式环境，可直接执行代码",
+      "脚本模式：将代码保存为.py文件，通过python命令执行",
+      "缩进规则：Python使用缩进（4个空格）来表示代码块，而非大括号"
+    ],
+    "c": "# 第一个Python程序\nprint(\"Hello, World!\")\n\n# 多行输出\nprint(\"欢迎学习Python！\")\nprint(\"让我们一起开始编程之旅\")\n\n# 使用变量\nname = \"Python学习者\"\nprint(f\"你好，{name}！\")\n\n# 简单计算\nresult = 2 + 3\nprint(f\"2 + 3 = {result}\")",
+    "et": "❌ 常见错误",
+    "ec": "大小写错误：Print(\"hello\") 会报错，Python区分大小写，正确的函数名是 print\n缺少括号：print \"hello\" 是Python 2语法，Python 3必须加括号",
+    "q": [
+      {
+        "q": "编写程序输出你的名字和年龄",
+        "a": "name = \"张三\"\nage = 20\nprint(f\"我叫{name}，今年{age}岁\")"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "4. 注释与代码规范",
+    "p": [
+      "单行注释：使用#号开头，#后面的内容不会被Python执行",
+      "多行注释：使用三引号（'''或\"\"\"）包裹，常用于函数/类的文档字符串",
+      "PEP 8规范：Python官方编码风格指南，规定缩进4空格、行宽79字符、命名规则等",
+      "命名规范：变量/函数用snake_case，类用PascalCase，常量用UPPER_CASE"
+    ],
+    "c": "# 这是单行注释\nname = \"Python\"  # 行末注释\n\n\"\"\"\n这是多行注释\n可以写多行说明文字\n通常用于文档字符串\n\"\"\"\n\n# PEP 8 命名规范\nstudent_name = \"Alice\"       # 变量: snake_case\nMAX_SIZE = 100               # 常量: UPPER_CASE\n\ndef calculate_area(radius):  # 函数: snake_case\n    \"\"\"计算圆的面积\"\"\"\n    return 3.14 * radius ** 2\n\nclass StudentInfo:           # 类: PascalCase\n    \"\"\"学生信息类\"\"\"\n    pass",
+    "et": "❌ 常见错误",
+    "ec": "注释未闭合：多行注释忘记闭合三引号，导致后面的代码全被当作注释\n中文字符问题：注释中使用中文时确保文件编码为UTF-8",
+    "q": [
+      {
+        "q": "按PEP 8规范，类名应该使用哪种命名风格？",
+        "a": "B"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "5. 变量与赋值",
+    "p": [
+      "变量定义：Python是动态类型语言，变量无需声明类型，直接赋值即可创建",
+      "赋值方式：支持多重赋值（a=b=c=1）、解包赋值（a,b=1,2）、增强赋值（a+=1）",
+      "命名规则：只能包含字母、数字、下划线，不能以数字开头，不能使用关键字",
+      "变量作用：变量是数据的标签（引用），而非存储数据的容器"
+    ],
+    "c": "# 基本赋值\nname = \"Alice\"\nage = 25\nheight = 1.68\n\n# 多重赋值\na = b = c = 100\n\n# 解包赋值\nx, y, z = 1, 2, 3\n\n# 交换变量（Python特色）\nx, y = y, x\n\n# 增强赋值\ncount = 0\ncount += 1   # 等同于 count = count + 1\ncount -= 1\ncount *= 2\n\n# 删除变量\ndel count",
+    "et": "❌ 常见错误",
+    "ec": "变量名以数字开头：1name = \"test\" 语法错误，变量名不能以数字开头\n使用关键字作变量名：class = \"Math\" 会报错，class是Python关键字",
+    "q": [
+      {
+        "q": "用一行代码交换两个变量a和b的值",
+        "a": "a, b = b, a"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "6. 数字类型(int,float,complex)",
+    "p": [
+      "int整数：支持任意大小的整数，没有溢出问题，支持二进制(0b)、八进制(0o)、十六进制(0x)",
+      "float浮点数：双精度64位，注意浮点精度问题（0.1+0.2≠0.3）",
+      "complex复数：形式为a+bj，实部和虚部都是浮点数",
+      "数字运算：支持+、-、*、/、//（整除）、%（取模）、**（幂运算）"
+    ],
+    "c": "# 整数\na = 42\nbig_num = 999999999999999999999  # 任意大小\nbinary = 0b1010   # 二进制 = 10\nhex_num = 0xA     # 十六进制 = 10\n\n# 浮点数\npi = 3.14159\nsci = 2.5e10      # 科学计数法\n\n# 复数\nc = 3 + 4j\nprint(c.real)     # 实部: 3.0\nprint(c.imag)     # 虚部: 4.0\n\n# 运算\nprint(10 / 3)     # 3.3333... 普通除法\nprint(10 // 3)    # 3 整除\nprint(10 % 3)     # 1 取模\nprint(2 ** 10)    # 1024 幂运算\n\n# 浮点精度问题\nprint(0.1 + 0.2)  # 0.30000000000000004\nfrom decimal import Decimal\nprint(Decimal('0.1') + Decimal('0.2'))  # 0.3",
+    "et": "❌ 常见错误",
+    "ec": "整除与普通除法混淆：10/3 返回3.333，10//3 返回3，注意区分\n浮点精度问题：0.1 + 0.2 == 0.3 返回False，需要用decimal模块处理精确计算",
+    "q": [
+      {
+        "q": "计算2的20次方",
+        "a": "2 ** 20"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "7. 字符串基础",
+    "p": [
+      "创建字符串：使用单引号、双引号或三引号创建，三引号可跨行",
+      "索引与切片：支持正向索引(0起)和反向索引(-1起)，切片语法s[start:end:step]",
+      "字符串不可变：创建后不能修改，修改操作会创建新字符串",
+      "转义字符：\\n换行、\\t制表、\\\\反斜杠、\\\"双引号等"
+    ],
+    "c": "# 创建字符串\ns1 = 'Hello'\ns2 = \"World\"\ns3 = \"\"\"多行\n字符串\"\"\"\n\n# 索引\ntext = \"Python\"\nprint(text[0])     # P\nprint(text[-1])    # n\n\n# 切片\nprint(text[0:3])   # Pyt\nprint(text[2:])    # thon\nprint(text[::-1])  # nohtyP 反转\n\n# 字符串拼接\ngreeting = s1 + \" \" + s2\nrepeat = \"Ha\" * 3   # HaHaHa\n\n# 转义字符\nprint(\"换行:\\n制表:\\t引号:\\\"\")",
+    "et": "❌ 常见错误",
+    "ec": "字符串修改：s = \"hello\"; s[0] = \"H\" 报错，字符串不可变，应使用 s = \"H\" + s[1:]\n索引越界：text[100] 会抛出IndexError",
+    "q": [
+      {
+        "q": "如何用切片反转字符串\"Python\"？",
+        "a": "\"Python\"[::-1]"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "8. 字符串高级操作",
+    "p": [
+      "格式化方法：f-string(Python 3.6+)、str.format()、%格式化三种方式",
+      "常用方法：split()分割、join()连接、replace()替换、strip()去空白、find()查找",
+      "判断方法：startswith()、endswith()、isdigit()、isalpha()、isalnum()等",
+      "大小写转换：upper()、lower()、title()、capitalize()、swapcase()"
+    ],
+    "c": "# f-string格式化\nname, age = \"Alice\", 25\nprint(f\"姓名: {name}, 年龄: {age}\")\n\n# format方法\nprint(\"姓名: {}, 年龄: {}\".format(name, age))\n\n# 常用方法\ntext = \"  Hello, World!  \"\nprint(text.strip())           # \"Hello, World!\"\nprint(text.split(\", \"))       # [\"  Hello\", \"World!  \"]\nprint(\"-\".join([\"a\",\"b\"]))    # \"a-b\"\nprint(text.replace(\"World\", \"Python\"))\nprint(text.find(\"World\"))     # 9\n\n# 判断方法\nprint(\"123\".isdigit())        # True\nprint(\"abc\".isalpha())        # True\nprint(\"Hello\".startswith(\"H\"))  # True",
+    "et": "❌ 常见错误",
+    "ec": "忘记strip返回新字符串：s.strip() 不会修改原字符串，需要 s = s.strip()\nformat占位符不匹配：花括号数量与参数数量不一致会报错",
+    "q": [
+      {
+        "q": "将列表[\"Python\",\"is\",\"awesome\"]用空格连接成字符串",
+        "a": "\" \".join([\"Python\",\"is\",\"awesome\"])"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "9. 布尔类型与None",
+    "p": [
+      "布尔值：True和False是bool类型的两个实例，首字母必须大写",
+      "Falsy值：False、0、0.0、\"\"、[]、()、{}、set()、None在布尔上下文中均为False",
+      "None：表示'无'或'空'，是NoneType的唯一实例，常作为函数默认返回值",
+      "判断相等：用is判断None（x is None），用==判断布尔值"
+    ],
+    "c": "# 布尔值\nis_student = True\nis_teacher = False\n\n# bool()转换\nprint(bool(1))       # True\nprint(bool(0))       # False\nprint(bool(\"\"))      # False\nprint(bool(\"hello\")) # True\nprint(bool([]))      # False\nprint(bool([1]))     # True\n\n# None\nresult = None\nif result is None:\n    print(\"结果为空\")\n\n# 布尔运算\nprint(True and False)  # False\nprint(True or False)   # True\nprint(not True)        # False",
+    "et": "❌ 常见错误",
+    "ec": "小写布尔值：true = 1 不会报错但创建了变量，正确的是 True\n用==判断None：if x == None 能工作但不够严谨，应使用 if x is None",
+    "q": [
+      {
+        "q": "bool(\"\")的值是什么？",
+        "a": "B"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "10. 类型转换",
+    "p": [
+      "隐式转换：Python自动将低精度类型转为高精度，如int+float自动转float",
+      "显式转换：使用int()、float()、str()、bool()、list()等内置函数强制转换",
+      "常见转换：字符串与数字互转、列表与元组互转、ASCII与字符互转",
+      "type()和isinstance()：用type()查看类型，isinstance()判断是否为某类型"
+    ],
+    "c": "# 显式转换\nprint(int(3.9))        # 3 截断小数\nprint(float(5))        # 5.0\nprint(str(100))        # \"100\"\nprint(bool(0))         # False\nprint(list(\"abc\"))     # ['a', 'b', 'c']\nprint(tuple([1,2,3]))  # (1, 2, 3)\n\n# 字符串转数字\nprint(int(\"42\"))       # 42\nprint(float(\"3.14\"))   # 3.14\n\n# ASCII与字符\nprint(chr(65))         # A\nprint(ord('A'))        # 65\n\n# 类型判断\nprint(type(42))        # \nprint(isinstance(42, int))    # True",
+    "et": "❌ 常见错误",
+    "ec": "无效转换：int(\"3.14\") 报错，应先转float再转int：int(float(\"3.14\"))\n非数字字符串：int(\"abc\") 会抛出ValueError",
+    "q": [
+      {
+        "q": "将字符串\"3.14\"转换为整数3",
+        "a": "int(float(\"3.14\"))"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "11. 算术运算符",
+    "p": [
+      "基本运算：+（加）、-（减）、*（乘）、/（除）、//（整除）、%（取模）、**（幂）",
+      "运算优先级：** > 正负号 > * / // % > + -",
+      "增强赋值：+=、-=、*=、/=、//=、%=、**=",
+      "math模块：提供sqrt()、ceil()、floor()、log()等数学函数"
+    ],
+    "c": "print(7 + 3)     # 10\nprint(7 - 3)     # 4\nprint(7 * 3)     # 21\nprint(7 / 3)     # 2.3333...\nprint(7 // 3)    # 2\nprint(7 % 3)     # 1\nprint(7 ** 3)    # 343\n\n# math模块\nimport math\nprint(math.sqrt(16))    # 4.0\nprint(math.ceil(3.2))   # 4\nprint(math.floor(3.8))  # 3\nprint(math.pi)          # 3.141592653589793\n\n# abs()和round()\nprint(abs(-5))          # 5\nprint(round(3.14159, 2))  # 3.14",
+    "et": "❌ 常见错误",
+    "ec": "除以零：10/0 抛出ZeroDivisionError\n整数除法方向：-7//3 返回-3（向下取整），不是-2",
+    "q": [
+      {
+        "q": "7 // -3 的结果是什么？",
+        "a": "-3（整除向下取整）"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "12. 比较与逻辑运算符",
+    "p": [
+      "比较运算符：==、!=、>、<、>=、<=，返回布尔值",
+      "逻辑运算符：and（与）、or（或）、not（非），有短路求值特性",
+      "is与==区别：is比较对象身份（内存地址），==比较值",
+      "链式比较：1 < x < 10 是合法的Python语法"
+    ],
+    "c": "# 比较运算符\nprint(5 == 5)      # True\nprint(5 != 3)      # True\nprint(5 > 3)       # True\n\n# 逻辑运算符\nprint(True and False)  # False\nprint(True or False)   # True\nprint(not True)        # False\n\n# 短路求值\nresult = 0 or \"default\"   # \"default\"\n\n# is vs ==\na = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)   # True  值相等\nprint(a is b)   # False 不同对象\n\n# 链式比较\nx = 5\nprint(1 < x < 10)  # True",
+    "et": "❌ 常见错误",
+    "ec": "混淆is和==：a is b 比较的是对象身份，通常应使用 a == b 比较值\n赋值与比较混淆：if x = 5 语法错误，应为 if x == 5",
+    "q": [
+      {
+        "q": "True and False or True 的结果是什么？",
+        "a": "True（and优先级高于or）"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "13. 赋值与位运算符",
+    "p": [
+      "赋值运算符：=、+=、-=、*=、/=、//=、%=、**=、&=、|=、^=、<<=、>>=",
+      "位运算符：&（与）、|（或）、^（异或）、~（取反）、<<（左移）、>>（右移）",
+      "海象运算符：:=（Python 3.8+）在表达式中赋值",
+      "位运算应用：权限控制、标志位、快速计算2的幂"
+    ],
+    "c": "# 位运算\nprint(5 & 3)    # 1   101 & 011 = 001\nprint(5 | 3)    # 7   101 | 011 = 111\nprint(5 ^ 3)    # 6   101 ^ 011 = 110\nprint(~5)       # -6  取反\nprint(5 << 1)   # 10  左移1位相当于*2\nprint(5 >> 1)   # 2   右移1位相当于//2\n\n# 位运算实用技巧\ndef is_even(n):\n    return (n & 1) == 0\n\nprint(is_even(4))  # True\nprint(is_even(7))  # False",
+    "et": "❌ 常见错误",
+    "ec": "混淆逻辑运算与位运算：& 是位与，and 是逻辑与，在条件判断中应使用and\n负数位移：-1 >> 1 结果是-1，不是0",
+    "q": [
+      {
+        "q": "8 << 2 的结果是什么？",
+        "a": "32（8左移2位，相当于8*4）"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "14. if条件语句",
+    "p": [
+      "基本语法：if 条件: 后跟缩进的代码块，条件为True时执行",
+      "条件表达式：任何能转换为布尔值的表达式，非零/非空即为True",
+      "嵌套if：if语句内部可以再嵌套if，注意缩进层级",
+      "代码块：用缩进（4空格）标识，同一缩进级别为同一代码块"
+    ],
+    "c": "# 基本if\nage = 20\nif age >= 18:\n    print(\"成年人\")\n\n# 带else的if\nscore = 85\nif score >= 60:\n    print(\"及格\")\nelse:\n    print(\"不及格\")\n\n# 嵌套if\nmoney = 100\nvip = True\nif money >= 50:\n    if vip:\n        print(\"VIP折扣价\")\n    else:\n        print(\"普通价\")",
+    "et": "❌ 常见错误",
+    "ec": "忘记冒号：if age >= 18 缺少冒号，应为 if age >= 18:\n缩进不一致：同一代码块的缩进必须一致，混用空格和Tab会报错",
+    "q": [
+      {
+        "q": "编写if语句：如果temperature > 38，输出\"发烧\"",
+        "a": "temperature = 39\nif temperature > 38:\n    print(\"发烧\")"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "15. elif与else",
+    "p": [
+      "elif：'else if'的缩写，用于多条件分支，从上到下依次判断",
+      "else：所有条件都不满足时执行的兜底分支",
+      "匹配模式(Python 3.10+)：match-case语句类似switch-case",
+      "只执行一个分支：条件从上到下判断，匹配第一个后跳出整个if-elif-else"
+    ],
+    "c": "# 多条件判断\nscore = 85\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelif score >= 60:\n    grade = \"D\"\nelse:\n    grade = \"F\"\nprint(f\"等级: {grade}\")  # B",
+    "et": "❌ 常见错误",
+    "ec": "条件重叠：if x > 5: ... elif x > 3: ... 当x=6时只执行第一个分支\n遗漏else：忘记处理所有条件都不满足的情况",
+    "q": [
+      {
+        "q": "用elif实现：根据月份输出季节（3-5春，6-8夏，9-11秋，12-2冬）",
+        "a": "month = 4\nif 3 <= month <= 5:\n    print(\"春季\")\nelif 6 <= month <= 8:\n    print(\"夏季\")\nelif 9 <= month <= 11:\n    print(\"秋季\")\nelse:\n    print(\"冬季\")"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "16. 三元表达式",
+    "p": [
+      "语法：值1 if 条件 else 值2，条件为True返回值1，否则返回值2",
+      "简洁替代：用于简化简单的if-else，使代码更紧凑",
+      "嵌套使用：可以嵌套但可读性降低，不建议超过两层"
+    ],
+    "c": "# 三元表达式\nage = 20\nstatus = \"成年\" if age >= 18 else \"未成年\"\nprint(status)  # 成年\n\n# 实用场景\nx, y = 5, 10\nmax_val = x if x > y else y   # 10\n\n# 嵌套（不推荐过于复杂）\nscore = 75\ngrade = \"A\" if score >= 90 else \"B\" if score >= 80 else \"C\" if score >= 70 else \"D\"",
+    "et": "❌ 常见错误",
+    "ec": "过度嵌套：三层以上的三元表达式难以阅读，应改用if-elif-else",
+    "q": [
+      {
+        "q": "用三元表达式判断一个数是奇数还是偶数",
+        "a": "\"偶数\" if n % 2 == 0 else \"奇数\""
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "17. for循环",
+    "p": [
+      "遍历可迭代对象：for item in iterable，可遍历列表、字符串、字典、range等",
+      "range函数：range(start, stop, step)生成整数序列，左闭右开",
+      "enumerate：同时获取索引和值，for i, v in enumerate(iterable)",
+      "zip：并行遍历多个可迭代对象"
+    ],
+    "c": "# 基本for循环\nfor i in range(5):\n    print(i)  # 0 1 2 3 4\n\n# 遍历列表\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor fruit in fruits:\n    print(fruit)\n\n# enumerate获取索引\nfor i, fruit in enumerate(fruits):\n    print(f\"{i}: {fruit}\")\n\n# zip并行遍历\nnames = [\"Alice\", \"Bob\"]\nages = [25, 30]\nfor name, age in zip(names, ages):\n    print(f\"{name}: {age}\")",
+    "et": "❌ 常见错误",
+    "ec": "修改迭代中的列表：在for循环中删除列表元素会导致跳过元素，应使用列表推导式或复制",
+    "q": [
+      {
+        "q": "用for循环和enumerate输出列表[\"a\",\"b\",\"c\"]的索引和值",
+        "a": "for i, v in enumerate([\"a\",\"b\",\"c\"]):\n    print(f\"{i}: {v}\")"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "18. while循环",
+    "p": [
+      "基本语法：while 条件: 当条件为True时重复执行代码块",
+      "循环控制：必须确保条件最终变为False，否则会无限循环",
+      "while-else：循环正常结束时执行else，break跳出时不执行"
+    ],
+    "c": "# 基本while\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\n# while-else\nn = 7\ni = 2\nwhile i < n:\n    if n % i == 0:\n        print(f\"{n}不是质数\")\n        break\n    i += 1\nelse:\n    print(f\"{n}是质数\")",
+    "et": "❌ 常见错误",
+    "ec": "忘记更新循环变量：while count < 5: print(count) 永远循环，需 count += 1",
+    "q": [
+      {
+        "q": "用while循环计算1到100的和",
+        "a": "total = 0\ni = 1\nwhile i <= 100:\n    total += i\n    i += 1\nprint(total)"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "19. break与continue",
+    "p": [
+      "break：立即跳出整个循环，不再执行剩余迭代",
+      "continue：跳过当前迭代剩余代码，直接进入下一次迭代",
+      "循环中的else：for/while的else块在循环正常完成时执行，break跳出时不执行"
+    ],
+    "c": "# break - 找到第一个偶数后停止\nfor i in range(1, 10):\n    if i % 2 == 0:\n        print(f\"找到偶数: {i}\")\n        break\n\n# continue - 跳过偶数\nfor i in range(10):\n    if i % 2 == 0:\n        continue\n    print(i)  # 1 3 5 7 9",
+    "et": "❌ 常见错误",
+    "ec": "在嵌套循环中break只跳出内层循环，外层循环继续执行",
+    "q": [
+      {
+        "q": "用continue输出1-20中不被3整除的数",
+        "a": "for i in range(1, 21):\n    if i % 3 == 0:\n        continue\n    print(i)"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "20. 列表基础",
+    "p": [
+      "创建列表：使用[]或list()，元素类型可混合",
+      "索引与切片：正向从0开始，负向从-1开始，切片list[start:end:step]",
+      "基本操作：append()添加、insert()插入、pop()删除末尾、remove()删除指定值",
+      "列表长度：len()获取元素个数，in判断元素是否存在"
+    ],
+    "c": "# 创建列表\nfruits = [\"apple\", \"banana\", \"cherry\"]\nmixed = [1, \"hello\", True, 3.14]\n\n# 索引与切片\nprint(fruits[0])     # apple\nprint(fruits[-1])    # cherry\nprint(fruits[1:3])   # ['banana', 'cherry']\n\n# 添加元素\nfruits.append(\"grape\")\nfruits.insert(1, \"mango\")\n\n# 删除元素\nfruits.remove(\"banana\")\npopped = fruits.pop()\n\n# 检查\nprint(len(fruits))\nprint(\"apple\" in fruits)",
+    "et": "❌ 常见错误",
+    "ec": "索引越界：fruits[10] 列表只有3个元素会报IndexError\nremove不存在的值：fruits.remove(\"xxx\") 抛出ValueError",
+    "q": [
+      {
+        "q": "创建一个1到10的列表，并删除第3个元素",
+        "a": "nums = list(range(1, 11))\nnums.pop(2)  # 或 del nums[2]"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "21. 列表高级操作",
+    "p": [
+      "列表推导式：[expression for item in iterable if condition]，简洁创建列表",
+      "排序：sort()原地排序，sorted()返回新列表，支持key参数自定义排序",
+      "拷贝：浅拷贝copy()或切片[:]，深拷贝需copy.deepcopy()",
+      "常用函数：sum()、max()、min()、any()、all()"
+    ],
+    "c": "# 列表推导式\nsquares = [x**2 for x in range(10)]\nevens = [x for x in range(20) if x % 2 == 0]\n\n# 排序\nnums = [3, 1, 4, 1, 5, 9]\nnums.sort()                    # 原地排序\nsorted_nums = sorted(nums, reverse=True)\n\n# 按条件排序\nwords = [\"banana\", \"apple\", \"cherry\"]\nwords.sort(key=len)            # 按长度排序\n\n# 常用函数\nprint(sum([1,2,3]))   # 6\nprint(max([1,5,3]))   # 5\nprint(any([0,0,1]))   # True\n\n# 浅拷贝与深拷贝\nimport copy\na = [1, [2, 3]]\nb = a.copy()           # 浅拷贝\nc = copy.deepcopy(a)   # 深拷贝",
+    "et": "❌ 常见错误",
+    "ec": "浅拷贝陷阱：嵌套列表的浅拷贝，修改内层列表会影响原始列表",
+    "q": [
+      {
+        "q": "用列表推导式生成1-20中所有偶数的平方",
+        "a": "[x**2 for x in range(1, 21) if x % 2 == 0]"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "22. 元组",
+    "p": [
+      "不可变序列：元组创建后不能修改，用()或tuple()创建",
+      "单元素元组：必须加逗号(1,)，否则(1)只是整数",
+      "元组解包：a, b, c = (1, 2, 3)，支持*args收集剩余",
+      "元组优势：作为字典键、函数返回多值、比列表更安全高效"
+    ],
+    "c": "# 创建元组\nt1 = (1, 2, 3)\nt2 = 1, 2, 3        # 省略括号\nt3 = (1,)            # 单元素必须加逗号\n\n# 元组解包\na, b, c = t1\nfirst, *rest = t1    # first=1, rest=[2,3]\n\n# 不可变\n# t1[0] = 10  # TypeError\n\n# 元组作为字典键\nlocations = {(35.6, 139.6): \"Tokyo\"}\n\n# 函数返回多值\ndef min_max(lst):\n    return min(lst), max(lst)\n\nlo, hi = min_max([3,1,4,1,5])",
+    "et": "❌ 常见错误",
+    "ec": "单元素漏逗号：t = (1) 创建的是整数1，不是元组，应为 t = (1,)",
+    "q": [
+      {
+        "q": "交换两个变量，利用元组解包",
+        "a": "a, b = b, a"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "23. 字典基础",
+    "p": [
+      "键值对：dict = {key: value}，键必须唯一且不可变，值可以是任意类型",
+      "访问值：dict[key]直接访问（键不存在报错），dict.get(key, default)安全访问",
+      "增删改：dict[key]=value添加/修改，del dict[key]删除，pop()删除并返回",
+      "遍历方式：keys()、values()、items()分别遍历键、值、键值对"
+    ],
+    "c": "# 创建字典\nperson = {\"name\": \"Alice\", \"age\": 25, \"city\": \"Beijing\"}\n\n# 访问值\nprint(person[\"name\"])\nprint(person.get(\"phone\", \"无\"))   # 安全访问\n\n# 添加/修改\nperson[\"email\"] = \"alice@example.com\"\nperson[\"age\"] = 26\n\n# 删除\ndel person[\"city\"]\nphone = person.pop(\"phone\", None)\n\n# 遍历\nfor key, value in person.items():\n    print(f\"{key}: {value}\")",
+    "et": "❌ 常见错误",
+    "ec": "键不存在：person[\"phone\"] 如果键不存在会报KeyError，应用 person.get(\"phone\")",
+    "q": [
+      {
+        "q": "创建一个字典存储3个学生的姓名和成绩，然后遍历输出",
+        "a": "students = {\"张三\": 90, \"李四\": 85, \"王五\": 95}\nfor name, score in students.items():\n    print(f\"{name}: {score}分\")"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "24. 字典高级操作",
+    "p": [
+      "字典推导式：{k: v for k, v in iterable}，简洁创建字典",
+      "合并字典：| 运算符(Python 3.9+)或update()方法",
+      "setdefault：键不存在时设置默认值并返回，存在则返回原值",
+      "defaultdict：from collections import defaultdict，自动初始化缺失键"
+    ],
+    "c": "# 字典推导式\nsquares = {x: x**2 for x in range(6)}\n\n# setdefault\nperson = {\"name\": \"Alice\"}\nperson.setdefault(\"age\", 25)\nprint(person)  # {\"name\": \"Alice\", \"age\": 25}\n\n# defaultdict\nfrom collections import defaultdict\ncounter = defaultdict(int)\nfor ch in \"hello\":\n    counter[ch] += 1\nprint(counter)  # {'h':1, 'e':1, 'l':2, 'o':1}",
+    "et": "❌ 常见错误",
+    "ec": "遍历时修改字典：遍历时添加/删除键会报RuntimeError，应先收集修改再统一操作",
+    "q": [
+      {
+        "q": "用字典推导式创建1-5的平方字典",
+        "a": "{x: x**2 for x in range(1, 6)}"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "25. 集合",
+    "p": [
+      "无序不重复：集合中的元素唯一且无序，用{}或set()创建",
+      "集合运算：| 并集、& 交集、- 差集、^ 对称差集",
+      "常用方法：add()添加、remove()删除(不存在报错)、discard()删除(不报错)",
+      "去重应用：将列表转集合去重再转回列表"
+    ],
+    "c": "# 创建集合\ns = {1, 2, 3, 3}    # {1, 2, 3}\nempty = set()        # 空集合\n\n# 集合运算\na = {1, 2, 3}\nb = {3, 4, 5}\nprint(a | b)   # {1,2,3,4,5} 并集\nprint(a & b)   # {3} 交集\nprint(a - b)   # {1,2} 差集\nprint(a ^ b)   # {1,2,4,5} 对称差\n\n# 方法\ns.add(4)\ns.discard(10)  # 不存在不报错\n\n# 去重\nnums = [1, 2, 2, 3, 3, 4]\nunique = list(set(nums))",
+    "et": "❌ 常见错误",
+    "ec": "空集合：{} 创建的是空字典，不是空集合，空集合必须用 set()",
+    "q": [
+      {
+        "q": "求两个列表[1,2,3,4]和[3,4,5,6]的交集",
+        "a": "set([1,2,3,4]) & set([3,4,5,6])"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "26. 函数定义与调用",
+    "p": [
+      "定义函数：使用def关键字，函数名+参数列表+冒号+缩进代码块",
+      "返回值：return语句返回结果，无return则返回None",
+      "文档字符串：函数体第一行的三引号字符串，用help()或.__doc__查看",
+      "函数是一等公民：可以赋值给变量、作为参数传递、作为返回值"
+    ],
+    "c": "# 定义函数\ndef greet(name):\n    \"\"\"向用户打招呼\"\"\"\n    return f\"Hello, {name}!\"\n\n# 调用函数\nmessage = greet(\"Alice\")\nprint(message)\n\n# 多返回值（实际返回元组）\ndef divide(a, b):\n    quotient = a // b\n    remainder = a % b\n    return quotient, remainder\n\nq, r = divide(17, 5)\nprint(f\"商: {q}, 余: {r}\")",
+    "et": "❌ 常见错误",
+    "ec": "忘记调用：greet 是函数对象，greet(\"Alice\") 才是调用",
+    "q": [
+      {
+        "q": "定义一个函数is_palindrome判断字符串是否为回文",
+        "a": "def is_palindrome(s):\n    return s == s[::-1]"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "27. 函数参数(默认/可变/关键字)",
+    "p": [
+      "默认参数：def f(a, b=10)，默认参数必须在非默认参数之后",
+      "可变参数*args：收集多余的位置参数为元组",
+      "关键字参数**kwargs：收集多余的关键字参数为字典",
+      "仅关键字参数：*后面的参数必须用关键字传递"
+    ],
+    "c": "# 默认参数\ndef greet(name, greeting=\"Hello\"):\n    return f\"{greeting}, {name}!\"\n\nprint(greet(\"Alice\"))            # Hello, Alice!\nprint(greet(\"Bob\", \"Hi\"))        # Hi, Bob!\n\n# 可变参数\ndef sum_all(*args):\n    return sum(args)\n\nprint(sum_all(1, 2, 3, 4))  # 10\n\n# 关键字参数\ndef print_info(**kwargs):\n    for k, v in kwargs.items():\n        print(f\"{k}: {v}\")\n\nprint_info(name=\"Alice\", age=25)",
+    "et": "❌ 常见错误",
+    "ec": "可变默认参数：def f(lst=[]) 默认列表在函数间共享，应使用 def f(lst=None): lst = lst or []",
+    "q": [
+      {
+        "q": "定义一个函数接受任意数量的参数，返回它们的平均值",
+        "a": "def average(*args):\n    return sum(args) / len(args) if args else 0"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "28. 匿名函数Lambda",
+    "p": [
+      "语法：lambda 参数: 表达式，只能包含一个表达式",
+      "配合map()：map(lambda x: x**2, iterable)对每个元素应用函数",
+      "配合filter()：filter(lambda x: x>0, iterable)过滤元素",
+      "配合sorted()：sorted(iterable, key=lambda x: x[1])自定义排序"
+    ],
+    "c": "# Lambda基本\nsquare = lambda x: x ** 2\nprint(square(5))  # 25\n\n# map\nnumbers = [1, 2, 3, 4, 5]\nsquared = list(map(lambda x: x**2, numbers))\nprint(squared)  # [1, 4, 9, 16, 25]\n\n# filter\nevens = list(filter(lambda x: x % 2 == 0, numbers))\nprint(evens)  # [2, 4]\n\n# sorted排序\npeople = [(\"Alice\", 25), (\"Bob\", 20)]\nby_age = sorted(people, key=lambda p: p[1])",
+    "et": "❌ 常见错误",
+    "ec": "过度使用lambda：复杂逻辑应使用def定义普通函数，lambda仅用于简单场景",
+    "q": [
+      {
+        "q": "用lambda和map将列表[1,2,3]每个元素加10",
+        "a": "list(map(lambda x: x + 10, [1, 2, 3]))"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "29. 变量作用域",
+    "p": [
+      "LEGB规则：查找顺序Local → Enclosing → Global → Built-in",
+      "局部变量：函数内部定义的变量，函数外部无法访问",
+      "global关键字：在函数内声明全局变量，允许修改",
+      "nonlocal关键字：在嵌套函数中引用外层函数的变量"
+    ],
+    "c": "# 局部变量\ndef func():\n    x = 10  # 局部变量\n    print(x)\n\n# global\ncount = 0\ndef increment():\n    global count\n    count += 1\n\nincrement()\nprint(count)  # 1\n\n# nonlocal\ndef outer():\n    x = 10\n    def inner():\n        nonlocal x\n        x += 5\n    inner()\n    print(x)  # 15\n\nouter()",
+    "et": "❌ 常见错误",
+    "ec": "UnboundLocalError：函数内先读取后赋值局部变量会报错，需用global声明",
+    "q": [
+      {
+        "q": "在函数内部修改全局变量total需要使用什么关键字？",
+        "a": "global"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "30. 递归函数",
+    "p": [
+      "递归：函数调用自身，必须有基准条件(终止条件)",
+      "递归三要素：基准条件、递归调用、状态推进",
+      "尾递归：递归调用在函数最后，某些语言可优化",
+      "栈溢出：递归深度过大导致栈溢出，Python默认深度约1000"
+    ],
+    "c": "# 阶乘递归\ndef factorial(n):\n    if n == 0:           # 基准条件\n        return 1\n    return n * factorial(n - 1)  # 递归调用\n\nprint(factorial(5))  # 120\n\n# 斐波那契递归\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(fibonacci(10))  # 55\n\n# 递归求和\ndef sum_list(lst):\n    if not lst:\n        return 0\n    return lst[0] + sum_list(lst[1:])",
+    "et": "❌ 常见错误",
+    "ec": "缺少基准条件或递归不收敛会导致无限递归，最终栈溢出",
+    "q": [
+      {
+        "q": "用递归实现反转字符串",
+        "a": "def reverse(s):\n    if len(s) <= 1:\n        return s\n    return s[-1] + reverse(s[:-1])"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "31. 类与对象基础",
+    "p": [
+      "定义类：使用class关键字，类名首字母大写",
+      "__init__方法：构造方法，初始化对象属性",
+      "self参数：代表对象自身，所有方法第一个参数",
+      "创建对象：类名()调用构造方法创建实例"
+    ],
+    "c": "# 定义类\nclass Person:\n    def __init__(self, name, age):\n        self.name = name\n        self.age = age\n\n    def greet(self):\n        return f\"Hello, I'm {self.name}, {self.age} years old\"\n\n# 创建对象\np = Person(\"Alice\", 25)\nprint(p.name)   # Alice\nprint(p.greet()) # Hello, I'm Alice, 25 years old\n\n# 多个实例\np2 = Person(\"Bob\", 30)\nprint(p2.name)  # Bob",
+    "et": "❌ 常见错误",
+    "ec": "忘记self参数：方法中必须包含self作为第一个参数",
+    "q": [
+      {
+        "q": "定义一个Car类，包含品牌(brand)和速度(speed)属性，以及accelerate方法加速",
+        "a": "class Car:\n    def __init__(self, brand, speed=0):\n        self.brand = brand\n        self.speed = speed\n\n    def accelerate(self, amount):\n        self.speed += amount"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "32. 继承与多态",
+    "p": [
+      "继承：子类继承父类的属性和方法，class Sub(Parent):",
+      "super()：调用父类的方法",
+      "方法重写：子类重新定义父类的方法",
+      "多态：不同对象调用同名方法表现不同行为"
+    ],
+    "c": "# 继承\nclass Animal:\n    def speak(self):\n        pass\n\nclass Dog(Animal):\n    def speak(self):\n        return \"Woof!\"\n\nclass Cat(Animal):\n    def speak(self):\n        return \"Meow!\"\n\n# 多态\nanimals = [Dog(), Cat()]\nfor animal in animals:\n    print(animal.speak())  # Woof! Meow!\n\n# super调用父类\nclass Bird(Animal):\n    def __init__(self, name):\n        self.name = name\n        super().__init__()\n\n    def speak(self):\n        return f\"{self.name} sings\"",
+    "et": "❌ 常见错误",
+    "ec": "子类__init__中忘记调用super().__init__()导致父类属性未初始化",
+    "q": [
+      {
+        "q": "定义Student类继承Person，添加grade属性",
+        "a": "class Student(Person):\n    def __init__(self, name, age, grade):\n        super().__init__(name, age)\n        self.grade = grade"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "33. 文件操作",
+    "p": [
+      "open()函数：打开文件，返回文件对象",
+      "模式：'r'读取(默认)、'w'写入(覆盖)、'a'追加、'b'二进制",
+      "with语句：自动关闭文件，推荐用法",
+      "常用方法：read()读全部、readline()读一行、write()写入"
+    ],
+    "c": "# with语句读取文件\nwith open(\"example.txt\", \"r\", encoding=\"utf-8\") as f:\n    content = f.read()\n    print(content)\n\n# 按行读取\nwith open(\"example.txt\", \"r\") as f:\n    for line in f:\n        print(line.strip())\n\n# 写入文件\nwith open(\"output.txt\", \"w\") as f:\n    f.write(\"Hello, World!\\n\")\n    f.write(\"Python is awesome\")\n\n# 追加模式\nwith open(\"output.txt\", \"a\") as f:\n    f.write(\"\\nAppended text\")",
+    "et": "❌ 常见错误",
+    "ec": "忘记关闭文件：不使用with语句时必须调用close()，否则文件可能损坏",
+    "q": [
+      {
+        "q": "读取文件内容并统计行数",
+        "a": "with open(\"file.txt\", \"r\") as f:\n    lines = len(f.readlines())\n    print(lines)"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "34. 异常处理",
+    "p": [
+      "try-except：捕获异常，防止程序崩溃",
+      "except类型：可以指定捕获特定类型的异常",
+      "finally：无论是否发生异常都会执行",
+      "raise：主动抛出异常"
+    ],
+    "c": "# 基本异常处理\ntry:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\n\n# 多个异常类型\ntry:\n    data = int(input(\"Enter a number: \"))\nexcept ValueError:\n    print(\"Invalid input, must be a number\")\nexcept Exception as e:\n    print(f\"Unexpected error: {e}\")\n\n# finally\ntry:\n    f = open(\"file.txt\", \"r\")\n    content = f.read()\nfinally:\n    f.close()\n\n# raise主动抛出\ndef validate_age(age):\n    if age < 0:\n        raise ValueError(\"Age cannot be negative\")\n    return age",
+    "et": "❌ 常见错误",
+    "ec": "裸except：except: 会捕获所有异常，包括系统退出信号，应指定具体异常类型",
+    "q": [
+      {
+        "q": "写一个函数safe_divide(a,b)，处理除零异常",
+        "a": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "35. 模块与包",
+    "p": [
+      "模块：一个.py文件就是一个模块，使用import导入",
+      "包：包含__init__.py的文件夹，可组织多个模块",
+      "import语法：import module、from module import func、import module as alias",
+      "常用标准库：os、sys、math、random、datetime等"
+    ],
+    "c": "# 导入模块\nimport math\nprint(math.sqrt(16))  # 4.0\n\n# 导入特定函数\nfrom random import randint\nprint(randint(1, 10))\n\n# 别名\nimport numpy as np\narr = np.array([1, 2, 3])\n\n# 自定义模块\n# utils.py\n# def greet(name): return f\"Hello {name}\"\n\n# main.py\n# import utils\n# print(utils.greet(\"Alice\"))\n\n# __name__ == \"__main__\"\nif __name__ == \"__main__\":\n    print(\"This is the main module\")",
+    "et": "❌ 常见错误",
+    "ec": "循环导入：模块A导入模块B，模块B又导入模块A，导致导入失败",
+    "q": [
+      {
+        "q": "使用random模块生成1-100的随机整数",
+        "a": "import random\nrandom.randint(1, 100)"
+      }
+    ]
+  }
+];

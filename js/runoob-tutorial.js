@@ -23,11 +23,25 @@ class RunoobTutorial {
     }
     
     async loadChapters() {
+        const dataKey = 'TUTORIAL_DATA_' + this.language.replace(/-/g, '_');
+        
+        if (window[dataKey]) {
+            this.chapters = window[dataKey];
+            return;
+        }
+
+        if (window.location.protocol === 'file:') {
+            console.error('file:// 协议下请先引入 data/tutorial-' + this.language + '.data.js');
+            this.chapters = [];
+            return;
+        }
+
         try {
             const response = await fetch(`data/tutorial-${this.language}.json`);
             this.chapters = await response.json();
         } catch (e) {
             console.error('加载章节数据失败:', e);
+            this.chapters = [];
         }
     }
     
