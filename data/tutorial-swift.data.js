@@ -1,8 +1,7 @@
-window.TUTORIAL_DATA_swift = 
-[
+window.TUTORIAL_DATA_swift = [
   {
     "id": 1,
-    "t": "1. Swift简介",
+    "t": "Swift简介",
     "p": [
       "诞生背景：Swift由Apple于2014年WWDC发布，由Chris Lattner主导设计，旨在替代Objective-C成为Apple平台主力开发语言",
       "设计理念：安全、快速、表达力强，融合了Objective-C、Rust、Haskell等语言的优点",
@@ -22,7 +21,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 2,
-    "t": "2. Xcode配置",
+    "t": "Xcode配置",
     "p": [
       "Xcode安装：从Mac App Store下载Xcode，需要macOS系统，Xcode是Apple官方IDE",
       "Playground：Swift Playground是交互式学习环境，可即时查看代码执行结果，适合学习与原型设计",
@@ -41,7 +40,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 3,
-    "t": "3. 第一个Swift程序",
+    "t": "第一个Swift程序",
     "p": [
       "print函数：使用print()输出内容到控制台，支持字符串插值 \\(变量名)",
       "程序入口：Swift程序从源文件顶部代码开始执行，不需要main函数（Swift 5.3+），也可用@main标记入口",
@@ -60,7 +59,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 4,
-    "t": "4. 注释与分号",
+    "t": "注释与分号",
     "p": [
       "单行注释：使用 // 开头，// 后面的内容不会被执行",
       "多行注释：使用 /* */ 包裹，支持嵌套注释（Swift特色，不同于C/Java）",
@@ -79,7 +78,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 5,
-    "t": "5. 变量与常量",
+    "t": "变量与常量",
     "p": [
       "let常量：使用let声明常量，一旦赋值不可修改，Swift推荐优先使用let",
       "var变量：使用var声明变量，值可以修改，仅在需要改变值时使用var",
@@ -98,7 +97,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 6,
-    "t": "6. 整数与浮点数",
+    "t": "整数与浮点数",
     "p": [
       "整数类型：Int（有符号，默认）、UInt（无符号），以及Int8/16/32/64等固定位宽类型",
       "浮点类型：Double（64位，默认浮点推断类型）、Float（32位），精度分别为15位和6位",
@@ -117,7 +116,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 7,
-    "t": "7. 布尔与元组",
+    "t": "布尔与元组",
     "p": [
       "Bool类型：只有true和false两个值，Swift不支持非零即真，条件判断必须是Bool类型",
       "元组(Tuple)：将多个值组合为单一复合值，使用括号创建，可包含不同类型",
@@ -136,7 +135,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 8,
-    "t": "8. 可选类型(Optional)",
+    "t": "可选类型(Optional)",
     "p": [
       "可选类型概念：Optional表示变量可能有值也可能为nil，是Swift安全的核心特性",
       "声明可选：在类型后加问号，如 var name: String? 表示name可能为nil",
@@ -156,7 +155,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 9,
-    "t": "9. 字符串基础",
+    "t": "字符串基础",
     "p": [
       "字符串创建：使用双引号创建String类型，Swift的String是值类型（结构体），赋值时拷贝",
       "字符串插值：\\(expression)语法在字符串中嵌入任意表达式，支持函数调用和运算",
@@ -175,7 +174,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 10,
-    "t": "10. 字符串操作",
+    "t": "字符串操作",
     "p": [
       "拼接与修改：使用+和+=拼接字符串，append()追加字符，String是值类型修改会创建新副本",
       "索引操作：使用startIndex、endIndex和index(_:offsetBy:)访问指定位置字符",
@@ -194,7 +193,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 11,
-    "t": "11. 类型转换",
+    "t": "类型转换",
     "p": [
       "数值类型转换：Int与Double/Float之间必须显式转换，Swift不会隐式转换",
       "整数与浮点互转：Int(3.14)截断为3，Double(3)变为3.0",
@@ -213,7 +212,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 12,
-    "t": "12. 运算符",
+    "t": "运算符",
     "p": [
       "算术运算符：+、-、*、/、%（取余），注意整数除法截断，溢出运算符&+、&-、&*",
       "比较运算符：==、!=、>、=、<=，以及===和!==（引用比较）",
@@ -233,7 +232,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 13,
-    "t": "13. if-else语句",
+    "t": "if-else语句",
     "p": [
       "基本语法：if 条件 { } else { }，条件必须是Bool类型，大括号不可省略",
       "多条件：使用else if处理多个条件分支，从上到下依次判断",
@@ -252,7 +251,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 14,
-    "t": "14. switch语句",
+    "t": "switch语句",
     "p": [
       "基本语法：switch value { case pattern: code }，每个case必须有可执行语句",
       "无break：Swift的switch默认不会贯穿，不需要写break",
@@ -273,7 +272,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 15,
-    "t": "15. 三目运算符",
+    "t": "三目运算符",
     "p": [
       "语法：条件 ? 表达式1 : 表达式2，条件为true返回表达式1，否则返回表达式2",
       "简洁替代：用于简化简单的if-else判断，使代码更紧凑",
@@ -292,7 +291,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 16,
-    "t": "16. for循环",
+    "t": "for循环",
     "p": [
       "for-in循环：遍历序列、集合、范围等可迭代对象",
       "范围循环：for i in 1...5 遍历范围内的整数",
@@ -312,7 +311,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 17,
-    "t": "17. while循环",
+    "t": "while循环",
     "p": [
       "while循环：先判断条件再执行循环体，条件为true时继续循环",
       "repeat-while：先执行循环体再判断条件，至少执行一次（类似do-while）",
@@ -331,7 +330,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 18,
-    "t": "18. 函数基础",
+    "t": "函数基础",
     "p": [
       "函数声明：func 函数名(参数列表) -&gt; 返回类型 { }",
       "参数标签：Swift函数有外部标签和内部标签，外部标签用于调用",
@@ -351,7 +350,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 19,
-    "t": "19. 函数高级",
+    "t": "函数高级",
     "p": [
       "返回元组：函数可返回多个值，通过元组实现",
       "函数类型：函数本身也是一种类型，可以作为参数或返回值",
@@ -371,7 +370,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 20,
-    "t": "20. 闭包",
+    "t": "闭包",
     "p": [
       "闭包概念：自包含的函数代码块，可以作为参数传递或返回",
       "闭包表达式：{ (参数列表) -&gt; 返回类型 in 语句 }",
@@ -391,7 +390,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 21,
-    "t": "21. 数组",
+    "t": "数组",
     "p": [
       "数组创建：使用[]创建，元素类型必须相同，Swift数组是值类型",
       "访问元素：使用下标访问，arr[index]，越界会运行时崩溃",
@@ -411,7 +410,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 22,
-    "t": "22. 集合",
+    "t": "集合",
     "p": [
       "集合特点：元素无序、不重复，需要元素实现Hashable协议",
       "创建集合：使用Set&lt;Type&gt;()或[值]创建",
@@ -431,7 +430,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 23,
-    "t": "23. 字典",
+    "t": "字典",
     "p": [
       "字典特点：键值对集合，键唯一，需要键实现Hashable协议",
       "创建字典：使用[Key: Value]()或[key: value]创建",
@@ -451,7 +450,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 24,
-    "t": "24. 类",
+    "t": "类",
     "p": [
       "类定义：class 类名 { }，Swift的类是引用类型",
       "属性：存储属性和计算属性，可设置属性观察器",
@@ -471,7 +470,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 25,
-    "t": "25. 结构体",
+    "t": "结构体",
     "p": [
       "结构体定义：struct 结构体名 { }，Swift的结构体是值类型",
       "值类型特性：赋值时会创建副本，传递时也是传递副本",
@@ -491,7 +490,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 26,
-    "t": "26. 枚举",
+    "t": "枚举",
     "p": [
       "枚举定义：enum 枚举名 { case 值1, 值2, 值3 }",
       "关联值：枚举成员可关联不同类型的值",
@@ -511,7 +510,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 27,
-    "t": "27. 协议",
+    "t": "协议",
     "p": [
       "协议定义：protocol 协议名 { }，定义方法和属性的蓝图",
       "遵循协议：class/struct/enum 类型名: 协议名 { }",
@@ -531,7 +530,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 28,
-    "t": "28. 扩展",
+    "t": "扩展",
     "p": [
       "扩展语法：extension 类型名 { }",
       "添加计算属性：扩展可以添加计算属性，不能添加存储属性",
@@ -551,7 +550,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 29,
-    "t": "29. 泛型",
+    "t": "泛型",
     "p": [
       "泛型函数：使用占位符类型编写通用函数",
       "泛型类型：结构体、类、枚举都可以是泛型的",
@@ -571,7 +570,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 30,
-    "t": "30. 错误处理",
+    "t": "错误处理",
     "p": [
       "错误类型：枚举实现Error协议表示错误类型",
       "抛出错误：使用throw关键字抛出错误",
@@ -591,7 +590,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 31,
-    "t": "31. 内存管理",
+    "t": "内存管理",
     "p": [
       "引用计数：Swift使用ARC自动管理内存，通过引用计数跟踪对象",
       "强引用：默认引用是强引用，会增加引用计数",
@@ -611,7 +610,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 32,
-    "t": "32. 访问控制",
+    "t": "访问控制",
     "p": [
       "public：最高级别，可被其他模块访问",
       "internal：默认级别，只能在当前模块内部访问",
@@ -631,7 +630,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 33,
-    "t": "33. 运算符重载",
+    "t": "运算符重载",
     "p": [
       "运算符重载：为自定义类型提供标准运算符的实现",
       "中缀运算符：+、-、*、/等二元运算符",
@@ -651,7 +650,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 34,
-    "t": "34. 类型转换",
+    "t": "类型转换",
     "p": [
       "is操作符：检查实例是否属于特定子类",
       "as?操作符：条件向下转型，成功返回可选值，失败返回nil",
@@ -671,7 +670,7 @@ window.TUTORIAL_DATA_swift =
   },
   {
     "id": 35,
-    "t": "35. Swift进阶与项目实战",
+    "t": "Swift进阶与项目实战",
     "p": [
       "并发编程：使用async/await进行异步编程",
       "Combine框架：响应式编程框架",

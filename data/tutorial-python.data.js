@@ -1,8 +1,7 @@
-window.TUTORIAL_DATA_python = 
-[
+window.TUTORIAL_DATA_python = [
   {
     "id": 1,
-    "t": "1. Python简介与历史",
+    "t": "Python简介与历史",
     "p": [
       "Python的诞生：Python由Guido van Rossum于1989年底发明，1991年首次发布，名字来源于英国喜剧团体Monty Python",
       "设计哲学：强调代码可读性和简洁性，'优雅'、'明确'、'简单'是Python的设计核心",
@@ -22,7 +21,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 2,
-    "t": "2. 安装与环境配置",
+    "t": "安装与环境配置",
     "p": [
       "下载安装：从python.org下载对应操作系统的安装包，安装时务必勾选'Add Python to PATH'",
       "虚拟环境：使用venv创建隔离的Python环境，避免不同项目间的依赖冲突",
@@ -41,7 +40,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 3,
-    "t": "3. 第一个Python程序",
+    "t": "第一个Python程序",
     "p": [
       "Hello World：使用print()函数输出文本，这是所有编程语言的入门仪式",
       "交互式模式：在终端输入python进入交互式环境，可直接执行代码",
@@ -60,7 +59,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 4,
-    "t": "4. 注释与代码规范",
+    "t": "注释与代码规范",
     "p": [
       "单行注释：使用#号开头，#后面的内容不会被Python执行",
       "多行注释：使用三引号（'''或\"\"\"）包裹，常用于函数/类的文档字符串",
@@ -79,7 +78,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 5,
-    "t": "5. 变量与赋值",
+    "t": "变量与赋值",
     "p": [
       "变量定义：Python是动态类型语言，变量无需声明类型，直接赋值即可创建",
       "赋值方式：支持多重赋值（a=b=c=1）、解包赋值（a,b=1,2）、增强赋值（a+=1）",
@@ -98,7 +97,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 6,
-    "t": "6. 数字类型(int,float,complex)",
+    "t": "数字类型(int,float,complex)",
     "p": [
       "int整数：支持任意大小的整数，没有溢出问题，支持二进制(0b)、八进制(0o)、十六进制(0x)",
       "float浮点数：双精度64位，注意浮点精度问题（0.1+0.2≠0.3）",
@@ -117,7 +116,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 7,
-    "t": "7. 字符串基础",
+    "t": "字符串基础",
     "p": [
       "创建字符串：使用单引号、双引号或三引号创建，三引号可跨行",
       "索引与切片：支持正向索引(0起)和反向索引(-1起)，切片语法s[start:end:step]",
@@ -136,7 +135,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 8,
-    "t": "8. 字符串高级操作",
+    "t": "字符串高级操作",
     "p": [
       "格式化方法：f-string(Python 3.6+)、str.format()、%格式化三种方式",
       "常用方法：split()分割、join()连接、replace()替换、strip()去空白、find()查找",
@@ -155,7 +154,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 9,
-    "t": "9. 布尔类型与None",
+    "t": "布尔类型与None",
     "p": [
       "布尔值：True和False是bool类型的两个实例，首字母必须大写",
       "Falsy值：False、0、0.0、\"\"、[]、()、{}、set()、None在布尔上下文中均为False",
@@ -174,7 +173,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 10,
-    "t": "10. 类型转换",
+    "t": "类型转换",
     "p": [
       "隐式转换：Python自动将低精度类型转为高精度，如int+float自动转float",
       "显式转换：使用int()、float()、str()、bool()、list()等内置函数强制转换",
@@ -193,7 +192,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 11,
-    "t": "11. 算术运算符",
+    "t": "算术运算符",
     "p": [
       "基本运算：+（加）、-（减）、*（乘）、/（除）、//（整除）、%（取模）、**（幂）",
       "运算优先级：** > 正负号 > * / // % > + -",
@@ -212,7 +211,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 12,
-    "t": "12. 比较与逻辑运算符",
+    "t": "比较与逻辑运算符",
     "p": [
       "比较运算符：==、!=、>、<、>=、<=，返回布尔值",
       "逻辑运算符：and（与）、or（或）、not（非），有短路求值特性",
@@ -231,7 +230,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 13,
-    "t": "13. 赋值与位运算符",
+    "t": "赋值与位运算符",
     "p": [
       "赋值运算符：=、+=、-=、*=、/=、//=、%=、**=、&=、|=、^=、<<=、>>=",
       "位运算符：&（与）、|（或）、^（异或）、~（取反）、<<（左移）、>>（右移）",
@@ -250,7 +249,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 14,
-    "t": "14. if条件语句",
+    "t": "if条件语句",
     "p": [
       "基本语法：if 条件: 后跟缩进的代码块，条件为True时执行",
       "条件表达式：任何能转换为布尔值的表达式，非零/非空即为True",
@@ -269,7 +268,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 15,
-    "t": "15. elif与else",
+    "t": "elif与else",
     "p": [
       "elif：'else if'的缩写，用于多条件分支，从上到下依次判断",
       "else：所有条件都不满足时执行的兜底分支",
@@ -288,7 +287,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 16,
-    "t": "16. 三元表达式",
+    "t": "三元表达式",
     "p": [
       "语法：值1 if 条件 else 值2，条件为True返回值1，否则返回值2",
       "简洁替代：用于简化简单的if-else，使代码更紧凑",
@@ -306,7 +305,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 17,
-    "t": "17. for循环",
+    "t": "for循环",
     "p": [
       "遍历可迭代对象：for item in iterable，可遍历列表、字符串、字典、range等",
       "range函数：range(start, stop, step)生成整数序列，左闭右开",
@@ -325,7 +324,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 18,
-    "t": "18. while循环",
+    "t": "while循环",
     "p": [
       "基本语法：while 条件: 当条件为True时重复执行代码块",
       "循环控制：必须确保条件最终变为False，否则会无限循环",
@@ -343,7 +342,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 19,
-    "t": "19. break与continue",
+    "t": "break与continue",
     "p": [
       "break：立即跳出整个循环，不再执行剩余迭代",
       "continue：跳过当前迭代剩余代码，直接进入下一次迭代",
@@ -361,7 +360,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 20,
-    "t": "20. 列表基础",
+    "t": "列表基础",
     "p": [
       "创建列表：使用[]或list()，元素类型可混合",
       "索引与切片：正向从0开始，负向从-1开始，切片list[start:end:step]",
@@ -380,7 +379,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 21,
-    "t": "21. 列表高级操作",
+    "t": "列表高级操作",
     "p": [
       "列表推导式：[expression for item in iterable if condition]，简洁创建列表",
       "排序：sort()原地排序，sorted()返回新列表，支持key参数自定义排序",
@@ -399,7 +398,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 22,
-    "t": "22. 元组",
+    "t": "元组",
     "p": [
       "不可变序列：元组创建后不能修改，用()或tuple()创建",
       "单元素元组：必须加逗号(1,)，否则(1)只是整数",
@@ -418,7 +417,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 23,
-    "t": "23. 字典基础",
+    "t": "字典基础",
     "p": [
       "键值对：dict = {key: value}，键必须唯一且不可变，值可以是任意类型",
       "访问值：dict[key]直接访问（键不存在报错），dict.get(key, default)安全访问",
@@ -437,7 +436,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 24,
-    "t": "24. 字典高级操作",
+    "t": "字典高级操作",
     "p": [
       "字典推导式：{k: v for k, v in iterable}，简洁创建字典",
       "合并字典：| 运算符(Python 3.9+)或update()方法",
@@ -456,7 +455,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 25,
-    "t": "25. 集合",
+    "t": "集合",
     "p": [
       "无序不重复：集合中的元素唯一且无序，用{}或set()创建",
       "集合运算：| 并集、& 交集、- 差集、^ 对称差集",
@@ -475,7 +474,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 26,
-    "t": "26. 函数定义与调用",
+    "t": "函数定义与调用",
     "p": [
       "定义函数：使用def关键字，函数名+参数列表+冒号+缩进代码块",
       "返回值：return语句返回结果，无return则返回None",
@@ -494,7 +493,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 27,
-    "t": "27. 函数参数(默认/可变/关键字)",
+    "t": "函数参数(默认/可变/关键字)",
     "p": [
       "默认参数：def f(a, b=10)，默认参数必须在非默认参数之后",
       "可变参数*args：收集多余的位置参数为元组",
@@ -513,7 +512,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 28,
-    "t": "28. 匿名函数Lambda",
+    "t": "匿名函数Lambda",
     "p": [
       "语法：lambda 参数: 表达式，只能包含一个表达式",
       "配合map()：map(lambda x: x**2, iterable)对每个元素应用函数",
@@ -532,7 +531,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 29,
-    "t": "29. 变量作用域",
+    "t": "变量作用域",
     "p": [
       "LEGB规则：查找顺序Local → Enclosing → Global → Built-in",
       "局部变量：函数内部定义的变量，函数外部无法访问",
@@ -551,7 +550,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 30,
-    "t": "30. 递归函数",
+    "t": "递归函数",
     "p": [
       "递归：函数调用自身，必须有基准条件(终止条件)",
       "递归三要素：基准条件、递归调用、状态推进",
@@ -570,7 +569,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 31,
-    "t": "31. 类与对象基础",
+    "t": "类与对象基础",
     "p": [
       "定义类：使用class关键字，类名首字母大写",
       "__init__方法：构造方法，初始化对象属性",
@@ -589,7 +588,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 32,
-    "t": "32. 继承与多态",
+    "t": "继承与多态",
     "p": [
       "继承：子类继承父类的属性和方法，class Sub(Parent):",
       "super()：调用父类的方法",
@@ -608,7 +607,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 33,
-    "t": "33. 文件操作",
+    "t": "文件操作",
     "p": [
       "open()函数：打开文件，返回文件对象",
       "模式：'r'读取(默认)、'w'写入(覆盖)、'a'追加、'b'二进制",
@@ -627,7 +626,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 34,
-    "t": "34. 异常处理",
+    "t": "异常处理",
     "p": [
       "try-except：捕获异常，防止程序崩溃",
       "except类型：可以指定捕获特定类型的异常",
@@ -646,7 +645,7 @@ window.TUTORIAL_DATA_python =
   },
   {
     "id": 35,
-    "t": "35. 模块与包",
+    "t": "模块与包",
     "p": [
       "模块：一个.py文件就是一个模块，使用import导入",
       "包：包含__init__.py的文件夹，可组织多个模块",

@@ -14,12 +14,17 @@ class RunoobTutorial {
     }
     
     async init() {
-        await this.loadChapters();
-        this.render();
-        this.bindEvents();
-        this.loadProgress();
-        this.loadNotes();
-        this.showChapter(1);
+        try {
+            await this.loadChapters();
+            this.render();
+            this.bindEvents();
+            this.loadProgress();
+            this.loadNotes();
+            this.showChapter(1);
+        } catch (e) {
+            console.error('教程初始化失败:', e);
+            document.body.innerHTML = '<div style="padding:40px;text-align:center;font-family:sans-serif;"><h2 style="color:#ef4444;">页面加载失败</h2><p style="color:#64748b;">' + e.message + '</p><p style="color:#94a3b8;margin-top:20px;">请按F12查看控制台详细错误信息</p></div>';
+        }
     }
     
     async loadChapters() {
@@ -174,8 +179,17 @@ class RunoobTutorial {
                 ${ch.et ? `
                 <h2 class="chapter-title">常见错误</h2>
                 <div class="error-block">
-                    <h4>${ch.et}</h4>
-                    <pre><code>${this.escapeHtml(ch.ec || '')}</code></pre>
+                    ${Array.isArray(ch.et) ? 
+                        ch.et.map((et, i) => `
+                            <h4>${et}</h4>
+                            <pre><code>${this.escapeHtml(Array.isArray(ch.ec) ? (ch.ec[i] || '') : (ch.ec || ''))}</code></pre>
+                        `).join('')
+                        :
+                        `
+                            <h4>${ch.et}</h4>
+                            <pre><code>${this.escapeHtml(Array.isArray(ch.ec) ? ch.ec.join('\n\n') : (ch.ec || ''))}</code></pre>
+                        `
+                    }
                 </div>` : ''}
                 
                 ${ch.q && ch.q.length > 0 ? `
