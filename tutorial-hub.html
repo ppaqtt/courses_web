@@ -3,218 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="学习中心 - 追踪你的编程学习进度和成就">
-    <meta name="keywords" content="学习中心,编程学习,学习进度,成就系统">
     <title>学习中心 | 编程教程</title>
     <link rel="stylesheet" href="css/runoob-style.css">
     <style>
         .hub-container {
             max-width: 1200px;
-            margin: 80px auto 40px;
-            padding: 0 20px;
+            margin: 88px auto 48px;
+            padding: 0 24px;
         }
 
         .hub-header {
-            background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
-            color: #fff;
-            padding: 40px 30px;
-            border-radius: 8px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .hub-header h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 36px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .hub-header p {
-            opacity: 0.9;
+            color: var(--text-secondary);
             font-size: 16px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 28px 24px;
             text-align: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
         }
 
-        .stat-card .stat-icon {
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card .stat-number {
             font-size: 36px;
-            margin-bottom: 10px;
-        }
-
-        .stat-card .stat-value {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4CAF50;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
         }
 
         .stat-card .stat-label {
+            color: var(--text-secondary);
             font-size: 14px;
-            color: #888;
-            margin-top: 5px;
         }
 
         .section {
-            background: #fff;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .section-title {
             font-size: 20px;
-            color: #333;
+            color: var(--text-primary);
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #4CAF50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
         }
 
-        .language-progress {
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .progress-list {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
         }
 
-        .lang-card {
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border-left: 4px solid #4CAF50;
+        .progress-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .lang-card h4 {
-            margin-bottom: 10px;
-            color: #333;
+        .progress-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
         }
 
-        .lang-bar {
+        .progress-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .progress-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .progress-card-percent {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .progress-bar-hub {
             height: 8px;
-            background: #e8e8e8;
+            background: var(--bg-main);
             border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 5px;
+            margin-bottom: 12px;
         }
 
-        .lang-fill {
+        .progress-bar-hub-fill {
             height: 100%;
-            background: #4CAF50;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 4px;
-            transition: width 0.5s;
+            transition: width 0.5s ease;
         }
 
-        .lang-info {
-            font-size: 12px;
-            color: #888;
-            text-align: right;
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
         .quick-links {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
         }
 
         .quick-link {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 15px 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
             text-decoration: none;
-            color: #333;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
         .quick-link:hover {
-            background: #e8f5e9;
-            color: #4CAF50;
-            transform: translateX(5px);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
         }
 
-        .quick-link .icon {
-            font-size: 24px;
+        .quick-link-icon {
+            font-size: 28px;
         }
 
-        .quick-link .text {
+        .quick-link-text {
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .snippets-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .snippets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .snippets-header h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .snippet-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .snippet-input select,
+        .snippet-input input {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            background: var(--bg-main);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .snippet-input select:focus,
+        .snippet-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .snippet-input input {
+            flex: 1;
         }
 
         .snippet-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 8px;
         }
 
         .snippet-item {
-            padding: 15px;
-            background: #f9f9f9;
-            border-radius: 8px;
+            background: var(--bg-main);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            border: 1px solid var(--border-light);
+            transition: all 0.2s ease;
         }
 
-        .snippet-header {
+        .snippet-item:hover {
+            border-color: var(--primary);
+        }
+
+        .snippet-item-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
 
-        .snippet-title {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .snippet-lang {
+        .snippet-item-lang {
             font-size: 12px;
             padding: 3px 10px;
-            background: #e8f5e9;
-            color: #4CAF50;
-            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 500;
         }
 
-        .snippet-code {
-            background: #282c34;
-            color: #abb2bf;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: "Source Code Pro", monospace;
-            font-size: 13px;
-            max-height: 100px;
-            overflow-y: auto;
+        .snippet-item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
-        .snippet-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
+        .snippet-item-code {
             font-size: 12px;
-            color: #888;
+            color: var(--text-secondary);
+            font-family: "JetBrains Mono", Consolas, monospace;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: #1e293b;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            color: #e2e8f0;
         }
 
-        .no-data {
+        .empty-state {
             text-align: center;
-            padding: 40px;
-            color: #888;
+            padding: 48px 24px;
+            color: var(--text-muted);
         }
 
-        .no-data .icon {
+        .empty-state-icon {
             font-size: 48px;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stat-card .stat-number {
+                font-size: 28px;
+            }
+        }
+
+        .code-btn {
+            padding: 6px 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            height: fit-content;
+        }
+
+        .code-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
         }
     </style>
 </head>
@@ -226,209 +358,298 @@
             </a>
             <div class="nav-menu">
                 <a href="index.html" class="nav-item">首页</a>
+                <a href="tutorial-hub.html" class="nav-item active">学习中心</a>
                 <a href="tutorial-python.html" class="nav-item">Python</a>
                 <a href="tutorial-java.html" class="nav-item">Java</a>
                 <a href="tutorial-javascript.html" class="nav-item">JavaScript</a>
-                <a href="tutorial-cpp.html" class="nav-item">C/C++</a>
-                <a href="tutorial-csharp.html" class="nav-item">C#</a>
-                <a href="tutorial-go.html" class="nav-item">Go</a>
-                <a href="tutorial-php.html" class="nav-item">PHP</a>
-                <a href="tutorial-rust.html" class="nav-item">Rust</a>
-                <a href="tutorial-swift.html" class="nav-item">Swift</a>
-                <a href="tutorial-hub.html" class="nav-item active">学习中心</a>
             </div>
         </div>
     </nav>
 
     <div class="hub-container">
         <div class="hub-header">
-            <h1>🎯 学习中心</h1>
-            <p>追踪你的学习进度，管理代码片段，解锁成就徽章</p>
+            <h1>学习中心</h1>
+            <p>追踪你的学习进度，管理你的代码片段</p>
         </div>
 
-        <div class="stats-grid" id="statsGrid"></div>
-
-        <div class="section">
-            <h3 class="section-title">📊 各语言学习进度</h3>
-            <div class="language-progress" id="langProgress"></div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalCompleted">0</div>
+                <div class="stat-label">已完成章节</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="languagesStudying">0</div>
+                <div class="stat-label">正在学习语言</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="snippetCount">0</div>
+                <div class="stat-label">代码片段</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="overallProgress">0%</div>
+                <div class="stat-label">总体进度</div>
+            </div>
         </div>
 
         <div class="section">
-            <h3 class="section-title">🚀 快捷访问</h3>
+            <div class="section-title">学习进度</div>
+            <div class="progress-list" id="progressList">
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">快捷访问</div>
             <div class="quick-links">
                 <a href="tutorial-python.html" class="quick-link">
-                    <span class="icon">🐍</span>
-                    <span class="text">Python教程</span>
+                    <span class="quick-link-icon">🐍</span>
+                    <span class="quick-link-text">Python教程</span>
                 </a>
                 <a href="tutorial-java.html" class="quick-link">
-                    <span class="icon">☕</span>
-                    <span class="text">Java教程</span>
+                    <span class="quick-link-icon">☕</span>
+                    <span class="quick-link-text">Java教程</span>
                 </a>
                 <a href="tutorial-javascript.html" class="quick-link">
-                    <span class="icon">📜</span>
-                    <span class="text">JavaScript教程</span>
+                    <span class="quick-link-icon">📜</span>
+                    <span class="quick-link-text">JavaScript教程</span>
                 </a>
                 <a href="tutorial-cpp.html" class="quick-link">
-                    <span class="icon">⚙️</span>
-                    <span class="text">C/C++教程</span>
+                    <span class="quick-link-icon">⚙️</span>
+                    <span class="quick-link-text">C/C++教程</span>
                 </a>
                 <a href="tutorial-csharp.html" class="quick-link">
-                    <span class="icon">🎯</span>
-                    <span class="text">C#教程</span>
+                    <span class="quick-link-icon">🎯</span>
+                    <span class="quick-link-text">C#教程</span>
                 </a>
                 <a href="tutorial-go.html" class="quick-link">
-                    <span class="icon">🐹</span>
-                    <span class="text">Go教程</span>
+                    <span class="quick-link-icon">🐹</span>
+                    <span class="quick-link-text">Go教程</span>
                 </a>
                 <a href="tutorial-php.html" class="quick-link">
-                    <span class="icon">🐘</span>
-                    <span class="text">PHP教程</span>
+                    <span class="quick-link-icon">🐘</span>
+                    <span class="quick-link-text">PHP教程</span>
                 </a>
                 <a href="tutorial-rust.html" class="quick-link">
-                    <span class="icon">🦀</span>
-                    <span class="text">Rust教程</span>
+                    <span class="quick-link-icon">🦀</span>
+                    <span class="quick-link-text">Rust教程</span>
                 </a>
                 <a href="tutorial-swift.html" class="quick-link">
-                    <span class="icon">🍎</span>
-                    <span class="text">Swift教程</span>
+                    <span class="quick-link-icon">🍎</span>
+                    <span class="quick-link-text">Swift教程</span>
                 </a>
                 <a href="tutorial-typescript.html" class="quick-link">
-                    <span class="icon">📘</span>
-                    <span class="text">TypeScript教程</span>
+                    <span class="quick-link-icon">📘</span>
+                    <span class="quick-link-text">TypeScript教程</span>
                 </a>
             </div>
         </div>
 
         <div class="section">
-            <h3 class="section-title">📋 我的代码片段</h3>
-            <div class="snippet-list" id="snippetList"></div>
+            <div class="snippets-section">
+                <div class="snippets-header">
+                    <h3>💾 我的代码片段</h3>
+                    <button class="code-btn" onclick="exportSnippets()">导出全部</button>
+                </div>
+                <div class="snippet-input">
+                    <select id="snippetLang">
+                        <option value="python">Python</option>
+                        <option value="java">Java</option>
+                        <option value="javascript">JavaScript</option>
+                        <option value="cpp">C++</option>
+                        <option value="csharp">C#</option>
+                        <option value="go">Go</option>
+                        <option value="php">PHP</option>
+                        <option value="rust">Rust</option>
+                        <option value="swift">Swift</option>
+                        <option value="typescript">TypeScript</option>
+                    </select>
+                    <input type="text" id="snippetTitle" placeholder="输入代码片段标题，按Enter保存">
+                    <button class="code-btn" onclick="addSnippet()">添加</button>
+                </div>
+                <div class="snippet-list" id="snippetList">
+                </div>
+            </div>
         </div>
     </div>
 
-    <footer class="footer" style="text-align: center; padding: 30px; background: #333; color: #fff;">
-        <p>© 2024 编程教程 | 学的不仅是技术，更是梦想！</p>
-    </footer>
+    <div class="toast" id="toast"></div>
 
     <script>
         const languages = [
-            { id: 'python', name: 'Python', total: 35 },
-            { id: 'java', name: 'Java', total: 35 },
-            { id: 'javascript', name: 'JavaScript', total: 35 },
-            { id: 'cpp', name: 'C/C++', total: 35 },
-            { id: 'csharp', name: 'C#', total: 35 },
-            { id: 'go', name: 'Go', total: 35 },
-            { id: 'php', name: 'PHP', total: 35 },
-            { id: 'rust', name: 'Rust', total: 35 },
-            { id: 'swift', name: 'Swift', total: 35 },
-            { id: 'typescript', name: 'TypeScript', total: 35 }
+            { id: 'python', name: 'Python教程', icon: '🐍' },
+            { id: 'java', name: 'Java教程', icon: '☕' },
+            { id: 'javascript', name: 'JavaScript教程', icon: '📜' },
+            { id: 'cpp', name: 'C/C++教程', icon: '⚙️' },
+            { id: 'csharp', name: 'C#教程', icon: '🎯' },
+            { id: 'go', name: 'Go教程', icon: '🐹' },
+            { id: 'php', name: 'PHP教程', icon: '🐘' },
+            { id: 'rust', name: 'Rust教程', icon: '🦀' },
+            { id: 'swift', name: 'Swift教程', icon: '🍎' },
+            { id: 'typescript', name: 'TypeScript教程', icon: '📘' }
         ];
 
-        function getProgress(languageId) {
-            const stored = localStorage.getItem(`${languageId}_progress`);
-            return stored ? JSON.parse(stored).length : 0;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        function renderStats() {
+        function getProgress() {
+            const dataKey = 'TUTORIAL_DATA_python';
+            const totalChapters = window[dataKey] ? window[dataKey].length : 35;
             let totalCompleted = 0;
-            let totalLanguages = 0;
-            
+            let totalChaptersAll = 0;
+            let studyingCount = 0;
+
+            const list = document.getElementById('progressList');
+            list.innerHTML = '';
+
             languages.forEach(lang => {
-                const progress = getProgress(lang.id);
-                totalCompleted += progress;
-                if (progress > 0) totalLanguages++;
-            });
+                const pKey = lang.id + '_progress';
+                const progress = JSON.parse(localStorage.getItem(pKey) || '[]');
+                const count = progress.length;
+                const chapters = totalChapters;
+                const percent = Math.round((count / chapters) * 100);
 
-            const statsGrid = document.getElementById('statsGrid');
-            statsGrid.innerHTML = `
-                <div class="stat-card">
-                    <div class="stat-icon">📚</div>
-                    <div class="stat-value">${totalCompleted}</div>
-                    <div class="stat-label">已完成章节</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🌐</div>
-                    <div class="stat-value">${totalLanguages}</div>
-                    <div class="stat-label">正在学习的语言</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-value">${getSnippetsCount()}</div>
-                    <div class="stat-label">保存的代码片段</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎯</div>
-                    <div class="stat-value">${Math.round(totalCompleted / 350 * 100)}%</div>
-                    <div class="stat-label">总体进度</div>
-                </div>
-            `;
-        }
+                if (count > 0) studyingCount++;
+                totalCompleted += count;
+                totalChaptersAll += chapters;
 
-        function renderLangProgress() {
-            const container = document.getElementById('langProgress');
-            container.innerHTML = languages.map(lang => {
-                const completed = getProgress(lang.id);
-                const percent = Math.round(completed / lang.total * 100);
-                return `
-                    <div class="lang-card">
-                        <h4>${lang.name}</h4>
-                        <div class="lang-bar">
-                            <div class="lang-fill" style="width: ${percent}%"></div>
-                        </div>
-                        <div class="lang-info">${completed}/${lang.total} 章节 (${percent}%)</div>
+                const card = document.createElement('a');
+                card.href = 'tutorial-' + lang.id + '.html';
+                card.className = 'progress-card';
+                card.innerHTML = `
+                    <div class="progress-card-header">
+                        <span class="progress-card-title">${lang.icon} ${lang.name}</span>
+                        <span class="progress-card-percent">${percent}%</span>
+                    </div>
+                    <div class="progress-bar-hub">
+                        <div class="progress-bar-hub-fill" style="width: ${percent}%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span>已完成 ${count} 节</span>
+                        <span>共 ${chapters} 节</span>
                     </div>
                 `;
-            }).join('');
+                list.appendChild(card);
+            });
+
+            document.getElementById('totalCompleted').textContent = totalCompleted;
+            document.getElementById('languagesStudying').textContent = studyingCount;
+            document.getElementById('overallProgress').textContent = 
+                Math.round((totalCompleted / totalChaptersAll) * 100) + '%';
         }
 
-        function getSnippetsCount() {
-            const snippets = localStorage.getItem('code_snippets');
-            return snippets ? JSON.parse(snippets).length : 0;
+        function getSnippets() {
+            return JSON.parse(localStorage.getItem('code_snippets') || '[]');
+        }
+
+        function saveSnippets(snippets) {
+            localStorage.setItem('code_snippets', JSON.stringify(snippets));
         }
 
         function renderSnippets() {
-            const container = document.getElementById('snippetList');
-            const snippets = localStorage.getItem('code_snippets');
-            
-            if (!snippets || JSON.parse(snippets).length === 0) {
-                container.innerHTML = `
-                    <div class="no-data">
-                        <div class="icon">📋</div>
-                        <p>还没有保存任何代码片段</p>
-                        <p>在教程页面点击复制按钮即可保存代码</p>
+            const list = document.getElementById('snippetList');
+            const snippets = getSnippets();
+            document.getElementById('snippetCount').textContent = snippets.length;
+
+            if (snippets.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <div class="empty-state-icon">📝</div>
+                        <p>还没有代码片段，添加一个吧！</p>
                     </div>
                 `;
                 return;
             }
 
-            const snippetList = JSON.parse(snippets);
-            container.innerHTML = snippetList.map((s, idx) => `
-                <div class="snippet-item">
-                    <div class="snippet-header">
-                        <span class="snippet-title">${s.title || '代码片段 ' + (idx + 1)}</span>
-                        <span class="snippet-lang">${s.language || '未知'}</span>
+            list.innerHTML = '';
+            snippets.forEach((s, i) => {
+                const item = document.createElement('div');
+                item.className = 'snippet-item';
+                item.innerHTML = `
+                    <div class="snippet-item-header">
+                        <span class="snippet-item-lang">${s.language}</span>
+                        <button class="delete-btn" onclick="deleteSnippet(${i})">✕</button>
                     </div>
-                    <pre class="snippet-code">${s.code || ''}</pre>
-                    <div class="snippet-footer">
-                        <span>${new Date(s.createdAt).toLocaleDateString()}</span>
-                        <button class="btn btn-secondary" onclick="deleteSnippet(${idx})" style="padding: 5px 10px; font-size: 12px;">删除</button>
-                    </div>
-                </div>
-            `).join('');
+                    <div class="snippet-item-title">${s.title}</div>
+                    <div class="snippet-item-code">${s.code.substring(0, 60)}...</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function addSnippet() {
+            const lang = document.getElementById('snippetLang').value;
+            const title = document.getElementById('snippetTitle').value.trim();
+            if (!title) {
+                showToast('请输入代码片段标题');
+                return;
+            }
+            const code = prompt('请输入代码内容：');
+            if (!code) return;
+
+            const snippets = getSnippets();
+            snippets.unshift({ language: lang, title, code, date: new Date().toISOString() });
+            saveSnippets(snippets);
+            renderSnippets();
+            document.getElementById('snippetTitle').value = '';
+            showToast('代码片段已保存');
         }
 
         function deleteSnippet(index) {
-            const snippets = JSON.parse(localStorage.getItem('code_snippets') || '[]');
+            if (!confirm('确定删除此代码片段吗？')) return;
+            const snippets = getSnippets();
             snippets.splice(index, 1);
-            localStorage.setItem('code_snippets', JSON.stringify(snippets));
+            saveSnippets(snippets);
             renderSnippets();
-            renderStats();
+            showToast('已删除');
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderStats();
-            renderLangProgress();
-            renderSnippets();
+        function exportSnippets() {
+            const snippets = getSnippets();
+            if (snippets.length === 0) {
+                showToast('没有代码片段可导出');
+                return;
+            }
+            const blob = new Blob([JSON.stringify(snippets, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'code-snippets.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('导出成功');
+        }
+
+        document.getElementById('snippetTitle').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') addSnippet();
         });
+
+        function loadChaptersData() {
+            let loaded = 0;
+            languages.forEach((lang, index) => {
+                const script = document.createElement('script');
+                script.src = 'data/tutorial-' + lang.id + '.data.js';
+                script.onload = function() {
+                    loaded++;
+                    if (loaded === languages.length) {
+                        getProgress();
+                    }
+                };
+                script.onerror = function() {
+                    loaded++;
+                    if (loaded === languages.length) {
+                        getProgress();
+                    }
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        getProgress();
+        renderSnippets();
+        loadChaptersData();
     </script>
 </body>
 </html>
