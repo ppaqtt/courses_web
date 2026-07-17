@@ -1,0 +1,839 @@
+[
+  {
+    "id": 1,
+    "t": "TypeScript 入门",
+    "p": [
+      "TypeScript 是 JavaScript 的超集，添加了静态类型系统",
+      "TypeScript 编译后生成纯 JavaScript，可在任何浏览器运行",
+      "TypeScript 提供类型检查、智能提示和更好的开发体验",
+      "安装命令：npm install -g typescript",
+      "编译命令：tsc filename.ts"
+    ],
+    "c": "// hello.ts\nfunction greet(name: string): string {\n    return `Hello, ${name}!`;\n}\n\nconst message: string = greet('TypeScript');\nconsole.log(message);\n\n// 编译命令\ntsc hello.ts\n// 生成 hello.js\nnode hello.js\n// 输出: Hello, TypeScript!",
+    "et": [
+      "错误：未安装 TypeScript",
+      "错误：类型不匹配"
+    ],
+    "ec": [
+      "运行 tsc 命令时报错 \"command not found\"，需要先安装 TypeScript：npm install -g typescript",
+      "传入参数类型与声明类型不一致会导致编译错误"
+    ],
+    "q": [
+      "安装 TypeScript 并编译第一个 .ts 文件",
+      "创建一个函数，接收两个数字参数并返回它们的和",
+      "编写一个 TypeScript 程序，输出你的名字和年龄"
+    ]
+  },
+  {
+    "id": 2,
+    "t": "基础类型",
+    "p": [
+      "string：字符串类型",
+      "number：数字类型（整数和浮点数）",
+      "boolean：布尔类型（true/false）",
+      "undefined：未定义值",
+      "null：空值",
+      "void：无返回值",
+      "any：任意类型（关闭类型检查）",
+      "never：永不返回的类型"
+    ],
+    "c": "let name: string = 'Alice';\nlet age: number = 25;\nlet isStudent: boolean = true;\nlet nothing: void = undefined;\nlet unknownValue: any = 'hello';\nunknownValue = 42;\nunknownValue = false;\n\nfunction warnUser(): void {\n    console.log('This is a warning');\n}\n\nfunction throwError(): never {\n    throw new Error('An error occurred');\n}",
+    "et": [
+      "错误：误用 any 类型",
+      "错误：将 null/undefined 赋值给非空类型"
+    ],
+    "ec": [
+      "过度使用 any 会丧失 TypeScript 的类型安全优势，应尽量避免",
+      "默认情况下，null 和 undefined 不能赋值给其他类型变量"
+    ],
+    "q": [
+      "声明并初始化不同类型的变量（string、number、boolean）",
+      "创建一个返回 void 的函数",
+      "解释 never 类型的使用场景"
+    ]
+  },
+  {
+    "id": 3,
+    "t": "类型推断",
+    "p": [
+      "TypeScript 会根据上下文自动推断变量类型",
+      "初始化时的赋值决定变量类型",
+      "函数返回值类型可根据 return 语句推断",
+      "let 和 const 的类型推断差异",
+      "类型推断可以减少显式类型注解"
+    ],
+    "c": "// 类型推断为 string\nlet username = 'Bob';\n\n// 类型推断为 number\nlet count = 10;\n\n// 类型推断为 boolean\nlet isActive = true;\n\n// const 推断为字面量类型\nconst pi = 3.14;\n\nfunction add(a: number, b: number) {\n    // 返回值类型推断为 number\n    return a + b;\n}\n\nconst result = add(5, 3);\n// result 类型推断为 number",
+    "et": [
+      "错误：推断类型过于宽泛"
+    ],
+    "ec": [
+      "使用 let 声明时，类型推断为基础类型而非字面量类型"
+    ],
+    "q": [
+      "不使用类型注解声明变量，观察 TypeScript 的类型推断",
+      "比较 let 和 const 的类型推断差异",
+      "编写一个函数，让 TypeScript 自动推断返回值类型"
+    ]
+  },
+  {
+    "id": 4,
+    "t": "接口",
+    "p": [
+      "接口定义对象的结构和类型约束",
+      "使用 interface 关键字声明",
+      "接口可以包含可选属性（?）",
+      "接口可以包含只读属性（readonly）",
+      "接口可以描述函数类型",
+      "接口可以继承其他接口"
+    ],
+    "c": "interface Person {\n    name: string;\n    age: number;\n    email?: string;\n    readonly id: number;\n}\n\nconst person: Person = {\n    name: 'Charlie',\n    age: 30,\n    id: 123\n};\n\ninterface GreetFunction {\n    (name: string): string;\n}\n\nconst greet: GreetFunction = (name) => {\n    return `Hello, ${name}!`;\n};\n\ninterface Shape {\n    color: string;\n}\n\ninterface Square extends Shape {\n    sideLength: number;\n}\n\nconst square: Square = {\n    color: 'red',\n    sideLength: 10\n};",
+    "et": [
+      "错误：缺少必需属性",
+      "错误：修改只读属性"
+    ],
+    "ec": [
+      "实现接口时必须提供所有非可选属性",
+      "尝试修改 readonly 属性会导致编译错误"
+    ],
+    "q": [
+      "定义一个 User 接口，包含 name、age、email 属性",
+      "创建一个包含可选属性和只读属性的接口",
+      "定义两个接口，让一个继承另一个"
+    ]
+  },
+  {
+    "id": 5,
+    "t": "类型别名",
+    "p": [
+      "类型别名使用 type 关键字定义",
+      "类型别名可以表示任意类型（联合类型、交叉类型等）",
+      "类型别名可以复用复杂类型定义",
+      "类型别名可以使用泛型",
+      "接口和类型别名的区别：接口可继承和合并声明"
+    ],
+    "c": "type Point = {\n    x: number;\n    y: number;\n};\n\ntype ID = string | number;\n\ntype User = {\n    id: ID;\n    name: string;\n    isActive: boolean;\n};\n\ntype StringOrNumber = string | number;\n\ntype GenericType<T> = {\n    value: T;\n    label: string;\n};\n\nconst coordinate: Point = { x: 10, y: 20 };\nconst userId: ID = 'abc123';\nconst genericValue: GenericType<number> = {\n    value: 42,\n    label: 'Answer'\n};",
+    "et": [
+      "错误：混淆类型别名和接口"
+    ],
+    "ec": [
+      "类型别名不能声明合并，适合联合类型；接口适合对象类型"
+    ],
+    "q": [
+      "使用类型别名定义一个联合类型（string | number）",
+      "创建一个包含泛型的类型别名",
+      "比较类型别名和接口的适用场景"
+    ]
+  },
+  {
+    "id": 6,
+    "t": "函数类型",
+    "p": [
+      "函数参数可以指定类型",
+      "函数返回值可以指定类型",
+      "可选参数使用 ? 标记",
+      "默认参数值会自动推断类型",
+      "剩余参数使用 ... 语法",
+      "函数重载允许一个函数有多个签名"
+    ],
+    "c": "function multiply(a: number, b: number): number {\n    return a * b;\n}\n\nfunction greet(name: string, greeting: string = 'Hello'): string {\n    return `${greeting}, ${name}!`;\n}\n\nfunction sum(...numbers: number[]): number {\n    return numbers.reduce((acc, curr) => acc + curr, 0);\n}\n\nfunction formatInput(input: string): string;\nfunction formatInput(input: number): string;\nfunction formatInput(input: string | number): string {\n    return String(input);\n}",
+    "et": [
+      "错误：参数数量不匹配",
+      "错误：返回值类型不匹配"
+    ],
+    "ec": [
+      "调用函数时参数数量必须与定义一致（除非有可选参数）",
+      "函数返回值必须与声明的返回类型一致"
+    ],
+    "q": [
+      "创建一个带可选参数的函数",
+      "编写一个接收任意数量参数的求和函数",
+      "实现一个函数重载示例"
+    ]
+  },
+  {
+    "id": 7,
+    "t": "泛型",
+    "p": [
+      "泛型允许编写可重用的类型安全代码",
+      "使用 &lt;T&gt; 语法定义类型参数",
+      "泛型可以应用于函数、类、接口",
+      "泛型约束限制类型参数的范围",
+      "默认泛型参数提供默认类型"
+    ],
+    "c": "function identity<T>(arg: T): T {\n    return arg;\n}\n\nconst num = identity<number>(42);\nconst str = identity('hello');\n\ninterface Container<T> {\n    value: T;\n    getValue: () => T;\n}\n\nclass GenericArray<T> {\n    private items: T[] = [];\n    \n    add(item: T): void {\n        this.items.push(item);\n    }\n    \n    get(index: number): T {\n        return this.items[index];\n    }\n}\n\ninterface Lengthwise {\n    length: number;\n}\n\nfunction logLength<T extends Lengthwise>(arg: T): T {\n    console.log(arg.length);\n    return arg;\n}",
+    "et": [
+      "错误：泛型参数未使用约束导致属性访问错误"
+    ],
+    "ec": [
+      "在泛型函数中访问属性时，需要使用约束确保属性存在"
+    ],
+    "q": [
+      "实现一个泛型函数，交换数组中两个元素的位置",
+      "创建一个泛型类",
+      "使用泛型约束限制类型参数"
+    ]
+  },
+  {
+    "id": 8,
+    "t": "类",
+    "p": [
+      "使用 class 关键字定义类",
+      "构造函数使用 constructor",
+      "类包含属性和方法",
+      "访问实例属性使用 this",
+      "类可以实现接口",
+      "类可以继承其他类"
+    ],
+    "c": "class Car {\n    brand: string;\n    model: string;\n    year: number;\n    \n    constructor(brand: string, model: string, year: number) {\n        this.brand = brand;\n        this.model = model;\n        this.year = year;\n    }\n    \n    drive(): void {\n        console.log(`Driving ${this.brand} ${this.model}`);\n    }\n    \n    getAge(): number {\n        return new Date().getFullYear() - this.year;\n    }\n}\n\nconst myCar = new Car('Toyota', 'Camry', 2020);\nmyCar.drive();\nconsole.log(myCar.getAge());",
+    "et": [
+      "错误：忘记在构造函数中初始化属性"
+    ],
+    "ec": [
+      "声明的属性必须在构造函数中赋值或有默认值"
+    ],
+    "q": [
+      "创建一个 Person 类，包含 name、age 属性和 greet 方法",
+      "添加一个计算属性的方法",
+      "实例化类并调用其方法"
+    ]
+  },
+  {
+    "id": 9,
+    "t": "继承",
+    "p": [
+      "使用 extends 关键字实现继承",
+      "子类继承父类的属性和方法",
+      "使用 super 调用父类构造函数",
+      "子类可以重写父类方法",
+      "TypeScript 支持单继承"
+    ],
+    "c": "class Animal {\n    name: string;\n    \n    constructor(name: string) {\n        this.name = name;\n    }\n    \n    makeSound(): void {\n        console.log('Animal makes sound');\n    }\n}\n\nclass Dog extends Animal {\n    breed: string;\n    \n    constructor(name: string, breed: string) {\n        super(name);\n        this.breed = breed;\n    }\n    \n    makeSound(): void {\n        console.log('Woof! Woof!');\n    }\n    \n    fetch(): void {\n        console.log(`${this.name} is fetching`);\n    }\n}\n\nconst dog = new Dog('Buddy', 'Golden Retriever');\ndog.makeSound();\ndog.fetch();",
+    "et": [
+      "错误：在调用 super 前使用 this"
+    ],
+    "ec": [
+      "在子类构造函数中，必须先调用 super() 才能使用 this"
+    ],
+    "q": [
+      "创建一个父类 Shape，包含 color 属性",
+      "创建子类 Circle 和 Rectangle，继承 Shape",
+      "在子类中添加计算面积的方法"
+    ]
+  },
+  {
+    "id": 10,
+    "t": "访问修饰符",
+    "p": [
+      "public：公共属性，默认值，可在任何地方访问",
+      "private：私有属性，只能在类内部访问",
+      "protected：受保护属性，可在类和子类中访问",
+      "访问修饰符控制属性的可见性",
+      "TypeScript 编译后不保留访问修饰符"
+    ],
+    "c": "class Person {\n    public name: string;\n    private age: number;\n    protected email: string;\n    \n    constructor(name: string, age: number, email: string) {\n        this.name = name;\n        this.age = age;\n        this.email = email;\n    }\n    \n    public getAge(): number {\n        return this.age;\n    }\n}\n\nclass Employee extends Person {\n    constructor(name: string, age: number, email: string) {\n        super(name, age, email);\n    }\n    \n    public getEmail(): string {\n        return this.email;\n    }\n}\n\nconst person = new Person('David', 35, 'david@example.com');\nconsole.log(person.name);\nconsole.log(person.getAge());\n\nconst employee = new Employee('Sarah', 28, 'sarah@company.com');\nconsole.log(employee.getEmail());",
+    "et": [
+      "错误：访问私有属性",
+      "错误：在子类中访问父类私有属性"
+    ],
+    "ec": [
+      "尝试从类外部访问 private 属性会导致编译错误",
+      "private 属性不能在子类中访问，应使用 protected"
+    ],
+    "q": [
+      "创建一个类，包含 public、private、protected 属性",
+      "创建子类访问 protected 属性",
+      "尝试从外部访问 private 属性，观察错误信息"
+    ]
+  },
+  {
+    "id": 11,
+    "t": "抽象类",
+    "p": [
+      "抽象类使用 abstract 关键字定义",
+      "抽象类不能被实例化",
+      "抽象方法必须在子类中实现",
+      "抽象类可以包含具体方法和抽象方法",
+      "抽象类用于定义基类的通用行为"
+    ],
+    "c": "abstract class Shape {\n    protected color: string;\n    \n    constructor(color: string) {\n        this.color = color;\n    }\n    \n    abstract calculateArea(): number;\n    \n    abstract calculatePerimeter(): number;\n    \n    getColor(): string {\n        return this.color;\n    }\n}\n\nclass Circle extends Shape {\n    private radius: number;\n    \n    constructor(color: string, radius: number) {\n        super(color);\n        this.radius = radius;\n    }\n    \n    calculateArea(): number {\n        return Math.PI * this.radius * this.radius;\n    }\n    \n    calculatePerimeter(): number {\n        return 2 * Math.PI * this.radius;\n    }\n}\n\nclass Rectangle extends Shape {\n    private width: number;\n    private height: number;\n    \n    constructor(color: string, width: number, height: number) {\n        super(color);\n        this.width = width;\n        this.height = height;\n    }\n    \n    calculateArea(): number {\n        return this.width * this.height;\n    }\n    \n    calculatePerimeter(): number {\n        return 2 * (this.width + this.height);\n    }\n}\n\nconst circle = new Circle('red', 5);\nconsole.log(circle.calculateArea());",
+    "et": [
+      "错误：尝试实例化抽象类",
+      "错误：子类未实现抽象方法"
+    ],
+    "ec": [
+      "抽象类不能直接实例化，必须通过子类",
+      "子类必须实现父类的所有抽象方法"
+    ],
+    "q": [
+      "创建一个抽象类 Vehicle",
+      "定义抽象方法 start() 和 stop()",
+      "创建 Car 和 Bike 子类实现抽象方法"
+    ]
+  },
+  {
+    "id": 12,
+    "t": "接口与类",
+    "p": [
+      "类使用 implements 实现接口",
+      "类必须实现接口的所有属性和方法",
+      "一个类可以实现多个接口",
+      "接口描述类的公共部分",
+      "接口可以继承其他接口"
+    ],
+    "c": "interface Flyable {\n    fly(): void;\n    getAltitude(): number;\n}\n\ninterface Swimmable {\n    swim(): void;\n    getDepth(): number;\n}\n\nclass Bird implements Flyable {\n    private altitude: number = 0;\n    \n    fly(): void {\n        this.altitude += 100;\n        console.log('Bird is flying');\n    }\n    \n    getAltitude(): number {\n        return this.altitude;\n    }\n}\n\nclass Duck implements Flyable, Swimmable {\n    private altitude: number = 0;\n    private depth: number = 0;\n    \n    fly(): void {\n        this.altitude += 50;\n        console.log('Duck is flying');\n    }\n    \n    getAltitude(): number {\n        return this.altitude;\n    }\n    \n    swim(): void {\n        this.depth += 10;\n        console.log('Duck is swimming');\n    }\n    \n    getDepth(): number {\n        return this.depth;\n    }\n}",
+    "et": [
+      "错误：类未实现接口的所有方法"
+    ],
+    "ec": [
+      "实现接口时必须提供所有声明的属性和方法"
+    ],
+    "q": [
+      "定义一个 Drivable 接口，包含 drive() 方法",
+      "创建 Car 和 Truck 类实现 Drivable 接口",
+      "让一个类实现多个接口"
+    ]
+  },
+  {
+    "id": 13,
+    "t": "联合类型",
+    "p": [
+      "联合类型使用 | 分隔多个类型",
+      "变量可以是联合类型中的任意一种",
+      "只能访问联合类型中所有类型共有的属性和方法",
+      "类型守卫可以缩小类型范围",
+      "联合类型常用于处理多种可能的输入类型"
+    ],
+    "c": "type StringOrNumber = string | number;\n\nfunction formatInput(input: StringOrNumber): string {\n    return String(input);\n}\n\nfunction printId(id: number | string): void {\n    if (typeof id === 'number') {\n        console.log(`ID is number: ${id}`);\n    } else {\n        console.log(`ID is string: ${id.toUpperCase()}`);\n    }\n}\n\ntype Status = 'loading' | 'success' | 'error';\n\nfunction handleStatus(status: Status): void {\n    switch (status) {\n        case 'loading':\n            console.log('Loading...');\n            break;\n        case 'success':\n            console.log('Success!');\n            break;\n        case 'error':\n            console.log('Error!');\n            break;\n    }\n}",
+    "et": [
+      "错误：访问联合类型中非共有属性"
+    ],
+    "ec": [
+      "在未进行类型收窄的情况下，只能访问所有类型共有的属性"
+    ],
+    "q": [
+      "创建一个联合类型表示不同的动物类型",
+      "编写函数处理 string | number 类型的参数",
+      "使用 typeof 进行类型守卫"
+    ]
+  },
+  {
+    "id": 14,
+    "t": "交叉类型",
+    "p": [
+      "交叉类型使用 &amp; 组合多个类型",
+      "交叉类型包含所有类型的属性和方法",
+      "交叉类型表示\"并且\"关系",
+      "联合类型表示\"或者\"关系",
+      "交叉类型常用于 mixin 模式"
+    ],
+    "c": "interface User {\n    id: number;\n    name: string;\n}\n\ninterface ContactInfo {\n    email: string;\n    phone: string;\n}\n\ntype UserWithContact = User & ContactInfo;\n\nconst user: UserWithContact = {\n    id: 1,\n    name: 'Emily',\n    email: 'emily@example.com',\n    phone: '123-456-7890'\n};\n\ntype Admin = {\n    isAdmin: boolean;\n    permissions: string[];\n};\n\ntype AdminUser = User & Admin;\n\nconst admin: AdminUser = {\n    id: 2,\n    name: 'Admin',\n    isAdmin: true,\n    permissions: ['read', 'write', 'delete']\n};",
+    "et": [
+      "错误：混淆联合类型和交叉类型"
+    ],
+    "ec": [
+      "联合类型是\"或\"，交叉类型是\"且\"，使用时需区分清楚"
+    ],
+    "q": [
+      "创建两个接口，使用交叉类型组合",
+      "比较联合类型和交叉类型的区别",
+      "使用交叉类型实现 mixin 模式"
+    ]
+  },
+  {
+    "id": 15,
+    "t": "类型守卫",
+    "p": [
+      "类型守卫用于在运行时检查类型",
+      "typeof 类型守卫检查基本类型",
+      "instanceof 类型守卫检查对象类型",
+      "in 操作符检查属性是否存在",
+      "自定义类型守卫使用类型谓词"
+    ],
+    "c": "function padLeft(value: string, padding: string | number): string {\n    if (typeof padding === 'number') {\n        return ' '.repeat(padding) + value;\n    }\n    return padding + value;\n}\n\nclass Dog {\n    bark(): void {\n        console.log('Woof!');\n    }\n}\n\nclass Cat {\n    meow(): void {\n        console.log('Meow!');\n    }\n}\n\nfunction makeSound(animal: Dog | Cat): void {\n    if (animal instanceof Dog) {\n        animal.bark();\n    } else {\n        animal.meow();\n    }\n}\n\ninterface Bird {\n    fly(): void;\n    layEggs(): void;\n}\n\ninterface Fish {\n    swim(): void;\n    layEggs(): void;\n}\n\nfunction move(animal: Bird | Fish): void {\n    if ('fly' in animal) {\n        animal.fly();\n    } else {\n        animal.swim();\n    }\n}",
+    "et": [
+      "错误：typeof 无法区分对象类型"
+    ],
+    "ec": [
+      "typeof 对所有对象都返回 'object'，需要使用 instanceof"
+    ],
+    "q": [
+      "使用 typeof 检查 number 和 string 类型",
+      "使用 instanceof 区分不同类的实例",
+      "使用 in 操作符检查属性"
+    ]
+  },
+  {
+    "id": 16,
+    "t": "类型谓词",
+    "p": [
+      "类型谓词是自定义的类型守卫函数",
+      "使用 parameterName is Type 语法",
+      "类型谓词函数返回 boolean",
+      "TypeScript 会根据返回值收窄类型",
+      "类型谓词常用于复杂的类型检查"
+    ],
+    "c": "interface Bird {\n    fly(): void;\n    layEggs(): void;\n}\n\ninterface Fish {\n    swim(): void;\n    layEggs(): void;\n}\n\nfunction isBird(animal: Bird | Fish): animal is Bird {\n    return (animal as Bird).fly !== undefined;\n}\n\nfunction move(animal: Bird | Fish): void {\n    if (isBird(animal)) {\n        animal.fly();\n    } else {\n        animal.swim();\n    }\n}\n\ninterface User {\n    name: string;\n}\n\ninterface Admin {\n    name: string;\n    isAdmin: boolean;\n}\n\nfunction isAdmin(user: User | Admin): user is Admin {\n    return 'isAdmin' in user && (user as Admin).isAdmin;\n}\n\nfunction handleUser(user: User | Admin): void {\n    if (isAdmin(user)) {\n        console.log(`${user.name} is an admin`);\n    } else {\n        console.log(`${user.name} is a regular user`);\n    }\n}",
+    "et": [
+      "错误：类型谓词函数逻辑不正确"
+    ],
+    "ec": [
+      "类型谓词的检查逻辑必须能准确区分类型"
+    ],
+    "q": [
+      "创建两个接口，编写类型谓词函数区分它们",
+      "使用类型谓词进行类型收窄",
+      "实现一个检查数组是否为空的类型谓词"
+    ]
+  },
+  {
+    "id": 17,
+    "t": "类型断言",
+    "p": [
+      "类型断言告诉 TypeScript 变量的确切类型",
+      "尖括号语法：&lt;Type&gt;value",
+      "as 语法：value as Type",
+      "类型断言不进行运行时检查",
+      "类型断言常用于类型收窄或转换",
+      "双重断言：value as unknown as Type"
+    ],
+    "c": "let someValue: any = 'this is a string';\n\nlet strLength: number = (<string>someValue).length;\n\nlet anotherValue: any = 'another string';\nlet anotherLength: number = (anotherValue as string).length;\n\ninterface User {\n    name: string;\n    age: number;\n}\n\nconst user = {} as User;\nuser.name = 'Frank';\nuser.age = 40;\n\nfunction getValue(): string | number {\n    return 'hello';\n}\n\nconst stringValue = getValue() as string;\nconsole.log(stringValue.toUpperCase());\n\nconst assertAny: any = 'test';\nconst assertString = assertAny as unknown as string;",
+    "et": [
+      "错误：滥用类型断言",
+      "错误：类型断言与实际类型不匹配"
+    ],
+    "ec": [
+      "过度使用类型断言会绕过 TypeScript 的类型检查，应尽量避免",
+      "类型断言不进行运行时检查，错误的断言会导致运行时错误"
+    ],
+    "q": [
+      "使用尖括号语法和 as 语法进行类型断言",
+      "将 any 类型转换为具体类型",
+      "解释类型断言和类型转换的区别"
+    ]
+  },
+  {
+    "id": 18,
+    "t": "非空断言",
+    "p": [
+      "非空断言使用 ! 后缀",
+      "告诉 TypeScript 变量不是 null 或 undefined",
+      "非空断言不进行运行时检查",
+      "谨慎使用，确保变量确实不为空",
+      "可用于可选属性访问"
+    ],
+    "c": "function getLength(str: string | null | undefined): number {\n    return str!.length;\n}\n\ninterface User {\n    name?: string;\n}\n\nconst user: User = { name: 'Grace' };\nconst userName = user.name!;\n\nconst element = document.getElementById('myId')!;\nelement.innerHTML = 'Hello';\n\nfunction processValue(value: string | null): void {\n    const trimmed = value!.trim();\n    console.log(trimmed);\n}",
+    "et": [
+      "错误：对可能为空的变量使用非空断言"
+    ],
+    "ec": [
+      "如果变量实际上为 null 或 undefined，会导致运行时错误"
+    ],
+    "q": [
+      "对可选属性使用非空断言",
+      "比较非空断言和条件检查的优缺点",
+      "找出代码中不适合使用非空断言的地方"
+    ]
+  },
+  {
+    "id": 19,
+    "t": "可选链",
+    "p": [
+      "可选链使用 ?.[] 语法",
+      "如果链中的值为 null/undefined，返回 undefined",
+      "避免空指针异常",
+      "可用于属性访问、方法调用、数组索引",
+      "可选链是短路求值的"
+    ],
+    "c": "interface User {\n    name?: string;\n    address?: {\n        city?: string;\n    };\n}\n\nconst user: User = {};\n\nconst userName = user?.name;\n\nconst city = user?.address?.city;\n\ninterface Product {\n    getPrice?: () => number;\n}\n\nconst product: Product = {};\nconst price = product?.getPrice?.();\n\nconst arr: number[] | null = null;\nconst first = arr?.[0];\n\nconst nested = {\n    a: {\n        b: {\n            c: 42\n        }\n    }\n};\n\nconst value = nested?.a?.b?.c;",
+    "et": [
+      "错误：在非可选链上下文中误用可选链"
+    ],
+    "ec": [
+      "对肯定存在的值使用可选链会产生不必要的 undefined 可能性"
+    ],
+    "q": [
+      "使用可选链访问嵌套对象属性",
+      "使用可选链调用可选方法",
+      "比较可选链和传统的条件检查"
+    ]
+  },
+  {
+    "id": 20,
+    "t": "空值合并",
+    "p": [
+      "空值合并操作符 ??",
+      "仅当左侧为 null 或 undefined 时返回右侧",
+      "与 || 的区别：|| 会把 0、''、false 视为假值",
+      "提供默认值的安全方式",
+      "可以与可选链结合使用"
+    ],
+    "c": "const nullValue = null;\nconst undefinedValue = undefined;\nconst zero = 0;\nconst emptyString = '';\n\nconst result1 = nullValue ?? 'default';\nconst result2 = undefinedValue ?? 'default';\nconst result3 = zero ?? 42;\nconst result4 = emptyString ?? 'default';\n\nfunction getValue(): number | null {\n    return 0;\n}\n\nconst value = getValue() ?? 100;\n\ninterface Config {\n    timeout?: number;\n}\n\nconst config: Config = {};\nconst timeout = config.timeout ?? 5000;\n\nconst nestedValue = null;\nconst safeValue = nestedValue ?? 'fallback';",
+    "et": [
+      "错误：混淆 ?? 和 ||"
+    ],
+    "ec": [
+      "使用 || 时要注意，0、''、false 会被视为假值返回默认值"
+    ],
+    "q": [
+      "比较 ?? 和 || 的行为差异",
+      "使用空值合并提供默认值",
+      "结合可选链和空值合并处理嵌套对象"
+    ]
+  },
+  {
+    "id": 21,
+    "t": "枚举",
+    "p": [
+      "枚举使用 enum 关键字定义",
+      "枚举是命名常量的集合",
+      "数字枚举默认从 0 开始递增",
+      "字符串枚举需要手动赋值",
+      "枚举值可以反向映射",
+      "可以定义常量枚举"
+    ],
+    "c": "enum Direction {\n    Up,\n    Down,\n    Left,\n    Right\n}\n\nconsole.log(Direction.Up);\nconsole.log(Direction[0]);\n\nenum StatusCode {\n    OK = 200,\n    NotFound = 404,\n    ServerError = 500\n}\n\nenum Color {\n    Red = '#FF0000',\n    Green = '#00FF00',\n    Blue = '#0000FF'\n}\n\nconst color: Color = Color.Red;\n\nenum FileAccess {\n    None,\n    Read = 1 << 1,\n    Write = 1 << 2,\n    ReadWrite = Read | Write\n}\n\nconst hasReadAccess = (FileAccess.Read & FileAccess.ReadWrite) !== 0;",
+    "et": [
+      "错误：忘记为字符串枚举赋值"
+    ],
+    "ec": [
+      "字符串枚举的每个成员都必须有初始值"
+    ],
+    "q": [
+      "创建一个数字枚举表示星期几",
+      "创建一个字符串枚举表示颜色",
+      "使用位运算创建带有标志的枚举"
+    ]
+  },
+  {
+    "id": 22,
+    "t": "元组",
+    "p": [
+      "元组是固定长度和类型的数组",
+      "每个位置有特定类型",
+      "可以通过索引访问元素",
+      "支持解构赋值",
+      "可以有可选元素",
+      "可以有剩余元素"
+    ],
+    "c": "type Point = [number, number];\nconst point: Point = [10, 20];\n\ntype User = [string, number, boolean];\nconst user: User = ['Henry', 30, true];\n\nconst [x, y] = point;\nconst [name, age, isActive] = user;\n\ntype Response = [number, string];\nfunction fetchData(): Response {\n    return [200, 'Success'];\n}\n\nconst [status, message] = fetchData();\n\ntype OptionalTuple = [string, number?];\nconst optional1: OptionalTuple = ['hello'];\nconst optional2: OptionalTuple = ['hello', 42];\n\ntype RestTuple = [string, ...number[]];\nconst rest: RestTuple = ['numbers', 1, 2, 3, 4];",
+    "et": [
+      "错误：元组长度或类型不匹配"
+    ],
+    "ec": [
+      "赋值时必须提供正确数量和类型的元素"
+    ],
+    "q": [
+      "创建一个表示 RGB 颜色的元组",
+      "使用解构赋值从元组中提取值",
+      "创建带有可选元素的元组"
+    ]
+  },
+  {
+    "id": 23,
+    "t": "数组类型",
+    "p": [
+      "数组类型使用 Type[] 或 Array&lt;Type&gt;",
+      "数组元素必须是指定类型",
+      "TypeScript 提供数组方法的类型定义",
+      "可以使用泛型数组类型",
+      "只读数组使用 readonly 修饰符"
+    ],
+    "c": "const numbers: number[] = [1, 2, 3, 4, 5];\nconst strings: string[] = ['a', 'b', 'c'];\nconst booleans: boolean[] = [true, false, true];\n\nconst mixed: Array<string | number> = [1, 'a', 2, 'b'];\n\ninterface User {\n    name: string;\n    age: number;\n}\n\nconst users: User[] = [\n    { name: 'Ivy', age: 25 },\n    { name: 'Jack', age: 30 }\n];\n\nconst readonlyNumbers: readonly number[] = [1, 2, 3];\nconst readonlyArray: ReadonlyArray<number> = [1, 2, 3];\n\nconst filtered = numbers.filter(n => n > 2);\nconst doubled = numbers.map(n => n * 2);",
+    "et": [
+      "错误：向只读数组添加元素"
+    ],
+    "ec": [
+      "readonly 数组不能被修改，尝试添加或修改元素会报错"
+    ],
+    "q": [
+      "创建不同类型的数组",
+      "使用数组方法（filter、map、reduce）",
+      "创建只读数组"
+    ]
+  },
+  {
+    "id": 24,
+    "t": "对象类型",
+    "p": [
+      "对象类型使用花括号 {} 定义",
+      "属性可以指定类型",
+      "可选属性使用 ? 标记",
+      "索引签名允许动态属性名",
+      "对象可以有方法"
+    ],
+    "c": "const person: { name: string; age: number } = {\n    name: 'Kate',\n    age: 28\n};\n\ntype Point = {\n    x: number;\n    y: number;\n    z?: number;\n};\n\nconst point: Point = { x: 10, y: 20 };\n\ntype Dictionary = {\n    [key: string]: number;\n};\n\nconst dict: Dictionary = {\n    a: 1,\n    b: 2,\n    c: 3\n};\n\ntype User = {\n    id: number;\n    name: string;\n    greet: () => string;\n};\n\nconst user: User = {\n    id: 1,\n    name: 'Leo',\n    greet() {\n        return `Hello, ${this.name}!`;\n    }\n};",
+    "et": [
+      "错误：对象字面量的多余属性"
+    ],
+    "ec": [
+      "TypeScript 会检查对象字面量是否有多余属性"
+    ],
+    "q": [
+      "定义一个包含可选属性的对象类型",
+      "创建一个带有索引签名的对象类型",
+      "定义一个包含方法的对象类型"
+    ]
+  },
+  {
+    "id": 25,
+    "t": "模块系统",
+    "p": [
+      "使用 export 导出模块",
+      "使用 import 导入模块",
+      "支持默认导出和命名导出",
+      "模块可以重命名导入",
+      "可以导入整个模块"
+    ],
+    "c": "// math.ts\nexport function add(a: number, b: number): number {\n    return a + b;\n}\n\nexport const PI = 3.14;\n\nexport interface Point {\n    x: number;\n    y: number;\n}\n\nexport default function multiply(a: number, b: number): number {\n    return a * b;\n}\n\n// main.ts\nimport multiply, { add, PI, Point } from './math';\n\nconst result = multiply(5, 3);\nconst sum = add(2, 4);\nconsole.log(PI);\n\nconst point: Point = { x: 10, y: 20 };\n\nimport * as MathModule from './math';\nconst total = MathModule.add(1, 2);",
+    "et": [
+      "错误：导入路径不正确"
+    ],
+    "ec": [
+      "确保导入路径与文件实际位置匹配"
+    ],
+    "q": [
+      "创建一个模块并导出函数和常量",
+      "在另一个文件中导入并使用",
+      "尝试默认导出和命名导出"
+    ]
+  },
+  {
+    "id": 26,
+    "t": "命名空间",
+    "p": [
+      "使用 namespace 定义命名空间",
+      "命名空间可以包含类、接口、函数、变量",
+      "使用 export 导出内部成员",
+      "命名空间可以嵌套",
+      "现代 TypeScript 推荐使用模块而非命名空间"
+    ],
+    "c": "namespace Geometry {\n    export const PI = 3.14;\n    \n    export interface Point {\n        x: number;\n        y: number;\n    }\n    \n    export function calculateDistance(p1: Point, p2: Point): number {\n        const dx = p2.x - p1.x;\n        const dy = p2.y - p1.y;\n        return Math.sqrt(dx * dx + dy * dy);\n    }\n    \n    export namespace Shapes {\n        export function areaOfCircle(radius: number): number {\n            return PI * radius * radius;\n        }\n    }\n}\n\nconst point1: Geometry.Point = { x: 0, y: 0 };\nconst point2: Geometry.Point = { x: 3, y: 4 };\nconst distance = Geometry.calculateDistance(point1, point2);\nconst area = Geometry.Shapes.areaOfCircle(5);",
+    "et": [
+      "错误：忘记导出命名空间成员"
+    ],
+    "ec": [
+      "未导出的成员只能在命名空间内部访问"
+    ],
+    "q": [
+      "创建一个命名空间包含工具函数",
+      "在命名空间中定义接口和类",
+      "创建嵌套命名空间"
+    ]
+  },
+  {
+    "id": 27,
+    "t": "装饰器",
+    "p": [
+      "装饰器使用 @decorator 语法",
+      "需要启用 experimentalDecorators 配置",
+      "类装饰器、属性装饰器、方法装饰器、参数装饰器",
+      "装饰器工厂返回装饰器函数",
+      "装饰器在类定义时执行"
+    ],
+    "c": "function sealed(constructor: Function) {\n    Object.seal(constructor);\n    Object.seal(constructor.prototype);\n}\n\n@sealed\nclass Greeter {\n    greeting: string;\n    \n    constructor(message: string) {\n        this.greeting = message;\n    }\n    \n    greet(): string {\n        return `Hello, ${this.greeting}`;\n    }\n}\n\nfunction log(target: any, propertyKey: string) {\n    const originalValue = target[propertyKey];\n    \n    Object.defineProperty(target, propertyKey, {\n        get() {\n            console.log(`Getting ${propertyKey}`);\n            return originalValue;\n        }\n    });\n}\n\nfunction decoratorFactory(value: string) {\n    return function(constructor: Function) {\n        console.log(`Decorator with value: ${value}`);\n    };\n}\n\n@decoratorFactory('test')\nclass MyClass {\n    @log\n    public name: string = 'Test';\n}",
+    "et": [
+      "错误：未启用装饰器配置"
+    ],
+    "ec": [
+      "需要在 tsconfig.json 中设置 experimentalDecorators: true"
+    ],
+    "q": [
+      "创建一个类装饰器",
+      "创建一个属性装饰器",
+      "实现一个装饰器工厂"
+    ]
+  },
+  {
+    "id": 28,
+    "t": "高级泛型",
+    "p": [
+      "泛型约束使用 extends",
+      "泛型默认参数提供默认类型",
+      "泛型条件类型根据条件返回不同类型",
+      "泛型推断自动推导类型参数",
+      "泛型工具类型如 Partial、Readonly"
+    ],
+    "c": "interface Lengthwise {\n    length: number;\n}\n\nfunction logLength<T extends Lengthwise>(arg: T): T {\n    console.log(arg.length);\n    return arg;\n}\n\ninterface Container<T = string> {\n    value: T;\n}\n\nconst container1: Container = { value: 'hello' };\nconst container2: Container<number> = { value: 42 };\n\ntype IsString<T> = T extends string ? true : false;\ntype A = IsString<string>;\ntype B = IsString<number>;\n\nfunction createPair<T, U>(first: T, second: U): [T, U] {\n    return [first, second];\n}\n\nconst pair = createPair('hello', 42);\n\ntype Partial<T> = {\n    [P in keyof T]?: T[P];\n};\n\ninterface User {\n    name: string;\n    age: number;\n}\n\ntype PartialUser = Partial<User>;",
+    "et": [
+      "错误：泛型约束过严"
+    ],
+    "ec": [
+      "过于严格的约束会限制泛型的灵活性"
+    ],
+    "q": [
+      "实现一个带有约束的泛型函数",
+      "使用泛型默认参数",
+      "创建一个条件类型"
+    ]
+  },
+  {
+    "id": 29,
+    "t": "条件类型",
+    "p": [
+      "条件类型语法：T extends U ? X : Y",
+      "条件类型在类型层面进行条件判断",
+      "分布式条件类型对联合类型进行分发",
+      "条件类型可以嵌套",
+      "条件类型常用于类型推导和转换"
+    ],
+    "c": "type IsArray<T> = T extends any[] ? true : false;\ntype A = IsArray<string[]>;\ntype B = IsArray<string>;\n\ntype UnwrapArray<T> = T extends (infer U)[] ? U : T;\ntype StringType = UnwrapArray<string[]>;\ntype NumberType = UnwrapArray<number>;\n\ntype NonNullable<T> = T extends null | undefined ? never : T;\ntype SafeString = NonNullable<string | null | undefined>;\n\ntype Extract<T, U> = T extends U ? T : never;\ntype StringOrNumber = Extract<string | number | boolean, string | number>;\n\ntype Exclude<T, U> = T extends U ? never : T;\ntype NotBoolean = Exclude<string | number | boolean, boolean>;\n\ntype DeepReadonly<T> = {\n    readonly [P in keyof T]: T[P] extends object\n        ? DeepReadonly<T[P]>\n        : T[P];\n};",
+    "et": [
+      "错误：忽略分布式条件类型的行为"
+    ],
+    "ec": [
+      "条件类型对联合类型会自动分发，可能导致意外结果"
+    ],
+    "q": [
+      "创建一个判断是否为数组的条件类型",
+      "使用 infer 提取数组元素类型",
+      "实现一个深度只读的条件类型"
+    ]
+  },
+  {
+    "id": 30,
+    "t": "映射类型",
+    "p": [
+      "映射类型基于现有类型创建新类型",
+      "使用 keyof 获取类型的键",
+      "使用 [P in K] 遍历键",
+      "内置映射类型：Partial、Readonly、Pick、Omit",
+      "可以添加修饰符 +/-"
+    ],
+    "c": "interface User {\n    name: string;\n    age: number;\n    email: string;\n}\n\ntype Partial<T> = {\n    [P in keyof T]?: T[P];\n};\n\ntype Readonly<T> = {\n    readonly [P in keyof T]: T[P];\n};\n\ntype Pick<T, K extends keyof T> = {\n    [P in K]: T[P];\n};\n\ntype Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;\n\ntype PartialUser = Partial<User>;\ntype ReadonlyUser = Readonly<User>;\ntype UserNameAge = Pick<User, 'name' | 'age'>;\ntype UserWithoutEmail = Omit<User, 'email'>;\n\ntype Nullable<T> = {\n    [P in keyof T]: T[P] | null;\n};\n\ntype NullableUser = Nullable<User>;",
+    "et": [
+      "错误：keyof 操作对象类型时的行为"
+    ],
+    "ec": [
+      "keyof 对对象类型返回 string | number | symbol 的联合类型"
+    ],
+    "q": [
+      "实现一个将所有属性变为可选的映射类型",
+      "创建一个将所有属性变为只读的映射类型",
+      "实现 Pick 和 Omit 类型"
+    ]
+  },
+  {
+    "id": 31,
+    "t": "模板字面量类型",
+    "p": [
+      "模板字面量类型使用反引号 ``",
+      "可以嵌入类型表达式",
+      "与联合类型结合生成新类型",
+      "类型推断可以从模板字面量中提取",
+      "可用于创建类型安全的字符串模式"
+    ],
+    "c": "type Color = 'red' | 'green' | 'blue';\ntype Size = 'small' | 'medium' | 'large';\n\ntype ColorSize = `${Color}-${Size}`;\n\ntype EventName<T extends string> = `on${Capitalize<T>}`;\ntype ClickEvent = EventName<'click'>;\ntype FocusEvent = EventName<'focus'>;\n\ntype HTTPMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';\ntype Endpoint = '/users' | '/posts' | '/comments';\n\ntype Route = `${HTTPMethod} ${Endpoint}`;\n\nfunction createRoute(method: HTTPMethod, endpoint: Endpoint): Route {\n    return `${method} ${endpoint}`;\n}\n\nconst route = createRoute('GET', '/users');\n\ntype Getter<T> = {\n    [P in keyof T as `get${Capitalize<string & P>}`]: () => T[P];\n};\n\ninterface User {\n    name: string;\n    age: number;\n}\n\ntype UserGetters = Getter<User>;",
+    "et": [
+      "错误：模板字面量中的类型表达式"
+    ],
+    "ec": [
+      "确保嵌入的类型表达式符合 TypeScript 的类型规则"
+    ],
+    "q": [
+      "使用模板字面量类型创建颜色和尺寸的组合",
+      "创建事件名称的类型（如 onClick）",
+      "实现一个 Getter 类型映射"
+    ]
+  },
+  {
+    "id": 32,
+    "t": "类型体操",
+    "p": [
+      "类型体操是指使用 TypeScript 类型系统进行复杂类型运算",
+      "常用技巧：条件类型、映射类型、递归类型",
+      "infer 关键字用于类型推断",
+      "类型体操可以解决复杂的类型问题",
+      "类型体操练习有助于深入理解类型系统"
+    ],
+    "c": "type Flatten<T> = T extends Array<infer U> ? U : T;\ntype Flattened = Flatten<number[]>;\n\ntype DeepReadonly<T> = {\n    readonly [P in keyof T]: T[P] extends object\n        ? DeepReadonly<T[P]>\n        : T[P];\n};\n\ntype TupleToObject<T extends readonly any[]> = {\n    [P in T[number]]: P;\n};\n\nconst tuple = ['a', 'b', 'c'] as const;\ntype ObjectFromTuple = TupleToObject<typeof tuple>;\n\ntype First<T extends any[]> = T extends [infer F, ...any[]] ? F : never;\ntype FirstElement = First<[string, number, boolean]>;\n\ntype Last<T extends any[]> = T extends [...any[], infer L] ? L : never;\ntype LastElement = Last<[string, number, boolean]>;\n\ntype Length<T extends readonly any[]> = T['length'];",
+    "et": [
+      "错误：递归类型深度超出限制"
+    ],
+    "ec": [
+      "深度递归类型可能导致 TypeScript 编译错误"
+    ],
+    "q": [
+      "实现一个 Flatten 类型将数组类型展平",
+      "实现深度只读类型",
+      "实现一个类型获取元组的第一个元素"
+    ]
+  },
+  {
+    "id": 33,
+    "t": "配置与编译",
+    "p": [
+      "tsconfig.json 是 TypeScript 的配置文件",
+      "compilerOptions 配置编译选项",
+      "target 指定目标 JavaScript 版本",
+      "module 指定模块系统",
+      "strict 启用严格模式",
+      "outDir 指定输出目录"
+    ],
+    "c": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2020\",\n    \"module\": \"commonjs\",\n    \"strict\": true,\n    \"esModuleInterop\": true,\n    \"skipLibCheck\": true,\n    \"forceConsistentCasingInFileNames\": true,\n    \"outDir\": \"./dist\",\n    \"rootDir\": \"./src\",\n    \"declaration\": true,\n    \"sourceMap\": true\n  },\n  \"include\": [\"src/**/*\"],\n  \"exclude\": [\"node_modules\", \"dist\"]\n}\n\n// package.json 脚本\n{\n  \"scripts\": {\n    \"build\": \"tsc\",\n    \"watch\": \"tsc --watch\",\n    \"start\": \"node dist/index.js\"\n  }\n}",
+    "et": [
+      "错误：缺少 tsconfig.json",
+      "错误：strict 模式下的类型检查"
+    ],
+    "ec": [
+      "运行 tsc 命令时如果没有配置文件，使用默认配置",
+      "启用 strict 模式后，需要处理所有可能的 null/undefined 情况"
+    ],
+    "q": [
+      "创建一个 tsconfig.json 配置文件",
+      "配置编译选项：target、module、strict",
+      "设置 include 和 exclude 选项"
+    ]
+  },
+  {
+    "id": 34,
+    "t": "与 React 集成",
+    "p": [
+      "React 组件的类型定义",
+      "Props 和 State 的类型",
+      "React.FC 和 React.Component",
+      "hooks 的类型推断",
+      "事件处理函数的类型",
+      "泛型组件"
+    ],
+    "c": "interface Props {\n    name: string;\n    age?: number;\n}\n\nconst Greeting: React.FC<Props> = ({ name, age }) => {\n    return (\n        <div>\n            <h1>Hello, {name}!</h1>\n            {age && <p>You are {age} years old</p>}\n        </div>\n    );\n};\n\ninterface User {\n    id: number;\n    name: string;\n}\n\nconst UserList: React.FC<{ users: User[] }> = ({ users }) => {\n    const [selectedId, setSelectedId] = React.useState<number | null>(null);\n    \n    return (\n        <ul>\n            {users.map(user => (\n                <li key={user.id} onClick={() => setSelectedId(user.id)}>\n                    {user.name}\n                </li>\n            ))}\n        </ul>\n    );\n};\n\nconst handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    console.log(e.target.value);\n};\n\nconst handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {\n    console.log('Clicked');\n};",
+    "et": [
+      "错误：事件类型不正确"
+    ],
+    "ec": [
+      "React 事件有自己的类型，如 React.ChangeEvent 而非原生 Event"
+    ],
+    "q": [
+      "创建一个带类型 Props 的 React 组件",
+      "为 useState 指定类型",
+      "为事件处理函数添加正确的类型"
+    ]
+  },
+  {
+    "id": 35,
+    "t": "TypeScript 最佳实践",
+    "p": [
+      "始终启用 strict 模式",
+      "避免使用 any 类型",
+      "使用 interface 定义对象类型",
+      "使用 type 定义联合类型和复杂类型",
+      "合理使用类型断言，优先类型守卫",
+      "为函数参数和返回值添加类型注解",
+      "使用泛型提高代码复用性",
+      "使用可选链和空值合并处理 null/undefined"
+    ],
+    "c": "interface User {\n    id: number;\n    name: string;\n    email?: string;\n}\n\nfunction getUser(id: number): User | null {\n    const users: User[] = [\n        { id: 1, name: 'Alice', email: 'alice@example.com' },\n        { id: 2, name: 'Bob' }\n    ];\n    return users.find(u => u.id === id) || null;\n}\n\nfunction getUserName(user: User | null): string {\n    return user?.name ?? 'Unknown';\n}\n\ntype Result<T, E = Error> = { success: true; data: T } | { success: false; error: E };\n\nfunction fetchData<T>(url: string): Promise<Result<T>> {\n    return fetch(url)\n        .then(res => res.json())\n        .then(data => ({ success: true, data }))\n        .catch(error => ({ success: false, error }));\n}",
+    "et": [
+      "错误：过度使用类型断言",
+      "错误：忽略类型错误"
+    ],
+    "ec": [
+      "类型断言会绕过类型检查，应优先使用类型守卫或类型推断",
+      "TypeScript 的类型错误是帮助你发现问题的，不应忽略"
+    ],
+    "q": [
+      "检查现有代码中是否有不必要的 any 类型",
+      "使用 Result 类型重写一个异步函数",
+      "总结你在项目中应用 TypeScript 的经验"
+    ]
+  }
+]
