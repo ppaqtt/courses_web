@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="编程语言教程 - 学的不仅是技术，更是梦想！提供Python、Java、JavaScript、C/C++、Go、Rust等编程语言的完整教程。">
-    <meta name="keywords" content="编程教程,Python教程,Java教程,JavaScript教程,C++教程,Go教程,Rust教程">
+    <meta name="description" content="编程语言教程 - 学的不仅是技术，更是梦想！提供24种编程语言的完整教程。">
     <title>编程教程 - 学的不仅是技术，更是梦想！</title>
     <link rel="stylesheet" href="css/runoob-style.css">
     <style>
@@ -17,231 +16,49 @@
             position: relative;
             overflow: hidden;
         }
-
         .hero::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
             animation: pulse 4s ease-in-out infinite;
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            position: relative;
-        }
-
-        .hero p {
-            font-size: 18px;
-            opacity: 0.95;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: center;
-            gap: 80px;
-            margin-top: 50px;
-            position: relative;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-item .number {
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-
-        .stat-item .label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .section {
-            padding: 80px 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-size: 32px;
-            text-align: center;
-            margin-bottom: 16px;
-            color: var(--text-primary);
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--text-secondary);
-            margin-bottom: 48px;
-            font-size: 16px;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .feature-card {
-            text-align: center;
-            padding: 32px 24px;
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-        }
-
-        .feature-card .icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .feature-card h3 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .feature-card p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .footer {
-            background: #1e293b;
-            color: #fff;
-            padding: 48px 24px 32px;
-            text-align: center;
-        }
-
-        .footer a {
-            color: #818cf8;
-        }
-
-        .footer p {
-            margin: 6px 0;
-            color: #94a3b8;
-        }
-
-        .languages-showcase {
-            background: var(--bg-main);
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 24px;
-            margin-top: 40px;
-        }
-
-        .tutorial-card {
-            background: var(--bg-card);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            display: block;
-        }
-
-        .tutorial-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .card-header {
-            padding: 28px 24px;
-            color: #fff;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-            transform: translate(30%, -30%);
-        }
-
-        .card-header h3 {
-            font-size: 20px;
-            margin-bottom: 6px;
-            font-weight: 700;
-            position: relative;
-        }
-
-        .card-header span {
-            font-size: 13px;
-            opacity: 0.9;
-            position: relative;
-        }
-
-        .card-body {
-            padding: 20px 24px;
-        }
-
-        .card-body p {
-            color: var(--text-secondary);
-            font-size: 14px;
-            line-height: 1.7;
-        }
-
-        .card-footer {
-            padding: 16px 24px;
-            background: var(--bg-main);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .card-footer .chapters {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .card-footer .status {
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; font-weight: 800; letter-spacing: -1px; position: relative; }
+        .hero p { font-size: 18px; opacity: 0.95; max-width: 600px; margin: 0 auto; position: relative; }
+        .stats { display: flex; justify-content: center; gap: 80px; margin-top: 50px; position: relative; flex-wrap: wrap; }
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 42px; font-weight: 800; margin-bottom: 4px; }
+        .stat-item .label { font-size: 14px; opacity: 0.9; }
+        .section { padding: 80px 24px; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-size: 32px; text-align: center; margin-bottom: 16px; color: var(--text-primary); font-weight: 700; }
+        .section-subtitle { text-align: center; color: var(--text-secondary); margin-bottom: 48px; font-size: 16px; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; }
+        .feature-card { text-align: center; padding: 32px 24px; background: var(--bg-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: all 0.3s ease; }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--primary); }
+        .feature-card .icon { font-size: 48px; margin-bottom: 16px; }
+        .feature-card h3 { color: var(--text-primary); margin-bottom: 10px; font-size: 18px; font-weight: 600; }
+        .feature-card p { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+        .footer { background: #1e293b; color: #fff; padding: 48px 24px 32px; text-align: center; }
+        .footer a { color: #818cf8; }
+        .footer p { margin: 6px 0; color: #94a3b8; }
+        .languages-showcase { background: var(--bg-main); }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; margin-top: 40px; }
+        .tutorial-card { background: var(--bg-card); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.3s ease; cursor: pointer; border: 1px solid var(--border); display: block; text-decoration: none; }
+        .tutorial-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .card-header { padding: 24px 20px; color: #fff; position: relative; overflow: hidden; }
+        .card-header::after { content: ''; position: absolute; top: 0; right: 0; width: 80px; height: 80px; background: rgba(255,255,255,0.1); border-radius: 50%; transform: translate(30%, -30%); }
+        .card-header h3 { font-size: 18px; margin-bottom: 4px; font-weight: 700; position: relative; }
+        .card-header span { font-size: 12px; opacity: 0.9; position: relative; }
+        .card-body { padding: 16px 20px; }
+        .card-body p { color: var(--text-secondary); font-size: 13px; line-height: 1.6; }
+        .card-footer { padding: 12px 20px; background: var(--bg-main); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-light); }
+        .card-footer .chapters { color: var(--text-muted); font-size: 12px; }
+        .card-footer .status { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
     </style>
 </head>
 <body>
@@ -260,211 +77,392 @@
                 <a href="tutorial-go.html" class="nav-item">Go</a>
                 <a href="tutorial-php.html" class="nav-item">PHP</a>
                 <a href="tutorial-rust.html" class="nav-item">Rust</a>
-                <a href="tutorial-swift.html" class="nav-item">Swift</a>
             </div>
         </div>
     </nav>
 
     <div class="hero">
         <h1>学的不仅是技术，更是梦想</h1>
-        <p>提供10种主流编程语言的完整教程，从入门到精通，助你成为优秀的开发者</p>
+        <p>提供24种主流编程语言的完整教程，从入门到精通，助你成为优秀的开发者</p>
         <div class="stats">
             <div class="stat-item">
-                <div class="number">10</div>
+                <div class="number">24</div>
                 <div class="label">编程语言</div>
             </div>
             <div class="stat-item">
-                <div class="number">350+</div>
+                <div class="number">840+</div>
                 <div class="label">教程章节</div>
             </div>
             <div class="stat-item">
-                <div class="number">1000+</div>
+                <div class="number">2000+</div>
                 <div class="label">代码示例</div>
             </div>
         </div>
     </div>
 
-    <div class="section">
-        <h2 class="section-title">热门教程</h2>
-        <p class="section-subtitle">选择你感兴趣的编程语言，开启学习之旅</p>
-        <div class="card-grid">
+    <div class="languages-showcase">
+        <div class="section">
+            <h2 class="section-title">编程语言教程</h2>
+            <p class="section-subtitle">从基础语法到项目实战，系统化学习编程，每门语言35章精心设计</p>
+            <div class="card-grid">
+
             <a href="tutorial-python.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #3776AB, #4B8BBE);">
+                <div class="card-header" style="background: linear-gradient(135deg, #3776ab, #ffd43b);">
                     <h3>🐍 Python教程</h3>
-                    <span>从入门到精通</span>
+                    <span>AI与数据科学首选</span>
                 </div>
                 <div class="card-body">
-                    <p>Python是一门简洁优雅的编程语言，适合初学者入门，在数据科学、AI领域广泛应用。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(55, 118, 171, 0.1); color: #3776AB;">热门推荐</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-java.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #f89820, #e76f00);">
+                <div class="card-header" style="background: linear-gradient(135deg, #f89820, #5382a1);">
                     <h3>☕ Java教程</h3>
-                    <span>企业级开发首选</span>
+                    <span>企业级开发霸主</span>
                 </div>
                 <div class="card-body">
-                    <p>Java是一门成熟稳定的面向对象编程语言，广泛应用于企业级开发、Android应用。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(248, 152, 32, 0.1); color: #f89820;">经典必学</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-javascript.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #F7DF1E, #e6c700);">
-                    <h3>📜 JavaScript教程</h3>
-                    <span>Web开发核心</span>
+                <div class="card-header" style="background: linear-gradient(135deg, #f7df1e, #323330);">
+                    <h3>🟨 JavaScript教程</h3>
+                    <span>全栈开发必备</span>
                 </div>
                 <div class="card-body">
-                    <p>JavaScript是Web前端开发的核心语言，Node.js让它也能进行后端开发。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(247, 223, 30, 0.2); color: #b8860b;">前端必备</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-cpp.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #00599C, #004482);">
-                    <h3>⚙️ C/C++教程</h3>
-                    <span>系统编程基石</span>
+                <div class="card-header" style="background: linear-gradient(135deg, #00599c, #004482);">
+                    <h3>🔵 C/C++教程</h3>
+                    <span>系统级编程基础</span>
                 </div>
                 <div class="card-body">
-                    <p>C/C++是系统级编程的基础语言，性能卓越，广泛应用于操作系统、游戏引擎。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(0, 89, 156, 0.1); color: #00599C;">底层开发</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-csharp.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #68217A, #9B4DCA);">
-                    <h3>🎯 C#教程</h3>
+                <div class="card-header" style="background: linear-gradient(135deg, #68217a, #9b4f96);">
+                    <h3>💜 C#教程</h3>
                     <span>.NET平台核心</span>
                 </div>
                 <div class="card-body">
-                    <p>C#是微软开发的现代编程语言，在Windows开发、Unity游戏开发中广泛使用。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(104, 33, 122, 0.1); color: #68217A;">游戏开发</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-go.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #00ADD8, #007d9c);">
+                <div class="card-header" style="background: linear-gradient(135deg, #00add8, #0067a0);">
                     <h3>🐹 Go教程</h3>
-                    <span>云原生首选</span>
+                    <span>云原生时代语言</span>
                 </div>
                 <div class="card-body">
-                    <p>Go语言简洁高效，天生支持并发，是云原生开发、微服务架构的首选语言。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(0, 173, 216, 0.1); color: #00ADD8;">高并发</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-php.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #777BB4, #8892BF);">
+                <div class="card-header" style="background: linear-gradient(135deg, #777bb4, #4f5b93);">
                     <h3>🐘 PHP教程</h3>
                     <span>Web开发利器</span>
                 </div>
                 <div class="card-body">
-                    <p>PHP专为Web而生，WordPress、Laravel等框架让Web开发更加高效便捷。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(119, 123, 180, 0.1); color: #777BB4;">Web开发</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-rust.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #DEA584, #CE422B);">
+                <div class="card-header" style="background: linear-gradient(135deg, #ce422b, #000000);">
                     <h3>🦀 Rust教程</h3>
-                    <span>安全高效</span>
+                    <span>安全系统编程</span>
                 </div>
                 <div class="card-body">
-                    <p>Rust追求内存安全与高性能的完美平衡，是系统编程的未来之星。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(206, 66, 43, 0.1); color: #CE422B;">新锐语言</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-swift.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #FA7343, #F05138);">
+                <div class="card-header" style="background: linear-gradient(135deg, #fa7343, #f05138);">
                     <h3>🍎 Swift教程</h3>
-                    <span>iOS开发首选</span>
+                    <span>iOS/macOS开发</span>
                 </div>
                 <div class="card-body">
-                    <p>Swift是苹果推出的现代编程语言，简洁安全，是开发iOS/macOS应用的最佳选择。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(250, 115, 67, 0.1); color: #FA7343;">移动开发</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-
             <a href="tutorial-typescript.html" class="tutorial-card">
-                <div class="card-header" style="background: linear-gradient(135deg, #3178C6, #235A97);">
-                    <h3>📘 TypeScript教程</h3>
-                    <span>JavaScript超集</span>
+                <div class="card-header" style="background: linear-gradient(135deg, #3178c6, #235a97);">
+                    <h3>🔷 TypeScript教程</h3>
+                    <span>类型安全的JS</span>
                 </div>
                 <div class="card-body">
-                    <p>TypeScript为JavaScript添加了类型系统，让大型项目开发更加安全可靠。</p>
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
                 <div class="card-footer">
-                    <span class="chapters">35章节</span>
-                    <span class="status" style="background: rgba(49, 120, 198, 0.1); color: #3178C6;">类型安全</span>
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
             </a>
-        </div>
-    </div>
-
-    <div class="languages-showcase">
-        <div class="section">
-            <h2 class="section-title">为什么选择我们</h2>
-            <p class="section-subtitle">全面的学习体验，助你快速成长</p>
-            <div class="features">
-                <div class="feature-card">
-                    <div class="icon">📚</div>
-                    <h3>内容全面</h3>
-                    <p>从基础语法到高级应用，每个知识点都有详细讲解，循序渐进</p>
+            <a href="tutorial-kotlin.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #7F52FF, #E34F26);">
+                    <h3>🟣 Kotlin教程</h3>
+                    <span>Android开发首选</span>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">💻</div>
-                    <h3>代码示例</h3>
-                    <p>每章配有完整可运行的代码示例，边学边练，快速掌握</p>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">📝</div>
-                    <h3>练习题</h3>
-                    <p>章节末尾附带练习题，巩固所学知识，检验学习效果</p>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
                 </div>
-                <div class="feature-card">
-                    <div class="icon">📊</div>
-                    <h3>进度追踪</h3>
-                    <p>自动保存学习进度和笔记，随时随地继续你的学习</p>
+            </a>
+            <a href="tutorial-ruby.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #CC342D, #8B2E29);">
+                    <h3>💎 Ruby教程</h3>
+                    <span>优雅的Web开发</span>
                 </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-dart.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #0175C2, #02569B);">
+                    <h3>🎯 Dart教程</h3>
+                    <span>Flutter跨平台开发</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-scala.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #DC322F, #B8860B);">
+                    <h3>🔴 Scala教程</h3>
+                    <span>函数式编程与大数据</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-r-lang.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #276DC3, #1A4A7A);">
+                    <h3>📊 R语言教程</h3>
+                    <span>数据分析与统计</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-sql.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #00758F, #F29111);">
+                    <h3>🗄️ SQL教程</h3>
+                    <span>数据库查询语言</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-html-css.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #E34F26, #1572B6);">
+                    <h3>🌐 HTML/CSS教程</h3>
+                    <span>前端开发基础</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-shell.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #4EAA25, #2D5A1B);">
+                    <h3>🐚 Shell教程</h3>
+                    <span>脚本与运维自动化</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-lua.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #2C2D72, #5A5EB2);">
+                    <h3>🌙 Lua教程</h3>
+                    <span>游戏脚本与嵌入式</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-perl.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #39457E, #6B7280);">
+                    <h3>🐪 Perl教程</h3>
+                    <span>文本处理与运维</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-elixir.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #6E4A7E, #9B6BA5);">
+                    <h3>💜 Elixir教程</h3>
+                    <span>高并发函数式编程</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-julia.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #9558B2, #389826);">
+                    <h3>💙 Julia教程</h3>
+                    <span>科学计算高性能</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-zig.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #F7A41D, #E8871E);">
+                    <h3>⚡ Zig教程</h3>
+                    <span>现代系统编程语言</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
+            <a href="tutorial-assembly.html" class="tutorial-card">
+                <div class="card-header" style="background: linear-gradient(135deg, #6E4C13, #A0522D);">
+                    <h3>🔧 汇编语言教程</h3>
+                    <span>底层编程与系统</span>
+                </div>
+                <div class="card-body">
+                    <p>从基础语法到高级特性，35章系统学习，包含代码示例、练习题和常见错误解析。</p>
+                </div>
+                <div class="card-footer">
+                    <span class="chapters">35 章节</span>
+                    <span class="status" style="background: #dcfce7; color: #166534;">入门 → 精通</span>
+                </div>
+            </a>
             </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <p style="color: #e2e8f0; font-size: 16px; font-weight: 600; margin-bottom: 12px;">编程教程 - 学的不仅是技术，更是梦想</p>
-        <p>© 2024 编程教程. All rights reserved.</p>
-        <p style="margin-top: 10px;">
-            <a href="tutorial-hub.html">学习中心</a> · <a href="index.html">首页</a>
-        </p>
-    </footer>
+    <div class="section">
+        <h2 class="section-title">为什么选择我们</h2>
+        <p class="section-subtitle">系统化的学习路径，让编程学习更简单、更高效</p>
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">📚</div>
+                <h3>系统化学习</h3>
+                <p>从入门到精通，循序渐进的课程设计，覆盖语言所有核心知识点</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">💻</div>
+                <h3>实战代码</h3>
+                <p>每章配有完整可运行的代码示例，复制即可运行，边学边练</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">❌</div>
+                <h3>避坑指南</h3>
+                <p>总结常见错误和解决方案，让你少走弯路，快速提升</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📝</div>
+                <h3>在线练习</h3>
+                <p>每章配套练习题，检查学习效果，巩固知识点</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>进度追踪</h3>
+                <p>学习进度自动保存，随时了解学习状态，科学规划学习路径</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📒</div>
+                <h3>学习笔记</h3>
+                <p>支持添加个人学习笔记，记录心得，构建知识体系</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>📚 编程教程 - 学的不仅是技术，更是梦想</p>
+        <p><a href="tutorial-hub.html">学习中心</a> | 24种编程语言 | 840+章节</p>
+        <p style="font-size: 12px; margin-top: 20px;">© 2026 编程教程. All rights reserved.</p>
+    </div>
 </body>
 </html>

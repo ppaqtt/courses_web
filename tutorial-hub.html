@@ -348,6 +348,7 @@
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
         }
+    
     </style>
 </head>
 <body>
@@ -358,298 +359,396 @@
             </a>
             <div class="nav-menu">
                 <a href="index.html" class="nav-item">首页</a>
-                <a href="tutorial-hub.html" class="nav-item active">学习中心</a>
                 <a href="tutorial-python.html" class="nav-item">Python</a>
                 <a href="tutorial-java.html" class="nav-item">Java</a>
                 <a href="tutorial-javascript.html" class="nav-item">JavaScript</a>
+                <a href="tutorial-cpp.html" class="nav-item">C/C++</a>
+                <a href="tutorial-csharp.html" class="nav-item">C#</a>
+                <a href="tutorial-go.html" class="nav-item">Go</a>
+                <a href="tutorial-php.html" class="nav-item">PHP</a>
+                <a href="tutorial-rust.html" class="nav-item">Rust</a>
             </div>
         </div>
     </nav>
 
     <div class="hub-container">
         <div class="hub-header">
-            <h1>学习中心</h1>
-            <p>追踪你的学习进度，管理你的代码片段</p>
+            <h1>📖 学习中心</h1>
+            <p>追踪你的学习进度，管理学习笔记，探索更多编程语言</p>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalCompleted">0</div>
+                <div class="stat-icon">✅</div>
+                <div class="stat-number" id="completedChapters">0</div>
                 <div class="stat-label">已完成章节</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="languagesStudying">0</div>
-                <div class="stat-label">正在学习语言</div>
+                <div class="stat-icon">📚</div>
+                <div class="stat-number" id="learningLangs">0</div>
+                <div class="stat-label">学习中语言</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="snippetCount">0</div>
+                <div class="stat-icon">💻</div>
+                <div class="stat-number" id="codeSnippets">0</div>
                 <div class="stat-label">代码片段</div>
             </div>
             <div class="stat-card">
+                <div class="stat-icon">📊</div>
                 <div class="stat-number" id="overallProgress">0%</div>
                 <div class="stat-label">总体进度</div>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">学习进度</div>
-            <div class="progress-list" id="progressList">
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-title">快捷访问</div>
-            <div class="quick-links">
-                <a href="tutorial-python.html" class="quick-link">
-                    <span class="quick-link-icon">🐍</span>
-                    <span class="quick-link-text">Python教程</span>
-                </a>
-                <a href="tutorial-java.html" class="quick-link">
-                    <span class="quick-link-icon">☕</span>
-                    <span class="quick-link-text">Java教程</span>
-                </a>
-                <a href="tutorial-javascript.html" class="quick-link">
-                    <span class="quick-link-icon">📜</span>
-                    <span class="quick-link-text">JavaScript教程</span>
-                </a>
-                <a href="tutorial-cpp.html" class="quick-link">
-                    <span class="quick-link-icon">⚙️</span>
-                    <span class="quick-link-text">C/C++教程</span>
-                </a>
-                <a href="tutorial-csharp.html" class="quick-link">
-                    <span class="quick-link-icon">🎯</span>
-                    <span class="quick-link-text">C#教程</span>
-                </a>
-                <a href="tutorial-go.html" class="quick-link">
-                    <span class="quick-link-icon">🐹</span>
-                    <span class="quick-link-text">Go教程</span>
-                </a>
-                <a href="tutorial-php.html" class="quick-link">
-                    <span class="quick-link-icon">🐘</span>
-                    <span class="quick-link-text">PHP教程</span>
-                </a>
-                <a href="tutorial-rust.html" class="quick-link">
-                    <span class="quick-link-icon">🦀</span>
-                    <span class="quick-link-text">Rust教程</span>
-                </a>
-                <a href="tutorial-swift.html" class="quick-link">
-                    <span class="quick-link-icon">🍎</span>
-                    <span class="quick-link-text">Swift教程</span>
-                </a>
-                <a href="tutorial-typescript.html" class="quick-link">
-                    <span class="quick-link-icon">📘</span>
-                    <span class="quick-link-text">TypeScript教程</span>
-                </a>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="snippets-section">
-                <div class="snippets-header">
-                    <h3>💾 我的代码片段</h3>
-                    <button class="code-btn" onclick="exportSnippets()">导出全部</button>
+        <div class="hub-content">
+            <div class="main-content">
+                <h2 class="section-title">学习进度</h2>
+                <div class="progress-grid" id="progressGrid">
+                    <!-- 进度卡片将通过JS生成 -->
                 </div>
-                <div class="snippet-input">
-                    <select id="snippetLang">
-                        <option value="python">Python</option>
-                        <option value="java">Java</option>
-                        <option value="javascript">JavaScript</option>
-                        <option value="cpp">C++</option>
-                        <option value="csharp">C#</option>
-                        <option value="go">Go</option>
-                        <option value="php">PHP</option>
-                        <option value="rust">Rust</option>
-                        <option value="swift">Swift</option>
-                        <option value="typescript">TypeScript</option>
-                    </select>
-                    <input type="text" id="snippetTitle" placeholder="输入代码片段标题，按Enter保存">
-                    <button class="code-btn" onclick="addSnippet()">添加</button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="sidebar-card">
+                    <h3>快速访问</h3>
+                    <div class="lang-list">
+
+                    <a href="tutorial-python.html" class="lang-progress-item" data-lang="python" data-name="Python">
+                        <span class="lang-icon" style="background: #3776ab;">🐍</span>
+                        <span class="lang-name">Python</span>
+                        <span class="lang-status" id="status_python">未开始</span>
+                    </a>
+                    <a href="tutorial-java.html" class="lang-progress-item" data-lang="java" data-name="Java">
+                        <span class="lang-icon" style="background: #f89820;">☕</span>
+                        <span class="lang-name">Java</span>
+                        <span class="lang-status" id="status_java">未开始</span>
+                    </a>
+                    <a href="tutorial-javascript.html" class="lang-progress-item" data-lang="javascript" data-name="JavaScript">
+                        <span class="lang-icon" style="background: #f7df1e;">🟨</span>
+                        <span class="lang-name">JavaScript</span>
+                        <span class="lang-status" id="status_javascript">未开始</span>
+                    </a>
+                    <a href="tutorial-cpp.html" class="lang-progress-item" data-lang="cpp" data-name="C/C++">
+                        <span class="lang-icon" style="background: #00599c;">🔵</span>
+                        <span class="lang-name">C/C++</span>
+                        <span class="lang-status" id="status_cpp">未开始</span>
+                    </a>
+                    <a href="tutorial-csharp.html" class="lang-progress-item" data-lang="csharp" data-name="C#">
+                        <span class="lang-icon" style="background: #68217a;">💜</span>
+                        <span class="lang-name">C#</span>
+                        <span class="lang-status" id="status_csharp">未开始</span>
+                    </a>
+                    <a href="tutorial-go.html" class="lang-progress-item" data-lang="go" data-name="Go">
+                        <span class="lang-icon" style="background: #00add8;">🐹</span>
+                        <span class="lang-name">Go</span>
+                        <span class="lang-status" id="status_go">未开始</span>
+                    </a>
+                    <a href="tutorial-php.html" class="lang-progress-item" data-lang="php" data-name="PHP">
+                        <span class="lang-icon" style="background: #777bb4;">🐘</span>
+                        <span class="lang-name">PHP</span>
+                        <span class="lang-status" id="status_php">未开始</span>
+                    </a>
+                    <a href="tutorial-rust.html" class="lang-progress-item" data-lang="rust" data-name="Rust">
+                        <span class="lang-icon" style="background: #ce422b;">🦀</span>
+                        <span class="lang-name">Rust</span>
+                        <span class="lang-status" id="status_rust">未开始</span>
+                    </a>
+                    <a href="tutorial-swift.html" class="lang-progress-item" data-lang="swift" data-name="Swift">
+                        <span class="lang-icon" style="background: #fa7343;">🍎</span>
+                        <span class="lang-name">Swift</span>
+                        <span class="lang-status" id="status_swift">未开始</span>
+                    </a>
+                    <a href="tutorial-typescript.html" class="lang-progress-item" data-lang="typescript" data-name="TypeScript">
+                        <span class="lang-icon" style="background: #3178c6;">🔷</span>
+                        <span class="lang-name">TypeScript</span>
+                        <span class="lang-status" id="status_typescript">未开始</span>
+                    </a>
+                    <a href="tutorial-kotlin.html" class="lang-progress-item" data-lang="kotlin" data-name="Kotlin">
+                        <span class="lang-icon" style="background: #7F52FF;">🟣</span>
+                        <span class="lang-name">Kotlin</span>
+                        <span class="lang-status" id="status_kotlin">未开始</span>
+                    </a>
+                    <a href="tutorial-ruby.html" class="lang-progress-item" data-lang="ruby" data-name="Ruby">
+                        <span class="lang-icon" style="background: #CC342D;">💎</span>
+                        <span class="lang-name">Ruby</span>
+                        <span class="lang-status" id="status_ruby">未开始</span>
+                    </a>
+                    <a href="tutorial-dart.html" class="lang-progress-item" data-lang="dart" data-name="Dart">
+                        <span class="lang-icon" style="background: #0175C2;">🎯</span>
+                        <span class="lang-name">Dart</span>
+                        <span class="lang-status" id="status_dart">未开始</span>
+                    </a>
+                    <a href="tutorial-scala.html" class="lang-progress-item" data-lang="scala" data-name="Scala">
+                        <span class="lang-icon" style="background: #DC322F;">🔴</span>
+                        <span class="lang-name">Scala</span>
+                        <span class="lang-status" id="status_scala">未开始</span>
+                    </a>
+                    <a href="tutorial-r-lang.html" class="lang-progress-item" data-lang="r-lang" data-name="R语言">
+                        <span class="lang-icon" style="background: #276DC3;">📊</span>
+                        <span class="lang-name">R语言</span>
+                        <span class="lang-status" id="status_r-lang">未开始</span>
+                    </a>
+                    <a href="tutorial-sql.html" class="lang-progress-item" data-lang="sql" data-name="SQL">
+                        <span class="lang-icon" style="background: #00758F;">🗄️</span>
+                        <span class="lang-name">SQL</span>
+                        <span class="lang-status" id="status_sql">未开始</span>
+                    </a>
+                    <a href="tutorial-html-css.html" class="lang-progress-item" data-lang="html-css" data-name="HTML/CSS">
+                        <span class="lang-icon" style="background: #E34F26;">🌐</span>
+                        <span class="lang-name">HTML/CSS</span>
+                        <span class="lang-status" id="status_html-css">未开始</span>
+                    </a>
+                    <a href="tutorial-shell.html" class="lang-progress-item" data-lang="shell" data-name="Shell">
+                        <span class="lang-icon" style="background: #4EAA25;">🐚</span>
+                        <span class="lang-name">Shell</span>
+                        <span class="lang-status" id="status_shell">未开始</span>
+                    </a>
+                    <a href="tutorial-lua.html" class="lang-progress-item" data-lang="lua" data-name="Lua">
+                        <span class="lang-icon" style="background: #2C2D72;">🌙</span>
+                        <span class="lang-name">Lua</span>
+                        <span class="lang-status" id="status_lua">未开始</span>
+                    </a>
+                    <a href="tutorial-perl.html" class="lang-progress-item" data-lang="perl" data-name="Perl">
+                        <span class="lang-icon" style="background: #39457E;">🐪</span>
+                        <span class="lang-name">Perl</span>
+                        <span class="lang-status" id="status_perl">未开始</span>
+                    </a>
+                    <a href="tutorial-elixir.html" class="lang-progress-item" data-lang="elixir" data-name="Elixir">
+                        <span class="lang-icon" style="background: #6E4A7E;">💜</span>
+                        <span class="lang-name">Elixir</span>
+                        <span class="lang-status" id="status_elixir">未开始</span>
+                    </a>
+                    <a href="tutorial-julia.html" class="lang-progress-item" data-lang="julia" data-name="Julia">
+                        <span class="lang-icon" style="background: #9558B2;">💙</span>
+                        <span class="lang-name">Julia</span>
+                        <span class="lang-status" id="status_julia">未开始</span>
+                    </a>
+                    <a href="tutorial-zig.html" class="lang-progress-item" data-lang="zig" data-name="Zig">
+                        <span class="lang-icon" style="background: #F7A41D;">⚡</span>
+                        <span class="lang-name">Zig</span>
+                        <span class="lang-status" id="status_zig">未开始</span>
+                    </a>
+                    <a href="tutorial-assembly.html" class="lang-progress-item" data-lang="assembly" data-name="汇编语言">
+                        <span class="lang-icon" style="background: #6E4C13;">🔧</span>
+                        <span class="lang-name">汇编语言</span>
+                        <span class="lang-status" id="status_assembly">未开始</span>
+                    </a>
+                    </div>
                 </div>
-                <div class="snippet-list" id="snippetList">
+
+                <div class="sidebar-card">
+                    <h3>代码片段</h3>
+                    <div class="snippets-container" id="snippetsContainer">
+                        <p class="empty-text">暂无代码片段</p>
+                    </div>
+                    <button class="add-snippet-btn" onclick="showAddSnippetModal()">+ 添加代码片段</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="toast" id="toast"></div>
+    <!-- 添加代码片段弹窗 -->
+    <div class="modal-overlay" id="addSnippetModal" onclick="if(event.target === this) hideAddSnippetModal()">
+        <div class="modal-content">
+            <h3>添加代码片段</h3>
+            <input type="text" id="snippetTitle" placeholder="标题" class="snippet-input">
+            <select id="snippetLang" class="snippet-input">
+                <option value="python">🐍 Python</option>
+                <option value="java">☕ Java</option>
+                <option value="javascript">🟨 JavaScript</option>
+                <option value="cpp">🔵 C/C++</option>
+                <option value="csharp">💜 C#</option>
+                <option value="go">🐹 Go</option>
+                <option value="php">🐘 PHP</option>
+                <option value="rust">🦀 Rust</option>
+                <option value="swift">🍎 Swift</option>
+                <option value="typescript">🔷 TypeScript</option>
+                <option value="kotlin">🟣 Kotlin</option>
+                <option value="ruby">💎 Ruby</option>
+                <option value="dart">🎯 Dart</option>
+                <option value="scala">🔴 Scala</option>
+                <option value="r-lang">📊 R语言</option>
+                <option value="sql">🗄️ SQL</option>
+                <option value="html-css">🌐 HTML/CSS</option>
+                <option value="shell">🐚 Shell</option>
+                <option value="lua">🌙 Lua</option>
+                <option value="perl">🐪 Perl</option>
+                <option value="elixir">💜 Elixir</option>
+                <option value="julia">💙 Julia</option>
+                <option value="zig">⚡ Zig</option>
+                <option value="assembly">🔧 汇编语言</option>
+            </select>
+            <textarea id="snippetCode" placeholder="代码内容" class="snippet-textarea"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="hideAddSnippetModal()">取消</button>
+                <button class="btn-primary" onclick="saveSnippet()">保存</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const languages = [
-            { id: 'python', name: 'Python教程', icon: '🐍' },
-            { id: 'java', name: 'Java教程', icon: '☕' },
-            { id: 'javascript', name: 'JavaScript教程', icon: '📜' },
-            { id: 'cpp', name: 'C/C++教程', icon: '⚙️' },
-            { id: 'csharp', name: 'C#教程', icon: '🎯' },
-            { id: 'go', name: 'Go教程', icon: '🐹' },
-            { id: 'php', name: 'PHP教程', icon: '🐘' },
-            { id: 'rust', name: 'Rust教程', icon: '🦀' },
-            { id: 'swift', name: 'Swift教程', icon: '🍎' },
-            { id: 'typescript', name: 'TypeScript教程', icon: '📘' }
-        ];
+        const languages = {
+            'python': { name: 'Python', icon: '🐍', color: '#3776ab' },
+            'java': { name: 'Java', icon: '☕', color: '#f89820' },
+            'javascript': { name: 'JavaScript', icon: '🟨', color: '#f7df1e' },
+            'cpp': { name: 'C/C++', icon: '🔵', color: '#00599c' },
+            'csharp': { name: 'C#', icon: '💜', color: '#68217a' },
+            'go': { name: 'Go', icon: '🐹', color: '#00add8' },
+            'php': { name: 'PHP', icon: '🐘', color: '#777bb4' },
+            'rust': { name: 'Rust', icon: '🦀', color: '#ce422b' },
+            'swift': { name: 'Swift', icon: '🍎', color: '#fa7343' },
+            'typescript': { name: 'TypeScript', icon: '🔷', color: '#3178c6' },
+            'kotlin': { name: 'Kotlin', icon: '🟣', color: '#7F52FF' },
+            'ruby': { name: 'Ruby', icon: '💎', color: '#CC342D' },
+            'dart': { name: 'Dart', icon: '🎯', color: '#0175C2' },
+            'scala': { name: 'Scala', icon: '🔴', color: '#DC322F' },
+            'r-lang': { name: 'R语言', icon: '📊', color: '#276DC3' },
+            'sql': { name: 'SQL', icon: '🗄️', color: '#00758F' },
+            'html-css': { name: 'HTML/CSS', icon: '🌐', color: '#E34F26' },
+            'shell': { name: 'Shell', icon: '🐚', color: '#4EAA25' },
+            'lua': { name: 'Lua', icon: '🌙', color: '#2C2D72' },
+            'perl': { name: 'Perl', icon: '🐪', color: '#39457E' },
+            'elixir': { name: 'Elixir', icon: '💜', color: '#6E4A7E' },
+            'julia': { name: 'Julia', icon: '💙', color: '#9558B2' },
+            'zig': { name: 'Zig', icon: '⚡', color: '#F7A41D' },
+            'assembly': { name: '汇编语言', icon: '🔧', color: '#6E4C13' }
+        };
 
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
-        }
-
-        function getProgress() {
-            const dataKey = 'TUTORIAL_DATA_python';
-            const totalChapters = window[dataKey] ? window[dataKey].length : 35;
+        // 加载所有进度
+        function loadAllProgress() {
             let totalCompleted = 0;
-            let totalChaptersAll = 0;
-            let studyingCount = 0;
+            let totalChapters = 0;
+            let learningCount = 0;
 
-            const list = document.getElementById('progressList');
-            list.innerHTML = '';
+            const progressGrid = document.getElementById('progressGrid');
+            progressGrid.innerHTML = '';
 
-            languages.forEach(lang => {
-                const pKey = lang.id + '_progress';
-                const progress = JSON.parse(localStorage.getItem(pKey) || '[]');
-                const count = progress.length;
-                const chapters = totalChapters;
-                const percent = Math.round((count / chapters) * 100);
+            Object.keys(languages).forEach(lang => {
+                const progress = JSON.parse(localStorage.getItem(lang + '_progress') || '[]');
+                const total = 35; // 每门语言35章
+                const completed = progress.length;
+                const percent = Math.round((completed / total) * 100);
 
-                if (count > 0) studyingCount++;
-                totalCompleted += count;
-                totalChaptersAll += chapters;
+                totalCompleted += completed;
+                totalChapters += total;
+                if (completed > 0) learningCount++;
 
-                const card = document.createElement('a');
-                card.href = 'tutorial-' + lang.id + '.html';
-                card.className = 'progress-card';
-                card.innerHTML = `
-                    <div class="progress-card-header">
-                        <span class="progress-card-title">${lang.icon} ${lang.name}</span>
-                        <span class="progress-card-percent">${percent}%</span>
-                    </div>
-                    <div class="progress-bar-hub">
-                        <div class="progress-bar-hub-fill" style="width: ${percent}%"></div>
-                    </div>
-                    <div class="progress-info">
-                        <span>已完成 ${count} 节</span>
-                        <span>共 ${chapters} 节</span>
-                    </div>
-                `;
-                list.appendChild(card);
+                if (completed > 0) {
+                    const langInfo = languages[lang];
+                    const card = document.createElement('div');
+                    card.className = 'progress-card';
+                    card.innerHTML = `
+                        <div class="progress-card-header">
+                            <span class="lang-icon" style="background: ${langInfo.color};">${langInfo.icon}</span>
+                            <span class="lang-name">${langInfo.name}</span>
+                            <span class="progress-percent">${percent}%</span>
+                        </div>
+                        <div class="progress-bar-small">
+                            <div class="progress-fill-small" style="width: ${percent}%; background: ${langInfo.color};"></div>
+                        </div>
+                        <div class="progress-detail">${completed} / ${total} 章节</div>
+                        <a href="tutorial-${lang}.html" class="continue-btn">继续学习 →</a>
+                    `;
+                    progressGrid.appendChild(card);
+                }
+
+                // 更新侧边栏状态
+                const statusEl = document.getElementById('status_' + lang);
+                if (statusEl) {
+                    if (completed === 0) {
+                        statusEl.textContent = '未开始';
+                        statusEl.style.color = '#94a3b8';
+                    } else if (percent === 100) {
+                        statusEl.textContent = '已完成';
+                        statusEl.style.color = '#10b981';
+                    } else {
+                        statusEl.textContent = percent + '%';
+                        statusEl.style.color = '#6366f1';
+                    }
+                }
             });
 
-            document.getElementById('totalCompleted').textContent = totalCompleted;
-            document.getElementById('languagesStudying').textContent = studyingCount;
-            document.getElementById('overallProgress').textContent = 
-                Math.round((totalCompleted / totalChaptersAll) * 100) + '%';
+            document.getElementById('completedChapters').textContent = totalCompleted;
+            document.getElementById('learningLangs').textContent = learningCount;
+            
+            const snippets = JSON.parse(localStorage.getItem('code_snippets') || '[]');
+            document.getElementById('codeSnippets').textContent = snippets.length;
+            
+            const overall = totalChapters > 0 ? Math.round((totalCompleted / totalChapters) * 100) : 0;
+            document.getElementById('overallProgress').textContent = overall + '%';
         }
 
-        function getSnippets() {
-            return JSON.parse(localStorage.getItem('code_snippets') || '[]');
+        // 代码片段功能
+        function showAddSnippetModal() {
+            document.getElementById('addSnippetModal').style.display = 'flex';
         }
 
-        function saveSnippets(snippets) {
+        function hideAddSnippetModal() {
+            document.getElementById('addSnippetModal').style.display = 'none';
+            document.getElementById('snippetTitle').value = '';
+            document.getElementById('snippetCode').value = '';
+        }
+
+        function saveSnippet() {
+            const title = document.getElementById('snippetTitle').value.trim();
+            const lang = document.getElementById('snippetLang').value;
+            const code = document.getElementById('snippetCode').value.trim();
+
+            if (!title || !code) {
+                alert('请填写标题和代码内容');
+                return;
+            }
+
+            const snippets = JSON.parse(localStorage.getItem('code_snippets') || '[]');
+            snippets.unshift({
+                id: Date.now(),
+                title,
+                lang,
+                code,
+                created: new Date().toLocaleDateString()
+            });
             localStorage.setItem('code_snippets', JSON.stringify(snippets));
+            
+            hideAddSnippetModal();
+            loadAllProgress();
+            renderSnippets();
         }
 
         function renderSnippets() {
-            const list = document.getElementById('snippetList');
-            const snippets = getSnippets();
-            document.getElementById('snippetCount').textContent = snippets.length;
+            const container = document.getElementById('snippetsContainer');
+            const snippets = JSON.parse(localStorage.getItem('code_snippets') || '[]');
 
             if (snippets.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1/-1;">
-                        <div class="empty-state-icon">📝</div>
-                        <p>还没有代码片段，添加一个吧！</p>
+                container.innerHTML = '<p class="empty-text">暂无代码片段</p>';
+                return;
+            }
+
+            container.innerHTML = snippets.slice(0, 5).map(s => {
+                const langInfo = languages[s.lang] || { icon: '📄', name: s.lang };
+                return `
+                    <div class="snippet-item">
+                        <div class="snippet-header">
+                            <span class="snippet-lang" style="background: ${langInfo.color};">${langInfo.icon}</span>
+                            <span class="snippet-title">${s.title}</span>
+                            <button class="delete-btn" onclick="deleteSnippet(${s.id})">×</button>
+                        </div>
+                        <pre class="snippet-code">${s.code.substring(0, 100)}${s.code.length > 100 ? '...' : ''}</pre>
                     </div>
                 `;
-                return;
-            }
-
-            list.innerHTML = '';
-            snippets.forEach((s, i) => {
-                const item = document.createElement('div');
-                item.className = 'snippet-item';
-                item.innerHTML = `
-                    <div class="snippet-item-header">
-                        <span class="snippet-item-lang">${s.language}</span>
-                        <button class="delete-btn" onclick="deleteSnippet(${i})">✕</button>
-                    </div>
-                    <div class="snippet-item-title">${s.title}</div>
-                    <div class="snippet-item-code">${s.code.substring(0, 60)}...</div>
-                `;
-                list.appendChild(item);
-            });
+            }).join('');
         }
 
-        function addSnippet() {
-            const lang = document.getElementById('snippetLang').value;
-            const title = document.getElementById('snippetTitle').value.trim();
-            if (!title) {
-                showToast('请输入代码片段标题');
-                return;
-            }
-            const code = prompt('请输入代码内容：');
-            if (!code) return;
-
-            const snippets = getSnippets();
-            snippets.unshift({ language: lang, title, code, date: new Date().toISOString() });
-            saveSnippets(snippets);
+        function deleteSnippet(id) {
+            let snippets = JSON.parse(localStorage.getItem('code_snippets') || '[]');
+            snippets = snippets.filter(s => s.id !== id);
+            localStorage.setItem('code_snippets', JSON.stringify(snippets));
+            loadAllProgress();
             renderSnippets();
-            document.getElementById('snippetTitle').value = '';
-            showToast('代码片段已保存');
         }
 
-        function deleteSnippet(index) {
-            if (!confirm('确定删除此代码片段吗？')) return;
-            const snippets = getSnippets();
-            snippets.splice(index, 1);
-            saveSnippets(snippets);
-            renderSnippets();
-            showToast('已删除');
-        }
-
-        function exportSnippets() {
-            const snippets = getSnippets();
-            if (snippets.length === 0) {
-                showToast('没有代码片段可导出');
-                return;
-            }
-            const blob = new Blob([JSON.stringify(snippets, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'code-snippets.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('导出成功');
-        }
-
-        document.getElementById('snippetTitle').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') addSnippet();
-        });
-
-        function loadChaptersData() {
-            let loaded = 0;
-            languages.forEach((lang, index) => {
-                const script = document.createElement('script');
-                script.src = 'data/tutorial-' + lang.id + '.data.js';
-                script.onload = function() {
-                    loaded++;
-                    if (loaded === languages.length) {
-                        getProgress();
-                    }
-                };
-                script.onerror = function() {
-                    loaded++;
-                    if (loaded === languages.length) {
-                        getProgress();
-                    }
-                };
-                document.head.appendChild(script);
-            });
-        }
-
-        getProgress();
+        // 初始化
+        loadAllProgress();
         renderSnippets();
-        loadChaptersData();
     </script>
 </body>
 </html>
