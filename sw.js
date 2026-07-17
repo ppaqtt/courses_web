@@ -3,7 +3,7 @@
  * 支持离线访问和缓存管理
  */
 
-const CACHE_NAME = 'tutorial-cache-v1';
+const CACHE_NAME = 'tutorial-cache-v2';
 const STATIC_ASSETS = [
     '/',
     '/programming-languages-tutorial.html',

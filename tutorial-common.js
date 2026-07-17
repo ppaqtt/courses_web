@@ -644,7 +644,18 @@ const CodeEditor = {
         go: { name: 'Go', runnable: false },
         rust: { name: 'Rust', runnable: false },
         php: { name: 'PHP', runnable: false },
-        swift: { name: 'Swift', runnable: false }
+        swift: { name: 'Swift', runnable: false },
+        kotlin: { name: 'Kotlin', runnable: false },
+        ruby: { name: 'Ruby', runnable: false },
+        sql: { name: 'SQL', runnable: false },
+        c: { name: 'C', runnable: false },
+        dart: { name: 'Dart', runnable: false },
+        scala: { name: 'Scala', runnable: false },
+        r: { name: 'R', runnable: false },
+        lua: { name: 'Lua', runnable: false },
+        bash: { name: 'Bash', runnable: false },
+        html: { name: 'HTML', runnable: true },
+        css: { name: 'CSS', runnable: true }
     },
     
     // 创建编辑器
@@ -741,8 +752,26 @@ const CodeEditor = {
     highlight(code, language) {
         const keywords = {
             javascript: ['const', 'let', 'var', 'function', 'class', 'if', 'else', 'for', 'while', 'return', 'import', 'export', 'from', 'new', 'this', 'async', 'await', 'try', 'catch', 'throw'],
+            typescript: ['const', 'let', 'var', 'function', 'class', 'interface', 'type', 'if', 'else', 'for', 'while', 'return', 'import', 'export', 'from', 'new', 'this', 'async', 'await', 'try', 'catch', 'throw', 'public', 'private', 'readonly'],
             python: ['def', 'class', 'if', 'else', 'elif', 'for', 'while', 'return', 'import', 'from', 'as', 'in', 'not', 'and', 'or', 'True', 'False', 'None', 'lambda', 'try', 'except', 'finally'],
             java: ['public', 'private', 'protected', 'class', 'interface', 'extends', 'implements', 'static', 'final', 'void', 'int', 'String', 'boolean', 'if', 'else', 'for', 'while', 'return', 'new', 'this', 'import', 'package'],
+            cpp: ['int', 'char', 'float', 'double', 'void', 'class', 'struct', 'public', 'private', 'protected', 'const', 'static', 'if', 'else', 'for', 'while', 'return', 'new', 'delete', 'this', 'namespace', 'using', 'include', 'template', 'typename'],
+            csharp: ['using', 'class', 'public', 'private', 'protected', 'static', 'void', 'int', 'string', 'bool', 'var', 'if', 'else', 'for', 'foreach', 'while', 'return', 'new', 'this', 'namespace'],
+            go: ['package', 'import', 'func', 'var', 'const', 'type', 'struct', 'interface', 'if', 'else', 'for', 'range', 'return', 'go', 'chan', 'defer', 'select', 'switch', 'case', 'default'],
+            rust: ['fn', 'let', 'mut', 'const', 'static', 'struct', 'enum', 'impl', 'trait', 'mod', 'use', 'pub', 'if', 'else', 'match', 'for', 'while', 'loop', 'return', 'self', 'Self', 'true', 'false'],
+            php: ['class', 'public', 'private', 'protected', 'function', 'static', 'array', 'if', 'else', 'foreach', 'for', 'while', 'return', 'new', 'this', 'echo', 'print', 'include', 'require', 'namespace', 'use'],
+            swift: ['let', 'var', 'func', 'class', 'struct', 'enum', 'protocol', 'extension', 'if', 'else', 'for', 'while', 'return', 'import', 'guard', 'switch', 'case', 'self', 'true', 'false', 'nil'],
+            kotlin: ['fun', 'val', 'var', 'class', 'object', 'interface', 'enum', 'data', 'if', 'else', 'for', 'while', 'when', 'return', 'import', 'package', 'this', 'super', 'null', 'true', 'false'],
+            ruby: ['def', 'class', 'module', 'if', 'elsif', 'else', 'unless', 'case', 'when', 'while', 'until', 'for', 'do', 'end', 'return', 'break', 'next', 'yield', 'begin', 'rescue', 'ensure', 'self', 'nil', 'true', 'false', 'puts'],
+            sql: ['SELECT', 'FROM', 'WHERE', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE', 'CREATE', 'TABLE', 'DROP', 'JOIN', 'INNER', 'LEFT', 'RIGHT', 'ON', 'GROUP', 'BY', 'HAVING', 'ORDER', 'LIMIT', 'AS', 'AND', 'OR'],
+            c: ['int', 'char', 'float', 'double', 'void', 'short', 'long', 'unsigned', 'signed', 'const', 'static', 'extern', 'struct', 'union', 'enum', 'typedef', 'if', 'else', 'for', 'while', 'do', 'switch', 'case', 'return', 'sizeof', 'include', 'define'],
+            dart: ['var', 'final', 'const', 'void', 'int', 'double', 'String', 'bool', 'class', 'extends', 'if', 'else', 'for', 'while', 'switch', 'case', 'return', 'new', 'this', 'super', 'import', 'async', 'await', 'true', 'false', 'null'],
+            scala: ['val', 'var', 'def', 'class', 'object', 'trait', 'extends', 'with', 'if', 'else', 'for', 'while', 'match', 'case', 'return', 'import', 'package', 'this', 'super', 'new', 'try', 'catch', 'finally', 'null', 'true', 'false'],
+            r: ['function', 'if', 'else', 'for', 'while', 'repeat', 'break', 'next', 'return', 'in', 'TRUE', 'FALSE', 'NULL', 'NA', 'library', 'require', 'print', 'cat', 'data', 'frame', 'list', 'c'],
+            lua: ['local', 'function', 'end', 'if', 'then', 'else', 'elseif', 'for', 'in', 'do', 'while', 'repeat', 'until', 'return', 'break', 'and', 'or', 'not', 'nil', 'true', 'false', 'self'],
+            bash: ['if', 'then', 'else', 'elif', 'fi', 'for', 'in', 'do', 'done', 'while', 'until', 'case', 'esac', 'function', 'return', 'break', 'continue', 'exit', 'local', 'export', 'echo', 'read', 'cd'],
+            html: ['html', 'head', 'body', 'title', 'meta', 'link', 'script', 'style', 'div', 'span', 'p', 'a', 'img', 'ul', 'ol', 'li', 'table', 'tr', 'td', 'form', 'input', 'button', 'header', 'footer', 'nav', 'main', 'section', 'article'],
+            css: ['margin', 'padding', 'color', 'background', 'display', 'flex', 'grid', 'width', 'height', 'border', 'font', 'text', 'position', 'top', 'right', 'bottom', 'left', 'transition', 'transform', 'animation']
         };
         
         const langKeywords = keywords[language] || [];

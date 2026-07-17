@@ -1,7 +1,7 @@
 {
     "name": "编程语言教程系统",
     "short_name": "编程教程",
-    "description": "学习最流行的编程语言，从Python到Swift",
+    "description": "学习最流行的 21 种编程语言，从 Python 到 CSS，涵盖 Web、移动、数据科学、系统编程",
     "start_url": "/programming-languages-tutorial.html",
     "display": "standalone",
     "background_color": "#667eea",

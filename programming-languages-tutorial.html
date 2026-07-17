@@ -403,7 +403,7 @@
             <button class="lang-switcher" onclick="toggleLanguage()">🌐 中文</button>
             <a href="tutorial-hub.html" class="hub-link">🎯 学习中心</a>
             <h1>🚀 流行编程语言教程</h1>
-            <p>探索当今世界最受欢迎的编程语言，找到最适合你的那一个</p>
+            <p>探索当今世界最受欢迎的 21 种编程语言，找到最适合你的那一个</p>
         </header>
 
         <div class="stats-bar">
@@ -420,7 +420,7 @@
                 <div class="stat-label">全球开发者</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">Top 10</div>
+                <div class="stat-number">Top 21</div>
                 <div class="stat-label">热门语言</div>
             </div>
         </div>
@@ -1227,6 +1227,967 @@ manager.printSummary()`,
                     { title: "实战项目", desc: "完整App开发、上架App Store" }
                 ],
                 useCases: ["iOS应用开发", "macOS应用开发", "watchOS应用", "tvOS应用", "服务端开发"]
+            },
+            {
+                id: 11,
+                name: "Kotlin",
+                icon: "🟣",
+                rank: 11,
+                color: "#7F52FF",
+                category: ["mobile", "web"],
+                year: 2011,
+                creator: "JetBrains",
+                description: "Kotlin 是一种现代、简洁、安全的编程语言，与 Java 完全互操作，是 Android 官方推荐的开发语言。",
+                features: [
+                    "简洁优雅，消除大量样板代码",
+                    "100% 与 Java 互操作，可混用现有库",
+                    "空安全类型系统，编译期杜绝空指针",
+                    "通过协程优雅地处理异步与并发",
+                    "Android 官方首选开发语言"
+                ],
+                codeExample: `// Kotlin 示例：任务管理系统
+data class Task(
+    val id: Int,
+    var title: String,
+    var isCompleted: Boolean = false,
+    val priority: Priority = Priority.MEDIUM
+) {
+    enum class Priority(val label: String) {
+        HIGH("高"), MEDIUM("中"), LOW("低")
+    }
+}
+
+class TaskManager {
+    private val tasks = mutableListOf<Task>()
+
+    fun add(title: String, priority: Task.Priority = Task.Priority.MEDIUM) {
+        val task = Task(id = tasks.size + 1, title = title, priority = priority)
+        tasks.add(task)
+        println("✅ 已添加: \${task.title}")
+    }
+
+    fun complete(id: Int) {
+        tasks.find { it.id == id }?.let {
+            it.isCompleted = true
+            println("🎉 完成: \${it.title}")
+        }
+    }
+
+    fun summary() {
+        val total = tasks.size
+        val done = tasks.count { it.isCompleted }
+        println("\\n📋 任务管理: \${done}/\${total} 完成")
+        tasks.groupBy { it.priority }.forEach { (p, list) ->
+            println("\${p.label}优先级: \${list.size} 项")
+        }
+    }
+}
+
+fun main() {
+    val manager = TaskManager()
+    manager.add("学习 Kotlin", Task.Priority.HIGH)
+    manager.add("开发 Android App")
+    manager.add("掌握协程", Task.Priority.LOW)
+    manager.complete(1)
+    manager.summary()
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、继承、接口、数据类、单例对象" },
+                    { title: "函数式编程", desc: "高阶函数、Lambda、集合操作符" },
+                    { title: "协程与异步", desc: "协程、Flow、suspend 函数" },
+                    { title: "Android 开发", desc: "Jetpack Compose、ViewModel、Room" },
+                    { title: "实战项目", desc: "完整 App 开发、上架 Google Play" }
+                ],
+                useCases: ["Android 应用开发", "服务端开发（Ktor）", "跨平台应用", "Gradle 构建脚本", "数据工程"]
+            },
+            {
+                id: 12,
+                name: "Ruby",
+                icon: "💎",
+                rank: 12,
+                color: "#CC342D",
+                category: ["web"],
+                year: 1995,
+                creator: "Yukihiro Matsumoto",
+                description: "Ruby 是一种简洁优雅的动态编程语言，以"程序员的快乐"为设计目标，Rails 框架使其在 Web 领域大放异彩。",
+                features: [
+                    "语法自然优雅，接近自然语言",
+                    "纯面向对象，一切皆为对象",
+                    "强大的元编程能力",
+                    "Ruby on Rails 框架开创 Web 开发新模式",
+                    "丰富的 Gem 包生态"
+                ],
+                codeExample: `# Ruby 示例：任务管理系统
+class Task
+  attr_accessor :title, :completed
+  attr_reader :id, :priority, :created_at
+
+  PRIORITIES = { high: '高', medium: '中', low: '低' }.freeze
+
+  def initialize(id, title, priority = :medium)
+    @id = id
+    @title = title
+    @priority = priority
+    @completed = false
+    @created_at = Time.now
+  end
+
+  def complete!
+    @completed = true
+    puts "🎉 完成: #{title}"
+  end
+end
+
+class TaskManager
+  def initialize
+    @tasks = []
+  end
+
+  def add(title, priority = :medium)
+    task = Task.new(@tasks.size + 1, title, priority)
+    @tasks << task
+    puts "✅ 已添加: #{task.title}"
+  end
+
+  def complete(id)
+    task = @tasks.find { |t| t.id == id }
+    task&.complete!
+  end
+
+  def summary
+    total = @tasks.size
+    done = @tasks.count(&:completed)
+    puts "\\n📋 任务管理: #{done}/#{total} 完成"
+    @tasks.group_by(&:priority).each do |p, list|
+      puts "#{Task::PRIORITIES[p]}优先级: #{list.size} 项"
+    end
+  end
+end
+
+manager = TaskManager.new
+manager.add('学习 Ruby', :high)
+manager.add('使用 Rails 开发网站')
+manager.add('掌握元编程', :low)
+manager.complete(1)
+manager.summary`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、模块、Mixin、块" },
+                    { title: "块与迭代器", desc: "block、proc、lambda、yield" },
+                    { title: "元编程", desc: "动态方法、open class、反射" },
+                    { title: "Web 开发", desc: "Ruby on Rails、 ActiveRecord、REST" },
+                    { title: "实战项目", desc: "完整 Web 应用、API 服务" }
+                ],
+                useCases: ["Web 后端开发", "原型与脚本", "DevOps 工具", "静态网站生成", "自动化测试"]
+            },
+            {
+                id: 13,
+                name: "SQL",
+                icon: "🗄️",
+                rank: 13,
+                color: "#336791",
+                category: ["data", "web"],
+                year: 1974,
+                creator: "Donald Chamberlin & Raymond Boyce",
+                description: "SQL（结构化查询语言）是关系型数据库的标准语言，用于数据的查询、定义、操作和控制。",
+                features: [
+                    "声明式查询，专注于"做什么"而非"怎么做"",
+                    "关系型数据库的通用标准语言",
+                    "支持事务、索引、视图、存储过程",
+                    "强大的数据聚合与统计分析能力",
+                    "几乎所有的应用都需要数据库支持"
+                ],
+                codeExample: `-- SQL 示例：电商数据查询
+-- 建表
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    amount DECIMAL(10, 2),
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 插入数据
+INSERT INTO users (name, email) VALUES
+    ('张三', 'zhangsan@example.com'),
+    ('李四', 'lisi@example.com'),
+    ('王五', 'wangwu@example.com');
+
+INSERT INTO orders (user_id, amount, status) VALUES
+    (1, 299.00, 'completed'),
+    (1, 1599.50, 'completed'),
+    (2, 89.00, 'pending'),
+    (3, 499.00, 'completed');
+
+-- 查询消费金额前 3 的用户
+SELECT
+    u.name AS 用户名,
+    COUNT(o.id) AS 订单数,
+    SUM(o.amount) AS 总消费,
+    AVG(o.amount) AS 平均消费
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id AND o.status = 'completed'
+GROUP BY u.id, u.name
+HAVING SUM(o.amount) > 0
+ORDER BY 总消费 DESC
+LIMIT 3;
+
+-- 窗口函数：统计每个用户的订单排名
+SELECT
+    u.name,
+    o.amount,
+    RANK() OVER (PARTITION BY u.id ORDER BY o.amount DESC) AS 用户内排名
+FROM orders o
+JOIN users u ON o.user_id = u.id;`,
+                learningPath: [
+                    { title: "基础查询", desc: "SELECT、WHERE、ORDER BY、LIMIT" },
+                    { title: "聚合与分组", desc: "COUNT、SUM、AVG、GROUP BY、HAVING" },
+                    { title: "多表连接", desc: "INNER/LEFT/RIGHT JOIN、子查询" },
+                    { title: "数据操作", desc: "INSERT、UPDATE、DELETE、事务" },
+                    { title: "高级特性", desc: "视图、索引、存储过程、窗口函数" },
+                    { title: "性能优化", desc: "执行计划、索引调优、数据库设计" }
+                ],
+                useCases: ["业务数据分析", "后端应用开发", "数据仓库与BI", "数据库管理", "数据科学"]
+            },
+            {
+                id: 14,
+                name: "C",
+                icon: "🔧",
+                rank: 14,
+                color: "#A8B9CC",
+                textColor: "#333",
+                category: ["system", "game"],
+                year: 1972,
+                creator: "Dennis Ritchie",
+                description: "C 语言是一种通用的、过程式的编程语言，被誉为"现代编程语言之母"，是操作系统和系统软件的基石。",
+                features: [
+                    "高效、低层、贴近硬件",
+                    "提供指针直接操作内存",
+                    "可移植性强，跨平台运行",
+                    "影响深远，C++/Java/Python 都借鉴了 C",
+                    "Unix/Linux/Windows 内核的核心语言"
+                ],
+                codeExample: `// C 示例：链表实现
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+typedef struct {
+    Node* head;
+    int size;
+} LinkedList;
+
+void list_init(LinkedList* list) {
+    list->head = NULL;
+    list->size = 0;
+}
+
+void list_push(LinkedList* list, int data) {
+    Node* node = (Node*)malloc(sizeof(Node));
+    node->data = data;
+    node->next = list->head;
+    list->head = node;
+    list->size++;
+    printf("✅ 添加: %d\\n", data);
+}
+
+void list_print(const LinkedList* list) {
+    Node* cur = list->head;
+    printf("链表 (size=%d): ", list->size);
+    while (cur != NULL) {
+        printf("%d", cur->data);
+        if (cur->next) printf(" -> ");
+        cur = cur->next;
+    }
+    printf("\\n");
+}
+
+int list_sum(const LinkedList* list) {
+    int total = 0;
+    for (Node* cur = list->head; cur; cur = cur->next) {
+        total += cur->data;
+    }
+    return total;
+}
+
+void list_free(LinkedList* list) {
+    Node* cur = list->head;
+    while (cur) {
+        Node* next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    list->head = NULL;
+    list->size = 0;
+}
+
+int main() {
+    LinkedList list;
+    list_init(&list);
+    list_push(&list, 10);
+    list_push(&list, 20);
+    list_push(&list, 30);
+    list_print(&list);
+    printf("总和: %d\\n", list_sum(&list));
+    list_free(&list);
+    return 0;
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "函数与作用域", desc: "函数定义、参数传递、作用域规则" },
+                    { title: "指针与内存", desc: "指针、数组、动态内存分配" },
+                    { title: "结构体与联合", desc: "struct、union、enum、typedef" },
+                    { title: "文件与预处理", desc: "文件 I/O、宏、头文件" },
+                    { title: "实战项目", desc: "数据结构、操作系统、嵌入式" }
+                ],
+                useCases: ["操作系统开发", "嵌入式系统", "编译器与解释器", "驱动程序", "高性能库"]
+            },
+            {
+                id: 15,
+                name: "Dart",
+                icon: "💙",
+                rank: 15,
+                color: "#0175C2",
+                category: ["mobile", "web"],
+                year: 2011,
+                creator: "Google",
+                description: "Dart 是 Google 开发的客户端优化编程语言，配合 Flutter 框架可一套代码同时构建移动、Web 和桌面应用。",
+                features: [
+                    "类型安全，支持空安全",
+                    "JIT 与 AOT 双编译模式，开发快、运行快",
+                    "异步编程基于 Future 和 Stream",
+                    "Flutter 跨平台 UI 框架的核心语言",
+                    "一套代码覆盖 iOS/Android/Web/桌面"
+                ],
+                codeExample: `// Dart 示例：任务管理系统
+enum Priority { high, medium, low }
+
+extension PriorityLabel on Priority {
+  String get label => switch (this) {
+    Priority.high => '高',
+    Priority.medium => '中',
+    Priority.low => '低',
+  };
+}
+
+class Task {
+  final int id;
+  String title;
+  bool isCompleted;
+  final Priority priority;
+  final DateTime createdAt;
+
+  Task({
+    required this.id,
+    required this.title,
+    this.isCompleted = false,
+    this.priority = Priority.medium,
+  }) : createdAt = DateTime.now();
+
+  void complete() {
+    isCompleted = true;
+    print('🎉 完成: $title');
+  }
+}
+
+class TaskManager {
+  final List<Task> _tasks = [];
+
+  void add(String title, {Priority priority = Priority.medium}) {
+    final task = Task(
+      id: _tasks.length + 1,
+      title: title,
+      priority: priority,
+    );
+    _tasks.add(task);
+    print('✅ 已添加: \${task.title}');
+  }
+
+  void completeById(int id) {
+    final task = _tasks.firstWhere((t) => t.id == id);
+    task.complete();
+  }
+
+  void summary() {
+    final total = _tasks.length;
+    final done = _tasks.where((t) => t.isCompleted).length;
+    print('\\n📋 任务管理: $done/$total 完成');
+    for (final p in Priority.values) {
+      final count = _tasks.where((t) => t.priority == p).length;
+      print('\${p.label}优先级: $count 项');
+    }
+  }
+}
+
+void main() {
+  final manager = TaskManager();
+  manager.add('学习 Dart', priority: Priority.high);
+  manager.add('使用 Flutter 开发 App');
+  manager.add('掌握异步编程', priority: Priority.low);
+  manager.completeById(1);
+  manager.summary();
+}`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、继承、Mixin、抽象类" },
+                    { title: "异步编程", desc: "Future、async/await、Stream" },
+                    { title: "Flutter 基础", desc: "Widget、布局、状态管理" },
+                    { title: "进阶 Flutter", desc: "路由、动画、网络请求、本地存储" },
+                    { title: "实战项目", desc: "跨平台 App 开发与发布" }
+                ],
+                useCases: ["跨平台移动应用", "Flutter Web", "桌面应用", "响应式 UI", "原型开发"]
+            },
+            {
+                id: 16,
+                name: "Scala",
+                icon: "🌀",
+                rank: 16,
+                color: "#DC322F",
+                category: ["data", "web"],
+                year: 2004,
+                creator: "Martin Odersky",
+                description: "Scala 是一种融合了面向对象和函数式编程的语言，运行于 JVM 之上，是大数据 Spark 的核心开发语言。",
+                features: [
+                    "融合面向对象与函数式编程",
+                    "运行于 JVM，与 Java 库互操作",
+                    "强大的类型推断系统",
+                    "Apache Spark 的大数据开发首选",
+                    "支持模式匹配、高阶函数、不可变数据"
+                ],
+                codeExample: `// Scala 示例：任务管理（函数式风格）
+import scala.collection.immutable.List
+
+enum Priority(val label: String):
+  case High extends Priority("高")
+  case Medium extends Priority("中")
+  case Low extends Priority("低")
+
+case class Task(
+  id: Int,
+  title: String,
+  priority: Priority = Priority.Medium,
+  isCompleted: Boolean = false
+):
+  def complete: Task = copy(isCompleted = true)
+
+class TaskManager:
+  private var tasks: List[Task] = Nil
+
+  def add(title: String, priority: Priority = Priority.Medium): Unit =
+    val task = Task(id = tasks.size + 1, title = title, priority = priority)
+    tasks = tasks :+ task
+    println(s"✅ 已添加: \${task.title}")
+
+  def complete(id: Int): Unit =
+    tasks = tasks.map { t =>
+      if t.id == id then
+        println(s"🎉 完成: \${t.title}")
+        t.complete
+      else t
+    }
+
+  def summary: Unit =
+    val total = tasks.size
+    val done = tasks.count(_.isCompleted)
+    println(s"\\n📋 任务管理: \${done}/\${total} 完成")
+    tasks.groupBy(_.priority).foreach { (p, list) =>
+      println(s"\${p.label}优先级: \${list.size} 项")
+    }
+
+@main def run(): Unit =
+  val manager = TaskManager()
+  manager.add("学习 Scala", Priority.High)
+  manager.add("使用 Spark 处理大数据")
+  manager.add("掌握函数式编程", Priority.Low)
+  manager.complete(1)
+  manager.summary`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "面向对象", desc: "类、特质、继承、样例类" },
+                    { title: "函数式编程", desc: "高阶函数、不可变集合、模式匹配" },
+                    { title: "类型系统", desc: "泛型、隐式转换、上下文抽象" },
+                    { title: "大数据开发", desc: "Spark、RDD、DataFrame、流处理" },
+                    { title: "实战项目", desc: "数据管道、分布式计算、Web 后端" }
+                ],
+                useCases: ["大数据处理（Spark）", "分布式系统", "后端服务", "数据工程", "函数式编程实践"]
+            },
+            {
+                id: 17,
+                name: "R",
+                icon: "📊",
+                rank: 17,
+                color: "#276DC3",
+                category: ["data"],
+                year: 1993,
+                creator: "Ross Ihaka & Robert Gentleman",
+                description: "R 是一种专为统计计算和图形可视化设计的编程语言，在学术研究、数据科学和生物信息学领域广泛应用。",
+                features: [
+                    "强大的统计分析与建模能力",
+                    "丰富的可视化包（ggplot2 等）",
+                    "CRAN 上 18000+ 统计与分析扩展包",
+                    "向量化的运算方式",
+                    "学术研究与数据科学的事实标准之一"
+                ],
+                codeExample: `# R 示例：学生成绩分析
+library(ggplot2)
+
+# 创建学生数据
+students <- data.frame(
+  name = c("张三", "李四", "王五", "赵六", "钱七",
+           "孙八", "周九", "吴十"),
+  math = c(85, 92, 78, 65, 95, 70, 88, 60),
+  english = c(90, 85, 75, 80, 88, 92, 70, 65),
+  program = c("A", "A", "B", "B", "A", "B", "A", "B")
+)
+
+# 计算统计量
+students$total <- students$math + students$english
+students$avg <- rowMeans(students[, c("math", "english")])
+
+cat("=== 成绩统计 ===\\n")
+print(summary(students[, c("math", "english", "avg")]))
+
+cat("\\n=== 各项目平均分 ===\\n")
+program_stats <- aggregate(
+  cbind(math, english) ~ program,
+  data = students,
+  FUN = mean
+)
+print(program_stats)
+
+# 找出 Top 3
+top3 <- students[order(-students$avg), ][1:3, ]
+cat("\\n=== Top 3 学生 ===\\n")
+print(top3[, c("name", "math", "english", "avg")])
+
+# 可视化
+ggplot(students, aes(x = math, y = english, color = program)) +
+  geom_point(size = 4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(title = "数学与英语成绩关系",
+       x = "数学成绩", y = "英语成绩") +
+  theme_minimal()`,
+                learningPath: [
+                    { title: "基础语法", desc: "向量、数据类型、运算符、流程控制" },
+                    { title: "数据结构", desc: "向量、矩阵、数据框、列表、因子" },
+                    { title: "数据操作", desc: "dplyr、tidyr、数据清洗" },
+                    { title: "统计分析", desc: "描述统计、假设检验、回归模型" },
+                    { title: "数据可视化", desc: "ggplot2、基础绘图系统" },
+                    { title: "实战项目", desc: "数据报告、统计建模、研究报告" }
+                ],
+                useCases: ["统计分析", "数据可视化", "学术研究", "生物信息学", "金融分析"]
+            },
+            {
+                id: 18,
+                name: "Lua",
+                icon: "🌙",
+                rank: 18,
+                color: "#2C2D72",
+                category: ["game", "system"],
+                year: 1993,
+                creator: "Roberto Ierusalimschy",
+                description: "Lua 是一种轻量、高效、可嵌入的脚本语言，常作为游戏脚本、Nginx 模块和嵌入式设备的扩展语言。",
+                features: [
+                    "极轻量，解释器仅 ~200KB",
+                    "极快的执行速度（LuaJIT 接近 C）",
+                    "易于嵌入 C/C++ 宿主程序",
+                    "表（table）是唯一的复合数据结构",
+                    "游戏脚本与热更新的事实标准"
+                ],
+                codeExample: `-- Lua 示例：任务管理系统
+local TaskManager = {}
+TaskManager.__index = TaskManager
+
+local Priority = { high = "高", medium = "中", low = "低" }
+
+function TaskManager.new()
+    local self = setmetatable({}, TaskManager)
+    self.tasks = {}
+    self.nextId = 1
+    return self
+end
+
+function TaskManager:add(title, priority)
+    local task = {
+        id = self.nextId,
+        title = title,
+        priority = priority or "medium",
+        completed = false,
+        createdAt = os.time()
+    }
+    table.insert(self.tasks, task)
+    self.nextId = self.nextId + 1
+    print(string.format("✅ 已添加: %s", task.title))
+end
+
+function TaskManager:complete(id)
+    for _, task in ipairs(self.tasks) do
+        if task.id == id then
+            task.completed = true
+            print(string.format("🎉 完成: %s", task.title))
+            return
+        end
+    end
+end
+
+function TaskManager:summary()
+    local total = #self.tasks
+    local done = 0
+    local byPriority = {}
+
+    for _, task in ipairs(self.tasks) do
+        if task.completed then done = done + 1 end
+        byPriority[task.priority] = (byPriority[task.priority] or 0) + 1
+    end
+
+    print(string.format("\\n📋 任务管理: %d/%d 完成", done, total))
+    for p, count in pairs(byPriority) do
+        print(string.format("%s优先级: %d 项", Priority[p], count))
+    end
+end
+
+-- 使用
+local manager = TaskManager.new()
+manager:add("学习 Lua", "high")
+manager:add("为游戏写脚本")
+manager:add("掌握协程", "low")
+manager:complete(1)
+manager:summary()`,
+                learningPath: [
+                    { title: "基础语法", desc: "变量、数据类型、运算符、流程控制" },
+                    { title: "表与元表", desc: "table、元表、元方法、面向对象" },
+                    { title: "函数与闭包", desc: "函数、闭包、可变参数" },
+                    { title: "协程", desc: "coroutine、协作式多任务" },
+                    { title: "C 互操作", desc: "嵌入 Lua、C API、绑定库" },
+                    { title: "实战项目", desc: "游戏脚本、Nginx 模块、Redis 插件" }
+                ],
+                useCases: ["游戏脚本（WoW/Roblox）", "Nginx 扩展", "Redis 功能扩展", "嵌入式设备", "热更新系统"]
+            },
+            {
+                id: 19,
+                name: "Bash",
+                icon: "🐚",
+                rank: 19,
+                color: "#4EAA25",
+                category: ["system"],
+                year: 1989,
+                creator: "Brian Fox",
+                description: "Bash 是 Unix/Linux 系统的标准命令行 Shell 与脚本语言，是运维自动化和 DevOps 工作流的核心工具。",
+                features: [
+                    "Linux/macOS 默认 Shell",
+                    "管道与重定向组合命令威力巨大",
+                    "自动化运维与 DevOps 工作流核心",
+                    "可调用所有系统命令与工具",
+                    "学习曲线平缓，开箱即用"
+                ],
+                codeExample: `#!/bin/bash
+# Bash 示例：项目部署脚本
+
+set -e  # 出错即退出
+
+# 配置
+APP_NAME="my-app"
+DEPLOY_DIR="/var/www/\${APP_NAME}"
+BACKUP_DIR="/backup/\${APP_NAME}"
+LOG_FILE="/var/log/\${APP_NAME}-deploy.log"
+
+# 日志函数
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] \$1" | tee -a "\${LOG_FILE}"
+}
+
+# 备份当前版本
+backup_current() {
+    if [ -d "\${DEPLOY_DIR}" ]; then
+        local backup_name="\${BACKUP_DIR}/\${APP_NAME}-$(date +%Y%m%d%H%M%S).tar.gz"
+        log "📦 备份当前版本到 \${backup_name}"
+        mkdir -p "\${BACKUP_DIR}"
+        tar -czf "\${backup_name}" -C "\${DEPLOY_DIR}" .
+    fi
+}
+
+# 拉取最新代码
+pull_latest() {
+    log "📥 拉取最新代码..."
+    cd "\${DEPLOY_DIR}"
+    git pull origin main
+    npm install --production
+}
+
+# 重启服务
+restart_service() {
+    log "🔄 重启 \${APP_NAME} 服务..."
+    systemctl restart "\${APP_NAME}"
+    sleep 2
+    if systemctl is-active --quiet "\${APP_NAME}"; then
+        log "✅ 服务已启动"
+    else
+        log "❌ 服务启动失败"
+        exit 1
+    fi
+}
+
+# 健康检查
+health_check() {
+    log "🏥 健康检查..."
+    for i in {1..5}; do
+        if curl -sf "http://localhost:3000/health" > /dev/null; then
+            log "✅ 健康检查通过"
+            return 0
+        fi
+        sleep 3
+    done
+    log "❌ 健康检查失败"
+    exit 1
+}
+
+# 主流程
+main() {
+    log "🚀 开始部署 \${APP_NAME}"
+    backup_current
+    pull_latest
+    restart_service
+    health_check
+    log "🎉 部署完成！"
+}
+
+main "$@"`,
+                learningPath: [
+                    { title: "基础命令", desc: "文件、目录、权限、进程管理" },
+                    { title: "Shell 脚本", desc: "变量、参数、条件、循环" },
+                    { title: "文本处理", desc: "grep、sed、awk、正则表达式" },
+                    { title: "管道与重定向", desc: "管道、文件描述符、命令组合" },
+                    { title: "函数与调试", desc: "函数、set 选项、调试技巧" },
+                    { title: "实战项目", desc: "部署脚本、日志分析、自动化运维" }
+                ],
+                useCases: ["运维自动化", "DevOps 工作流", "CI/CD 脚本", "日志处理", "系统管理"]
+            },
+            {
+                id: 20,
+                name: "HTML",
+                icon: "📄",
+                rank: 20,
+                color: "#E34F26",
+                category: ["web"],
+                year: 1993,
+                creator: "Tim Berners-Lee",
+                description: "HTML（超文本标记语言）是构建 Web 页面的标准标记语言，是所有网站内容结构的基石。",
+                features: [
+                    "Web 内容的标准结构语言",
+                    "语义化标签提升可访问性与 SEO",
+                    "HTML5 引入丰富的原生 API",
+                    "与 CSS、JavaScript 配合构成完整前端",
+                    "浏览器原生支持，无需编译"
+                ],
+                codeExample: `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页示例</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#projects">项目</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h1>你好，我是张三 👋</h1>
+            <p>一名全栈工程师，热爱构建优秀的 Web 应用。</p>
+        </section>
+
+        <section id="projects">
+            <h2>我的项目</h2>
+            <article>
+                <h3>待办应用</h3>
+                <p>使用 React 构建的待办事项管理工具。</p>
+                <figure>
+                    <img src="todo.png" alt="待办应用截图" width="400">
+                    <figcaption>应用主界面</figcaption>
+                </figure>
+            </article>
+            <article>
+                <h3>博客系统</h3>
+                <p>基于 Next.js 的个人博客。</p>
+            </article>
+        </section>
+
+        <section id="contact">
+            <h2>联系方式</h2>
+            <form action="/contact" method="POST">
+                <label for="name">姓名：</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">邮箱：</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">留言：</label>
+                <textarea id="message" name="message" rows="4"></textarea>
+
+                <button type="submit">发送</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 张三. 保留所有权利。</p>
+    </footer>
+</body>
+</html>`,
+                learningPath: [
+                    { title: "基础结构", desc: "DOCTYPE、html、head、body" },
+                    { title: "文本与链接", desc: "标题、段落、列表、超链接" },
+                    { title: "多媒体", desc: "图片、音频、视频、iframe" },
+                    { title: "表单", desc: "input、select、表单验证" },
+                    { title: "语义化", desc: "header、nav、main、article、section" },
+                    { title: "HTML5 API", desc: "Canvas、Storage、Geolocation、Web Worker" }
+                ],
+                useCases: ["网页开发", "Web 应用", "邮件模板", "PWA", "混合应用"]
+            },
+            {
+                id: 21,
+                name: "CSS",
+                icon: "🎨",
+                rank: 21,
+                color: "#1572B6",
+                category: ["web"],
+                year: 1996,
+                creator: "Håkon Wium Lie",
+                description: "CSS（层叠样式表）是控制 Web 页面视觉表现的标准语言，负责布局、颜色、字体、动画等所有样式。",
+                features: [
+                    "Web 样式的标准语言",
+                    "现代布局利器：Flexbox 与 Grid",
+                    "CSS 变量与自定义属性",
+                    "强大的动画与过渡能力",
+                    "响应式设计基石"
+                ],
+                codeExample: `/* CSS 示例：响应式卡片组件 */
+:root {
+    --primary: #667eea;
+    --primary-dark: #5568d3;
+    --bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --text: #2d3748;
+    --text-muted: #718096;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 24px;
+}
+
+.card-body {
+    padding: 20px 24px;
+}
+
+.card-body p {
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+.tag {
+    display: inline-block;
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    margin-right: 8px;
+}
+
+/* 响应式：小屏单列 */
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+    }
+}
+
+/* 动画入场 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.5s ease backwards;
+}
+
+.card:nth-child(2) { animation-delay: 0.1s; }
+.card:nth-child(3) { animation-delay: 0.2s; }`,
+                learningPath: [
+                    { title: "基础选择器", desc: "元素、类、ID、属性选择器" },
+                    { title: "盒模型", desc: "margin、padding、border、box-sizing" },
+                    { title: "布局", desc: "Flexbox、Grid、定位、浮动" },
+                    { title: "响应式", desc: "媒体查询、移动优先、视口单位" },
+                    { title: "动画与过渡", desc: "transition、animation、keyframes" },
+                    { title: "现代特性", desc: "变量、Grid 子网格、容器查询、:has()" }
+                ],
+                useCases: ["网页样式设计", "响应式布局", "Web 动画", "主题切换", "组件库开发"]
             }
         ];
 
@@ -1388,6 +2349,66 @@ manager.printSummary()`,
                 escaped = escaped.replace(/\b(let|var|func|class|struct|enum|protocol|extension|if|else|for|while|return|import|guard|defer|switch|case|default|break|continue|self|Self|true|false|nil|String|Int|Double|Bool|Array|Dictionary|Optional|some|any|async|await|throws|rethrows|try|catch)\b/g, '<span class="code-keyword">$1</span>');
                 escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
                 escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Kotlin') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(fun|val|var|class|object|interface|enum|data|sealed|open|abstract|override|private|protected|public|internal|companion|init|constructor|if|else|for|while|do|when|return|break|continue|in|is|as|import|package|this|super|null|true|false|Unit|Nothing|String|Int|Boolean|Double|Float|Long|List|Map|Set|suspend|by|lateinit|const|vararg|typealias|inline|reified|operator|infix|tailrec)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Ruby') {
+                escaped = escaped.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/=begin[\s\S]*?=end/g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(def|class|module|if|elsif|else|unless|case|when|while|until|for|do|end|return|break|next|yield|begin|rescue|ensure|raise|require|require_relative|include|extend|attr_accessor|attr_reader|attr_writer|self|nil|true|false|puts|print|new|lambda|proc|and|or|not|then|in|defined)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/(:[a-zA-Z_]\w*)/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'SQL') {
+                escaped = escaped.replace(/--.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(SELECT|FROM|WHERE|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|ADD|PRIMARY|KEY|FOREIGN|REFERENCES|NOT|NULL|DEFAULT|UNIQUE|INDEX|VIEW|JOIN|INNER|LEFT|RIGHT|OUTER|ON|GROUP|BY|HAVING|ORDER|ASC|DESC|LIMIT|OFFSET|UNION|ALL|DISTINCT|AS|AND|OR|IN|EXISTS|BETWEEN|LIKE|IS|CASE|WHEN|THEN|ELSE|END|COUNT|SUM|AVG|MIN|MAX|SERIAL|VARCHAR|INTEGER|INT|DECIMAL|TIMESTAMP|BOOLEAN|TEXT|DATE|RANK|OVER|PARTITION|TRANSACTION|COMMIT|ROLLBACK|BEGIN|CONSTRAINT|CHECK)\b/gi, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/([''])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'C') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/(#.*$)/gm, '<span class="code-comment">$1</span>');
+                escaped = escaped.replace(/\b(int|char|float|double|void|short|long|unsigned|signed|const|static|extern|volatile|register|auto|struct|union|enum|typedef|if|else|for|while|do|switch|case|default|break|continue|return|sizeof|goto|NULL|true|false|bool|printf|scanf|malloc|free|include|define|ifdef|endif|ifndef)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Dart') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(var|final|const|void|int|double|String|bool|List|Map|Set|dynamic|class|extends|implements|with|abstract|interface|enum|typedef|factory|static|late|required|if|else|for|while|do|switch|case|default|break|continue|return|new|this|super|import|library|part|export|async|await|sync|yield|try|catch|finally|throw|rethrow|true|false|null|get|set|operator|external|covariant|Future|Stream)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Scala') {
+                escaped = escaped.replace(/\/\/.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(val|var|def|class|object|trait|extends|with|abstract|final|sealed|override|case|if|else|for|while|do|yield|return|break|continue|match|import|package|this|super|new|throw|try|catch|finally|type|implicit|lazy|private|protected|public|null|true|false|Unit|Nothing|Any|Int|Long|Double|Float|String|Boolean|List|Map|Option|Some|None|enum|given|using|extension|end)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'R') {
+                escaped = escaped.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(function|if|else|for|while|repeat|break|next|return|in|TRUE|FALSE|NULL|NA|NaN|Inf|library|require|source|print|cat|plot|data|frame|list|matrix|vector|factor|length|nrow|ncol|names|summary|mean|sum|sd|var|median|min|max|order|sort|aggregate|merge|subset|head|tail|apply|lapply|sapply|tapply|ggplot|aes|geom|rowMeans|cbind|rbind)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+(\.\d+)?\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Lua') {
+                escaped = escaped.replace(/--\[\[[\s\S]*?\]\]/g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/--.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(local|function|end|if|then|else|elseif|for|in|do|while|repeat|until|return|break|and|or|not|nil|true|false|self|require|print|pairs|ipairs|table|string|math|os|io|tostring|tonumber|type|setmetatable|getmetatable)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+                escaped = escaped.replace(/\b\d+\b/g, '<span class="code-number">$&</span>');
+            } else if (langName === 'Bash') {
+                escaped = escaped.replace(/#.*$/gm, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/\b(if|then|else|elif|fi|for|in|do|done|while|until|case|esac|function|return|break|continue|exit|local|export|readonly|declare|unset|shift|source|echo|printf|read|cd|pwd|ls|cp|mv|rm|mkdir|rmdir|cat|grep|sed|awk|find|xargs|sort|uniq|wc|head|tail|tee|tar|curl|wget|git|npm|systemctl|sleep)\b/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(\$\{?\w+\}?)/g, '<span class="code-number">$&</span>');
+                escaped = escaped.replace(/(["'])((?:\\.|[^\\])*?)\1/g, '<span class="code-string">$&</span>');
+            } else if (langName === 'HTML') {
+                escaped = escaped.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="code-comment">$1</span>');
+                escaped = escaped.replace(/(&lt;\/?[\w-]+)/g, '<span class="code-keyword">$&</span>');
+                escaped = escaped.replace(/([\w-]+)(=)/g, '<span class="code-number">$1</span>$2');
+            } else if (langName === 'CSS') {
+                escaped = escaped.replace(/\/\*[\s\S]*?\*\//g, '<span class="code-comment">$&</span>');
+                escaped = escaped.replace(/(@[\w-]+)/g, '<span class="code-keyword">$1</span>');
+                escaped = escaped.replace(/(--[\w-]+)/g, '<span class="code-number">$1</span>');
+                escaped = escaped.replace(/([\w-]+)(\s*:)/g, '<span class="code-keyword">$1</span>$2');
             }
             
             return escaped;
