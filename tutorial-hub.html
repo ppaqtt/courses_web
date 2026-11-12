@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>学习中心 - 编程语言教程</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <meta name="theme-color" content="#667eea">
     <link rel="stylesheet" href="tutorial-style.css">
     <link rel="stylesheet" href="tutorial-features.css">
     <link rel="stylesheet" href="tutorial-extensions.css">
@@ -255,7 +258,7 @@
     <div class="container">
         <!-- 语言切换 -->
         <div class="language-switcher">
-            <button class="lang-btn" onclick="toggleLanguage()" id="langBtn">🌐 中文</button>
+            <button class="lang-btn" onclick="toggleLanguageUI()" id="langBtn">🌐 中文</button>
         </div>
         
         <!-- 头部 -->
@@ -270,6 +273,21 @@
                 <div class="icon">📚</div>
                 <div class="title" data-i18n="tutorials">教程</div>
                 <div class="desc" data-i18n="tutorials_desc">选择编程语言开始学习</div>
+            </a>
+            <a href="learning-paths.html" class="action-card">
+                <div class="icon">🗺️</div>
+                <div class="title">学习路线</div>
+                <div class="desc">3 条路线 · 34 门语言</div>
+            </a>
+            <a href="concepts.html" class="action-card">
+                <div class="icon">🧩</div>
+                <div class="title">概念对照</div>
+                <div class="desc">闭包 / GC / 类型 / 并发</div>
+            </a>
+            <a href="daily-quiz.html" class="action-card">
+                <div class="icon">📅</div>
+                <div class="title">每日 5 题</div>
+                <div class="desc">打卡与本地排行</div>
             </a>
             <a href="#" class="action-card" onclick="showTab('achievements')">
                 <div class="icon">🏆</div>
@@ -561,6 +579,7 @@
         </div>
     </div>
     
+    <script src="language-catalog.js"></script>
     <script src="tutorial-common.js"></script>
     <script src="tutorial-extensions.js"></script>
     <script src="tutorial-advanced.js"></script>
@@ -732,8 +751,8 @@
         }
         
         // 切换语言
-        function toggleLanguage() {
-            const newLang = window.toggleLanguage();
+        function toggleLanguageUI() {
+            const newLang = window.toggleLanguage ? window.toggleLanguage() : 'zh';
             document.getElementById('langBtn').textContent = newLang === 'zh' ? '🌐 中文' : '🌐 English';
             updateOverviewStats();
             AchievementSystem.updateUI();

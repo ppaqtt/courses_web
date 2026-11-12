@@ -1,0 +1,157 @@
+/**
+ * 编程语言教程系统 - 基础样式
+ * 定义全局 CSS 变量与页面骨架，供 tutorial-hub 与新增页面共用。
+ */
+
+:root {
+    --bg-primary: #f3f5fb;
+    --bg-secondary: #eef1f8;
+    --bg-card: #ffffff;
+    --text-primary: #1f2937;
+    --text-secondary: #4b5563;
+    --text-muted: #6b7280;
+    --accent-color: #667eea;
+    --accent-hover: #5568d3;
+    --success-color: #22c55e;
+    --warning-color: #f59e0b;
+    --error-color: #ef4444;
+    --border-color: #e5e7eb;
+    --code-bg: #1e293b;
+    --code-text: #e2e8f0;
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+    --shadow-lg: 0 18px 48px rgba(15, 23, 42, 0.12);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-card: #172033;
+    --text-primary: #e2e8f0;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-color: #334155;
+    --code-bg: #0b1120;
+    --code-text: #e2e8f0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+}
+
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-hover);
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    width: min(1200px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 24px 0 60px;
+}
+
+.page-header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border-radius: var(--radius-lg);
+    padding: 44px 32px;
+    margin-bottom: 28px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+}
+
+.page-header h1 {
+    margin: 0 0 10px;
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+}
+
+.page-header p {
+    margin: 0;
+    opacity: 0.92;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.site-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+}
+
+.site-nav a:hover,
+.site-nav a.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+.pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--accent-color);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+@media (max-width: 640px) {
+    .container {
+        width: min(100% - 20px, 1200px);
+        padding-top: 16px;
+    }
+
+    .page-header {
+        padding: 32px 20px;
+        border-radius: var(--radius-md);
+    }
+}

@@ -501,7 +501,7 @@ const AssignmentSystem = {
                                 <span>章节 ${a.chapter}</span>
                                 <span>截止: ${a.deadline}</span>
                                 ${submission ? `<span>状态: ${submission.status}</span>` : ''}
-                                ${submission?.score !== null ? `<span>得分: ${submission.score}/${a.points}</span>` : ''}
+                                ${submission && submission.score != null ? `<span>得分: ${submission.score}/${a.points}</span>` : ''}
                             </div>
                             ${!submission ? `
                                 <button class="btn-primary" onclick="AssignmentSystem.showSubmit('${language}', ${a.id})">提交作业</button>

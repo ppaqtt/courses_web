@@ -637,14 +637,38 @@ const CodeEditor = {
     supportedLanguages: {
         javascript: { name: 'JavaScript', runnable: true },
         typescript: { name: 'TypeScript', runnable: true },
-        python: { name: 'Python', runnable: false },
-        java: { name: 'Java', runnable: false },
-        cpp: { name: 'C++', runnable: false },
-        csharp: { name: 'C#', runnable: false },
-        go: { name: 'Go', runnable: false },
-        rust: { name: 'Rust', runnable: false },
-        php: { name: 'PHP', runnable: false },
-        swift: { name: 'Swift', runnable: false }
+        python: { name: 'Python', runnable: true },
+        java: { name: 'Java', runnable: true },
+        cpp: { name: 'C++', runnable: true },
+        csharp: { name: 'C#', runnable: true },
+        go: { name: 'Go', runnable: true },
+        rust: { name: 'Rust', runnable: true },
+        php: { name: 'PHP', runnable: true },
+        swift: { name: 'Swift', runnable: true },
+        kotlin: { name: 'Kotlin', runnable: true },
+        ruby: { name: 'Ruby', runnable: true },
+        sql: { name: 'SQL', runnable: true },
+        c: { name: 'C', runnable: true },
+        dart: { name: 'Dart', runnable: true },
+        scala: { name: 'Scala', runnable: true },
+        r: { name: 'R', runnable: true },
+        lua: { name: 'Lua', runnable: true },
+        bash: { name: 'Bash', runnable: true },
+        html: { name: 'HTML', runnable: true },
+        css: { name: 'CSS', runnable: true },
+        haskell: { name: 'Haskell', runnable: true },
+        elixir: { name: 'Elixir', runnable: true },
+        clojure: { name: 'Clojure', runnable: true },
+        fsharp: { name: 'F#', runnable: true },
+        erlang: { name: 'Erlang', runnable: true },
+        ocaml: { name: 'OCaml', runnable: true },
+        perl: { name: 'Perl', runnable: true },
+        pascal: { name: 'Pascal', runnable: true },
+        groovy: { name: 'Groovy', runnable: true },
+        objectivec: { name: 'Objective-C', runnable: true },
+        assembly: { name: 'Assembly', runnable: true },
+        prolog: { name: 'Prolog', runnable: true },
+        fortran: { name: 'Fortran', runnable: true }
     },
     
     // 创建编辑器
@@ -652,8 +676,13 @@ const CodeEditor = {
         const container = document.getElementById(containerId);
         if (!container) return;
         
-        const langConfig = this.supportedLanguages[language] || { name: language, runnable: false };
+        const langConfig = this.supportedLanguages[language] || { name: language, runnable: true };
+        const safeInitialCode = String(initialCode)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
         
+        container._initialCode = initialCode;
         container.innerHTML = `
             <div class="code-editor">
                 <div class="editor-header">
@@ -665,7 +694,7 @@ const CodeEditor = {
                     </div>
                 </div>
                 <div class="editor-body">
-                    <textarea class="editor-textarea" id="${containerId}_code" spellcheck="false">${initialCode}</textarea>
+                    <textarea class="editor-textarea" id="${containerId}_code" spellcheck="false">${safeInitialCode}</textarea>
                 </div>
                 <div class="editor-output" id="${containerId}_output" style="display: none;">
                     <div class="output-header">${t('output')}</div>
@@ -675,8 +704,8 @@ const CodeEditor = {
         `;
     },
     
-    // 运行代码
-    run(containerId, language) {
+    // 运行代码（JavaScript 本地执行，其余语言走在线运行服务）
+    async run(containerId, language) {
         const code = document.getElementById(`${containerId}_code`).value;
         const outputContainer = document.getElementById(`${containerId}_output`);
         const outputContent = outputContainer.querySelector('.output-content');
@@ -684,43 +713,43 @@ const CodeEditor = {
         outputContainer.style.display = 'block';
         outputContent.innerHTML = `<span class="output-running">${t('running')}</span>`;
         
+        if (typeof CodeRunner !== 'undefined') {
+            await CodeRunner.runInto(outputContent, language, code);
+            return;
+        }
+
+        // 未加载在线运行模块时，至少保留 JavaScript 的本地执行能力
+        const originalLog = console.log;
         try {
-            // 重定向console.log
             const logs = [];
-            const originalLog = console.log;
             console.log = (...args) => {
                 logs.push(args.map(arg => 
                     typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
                 ).join(' '));
             };
             
-            // 执行代码
             const result = new Function(code)();
-            
-            // 恢复console.log
             console.log = originalLog;
             
-            // 显示输出
+            outputContent.classList.remove('error');
+            outputContent.classList.add('success');
             if (logs.length > 0) {
                 outputContent.innerHTML = logs.join('\n');
-                outputContent.classList.add('success');
             } else if (result !== undefined) {
                 outputContent.innerHTML = `返回值: ${result}`;
-                outputContent.classList.add('success');
             } else {
                 outputContent.innerHTML = t('runSuccess');
-                outputContent.classList.add('success');
             }
             
-            // 记录运行次数
             const stats = LearningStats.get();
             stats.codeRuns = (stats.codeRuns || 0) + 1;
             LearningStats.save(stats);
             LearningStats.checkAchievements();
-            
         } catch (error) {
-            outputContent.innerHTML = `${t('runError')}: ${error.message}`;
+            console.log = originalLog;
+            outputContent.classList.remove('success');
             outputContent.classList.add('error');
+            outputContent.innerHTML = `${t('runError')}: ${error.message}`;
         }
     },
     
@@ -733,8 +762,9 @@ const CodeEditor = {
     
     // 重置代码
     reset(containerId) {
+        const container = document.getElementById(containerId);
         const textarea = document.getElementById(`${containerId}_code`);
-        textarea.value = textarea.getAttribute('data-initial') || '';
+        if (container && textarea) textarea.value = container._initialCode || '';
     },
     
     // 高亮语法（简单实现）
@@ -1114,6 +1144,27 @@ const LearningPath = {
         }
     },
     
+    // 语言 key -> 教程深链
+    getLanguageHref(key) {
+        const catalog = (typeof window.getCatalogLanguage === 'function')
+            ? window.getCatalogLanguage(key)
+            : null;
+        if (catalog && catalog.detail) return catalog.detail;
+        const fallback = {
+            javascript: 2, typescript: 8, python: 1, java: 3,
+            go: 6, swift: 10, cpp: 4, rust: 7
+        };
+        return `programming-languages-tutorial.html#lang-${fallback[key] || 1}`;
+    },
+
+    // 显示语言名称
+    getLanguageName(key) {
+        const catalog = (typeof window.getCatalogLanguage === 'function')
+            ? window.getCatalogLanguage(key)
+            : null;
+        return catalog ? catalog.name : key;
+    },
+
     // 获取用户进度
     getProgress(pathId) {
         const path = this.paths[pathId];
@@ -1122,11 +1173,15 @@ const LearningPath = {
         const stats = LearningStats.get();
         const steps = path.steps.map(step => {
             const progress = stats.languagesProgress[step.lang] || [];
+            const catalog = (typeof window.getCatalogLanguage === 'function')
+                ? window.getCatalogLanguage(step.lang)
+                : null;
+            const total = (catalog && catalog.chapters) || 10;
             return {
                 ...step,
                 completed: progress.length,
-                total: 10,
-                percentage: Math.round((progress.length / 10) * 100)
+                total: total,
+                percentage: Math.min(100, Math.round((progress.length / total) * 100))
             };
         });
         
@@ -1156,7 +1211,7 @@ const LearningPath = {
                     <div class="path-steps">
                         ${progress.steps.map(step => `
                             <div class="step-indicator ${step.percentage >= 100 ? 'completed' : ''}">
-                                <span class="step-lang">${step.lang}</span>
+                                <span class="step-lang">${this.getLanguageName(step.lang)}</span>
                                 <div class="step-progress-bar">
                                     <div class="step-progress-fill" style="width: ${step.percentage}%"></div>
                                 </div>
@@ -1191,10 +1246,10 @@ const LearningPath = {
                 </div>
                 <div class="path-steps-detail">
                     ${progress.steps.map(step => `
-                        <div class="step-card ${step.percentage >= 100 ? 'completed' : ''}" onclick="window.location.href='tutorial-${step.lang}.html'">
+                        <div class="step-card ${step.percentage >= 100 ? 'completed' : ''}" onclick="window.location.href='${this.getLanguageHref(step.lang)}'">
                             <div class="step-info">
                                 <span class="step-number">第${step.order}步</span>
-                                <span class="step-name">${step.lang}</span>
+                                <span class="step-name">${this.getLanguageName(step.lang)}</span>
                             </div>
                             <div class="step-progress-info">
                                 <span>${step.completed}/${step.total} ${t('chapters')}</span>

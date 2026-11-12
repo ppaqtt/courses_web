@@ -1,7 +1,7 @@
 {
     "name": "编程语言教程系统",
     "short_name": "编程教程",
-    "description": "学习最流行的编程语言，从Python到Swift",
+    "description": "34 门编程语言教程、学习路线、概念对照与每日 5 题，示例可在线运行",
     "start_url": "/programming-languages-tutorial.html",
     "display": "standalone",
     "background_color": "#667eea",
@@ -9,9 +9,16 @@
     "orientation": "any",
     "icons": [
         {
-            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>",
-            "sizes": "any",
-            "type": "image/svg+xml"
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
         }
     ],
     "categories": ["education", "programming"],
@@ -19,14 +26,24 @@
     "screenshots": [],
     "shortcuts": [
         {
-            "name": "Python教程",
-            "url": "/tutorial-python.html",
-            "description": "学习Python编程语言"
+            "name": "Python 教程",
+            "url": "/programming-languages-tutorial.html#lang-1",
+            "description": "学习 Python 编程语言"
         },
         {
-            "name": "JavaScript教程",
-            "url": "/tutorial-javascript.html",
-            "description": "学习JavaScript编程语言"
+            "name": "JavaScript 教程",
+            "url": "/programming-languages-tutorial.html#lang-2",
+            "description": "学习 JavaScript 编程语言"
+        },
+        {
+            "name": "学习路线",
+            "url": "/learning-paths.html",
+            "description": "按 Web 全栈、系统底层、数据脚本三条路线学习"
+        },
+        {
+            "name": "每日 5 题",
+            "url": "/daily-quiz.html",
+            "description": "每天 5 道编程语言选择题"
         },
         {
             "name": "学习中心",

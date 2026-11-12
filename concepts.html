@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨语言概念对照 - 编程语言教程</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="闭包、垃圾回收、类型系统、并发模型：34 门编程语言并排对照">
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-pages.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="site-nav">
+            <a href="programming-languages-tutorial.html">📚 全部教程</a>
+            <a href="tutorial-hub.html">🎯 学习中心</a>
+            <a href="learning-paths.html">🗺️ 学习路线</a>
+            <a href="concepts.html" class="active">🧩 概念对照</a>
+            <a href="daily-quiz.html">📅 每日 5 题</a>
+        </nav>
+
+        <header class="page-header">
+            <h1>🧩 跨语言概念对照</h1>
+            <p>把「闭包 / 垃圾回收 / 类型系统 / 并发模型」放在同一张表里，看清 34 门语言的设计取舍。</p>
+        </header>
+
+        <section class="concept-legend" id="conceptLegend" aria-label="概念说明"></section>
+
+        <section class="concept-selector" aria-labelledby="selectorTitle">
+            <div class="concept-selector-head">
+                <h2 id="selectorTitle">选择要对照的语言</h2>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button type="button" class="btn ghost" id="selectDefault">默认 8 门</button>
+                    <button type="button" class="btn ghost" id="selectAll">全选 34 门</button>
+                    <button type="button" class="btn ghost" id="selectClear">清空</button>
+                </div>
+            </div>
+            <div class="concept-chip-groups" id="conceptChips"></div>
+        </section>
+
+        <div class="concept-matrix-wrap" id="matrixWrap"></div>
+
+        <p class="muted" style="font-size:.8rem;text-align:center;margin-top:22px">
+            表中为概念性归纳，不同实现/编译器版本可能略有差异；点击语言名可跳到学习路线中的示例。
+        </p>
+    </div>
+
+    <script src="language-catalog.js"></script>
+    <script>
+        (function () {
+            const catalog = window.LANGUAGE_CATALOG || [];
+            const groups = window.LANGUAGE_GROUPS || [];
+            const concepts = [
+                { index: 0, icon: '🧬', title: '闭包', desc: '函数能否捕获并记住创建时的词法作用域。' },
+                { index: 1, icon: '♻️', title: '垃圾回收', desc: '运行时如何回收不再使用的内存。' },
+                { index: 2, icon: '🏷️', title: '类型系统', desc: '类型在编译期还是运行期检查，强度如何。' },
+                { index: 3, icon: '⚡', title: '并发模型', desc: '语言层面提供的线程、协程、Actor 或事件循环。' }
+            ];
+            const defaults = ['python', 'javascript', 'java', 'cpp', 'rust', 'go', 'typescript', 'sql'];
+            const selected = new Set(defaults);
+
+            function escapeHtml(value) {
+                return String(value == null ? '' : value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function renderLegend() {
+                document.getElementById('conceptLegend').innerHTML = concepts.map(concept => `
+                    <article class="concept-card">
+                        <h3>${concept.icon} ${concept.title}</h3>
+                        <p>${concept.desc}</p>
+                    </article>
+                `).join('');
+            }
+
+            function renderChips() {
+                document.getElementById('conceptChips').innerHTML = groups.map(group => {
+                    const languages = catalog.filter(lang => lang.group === group.id);
+                    return `
+                        <div class="concept-chip-row">
+                            <strong>${group.icon} ${group.name}</strong>
+                            ${languages.map(lang => `
+                                <button type="button"
+                                        class="concept-chip ${selected.has(lang.key) ? 'active' : ''}"
+                                        data-lang="${escapeHtml(lang.key)}"
+                                        aria-pressed="${selected.has(lang.key)}">
+                                    ${lang.icon} ${escapeHtml(lang.name)}
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            function renderMatrix() {
+                const wrap = document.getElementById('matrixWrap');
+                const languages = catalog.filter(lang => selected.has(lang.key));
+                if (!languages.length) {
+                    wrap.innerHTML = '<div class="matrix-empty">请至少选择一门语言进行对照。</div>';
+                    return;
+                }
+
+                const head = `
+                    <thead>
+                        <tr>
+                            <th scope="col">概念</th>
+                            ${languages.map(lang => `
+                                <th scope="col">
+                                    <a class="lang-col-head" href="learning-paths.html#lang-${lang.id}">
+                                        <span>${lang.icon}</span>
+                                        <span>${escapeHtml(lang.name)}<small>${lang.year}</small></span>
+                                    </a>
+                                </th>
+                            `).join('')}
+                        </tr>
+                    </thead>
+                `;
+
+                const body = concepts.map(concept => `
+                    <tr>
+                        <th scope="row">${concept.icon} ${concept.title}</th>
+                        ${languages.map(lang => `
+                            <td>${escapeHtml((lang.concepts || [])[concept.index] || '—')}</td>
+                        `).join('')}
+                    </tr>
+                `).join('');
+
+                wrap.innerHTML = `<table class="concept-matrix">${head}<tbody>${body}</tbody></table>`;
+            }
+
+            function refresh() {
+                renderChips();
+                renderMatrix();
+            }
+
+            document.getElementById('conceptChips').addEventListener('click', event => {
+                const chip = event.target.closest('[data-lang]');
+                if (!chip) return;
+                const key = chip.getAttribute('data-lang');
+                if (selected.has(key)) {
+                    selected.delete(key);
+                } else {
+                    selected.add(key);
+                }
+                refresh();
+            });
+
+            document.getElementById('selectDefault').addEventListener('click', () => {
+                selected.clear();
+                defaults.forEach(key => selected.add(key));
+                refresh();
+            });
+
+            document.getElementById('selectAll').addEventListener('click', () => {
+                catalog.forEach(lang => selected.add(lang.key));
+                refresh();
+            });
+
+            document.getElementById('selectClear').addEventListener('click', () => {
+                selected.clear();
+                refresh();
+            });
+
+            renderLegend();
+            refresh();
+        })();
+    </script>
+</body>
+</html>
