@@ -1,0 +1,878 @@
+window.TUTORIAL_DATA_php = 
+[
+  {
+    "id": 1,
+    "t": "PHP简介与环境搭建",
+    "p": [
+      "PHP是一种服务器端脚本语言，用于Web开发",
+      "PHP文件以.php扩展名，可嵌入HTML中",
+      "常用环境：WAMP(Linux)、XAMPP、MAMP",
+      "PHP标记：&lt;?php ?&gt; 或 &lt;?= ?&gt;",
+      "PHP执行流程：浏览器请求→服务器解析→返回HTML"
+    ],
+    "c": "<!DOCTYPE html>\n<html>\n<body>\n    <h1>我的第一个PHP页面</h1>\n    <?php\n        echo \"Hello, PHP!\";\n        // 这是单行注释\n        /* 这是多行注释 */\n    ?>\n    <p><?=\"短标记输出\" ?></p>\n</body>\n</html>",
+    "et": "常见错误",
+    "ec": [
+      "忘记添加PHP结束标记 ?&gt;",
+      "在纯PHP文件末尾添加?&gt;，可能导致输出空白",
+      "使用短标记&lt;? ?&gt;需要在php.ini中开启",
+      "PHP文件未正确配置服务器，被当作文本下载"
+    ],
+    "q": [
+      "搭建PHP开发环境，确保能运行PHP脚本",
+      "创建一个PHP文件，输出\"Hello, World!\"",
+      "在PHP文件中混合HTML和PHP代码，输出当前日期",
+      "查看phpinfo()输出，了解当前PHP配置"
+    ]
+  },
+  {
+    "id": 2,
+    "t": "PHP基础语法",
+    "p": [
+      "PHP语句以分号;结尾",
+      "变量以$符号开头",
+      "注释：//单行，/* */多行，#单行",
+      "PHP区分大小写（变量名）",
+      "echo和print用于输出内容"
+    ],
+    "c": "<?php\n    // 变量声明与输出\n    $name = \"张三\";\n    $age = 25;\n    \n    echo \"姓名：\" . $name . \"<br>\";\n    echo \"年龄：$age\";\n    \n    // print输出（返回1）\n    print \"<p>这是print输出</p>\";\n    \n    // 换行符\n    echo \"Hello\\nWorld\";\n?>",
+    "et": "常见错误",
+    "ec": [
+      "忘记在语句末尾加分号",
+      "变量名大小写不一致导致未定义变量",
+      "在双引号中使用特殊字符未转义",
+      "echo和print混淆使用"
+    ],
+    "q": [
+      "创建变量存储个人信息并输出",
+      "比较echo和print的区别",
+      "使用不同类型的注释",
+      "尝试变量名大小写敏感问题"
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量与数据类型",
+    "p": [
+      "PHP是弱类型语言，变量类型自动推断",
+      "标量类型：string, integer, float, boolean",
+      "复合类型：array, object",
+      "特殊类型：null, resource",
+      "gettype()获取类型，settype()转换类型"
+    ],
+    "c": "<?php\n    // 字符串\n    $str1 = '单引号字符串';\n    $str2 = \"双引号可以解析变量：$str1\";\n    \n    // 整数\n    $int1 = 10;\n    $int2 = -5;\n    \n    // 浮点数\n    $float1 = 3.14;\n    $float2 = 1.5e3;\n    \n    // 布尔值\n    $bool1 = true;\n    $bool2 = false;\n    \n    // NULL\n    $nullVar = null;\n    \n    // 获取和设置类型\n    echo gettype($str1);\n    settype($int1, \"string\");\n?>",
+    "et": "常见错误",
+    "ec": [
+      "单引号中使用变量不会被解析",
+      "浮点数比较时精度问题",
+      "将字符串直接当作数字运算",
+      "未初始化变量导致Notice错误"
+    ],
+    "q": [
+      "创建各种类型的变量并输出其类型",
+      "测试单引号和双引号的区别",
+      "进行类型转换操作",
+      "了解PHP的类型自动转换规则"
+    ]
+  },
+  {
+    "id": 4,
+    "t": "常量",
+    "p": [
+      "常量一旦定义不可更改",
+      "使用define()或const定义",
+      "常量名通常大写，不使用$符号",
+      "常量在整个脚本中全局可用",
+      "预定义常量：__FILE__, __LINE__, PHP_VERSION等"
+    ],
+    "c": "<?php\n    // 使用define定义常量\n    define(\"PI\", 3.14159);\n    define(\"SITE_NAME\", \"我的网站\");\n    \n    // 使用const定义常量（类外部也可用）\n    const MAX_USERS = 1000;\n    \n    // 使用常量\n    echo \"圆周率：\" . PI;\n    echo \"<br>网站名称：\" . SITE_NAME;\n    \n    // 预定义常量\n    echo \"<br>当前文件：\" . __FILE__;\n    echo \"<br>当前行号：\" . __LINE__;\n    echo \"<br>PHP版本：\" . PHP_VERSION;\n    \n    // 检查常量是否定义\n    if (defined(\"PI\")) {\n        echo \"<br>PI已定义\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "尝试修改已定义的常量",
+      "常量名使用小写（虽不报错但不符合规范）",
+      "使用const在条件语句中定义常量（PHP 7.0+允许）",
+      "混淆常量和变量的定义方式"
+    ],
+    "q": [
+      "使用define和const分别定义常量",
+      "尝试修改已定义的常量",
+      "使用几个预定义常量",
+      "检查常量是否已定义"
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符",
+    "p": [
+      "算术运算符：+ - * / % **",
+      "赋值运算符：= += -= *= /= %=",
+      "比较运算符：== === != !== > = <=",
+      "逻辑运算符：&& || ! and or xor",
+      "递增/递减：++ --（前置和后置）"
+    ],
+    "c": "<?php\n    // 算术运算\n    $a = 10;\n    $b = 3;\n    echo \"加法：\" . ($a + $b);\n    echo \"<br>取模：\" . ($a % $b);\n    echo \"<br>幂运算：\" . ($a ** $b);\n    \n    // 比较运算\n    echo \"<br>==：\" . (10 == \"10\"); // true\n    echo \"<br>===：\" . (10 === \"10\"); // false\n    \n    // 递增递减\n    $x = 5;\n    echo \"<br>后置++：\" . $x++; // 5\n    echo \"<br>前置++：\" . ++$x; // 7\n    \n    // 逻辑运算\n    if ($a > 5 && $b < 10) {\n        echo \"<br>条件成立\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "使用==而非===进行严格比较",
+      "除法运算结果为浮点数而非整数",
+      "递增递减运算符的前置后置混淆",
+      "逻辑运算符优先级错误"
+    ],
+    "q": [
+      "练习各种算术运算符",
+      "比较==和===的区别",
+      "理解递增递减的前置后置区别",
+      "使用逻辑运算符组合条件"
+    ]
+  },
+  {
+    "id": 6,
+    "t": "流程控制-条件语句",
+    "p": [
+      "if语句：单条件判断",
+      "if-else语句：双条件判断",
+      "if-elseif-else语句：多条件判断",
+      "switch语句：等值判断",
+      "三元运算符：简洁条件表达式"
+    ],
+    "c": "<?php\n    $score = 85;\n    \n    // if-elseif-else\n    if ($score >= 90) {\n        echo \"优秀\";\n    } elseif ($score >= 80) {\n        echo \"良好\";\n    } elseif ($score >= 60) {\n        echo \"及格\";\n    } else {\n        echo \"不及格\";\n    }\n    \n    // switch语句\n    $day = 3;\n    switch ($day) {\n        case 1:\n            echo \"星期一\";\n            break;\n        case 3:\n            echo \"星期三\";\n            break;\n        default:\n            echo \"其他\";\n    }\n    \n    // 三元运算符\n    $age = 20;\n    $status = ($age >= 18) ? \"成人\" : \"未成年\";\n    echo $status;\n?>",
+    "et": "常见错误",
+    "ec": [
+      "switch语句中忘记添加break",
+      "条件判断中使用赋值=而非比较==",
+      "elseif写成else if（会创建嵌套）",
+      "三元运算符嵌套过多影响可读性"
+    ],
+    "q": [
+      "根据成绩输出等级",
+      "使用switch判断星期几",
+      "使用三元运算符简化条件",
+      "练习嵌套if语句"
+    ]
+  },
+  {
+    "id": 7,
+    "t": "流程控制-循环语句",
+    "p": [
+      "for循环：已知次数的循环",
+      "while循环：条件满足时循环",
+      "do-while循环：至少执行一次",
+      "foreach循环：遍历数组",
+      "break和continue控制循环"
+    ],
+    "c": "<?php\n    // for循环\n    for ($i = 1; $i <= 10; $i++) {\n        echo $i . \" \";\n    }\n    \n    // while循环\n    $count = 0;\n    while ($count < 5) {\n        echo \"计数：\" . $count . \"<br>\";\n        $count++;\n    }\n    \n    // do-while循环\n    $x = 0;\n    do {\n        echo $x;\n        $x++;\n    } while ($x < 3);\n    \n    // foreach循环\n    $fruits = [\"苹果\", \"香蕉\", \"橙子\"];\n    foreach ($fruits as $fruit) {\n        echo $fruit . \"<br>\";\n    }\n    \n    // break和continue\n    for ($i = 1; $i <= 10; $i++) {\n        if ($i == 5) continue;\n        if ($i > 8) break;\n        echo $i;\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "while循环中忘记更新计数器导致死循环",
+      "for循环条件错误导致循环不执行或死循环",
+      "foreach中直接修改数组元素",
+      "混淆break和continue的作用"
+    ],
+    "q": [
+      "使用for循环输出1-100",
+      "使用while循环计算1-100的和",
+      "使用foreach遍历关联数组",
+      "练习break和continue的使用"
+    ]
+  },
+  {
+    "id": 8,
+    "t": "函数基础",
+    "p": [
+      "使用function关键字定义函数",
+      "函数名不区分大小写，但建议一致",
+      "函数必须先定义后调用",
+      "函数内部有自己的作用域",
+      "使用return返回值"
+    ],
+    "c": "<?php\n    // 定义无参数无返回值函数\n    function greet() {\n        echo \"Hello, World!\";\n    }\n    greet();\n    \n    // 定义有参数有返回值函数\n    function add($a, $b) {\n        return $a + $b;\n    }\n    $result = add(3, 5);\n    echo $result;\n    \n    // 函数内部作用域\n    $globalVar = \"全局变量\";\n    function testScope() {\n        $localVar = \"局部变量\";\n        global $globalVar;\n        echo $globalVar;\n    }\n    testScope();\n    \n    // 检查函数是否存在\n    if (function_exists(\"greet\")) {\n        greet();\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "函数调用在定义之前",
+      "函数名重复定义",
+      "忘记使用global关键字访问全局变量",
+      "return语句后还有代码不会执行"
+    ],
+    "q": [
+      "定义一个计算面积的函数",
+      "定义一个判断是否为偶数的函数",
+      "练习函数作用域",
+      "检查函数是否存在"
+    ]
+  },
+  {
+    "id": 9,
+    "t": "函数参数与返回值",
+    "p": [
+      "参数可以设置默认值",
+      "参数可以是按值传递或引用传递",
+      "PHP 7+支持类型声明",
+      "可以返回多个值（通过数组）",
+      "void返回类型（PHP 7.1+）"
+    ],
+    "c": "<?php\n    // 默认参数值\n    function sayHello($name = \"Guest\") {\n        echo \"Hello, $name!\";\n    }\n    sayHello();\n    sayHello(\"张三\");\n    \n    // 引用传递\n    function addOne(&$num) {\n        $num++;\n    }\n    $x = 10;\n    addOne($x);\n    echo $x; // 11\n    \n    // 类型声明（PHP 7+）\n    function calculate(int $a, float $b): float {\n        return $a + $b;\n    }\n    \n    // 返回多个值\n    function getUser() {\n        return [\n            'name' => \"张三\",\n            'age' => 25\n        ];\n    }\n    [$name, $age] = getUser();\n    \n    // void返回类型（PHP 7.1+）\n    function logMessage(string $msg): void {\n        echo \"[$msg]\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "默认参数必须放在非默认参数之后",
+      "引用传递时未使用&符号",
+      "类型声明后传入错误类型",
+      "尝试返回void函数的值"
+    ],
+    "q": [
+      "定义带默认参数的函数",
+      "练习引用传递",
+      "使用类型声明",
+      "返回多个值并解构"
+    ]
+  },
+  {
+    "id": 10,
+    "t": "数组基础",
+    "p": [
+      "索引数组：数字索引",
+      "关联数组：键值对",
+      "多维数组：数组嵌套",
+      "数组长度：count()",
+      "数组遍历：for, foreach"
+    ],
+    "c": "<?php\n    // 索引数组\n    $colors = [\"Red\", \"Green\", \"Blue\"];\n    echo $colors[0]; // Red\n    \n    // 关联数组\n    $person = [\n        'name' => \"张三\",\n        'age' => 25,\n        'city' => \"北京\"\n    ];\n    echo $person['name'];\n    \n    // 多维数组\n    $students = [\n        [\"张三\", 20],\n        [\"李四\", 22]\n    ];\n    echo $students[0][0];\n    \n    // 数组长度\n    echo count($colors); // 3\n    \n    // 遍历关联数组\n    foreach ($person as $key => $value) {\n        echo $key . \": \" . $value . \"<br>\";\n    }\n    \n    // 添加元素\n    $colors[] = \"Yellow\";\n    $person['email'] = \"test@example.com\";\n?>",
+    "et": "常见错误",
+    "ec": [
+      "访问未定义的数组索引",
+      "关联数组使用数字索引",
+      "多维数组层级错误",
+      "混淆数组索引从0开始"
+    ],
+    "q": [
+      "创建索引数组和关联数组",
+      "遍历数组并输出",
+      "创建多维数组",
+      "动态添加数组元素"
+    ]
+  },
+  {
+    "id": 11,
+    "t": "数组操作函数",
+    "p": [
+      "array_push/pop：末尾添加/删除",
+      "array_shift/unshift：开头添加/删除",
+      "array_merge：合并数组",
+      "array_search：搜索值",
+      "sort/rsort/asort/ksort：排序"
+    ],
+    "c": "<?php\n    $fruits = [\"苹果\", \"香蕉\"];\n    \n    // 添加元素\n    array_push($fruits, \"橙子\");\n    array_unshift($fruits, \"葡萄\");\n    \n    // 删除元素\n    $last = array_pop($fruits);\n    $first = array_shift($fruits);\n    \n    // 合并数组\n    $arr1 = [1, 2];\n    $arr2 = [3, 4];\n    $merged = array_merge($arr1, $arr2);\n    \n    // 搜索\n    $key = array_search(\"香蕉\", $fruits);\n    \n    // 排序\n    $nums = [3, 1, 4, 2];\n    sort($nums); // 升序\n    rsort($nums); // 降序\n    \n    // 关联数组排序\n    $ages = [\"张三\" => 25, \"李四\" => 20];\n    asort($ages); // 按值排序\n    ksort($ages); // 按键排序\n    \n    // 数组切片\n    $slice = array_slice($nums, 1, 2);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "对空数组使用pop/shift",
+      "排序后索引被重置",
+      "array_search返回false时未正确判断",
+      "合并关联数组时相同键名被覆盖"
+    ],
+    "q": [
+      "练习数组的增删操作",
+      "合并多个数组",
+      "对数组进行各种排序",
+      "搜索数组中的值"
+    ]
+  },
+  {
+    "id": 12,
+    "t": "字符串处理",
+    "p": [
+      "strlen()：获取长度",
+      "strpos()/strrpos()：查找位置",
+      "substr()：截取字符串",
+      "str_replace()：替换",
+      "strtoupper()/strtolower()：大小写转换"
+    ],
+    "c": "<?php\n    $str = \"Hello, PHP!\";\n    \n    // 字符串长度\n    echo strlen($str); // 11\n    \n    // 查找位置\n    echo strpos($str, \"PHP\"); // 7\n    echo strrpos($str, \"l\"); // 3\n    \n    // 截取字符串\n    echo substr($str, 0, 5); // Hello\n    echo substr($str, -4); // PHP!\n    \n    // 替换\n    echo str_replace(\"PHP\", \"World\", $str);\n    \n    // 大小写转换\n    echo strtoupper($str);\n    echo strtolower($str);\n    \n    // 去除空白\n    $trimmed = trim(\"  Hello  \");\n    \n    // 分割字符串\n    $parts = explode(\",\", \"a,b,c\");\n    \n    // 拼接字符串\n    echo implode(\"-\", $parts);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "strpos返回0时被当作false",
+      "中文字符串长度计算错误",
+      "substr截取中文乱码",
+      "忘记trim导致比较失败"
+    ],
+    "q": [
+      "计算字符串长度",
+      "查找子串位置",
+      "截取和替换字符串",
+      "处理用户输入的字符串"
+    ]
+  },
+  {
+    "id": 13,
+    "t": "日期与时间",
+    "p": [
+      "date()：格式化日期时间",
+      "time()：获取当前时间戳",
+      "strtotime()：字符串转时间戳",
+      "DateTime类：面向对象方式",
+      "时区设置：date_default_timezone_set()"
+    ],
+    "c": "<?php\n    // 设置时区\n    date_default_timezone_set(\"Asia/Shanghai\");\n    \n    // 获取当前时间戳\n    $timestamp = time();\n    \n    // 格式化日期\n    echo date(\"Y-m-d H:i:s\"); // 2024-01-01 12:00:00\n    echo date(\"l, F j, Y\");\n    \n    // 字符串转时间戳\n    $nextWeek = strtotime(\"+1 week\");\n    echo date(\"Y-m-d\", $nextWeek);\n    \n    // DateTime类（推荐）\n    $date = new DateTime();\n    echo $date->format(\"Y-m-d H:i:s\");\n    \n    // DateTime运算\n    $date->add(new DateInterval(\"P1D\"));\n    echo $date->format(\"Y-m-d\");\n?>",
+    "et": "常见错误",
+    "ec": [
+      "忘记设置时区导致警告",
+      "strtotime解析失败返回false",
+      "date()函数参数顺序错误",
+      "DateTime比较时未使用getTimestamp()"
+    ],
+    "q": [
+      "输出当前日期和时间",
+      "计算明天的日期",
+      "使用DateTime类进行日期运算",
+      "格式化不同风格的日期"
+    ]
+  },
+  {
+    "id": 14,
+    "t": "文件操作",
+    "p": [
+      "fopen()：打开文件",
+      "fread()/fwrite()：读写文件",
+      "fclose()：关闭文件",
+      "file_get_contents()/file_put_contents()：便捷方法",
+      "file_exists()/filesize()：文件信息"
+    ],
+    "c": "<?php\n    $file = fopen(\"test.txt\", \"r\");\n    $content = fread($file, filesize(\"test.txt\"));\n    echo $content;\n    fclose($file);\n    \n    $data = file_get_contents(\"test.txt\");\n    file_put_contents(\"output.txt\", $data);\n    \n    if (file_exists(\"test.txt\")) {\n        echo \"文件大小：\" . filesize(\"test.txt\") . \" bytes\";\n    }\n    \n    $file = fopen(\"new.txt\", \"w\");\n    fwrite($file, \"Hello, World!\");\n    fclose($file);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "文件路径错误导致无法打开",
+      "忘记关闭文件",
+      "写入模式错误覆盖文件",
+      "权限不足无法读写"
+    ],
+    "q": [
+      "读取并输出文件内容",
+      "创建新文件并写入内容",
+      "检查文件是否存在",
+      "追加内容到文件"
+    ]
+  },
+  {
+    "id": 15,
+    "t": "表单处理",
+    "p": [
+      "$_GET和$_POST超全局变量",
+      "表单method属性",
+      "表单验证和过滤",
+      "htmlspecialchars()防止XSS",
+      "isset()和empty()检查输入"
+    ],
+    "c": "<form method=\"post\" action=\"process.php\">\n    <input type=\"text\" name=\"username\">\n    <input type=\"password\" name=\"password\">\n    <input type=\"submit\" value=\"提交\">\n</form>\n\n<?php\n    if ($_SERVER[\"REQUEST_METHOD\"] == \"POST\") {\n        $username = htmlspecialchars($_POST['username']);\n        $password = $_POST['password'];\n        \n        if (empty($username)) {\n            echo \"用户名不能为空\";\n        } else {\n            echo \"欢迎, \" . $username;\n        }\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "未使用htmlspecialchars导致XSS",
+      "直接使用用户输入未验证",
+      "忘记检查变量是否存在",
+      "表单action指向错误页面"
+    ],
+    "q": [
+      "创建用户登录表单",
+      "验证表单输入",
+      "防止XSS攻击",
+      "处理GET和POST请求"
+    ]
+  },
+  {
+    "id": 16,
+    "t": "Cookie",
+    "p": [
+      "setcookie()：设置Cookie",
+      "$_COOKIE超全局变量",
+      "Cookie的生命周期",
+      "删除Cookie",
+      "Cookie路径和域名"
+    ],
+    "c": "<?php\n    setcookie(\"username\", \"张三\", time() + 3600);\n    setcookie(\"theme\", \"dark\", time() + 86400 * 30, \"/\");\n    \n    if (isset($_COOKIE['username'])) {\n        echo \"欢迎回来, \" . $_COOKIE['username'];\n    }\n    \n    setcookie(\"username\", \"\", time() - 3600);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "在输出内容后设置Cookie",
+      "Cookie值包含特殊字符未编码",
+      "删除Cookie时路径不一致",
+      "依赖Cookie存储敏感信息"
+    ],
+    "q": [
+      "设置和读取Cookie",
+      "设置Cookie过期时间",
+      "删除Cookie",
+      "使用Cookie保存用户偏好"
+    ]
+  },
+  {
+    "id": 17,
+    "t": "Session",
+    "p": [
+      "session_start()：启动会话",
+      "$_SESSION超全局变量",
+      "session_destroy()：销毁会话",
+      "Session与Cookie的区别",
+      "Session安全配置"
+    ],
+    "c": "<?php\n    session_start();\n    \n    $_SESSION['username'] = '张三';\n    $_SESSION['login_time'] = time();\n    \n    if (isset($_SESSION['username'])) {\n        echo \"用户: \" . $_SESSION['username'];\n    }\n    \n    unset($_SESSION['username']);\n    \n    session_destroy();\n?>",
+    "et": "常见错误",
+    "ec": [
+      "在输出内容后调用session_start()",
+      "忘记启动Session",
+      "直接在URL中传递Session ID",
+      "Session文件权限问题"
+    ],
+    "q": [
+      "使用Session保存登录状态",
+      "销毁Session",
+      "比较Session和Cookie",
+      "实现简单的购物车"
+    ]
+  },
+  {
+    "id": 18,
+    "t": "面向对象基础",
+    "p": [
+      "类的定义和实例化",
+      "属性和方法",
+      "访问修饰符：public, protected, private",
+      "构造函数__construct()",
+      "析构函数__destruct()"
+    ],
+    "c": "<?php\n    class Person {\n        public $name;\n        protected $age;\n        private $password;\n        \n        public function __construct($name, $age) {\n            $this->name = $name;\n            $this->age = $age;\n        }\n        \n        public function sayHello() {\n            echo \"Hello, I'm \" . $this->name;\n        }\n        \n        public function getAge() {\n            return $this->age;\n        }\n        \n        public function __destruct() {\n            echo \"Object destroyed\";\n        }\n    }\n    \n    $person = new Person(\"张三\", 25);\n    $person->sayHello();\n    echo $person->getAge();\n?>",
+    "et": "常见错误",
+    "ec": [
+      "访问private/protected属性",
+      "忘记使用$this引用",
+      "构造函数名拼写错误",
+      "类名重复定义"
+    ],
+    "q": [
+      "定义一个类并实例化",
+      "使用构造函数初始化属性",
+      "练习访问修饰符",
+      "创建多个对象"
+    ]
+  },
+  {
+    "id": 19,
+    "t": "类与对象进阶",
+    "p": [
+      "静态属性和静态方法",
+      "self和static关键字",
+      "类常量",
+      "对象克隆clone",
+      "instanceof关键字"
+    ],
+    "c": "<?php\n    class Math {\n        const PI = 3.14159;\n        public static $count = 0;\n        \n        public static function add($a, $b) {\n            self::$count++;\n            return $a + $b;\n        }\n        \n        public static function getCount() {\n            return self::$count;\n        }\n    }\n    \n    echo Math::PI;\n    echo Math::add(3, 5);\n    echo Math::getCount();\n    \n    $obj1 = new stdClass();\n    $obj2 = clone $obj1;\n    \n    if ($obj1 instanceof stdClass) {\n        echo \"是stdClass对象\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "静态方法中使用$this",
+      "使用->访问静态属性",
+      "clone对象时浅拷贝问题",
+      "类常量使用$前缀"
+    ],
+    "q": [
+      "使用静态方法",
+      "定义类常量",
+      "克隆对象",
+      "使用instanceof判断类型"
+    ]
+  },
+  {
+    "id": 20,
+    "t": "继承",
+    "p": [
+      "extends关键字实现继承",
+      "parent关键字调用父类方法",
+      "方法重写(override)",
+      "final关键字防止继承",
+      "抽象类abstract"
+    ],
+    "c": "<?php\n    class Animal {\n        protected $name;\n        \n        public function __construct($name) {\n            $this->name = $name;\n        }\n        \n        public function speak() {\n            echo \"Animal speaks\";\n        }\n    }\n    \n    class Dog extends Animal {\n        public function speak() {\n            echo \"Woof! My name is \" . $this->name;\n        }\n        \n        public function getParentName() {\n            return parent::class;\n        }\n    }\n    \n    final class Cat extends Animal {\n        public function speak() {\n            echo \"Meow!\";\n        }\n    }\n    \n    $dog = new Dog(\"旺财\");\n    $dog->speak();\n?>",
+    "et": "常见错误",
+    "ec": [
+      "子类访问父类private属性",
+      "忘记调用parent::__construct()",
+      "方法重写时访问修饰符更严格",
+      "继承final类"
+    ],
+    "q": [
+      "创建父类和子类",
+      "重写父类方法",
+      "使用parent关键字",
+      "创建抽象类"
+    ]
+  },
+  {
+    "id": 21,
+    "t": "抽象类与接口",
+    "p": [
+      "抽象类不能实例化",
+      "抽象方法必须被子类实现",
+      "接口interface定义契约",
+      "implements实现接口",
+      "接口可以多继承"
+    ],
+    "c": "<?php\n    abstract class Shape {\n        protected $color;\n        \n        public function __construct($color) {\n            $this->color = $color;\n        }\n        \n        abstract public function getArea();\n        \n        public function getColor() {\n            return $this->color;\n        }\n    }\n    \n    interface Logger {\n        public function log($message);\n    }\n    \n    class Circle extends Shape implements Logger {\n        private $radius;\n        \n        public function __construct($color, $radius) {\n            parent::__construct($color);\n            $this->radius = $radius;\n        }\n        \n        public function getArea() {\n            return pi() * $this->radius * $this->radius;\n        }\n        \n        public function log($message) {\n            echo \"Log: \" . $message;\n        }\n    }\n    \n    $circle = new Circle(\"red\", 5);\n    echo $circle->getArea();\n    $circle->log(\"Circle created\");\n?>",
+    "et": "常见错误",
+    "ec": [
+      "实例化抽象类",
+      "未实现接口所有方法",
+      "抽象方法有方法体",
+      "接口中定义属性"
+    ],
+    "q": [
+      "定义抽象类",
+      "实现接口",
+      "创建多个子类实现同一接口",
+      "使用接口实现多态"
+    ]
+  },
+  {
+    "id": 22,
+    "t": "魔术方法",
+    "p": [
+      "__get()/__set()：属性访问",
+      "__call()/__callStatic()：方法调用",
+      "__toString()：对象转字符串",
+      "__clone()：克隆对象",
+      "__isset()/__unset()：属性检查"
+    ],
+    "c": "<?php\n    class Person {\n        private $data = [];\n        \n        public function __set($name, $value) {\n            $this->data[$name] = $value;\n        }\n        \n        public function __get($name) {\n            return isset($this->data[$name]) ? $this->data[$name] : null;\n        }\n        \n        public function __toString() {\n            return \"Person: \" . $this->name;\n        }\n        \n        public function __call($method, $args) {\n            echo \"调用方法: $method\";\n        }\n        \n        public static function __callStatic($method, $args) {\n            echo \"调用静态方法: $method\";\n        }\n    }\n    \n    $person = new Person();\n    $person->name = \"张三\";\n    echo $person->name;\n    echo $person;\n?>",
+    "et": "常见错误",
+    "ec": [
+      "过度使用魔术方法影响性能",
+      "__toString()未返回字符串",
+      "魔术方法参数错误",
+      "依赖魔术方法实现核心逻辑"
+    ],
+    "q": [
+      "使用__get和__set",
+      "实现__toString",
+      "使用__call",
+      "实现__clone"
+    ]
+  },
+  {
+    "id": 23,
+    "t": "异常处理",
+    "p": [
+      "try-catch-finally结构",
+      "throw抛出异常",
+      "自定义异常类",
+      "Exception类的属性和方法",
+      "多重catch捕获"
+    ],
+    "c": "<?php\n    class InvalidAgeException extends Exception {\n        public function __construct($message) {\n            parent::__construct($message);\n        }\n    }\n    \n    function checkAge($age) {\n        if ($age < 0 || $age > 120) {\n            throw new InvalidAgeException(\"无效年龄: $age\");\n        }\n        return true;\n    }\n    \n    try {\n        checkAge(150);\n        echo \"年龄有效\";\n    } catch (InvalidAgeException $e) {\n        echo \"错误: \" . $e->getMessage();\n    } catch (Exception $e) {\n        echo \"未知错误: \" . $e->getMessage();\n    } finally {\n        echo \"<br>操作完成\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "catch顺序错误",
+      "空catch块吞掉异常",
+      "finally中修改返回值",
+      "抛出非Exception对象"
+    ],
+    "q": [
+      "使用try-catch捕获异常",
+      "创建自定义异常类",
+      "使用多重catch",
+      "使用finally"
+    ]
+  },
+  {
+    "id": 24,
+    "t": "MySQL数据库基础",
+    "p": [
+      "mysqli_connect()连接数据库",
+      "mysqli_query()执行SQL",
+      "mysqli_fetch_assoc()获取结果",
+      "mysqli_error()错误处理",
+      "mysqli_close()关闭连接"
+    ],
+    "c": "<?php\n    $servername = \"localhost\";\n    $username = \"root\";\n    $password = \"password\";\n    $dbname = \"myDB\";\n    \n    $conn = mysqli_connect($servername, $username, $password, $dbname);\n    \n    if (!$conn) {\n        die(\"连接失败: \" . mysqli_connect_error());\n    }\n    \n    $sql = \"SELECT id, name, email FROM users\";\n    $result = mysqli_query($conn, $sql);\n    \n    if (mysqli_num_rows($result) > 0) {\n        while($row = mysqli_fetch_assoc($result)) {\n            echo \"id: \" . $row[\"id\"]. \" - Name: \" . $row[\"name\"]. \"<br>\";\n        }\n    }\n    \n    mysqli_close($conn);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "数据库连接信息错误",
+      "SQL语法错误未检查",
+      "忘记关闭数据库连接",
+      "直接拼接用户输入到SQL"
+    ],
+    "q": [
+      "连接MySQL数据库",
+      "查询数据并输出",
+      "处理数据库错误",
+      "关闭数据库连接"
+    ]
+  },
+  {
+    "id": 25,
+    "t": "CRUD操作",
+    "p": [
+      "INSERT：插入数据",
+      "SELECT：查询数据",
+      "UPDATE：更新数据",
+      "DELETE：删除数据",
+      "mysqli_insert_id()获取自增ID"
+    ],
+    "c": "<?php\n    $conn = mysqli_connect(\"localhost\", \"root\", \"password\", \"myDB\");\n    \n    $sql = \"INSERT INTO users (name, email) VALUES ('张三', 'zhang@example.com')\";\n    if (mysqli_query($conn, $sql)) {\n        $last_id = mysqli_insert_id($conn);\n        echo \"新记录插入成功，ID: \" . $last_id;\n    }\n    \n    $sql = \"UPDATE users SET email='new@example.com' WHERE id=1\";\n    mysqli_query($conn, $sql);\n    \n    $sql = \"DELETE FROM users WHERE id=1\";\n    mysqli_query($conn, $sql);\n    \n    mysqli_close($conn);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "UPDATE/DELETE缺少WHERE条件",
+      "字符串值未加引号",
+      "字段名与保留字冲突",
+      "忘记检查执行结果"
+    ],
+    "q": [
+      "插入新记录",
+      "更新现有记录",
+      "删除记录",
+      "查询并显示所有记录"
+    ]
+  },
+  {
+    "id": 26,
+    "t": "PDO数据库操作",
+    "p": [
+      "PDO连接数据库",
+      "PDO::query()执行查询",
+      "fetch()/fetchAll()获取结果",
+      "PDO异常处理",
+      "事务处理"
+    ],
+    "c": "<?php\n    try {\n        $pdo = new PDO(\"mysql:host=localhost;dbname=myDB\", \"root\", \"password\");\n        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);\n        \n        $stmt = $pdo->query(\"SELECT * FROM users\");\n        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {\n            echo $row['name'];\n        }\n        \n        $pdo->beginTransaction();\n        $pdo->exec(\"INSERT INTO users (name) VALUES ('李四')\");\n        $pdo->commit();\n        \n    } catch(PDOException $e) {\n        $pdo->rollback();\n        echo \"Error: \" . $e->getMessage();\n    }\n    \n    $pdo = null;\n?>",
+    "et": "常见错误",
+    "ec": [
+      "DSN格式错误",
+      "忘记设置ERRMODE_EXCEPTION",
+      "未提交事务",
+      "fetch模式错误"
+    ],
+    "q": [
+      "使用PDO连接数据库",
+      "查询数据",
+      "使用事务",
+      "处理PDO异常"
+    ]
+  },
+  {
+    "id": 27,
+    "t": "预处理语句",
+    "p": [
+      "prepare()准备语句",
+      "bindParam()绑定参数",
+      "execute()执行语句",
+      "防止SQL注入",
+      "批量执行"
+    ],
+    "c": "<?php\n    $pdo = new PDO(\"mysql:host=localhost;dbname=myDB\", \"root\", \"password\");\n    \n    $stmt = $pdo->prepare(\"INSERT INTO users (name, email) VALUES (:name, :email)\");\n    $stmt->bindParam(':name', $name);\n    $stmt->bindParam(':email', $email);\n    \n    $name = \"张三\";\n    $email = \"zhang@example.com\";\n    $stmt->execute();\n    \n    $stmt = $pdo->prepare(\"SELECT * FROM users WHERE id = ?\");\n    $stmt->execute([1]);\n    $user = $stmt->fetch();\n    \n    $data = [\n        ['王五', 'wang@example.com'],\n        ['赵六', 'zhao@example.com']\n    ];\n    $stmt = $pdo->prepare(\"INSERT INTO users (name, email) VALUES (?, ?)\");\n    foreach ($data as $row) {\n        $stmt->execute($row);\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "绑定参数后修改变量值",
+      "使用execute()时参数格式错误",
+      "prepare()中直接拼接变量",
+      "忘记调用execute()"
+    ],
+    "q": [
+      "使用预处理语句插入数据",
+      "使用命名参数",
+      "使用问号参数",
+      "批量插入数据"
+    ]
+  },
+  {
+    "id": 28,
+    "t": "JSON处理",
+    "p": [
+      "json_encode()：数组转JSON",
+      "json_decode()：JSON转数组/对象",
+      "JSON_PRETTY_PRINT美化输出",
+      "JSON_UNESCAPED_UNICODE保留中文",
+      "处理JSON错误"
+    ],
+    "c": "<?php\n    $data = [\n        'name' => '张三',\n        'age' => 25,\n        'hobbies' => ['读书', '游泳']\n    ];\n    \n    $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);\n    echo $json;\n    \n    $jsonString = '{\"name\":\"李四\",\"age\":30}';\n    $obj = json_decode($jsonString);\n    echo $obj->name;\n    \n    $arr = json_decode($jsonString, true);\n    echo $arr['age'];\n    \n    if (json_last_error() !== JSON_ERROR_NONE) {\n        echo \"JSON解析错误\";\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "中文被转义为Unicode",
+      "json_decode返回null未检查",
+      "忘记使用true参数转数组",
+      "循环引用导致json_encode失败"
+    ],
+    "q": [
+      "将数组转换为JSON",
+      "解析JSON字符串",
+      "美化JSON输出",
+      "处理JSON错误"
+    ]
+  },
+  {
+    "id": 29,
+    "t": "正则表达式",
+    "p": [
+      "preg_match()：匹配正则",
+      "preg_match_all()：匹配所有",
+      "preg_replace()：替换",
+      "preg_split()：分割字符串",
+      "正则表达式语法"
+    ],
+    "c": "<?php\n    $email = \"test@example.com\";\n    $pattern = '/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/';\n    \n    if (preg_match($pattern, $email)) {\n        echo \"有效的邮箱\";\n    }\n    \n    $text = \"电话: 13812345678, 电话: 15987654321\";\n    preg_match_all('/1[3-9]\\d{9}/', $text, $matches);\n    print_r($matches[0]);\n    \n    $str = \"Hello World\";\n    $newStr = preg_replace('/World/', 'PHP', $str);\n    echo $newStr;\n    \n    $str = \"a,b,c,d\";\n    $arr = preg_split('/,/', $str);\n    print_r($arr);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "正则表达式缺少定界符",
+      "特殊字符未转义",
+      "贪婪匹配导致结果错误",
+      "preg_match返回值判断错误"
+    ],
+    "q": [
+      "验证邮箱格式",
+      "提取手机号",
+      "替换字符串",
+      "分割字符串"
+    ]
+  },
+  {
+    "id": 30,
+    "t": "错误处理",
+    "p": [
+      "error_reporting()设置错误级别",
+      "ini_set()配置PHP",
+      "trigger_error()触发错误",
+      "set_error_handler()自定义错误处理",
+      "error_get_last()获取最后错误"
+    ],
+    "c": "<?php\n    error_reporting(E_ALL);\n    ini_set('display_errors', 1);\n    ini_set('log_errors', 1);\n    ini_set('error_log', 'errors.log');\n    \n    function customError($errno, $errstr) {\n        echo \"错误: [$errno] $errstr\";\n        error_log(\"错误: [$errno] $errstr\");\n    }\n    \n    set_error_handler(\"customError\");\n    \n    $undefinedVar;\n    \n    trigger_error(\"自定义错误\", E_USER_WARNING);\n    \n    $error = error_get_last();\n    if ($error) {\n        print_r($error);\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "生产环境显示错误信息",
+      "错误级别设置过低",
+      "自定义错误处理未记录日志",
+      "忽略警告错误"
+    ],
+    "q": [
+      "设置错误级别",
+      "创建自定义错误处理器",
+      "记录错误日志",
+      "触发自定义错误"
+    ]
+  },
+  {
+    "id": 31,
+    "t": "PHP安全",
+    "p": [
+      "SQL注入防护",
+      "XSS攻击防护",
+      "CSRF攻击防护",
+      "文件包含漏洞",
+      "密码安全存储"
+    ],
+    "c": "<?php\n    $username = htmlspecialchars($_POST['username']);\n    \n    $stmt = $pdo->prepare(\"SELECT * FROM users WHERE username = ?\");\n    $stmt->execute([$username]);\n    \n    $password = password_hash(\"123456\", PASSWORD_DEFAULT);\n    \n    if (password_verify(\"123456\", $hash)) {\n        echo \"密码正确\";\n    }\n    \n    session_start();\n    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));\n    \n    if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {\n        die(\"CSRF攻击检测\");\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "直接拼接用户输入到SQL",
+      "明文存储密码",
+      "未验证CSRF Token",
+      "未转义输出内容"
+    ],
+    "q": [
+      "防止SQL注入",
+      "防止XSS攻击",
+      "实现CSRF防护",
+      "安全存储密码"
+    ]
+  },
+  {
+    "id": 32,
+    "t": "文件上传",
+    "p": [
+      "$_FILES超全局变量",
+      "move_uploaded_file()移动文件",
+      "文件类型验证",
+      "文件大小限制",
+      "安全上传目录"
+    ],
+    "c": "<form method=\"post\" enctype=\"multipart/form-data\">\n    <input type=\"file\" name=\"fileToUpload\">\n    <input type=\"submit\" value=\"上传\">\n</form>\n\n<?php\n    $target_dir = \"uploads/\";\n    $target_file = $target_dir . basename($_FILES[\"fileToUpload\"][\"name\"]);\n    $uploadOk = 1;\n    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));\n    \n    if ($_FILES[\"fileToUpload\"][\"size\"] > 500000) {\n        echo \"文件过大\";\n        $uploadOk = 0;\n    }\n    \n    if($imageFileType != \"jpg\" && $imageFileType != \"png\") {\n        echo \"只允许JPG和PNG\";\n        $uploadOk = 0;\n    }\n    \n    if ($uploadOk == 1) {\n        if (move_uploaded_file($_FILES[\"fileToUpload\"][\"tmp_name\"], $target_file)) {\n            echo \"文件上传成功\";\n        }\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "未检查文件类型",
+      "文件大小超过php.ini限制",
+      "上传目录权限不足",
+      "使用用户提供的文件名"
+    ],
+    "q": [
+      "创建文件上传表单",
+      "验证文件类型",
+      "限制文件大小",
+      "安全处理上传文件"
+    ]
+  },
+  {
+    "id": 33,
+    "t": "图像处理",
+    "p": [
+      "GD库函数",
+      "imagecreatefromjpeg()读取图片",
+      "imagecopyresampled()缩放图片",
+      "imagejpeg()输出图片",
+      "文字水印和图片水印"
+    ],
+    "c": "<?php\n    $src = imagecreatefromjpeg(\"original.jpg\");\n    $width = imagesx($src);\n    $height = imagesy($src);\n    \n    $newWidth = 200;\n    $newHeight = ($height / $width) * $newWidth;\n    \n    $dst = imagecreatetruecolor($newWidth, $newHeight);\n    imagecopyresampled($dst, $src, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);\n    \n    imagejpeg($dst, \"thumbnail.jpg\", 80);\n    \n    $white = imagecolorallocate($dst, 255, 255, 255);\n    $font = \"arial.ttf\";\n    imagettftext($dst, 12, 0, 10, 20, $white, $font, \"水印文字\");\n    \n    imagedestroy($src);\n    imagedestroy($dst);\n?>",
+    "et": "常见错误",
+    "ec": [
+      "GD库未安装或未启用",
+      "图片路径错误",
+      "输出图片前有其他输出",
+      "字体文件路径错误"
+    ],
+    "q": [
+      "缩放图片",
+      "添加文字水印",
+      "创建缩略图",
+      "转换图片格式"
+    ]
+  },
+  {
+    "id": 34,
+    "t": "Composer",
+    "p": [
+      "Composer是PHP依赖管理器",
+      "composer.json配置文件",
+      "composer install安装依赖",
+      "composer require添加依赖",
+      "autoload自动加载"
+    ],
+    "c": "{\n    \"name\": \"my/project\",\n    \"require\": {\n        \"monolog/monolog\": \"^2.0\",\n        \"guzzlehttp/guzzle\": \"^7.0\"\n    },\n    \"autoload\": {\n        \"psr-4\": {\n            \"App\\\\\": \"src/\"\n        }\n    }\n}",
+    "et": "常见错误",
+    "ec": [
+      "忘记require autoload.php",
+      "依赖版本冲突",
+      "composer.lock文件未提交",
+      "autoload配置错误"
+    ],
+    "q": [
+      "安装Composer",
+      "创建composer.json",
+      "安装依赖包",
+      "配置autoload"
+    ]
+  },
+  {
+    "id": 35,
+    "t": "PHP框架简介",
+    "p": [
+      "Laravel框架",
+      "Symfony框架",
+      "CodeIgniter框架",
+      "框架优势：MVC、路由、ORM",
+      "选择合适的框架"
+    ],
+    "c": "<?php\n    // routes/web.php\n    use App\\Http\\Controllers\\UserController;\n    \n    Route::get('/users', [UserController::class, 'index']);\n    Route::get('/users/{id}', [UserController::class, 'show']);\n    Route::post('/users', [UserController::class, 'store']);\n    \n    // app/Http/Controllers/UserController.php\n    namespace App\\Http\\Controllers;\n    \n    use App\\Models\\User;\n    \n    class UserController extends Controller {\n        public function index() {\n            return User::all();\n        }\n        \n        public function show($id) {\n            return User::findOrFail($id);\n        }\n        \n        public function store(Request $request) {\n            $validated = $request->validate([\n                'name' => 'required|string',\n                'email' => 'required|email|unique:users'\n            ]);\n            return User::create($validated);\n        }\n    }\n?>",
+    "et": "常见错误",
+    "ec": [
+      "过度设计选择重型框架",
+      "忽视框架学习曲线",
+      "不理解框架核心概念",
+      "混用原生PHP和框架代码"
+    ],
+    "q": [
+      "安装Laravel框架",
+      "创建路由",
+      "创建控制器",
+      "创建模型和迁移"
+    ]
+  }
+];

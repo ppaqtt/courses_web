@@ -3,24 +3,29 @@
  * 支持离线访问和缓存管理
  */
 
-const CACHE_NAME = 'tutorial-cache-v1';
+const CACHE_NAME = 'tutorial-cache-v3';
 const STATIC_ASSETS = [
-    '/',
     '/programming-languages-tutorial.html',
     '/tutorial-hub.html',
-    '/tutorial-python.html',
-    '/tutorial-javascript.html',
-    '/tutorial-java.html',
-    '/tutorial-cpp.html',
-    '/tutorial-csharp.html',
-    '/tutorial-go.html',
-    '/tutorial-rust.html',
-    '/tutorial-typescript.html',
-    '/tutorial-php.html',
-    '/tutorial-swift.html',
+    '/learning-paths.html',
+    '/concepts.html',
+    '/daily-quiz.html',
+    '/offline.html',
     '/tutorial-style.css',
+    '/tutorial-pages.css',
     '/tutorial-features.css',
-    '/tutorial-common.js'
+    '/tutorial-extensions.css',
+    '/tutorial-advanced.css',
+    '/tutorial-common.js',
+    '/tutorial-extensions.js',
+    '/tutorial-advanced.js',
+    '/tutorial-runner.js',
+    '/language-catalog.js',
+    '/manifest.json',
+    '/favicon.ico',
+    '/badge.png',
+    '/icon-192.png',
+    '/icon-512.png'
 ];
 
 // 安装事件 - 预缓存静态资源

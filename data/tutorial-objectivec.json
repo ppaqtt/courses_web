@@ -1,0 +1,807 @@
+[
+  {
+    "id": 1,
+    "t": "Objective-C 简介：Smalltalk 消息与 C 的融合",
+    "p": [
+      "Objective-C 由 Brad Cox 在 1980 年代设计，后随 NeXT 与苹果生态广泛使用",
+      "在 C 之上加入 Smalltalk 风格的消息发送与面向对象，语法是 C 的超集",
+      "现代开发使用 Clang 编译、Foundation 框架与自动引用计数 ARC",
+      "主要用于 iOS 与 macOS 应用、系统扩展，以及需要调用苹果框架的场景"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(int argc, const char * argv[]) {\n    @autoreleasepool {\n        NSLog(@\"Hello, Objective-C!\");\n        NSString *version = @\"Clang + Foundation\";\n        NSLog(@\"工具链: %@\", version);\n        NSArray *langs = @[@\"Objective-C\", @\"Swift\"];\n        NSLog(@\"语言数量: %lu\", (unsigned long)langs.count);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 Objective-C 当成纯 C 来读：方括号不是数组下标而是消息发送，[obj method] 表示向 obj 发送 method 消息，理解这一点是入门关键。",
+    "q": [
+      {
+        "q": "Objective-C 的消息语法来自哪种语言？",
+        "a": "Smalltalk"
+      },
+      {
+        "q": "现代 Objective-C 使用什么内存管理机制？",
+        "a": "ARC 自动引用计数"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与工具链：Xcode、Clang 与 Foundation",
+    "p": [
+      "macOS 安装 Xcode 与 Command Line Tools，Linux 可安装 clang 与 GNUstep",
+      "clang -fobjc-arc -framework Foundation 可编译命令行程序",
+      "Xcode 提供项目管理、Interface Builder、调试器与 Instruments",
+      "clang-format 统一代码风格，lldb 负责断点调试与运行时检查"
+    ],
+    "c": "// 编译: clang -fobjc-arc -framework Foundation hello.m -o hello\n// 运行: ./hello\n#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSArray *langs = @[@\"Objective-C\", @\"Swift\"];\n        for (NSString *lang in langs) {\n            NSLog(@\"%@\", lang);\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "编译时忘记加 -fobjc-arc：手动引用计数下 retain 与 release 需要自己配对，容易出现内存泄漏或过度释放崩溃。",
+    "q": [
+      {
+        "q": "编译 Objective-C 命令行程序需要链接哪个框架？",
+        "a": "Foundation"
+      },
+      {
+        "q": "查看调用栈的 lldb 命令是什么？",
+        "a": "bt"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量与常量：C 类型、对象指针与 const",
+    "p": [
+      "基本类型沿用 C：int、double、char、BOOL，NSInteger 是平台相关整数",
+      "对象变量用指针声明，如 NSString *name，星号紧跟变量名更清晰",
+      "const 修饰指针指向或指针本身，位置不同语义完全不同，需格外注意",
+      "常量可用 static const、extern 或 #define，字符串字面量用 @\"...\""
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        int count = 3;\n        double pi = 3.14159;\n        NSString *name = @\"Ada\";\n        const int MAX = 100;\n        static int calls = 0;\n        calls++;\n        NSLog(@\"%@ count=%d pi=%.2f MAX=%d calls=%d\", name, count, pi, MAX, calls);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "写 NSString name 而不是 NSString *name：对象变量必须是指针，漏掉星号会编译报错，提示界面类型不能作为变量类型。",
+    "q": [
+      {
+        "q": "NSString 变量应该如何声明？",
+        "a": "NSString *name"
+      },
+      {
+        "q": "const 放在星号前后有什么区别？",
+        "a": "分别修饰指向内容或指针本身"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "数据类型：NSInteger、BOOL、id 与集合字面量",
+    "p": [
+      "NSInteger 与 NSUInteger 根据平台选择 32 或 64 位整数，适合表示长度与索引",
+      "BOOL 取 YES 或 NO，本质是有符号字符，不要与 true 和 false 混用",
+      "id 是任意对象指针，可指向任何 Objective-C 对象，调用前最好检查类型",
+      "NSNumber、NSArray、NSDictionary 可用 @()、@[]、@{} 字面量快速创建"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSInteger i = 42;\n        BOOL ok = YES;\n        id any = @\"text\";\n        NSNumber *n = @(i);\n        NSArray *arr = @[@1, @2, @3];\n        NSDictionary *dict = @{@\"a\": @1};\n        NSLog(@\"%ld %d %@ %@\", (long)i, ok, n, any);\n        NSLog(@\"%lu %lu\", (unsigned long)arr.count, (unsigned long)dict.count);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 NSNumber 当 int 直接运算：NSNumber 是对象，需要调用 integerValue 或 intValue 拆箱，否则会得到指针地址或编译错误。",
+    "q": [
+      {
+        "q": "NSInteger 应该用什么格式符打印？",
+        "a": "%ld 并强转为 long"
+      },
+      {
+        "q": "id 类型可以指向什么？",
+        "a": "任意 Objective-C 对象"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式：比较、位运算与消息",
+    "p": [
+      "算术与位运算符沿用 C，整数除法会截断，取模只适用于整数类型",
+      "== 比较对象指针，isEqualToString 或 isEqual 才比较内容",
+      "三目运算符与短路逻辑和 C 一致，可用于简洁的条件赋值表达式",
+      "消息表达式可嵌套，返回值可继续作为下一条消息的接收者对象使用"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        int a = 7, b = 2;\n        NSLog(@\"%d\", a / b);\n        NSLog(@\"%.2f\", (double)a / b);\n        NSLog(@\"%d\", a % b);\n        NSString *s1 = @\"abc\";\n        NSString *s2 = [NSString stringWithFormat:@\"%@\", @\"abc\"];\n        NSLog(@\"指针相等: %d\", (int)(s1 == s2));\n        NSLog(@\"内容相等: %d\", (int)[s1 isEqualToString:s2]);\n        NSNumber *x = @(a > b ? a : b);\n        NSLog(@\"max=%@\", x);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较两个内容相同的 NSString：字面量可能因常量池相等，但运行时拼接的字符串通常不等，必须用 isEqualToString。",
+    "q": [
+      {
+        "q": "比较 NSString 内容用什么方法？",
+        "a": "isEqualToString:"
+      },
+      {
+        "q": "对象指针相等使用哪个运算符？",
+        "a": "=="
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串：NSString 与 NSMutableString",
+    "p": [
+      "NSString 不可变，创建后内容不能修改，线程安全且可安全共享",
+      "stringWithFormat 支持 %@、%ld、%.2f 等格式化占位符",
+      "NSRange 表示位置与长度，配合 substringWithRange 截取子串",
+      "NSMutableString 适合频繁拼接，appendString 避免反复创建新对象"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSString *name = @\"ObjC\";\n        NSString *msg = [NSString stringWithFormat:@\"Hello, %@! 长度=%lu\", name, (unsigned long)name.length];\n        NSLog(@\"%@\", msg);\n        NSString *upper = [msg uppercaseString];\n        NSRange range = [upper rangeOfString:@\"OBJC\"];\n        NSLog(@\"range=(%lu,%lu)\", (unsigned long)range.location, (unsigned long)range.length);\n        NSString *sub = [upper substringWithRange:NSMakeRange(0, 5)];\n        NSLog(@\"sub=%@\", sub);\n        NSLog(@\"%@\", [@\"a,b,c\" componentsSeparatedByString:@\",\"]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 %@ 打印 NSInteger：格式符与参数类型不匹配会产生未定义行为；NSInteger 应用 %ld 并强转 long，NSUInteger 用 %lu。",
+    "q": [
+      {
+        "q": "NSString 和 NSMutableString 的核心区别？",
+        "a": "前者不可变，后者可修改"
+      },
+      {
+        "q": "截取子串用什么方法？",
+        "a": "substringWithRange:"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "数组与集合：NSArray、NSDictionary 与 NSSet",
+    "p": [
+      "NSArray 有序不可变，NSMutableArray 支持增删改，越界会抛异常",
+      "NSDictionary 以键值对存储，键必须实现 NSCopying，通常用 NSString",
+      "NSSet 无序且去重，适合成员判断与集合的交并运算场景处理",
+      "集合字面量 @[]、@{} 创建不可变对象，需要修改时用 mutableCopy"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSArray *immutable = @[@\"a\", @\"b\"];\n        NSMutableArray *list = [NSMutableArray arrayWithArray:immutable];\n        [list addObject:@\"c\"];\n        [list removeObjectAtIndex:0];\n\n        NSDictionary *dict = @{@\"name\": @\"Ada\", @\"age\": @36};\n        NSMutableDictionary *mutable = [dict mutableCopy];\n        mutable[@\"city\"] = @\"Beijing\";\n\n        NSSet *set = [NSSet setWithArray:@[@1, @2, @2]];\n        NSLog(@\"list=%@ set=%@\", list, set);\n        NSLog(@\"name=%@ age=%@ city=%@\", dict[@\"name\"], dict[@\"age\"], mutable[@\"city\"]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接修改 @[] 创建的数组：字面量产生不可变 NSArray，调用 addObject 会抛 unrecognized selector 异常，应先 mutableCopy。",
+    "q": [
+      {
+        "q": "如何从不可变字典得到可变副本？",
+        "a": "调用 mutableCopy"
+      },
+      {
+        "q": "NSSet 会因为重复元素而保留几份？",
+        "a": "一份，自动去重"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件分支：if、switch 与布尔值",
+    "p": [
+      "if/else 条件必须是标量，对象指针也可以与 nil 比较",
+      "switch 的 case 只能是整数常量，不能直接匹配字符串",
+      "BOOL 只有 YES 与 NO，任何非零整数赋给 BOOL 都可能被截断",
+      "复杂条件可提取为 BOOL 变量或辅助方法，提升代码整体可读性"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSInteger score = 85;\n        if (score >= 90) {\n            NSLog(@\"A\");\n        } else if (score >= 60) {\n            NSLog(@\"B\");\n        } else {\n            NSLog(@\"C\");\n        }\n\n        switch (score / 10) {\n            case 10:\n            case 9: NSLog(@\"优秀\"); break;\n            case 8: NSLog(@\"良好\"); break;\n            default: NSLog(@\"继续努力\"); break;\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 switch 的 case 中忘记 break：会继续执行后续分支，造成逻辑穿透；每个 case 结束应显式 break 或 return。",
+    "q": [
+      {
+        "q": "Objective-C 的 switch 能直接匹配字符串吗？",
+        "a": "不能，只能匹配整数常量"
+      },
+      {
+        "q": "BOOL 的正确取值是什么？",
+        "a": "YES 与 NO"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "循环与递归：for、for-in 与递归",
+    "p": [
+      "C 风格 for 适合计数循环，for-in 更适合遍历集合与数组",
+      "while 与 do-while 的区别在于是否至少执行一次循环体",
+      "递归必须写出明确的终止条件，过深的递归可能耗尽栈空间并导致崩溃",
+      "遍历可变集合时不要增删元素，应先复制集合或收集待删除索引再处理"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nstatic NSInteger factorial(NSInteger n) {\n    return n <= 1 ? 1 : n * factorial(n - 1);\n}\n\nint main(void) {\n    @autoreleasepool {\n        for (NSInteger i = 0; i < 3; i++) {\n            NSLog(@\"i=%ld\", (long)i);\n        }\n        NSArray *items = @[@\"a\", @\"b\", @\"c\"];\n        for (NSString *item in items) {\n            NSLog(@\"item=%@\", item);\n        }\n        NSInteger n = 0;\n        while (n < 2) { n++; }\n        NSLog(@\"factorial(5)=%ld\", (long)factorial(5));\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 for-in 循环中修改 NSMutableArray：枚举器会检测到集合变化并抛异常，应改用索引循环或先复制集合。",
+    "q": [
+      {
+        "q": "遍历数组推荐哪种循环？",
+        "a": "for-in 快速枚举"
+      },
+      {
+        "q": "递归必须有什么？",
+        "a": "明确的终止条件"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数基础：C 函数与方法签名",
+    "p": [
+      "C 函数适合工具逻辑，Objective-C 方法用减号声明实例方法",
+      "方法名由各段关键字组成，如 greet:prefix:，可读性强",
+      "参数类型写在冒号后的括号中，返回类型写在方法声明的最前面位置",
+      "类方法用加号声明，常作为工厂方法或工具方法的便捷入口调用使用"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\n@interface Greeter : NSObject\n- (NSString *)greet:(NSString *)name;\n- (NSString *)greet:(NSString *)name prefix:(NSString *)prefix;\n@end\n\n@implementation Greeter\n- (NSString *)greet:(NSString *)name {\n    return [self greet:name prefix:@\"Hello\"];\n}\n- (NSString *)greet:(NSString *)name prefix:(NSString *)prefix {\n    return [NSString stringWithFormat:@\"%@, %@\", prefix, name];\n}\n@end\n\nint main(void) {\n    @autoreleasepool {\n        Greeter *g = [Greeter new];\n        NSLog(@\"%@\", [g greet:@\"ObjC\"]);\n        NSLog(@\"%@\", [g greet:@\"Lua\" prefix:@\"Hi\"]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "调用方法时漏写参数标签：Objective-C 的方法名包含冒号与标签，少写一段会编译失败或调用到错误的方法。",
+    "q": [
+      {
+        "q": "实例方法与类方法分别用什么符号声明？",
+        "a": "减号与加号"
+      },
+      {
+        "q": "方法名 greet:prefix: 中的冒号表示什么？",
+        "a": "一个参数位置"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "函数进阶：Block、函数指针与回调",
+    "p": [
+      "Block 是带捕获环境的匿名函数，语法为 ^返回值(参数){ 代码 }",
+      "typedef 可简化 Block 类型声明，提升代码可读性",
+      "Block 可作为参数实现回调，也可作为属性长期保存并重复使用",
+      "函数指针适合 C 回调，Block 更适合需要捕获上下文的场景"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\ntypedef NSInteger (^MathBlock)(NSInteger, NSInteger);\n\nstatic NSInteger apply(NSInteger x, NSInteger y, MathBlock f) {\n    return f(x, y);\n}\n\nint main(void) {\n    @autoreleasepool {\n        MathBlock add = ^NSInteger(NSInteger a, NSInteger b) { return a + b; };\n        MathBlock mul = ^NSInteger(NSInteger a, NSInteger b) { return a * b; };\n        NSLog(@\"add=%ld\", (long)apply(2, 3, add));\n        NSLog(@\"mul=%ld\", (long)apply(2, 3, mul));\n\n        NSArray *nums = @[@1, @2, @3];\n        NSMutableArray *squares = [NSMutableArray array];\n        for (NSNumber *n in nums) {\n            [squares addObject:@(n.integerValue * n.integerValue)];\n        }\n        NSLog(@\"%@\", squares);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把栈上的 Block 保存为属性却不 copy：Block 可能在栈上，离开作用域后失效；属性应使用 copy 或 strong 配合复制。",
+    "q": [
+      {
+        "q": "Block 的语法以什么符号开头？",
+        "a": "脱字符 ^"
+      },
+      {
+        "q": "Block 类型如何简化声明？",
+        "a": "使用 typedef"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "作用域与闭包：Block 捕获与循环引用",
+    "p": [
+      "Block 捕获外部变量时默认是只读副本，修改需加 __block",
+      "捕获对象会强引用它，容易与 self 之间形成循环引用导致内存泄漏",
+      "使用 weakSelf 与 strongSelf 打破循环，避免内存泄漏",
+      "局部变量在 Block 执行时可能已离开作用域，注意生命周期"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        __block NSInteger counter = 0;\n        void (^increment)(void) = ^{\n            counter += 1;\n        };\n        increment();\n        increment();\n        NSLog(@\"counter=%ld\", (long)counter);\n\n        NSInteger base = 10;\n        NSInteger (^addBase)(NSInteger) = ^NSInteger(NSInteger x) {\n            return base + x;\n        };\n        NSLog(@\"addBase(5)=%ld\", (long)addBase(5));\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 Block 中直接使用 self 并让 self 持有该 Block：双方互相强引用，对象永远不会释放；应使用 __weak 弱引用并在块内转强。",
+    "q": [
+      {
+        "q": "Block 内修改外部变量需要什么修饰？",
+        "a": "__block"
+      },
+      {
+        "q": "如何避免 Block 与 self 循环引用？",
+        "a": "使用 __weak 弱引用 self"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "类与对象：@interface、@implementation 与属性",
+    "p": [
+      "@interface 声明类、父类、属性与方法，@implementation 提供实现",
+      "property 自动生成 getter、setter 与下划线实例变量",
+      "属性特性需匹配语义：copy 用于 NSString，strong 用于拥有对象",
+      "instancetype 作为初始化方法返回类型，提供更好的类型检查"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\n@interface User : NSObject\n@property (nonatomic, copy) NSString *name;\n@property (nonatomic, assign) NSInteger age;\n- (instancetype)initWithName:(NSString *)name age:(NSInteger)age;\n@end\n\n@implementation User\n- (instancetype)initWithName:(NSString *)name age:(NSInteger)age {\n    self = [super init];\n    if (self) {\n        _name = [name copy];\n        _age = age;\n    }\n    return self;\n}\n@end\nint main(void) {\n    @autoreleasepool {\n        User *u = [[User alloc] initWithName:@\"Ada\" age:36];\n        NSLog(@\"%@\", u);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 NSString 属性声明为 strong：多个对象可能共享同一可变字符串，外部修改会影响本对象；应使用 copy 获得独立副本。",
+    "q": [
+      {
+        "q": "NSString 属性通常使用哪个特性？",
+        "a": "copy"
+      },
+      {
+        "q": "property 自动生成的实例变量叫什么？",
+        "a": "下划线加属性名"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "继承与多态：super、重写与类型判断",
+    "p": [
+      "Objective-C 支持单继承，所有类最终继承自 NSObject",
+      "子类可重写父类方法，用 super 调用父类的原有实现逻辑代码",
+      "多态由消息动态分派实现，运行时根据对象的真实类型选择具体方法",
+      "isKindOfClass 判断继承关系，respondsToSelector 判断方法可用性"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n@interface Animal : NSObject\n@property (nonatomic, copy) NSString *name;\n- (NSString *)speak;\n@end\n\n@implementation Animal\n- (NSString *)speak { return @\"...\"; }\n@end\n@interface Dog : Animal\n@end\n\n@implementation Dog\n- (NSString *)speak { return [NSString stringWithFormat:@\"Woof, I am %@\", self.name]; }\n@end\n\nint main(void) {\n    @autoreleasepool {\n        NSArray *animals = @[[Animal new], [Dog new]];\n        [(Animal *)animals[1] setName:@\"Rex\"];\n        for (Animal *a in animals) NSLog(@\"%@\", [a speak]);\n        NSLog(@\"kind=%d\", (int)[animals[1] isKindOfClass:[Animal class]]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "重写 init 时忘记调用 self = [super init]：父类初始化逻辑不会执行，对象状态可能不完整，后续调用会出错。",
+    "q": [
+      {
+        "q": "调用父类实现用什么关键字？",
+        "a": "super"
+      },
+      {
+        "q": "判断对象是否属于某类用什么方法？",
+        "a": "isKindOfClass:"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "协议与抽象：@protocol 与可选方法",
+    "p": [
+      "@protocol 声明一组方法契约，类通过尖括号声明遵循协议",
+      "@required 方法必须实现，@optional 方法可选择实现",
+      "调用可选方法前用 respondsToSelector 检查，避免崩溃",
+      "协议可用于解耦，如委托模式中控制器只依赖协议而非具体类实现细节"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n@protocol Runner <NSObject>\n@required\n- (NSString *)run;\n@optional\n- (NSString *)rest;\n@end\n@interface Athlete : NSObject <Runner>\n@property (nonatomic, copy) NSString *name;\n@end\n\n@implementation Athlete\n- (NSString *)run { return [NSString stringWithFormat:@\"%@ is running\", self.name]; }\n@end\nint main(void) {\n    @autoreleasepool {\n        Athlete *a = [Athlete new];\n        a.name = @\"Ada\";\n        NSLog(@\"%@\", [a run]);\n        if ([a respondsToSelector:@selector(rest)]) {\n            NSLog(@\"%@\", [a rest]);\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "调用 @optional 方法前不检查 respondsToSelector：对象未实现该方法时会抛 unrecognized selector 异常导致崩溃。",
+    "q": [
+      {
+        "q": "协议中必须实现的方法用什么标记？",
+        "a": "@required"
+      },
+      {
+        "q": "调用可选方法前应检查什么？",
+        "a": "respondsToSelector:"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "泛型与类型参数：轻量级泛型",
+    "p": [
+      "NSArray<NSString *> * 是轻量级泛型，为编译器提供元素类型信息",
+      "泛型只存在于编译期，运行时仍被擦除，也不会改变对象实际内存布局",
+      "__covariant 与 __contravariant 控制泛型类型的型变方向",
+      "泛型可减少强制转换，但不应依赖它来做运行时的类型校验与安全检查"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n@interface Stack<__covariant ObjectType> : NSObject\n- (void)push:(ObjectType)obj;\n- (ObjectType)pop;\n@end\n@implementation Stack {\n    NSMutableArray *_items;\n}\n- (instancetype)init {\n    if ((self = [super init])) { _items = [NSMutableArray array]; }\n    return self;\n}\n- (void)push:(id)obj { [_items addObject:obj]; }\n- (id)pop {\n    id last = _items.lastObject; if (last) { [_items removeLastObject]; }\n    return last;\n}\n@end\nint main(void) {\n    @autoreleasepool {\n        Stack<NSString *> *s = [Stack new];\n        [s push:@\"a\"]; NSLog(@\"%@\", [s pop]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "以为 NSArray<NSString *> 能阻止放入 NSNumber：泛型只在编译期提示，运行时仍可插入任意对象，读取时才会暴露类型问题。",
+    "q": [
+      {
+        "q": "轻量级泛型在运行时保留吗？",
+        "a": "不保留，会类型擦除"
+      },
+      {
+        "q": "什么关键字表示泛型协变？",
+        "a": "__covariant"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理：NSError、断言与异常",
+    "p": [
+      "Cocoa 惯例用 NSError ** 传出错误，方法返回 BOOL 或 nil 表示失败",
+      "调用前传入 &error，成功后 error 保持 nil，失败时填充原因",
+      "NSAssert 用于开发期检查不变量，发布版可能被编译器移除",
+      "@try/@catch 适合捕获 Objective-C 异常，不应作为常规控制流"
+    ],
+    "c": "#import <Foundation/Foundation.h>\nstatic BOOL parseInteger(NSString *text, NSInteger *out, NSError **error) {\n    NSScanner *scanner = [NSScanner scannerWithString:text];\n    NSInteger value;\n    if ([scanner scanInteger:&value] && scanner.isAtEnd) {\n        *out = value; return YES;\n    }\n    if (error) {\n        *error = [NSError errorWithDomain:@\"ParseError\" code:1 userInfo:@{NSLocalizedDescriptionKey: @\"不是合法整数\"}];\n    }\n    return NO;\n}\nint main(void) {\n    @autoreleasepool {\n        NSInteger value = 0;\n        NSError *err = nil;\n        if (parseInteger(@\"42\", &value, &err)) {\n            NSLog(@\"value=%ld\", (long)value);\n        }\n        if (!parseInteger(@\"x\", &value, &err)) {\n            NSLog(@\"error=%@\", err.localizedDescription);\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 NSError ** 参数传成 NULL 却仍想读取错误：方法不会填充错误对象，调试时拿不到原因；应传入有效 NSError 变量的地址。",
+    "q": [
+      {
+        "q": "NSError ** 参数调用时传什么？",
+        "a": "NSError 变量的地址 &error"
+      },
+      {
+        "q": "开发期断言使用哪个宏？",
+        "a": "NSAssert"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件 I/O：NSString、NSData 与 NSFileManager",
+    "p": [
+      "NSString 提供 writeToFile:atomically:encoding:error: 写入文本",
+      "stringWithContentsOfFile:encoding:error: 读取文本，失败返回 nil",
+      "NSData 用于二进制读写，NSFileManager 负责复制、移动与删除",
+      "临时目录用 NSTemporaryDirectory，沙盒路径用 NSHomeDirectory 拼接"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:@\"demo.txt\"];\n        NSString *content = @\"hello\\nobjective-c\\n\";\n        NSError *error = nil;\n        BOOL ok = [content writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:&error];\n        if (!ok) { NSLog(@\"写入失败: %@\", error); return 1; }\n\n        NSString *read = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];\n        NSLog(@\"内容: %@\", read);\n\n        NSFileManager *fm = [NSFileManager defaultManager];\n        NSLog(@\"存在: %d\", (int)[fm fileExistsAtPath:path]);\n        [fm removeItemAtPath:path error:nil];\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "忽略写入方法的返回值：磁盘满或权限不足时返回 NO 并填充错误，不检查会以为写入成功，后续读取得到空内容。",
+    "q": [
+      {
+        "q": "读取文本文件失败时方法返回什么？",
+        "a": "nil"
+      },
+      {
+        "q": "删除文件用哪个类？",
+        "a": "NSFileManager"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式：NSRegularExpression",
+    "p": [
+      "NSRegularExpression 用 pattern 与 options 创建，需处理 NSError",
+      "matchesInString 返回 NSTextCheckingResult 数组，rangeAtIndex 取捕获组",
+      "stringByReplacingMatchesInString 可按模板批量替换",
+      "复杂正则建议先在小脚本验证，再放进正式代码并补充单元测试用例"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSString *text = @\"电话 010-1234，备用 021-5678\";\n        NSError *error = nil;\n        NSRegularExpression *regex =\n            [NSRegularExpression regularExpressionWithPattern:@\"(\\\\d{3})-(\\\\d{4})\"\n                                                      options:0\n                                                        error:&error];\n        NSArray<NSTextCheckingResult *> *matches =\n            [regex matchesInString:text options:0 range:NSMakeRange(0, text.length)];\n        for (NSTextCheckingResult *m in matches) {\n            NSString *area = [text substringWithRange:[m rangeAtIndex:1]];\n            NSString *num = [text substringWithRange:[m rangeAtIndex:2]];\n            NSLog(@\"%@ => %@\", area, num);\n        }\n        NSString *replaced = [regex stringByReplacingMatchesInString:text\n                                                            options:0\n                                                              range:NSMakeRange(0, text.length)\n                                                       withTemplate:@\"[$1]\"];\n        NSLog(@\"%@\", replaced);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接用 NSRange 截取中文文本：NSRange 以 UTF-16 单元计数，表情与部分汉字会占多个单元；应使用 rangeOfComposedCharacterSequences。",
+    "q": [
+      {
+        "q": "正则匹配结果数组的元素类型是什么？",
+        "a": "NSTextCheckingResult"
+      },
+      {
+        "q": "读取第 1 个捕获组用哪个方法？",
+        "a": "rangeAtIndex:1"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块与包：头文件、CocoaPods 与 SPM",
+    "p": [
+      "#import 保证头文件只被包含一次，Foundation 头文件提供基础类型",
+      "@import Foundation; 使用模块化导入，编译更快且避免宏污染",
+      "CocoaPods 通过 Podfile 管理第三方库，SPM 通过 Package.swift",
+      "公共头文件放在 umbrella header 中，控制对外暴露的 API"
+    ],
+    "c": "// App.h\n#import <Foundation/Foundation.h>\n@interface App : NSObject\n- (void)run;\n@end\n\n// App.m\n#import \"App.h\"\n@implementation App\n- (void)run { NSLog(@\"module ready\"); }\n@end\n\n// main.m\n#import <Foundation/Foundation.h>\n#import \"App.h\"\nint main(void) {\n    @autoreleasepool {\n        [[App new] run];\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在头文件中 import 过多实现细节：会拖慢编译并造成循环依赖；应尽量在 .m 中使用前向声明 @class，头文件只暴露必要类型。",
+    "q": [
+      {
+        "q": "CocoaPods 用什么文件声明依赖？",
+        "a": "Podfile"
+      },
+      {
+        "q": "头文件中如何前向声明一个类？",
+        "a": "@class 类名;"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "编译运行：clang -fobjc-arc -framework Foundation main.m -o app",
+      "依赖管理：CocoaPods 的 pod install 与 Swift Package Manager",
+      "测试框架 XCTest，格式化工具 clang-format，调试器 lldb",
+      "Xcode 提供 xcodebuild 命令行构建与模拟器测试"
+    ],
+    "c": "# 编译与运行（Clang + Foundation）\nclang -fobjc-arc -framework Foundation main.m -o app && ./app\n\n# 依赖管理：CocoaPods\npod init\npod install\n\n# 测试：XCTest（Xcode 中 Cmd+U）\nxcodebuild test -scheme App -destination 'platform=macOS'\n\n# 格式化：clang-format\nclang-format -i Sources/*.m\nclang-format --dry-run --Werror Sources/*.m\n\n# 调试：LLDB\nlldb ./app\n# (lldb) breakpoint set -n main\n# (lldb) run\n\n# 查看 SDK 路径\nxcrun --sdk macosx --show-sdk-path",
+    "et": "❌ 常见错误",
+    "ec": "在 Xcode 项目中手动修改 pbxproj 增加文件：容易破坏工程结构且冲突难解；应通过 Xcode 界面或 xcodeproj 工具管理。",
+    "q": [
+      {
+        "q": "命令行构建 Xcode 项目用什么工具？",
+        "a": "xcodebuild"
+      },
+      {
+        "q": "格式化 Objective-C 代码用什么？",
+        "a": "clang-format"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与异步：GCD 与线程安全",
+    "p": [
+      "GCD 以队列为中心，dispatch_async 把任务提交到后台队列",
+      "dispatch_group 可等待一组任务完成，适合并行聚合",
+      "共享可变状态需加锁，NSLock 或串行队列都可以实现互斥访问",
+      "主队列负责 UI 更新，后台任务完成后应当切回主队列执行更新"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        dispatch_queue_t queue = dispatch_get_global_queue(QOS_CLASS_DEFAULT, 0);\n        dispatch_group_t group = dispatch_group_create();\n        __block NSInteger total = 0;\n        NSLock *lock = [NSLock new];\n\n        for (NSInteger i = 1; i <= 3; i++) {\n            dispatch_group_async(group, queue, ^{\n                [lock lock];\n                total += i;\n                [lock unlock];\n            });\n        }\n        dispatch_group_wait(group, DISPATCH_TIME_FOREVER);\n        NSLog(@\"total=%ld\", (long)total);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在后台队列直接更新 UI：UIKit 不是线程安全的，可能崩溃或界面错乱；任何 UI 操作都必须回到主队列执行。",
+    "q": [
+      {
+        "q": "等待一组 GCD 任务完成用什么？",
+        "a": "dispatch_group_wait"
+      },
+      {
+        "q": "UI 更新应该在哪个队列？",
+        "a": "主队列"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化：内存峰值与缓存",
+    "p": [
+      "循环内使用 autoreleasepool 控制临时对象峰值内存",
+      "字符串拼接优先 NSMutableString，避免反复创建临时 NSString",
+      "NSCache 适合缓存可重建的昂贵对象，内存紧张时自动清理",
+      "用 Instruments 的 Time Profiler 与 Allocations 定位热点"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSMutableString *sb = [NSMutableString string];\n        for (NSInteger i = 0; i < 1000; i++) {\n            [sb appendFormat:@\"%ld,\", (long)i];\n        }\n        NSLog(@\"length=%lu\", (unsigned long)sb.length);\n\n        NSCache<NSString *, NSData *> *cache = [NSCache new];\n        cache.countLimit = 100;\n        [cache setObject:[NSData data] forKey:@\"empty\"];\n        NSLog(@\"cached=%d\", [cache objectForKey:@\"empty\"] != nil);\n\n        @autoreleasepool {\n            for (NSInteger i = 0; i < 10000; i++) {\n                NSString *tmp = [NSString stringWithFormat:@\"item-%ld\", (long)i];\n                (void)tmp;\n            }\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在循环中大量使用 NSString stringWithFormat：会产生大量临时对象并推迟释放，导致内存峰值升高；应使用可变字符串或 autoreleasepool。",
+    "q": [
+      {
+        "q": "控制临时对象峰值内存用什么？",
+        "a": "autoreleasepool"
+      },
+      {
+        "q": "可自动清理的缓存类是什么？",
+        "a": "NSCache"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试：XCTest 单元测试",
+    "p": [
+      "XCTestCase 中每个 test 开头的方法会被自动发现并执行",
+      "XCTAssertEqual、XCTAssertNil、XCTAssertTrue 提供基础断言",
+      "异步测试用 XCTestExpectation 等待回调完成",
+      "xcodebuild test 可在命令行运行测试并生成结果"
+    ],
+    "c": "#import <XCTest/XCTest.h>\n@interface Calculator : NSObject\n- (NSInteger)add:(NSInteger)a with:(NSInteger)b;\n- (NSNumber *)divide:(NSInteger)a by:(NSInteger)b error:(NSError **)error;\n@end\n@implementation Calculator\n- (NSInteger)add:(NSInteger)a with:(NSInteger)b { return a + b; }\n- (NSNumber *)divide:(NSInteger)a by:(NSInteger)b error:(NSError **)error {\n    if (b == 0) { if (error) *error = [NSError errorWithDomain:@\"Calc\" code:1 userInfo:nil]; return nil; }\n    return @(a / b);\n}\n@end\n@interface CalculatorTests : XCTestCase\n@end\n\n@implementation CalculatorTests\n- (void)testAdd { Calculator *calc = [Calculator new]; XCTAssertEqual([calc add:2 with:3], 5); }\n\n- (void)testDivideByZeroReturnsError {\n    Calculator *calc = [Calculator new];\n    NSError *error = nil;\n    XCTAssertNil([calc divide:10 by:0 error:&error]);\n    XCTAssertNotNil(error);\n}\n@end",
+    "et": "❌ 常见错误",
+    "ec": "测试方法没有以 test 开头：XCTest 不会执行它，测试报告显示通过但实际没有任何断言运行执行。",
+    "q": [
+      {
+        "q": "XCTest 如何发现测试方法？",
+        "a": "方法名以 test 开头"
+      },
+      {
+        "q": "异步测试等待回调用什么类？",
+        "a": "XCTestExpectation"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧：NSLog、LLDB 与僵尸对象",
+    "p": [
+      "NSLog 输出对象与格式化信息，适合开发期简单快速定位问题",
+      "lldb 的 po 打印对象、p 打印表达式、bt 查看调用栈",
+      "开启 NSZombieEnabled 可定位过度释放对象的访问",
+      "异常断点与符号断点能在错误发生前暂停程序执行流程，便于检查现场"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSArray *items = @[@\"a\", @\"b\"];\n        NSLog(@\"items=%@\", items);\n\n        NSDictionary *dict = @{@\"k\": @\"v\"};\n        NSLog(@\"dict=%@\", dict);\n\n        @try {\n            [items objectAtIndex:5];\n        } @catch (NSException *e) {\n            NSLog(@\"异常: %@ %@\", e.name, e.reason);\n        }\n\n        // lldb: po items / p (NSInteger)items.count / bt\n        // 开启僵尸对象: NSZombieEnabled=YES\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "只看崩溃日志不开启僵尸对象：过度释放导致的崩溃往往缺少有效堆栈，开启 NSZombieEnabled 才能看到被访问的类名。",
+    "q": [
+      {
+        "q": "lldb 打印对象用什么命令？",
+        "a": "po"
+      },
+      {
+        "q": "查看调用栈用什么命令？",
+        "a": "bt"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "与 C 及系统互操作",
+    "p": [
+      "Objective-C 可直接调用 C 函数与 POSIX API，反之亦然",
+      "runtime 提供 class_copyMethodList、method_exchangeImplementations 等能力",
+      "NSTask 可启动外部进程，NSPipe 用于读取标准输出",
+      "performSelector 可动态调用方法，但要注意 ARC 与参数限制"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n#import <objc/runtime.h>\nint main(void) {\n    @autoreleasepool {\n        NSString *s = @\"hello\";\n        SEL sel = @selector(uppercaseString);\n        if ([s respondsToSelector:sel]) {\n            NSLog(@\"%@\", [s performSelector:sel]);\n        }\n        unsigned int count = 0;\n        Method *methods = class_copyMethodList([NSString class], &count);\n        NSLog(@\"NSString 方法数: %u\", count);\n        free(methods);\n        NSTask *task = [NSTask new];\n        task.executableURL = [NSURL fileURLWithPath:@\"/bin/echo\"];\n        task.arguments = @[@\"hello from NSTask\"];\n        NSPipe *pipe = [NSPipe pipe];\n        task.standardOutput = pipe;\n        [task launchAndReturnError:nil];\n        [task waitUntilExit];\n        NSData *data = [pipe.fileHandleForReading readDataToEndOfFile];\n        NSLog(@\"%@\", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 ARC 下随意使用 performSelector：编译器无法检查返回值所有权，可能产生内存管理警告或泄漏；优先使用 Block 或协议。",
+    "q": [
+      {
+        "q": "获取类的方法列表用哪个 runtime 函数？",
+        "a": "class_copyMethodList"
+      },
+      {
+        "q": "启动外部进程用什么类？",
+        "a": "NSTask"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式：委托、单例与工厂",
+    "p": [
+      "委托模式用 protocol 与 weak 属性解耦回调方与被回调方",
+      "单例用 dispatch_once 或 static 变量保证只初始化一次",
+      "KVO 可观察属性变化，但必须在合适时机移除注册的观察者对象",
+      "工厂方法用类方法返回 instancetype，隐藏具体子类"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n@protocol PaymentStrategy <NSObject>\n- (NSString *)pay:(double)amount;\n@end\n@interface CashPayment : NSObject <PaymentStrategy>\n@end\n@implementation CashPayment\n- (NSString *)pay:(double)amount { return [NSString stringWithFormat:@\"现金支付 %.2f\", amount]; }\n@end\n\n@interface Checkout : NSObject\n@property (nonatomic, strong) id<PaymentStrategy> strategy;\n- (void)checkout:(double)amount;\n@end\n@implementation Checkout\n- (void)checkout:(double)amount { NSLog(@\"%@\", [self.strategy pay:amount]); }\n@end\nint main(void) {\n    @autoreleasepool {\n        Checkout *c = [Checkout new];\n        c.strategy = [CashPayment new];\n        [c checkout:99.5];\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "delegate 属性用 strong：代理对象通常持有被委托对象，强引用会形成循环引用；delegate 应声明为 weak 或 assign。",
+    "q": [
+      {
+        "q": "delegate 属性应该用什么特性？",
+        "a": "weak"
+      },
+      {
+        "q": "单例如何保证只初始化一次？",
+        "a": "dispatch_once 或 static 变量"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问：SQLite3 C API",
+    "p": [
+      "iOS 与 macOS 可用 SQLite3 C API，需链接 libsqlite3",
+      "sqlite3_open 打开数据库，sqlite3_prepare_v2 预编译语句",
+      "sqlite3_bind_* 绑定参数，避免 SQL 注入攻击风险",
+      "sqlite3_step 逐行读取，SQLITE_ROW 表示还有数据"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n#import <sqlite3.h>\nint main(void) {\n    @autoreleasepool {\n        sqlite3 *db = NULL;\n        if (sqlite3_open(\":memory:\", &db) != SQLITE_OK) {\n            NSLog(@\"打开失败\");\n            return 1;\n        }\n        sqlite3_exec(db, \"CREATE TABLE user(id INTEGER PRIMARY KEY, name TEXT)\", NULL, NULL, NULL);\n        sqlite3_stmt *stmt = NULL;\n        sqlite3_prepare_v2(db, \"INSERT INTO user(name) VALUES (?)\", -1, &stmt, NULL);\n        sqlite3_bind_text(stmt, 1, \"Ada\", -1, SQLITE_TRANSIENT);\n        sqlite3_step(stmt);\n        sqlite3_finalize(stmt);\n\n        sqlite3_prepare_v2(db, \"SELECT id, name FROM user\", -1, &stmt, NULL);\n        while (sqlite3_step(stmt) == SQLITE_ROW) {\n            NSLog(@\"%d: %s\", sqlite3_column_int(stmt, 0), (const char *)sqlite3_column_text(stmt, 1));\n        }\n        sqlite3_finalize(stmt);\n        sqlite3_close(db);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入拼进 SQL 字符串：会遭受 SQL 注入；应使用 sqlite3_prepare_v2 加 sqlite3_bind_text 绑定参数。",
+    "q": [
+      {
+        "q": "预编译 SQL 语句用哪个函数？",
+        "a": "sqlite3_prepare_v2"
+      },
+      {
+        "q": "如何判断还有一行结果？",
+        "a": "sqlite3_step 返回 SQLITE_ROW"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP 客户端",
+    "p": [
+      "NSURLSession 是系统 HTTP 客户端，支持数据、下载与上传任务",
+      "dataTaskWithRequest 的回调在后台线程执行，UI 更新需切主线程",
+      "NSJSONSerialization 把 JSON 转为 NSDictionary 或 NSArray",
+      "HTTPS 需满足 ATS 要求，必要时在 Info.plist 配置例外"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSURL *url = [NSURL URLWithString:@\"https://httpbin.org/get\"];\n        NSURLRequest *req = [NSURLRequest requestWithURL:url];\n        dispatch_semaphore_t sem = dispatch_semaphore_create(0);\n\n        NSURLSessionDataTask *task =\n            [[NSURLSession sharedSession] dataTaskWithRequest:req\n                                            completionHandler:^(NSData *data, NSURLResponse *resp, NSError *err) {\n                if (err) {\n                    NSLog(@\"错误: %@\", err.localizedDescription);\n                } else {\n                    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];\n                    NSLog(@\"status=%ld url=%@\", (long)[(NSHTTPURLResponse *)resp statusCode], json[@\"url\"]);\n                }\n                dispatch_semaphore_signal(sem);\n            }];\n        [task resume];\n        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 NSURLSession 回调中直接刷新 UI：回调不在主线程，UIKit 操作会崩溃；应 dispatch_async 到主队列再更新界面。",
+    "q": [
+      {
+        "q": "解析 JSON 用哪个类？",
+        "a": "NSJSONSerialization"
+      },
+      {
+        "q": "发起请求后如何启动任务？",
+        "a": "调用 resume"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程：Keychain、TLS 与参数绑定",
+    "p": [
+      "密码与令牌存入 Keychain，不要放 NSUserDefaults 或明文文件",
+      "网络通信启用 ATS 与 TLS，避免使用明文 HTTP 传输",
+      "SQL 使用参数绑定，输出到 WebView 之前先做转义处理",
+      "敏感日志会泄露凭证，发布版本中应移除所有相关内容或脱敏处理信息"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n#import <CommonCrypto/CommonCrypto.h>\n\nint main(void) {\n    @autoreleasepool {\n        // 密码哈希示例（生产建议 PBKDF2/Argon2，而非裸 SHA）\n        NSData *data = [@\"password\" dataUsingEncoding:NSUTF8StringEncoding];\n        unsigned char digest[CC_SHA256_DIGEST_LENGTH];\n        CC_SHA256(data.bytes, (CC_LONG)data.length, digest);\n        NSMutableString *hex = [NSMutableString string];\n        for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; i++) {\n            [hex appendFormat:@\"%02x\", digest[i]];\n        }\n        NSLog(@\"sha256=%@\", hex);\n\n        // 敏感数据应存入 Keychain\n        // SQL 使用 sqlite3_bind_* 绑定参数，避免拼接\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "把登录令牌保存在 NSUserDefaults：该存储是明文 plist，越狱设备或备份中可被读取；应使用 Keychain 并设置访问策略。",
+    "q": [
+      {
+        "q": "敏感令牌应该存在哪里？",
+        "a": "Keychain"
+      },
+      {
+        "q": "iOS 网络默认要求使用什么协议？",
+        "a": "ATS 强制 HTTPS"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行文件统计工具",
+    "p": [
+      "main 函数通过 argc 与 argv 接收命令行参数输入",
+      "用 NSString stringWithUTF8String 把 C 字符串转为 NSString",
+      "读取文件内容并统计行数、字节数，错误信息写入标准错误 stderr",
+      "退出码通过 return 返回，非零值表示程序运行失败状态码"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(int argc, const char *argv[]) {\n    @autoreleasepool {\n        if (argc < 2) {\n            fprintf(stderr, \"用法: %s FILE...\\n\", argv[0]);\n            return 1;\n        }\n        for (int i = 1; i < argc; i++) {\n            NSString *path = [NSString stringWithUTF8String:argv[i]];\n            NSError *error = nil;\n            NSString *content = [NSString stringWithContentsOfFile:path\n                                                          encoding:NSUTF8StringEncoding\n                                                             error:&error];\n            if (!content) {\n                fprintf(stderr, \"读取失败: %s\\n\", error.localizedDescription.UTF8String);\n                continue;\n            }\n            NSUInteger lines = [[content componentsSeparatedByString:@\"\\n\"] count] - 1;\n            printf(\"%lu\\t%lu\\t%s\\n\", (unsigned long)lines, (unsigned long)content.length, argv[i]);\n        }\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接访问 argv[1] 而不检查 argc：没有参数时会越界读取，可能崩溃或得到随机数据；应先判断 argc 是否足够。",
+    "q": [
+      {
+        "q": "argc 与 argv 分别表示什么？",
+        "a": "参数个数与参数字符串数组"
+      },
+      {
+        "q": "程序失败时返回什么退出码？",
+        "a": "非零值，例如 1"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：GCDWebServer 提供 Web 服务",
+    "p": [
+      "Objective-C 常用 GCDWebServer 或 Swift 的 Vapor 搭建 HTTP 服务",
+      "addGETHandlerForPath 注册路由，Block 返回响应对象",
+      "GCDWebServerDataResponse 可直接返回文本或 JSON",
+      "启动后需运行 RunLoop，否则主线程退出后服务会随之停止"
+    ],
+    "c": "// 借助 GCDWebServer（CocoaPods: pod 'GCDWebServer'）\n#import <Foundation/Foundation.h>\n#import \"GCDWebServer.h\"\n#import \"GCDWebServerDataResponse.h\"\n\nint main(void) {\n    @autoreleasepool {\n        GCDWebServer *server = [[GCDWebServer alloc] init];\n        [server addGETHandlerForPath:@\"/hello\"\n                     defaultResponse:^GCDWebServerResponse *(GCDWebServerRequest *request) {\n            return [GCDWebServerDataResponse responseWithText:@\"Hello from Objective-C!\"];\n        }];\n        BOOL ok = [server startWithPort:8080 bonjourName:nil];\n        NSLog(@\"started=%d url=%@\", (int)ok, server.serverURL);\n        [[NSRunLoop currentRunLoop] run];\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "启动服务器后 main 函数直接返回：进程结束，服务随之停止；应调用 RunLoop run 保持主线程存活。",
+    "q": [
+      {
+        "q": "GCDWebServer 如何注册 GET 路由？",
+        "a": "addGETHandlerForPath:defaultResponse:"
+      },
+      {
+        "q": "为什么启动后要运行 RunLoop？",
+        "a": "保持主线程存活，服务才能持续响应"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "命令行工具用 clang 编译，Xcode 项目用 xcodebuild 构建",
+      "CocoaPods 依赖用 pod install 还原，SPM 由 Xcode 自动解析",
+      "macOS 分发需要 codesign 签名与 notarytool 公证",
+      "iOS 发布通过 Archive 上传 App Store Connect 或 TestFlight"
+    ],
+    "c": "# 命令行工具编译\nclang -fobjc-arc -framework Foundation main.m -o app\n\n# Xcode 构建\nxcodebuild -project App.xcodeproj -scheme App -configuration Release build\n\n# CocoaPods 依赖还原\npod install --repo-update\n\n# 代码签名与公证（macOS 分发）\ncodesign --deep --force --sign \"Developer ID Application: XXX\" App.app\nxcrun notarytool submit App.zip --keychain-profile profile --wait\n\n# 检查架构\nlipo -info App.app/Contents/MacOS/App",
+    "et": "❌ 常见错误",
+    "ec": "分发前未做公证：macOS Gatekeeper 会阻止用户打开应用；应使用 Developer ID 签名并通过 notarytool 提交公证。",
+    "q": [
+      {
+        "q": "macOS 公证使用什么工具？",
+        "a": "xcrun notarytool"
+      },
+      {
+        "q": "查看可执行文件架构用什么？",
+        "a": "lipo -info"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "属性特性与语义匹配：copy、strong、weak、assign 不可乱用",
+      "初始化方法返回 instancetype，并使用 NS_DESIGNATED_INITIALIZER",
+      "公开头文件使用 nullability 标注，明确指针的可空性",
+      "遵循 Apple 命名规范，类名加前缀，方法名清晰表达设计意图"
+    ],
+    "c": "#import <Foundation/Foundation.h>\nNS_ASSUME_NONNULL_BEGIN\n@interface Account : NSObject\n@property (nonatomic, copy, readonly) NSString *owner;\n@property (nonatomic, assign) NSInteger balance;\n- (instancetype)initWithOwner:(NSString *)owner NS_DESIGNATED_INITIALIZER;\n- (instancetype)init NS_UNAVAILABLE;\n@end\n@implementation Account\n- (instancetype)initWithOwner:(NSString *)owner {\n    self = [super init];\n    if (self) { _owner = [owner copy]; }\n    return self;\n}\n@end\nNS_ASSUME_NONNULL_END\nint main(void) {\n    @autoreleasepool {\n        Account *a = [[Account alloc] initWithOwner:@\"Ada\"];\n        a.balance = 100;\n        NSLog(@\"%@: %ld\", a.owner, (long)a.balance);\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "给对象属性使用 assign：对象释放后指针不会置空，后续访问会崩溃；对象属性应使用 strong、copy 或 weak。",
+    "q": [
+      {
+        "q": "对象属性为什么不能用 assign？",
+        "a": "释放后指针不置空，容易野指针崩溃"
+      },
+      {
+        "q": "初始化方法返回类型推荐什么？",
+        "a": "instancetype"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "先掌握消息发送、属性与内存管理，再学习协议、Block 与运行时",
+      "深入 Foundation、GCD、RunLoop 与 runtime 机制",
+      "工程化补齐 CocoaPods/SPM、XCTest、签名与公证",
+      "可转向 Swift 或继续维护 Objective-C 存量项目"
+    ],
+    "c": "#import <Foundation/Foundation.h>\n\nint main(void) {\n    @autoreleasepool {\n        NSArray *roadmap = @[\n            @\"语法：消息发送、属性、协议\",\n            @\"内存：ARC、强弱引用、循环引用\",\n            @\"并发：GCD、NSOperationQueue\",\n            @\"工程：CocoaPods/SPM、XCTest、CI\"\n        ];\n        [roadmap enumerateObjectsUsingBlock:^(NSString *step, NSUInteger idx, BOOL *stop) {\n            NSLog(@\"%lu. %@\", (unsigned long)idx + 1, step);\n        }];\n        NSLog(@\"下一步：维护一个 iOS/macOS 小项目并接入单元测试\");\n    }\n    return 0;\n}",
+    "et": "❌ 常见错误",
+    "ec": "只学语法不看内存管理：ARC 下仍有循环引用与过度释放问题；理解强弱引用与 Block 捕获是写好 Objective-C 的关键。",
+    "q": [
+      {
+        "q": "ARC 下还需要关心内存吗？",
+        "a": "需要，循环引用与 Block 捕获仍需管理"
+      },
+      {
+        "q": "Objective-C 开发者常转向哪门语言？",
+        "a": "Swift"
+      }
+    ]
+  }
+]

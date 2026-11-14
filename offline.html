@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>离线 - 编程语言教程</title>
+    <meta name="theme-color" content="#667eea">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #1f2937;
+        }
+        .card {
+            width: min(460px, 100%);
+            background: #fff;
+            border-radius: 20px;
+            padding: 36px 30px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, .25);
+            text-align: center;
+        }
+        .icon { font-size: 3.4rem; margin-bottom: 12px; }
+        h1 { margin: 0 0 10px; font-size: 1.5rem; }
+        p { margin: 0 0 22px; color: #6b7280; line-height: 1.65; }
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        a, button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 11px 20px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            font-size: .95rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .primary { background: #667eea; color: #fff; }
+        .primary:hover { background: #5568d3; }
+        .ghost { background: #eef1f8; color: #1f2937; border-color: #e5e7eb; }
+        .ghost:hover { border-color: #667eea; color: #667eea; }
+        .hint { margin-top: 20px; font-size: .8rem; color: #9ca3af; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <div class="icon">📡</div>
+        <h1>当前处于离线状态</h1>
+        <p>网络暂时不可用。已缓存的教程页面、学习路线和每日 5 题仍然可以打开；在线运行代码需要联网。</p>
+        <div class="actions">
+            <a class="primary" href="programming-languages-tutorial.html">回到教程</a>
+            <button class="ghost" type="button" onclick="location.reload()">重试</button>
+        </div>
+        <p class="hint">提示：在线运行依赖 Piston / Judge0，离线时请先跳过。</p>
+    </main>
+</body>
+</html>

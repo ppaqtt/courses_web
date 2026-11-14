@@ -1,0 +1,653 @@
+window.TUTORIAL_DATA_rust = 
+[
+  {
+    "id": 1,
+    "t": "Rust简介",
+    "p": [
+      "Rust的诞生：Rust由Mozilla研究院开发，2015年发布1.0版本，旨在解决系统编程中的内存安全问题",
+      "核心设计理念：内存安全（无GC）、零成本抽象、并发安全、高性能",
+      "适用场景：操作系统、嵌入式、WebAssembly、网络服务、CLI工具",
+      "语言特点：所有权系统、模式匹配、类型推断、错误处理、模块化"
+    ],
+    "c": "// Rust的核心优势演示\nfn main() {\n    // 内存安全 - 编译时保证，无需垃圾回收\n    let data = vec![1, 2, 3, 4, 5];\n    \n    // 零成本抽象 - 高级写法无运行时开销\n    let sum: i32 = data.iter().map(|x| x * 2).sum();\n    println!(\"求和结果: {}\", sum);\n    \n    // 并发安全 - 编译器检查数据竞争\n    let message = String::from(\"Hello, Rust!\");\n    println!(\"{}\", message);\n}",
+    "et": "常见错误",
+    "ec": "认为Rust有垃圾回收器：Rust通过所有权系统在编译时管理内存，无需GC，性能可预测\n认为Rust只能写底层系统程序：Rust也适合Web后端(actix-web/axum)、CLI工具、WASM前端等",
+    "q": [
+      "Rust通过什么机制保证内存安全（而非GC）？",
+      "Rust的三大核心特性是什么？",
+      "Rust适合哪些应用场景？"
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与Cargo",
+    "p": [
+      "rustup：使用rustup安装和管理Rust工具链，支持stable/beta/nightly通道",
+      "Cargo：Rust的构建系统和包管理器，相当于npm/pip的角色",
+      "Cargo.toml：项目配置文件，定义依赖和元信息",
+      "Cargo.lock：锁定依赖版本，确保构建可复现"
+    ],
+    "c": "# 安装Rust (Linux/macOS)\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n\n# 验证安装\nrustc --version    # 编译器版本\ncargo --version    # Cargo版本\nrustup update      # 更新工具链\n\n# 创建新项目\ncargo new my_project\ncd my_project\n\n# 常用Cargo命令\ncargo build          # 编译项目\ncargo run            # 编译并运行\ncargo test           # 运行测试\ncargo check          # 快速检查(不生成二进制)\ncargo build --release # 发布优化构建",
+    "et": "常见错误",
+    "ec": "安装后直接运行rustc提示找不到命令：需要重新打开终端或运行 source $HOME/.cargo/env 使PATH生效\ncargo run报错找不到main.rs：确保在项目根目录(含Cargo.toml)下执行命令",
+    "q": [
+      "cargo check 和 cargo build 的区别是什么？",
+      "如何创建一个新的Rust项目？",
+      "Cargo.toml 和 Cargo.lock 的作用分别是什么？"
+    ]
+  },
+  {
+    "id": 3,
+    "t": "第一个Rust程序",
+    "p": [
+      "fn main()：程序入口点，每个可执行Rust程序必须有一个",
+      "println!：宏(注意感叹号)，用于格式化输出到标准输出",
+      "分号规则：Rust代码以分号结尾，表达式末尾加分号变成语句",
+      "缩进：使用4个空格(非Tab)，这是Rust官方风格"
+    ],
+    "c": "fn main() {\n    println!(\"Hello, World!\");\n    \n    // 带变量的格式化输出\n    let name = \"Rust\";\n    let year = 2015;\n    println!(\"{}发布于{}\", name, year);\n    \n    // 位置参数和命名参数\n    println!(\"{0}说:{1}, {0}!\", \"Alice\", \"你好\");\n    println!(\"{subject} {verb} {object}\",\n        subject=\"我\", verb=\"学习\", object=\"Rust\");\n    \n    // 调试输出\n    let v = vec![1, 2, 3];\n    println!(\"向量: {:?}\", v);\n}",
+    "et": "常见错误",
+    "ec": "fn main() 缺少括号或花括号：Rust函数定义必须有完整签名: fn main() { ... }\nprintln! 写成 println (缺少感叹号)：println!是宏不是函数，感叹号是宏调用的标志，不可省略",
+    "q": [
+      "编写程序输出\"我爱Rust\"",
+      "使用位置参数输出\"Hello Rust World\"",
+      "使用命名参数输出一句话"
+    ]
+  },
+  {
+    "id": 4,
+    "t": "注释与格式化输出",
+    "p": [
+      "单行注释：使用 //，编译器会忽略",
+      "多行注释：使用 /* */，支持嵌套",
+      "文档注释：使用 /// 和 //!，支持Markdown语法",
+      "格式化输出：println!支持多种格式化方式，如{}、{:?}、{:#?}等"
+    ],
+    "c": "/// 这是一个文档注释 - 计算两数之和\n/// # Examples\n/// ```\n/// let result = add(2, 3);\n/// assert_eq!(result, 5);\n/// ```\nfn add(a: i32, b: i32) -> i32 {\n    // 单行注释\n    a + b /* 内联多行注释 */ + 0\n}\n\nfn main() {\n    let pi = 3.14159265;\n    \n    // 基本格式化\n    println!(\"圆周率: {}\", pi);\n    \n    // 宽度与对齐\n    println!(\"左对齐: {:<10}\", \"Rust\");\n    println!(\"右对齐: {:>10}\", \"Rust\");\n    println!(\"居中:   {:^10}\", \"Rust\");\n    \n    // 精度控制\n    println!(\"保留2位: {:.2}\", pi);\n    \n    // 数字进制\n    println!(\"十进制: {}\", 42);\n    println!(\"二进制: {:b}\", 42);\n    println!(\"十六进制: {:x}\", 42);\n}",
+    "et": "常见错误",
+    "ec": "文档注释 /// 写在了函数后面：文档注释必须紧跟在被注释项的上方\n对自定义类型使用{:?}报错：需要为类型派生Debug trait: #[derive(Debug)]",
+    "q": [
+      "如何让自定义结构体支持{:?}输出？",
+      "格式化输出圆周率，保留4位小数",
+      "分别用二进制、八进制、十六进制输出数字255"
+    ]
+  },
+  {
+    "id": 5,
+    "t": "变量与可变性",
+    "p": [
+      "let声明：默认创建不可变变量，这是Rust的安全基石",
+      "let mut：声明可变变量，可以修改其值",
+      "const：声明编译时常量，必须标注类型，命名用SCREAMING_SNAKE_CASE",
+      "变量遮蔽：允许用let重新声明同名变量，类型可以不同"
+    ],
+    "c": "fn main() {\n    // 不可变变量(默认)\n    let x = 5;\n    // x = 10; // 错误！不能对不可变变量赋值\n    \n    // 可变变量\n    let mut y = 10;\n    y = 20; // 正确\n    println!(\"y = {}\", y);\n    \n    // 常量\n    const MAX_POINTS: u32 = 100_000;\n    println!(\"最大分数: {}\", MAX_POINTS);\n    \n    // 变量遮蔽(shadowing)\n    let z = 5;\n    let z = z + 1; // 遮蔽，新变量z\n    let z = z * 2;  // 再次遮蔽\n    let z = \"现在是字符串\"; // 类型也可以变！\n    println!(\"z = {}\", z);\n}",
+    "et": "常见错误",
+    "ec": "let x = 5; x = 10; // 对不可变变量重新赋值：使用 let mut x = 5; 或通过遮蔽 let x = 10;\nconst X = 5; // 常量缺少类型标注：常量必须标注类型: const X: i32 = 5;",
+    "q": [
+      "变量遮蔽(shadowing)和mut的关键区别？",
+      "声明一个可变变量并修改其值",
+      "声明一个常量并使用它"
+    ]
+  },
+  {
+    "id": 6,
+    "t": "数据类型",
+    "p": [
+      "整数类型：i8-i128(有符号)、u8-u128(无符号)，默认i32",
+      "浮点类型：f32(单精度)、f64(双精度)，默认f64",
+      "布尔类型：bool，值为true或false",
+      "字符类型：char是4字节Unicode标量值，可以存储emoji和中文字符",
+      "复合类型：元组(tuple)和数组(array)，大小固定"
+    ],
+    "c": "fn main() {\n    // 整数类型\n    let a: i32 = -42;\n    let b: u8 = 255;\n    let c = 0xff;       // 十六进制\n    let d = 0o77;       // 八进制\n    let e = 0b1111_0000; // 二进制\n    let f = 1_000_000;  // 数字分隔符\n    \n    // 浮点类型\n    let x: f64 = 2.0;\n    let y: f32 = 3.0;\n    \n    // 布尔类型\n    let t: bool = true;\n    let f_val: bool = false;\n    \n    // 字符类型(Unicode)\n    let c1: char = 'z';\n    let c2: char = '中';\n    let c3: char = '🐘';\n    \n    // 元组\n    let tup: (i32, f64, char) = (500, 6.4, 'y');\n    let (x_val, y_val, z_val) = tup; // 解构\n    \n    // 数组(固定长度，相同类型)\n    let arr: [i32; 5] = [1, 2, 3, 4, 5];\n    let zeros = [0; 10]; // [0,0,0,0,0,0,0,0,0,0]\n}",
+    "et": "常见错误",
+    "ec": "let arr = [1, 2, 3]; let x = arr[3]; // 越界：数组索引从0开始，长度3的数组最大索引为2\nlet x: i32 = 3.14; // 浮点赋给整数类型：类型必须匹配: let x: f64 = 3.14;",
+    "q": [
+      "Rust中默认的整数类型和浮点类型？",
+      "声明一个包含5个i32元素的数组",
+      "声明一个元组并解构它"
+    ]
+  },
+  {
+    "id": 7,
+    "t": "类型转换",
+    "p": [
+      "as关键字：用于基本数值类型之间的显式转换，可能丢失精度",
+      "From/Into trait：提供安全的类型转换，是Rust惯用方式",
+      "TryFrom/TryInto：用于可能失败的转换，返回Result",
+      "parse：字符串转换为数值类型，返回Result"
+    ],
+    "c": "fn main() {\n    // as 关键字显式转换\n    let a: i32 = 42;\n    let b: f64 = a as f64;\n    let c: u8 = a as u8; // 截断\n    println!(\"i32->f64: {}, i32->u8: {}\", b, c);\n    \n    // 数值精度损失\n    let x: f64 = 3.99;\n    let y: i32 = x as i32; // 3, 丢失小数部分\n    println!(\"f64->i32: {}\", y);\n    \n    // From/Into trait\n    let s = String::from(\"hello\");\n    let n: i32 = i32::from(42u8);\n    \n    // TryFrom (可能失败的转换)\n    use std::convert::TryFrom;\n    let big: i32 = 300;\n    match u8::try_from(big) {\n        Ok(v) => println!(\"转换成功: {}\", v),\n        Err(e) => println!(\"转换失败: {}\", e),\n    }\n    \n    // 字符串与数值转换\n    let num: i32 = \"42\".parse().unwrap();\n    let s = 42i32.to_string();\n    println!(\"parse: {}, to_string: {}\", num, s);\n}",
+    "et": "常见错误",
+    "ec": "let x: i32 = 3.14; // 隐式转换：Rust不允许隐式转换，必须显式: let x: i32 = 3.14 as i32;\n\"hello\".parse::().unwrap() // 解析失败会panic：使用match或?处理可能的错误",
+    "q": [
+      "如何安全地将字符串转为整数？",
+      "将f64转换为i32会发生什么？",
+      "使用TryFrom将i32转换为u8，处理可能的错误"
+    ]
+  },
+  {
+    "id": 8,
+    "t": "运算符",
+    "p": [
+      "算术运算符：+, -, *, /, %，整数除法截断(非四舍五入)",
+      "比较运算符：==, !=, , =，返回bool",
+      "逻辑运算符：&&, ||, !，支持短路求值",
+      "位运算符：&, |, ^, !, >，操作二进制位"
+    ],
+    "c": "fn main() {\n    // 算术运算\n    let sum = 5 + 10;\n    let diff = 95.5 - 4.3;\n    let product = 4 * 30;\n    let quotient = 56.7 / 32.2;\n    let remainder = 43 % 5;\n    println!(\"商: {}, 余: {}\", quotient, remainder);\n    \n    // 比较运算\n    let a = 5;\n    println!(\"5 == 5: {}\", a == 5);\n    println!(\"5 != 3: {}\", a != 3);\n    \n    // 逻辑运算(短路求值)\n    let x = true;\n    let y = false;\n    println!(\"true && false: {}\", x && y);\n    println!(\"true || false: {}\", x || y);\n    \n    // 位运算\n    println!(\"1 & 2 = {}\", 1 & 2);   // 0\n    println!(\"1 | 2 = {}\", 1 | 2);   // 3\n    println!(\"1 << 3 = {}\", 1u32 << 3); // 8\n    println!(\"16 >> 2 = {}\", 16u32 >> 2); // 4\n}",
+    "et": "常见错误",
+    "ec": "let x = 5 / 0; // 整数除以零：整数除以零会在运行时panic，需先检查除数是否为零\nif x = 5 {} // 用=做比较：比较用==，=是赋值运算符: if x == 5 {}",
+    "q": [
+      "7 / 2 的结果是什么？",
+      "使用位运算判断一个数是否为偶数",
+      "解释短路求值是什么"
+    ]
+  },
+  {
+    "id": 9,
+    "t": "if表达式",
+    "p": [
+      "if是表达式：可以返回值绑定到变量",
+      "条件必须是bool：不支持隐式转换为bool",
+      "分支类型一致：if/else if/else分支中返回的值类型必须一致",
+      "无需括号：if后不需要括号(加了也没错，但不符合Rust风格)"
+    ],
+    "c": "fn main() {\n    let number = 6;\n    \n    // 基本if-else\n    if number > 10 {\n        println!(\"大于10\");\n    } else if number > 5 {\n        println!(\"大于5\");\n    } else {\n        println!(\"5或更小\");\n    }\n    \n    // if是表达式，可以用在let右侧\n    let condition = true;\n    let x = if condition { 5 } else { 6 };\n    println!(\"x = {}\", x);\n    \n    // 在循环中使用if表达式\n    let mut count = 0;\n    let max = if true { 10 } else { 5 };\n    while count < max {\n        count += 1;\n    }\n    println!(\"count = {}\", count);\n}",
+    "et": "常见错误",
+    "ec": "if 1 { } // 非bool条件：条件必须是bool: if 1 != 0 { } 或 if true { }\nlet x = if true { 5 } else { \"six\" }; // 类型不一致：if各分支返回值类型必须一致",
+    "q": [
+      "Rust中if是语句还是表达式？有什么含义？",
+      "使用if表达式判断一个数是正数、负数还是零",
+      "使用if表达式返回两个数中的较大值"
+    ]
+  },
+  {
+    "id": 10,
+    "t": "循环(loop/while/for)",
+    "p": [
+      "loop：创建无限循环，通过break退出，可返回值",
+      "while：在条件为true时循环，条件为bool表达式",
+      "for：遍历迭代器，是Rust中最常用和最安全的循环",
+      "Range：1..5是不含5，1..=5包含5"
+    ],
+    "c": "fn main() {\n    // loop - 无限循环\n    let mut counter = 0;\n    let result = loop {\n        counter += 1;\n        if counter == 10 {\n            break counter * 2; // loop可以返回值\n        }\n    };\n    println!(\"loop结果: {}\", result);\n    \n    // while - 条件循环\n    let mut num = 3;\n    while num != 0 {\n        println!(\"倒计时: {}!\", num);\n        num -= 1;\n    }\n    \n    // for - 遍历循环(推荐)\n    let arr = [10, 20, 30, 40, 50];\n    for element in arr.iter() {\n        println!(\"值: {}\", element);\n    }\n    \n    // Range\n    for i in 1..5 {    // 1,2,3,4\n        println!(\"i = {}\", i);\n    }\n    for i in 1..=5 {   // 1,2,3,4,5\n        println!(\"i = {}\", i);\n    }\n    \n    // 反向遍历\n    for i in (1..4).rev() {\n        println!(\"rev: {}\", i);\n    }\n}",
+    "et": "常见错误",
+    "ec": "for i in 0..arr.len() { arr[i] } // C风格遍历：Rust惯用: for elem in arr.iter() { ... }\nwhile 1 { } // 条件不是bool：while条件必须是bool: while true { }",
+    "q": [
+      "1..5 和 1..=5 的区别？",
+      "使用for循环计算1到100的和",
+      "使用loop循环实现斐波那契数列"
+    ]
+  },
+  {
+    "id": 11,
+    "t": "break与continue",
+    "p": [
+      "break：退出当前循环，loop中的break可携带返回值",
+      "break标签：配合标签退出外层循环(嵌套循环)",
+      "continue：跳过当前迭代，进入下一次循环",
+      "循环标签：用'label:语法定义，用于多层循环控制"
+    ],
+    "c": "fn main() {\n    // break退出循环\n    let mut count = 0;\n    loop {\n        if count == 5 { break; }\n        count += 1;\n    }\n    \n    // break返回值\n    let result = loop {\n        count += 1;\n        if count > 10 { break count; }\n    };\n    println!(\"break返回: {}\", result);\n    \n    // continue跳过当前迭代\n    for i in 1..=10 {\n        if i % 2 == 0 { continue; } // 跳过偶数\n        println!(\"奇数: {}\", i);\n    }\n    \n    // 标签break退出外层循环\n    let mut found = false;\n    'outer: for i in 0..5 {\n        for j in 0..5 {\n            if i * j == 6 {\n                println!(\"找到: {}*{}=6\", i, j);\n                break 'outer; // 退出外层循环\n            }\n        }\n    }\n}",
+    "et": "常见错误",
+    "ec": "在while/for的break中返回值：只有loop的break可以返回值，for/while的break仅退出循环\n忘记标签引号: outer: 而非 'outer:: 标签语法必须带单引号前缀: 'label:",
+    "q": [
+      "哪种循环的break可以返回值？",
+      "使用continue跳过奇数，打印1到10的偶数",
+      "使用标签break退出嵌套循环"
+    ]
+  },
+  {
+    "id": 12,
+    "t": "所有权规则",
+    "p": [
+      "规则1：每个值有且只有一个所有者(owner)",
+      "规则2：同一时刻，值只能有一个所有者(移动语义)",
+      "规则3：当所有者离开作用域，值自动被丢弃(drop)",
+      "Copy语义：基本标量类型实现Copy，赋值时自动复制"
+    ],
+    "c": "fn main() {\n    // 规则1: 每个值有所有者\n    let s1 = String::from(\"hello\"); // s1拥有\"hello\"\n    \n    // 规则2: 移动语义 - 所有权转移\n    let s2 = s1; // s1的所有权移动到s2\n    // println!(\"{}\", s1); // 错误！s1已失效\n    \n    // clone深拷贝\n    let s3 = String::from(\"world\");\n    let s4 = s3.clone(); // 深拷贝，两个独立所有者\n    println!(\"s3: {}, s4: {}\", s3, s4);\n    \n    // 栈上数据: Copy语义(自动复制)\n    let x = 5;\n    let y = x; // i32实现了Copy trait，x仍然有效\n    println!(\"x: {}, y: {}\", x, y);\n    \n    // 规则3: 作用域结束时自动drop\n    {\n        let s = String::from(\"inside\");\n        println!(\"{}\", s);\n    } // s在这里被drop，内存释放\n}",
+    "et": "常见错误",
+    "ec": "let s2 = s1; println!(\"{}\", s1); // 使用已移动的值：使用引用&或clone\n在函数中传递所有权后继续使用原变量：函数可以返回所有权，或使用引用借用",
+    "q": [
+      "String移动后原变量为什么不能使用？",
+      "i32赋值后原变量为什么仍然可用？",
+      "解释Copy和Clone的区别"
+    ]
+  },
+  {
+    "id": 13,
+    "t": "引用与借用",
+    "p": [
+      "引用&：允许使用值而不获取所有权，称为\"借用\"",
+      "不可变引用& T：可读不可写，同一时刻可有多个",
+      "可变引用&mut T：可读可写，同一时刻只能有一个",
+      "NLL规则：不可变引用和可变引用不能同时存在"
+    ],
+    "c": "fn calculate_length(s: &String) -> usize {\n    s.len() // 借用s，不获取所有权\n} // s离开作用域，但因为它不拥有所有权，不会drop原值\n\nfn append_world(s: &mut String) {\n    s.push_str(\", world\"); // 可变借用，可以修改\n}\n\nfn main() {\n    let mut s = String::from(\"hello\");\n    \n    // 不可变借用\n    let len = calculate_length(&s);\n    println!(\"'{}' 长度: {}\", s, len); // s仍然有效\n    \n    // 可变借用\n    append_world(&mut s);\n    println!(\"{}\", s); // \"hello, world\"\n    \n    // 多个不可变引用 - OK\n    let r1 = &s;\n    let r2 = &s;\n    println!(\"r1: {}, r2: {}\", r1, r2);\n    \n    // 可变引用与不可变引用不能同时存在\n    // let r3 = &mut s; // 错误！r1/r2仍存在\n}",
+    "et": "常见错误",
+    "ec": "同时存在可变引用和不可变引用：在可变引用之前，不可变引用最后一次使用必须已结束(NLL)\n同一作用域创建两个可变引用：可变引用具有独占性，同一时刻只能有一个",
+    "q": [
+      "不可变引用和可变引用的核心区别？",
+      "为什么可变引用具有独占性？",
+      "编写一个函数，通过引用修改字符串"
+    ]
+  },
+  {
+    "id": 14,
+    "t": "切片",
+    "p": [
+      "切片(slice)：是引用一段连续序列的视图，不拥有所有权",
+      "字符串切片&str：String的部分引用，范围用[开始..结束]",
+      "数组切片&[T]：数组的部分引用，语法类似字符串切片",
+      "范围省略：[..]全部，[2..]从2到末尾，[..4]从0到4"
+    ],
+    "c": "fn first_word(s: &str) -> &str {\n    let bytes = s.as_bytes();\n    for (i, &item) in bytes.iter().enumerate() {\n        if item == b' ' {\n            return &s[0..i];\n        }\n    }\n    &s[..]\n}\n\nfn main() {\n    // 字符串切片\n    let s = String::from(\"hello world\");\n    let hello = &s[0..5];   // \"hello\"\n    let world = &s[6..11];  // \"world\"\n    let all = &s[..];       // \"hello world\"\n    let from6 = &s[6..];    // \"world\"\n    println!(\"{} {}\", hello, world);\n    \n    // 字符串字面量就是切片\n    let literal: &str = \"我是切片\";\n    \n    // 函数签名用&str更通用\n    let word = first_word(&s);\n    let word2 = first_word(\"hello rust\");\n    println!(\"第一个词: {}\", word2);\n    \n    // 数组切片\n    let arr = [1, 2, 3, 4, 5];\n    let slice = &arr[1..3]; // [2, 3]\n    println!(\"切片: {:?}\", slice);\n}",
+    "et": "常见错误",
+    "ec": "按字节切片UTF-8多字节字符：&s[0..3]可能切到字符中间，使用.chars()迭代Unicode字符\n切片索引越界：&s[0..100] 切片范围不能超过原字符串长度",
+    "q": [
+      "String和&str的区别？",
+      "编写一个函数获取字符串的最后一个词",
+      "创建一个数组切片并打印"
+    ]
+  },
+  {
+    "id": 15,
+    "t": "字符串",
+    "p": [
+      "String：堆分配的可增长UTF-8字符串",
+      "&str：不可变字符串切片",
+      "+运算符：拼接字符串会获取左侧所有权",
+      "format!宏：不获取所有权的字符串拼接方式",
+      "UTF-8编码：Rust字符串是UTF-8编码，不支持直接索引"
+    ],
+    "c": "fn main() {\n    // 创建String\n    let mut s = String::new();\n    s.push_str(\"hello\");\n    s.push('!');\n    println!(\"{}\", s);\n    \n    let s1 = String::from(\"hello\");\n    let s2 = \"world\".to_string();\n    \n    // 拼接\n    let s3 = s1 + &s2; // s1被移动，s2被借用\n    println!(\"{}\", s3);\n    \n    let s4 = format!(\"{}-{}\", \"hello\", \"world\");\n    println!(\"{}\", s4);\n    \n    // 遍历\n    let s = \"你好Rust\";\n    for c in s.chars() {\n        println!(\"字符: {}\", c);\n    }\n    \n    // 常用方法\n    let s = String::from(\"hello world\");\n    println!(\"长度: {}\", s.len());\n    println!(\"包含'world': {}\", s.contains(\"world\"));\n    println!(\"替换: {}\", s.replace(\"world\", \"Rust\"));\n}",
+    "et": "常见错误",
+    "ec": "let c = s[0]; // 对字符串直接索引：字符串不支持直接索引，用 s.chars().nth(0)\nlet s3 = s1 + s2; // 两个String相加：+右侧必须是&str: s1 + &s2",
+    "q": [
+      "如何不获取所有权地拼接两个字符串？",
+      "如何遍历字符串的每个字符？",
+      "字符串的常用方法有哪些？"
+    ]
+  },
+  {
+    "id": 16,
+    "t": "结构体",
+    "p": [
+      "具名字段struct：struct Name { field: Type }",
+      "元组struct：struct Color(i32, i32, i32)",
+      "单元struct：struct AlwaysEqual",
+      "字段简写：当变量名与字段名相同时可省略",
+      "更新语法：..other复制其他字段"
+    ],
+    "c": "#[derive(Debug)]\nstruct User {\n    username: String,\n    email: String,\n    sign_in_count: u64,\n    active: bool,\n}\n\n// 元组结构体\nstruct Color(i32, i32, i32);\n// 单元结构体(无字段)\nstruct AlwaysEqual;\n\nfn build_user(email: String, username: String) -> User {\n    User {\n        email,      // 字段简写\n        username,\n        active: true,\n        sign_in_count: 1,\n    }\n}\n\nfn main() {\n    let mut user1 = build_user(\n        String::from(\"a@b.com\"),\n        String::from(\"alice\"),\n    );\n    user1.email = String::from(\"new@b.com\");\n    \n    // 结构体更新语法\n    let user2 = User {\n        email: String::from(\"bob@b.com\"),\n        ..user1 // 其余字段从user1复制\n    };\n    \n    // 元组结构体\n    let red = Color(255, 0, 0);\n    println!(\"R: {}\", red.0);\n    \n    println!(\"{:?}\", user2);\n}",
+    "et": "常见错误",
+    "ec": "部分字段可变：struct { mut x: i32, y: i32 }：Rust不允许部分可变，必须让整个实例mut\n结构体字段引用未标注生命周期：struct Foo { s: &'a str }",
+    "q": [
+      "结构体的三种形式？",
+      "创建一个Rectangle结构体并计算面积",
+      "使用更新语法创建新的结构体实例"
+    ]
+  },
+  {
+    "id": 17,
+    "t": "方法",
+    "p": [
+      "impl块：为结构体定义方法",
+      "&self：不可变借用，读取实例",
+      "&mut self：可变借用，修改实例",
+      "self：获取所有权，消耗实例",
+      "关联函数：无self参数，类似静态方法，用::调用"
+    ],
+    "c": "#[derive(Debug)]\nstruct Rectangle {\n    width: u32,\n    height: u32,\n}\n\nimpl Rectangle {\n    // 关联函数(构造器)\n    fn square(size: u32) -> Self {\n        Self { width: size, height: size }\n    }\n    \n    // 方法 - 不可变借用\n    fn area(&self) -> u32 {\n        self.width * self.height\n    }\n    \n    fn can_hold(&self, other: &Rectangle) -> bool {\n        self.width > other.width && self.height > other.height\n    }\n    \n    // 方法 - 可变借用\n    fn scale(&mut self, factor: u32) {\n        self.width *= factor;\n        self.height *= factor;\n    }\n}\n\nfn main() {\n    let rect1 = Rectangle { width: 30, height: 50 };\n    let square = Rectangle::square(10);\n    \n    println!(\"面积: {}\", rect1.area());\n    println!(\"正方形: {:?}\", square);\n    \n    let mut rect3 = Rectangle { width: 5, height: 5 };\n    rect3.scale(3);\n    println!(\"缩放后: {:?}\", rect3);\n}",
+    "et": "常见错误",
+    "ec": "在impl外定义方法：方法必须在impl块内定义\n方法第一个参数写成self而非&self导致所有权移动：通常用&self借用",
+    "q": [
+      "方法和关联函数的区别？",
+      "为Rectangle添加周长计算方法",
+      "解释self、&self、&mut self的区别"
+    ]
+  },
+  {
+    "id": 18,
+    "t": "枚举",
+    "p": [
+      "enum定义：枚举类型，每个变体可以携带不同类型的数据",
+      "Option：标准库枚举：Some(T)有值，None无值，替代null",
+      "枚举变体：可通过::访问，如Direction::North",
+      "impl for enum：可以为枚举实现方法"
+    ],
+    "c": "#[derive(Debug)]\nenum IpAddr {\n    V4(u8, u8, u8, u8),\n    V6(String),\n}\n\n#[derive(Debug)]\nenum Message {\n    Quit,                       // 无数据\n    Move { x: i32, y: i32 },   // 具名字段\n    Write(String),             // 包含String\n    ChangeColor(i32, i32, i32), // 包含三个i32\n}\n\nimpl Message {\n    fn call(&self) {\n        println!(\"调用: {:?}\", self);\n    }\n}\n\nfn main() {\n    let home = IpAddr::V4(127, 0, 0, 1);\n    let loopback = IpAddr::V6(String::from(\"::1\"));\n    println!(\"{:?}\", home);\n    \n    let msgs = vec![\n        Message::Quit,\n        Message::Move { x: 1, y: 2 },\n        Message::Write(String::from(\"hello\")),\n    ];\n    for msg in &msgs { msg.call(); }\n    \n    // Option<T> - 替代null\n    let some_num: Option<i32> = Some(42);\n    let none_num: Option<i32> = None;\n    println!(\"{:?}, {:?}\", some_num, none_num);\n}",
+    "et": "常见错误",
+    "ec": "直接使用Option的值而不处理None：必须用match/if let/?处理Some和None两种情况\nlet x: Option = Some(5); let y = x + 1;：Option不能直接和i32运算",
+    "q": [
+      "Option的作用是什么？",
+      "定义一个方向枚举(Direction)包含上下左右",
+      "为枚举实现一个方法"
+    ]
+  },
+  {
+    "id": 19,
+    "t": "match匹配",
+    "p": [
+      "match表达式：Rust强大的模式匹配，类似增强版switch",
+      "穷尽性：match必须穷尽所有可能(编译器检查)",
+      "_通配符：匹配任意值，放在最后",
+      "匹配守卫：用if添加额外条件",
+      "绑定值：匹配时可以绑定值到变量"
+    ],
+    "c": "fn main() {\n    let number = 42;\n    \n    match number {\n        1 => println!(\"一\"),\n        2 => println!(\"二\"),\n        3 | 4 => println!(\"三或四\"), // 多模式\n        5..=10 => println!(\"五到十\"), // 范围\n        n @ 42 => println!(\"答案是{}\", n), // 绑定值\n        _ => println!(\"其他\"),\n    }\n    \n    // 匹配Option<T>\n    let some_value: Option<i32> = Some(5);\n    match some_value {\n        Some(x) => println!(\"值: {}\", x),\n        None => println!(\"无值\"),\n    }\n    \n    // 匹配守卫\n    let pair = (2, -2);\n    match pair {\n        (x, y) if x == y => println!(\"相等\"),\n        (x, y) if x + y == 0 => println!(\"互为相反数\"),\n        _ => println!(\"其他\"),\n    }\n}",
+    "et": "常见错误",
+    "ec": "match缺少某一分支：编译器会报错，必须处理所有情况或使用_通配符\nmatch各分支返回类型不一致：所有分支必须返回相同类型",
+    "q": [
+      "match为什么必须穷尽所有可能？",
+      "使用match匹配Option并返回平方值",
+      "使用匹配守卫过滤特定条件"
+    ]
+  },
+  {
+    "id": 20,
+    "t": "if let简化匹配",
+    "p": [
+      "if let：当只关心一种匹配情况时的简化写法",
+      "while let：当条件满足时持续循环",
+      "if let与else：可以配合else处理不匹配的情况",
+      "适用场景：简单的单条件匹配"
+    ],
+    "c": "fn main() {\n    let some_value = Some(3);\n    \n    if let Some(x) = some_value {\n        println!(\"值: {}\", x);\n    }\n    \n    let another: Option<i32> = None;\n    if let Some(x) = another {\n        println!(\"有值: {}\", x);\n    } else {\n        println!(\"无值\");\n    }\n    \n    let mut stack = vec![1, 2, 3];\n    while let Some(top) = stack.pop() {\n        println!(\"栈顶: {}\", top);\n    }\n}",
+    "et": "常见错误",
+    "ec": "过度使用if let：复杂的多条件匹配应使用match更清晰",
+    "q": [
+      "什么时候使用if let而不是match？",
+      "使用if let处理Option",
+      "使用while let清空一个向量"
+    ]
+  },
+  {
+    "id": 21,
+    "t": "模块系统",
+    "p": [
+      "mod关键字：定义模块，组织代码",
+      "pub关键字：公开模块或项，允许外部访问",
+      "use关键字：导入模块，简化引用",
+      "super：引用父模块",
+      "self：引用当前模块"
+    ],
+    "c": "mod front_of_house {\n    pub mod hosting {\n        pub fn add_to_waitlist() {\n            println!(\"添加到等候名单\");\n        }\n        fn seat_at_table() {\n            println!(\"安排座位\");\n        }\n    }\n}\n\npub use front_of_house::hosting;\n\npub fn eat_at_restaurant() {\n    hosting::add_to_waitlist();\n}\n\nmod back_of_house {\n    fn fix_incorrect_order() {\n        cook_order();\n        super::serve_order();\n    }\n    fn cook_order() {\n        println!(\"烹饪订单\");\n    }\n}\n\nfn serve_order() {\n    println!(\"上菜\");\n}\n\nfn main() {\n    eat_at_restaurant();\n}",
+    "et": "常见错误",
+    "ec": "访问私有项：模块内的项默认私有，需要pub关键字公开\nuse路径错误：确保路径正确，使用crate根作为起点",
+    "q": [
+      "pub关键字的作用？",
+      "创建一个模块并导出其中的函数",
+      "解释super和self的用法"
+    ]
+  },
+  {
+    "id": 22,
+    "t": "集合类型",
+    "p": [
+      "Vec：动态数组，可增长的列表",
+      "String：UTF-8编码的可变字符串",
+      "HashMap：键值对映射",
+      "HashSet：无序唯一集合",
+      "集合操作：添加、删除、查询元素"
+    ],
+    "c": "use std::collections::{HashMap, HashSet};\n\nfn main() {\n    let mut v = Vec::new();\n    v.push(1);\n    v.push(2);\n    v.push(3);\n    println!(\"v[0] = {}\", v[0]);\n    \n    let mut s = String::from(\"hello\");\n    s.push_str(\" world\");\n    println!(\"{}\", s);\n    \n    let mut scores = HashMap::new();\n    scores.insert(String::from(\"Alice\"), 100);\n    scores.insert(String::from(\"Bob\"), 85);\n    \n    if let Some(score) = scores.get(\"Alice\") {\n        println!(\"Alice的分数: {}\", score);\n    }\n    \n    let mut set = HashSet::new();\n    set.insert(1);\n    set.insert(2);\n    set.insert(2);\n    println!(\"集合大小: {}\", set.len());\n}",
+    "et": "常见错误",
+    "ec": "索引越界访问Vec：v[100]当len<100时panic，使用get()安全访问\nHashMap插入时key被move：String作为key会被移动，使用insert(key.clone(), value)",
+    "q": [
+      "Vec和数组的区别？",
+      "使用HashMap存储学生成绩",
+      "使用HashSet去重"
+    ]
+  },
+  {
+    "id": 23,
+    "t": "泛型",
+    "p": [
+      "泛型函数：参数化类型的函数",
+      "泛型结构体：参数化类型的结构体",
+      "泛型枚举：参数化类型的枚举",
+      "泛型约束：限制泛型类型必须实现特定trait",
+      "T: Trait：约束语法"
+    ],
+    "c": "fn largest<T: PartialOrd>(list: &[T]) -> &T {\n    let mut largest = &list[0];\n    for item in list {\n        if item > largest {\n            largest = item;\n        }\n    }\n    largest\n}\n\nstruct Point<T, U> {\n    x: T,\n    y: U,\n}\n\nimpl<T, U> Point<T, U> {\n    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {\n        Point { x: self.x, y: other.y }\n    }\n}\n\nfn main() {\n    let numbers = vec![34, 50, 25, 100, 65];\n    println!(\"最大数: {}\", largest(&numbers));\n    \n    let chars = vec!['y', 'm', 'a', 'q'];\n    println!(\"最大字符: {}\", largest(&chars));\n    \n    let p1 = Point { x: 5, y: 10.4 };\n    let p2 = Point { x: \"hello\", y: 'c' };\n    let p3 = p1.mixup(p2);\n    println!(\"p3.x = {}, p3.y = {}\", p3.x, p3.y);\n}",
+    "et": "常见错误",
+    "ec": "缺少泛型约束：直接比较T类型的值，需要T: PartialOrd\n泛型参数过多：只在必要时引入泛型参数",
+    "q": [
+      "泛型的作用是什么？",
+      "创建一个泛型结构体",
+      "为泛型类型添加trait约束"
+    ]
+  },
+  {
+    "id": 24,
+    "t": "Trait",
+    "p": [
+      "Trait定义：定义共享行为的接口",
+      "impl Trait：为类型实现trait",
+      "默认实现：trait可以提供默认方法",
+      "trait作为参数：fn foo(x: T)",
+      "impl Trait语法：简化trait边界"
+    ],
+    "c": "pub trait Summary {\n    fn summarize(&self) -> String;\n    fn summarize_author(&self) -> String {\n        String::from(\"佚名\")\n    }\n}\n\npub struct NewsArticle {\n    pub headline: String,\n    pub author: String,\n}\n\nimpl Summary for NewsArticle {\n    fn summarize(&self) -> String {\n        format!(\"{}, by {}\", self.headline, self.author)\n    }\n}\n\npub struct Tweet {\n    pub username: String,\n    pub content: String,\n}\n\nimpl Summary for Tweet {\n    fn summarize(&self) -> String {\n        format!(\"{}: {}\", self.username, self.content)\n    }\n}\n\nfn notify(item: &impl Summary) {\n    println!(\"Breaking news! {}\", item.summarize());\n}\n\nfn main() {\n    let tweet = Tweet {\n        username: String::from(\"rust\"),\n        content: String::from(\"Hello Rust!\"),\n    };\n    notify(&tweet);\n}",
+    "et": "常见错误",
+    "ec": "缺少trait实现：使用未实现trait的类型会编译错误\ntrait未公开：pub trait，否则外部无法使用",
+    "q": [
+      "Trait和接口的区别？",
+      "定义一个trait并为多个类型实现",
+      "使用impl Trait作为参数"
+    ]
+  },
+  {
+    "id": 25,
+    "t": "生命周期",
+    "p": [
+      "生命周期标注：告诉编译器引用的有效范围",
+      "'a语法：生命周期参数",
+      "借用检查器：确保引用有效",
+      "省略规则：常见模式的生命周期可以省略",
+      "结构体中的引用：必须标注生命周期"
+    ],
+    "c": "fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {\n    if x.len() > y.len() { x } else { y }\n}\n\nstruct ImportantExcerpt<'a> {\n    part: &'a str,\n}\n\nimpl<'a> ImportantExcerpt<'a> {\n    fn level(&self) -> i32 { 3 }\n}\n\nfn main() {\n    let string1 = String::from(\"abcd\");\n    let string2 = \"xyz\";\n    let result = longest(string1.as_str(), string2);\n    println!(\"最长: {}\", result);\n    \n    let novel = String::from(\"Call me Ishmael.\");\n    let sentence = novel.split('.').next().unwrap();\n    let i = ImportantExcerpt { part: sentence };\n    println!(\"摘录: {}\", i.part);\n}",
+    "et": "常见错误",
+    "ec": "返回悬垂引用：函数返回的引用指向已被销毁的变量\n结构体包含引用但未标注生命周期：必须标注",
+    "q": [
+      "生命周期的作用？",
+      "编写一个返回两个字符串较长者的函数",
+      "创建一个包含引用的结构体"
+    ]
+  },
+  {
+    "id": 26,
+    "t": "错误处理",
+    "p": [
+      "panic!宏：不可恢复的错误，终止程序",
+      "Result：可恢复的错误，返回结果或错误",
+      "?操作符：简化错误传播",
+      "unwrap()/expect()：快速处理错误，出错时panic",
+      "自定义错误类型：用enum定义错误"
+    ],
+    "c": "use std::fs::File;\nuse std::io::{self, Read};\n\n#[derive(Debug)]\nenum AppError {\n    FileError(io::Error),\n    ParseError,\n}\n\nimpl From<io::Error> for AppError {\n    fn from(err: io::Error) -> Self {\n        AppError::FileError(err)\n    }\n}\n\nfn read_file(path: &str) -> Result<String, AppError> {\n    let mut file = File::open(path)?;\n    let mut content = String::new();\n    file.read_to_string(&mut content)?;\n    Ok(content)\n}\n\nfn main() {\n    match read_file(\"hello.txt\") {\n        Ok(content) => println!(\"内容: {}\", content),\n        Err(e) => println!(\"错误: {:?}\", e),\n    }\n}",
+    "et": "常见错误",
+    "ec": "过度使用unwrap()：生产代码应使用match处理错误\n?在main函数中使用：Rust 1.26前main不能返回Result",
+    "q": [
+      "panic!和Result的区别？",
+      "使用?操作符传播错误",
+      "定义自定义错误类型"
+    ]
+  },
+  {
+    "id": 27,
+    "t": "文件操作",
+    "p": [
+      "std::fs：文件系统操作模块",
+      "File::open：打开文件（只读）",
+      "File::create：创建文件（覆盖）",
+      "read_to_string：读取文件内容到字符串",
+      "write_all：写入内容到文件"
+    ],
+    "c": "use std::fs::{self, File};\nuse std::io::{Read, Write};\n\nfn main() -> std::io::Result<()> {\n    let mut content = String::new();\n    File::open(\"input.txt\")?.read_to_string(&mut content)?;\n    println!(\"文件内容:\\n{}\", content);\n    \n    let mut file = File::create(\"output.txt\")?;\n    file.write_all(b\"Hello, Rust!\\n\")?;\n    \n    fs::create_dir_all(\"data/subdir\")?;\n    fs::copy(\"output.txt\", \"data/output.txt\")?;\n    \n    for entry in fs::read_dir(\".\")? {\n        let entry = entry?;\n        println!(\"{}\", entry.path().display());\n    }\n    \n    Ok(())\n}",
+    "et": "常见错误",
+    "ec": "未处理文件操作错误：所有文件操作都可能失败，需要处理Result\n路径拼接：使用PathBuf或path.join()，不要手动拼接字符串",
+    "q": [
+      "File::open和File::create的区别？",
+      "读取文件内容到字符串",
+      "创建目录并复制文件"
+    ]
+  },
+  {
+    "id": 28,
+    "t": "命令行参数",
+    "p": [
+      "std::env::args：获取命令行参数",
+      "clap crate：流行的命令行参数解析库",
+      "位置参数：按顺序传递的参数",
+      "选项参数：-h/--help等标志",
+      "子命令：git style的子命令"
+    ],
+    "c": "use std::env;\n\nfn main() {\n    let args: Vec<String> = env::args().collect();\n    println!(\"程序名: {}\", args[0]);\n    \n    if args.len() > 1 {\n        println!(\"参数: {:?}\", &args[1..]);\n    }\n}",
+    "et": "常见错误",
+    "ec": "访问args越界：args[1]可能不存在，需要检查长度\n手动解析复杂参数：应使用clap等库",
+    "q": [
+      "如何获取命令行参数？",
+      "解析命令行参数并打印",
+      "了解clap库的使用"
+    ]
+  },
+  {
+    "id": 29,
+    "t": "测试",
+    "p": [
+      "#[test]宏：标记测试函数",
+      "assert!宏：断言布尔条件",
+      "assert_eq!/assert_ne!：断言相等/不相等",
+      "#[should_panic]：测试应该panic",
+      "cargo test：运行测试"
+    ],
+    "c": "pub fn add(a: i32, b: i32) -> i32 {\n    a + b\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n    \n    #[test]\n    fn test_add() {\n        assert_eq!(add(2, 3), 5);\n        assert_ne!(add(2, 2), 5);\n    }\n    \n    #[test]\n    #[should_panic(expected = \"panic\")]\n    fn test_panic() {\n        panic!(\"panic message\");\n    }\n}\n\n// 运行测试: cargo test",
+    "et": "常见错误",
+    "ec": "测试函数未标注#[test]：不会被cargo test执行\nassert_eq!参数顺序：实际值在前，期望值在后",
+    "q": [
+      "如何运行测试？",
+      "编写测试用例测试add函数",
+      "编写should_panic测试"
+    ]
+  },
+  {
+    "id": 30,
+    "t": "并发编程",
+    "p": [
+      "std::thread：创建线程",
+      "join()：等待线程完成",
+      "Mutex：互斥锁，保护共享数据",
+      "Arc：原子引用计数，多线程共享",
+      "channel：线程间通信"
+    ],
+    "c": "use std::thread;\nuse std::sync::{Arc, Mutex};\nuse std::sync::mpsc;\n\nfn main() {\n    let handle = thread::spawn(|| {\n        for i in 1..5 {\n            println!(\"线程: {}\", i);\n        }\n    });\n    handle.join().unwrap();\n    \n    let counter = Arc::new(Mutex::new(0));\n    let mut handles = vec![];\n    \n    for _ in 0..10 {\n        let counter = Arc::clone(&counter);\n        let handle = thread::spawn(move || {\n            let mut num = counter.lock().unwrap();\n            *num += 1;\n        });\n        handles.push(handle);\n    }\n    \n    for handle in handles { handle.join().unwrap(); }\n    println!(\"计数器: {}\", *counter.lock().unwrap());\n    \n    let (tx, rx) = mpsc::channel();\n    thread::spawn(move || {\n        tx.send(\"Hello\").unwrap();\n    });\n    let received = rx.recv().unwrap();\n    println!(\"收到: {}\", received);\n}",
+    "et": "常见错误",
+    "ec": "多线程共享可变数据：需要Mutex保护\n线程退出前数据被drop：使用Arc保持数据存活",
+    "q": [
+      "如何在多个线程间共享数据？",
+      "创建线程并等待完成",
+      "使用channel进行线程通信"
+    ]
+  },
+  {
+    "id": 31,
+    "t": "智能指针",
+    "p": [
+      "Box：堆分配指针，大小固定",
+      "Rc：引用计数，单线程多所有权",
+      "RefCell：内部可变性，运行时借用检查",
+      "Deref trait：解引用操作符重载",
+      "Drop trait：自定义析构逻辑"
+    ],
+    "c": "use std::rc::Rc;\nuse std::cell::RefCell;\n\nfn main() {\n    let b = Box::new(5);\n    println!(\"b = {}\", b);\n    \n    let a = Rc::new(String::from(\"hello\"));\n    let b = Rc::clone(&a);\n    println!(\"引用计数: {}\", Rc::strong_count(&a));\n    \n    let value = RefCell::new(5);\n    *value.borrow_mut() += 1;\n    println!(\"value = {}\", value.borrow());\n    \n    let shared = Rc::new(RefCell::new(vec![1, 2, 3]));\n    let s1 = Rc::clone(&shared);\n    s1.borrow_mut().push(4);\n    println!(\"shared = {:?}\", shared.borrow());\n}",
+    "et": "常见错误",
+    "ec": "Rc不能跨线程：多线程使用Arc\nRefCell违反借用规则：运行时panic",
+    "q": [
+      "Box和Rc的区别？",
+      "使用Rc实现共享所有权",
+      "使用RefCell实现内部可变性"
+    ]
+  },
+  {
+    "id": 32,
+    "t": "闭包",
+    "p": [
+      "闭包语法：|| -> T { ... }",
+      "捕获变量：按引用、可变引用或所有权捕获",
+      "Fn/FnMut/FnOnce：闭包trait",
+      "闭包作为参数：fn foo(f: F)",
+      "闭包作为返回值：impl Fn()"
+    ],
+    "c": "fn main() {\n    let add = |a: i32, b: i32| -> i32 { a + b };\n    println!(\"add(2, 3) = {}\", add(2, 3));\n    \n    let multiply = |a, b| a * b;\n    println!(\"multiply(4, 5) = {}\", multiply(4, 5));\n    \n    let x = 10;\n    let add_x = |y| x + y;\n    println!(\"add_x(5) = {}\", add_x(5));\n    \n    let mut count = 0;\n    let mut increment = || {\n        count += 1;\n        println!(\"count = {}\", count);\n    };\n    increment();\n    increment();\n}",
+    "et": "常见错误",
+    "ec": "闭包返回类型不一致：所有分支必须返回相同类型\nmove闭包后原变量不可用：move会转移所有权",
+    "q": [
+      "Fn、FnMut、FnOnce的区别？",
+      "创建一个闭包捕获外部变量",
+      "闭包作为函数参数"
+    ]
+  },
+  {
+    "id": 33,
+    "t": "迭代器",
+    "p": [
+      "Iterator trait：定义迭代器，next()方法",
+      "into_iter：获取所有权",
+      "iter：不可变引用",
+      "iter_mut：可变引用",
+      "迭代器适配器：map、filter、collect等"
+    ],
+    "c": "fn main() {\n    let v1 = vec![1, 2, 3];\n    \n    let v2: Vec<i32> = v1.iter().map(|x| x * 2).collect();\n    println!(\"v2 = {:?}\", v2);\n    \n    let numbers = vec![1, 2, 3, 4, 5, 6];\n    let evens: Vec<i32> = numbers.into_iter()\n        .filter(|x| x % 2 == 0)\n        .collect();\n    println!(\"偶数: {:?}\", evens);\n}",
+    "et": "常见错误",
+    "ec": "迭代器是惰性的：必须调用collect()或for循环才能执行\ninto_iter后原集合不可用：已转移所有权",
+    "q": [
+      "迭代器是惰性的意味着什么？",
+      "使用map转换集合元素",
+      "使用filter筛选集合元素"
+    ]
+  },
+  {
+    "id": 34,
+    "t": "异步编程",
+    "p": [
+      "async/await：Rust的异步语法",
+      "Future trait：异步计算的抽象",
+      "tokio：流行的异步运行时",
+      "async fn：返回Future的函数",
+      "await：等待Future完成"
+    ],
+    "c": "async fn say_hello() {\n    println!(\"Hello\");\n}\n\n// 需要tokio运行时\n// #[tokio::main]\n// async fn main() {\n//     say_hello().await;\n// }\n\nfn main() {\n    println!(\"异步编程需要tokio运行时\");\n}",
+    "et": "常见错误",
+    "ec": "没有运行时执行async代码：需要tokio等运行时\n忘记await：只创建Future不会执行",
+    "q": [
+      "async fn和普通fn的区别？",
+      "了解tokio运行时的使用",
+      "编写简单的异步函数"
+    ]
+  },
+  {
+    "id": 35,
+    "t": "Rust生态与项目实践",
+    "p": [
+      "Cargo：Rust的包管理器和构建工具",
+      "crates.io：Rust包仓库",
+      "常用crate：serde、reqwest、tokio、clap等",
+      "Rustup：Rust版本管理工具",
+      "项目结构：src/main.rs、src/lib.rs、Cargo.toml"
+    ],
+    "c": "[package]\nname = \"my_project\"\nversion = \"0.1.0\"\nedition = \"2021\"\n\n[dependencies]\nserde = { version = \"1\", features = [\"derive\"] }\nserde_json = \"1\"\nreqwest = { version = \"0.11\", features = [\"json\"] }\ntokio = { version = \"1\", features = [\"full\"] }\nclap = { version = \"4\", features = [\"derive\"] }",
+    "et": "常见错误",
+    "ec": "忘记更新Cargo.toml：添加新依赖后需要更新\n版本冲突：使用cargo update解决",
+    "q": [
+      "常用的Rust crate有哪些？",
+      "创建一个完整的Rust项目",
+      "添加依赖到Cargo.toml"
+    ]
+  }
+];

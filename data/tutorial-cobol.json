@@ -1,0 +1,667 @@
+[
+  {
+    "id": 1,
+    "t": "COBOL 语言简介与历史",
+    "p": [
+      "COBOL 是 COmmon Business Oriented Language 的缩写，1959 年由 CODASYL 委员会制定，面向商业数据处理",
+      "程序由 IDENTIFICATION、ENVIRONMENT、DATA、PROCEDURE 四个 DIVISION 组成，结构固定、接近自然语言",
+      "它长期支撑银行、保险、航空订票等核心系统，强调十进制精确计算、文件处理和批量作业",
+      "现代 COBOL 仍是编译型语言，GnuCOBOL 先把源码翻译成 C 再生成可执行文件，可跨平台运行"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. HELLO.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-YEAR PIC 9(4) VALUE 1959.\n       PROCEDURE DIVISION.\n           DISPLAY \"HELLO, COBOL!\".\n           DISPLAY \"COBOL WAS CREATED IN \" WS-YEAR.\n           DISPLAY \"STILL RUNNING CORE BANKING SYSTEMS.\".\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "把 COBOL 当成脚本语言直接在命令行输入执行：COBOL 必须先编译。用 cobc -x hello.cob 生成可执行文件再运行，且源文件要遵守固定格式的列位置。",
+    "q": [
+      {
+        "q": "COBOL 程序的四个 DIVISION 分别是什么？",
+        "a": "IDENTIFICATION、ENVIRONMENT、DATA、PROCEDURE"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装、编译与运行环境",
+    "p": [
+      "用 GnuCOBOL 编译：cobc -x -o hello hello.cob 生成可执行文件，-x 表示生成可执行程序",
+      "cobc -m 生成可被 CALL 的共享模块；cobc -free 使用自由格式，默认是固定格式（第 8-72 列有效）",
+      "固定格式第 1-6 列是序号区，第 7 列是指示符（* 表示注释），第 8-11 列是 A 区，第 12 列起是 B 区",
+      "常用选项：-Wall 警告、-g 调试信息、-debug 运行期检查、-std=default 指定语言标准"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. BUILD-DEMO.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-NAME PIC X(10) VALUE \"GnuCOBOL\".\n       PROCEDURE DIVISION.\n      * 编译：cobc -x -o build_demo build_demo.cob\n      * 运行：./build_demo\n      * 查看版本：cobc --version\n           DISPLAY \"ENVIRONMENT READY: \" WS-NAME.\n           DISPLAY \"FREE FORMAT: cobc -free -x app.cob\".\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "代码从第 1 列开始写，cobc 报 invalid indicator at column 7。固定格式必须前 6 列留空、第 7 列留空或写 *，正文从第 8 列开始；或者改用 -free 自由格式。",
+    "q": [
+      {
+        "q": "GnuCOBOL 生成可执行文件的选项是什么？",
+        "a": "-x，例如 cobc -x -o app app.cob"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量、常量与命名规则",
+    "p": [
+      "数据名最长 30 个字符，可含字母、数字和连字符，必须至少含一个字母，不能以连字符开头或结尾",
+      "01 层定义独立数据项或记录，05/10 等层号表示从属层级；层号越小范围越大，同级字段互不包含",
+      "用 VALUE 子句给初值；78 层定义命名常量，如 78 MAX-ITEMS VALUE 100，之后不能再赋值",
+      "WORKING-STORAGE 中的变量在程序运行期间保持状态，不会因为执行到某个段落而重新初始化"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. VARS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-COUNT PIC 9(3) VALUE 42.\n       01 WS-RATIO PIC 9V99 VALUE 0.75.\n       01 WS-NAME  PIC X(20) VALUE \"COBOL\".\n       78 MAX-ITEMS VALUE 100.\n       PROCEDURE DIVISION.\n           DISPLAY \"COUNT = \" WS-COUNT.\n           DISPLAY \"RATIO = \" WS-RATIO.\n           DISPLAY \"NAME  = \" FUNCTION TRIM(WS-NAME).\n           DISPLAY \"MAX   = \" MAX-ITEMS.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "数据名里使用下划线或中文，如 WS_COUNT：COBOL 只允许字母、数字和连字符，下划线会导致语法错误。应写成 WS-COUNT，且名字至少包含一个字母。",
+    "q": [
+      {
+        "q": "COBOL 中定义命名常量的层号是多少？",
+        "a": "78 层，例如 78 MAX-ITEMS VALUE 100"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "数据类型与类型声明",
+    "p": [
+      "PIC 子句描述数据形态：9 数字、X 任意字符、A 字母、V 隐含小数点、S 符号，如 PIC S9(5)V99",
+      "USAGE 决定存储方式：DISPLAY 按字符存、COMP-3 压缩十进制、COMP/COMP-5 二进制整数",
+      "COMP-3 适合金额计算，字节数约为位数的一半；COMP 运算快但只用二进制，不适合精确小数场景",
+      "组项没有 PIC，只由下属基本项组成；对组项 MOVE 会按字节整体搬运，可能造成数值错位"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. TYPES.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-INT     PIC S9(5) COMP-3 VALUE -12345.\n       01 WS-AMOUNT  PIC 9(5)V99 COMP-3 VALUE 1234.56.\n       01 WS-NAME    PIC X(10) VALUE \"ALPHA\".\n       01 WS-BINARY  PIC 9(9) COMP VALUE 987654321.\n       01 WS-FLAG    PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           DISPLAY \"S9(5) COMP-3 = \" WS-INT.\n           DISPLAY \"9(5)V99     = \" WS-AMOUNT.\n           DISPLAY \"X(10)       = \" WS-NAME.\n           DISPLAY \"9(9) COMP   = \" WS-BINARY.\n           DISPLAY \"X FLAG      = \" WS-FLAG.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "金额字段声明成 PIC 9(5) 却存入 1234.56，小数部分被直接截断；必须写 PIC 9(5)V99。V 只是隐含小数点，不占存储位置，显示时需要编辑型 PIC。",
+    "q": [
+      {
+        "q": "PIC S9(5)V99 中 S 和 V 分别表示什么？",
+        "a": "S 表示带符号，V 表示隐含小数点（不占存储位置）"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "COBOL 用 ADD/SUBTRACT/MULTIPLY/DIVIDE 或 COMPUTE 做算术，COMPUTE 可写 + - * / ** 表达式",
+      "接收字段的小数位决定结果精度：7/2 存入 PIC 9(3)V99 得到 3.50；ROUNDED 控制末位舍入",
+      "ON SIZE ERROR 捕获溢出与除零等异常，没有该子句时结果可能被截断而不报错",
+      "COBOL 没有 % 和 &&；比较用 = < > <= >= NOT =，逻辑用 AND OR NOT，字符串连接用 STRING"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. OPS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-A PIC 9(3) VALUE 7.\n       01 WS-B PIC 9(3) VALUE 2.\n       01 WS-R PIC 9(3)V99 VALUE ZERO.\n       PROCEDURE DIVISION.\n           ADD WS-A WS-B GIVING WS-R.\n           DISPLAY \"ADD = \" WS-R.\n           COMPUTE WS-R = WS-A / WS-B.\n           DISPLAY \"DIV = \" WS-R.\n           COMPUTE WS-R = WS-A ** WS-B.\n           DISPLAY \"POW = \" WS-R.\n           COMPUTE WS-R ROUNDED = 10 / 3.\n           DISPLAY \"ROUNDED = \" WS-R.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "以为 7/2 会像整数除法那样得到 3：COBOL 按接收字段的小数位计算，存入 PIC 9(3)V99 得到 3.50。若不想要小数，应把结果存入整数 PIC 或使用 FUNCTION INTEGER。",
+    "q": [
+      {
+        "q": "COBOL 中让计算结果四舍五入到接收字段末位的子句是什么？",
+        "a": "ROUNDED，例如 COMPUTE R ROUNDED = A / B"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串处理",
+    "p": [
+      "PIC X(n) 是定长字符串，MOVE 时不足补空格、超长从右侧截断；引用片段用 WS-TEXT(1:4)",
+      "STRING ... DELIMITED BY SIZE 把多个来源拼接到目标，ON OVERFLOW 可检测目标是否装不下",
+      "UNSTRING ... DELIMITED BY ',' 把字符串拆到多个字段，可配合 COUNT IN 统计实际字符数",
+      "INSPECT 可统计或替换字符，FUNCTION TRIM 去首尾空格，LENGTH 返回声明长度而非有效长度"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. STRINGS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-FIRST PIC X(10) VALUE \"COBOL\".\n       01 WS-LAST  PIC X(10) VALUE \"2023\".\n       01 WS-MSG   PIC X(40) VALUE SPACES.\n       01 WS-N1    PIC 99 VALUE ZERO.\n       01 WS-N2    PIC 99 VALUE ZERO.\n       PROCEDURE DIVISION.\n           STRING FUNCTION TRIM(WS-FIRST) DELIMITED BY SIZE\n                  \" \" DELIMITED BY SIZE\n                  FUNCTION TRIM(WS-LAST) DELIMITED BY SIZE\n               INTO WS-MSG\n           END-STRING.\n           DISPLAY \"MSG = \" WS-MSG.\n           UNSTRING \"12,34\" DELIMITED BY \",\" INTO WS-N1 WS-N2.\n           DISPLAY \"NUMS = \" WS-N1 \",\" WS-N2.\n           DISPLAY \"SUB = \" WS-MSG(1:4).\n           DISPLAY \"LEN = \" FUNCTION LENGTH(FUNCTION TRIM(WS-MSG)).\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "用 MOVE 拼接字符串：MOVE A TO B 是覆盖而不是追加，且定长字段会补空格。拼接必须用 STRING ... INTO，并用 FUNCTION TRIM 去掉来源字段的尾部空格。",
+    "q": [
+      {
+        "q": "把两个字符串拼接成一个，应使用哪个动词？",
+        "a": "STRING ... DELIMITED BY ... INTO 目标字段"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "表与集合（OCCURS）",
+    "p": [
+      "表用 OCCURS n TIMES 定义，如 05 WS-ITEM PIC X(10) OCCURS 5 TIMES，下标从 1 开始",
+      "访问表元素写 WS-ITEM(3)；可加 INDEXED BY 建立索引，配合 SEARCH 做顺序或二分查找",
+      "二维表用多层 OCCURS 嵌套，访问 WS-CELL(行, 列)，各维下标都从 1 开始",
+      "INITIALIZE 可把表恢复为初值；SORT 表时写 SORT 表项名 ASCENDING KEY 键名"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. TABLES.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-ITEMS.\n          05 WS-ITEM PIC X(10) OCCURS 5 TIMES.\n       01 WS-IDX PIC 9 VALUE ZERO.\n       PROCEDURE DIVISION.\n           MOVE \"APPLE\"  TO WS-ITEM(1).\n           MOVE \"BANANA\" TO WS-ITEM(2).\n           MOVE \"CHERRY\" TO WS-ITEM(3).\n           PERFORM VARYING WS-IDX FROM 1 BY 1\n                   UNTIL WS-IDX > 5\n              IF WS-ITEM(WS-IDX) NOT = SPACES\n                 DISPLAY WS-IDX \": \" WS-ITEM(WS-IDX)\n              END-IF\n           END-PERFORM.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "按其他语言习惯访问 WS-ITEM(0)：COBOL 表下标从 1 开始，0 会触发下标越界运行错误。循环应从 1 到 OCCURS 的次数，并在编译时加 -debug 检查越界。",
+    "q": [
+      {
+        "q": "COBOL 中 OCCURS 5 TIMES 的表，合法下标范围是多少？",
+        "a": "1 到 5"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件判断",
+    "p": [
+      "IF ... ELSE ... END-IF 必须以 END-IF 结束；嵌套 IF 时用 END-IF 明确归属，避免悬空 ELSE",
+      "EVALUATE 相当于 switch：WHEN 可写值、THRU 区间或条件，WHEN OTHER 兜底，且不会贯穿到下一分支",
+      "88 层条件名给字段的特定值起名字，如 88 IS-GOOD VALUE 80 THRU 89，之后可直接 IF IS-GOOD",
+      "COBOL 条件没有短路保证；AND/OR 混用时用括号明确优先级，NOT 作用于紧跟其后的条件"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. CONDITIONS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-SCORE PIC 9(3) VALUE 86.\n          88 IS-EXCELLENT VALUE 90 THRU 100.\n          88 IS-GOOD      VALUE 80 THRU 89.\n       PROCEDURE DIVISION.\n           EVALUATE TRUE\n              WHEN IS-EXCELLENT\n                 DISPLAY \"GRADE A\"\n              WHEN IS-GOOD\n                 DISPLAY \"GRADE B\"\n              WHEN OTHER\n                 DISPLAY \"GRADE C\"\n           END-EVALUATE.\n           IF IS-GOOD\n              DISPLAY \"SCORE IS IN 80-89\"\n           END-IF.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "写 IF ... END-IF 时漏掉句点或把 END-IF 写成 ENDIF：COBOL 关键字必须带连字符，且整个 IF 语句要以句点结束，否则后续语句会被并入条件分支。",
+    "q": [
+      {
+        "q": "给 80 到 89 分定义一个条件名，88 层怎么写？",
+        "a": "88 IS-GOOD VALUE 80 THRU 89."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "循环结构",
+    "p": [
+      "PERFORM VARYING i FROM 1 BY 1 UNTIL i > 10 是计数循环，循环体放在 PERFORM 与 END-PERFORM 之间",
+      "PERFORM 3 TIMES 执行固定次数；PERFORM UNTIL 条件为真时结束，条件在循环体之前判断",
+      "EXIT PERFORM 立即跳出当前内联循环，EXIT PERFORM CYCLE 跳过本次剩余语句，类似 continue",
+      "GO TO 会造成面条式代码，现代 COBOL 用 PERFORM 段落和 EVALUATE 组织流程，避免跨段跳转"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. LOOPS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-I     PIC 9(2) VALUE ZERO.\n       01 WS-TOTAL PIC 9(5) VALUE ZERO.\n       PROCEDURE DIVISION.\n           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > 10\n              ADD WS-I TO WS-TOTAL\n           END-PERFORM.\n           DISPLAY \"SUM 1..10 = \" WS-TOTAL.\n           PERFORM 3 TIMES\n              DISPLAY \"HELLO\"\n           END-PERFORM.\n           MOVE 5 TO WS-I.\n           PERFORM UNTIL WS-I = 0\n              DISPLAY \"COUNTDOWN \" WS-I\n              SUBTRACT 1 FROM WS-I\n           END-PERFORM.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "在 PERFORM UNTIL 循环体内忘记修改循环变量，或条件写成 UNTIL WS-I = 10 而变量从 0 递减，导致死循环。循环变量必须在体内朝终止条件方向变化。",
+    "q": [
+      {
+        "q": "PERFORM VARYING 中控制循环结束的子句是哪个？",
+        "a": "UNTIL 条件，条件为真时结束循环"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "子程序与段落基础",
+    "p": [
+      "段落以名字加句点开始，用 PERFORM 段落名 调用，执行完自动返回 PERFORM 的下一条语句",
+      "PERFORM A THRU B 执行从 A 到 B 的连续段落；应保证 B 是出口段，避免意外执行中间的段",
+      "CALL '程序名' USING 参数 调用独立子程序，子程序在 LINKAGE SECTION 声明参数并用 GOBACK 返回",
+      "需要返回值时用 CALL ... RETURNING；段落共享调用方的 WORKING-STORAGE，子程序则通过参数通信"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SUBPROGRAMS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-N      PIC 9(2) VALUE 5.\n       01 WS-RESULT PIC 9(5) VALUE ZERO.\n       PROCEDURE DIVISION.\n           PERFORM SQUARE\n           DISPLAY \"SQUARE(5) = \" WS-RESULT.\n           CALL \"DOUBLE-IT\" USING WS-N WS-RESULT\n           DISPLAY \"DOUBLE(5) = \" WS-RESULT.\n           STOP RUN.\n       SQUARE.\n           COMPUTE WS-RESULT = WS-N * WS-N.\n       END PROGRAM SUBPROGRAMS.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. DOUBLE-IT.\n       DATA DIVISION.\n       LINKAGE SECTION.\n       01 L-N PIC 9(2).\n       01 L-R PIC 9(5).\n       PROCEDURE DIVISION USING L-N L-R.\n           COMPUTE L-R = L-N * 2.\n           GOBACK.\n       END PROGRAM DOUBLE-IT.",
+    "et": "❌ 常见错误",
+    "ec": "PERFORM 一个没有出口的段落：如果段落最后一条语句不是句点或没有 GOBACK，执行会继续落入下一个段落。应在功能段落后加句点，或用独立子程序隔离。",
+    "q": [
+      {
+        "q": "子程序通过哪个 SECTION 声明调用方传入的参数？",
+        "a": "LINKAGE SECTION"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "子程序进阶：参数传递与返回值",
+    "p": [
+      "CALL 的 USING 参数默认 BY REFERENCE，子程序修改会反映到调用方；BY CONTENT 传副本，保护原值",
+      "BY VALUE 按值传递，主要用于调用 C 函数；LINKAGE SECTION 的声明必须与实参长度、类型一致",
+      "子程序用 PROCEDURE DIVISION USING ... 接收参数，用 GOBACK 或 EXIT PROGRAM 返回调用方",
+      "COBOL 2002 支持 RETURNING 返回值与递归（IS RECURSIVE），传统业务代码更常用参数回传结果"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. ADVANCED-CALL.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-A PIC 9(3) VALUE 7.\n       01 WS-B PIC 9(3) VALUE 3.\n       01 WS-R PIC 9(5) VALUE ZERO.\n       PROCEDURE DIVISION.\n           CALL \"MULTIPLY-IT\" USING BY REFERENCE WS-A\n                                   BY CONTENT WS-B\n                                   BY REFERENCE WS-R\n           DISPLAY \"7 * 3 = \" WS-R.\n           STOP RUN.\n       END PROGRAM ADVANCED-CALL.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. MULTIPLY-IT.\n       DATA DIVISION.\n       LINKAGE SECTION.\n       01 L-A PIC 9(3).\n       01 L-B PIC 9(3).\n       01 L-R PIC 9(5).\n       PROCEDURE DIVISION USING L-A L-B L-R.\n           COMPUTE L-R = L-A * L-B.\n           GOBACK.\n       END PROGRAM MULTIPLY-IT.",
+    "et": "❌ 常见错误",
+    "ec": "LINKAGE SECTION 中把参数声明成 PIC X(10)，调用方却传 PIC 9(5)，长度不一致导致读到相邻内存。参数声明必须与调用方字段的类型和长度严格匹配。",
+    "q": [
+      {
+        "q": "希望子程序拿到参数副本、不修改调用方原值，应使用哪种传递方式？",
+        "a": "BY CONTENT"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "作用域、模块与封装",
+    "p": [
+      "WORKING-STORAGE 属于程序单元，子程序被多次 CALL 时保持上次的值；LOCAL-STORAGE 每次调用重新初始化",
+      "LINKAGE SECTION 只描述调用方传入的数据，不分配存储，必须与 USING 列表一一对应",
+      "嵌套程序可直接访问外层程序的数据，用 GLOBAL 子句显式声明；独立编译单元之间只能靠参数通信",
+      "段落名和数据名在同一程序内可见；不同程序中同名变量互不干扰，避免了大范围命名冲突"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SCOPE-MAIN.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-TOTAL PIC 9(5) VALUE ZERO.\n       PROCEDURE DIVISION.\n           CALL \"BUMP\" USING WS-TOTAL\n           CALL \"BUMP\" USING WS-TOTAL\n           DISPLAY \"TOTAL = \" WS-TOTAL.\n           STOP RUN.\n       END PROGRAM SCOPE-MAIN.\n       IDENTIFICATION DIVISION.\n       PROGRAM-ID. BUMP.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-CALLS PIC 9(5) VALUE ZERO.\n       LOCAL-STORAGE SECTION.\n       01 WS-LOCAL PIC 9(5) VALUE ZERO.\n       LINKAGE SECTION.\n       01 L-TOTAL PIC 9(5).\n       PROCEDURE DIVISION USING L-TOTAL.\n           ADD 1 TO WS-CALLS WS-LOCAL L-TOTAL\n           DISPLAY \"CALLS=\" WS-CALLS \" LOCAL=\" WS-LOCAL\n           GOBACK.\n       END PROGRAM BUMP.",
+    "et": "❌ 常见错误",
+    "ec": "把需要跨调用累计的计数器放进 LOCAL-STORAGE，每次 CALL 都归零，统计结果永远是 1。需要保持状态的变量应放在 WORKING-STORAGE 或模块级数据中。",
+    "q": [
+      {
+        "q": "哪种存储区的变量在每次 CALL 子程序时都会重新初始化？",
+        "a": "LOCAL-STORAGE SECTION"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "结构化程序设计：记录与 REDEFINES",
+    "p": [
+      "记录由 01 层组项和下属字段组成，如客户记录包含编号、姓名、余额，字段层号递增表示从属关系",
+      "REDEFINES 让同一块存储按不同布局解释，常用于日期拆分、变长记录和多格式报文",
+      "对组项 MOVE 会按字节复制整条记录，目标长度不同会截断或补空格，字段边界可能因此错位",
+      "记录布局可用 COPY 抄本在多个程序间复用，修改字段时只需改一份 copybook"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. RECORDS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-DATE-NUM PIC 9(8) VALUE 20240115.\n       01 WS-DATE-RED REDEFINES WS-DATE-NUM.\n          05 WS-YEAR  PIC 9(4).\n          05 WS-MONTH PIC 99.\n          05 WS-DAY   PIC 99.\n       01 WS-STUDENT.\n          05 WS-NAME  PIC X(12) VALUE \"LI MING\".\n          05 WS-AGE   PIC 9(2) VALUE 20.\n          05 WS-SCORE PIC 9(3)V99 VALUE 91.50.\n       01 WS-RAW PIC X(20) VALUE SPACES.\n       PROCEDURE DIVISION.\n           DISPLAY \"DATE=\" WS-YEAR \"-\" WS-MONTH \"-\" WS-DAY.\n           DISPLAY \"NAME=\" FUNCTION TRIM(WS-NAME)\n                   \" AGE=\" WS-AGE \" SCORE=\" WS-SCORE.\n           MOVE WS-STUDENT TO WS-RAW.\n           DISPLAY \"RAW=[\" WS-RAW \"]\".\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "REDEFINES 的字段长度超过被重定义项：例如把 9(8) 日期重定义为 4+2+2=8 位没问题，但若写成 6 位月份就会越界覆盖后面的数据。重定义后的总长度不能超过原字段。",
+    "q": [
+      {
+        "q": "REDEFINES 的作用是什么？",
+        "a": "让同一块存储按另一种字段布局解释，不额外分配空间"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "文件与顺序 I/O",
+    "p": [
+      "文件在 ENVIRONMENT DIVISION 的 FILE-CONTROL 中用 SELECT ... ASSIGN TO 声明，并指定组织方式",
+      "LINE SEQUENTIAL 按行存放文本；FILE SECTION 的 FD 描述记录，01 层记录名对应一行数据",
+      "OPEN OUTPUT/INPUT/I-O 打开文件，WRITE/READ/REWRITE 操作记录，CLOSE 关闭并刷新缓冲",
+      "READ 配 AT END 处理文件结束；FILE STATUS 两字符返回状态，'00' 成功、'10' 到文件尾、'35' 文件不存在"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. FILE-IO.\n       ENVIRONMENT DIVISION.\n       INPUT-OUTPUT SECTION.\n       FILE-CONTROL.\n           SELECT SALES-FILE ASSIGN TO \"sales.dat\"\n              ORGANIZATION IS LINE SEQUENTIAL.\n       DATA DIVISION.\n       FILE SECTION.\n       FD  SALES-FILE.\n       01  SALES-REC PIC X(20).\n       WORKING-STORAGE SECTION.\n       01 WS-EOF PIC X VALUE \"N\".\n       PROCEDURE DIVISION.\n           OPEN OUTPUT SALES-FILE\n           MOVE \"A,120.50\" TO SALES-REC\n           WRITE SALES-REC\n           CLOSE SALES-FILE\n           OPEN INPUT SALES-FILE\n           PERFORM UNTIL WS-EOF = \"Y\"\n              READ SALES-FILE AT END MOVE \"Y\" TO WS-EOF END-READ\n              IF WS-EOF = \"N\" DISPLAY FUNCTION TRIM(SALES-REC) END-IF\n           END-PERFORM\n           CLOSE SALES-FILE\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "用 OPEN OUTPUT 打开已存在的重要数据文件，文件会被立即清空。写新文件用 OUTPUT 前先确认路径，读文件用 INPUT；需要原地更新时用 I-O 模式。",
+    "q": [
+      {
+        "q": "FILE STATUS 为 '10' 表示什么？",
+        "a": "已到达文件末尾（EOF）"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "错误处理与状态码",
+    "p": [
+      "每个文件操作后检查 FILE STATUS：'00' 成功、'10' 文件结束、'35' 文件不存在、'90' 其他错误",
+      "READ 用 INVALID KEY 处理索引文件键不存在，用 AT END 处理顺序读到文件尾，两者作用不同",
+      "算术语句加 ON SIZE ERROR 捕获溢出和除零；文件打开失败应终止并返回非零 RETURN-CODE",
+      "DECLARATIVES 段可集中处理 I/O 异常，但现代代码更倾向就近检查状态码，逻辑更清晰"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. ERRORS.\n       ENVIRONMENT DIVISION.\n       INPUT-OUTPUT SECTION.\n       FILE-CONTROL.\n           SELECT IN-FILE ASSIGN TO \"missing.dat\"\n              ORGANIZATION IS LINE SEQUENTIAL\n              FILE STATUS IS WS-STATUS.\n       DATA DIVISION.\n       FILE SECTION.\n       FD  IN-FILE.\n       01  IN-REC PIC X(40).\n       WORKING-STORAGE SECTION.\n       01 WS-STATUS PIC XX VALUE \"00\".\n       01 WS-QTY PIC 9(2) VALUE ZERO.\n       PROCEDURE DIVISION.\n           OPEN INPUT IN-FILE\n           IF WS-STATUS NOT = \"00\"\n              DISPLAY \"OPEN FAILED, STATUS=\" WS-STATUS\n           END-IF\n           COMPUTE WS-QTY = 100 * 100\n              ON SIZE ERROR DISPLAY \"SIZE ERROR CAUGHT\"\n           END-COMPUTE\n           DISPLAY \"QTY=\" WS-QTY\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "OPEN 失败后仍然执行 READ：文件未打开时读取行为未定义，可能直接崩溃。每次 OPEN 后先判断 FILE STATUS，不为 '00' 就跳过后续读写并给出明确错误信息。",
+    "q": [
+      {
+        "q": "捕获算术溢出应使用哪个子句？",
+        "a": "ON SIZE ERROR（配合 COMPUTE/ADD 等算术语句）"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "格式化输入输出",
+    "p": [
+      "PIC 中的 Z 做零抑制、* 用星号填充、$ 显示货币符号、逗号插入千位分隔，如 PIC $ZZ,ZZ9.99",
+      "BLANK WHEN ZERO 让值为零时整项显示空格；JUSTIFIED RIGHT 让字符右对齐",
+      "DISPLAY 按字段的 PIC 原样输出；数值前导零会保留，报表中应使用编辑型 PIC 或 Z 抑制",
+      "引用修改 WS-DATE(1:4) 可截取子串；日期常用 YYYYMMDD 的 9(8) 存储，再做分段显示"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. FORMAT-IO.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-AMT   PIC 9(6)V99 VALUE 12345.60.\n       01 WS-ED    PIC $ZZ,ZZ9.99 VALUE ZERO.\n       01 WS-ZSUP  PIC Z(4)9 VALUE 42.\n       01 WS-PLAIN PIC 9(5) VALUE 42.\n       01 WS-DATE  PIC 9(8) VALUE 20240115.\n       PROCEDURE DIVISION.\n           MOVE WS-AMT TO WS-ED\n           DISPLAY \"EDITED  = \" WS-ED.\n           DISPLAY \"ZSUPP   = \" WS-ZSUP.\n           DISPLAY \"PLAIN   = \" WS-PLAIN.\n           DISPLAY \"YYYYMMDD= \" WS-DATE.\n           DISPLAY \"SUBSTR  = \" WS-DATE(1:4) \"/\" WS-DATE(5:2).\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "直接把数值型 PIC 9(6)V99  DISPLAY 到报表，输出是 01234560 这样没有小数点、带前导零的字符串。报表字段应使用编辑型 PIC（含 Z、逗号、小数点）或先 MOVE 到编辑字段。",
+    "q": [
+      {
+        "q": "让数值 42 在 5 位字段中显示为右对齐且无前导零，PIC 怎么写？",
+        "a": "PIC Z(4)9（Z 做零抑制，9 保留最后一位）"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "数值计算与精度",
+    "p": [
+      "COBOL 默认做十进制精确运算，COMP-3 用压缩十进制存储，适合金额和需要精确小数的场景",
+      "结果小数位由接收字段决定，多余位截断；加 ROUNDED 后按末位四舍五入",
+      "COMP-1/COMP-2 是二进制浮点，运算快但存在表示误差，不应直接用于财务金额",
+      "ON SIZE ERROR 检测溢出；FUNCTION INTEGER 取整数部分，FUNCTION MOD 求余"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. PRECISION.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-A   PIC 9(5)V99 COMP-3 VALUE 1234.56.\n       01 WS-B   PIC 9(5)V99 COMP-3 VALUE 0.44.\n       01 WS-SUM PIC 9(6)V99 COMP-3 VALUE ZERO.\n       01 WS-R   PIC 9(5)V99 VALUE ZERO.\n       01 WS-INT PIC 9(5) VALUE ZERO.\n       PROCEDURE DIVISION.\n           ADD WS-A WS-B GIVING WS-SUM\n           DISPLAY \"SUM = \" WS-SUM.\n           COMPUTE WS-R ROUNDED = WS-A / 7\n           DISPLAY \"ROUND = \" WS-R.\n           COMPUTE WS-R = WS-A / 7\n           DISPLAY \"TRUNC = \" WS-R.\n           COMPUTE WS-INT = FUNCTION INTEGER(WS-A)\n           DISPLAY \"INT  = \" WS-INT.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "把金额放进 COMP-1/COMP-2 浮点字段，0.1+0.2 可能不等于 0.3，对账时出现一分钱误差。金额应使用 PIC 9(n)V99 配合 COMP-3 做十进制运算。",
+    "q": [
+      {
+        "q": "财务金额推荐使用哪种 USAGE？",
+        "a": "COMP-3（压缩十进制），配合 PIC 9(n)V99 精确表示小数"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "日期与时间处理",
+    "p": [
+      "FUNCTION CURRENT-DATE 返回 21 位字符串：YYYYMMDDHHMMSS+时区偏移，可直接 MOVE 到 PIC X(21)",
+      "ACCEPT 变量 FROM DATE YYYYMMDD 读取系统日期为 8 位数字，FROM TIME 读取时分秒",
+      "FUNCTION INTEGER-OF-DATE 把 YYYYMMDD 转成天数序号，两数相减即得相隔天数，自动处理闰年",
+      "FUNCTION DATE-OF-INTEGER 是逆运算；日期运算前应先校验月份和天数是否合法"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. DATE-TIME.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-NOW   PIC X(21) VALUE SPACES.\n       01 WS-TODAY PIC 9(8) VALUE ZERO.\n       01 WS-D1    PIC 9(8) VALUE 20240115.\n       01 WS-D2    PIC 9(8) VALUE 20000229.\n       01 WS-DAYS  PIC 9(9) VALUE ZERO.\n       PROCEDURE DIVISION.\n           MOVE FUNCTION CURRENT-DATE TO WS-NOW\n           DISPLAY \"NOW   = \" WS-NOW.\n           ACCEPT WS-TODAY FROM DATE YYYYMMDD\n           DISPLAY \"TODAY = \" WS-TODAY.\n           COMPUTE WS-DAYS = FUNCTION INTEGER-OF-DATE(WS-D1)\n                           - FUNCTION INTEGER-OF-DATE(WS-D2)\n           DISPLAY \"DAYS  = \" WS-DAYS.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "直接用 8 位日期相减计算天数：20240101 减 20231231 得到 8870 这类无意义结果。必须用 FUNCTION INTEGER-OF-DATE 转成天数序号后再相减。",
+    "q": [
+      {
+        "q": "把 YYYYMMDD 日期转换为天数序号用哪个函数？",
+        "a": "FUNCTION INTEGER-OF-DATE(日期字段)"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "字符与编码",
+    "p": [
+      "COBOL 字符按整理序列（collating sequence）比较，同一程序在 ASCII 与 EBCDIC 环境下的排序可能不同",
+      "FUNCTION ORD 返回字符在整理序列中的序号（从 1 开始），FUNCTION CHAR 是它的逆运算",
+      "INSPECT TALLYING 统计字符出现次数，INSPECT REPLACING 做批量替换，均区分大小写",
+      "FUNCTION UPPER-CASE/LOWER-CASE 做大小写转换；多字节中文需按 UTF-8 处理，不能按单字节截取"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. CHARS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-TEXT  PIC X(20) VALUE \"Hello, COBOL 123!\".\n       01 WS-UPPER PIC X(20) VALUE SPACES.\n       01 WS-COUNT PIC 9(3) VALUE ZERO.\n       01 WS-ORD   PIC 9(3) VALUE ZERO.\n       PROCEDURE DIVISION.\n           MOVE FUNCTION UPPER-CASE(WS-TEXT) TO WS-UPPER\n           DISPLAY \"UPPER = \" WS-UPPER.\n           INSPECT WS-TEXT TALLYING WS-COUNT FOR ALL \"l\"\n           DISPLAY \"COUNT l = \" WS-COUNT.\n           COMPUTE WS-ORD = FUNCTION ORD(\"A\")\n           DISPLAY \"ORD(A) = \" WS-ORD\n                   \" CHAR(66) = \" FUNCTION CHAR(66).\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "认为 ORD 就是 ASCII 码：GnuCOBOL 的 ORD 返回整理序列中的序号（从 1 开始），ASCII 环境下 A 的 ORD 是 66 而不是 65。需要真实编码时应用 C 互操作或查表。",
+    "q": [
+      {
+        "q": "FUNCTION CHAR(66) 与 FUNCTION ORD 是什么关系？",
+        "a": "互为逆运算：ORD 求字符序号，CHAR 按序号取字符（序号从 1 开始）"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块、库与 COPY 抄本",
+    "p": [
+      "用 cobc -m 把子程序编译成可被 CALL 的模块，模块名即 PROGRAM-ID，调用方无需知道源文件位置",
+      "COPY 'book.cpy' 把共享的数据描述抄本插入源码，编译时用 -I 指定 copybook 目录",
+      "多个源文件一起编译：cobc -x main.cob sub.cob -o app；也可分别编译再用 -L 链接共享库",
+      "GnuCOBOL 没有集中式包管理器，第三方库通常以源码、copybook 或系统共享库形式引入"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. CALC-MOD.\n       DATA DIVISION.\n       LINKAGE SECTION.\n       01 L-A PIC 9(3).\n       01 L-B PIC 9(3).\n       01 L-R PIC 9(5).\n       PROCEDURE DIVISION USING L-A L-B L-R.\n           COMPUTE L-R = L-A * L-B.\n           GOBACK.\n       END PROGRAM CALC-MOD.\n      * 编译为模块：cobc -m calc.cob  生成 calc.so\n      * 主程序调用：CALL \"CALC-MOD\" USING A B R\n      * 共享记录布局：COPY \"acctrec.cpy\".（-I 指定目录）",
+    "et": "❌ 常见错误",
+    "ec": "用 cobc -m 编译模块后直接运行 .so 文件：模块没有主程序入口，不能独立执行。应写一个主程序 CALL 它，或用 cobcrun 运行指定模块。",
+    "q": [
+      {
+        "q": "把子程序编译成可被 CALL 的共享模块用哪个选项？",
+        "a": "-m，例如 cobc -m calc.cob"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "编译命令：cobc -x -std=default -Wall -o app app.cob；模块用 -m，自由格式加 -free",
+      "调试：cobc -g -debug 生成带检查的可执行文件，再用 gdb ./app 设置断点、查看变量",
+      "测试：COBOL Check 是常用的单元测试框架；简单项目可写断言段落统计通过和失败数",
+      "cobcrun 运行模块，cobc --version 查版本；格式化无官方工具，靠编辑器列标尺保持 72 列"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. TOOLCHAIN.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-NAME PIC X(20) VALUE \"GnuCOBOL 3.1\".\n       PROCEDURE DIVISION.\n      * 编译：cobc -x -std=default -Wall -o app app.cob\n      * 模块：cobc -m sub.cob；运行：cobcrun sub\n      * 调试：cobc -g -debug app.cob 后用 gdb ./app\n      * 测试：COBOL Check，或自写断言段落\n      * 格式化：无官方工具，用编辑器列标尺保持 72 列\n           DISPLAY \"TOOLCHAIN READY: \" WS-NAME.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "只用 cobc app.cob 编译，得到的是中间表示而不是可执行程序，运行时报找不到文件。生成可执行文件必须加 -x；生成可调用模块则加 -m。",
+    "q": [
+      {
+        "q": "GnuCOBOL 中运行已编译模块的命令是什么？",
+        "a": "cobcrun 模块名"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与并行（批处理与 CICS）",
+    "p": [
+      "COBOL 标准没有线程 API，传统并发靠操作系统批量作业：把数据分区，多个 JOB 同时处理不同分区",
+      "CICS 事务以短事务、伪会话方式支撑高并发在线交易，每个事务独立，共享数据由 DB2/VSAM 管理",
+      "批处理并行要点：各作业处理互不重叠的记录集，避免同时更新同一条记录造成锁冲突",
+      "现代 GnuCOBOL 可通过 CALL 调用 C 的 pthread，但需自行同步，业务代码更常用多进程分片"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. BATCH-PART.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-PART PIC 9(2) VALUE 1.\n       01 WS-I    PIC 9(3) VALUE ZERO.\n       01 WS-JOB  PIC 9(2) VALUE 1.\n       PROCEDURE DIVISION.\n           ACCEPT WS-PART FROM ARGUMENT-VALUE\n           IF WS-PART = ZERO\n              MOVE 1 TO WS-PART\n           END-IF\n           DISPLAY \"JOB \" WS-JOB \" PART \" WS-PART\n           PERFORM VARYING WS-I FROM WS-PART BY 4\n                   UNTIL WS-I > 100\n              CONTINUE\n           END-PERFORM\n           DISPLAY \"PART \" WS-PART \" DONE, LAST=\" WS-I\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "多个批处理作业用相同的关键字范围并发更新同一文件，产生重复处理或锁冲突。启动前必须按分区键切分数据，确保每个作业处理互不重叠的记录集。",
+    "q": [
+      {
+        "q": "批处理并行的关键前提是什么？",
+        "a": "各作业处理互不重叠的数据分区，避免同时更新同一条记录"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化",
+    "p": [
+      "索引文件（ORGANIZATION IS INDEXED）按主键随机读取，比顺序扫描整个文件快得多，适合联机查询",
+      "批量处理时用 SORT 动词或数据库排序代替手工冒泡/插入排序，减少 CPU 与 I/O 次数",
+      "金额与计数用 COMP-3/COMP-5 存储，避免 DISPLAY 数值的字符转换开销；输出前再转成可读格式",
+      "减少不必要的 OPEN/CLOSE 与重复 READ，把公共数据一次读入内存表，能显著缩短批处理时间"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. PERFORMANCE.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-TABLE.\n          05 WS-ROW PIC X(10) OCCURS 5 TIMES\n             ASCENDING KEY IS WS-ROW\n             INDEXED BY WS-IDX.\n       01 WS-I PIC 9 VALUE ZERO.\n       PROCEDURE DIVISION.\n           MOVE \"C\" TO WS-ROW(1)\n           MOVE \"A\" TO WS-ROW(2)\n           MOVE \"B\" TO WS-ROW(3)\n           MOVE \"E\" TO WS-ROW(4)\n           MOVE \"D\" TO WS-ROW(5)\n           SORT WS-ROW\n           DISPLAY \"FIRST=\" WS-ROW(1) \" LAST=\" WS-ROW(5).\n      * 大数据量用 SORT 与索引文件，避免逐条线性查找\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "在循环里对表做线性查找，数据量上万后 CPU 时间急剧上升。应先用 SORT 排序再用 SEARCH ALL 二分查找，或直接使用索引文件按主键读取。",
+    "q": [
+      {
+        "q": "对 COBOL 内存表排序使用哪个动词？",
+        "a": "SORT 表项名 [ASCENDING|DESCENDING] KEY 键名"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试与验证",
+    "p": [
+      "单元测试应覆盖正常值、边界值（0、最大位数）和非法输入；被测段落应尽量只依赖参数",
+      "COBOL Check 用 GIVEN/WHEN/THEN 风格描述用例，可集成到 CI；小项目可自己统计 PASS/FAIL",
+      "断言失败要让程序以非零 RETURN-CODE 结束，否则 CI 无法感知失败",
+      "金额比较注意小数位与 ROUNDED，测试数据要覆盖进位边界，如 0.005、99.99"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. TESTS.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-N        PIC 9(2) VALUE 5.\n       01 WS-RESULT   PIC 9(5) VALUE ZERO.\n       01 WS-EXPECTED PIC 9(5) VALUE 120.\n       01 WS-PASSED   PIC 9(2) VALUE ZERO.\n       01 WS-FAILED   PIC 9(2) VALUE ZERO.\n       PROCEDURE DIVISION.\n           PERFORM FACT\n           IF WS-RESULT = WS-EXPECTED\n              ADD 1 TO WS-PASSED\n              DISPLAY \"PASS: FACT(5)=\" WS-RESULT\n           ELSE\n              ADD 1 TO WS-FAILED\n              DISPLAY \"FAIL: EXPECTED \" WS-EXPECTED\n           END-IF\n           DISPLAY \"PASSED=\" WS-PASSED \" FAILED=\" WS-FAILED\n           STOP RUN.\n       FACT.\n           MOVE 1 TO WS-RESULT\n           PERFORM VARYING WS-N FROM 1 BY 1 UNTIL WS-N > 5\n              MULTIPLY WS-N BY WS-RESULT\n           END-PERFORM.",
+    "et": "❌ 常见错误",
+    "ec": "测试只打印结果却不统计失败数，CI 里永远显示成功。应维护 PASS/FAIL 计数，并在失败时 MOVE 非零值 TO RETURN-CODE，让构建系统能判定测试失败。",
+    "q": [
+      {
+        "q": "如何让 shell 或 CI 知道 COBOL 测试失败？",
+        "a": "失败时把非零值赋给 RETURN-CODE，程序退出码随之非零"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "用 cobc -g -debug 编译，运行期会检查下标、数据越界等错误；再加 -Wall 捕获可疑写法",
+      "gdb ./app 后可 break 段落名 或 break 文件名:行号，print 变量，next/step 单步执行",
+      "设置环境变量 COB_SET_TRACE=ON 可打印 PERFORM 调用轨迹，快速定位程序走到哪个段落",
+      "在关键分支 DISPLAY 中间变量并标注 [TRACE]，比盲目猜测高效；发布前删除调试输出"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. DEBUGGING.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-I     PIC 9(2) VALUE ZERO.\n       01 WS-TOTAL PIC 9(4) VALUE ZERO.\n       PROCEDURE DIVISION.\n           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > 5\n              ADD WS-I TO WS-TOTAL\n              IF WS-TOTAL > 10\n                 DISPLAY \"[TRACE] I=\" WS-I \" TOTAL=\" WS-TOTAL\n              END-IF\n           END-PERFORM\n           DISPLAY \"RESULT=\" WS-TOTAL.\n      * 调试：cobc -g -debug 后用 gdb ./app；break 段落名\n      * 跟踪：export COB_SET_TRACE=ON 再运行\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "不编译 -debug 就直接跑，下标越界时程序可能读到相邻字段的旧值而不报错，排查半天以为是逻辑问题。测试阶段应加 -debug 或 -g，让运行期检查尽早暴露错误。",
+    "q": [
+      {
+        "q": "GnuCOBOL 运行期打印 PERFORM 调用轨迹的环境变量是什么？",
+        "a": "COB_SET_TRACE=ON"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "与 C 及系统接口互操作（CALL）",
+    "p": [
+      "CALL '函数名' 可直接调用 C 库函数，参数默认按地址传递；C 的 int 对应 PIC S9(9) COMP-5",
+      "字符串传给 C 前要在末尾补 X'00'，否则 C 函数找不到结束符；可用 STRING ... X'00' 构造",
+      "CALL ... RETURNING 接收 C 返回值；BY VALUE 用于需要按值传参的 C 函数",
+      "把 COBOL 子程序编译成 .so 后，C 程序也能通过 cob_init 和相应符号调用，实现双向互操作"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. C-INTEROP.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-PID PIC 9(9) COMP-5 VALUE ZERO.\n       01 WS-RC  PIC S9(9) COMP-5 VALUE ZERO.\n       01 WS-CMD PIC X(40) VALUE SPACES.\n       PROCEDURE DIVISION.\n           CALL \"getpid\" RETURNING WS-PID\n           DISPLAY \"PID = \" WS-PID.\n           STRING \"echo HELLO FROM C\" DELIMITED BY SIZE\n                  X\"00\" INTO WS-CMD\n           END-STRING\n           CALL \"system\" USING WS-CMD RETURNING WS-RC\n           DISPLAY \"SYSTEM RC = \" WS-RC.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "把 COBOL 的 PIC X(40) 直接传给 system 或 puts，末尾没有 NUL 字符，C 函数会一直读到相邻内存，输出乱码甚至崩溃。调用 C 字符串函数前必须补 X'00'。",
+    "q": [
+      {
+        "q": "COBOL 调用 C 的字符串函数前，字符串末尾要补什么？",
+        "a": "X'00'（NUL 字符），作为 C 字符串结束标志"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式与程序组织",
+    "p": [
+      "用主控段落加多个功能段落的组织方式：主控负责读入和分派，功能段落只做一件事",
+      "EVALUATE 按动作码分派到不同 PERFORM，比一长串 IF 更清晰，也不会意外贯穿",
+      "共享记录布局放到 copybook，多个程序 COPY 同一份定义，避免字段错位",
+      "段落命名用动词开头（CALC-TOTAL、WRITE-REPORT），保持单一出口，便于测试和维护"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. DISPATCH.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-ACTION PIC X VALUE \"B\".\n       PROCEDURE DIVISION.\n           EVALUATE WS-ACTION\n              WHEN \"A\" PERFORM ACTION-A\n              WHEN \"B\" PERFORM ACTION-B\n              WHEN OTHER PERFORM ACTION-DEFAULT\n           END-EVALUATE\n           STOP RUN.\n       ACTION-A.\n           DISPLAY \"ACTION A: INSERT\".\n       ACTION-B.\n           DISPLAY \"ACTION B: QUERY\".\n       ACTION-DEFAULT.\n           DISPLAY \"UNKNOWN ACTION\".",
+    "et": "❌ 常见错误",
+    "ec": "参照 C 的 switch 以为 EVALUATE 会贯穿执行后续 WHEN：COBOL 执行完匹配分支后直接跳到 END-EVALUATE，不需要 break，也不能靠贯穿实现多分支复用。",
+    "q": [
+      {
+        "q": "EVALUATE 匹配到某个 WHEN 后会继续执行下一个 WHEN 吗？",
+        "a": "不会，执行完该分支即跳出 EVALUATE"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问与 SQL 交互",
+    "p": [
+      "嵌入式 SQL 用 EXEC SQL ... END-EXEC 包裹，宿主变量前加冒号，如 :WS-ID，执行后检查 SQLCODE",
+      "GnuCOBOL 需 OCESQL 预处理器才能编译 EXEC SQL；DB2 用 db2 prep，Oracle 用 proc 预编译",
+      "批量场景常由数据库 UNLOAD 出定长或分隔文件，COBOL 处理后生成 INSERT 脚本或调用加载工具",
+      "拼接 SQL 时对单引号转义，优先使用带宿主变量的预处理语句，避免 SQL 注入"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SQL-EXPORT.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-ROW.\n          05 WS-ROW1 PIC X(12) VALUE \"000001|LI\".\n          05 WS-ROW2 PIC X(12) VALUE \"000002|WANG\".\n       01 WS-TAB REDEFINES WS-ROW.\n          05 WS-LINE PIC X(12) OCCURS 2 TIMES.\n       01 WS-I    PIC 9 VALUE ZERO.\n       01 WS-ID   PIC 9(6) VALUE ZERO.\n       01 WS-NAME PIC X(20) VALUE SPACES.\n       PROCEDURE DIVISION.\n           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > 2\n              UNSTRING WS-LINE(WS-I) DELIMITED BY \"|\"\n                 INTO WS-ID WS-NAME\n              DISPLAY \"INSERT INTO CUSTOMER(ID,NAME) VALUES(\"\n                      WS-ID \",'\" FUNCTION TRIM(WS-NAME) \"');\"\n           END-PERFORM\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入直接拼进 SQL 字符串，遇到含单引号的值就语法错误，还可能被注入。应使用 EXEC SQL 的宿主变量（:WS-NAME）绑定参数，或至少把单引号替换成两个单引号。",
+    "q": [
+      {
+        "q": "嵌入式 SQL 中引用 COBOL 变量 WS-ID 的写法是什么？",
+        "a": ":WS-ID（冒号前缀表示宿主变量）"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP 请求",
+    "p": [
+      "COBOL 没有标准套接字 API，常见做法是 CALL 'SYSTEM' 调用 curl，或通过 CICS WEB/外部 C 库发请求",
+      "传给 system 的命令字符串必须以 X'00' 结尾，否则 C 运行库会把后面的内存当作命令内容",
+      "检查返回码再处理响应文件；生产代码要设置超时、限制下载大小并校验 HTTP 状态码",
+      "高并发在线系统通常在 CICS 中用 WEB SEND/RECEIVE 或消息队列与外部服务通信，而非直接开套接字"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. HTTP-CALL.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-CMD PIC X(80) VALUE SPACES.\n       01 WS-RC  PIC S9(9) COMP-5 VALUE ZERO.\n       PROCEDURE DIVISION.\n           STRING \"curl -s -m 5 -o page.html https://example.com\"\n              DELIMITED BY SIZE X\"00\" INTO WS-CMD\n           END-STRING\n           CALL \"SYSTEM\" USING WS-CMD RETURNING WS-RC\n           IF WS-RC = 0\n              DISPLAY \"RESPONSE SAVED TO page.html\"\n           ELSE\n              DISPLAY \"HTTP REQUEST FAILED, RC=\" WS-RC\n           END-IF\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "调用 curl 时不加 -m 超时，目标不可达时程序会一直挂起；命令字符串不补 X'00' 还会让 system 读到垃圾参数。应同时设置超时并检查返回码。",
+    "q": [
+      {
+        "q": "COBOL 调用外部 curl 后，如何判断请求是否成功？",
+        "a": "检查 CALL 'SYSTEM' 的 RETURNING 返回码，0 表示命令执行成功"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "所有外部输入先校验长度和字符集，NUMERIC 类条件只能判断数字，空值和前导空格要单独处理",
+      "拼接 SQL 时用宿主变量绑定，不要直接拼用户输入；报表输出前过滤控制字符与换行",
+      "文件权限遵循最小授权，敏感文件不要用固定可预测名称；临时文件用完立即删除",
+      "口令和密钥不要写进源码或 copybook，应通过环境变量或安全配置传入，并限制日志打印"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. SECURE.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-USER PIC X(20) VALUE SPACES.\n       01 WS-LEN  PIC 99 VALUE ZERO.\n       01 WS-NUM  PIC 9(6) VALUE ZERO.\n       PROCEDURE DIVISION.\n           ACCEPT WS-USER FROM ARGUMENT-VALUE\n           MOVE FUNCTION LENGTH(FUNCTION TRIM(WS-USER))\n             TO WS-LEN\n           IF WS-LEN = 0\n              DISPLAY \"ERROR: EMPTY INPUT\"\n              STOP RUN\n           END-IF\n           IF WS-USER(1:WS-LEN) IS NUMERIC\n              MOVE WS-USER(1:WS-LEN) TO WS-NUM\n              DISPLAY \"VALUE = \" WS-NUM\n           ELSE\n              DISPLAY \"ERROR: NOT NUMERIC\"\n           END-IF\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "直接用 IF WS-USER IS NUMERIC 判断输入：PIC X(20) 尾部补满空格，空格不是数字，合法输入 123 也会被判为非数字。应先用 TRIM 求有效长度，再对 WS-USER(1:WS-LEN) 判断。",
+    "q": [
+      {
+        "q": "判断 PIC X(20) 输入是否为纯数字前，为什么要先截取有效长度？",
+        "a": "定长字段尾部补空格，空格不属于数字，整字段判断会误判"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "ACCEPT 变量 FROM ARGUMENT-NUMBER 取参数个数，FROM ARGUMENT-VALUE 取下一个参数值",
+      "参数不足时打印 USAGE 并用非零 RETURN-CODE 退出，方便 shell 脚本判断调用是否成功",
+      "文件名参数要 FUNCTION TRIM 后再 OPEN，固定长度字段的尾部空格会导致找不到文件",
+      "复杂选项可用 EVALUATE 解析，或把参数写入控制文件；不要依赖参数顺序之外的隐含约定"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. CLI-TOOL.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-ARGC PIC 9(3) VALUE ZERO.\n       01 WS-FILE PIC X(40) VALUE SPACES.\n       PROCEDURE DIVISION.\n           ACCEPT WS-ARGC FROM ARGUMENT-NUMBER\n           IF WS-ARGC < 1\n              DISPLAY \"USAGE: CLI-TOOL FILE\"\n              STOP RUN\n           END-IF\n           ACCEPT WS-FILE FROM ARGUMENT-VALUE\n           DISPLAY \"ARGS=\" WS-ARGC\n                   \" FILE=\" FUNCTION TRIM(WS-FILE)\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "用 ACCEPT ... FROM COMMAND-LINE 取参数：它返回整条命令行，需要自己拆空格，容易把带空格的文件名拆错。应按 ARGUMENT-NUMBER/ARGUMENT-VALUE 逐个取参数。",
+    "q": [
+      {
+        "q": "读取命令行参数个数用哪个 ACCEPT 子句？",
+        "a": "ACCEPT 变量 FROM ARGUMENT-NUMBER"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：数据解析与报表",
+    "p": [
+      "先把原始行放进表，再逐行 UNSTRING 解析，能把 I/O 与计算分离，便于单独测试计算段落",
+      "解析后立即校验字段：金额是否数字、名称是否为空，坏数据跳过并计数，不能污染汇总结果",
+      "汇总时先累加金额和条数，最后再算平均值，并判断条数大于 0，避免除零",
+      "输出报表用编辑型 PIC 对齐金额；需要给下游系统时输出 CSV，字段含逗号要加引号"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. REPORT.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-DATA.\n          05 WS-ROW PIC X(12) OCCURS 3 TIMES.\n       01 WS-I     PIC 9 VALUE ZERO.\n       01 WS-NAME  PIC X(6) VALUE SPACES.\n       01 WS-AMT   PIC 9(5)V99 VALUE ZERO.\n       01 WS-TOTAL PIC 9(7)V99 VALUE ZERO.\n       01 WS-COUNT PIC 9(3) VALUE ZERO.\n       PROCEDURE DIVISION.\n           MOVE \"A,120.50\" TO WS-ROW(1)\n           MOVE \"B,80.00\"  TO WS-ROW(2)\n           MOVE \"C,199.50\" TO WS-ROW(3)\n           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > 3\n              UNSTRING WS-ROW(WS-I) DELIMITED BY \",\"\n                 INTO WS-NAME WS-AMT\n              ADD WS-AMT TO WS-TOTAL\n              ADD 1 TO WS-COUNT\n              DISPLAY FUNCTION TRIM(WS-NAME)\n                      \" AMOUNT=\" WS-AMT\n           END-PERFORM\n           DISPLAY \"ITEMS=\" WS-COUNT \" TOTAL=\" WS-TOTAL\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "UNSTRING 后不校验金额字段就直接累加：遇到空字段或非数字内容时，WS-AMT 保留上一条的旧值，合计被重复计算。解析后应先用 IS NUMERIC 校验再累加。",
+    "q": [
+      {
+        "q": "用 UNSTRING 按逗号拆分一行数据的关键子句是什么？",
+        "a": "UNSTRING 字段 DELIMITED BY \",\" INTO 目标字段1 目标字段2"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "发布构建用 cobc -x -O2 -std=default 编译，并确认没有 -debug 运行期检查开销",
+      "可执行文件依赖 libcob 运行库，容器镜像要安装 gnucobol 运行包，而不是只拷贝二进制",
+      "发布包包含程序、copybook、配置样例、README 和版本号；用 tar.gz 打包并生成 SHA256",
+      "部署前在目标环境做冒烟测试，确认文件路径、字符集和区域设置（locale）一致"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. RELEASE.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-VERSION PIC X(10) VALUE \"1.0.0\".\n       PROCEDURE DIVISION.\n      * 构建：cobc -x -O2 -std=default -o app app.cob\n      * 发布：tar czf app-1.0.0.tgz app README.md\n      * 容器：运行镜像需 gnucobol 运行库与 libcob\n           DISPLAY \"APP VERSION \" WS-VERSION.\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "只在编译机器上测试通过就把可执行文件拷到服务器，目标机缺少 libcob 运行库导致启动失败。发布前应在干净的目标环境安装运行依赖并做一次冒烟测试。",
+    "q": [
+      {
+        "q": "GnuCOBOL 编译出的程序运行时依赖哪个主要共享库？",
+        "a": "libcob（由 gnucobol 运行包提供）"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "固定格式严格遵守列规则：A 区放 division/section/01/段落名，B 区放语句，行宽不超过 72 列",
+      "数据名用有意义的连字符命名（WS-CUSTOMER-NAME），避免单字母；常量用 78 层集中定义",
+      "每个段落只做一件事，用 PERFORM 组织；避免 GO TO 和 ALTER，保持单一入口单一出口",
+      "所有文件操作检查 FILE STATUS，所有算术考虑 ON SIZE ERROR，发布前用 -Wall 清零警告"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. BEST-PRACTICES.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-QTY    PIC 9(5) VALUE 3.\n       01 WS-PRICE  PIC 9(5)V99 VALUE 19.99.\n       01 WS-AMOUNT PIC 9(8)V99 VALUE ZERO.\n          88 AMOUNT-OK VALUE 0 THRU 99999999.99.\n       PROCEDURE DIVISION.\n           COMPUTE WS-AMOUNT ROUNDED = WS-QTY * WS-PRICE\n           IF AMOUNT-OK\n              DISPLAY \"AMOUNT = \" WS-AMOUNT\n           ELSE\n              DISPLAY \"AMOUNT OUT OF RANGE\"\n           END-IF\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "语句写到第 73 列之后，cobc 会把它截断，表现为莫名其妙的语法错误或少了半句逻辑。固定格式必须把正文控制在前 72 列内，长表达式应换行续写。",
+    "q": [
+      {
+        "q": "固定格式 COBOL 中，程序正文的有效列范围是多少？",
+        "a": "第 8 列到第 72 列（第 1-6 列序号区，第 7 列指示符）"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结、学习路线与资源",
+    "p": [
+      "学习路线：四个 DIVISION → PIC 与数据层级 → PERFORM/EVALUATE → 文件与表 → CALL 与数据库",
+      "官方资源：GnuCOBOL 手册与 Programmer's Guide、COBOL 2002/2014 标准、COBOL Check 文档",
+      "实践建议：从批处理小工具做起，练习顺序文件、索引文件和报表；再用 CALL 拆分公共子程序",
+      "进阶方向：CICS 在线事务、DB2 嵌入式 SQL、JCL 作业编排，以及把 COBOL 服务封装为 API"
+    ],
+    "c": "       IDENTIFICATION DIVISION.\n       PROGRAM-ID. ROADMAP.\n       DATA DIVISION.\n       WORKING-STORAGE SECTION.\n       01 WS-STAGE PIC 9 VALUE ZERO.\n       01 WS-TOPIC PIC X(20) VALUE SPACES.\n       PROCEDURE DIVISION.\n           PERFORM VARYING WS-STAGE FROM 1 BY 1\n                   UNTIL WS-STAGE > 3\n              EVALUATE WS-STAGE\n                 WHEN 1 MOVE \"DATA DIVISION\" TO WS-TOPIC\n                 WHEN 2 MOVE \"FILES AND TABLES\" TO WS-TOPIC\n                 WHEN 3 MOVE \"CALL AND CICS\" TO WS-TOPIC\n              END-EVALUATE\n              DISPLAY \"STAGE \" WS-STAGE \": \" WS-TOPIC\n           END-PERFORM\n           DISPLAY \"RESOURCES: GnuCOBOL MANUAL, COBOL CHECK\"\n           STOP RUN.",
+    "et": "❌ 常见错误",
+    "ec": "学完语法后只在单文件里打转，不练习 copybook、子程序和文件分区，到了真实项目就看不懂多程序结构。应尽早用 CALL 拆分公共逻辑并用 COPY 复用记录定义。",
+    "q": [
+      {
+        "q": "COBOL 中复用共享记录定义使用哪个语句？",
+        "a": "COPY \"文件名.cpy\"，编译时用 -I 指定 copybook 目录"
+      }
+    ]
+  }
+]

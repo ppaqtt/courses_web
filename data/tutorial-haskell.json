@@ -1,0 +1,807 @@
+[
+  {
+    "id": 1,
+    "t": "Haskell 简介与历史",
+    "p": [
+      "Haskell 于 1990 年标准化，以 lambda 演算为基础，是纯函数式、强静态类型、默认惰性求值的语言",
+      "纯函数没有副作用，IO 通过 IO 类型与 do 语法显式隔离，类型系统在编译期排除大量错误",
+      "类型类提供 ad-hoc 多态，Functor/Applicative/Monad 是抽象计算的核心接口",
+      "GHC 是事实标准实现，广泛用于编译器、金融建模、并发服务与形式化验证"
+    ],
+    "c": "-- hello.hs 运行：runghc hello.hs 或 ghc hello.hs && ./hello\nmodule Main where\n\ngreet :: String -> String -> String\ngreet greeting name = greeting ++ \", \" ++ name ++ \"!\"\n\nmain :: IO ()\nmain = do\n  putStrLn \"Hello, World!\"\n  putStrLn (greet \"你好\" \"Haskell\")\n  -- 纯函数：同样的输入永远得到同样的输出\n  print (sum [1 .. 10])\n  print (map (* 2) [1, 2, 3])",
+    "et": "❌ 常见错误",
+    "ec": "把 Haskell 当命令式语言写：试图用变量累加或 for 循环。Haskell 没有可变变量和循环，迭代要用递归、map 与 fold 表达，状态要用 State monad 或 IORef 显式传递。",
+    "q": [
+      {
+        "q": "Haskell 默认采用哪种求值策略？",
+        "a": "惰性求值（lazy evaluation）"
+      },
+      {
+        "q": "Haskell 用什么类型隔离副作用？",
+        "a": "IO 类型"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与开发环境",
+    "p": [
+      "用 GHCup 安装 GHC、cabal 与 stack，安装后在 shell 配置 PATH，ghcup list 查看可用版本",
+      "cabal 是官方构建工具：cabal init 建项目、cabal build 编译、cabal run 运行、cabal repl 进 REPL",
+      "stack 基于快照 resolver 锁定整套依赖版本，适合可复现构建；两者都从 Hackage 拉包",
+      "GHCi 是交互解释器：:l 加载文件、:t 查类型、:i 查信息、:r 重新加载"
+    ],
+    "c": "-- 安装：curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh\n-- 项目：cabal init --interactive && cabal build && cabal run\nmodule Main where\n\nimport System.Info (compilerName, compilerVersion)\n\nmain :: IO ()\nmain = do\n  putStrLn (\"编译器: \" ++ compilerName ++ \" \" ++ show compilerVersion)\n  putStrLn \"REPL: ghci；加载文件 :l Main.hs；查类型 :t\"\n  putStrLn \"格式化: ormolu / fourmolu；静态检查: hlint\"\n  putStrLn \"测试: cabal test；文档: cabal haddock\"",
+    "et": "❌ 常见错误",
+    "ec": "同时用系统包管理器、stack 与 cabal 安装的多个 GHC 版本，导致 PATH 混乱、包不可见。应统一用 ghcup 管理工具链，并在项目内只选 cabal 或 stack 之一。",
+    "q": [
+      {
+        "q": "GHC 生态常用的工具链管理器？",
+        "a": "GHCup"
+      },
+      {
+        "q": "GHCi 中查看表达式类型的命令？",
+        "a": ":t"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "值与不可变绑定",
+    "p": [
+      "Haskell 没有赋值语句，= 表示定义；绑定一旦确立不可修改，所谓改变其实是创建新绑定",
+      "let ... in 在表达式内引入局部绑定，where 附着在函数方程后，二者都支持模式绑定",
+      "绑定默认惰性，只有被使用时才求值，这允许定义无限结构，也要注意空间泄漏",
+      "顶层绑定没有顺序要求，函数可互相引用；内层同名绑定会遮蔽外层并触发警告"
+    ],
+    "c": "module Main where\n\n-- 不可变绑定：radius 永远是 2.0\nradius :: Double\nradius = 2.0\n\narea :: Double\narea = pi * radius * radius\n\nmain :: IO ()\nmain = do\n  let greeting = \"Hello\"\n      name = \"Haskell\"\n  putStrLn (greeting ++ \", \" ++ name)\n  print area\n  print (double 21)\n  where\n    double x = x * 2",
+    "et": "❌ 常见错误",
+    "ec": "在 do 块写 x = x + 1 试图累加：这实际是递归定义，求值时会陷入 <<loop>> 或无限循环。需要状态时应使用 fold、State monad 或 IORef。",
+    "q": [
+      {
+        "q": "Haskell 中 = 的含义是什么？",
+        "a": "定义/绑定，不是赋值"
+      },
+      {
+        "q": "在表达式内引入局部绑定用什么语法？",
+        "a": "let ... in ..."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "类型与类型推断",
+    "p": [
+      "每个表达式都有静态类型，函数类型写作 a -> b -> c，箭头右结合而函数应用左结合",
+      "类型推断基于 Hindley-Milner，可省略签名；顶层函数仍建议写签名作为文档与错误边界",
+      "常见类型：Int、Integer、Double、Char、String（即 [Char]）、Bool、Maybe a",
+      "类型变量小写表示任意类型，类型构造器与类名大写；GHCi 的 :t 可查看推断结果"
+    ],
+    "c": "module Main where\n\n-- 类型签名可选，编译器可以推断；写上更清晰\nadd :: Int -> Int -> Int\nadd x y = x + y\n\naverage :: [Double] -> Double\naverage xs = sum xs / fromIntegral (length xs)\n\nmain :: IO ()\nmain = do\n  print (add 2 3)\n  print (average [1, 2, 3, 4])\n  print (show (add 1 2))\n  -- Int 是机器整数，Integer 是任意精度\n  print (2 ^ 100 :: Integer)",
+    "et": "❌ 常见错误",
+    "ec": "混用 Int 与 Integer 导致类型不匹配：length 返回 Int，而函数签名写的是 Integer。应在边界处用 fromIntegral 转换，并注意字面量类型由上下文推断。",
+    "q": [
+      {
+        "q": "Haskell 中 String 是什么的类型别名？",
+        "a": "[Char]"
+      },
+      {
+        "q": "把 Int 转为 Integer 的函数？",
+        "a": "fromIntegral"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "算术 + - * 要求 Num，/ 只用于 Fractional；整数除法用 div 与 mod，幂用 ^ 与 **",
+      "比较运算符返回 Bool，可比较任何 Ord 实例；逻辑运算 && || not 会短路求值",
+      "$ 是低优先级右结合的应用运算符，. 是函数组合，二者常用来消除括号",
+      "运算符可部分应用，如 (+1)、(*2)；也可用反引号把二元函数写成中缀：10 `div` 3"
+    ],
+    "c": "module Main where\n\nmain :: IO ()\nmain = do\n  print (7 / 2)              -- 3.5，/ 只用于 Fractional\n  print (div 7 2)            -- 3\n  print (mod 7 2)            -- 1\n  print (2 ^ 10)             -- 1024\n  print (True && False || not False)\n  print (\"ab\" ++ \"cd\")\n  print ([1, 2] ++ [3])\n\n  -- $ 降低优先级，. 组合函数\n  print (negate $ 5 + 3)\n  print (map (* 2) [1, 2, 3])\n  print (10 `div` 3)",
+    "et": "❌ 常见错误",
+    "ec": "用 / 做整数除法：7 / 2 得到 3.5，若函数签名是 Int 会直接编译失败。整数除法应用 div 7 2 或 7 `div` 2，取余用 mod，负数时 mod 与 rem 语义不同。",
+    "q": [
+      {
+        "q": "整数除法与取余的运算符？",
+        "a": "div 与 mod"
+      },
+      {
+        "q": "$ 的作用是什么？",
+        "a": "低优先级右结合的函数应用，减少括号"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串与字符",
+    "p": [
+      "String 是 [Char] 的类型别名，即字符链表；Text 包提供更高效的紧凑 Unicode 文本",
+      "拼接用 ++（线性复杂度），大量拼接应使用 Builder 或 Text；show 转字符串，read 反向解析",
+      "Char 用单引号，支持 '\\n'、'\\'' 等转义；Data.Char 提供 toUpper、isDigit、ord、chr",
+      "多行文本可用 unlines 组合；OverloadedStrings 扩展让字面量可用于 Text 与 ByteString"
+    ],
+    "c": "module Main where\n\nimport Data.Char (toUpper, isDigit, digitToInt)\n\nmain :: IO ()\nmain = do\n  let s = \"Hello, Haskell\"\n  putStrLn (map toUpper s)\n  print (length s)\n  print (words s)\n  print (unwords (reverse (words s)))\n  putStrLn (show (42 :: Int))\n  print (read \"123\" :: Int)\n\n  print ('A', fromEnum 'A')\n  print (filter isDigit \"a1b2c3\")\n  print (digitToInt '7')",
+    "et": "❌ 常见错误",
+    "ec": "在循环中逐次用 ++ 拼接字符串，每次都要遍历左操作数，复杂度 O(n²)。应改用 Data.Text 的 <>、Builder 的 toLazyText，或先收集成列表再 concat。",
+    "q": [
+      {
+        "q": "String 与 [Char] 的关系？",
+        "a": "String 就是 [Char] 的类型别名"
+      },
+      {
+        "q": "把字符串解析为值的函数？",
+        "a": "read"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "列表、元组与集合",
+    "p": [
+      "列表是单链表，用 [] 与 x:xs 构造；: 常数时间头插，++ 是线性拼接",
+      "元组大小固定、元素类型可不同，用 fst/snd 或模式匹配取值；三个以上字段建议用记录",
+      "Data.Map/Data.Set 提供平衡树实现的有序映射与集合，操作 O(log n)，需 containers 包",
+      "列表推导式 [f x | x <- xs, p x] 同时完成映射与过滤；range 语法 [1..10]、[1,3..9]"
+    ],
+    "c": "module Main where\n\nimport qualified Data.Map.Strict as Map\nimport Data.List (sort, nub)\n\nmain :: IO ()\nmain = do\n  let xs = [3, 1, 2, 1]\n  print (head xs)\n  print (tail xs)\n  print (take 2 xs)\n  print (sort xs)\n  print (nub xs)                -- 去重\n  print (zip [1, 2] \"ab\")\n  print (fst (1, \"one\"))\n\n  let m = Map.fromList [(\"a\", 1), (\"b\", 2)]\n  print (Map.lookup \"a\" m)\n  print (Map.insert \"c\" 3 m)",
+    "et": "❌ 常见错误",
+    "ec": "用 xs !! n 随机访问列表，单次 O(n)，放在循环里就是 O(n²)。频繁按索引访问应用 Data.Vector；只需遍历时用 map/fold 而不是索引。",
+    "q": [
+      {
+        "q": "列表头部插入元素的构造子？",
+        "a": ":（cons）"
+      },
+      {
+        "q": "有序映射与集合来自哪个包？",
+        "a": "containers（Data.Map / Data.Set）"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件与分支",
+    "p": [
+      "if/then/else 是表达式且 else 必需，所有分支类型必须相同，只适合简单二选一",
+      "守卫 guards 写在函数方程或 case 分支后，用 | 分隔，otherwise 恒为 True",
+      "case 对表达式做模式匹配，分支按顺序尝试，模式可嵌套并绑定变量",
+      "多路分类优先用函数多方程加守卫，比嵌套 if 清晰；Maybe/Either 常用 case 展开"
+    ],
+    "c": "module Main where\n\nsign :: Int -> String\nsign n\n  | n > 0 = \"正数\"\n  | n < 0 = \"负数\"\n  | otherwise = \"零\"\n\nbmi :: Double -> String\nbmi x =\n  if x < 18.5\n    then \"偏瘦\"\n    else \"正常\"\n\ndescribe :: Maybe Int -> String\ndescribe m = case m of\n  Nothing -> \"空\"\n  Just 0 -> \"零\"\n  Just n -> \"数字 \" ++ show n\n\nmain :: IO ()\nmain = do\n  putStrLn (sign (-3))\n  putStrLn (bmi 22.0)\n  putStrLn (describe (Just 0))",
+    "et": "❌ 常见错误",
+    "ec": "在守卫里调用自定义函数（如 isEven n）会编译失败：守卫只允许算术、比较、构造器与白名单函数。应把条件移入函数体用 if，或改用 case 与模式匹配。",
+    "q": [
+      {
+        "q": "守卫中常用的恒真条件？",
+        "a": "otherwise"
+      },
+      {
+        "q": "if 表达式的 else 分支可以省略吗？",
+        "a": "不可以，if 必须有 else"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "递归与迭代",
+    "p": [
+      "Haskell 没有 for/while，迭代用递归或高阶函数（map/filter/foldr/foldl'）表达",
+      "递归函数必须覆盖基线情形（[]、0 等），开启 -Wincomplete-patterns 可提示遗漏",
+      "尾递归在惰性求值下不必然更省内存，foldl 会堆积 thunk，数值聚合应用 foldl'",
+      "foldr 可处理无限列表并短路，foldl' 做严格聚合；map 与 filter 在 -O2 下可融合"
+    ],
+    "c": "module Main where\n\nimport Data.List (foldl')\n\nfactorial :: Integer -> Integer\nfactorial 0 = 1\nfactorial n = n * factorial (n - 1)\n\nmySum :: [Int] -> Int\nmySum [] = 0\nmySum (x:xs) = x + mySum xs\n\nmain :: IO ()\nmain = do\n  print (factorial 10)\n  print (mySum [1 .. 100])\n  print (foldr (+) 0 [1 .. 100])\n  print (foldl' (+) 0 [1 .. 100])\n  print (map (* 2) [1 .. 5])",
+    "et": "❌ 常见错误",
+    "ec": "用 foldl (+) 0 求和大列表，会产生百万层未求值 thunk，导致内存暴涨甚至栈溢出。数值聚合应使用 Data.List.foldl'，或开启 -O2 让 GHC 做严格性分析。",
+    "q": [
+      {
+        "q": "严格左折叠来自哪里？",
+        "a": "Data.List.foldl'"
+      },
+      {
+        "q": "foldr 相比 foldl' 的优势之一？",
+        "a": "可惰性处理无限列表并提前短路"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数定义与调用",
+    "p": [
+      "函数定义用 f x y = 表达式，多方程按模式自上而下匹配，where 引入局部定义",
+      "所有函数本质上只接受一个参数，多参数函数是返回函数的柯里化形式",
+      "调用即空格分隔的应用 f x y，优先级最高；复杂参数用 $ 或括号组织",
+      "局部函数可定义在 let/where 中并捕获外层参数；顶层函数建议写类型签名"
+    ],
+    "c": "module Main where\n\ngreet :: String -> String -> String\ngreet greeting name = greeting ++ \", \" ++ name ++ \"!\"\n\narea :: (Double, Double) -> Double\narea (w, h) = w * h\n\nbmi :: Double -> Double -> String\nbmi weight height\n  | value < 18.5 = \"偏瘦\"\n  | otherwise = \"正常\"\n  where\n    value = weight / (height * height)\n\nmain :: IO ()\nmain = do\n  putStrLn (greet \"Hello\" \"Haskell\")\n  print (area (3, 4))\n  putStrLn (bmi 70 1.75)",
+    "et": "❌ 常见错误",
+    "ec": "定义函数时遗漏模式：head [] 这类部分函数在运行时抛异常。应用模式匹配覆盖 [] 与 (x:xs)，或返回 Maybe，并开启 -Wall 检查不完整模式。",
+    "q": [
+      {
+        "q": "函数调用在 Haskell 中如何书写？",
+        "a": "用空格分隔，如 f x y"
+      },
+      {
+        "q": "where 的作用是什么？",
+        "a": "在函数方程后引入局部定义"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "高阶函数与柯里化",
+    "p": [
+      "高阶函数接受函数作为参数或返回函数，map、filter、foldr、zipWith 都是典型",
+      "部分应用：给多参函数传更少的实参，得到新函数，如 map (add 10)",
+      "函数组合 f . g 定义为 \\x -> f (g x)；$ 用于消除右端括号嵌套",
+      "匿名函数 \\x -> x * 2，也可用 section 写成 (*2)、(+1)"
+    ],
+    "c": "module Main where\n\ntwice :: (a -> a) -> a -> a\ntwice f x = f (f x)\n\nadd :: Int -> Int -> Int\nadd x y = x + y\n\nmain :: IO ()\nmain = do\n  print (twice (* 3) 2)\n  print (map (add 10) [1, 2, 3])   -- 部分应用\n  print (filter even [1 .. 10])\n  print (foldr (+) 0 [1 .. 5])\n  print ((* 2) $ 21)\n  print (zipWith add [1, 2] [10, 20])\n  print (flip (-) 1 5)             -- 5 - 1",
+    "et": "❌ 常见错误",
+    "ec": "混淆 . 与 $ 的结合方式：f . g x 会解析成 f . (g x) 而不是 (f . g) x，类型通常不匹配。应写 f . g $ x 或 f (g x)。",
+    "q": [
+      {
+        "q": "函数组合运算符是什么？",
+        "a": ".（点号）"
+      },
+      {
+        "q": "flip (-) 1 5 的结果？",
+        "a": "4（即 5 - 1）"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "模式匹配与解构",
+    "p": [
+      "模式匹配出现在函数参数、case、let/where 绑定与列表推导中，是解构数据的核心手段",
+      "构造器模式可嵌套，如 Just (x:xs)；_ 是通配符，var@pat 同时绑定整体与部分",
+      "记录语法生成字段访问器与更新语法，p { field = v } 返回修改后的新记录",
+      "模式匹配是穷尽性检查点，-Wincomplete-patterns 配合 -Werror 可把遗漏变成编译错误"
+    ],
+    "c": "module Main where\n\ndata Point = Point { px :: Double, py :: Double } deriving (Show)\n\ndescribe :: [Int] -> String\ndescribe [] = \"空列表\"\ndescribe [x] = \"单元素 \" ++ show x\ndescribe (x:y:_) = \"前两个: \" ++ show x ++ \", \" ++ show y\n\nshift :: Point -> Point\nshift p@(Point x y) = p { px = x + 1, py = y + 1 }\n\nmain :: IO ()\nmain = do\n  putStrLn (describe [1, 2, 3])\n  let p = Point 1 2\n  print p\n  print (shift p)\n  let (a, b) = (1, \"two\")\n  print a\n  putStrLn b",
+    "et": "❌ 常见错误",
+    "ec": "在 let 或函数参数中匹配可能失败的模式，如 let Just x = m，失败时抛 irrefutable pattern failed 且难以定位。可能失败的情况应使用 case 显式处理 Nothing。",
+    "q": [
+      {
+        "q": "_ 在模式匹配中表示什么？",
+        "a": "通配符，匹配任意值且不绑定"
+      },
+      {
+        "q": "var@pat 这种模式叫什么？",
+        "a": "as 模式"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "自定义数据类型",
+    "p": [
+      "data 定义代数数据类型，多个构造器用 | 分隔，每个构造器可携带任意类型字段",
+      "newtype 定义单构造器单字段的零运行时开销包装，用于区分语义，如 UserId 与 OrderId",
+      "记录语法 data Person = Person { name :: String, age :: Int } 自动生成访问器与更新语法",
+      "deriving 可自动实现 Show/Eq/Ord/Enum；递归数据类型可表示树与表达式"
+    ],
+    "c": "module Main where\n\ndata Shape\n  = Circle Double\n  | Rect Double Double\n  deriving (Show, Eq)\n\nnewtype UserId = UserId Int deriving (Show)\n\narea :: Shape -> Double\narea (Circle r) = pi * r * r\narea (Rect w h) = w * h\n\ndata Person = Person\n  { name :: String\n  , age :: Int\n  } deriving (Show)\n\nmain :: IO ()\nmain = do\n  print (area (Circle 2))\n  print (area (Rect 3 4))\n  print (UserId 42)\n  print (Person { name = \"Ada\", age = 36 })",
+    "et": "❌ 常见错误",
+    "ec": "在同一模块的两个记录中复用字段名，会生成重复的访问器函数而编译报错。应使用 DuplicateRecordFields 扩展，或把记录拆到不同模块并限定导入。",
+    "q": [
+      {
+        "q": "定义单字段零开销包装用哪个关键字？",
+        "a": "newtype"
+      },
+      {
+        "q": "自动派生类型类实例的关键字？",
+        "a": "deriving"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "类型类与多态",
+    "p": [
+      "类型类声明一组函数签名，如 class Eq a where (==) :: a -> a -> Bool，实例为具体类型实现",
+      "类型类区别于 OO 接口：调用按类型静态解析，实例可分布在任意模块，且支持默认实现",
+      "常见类型类：Eq、Ord、Show、Read、Num、Enum、Bounded、Semigroup、Monoid",
+      "约束写作 (Eq a, Show a) => ...，表示函数对满足这些类的类型多态"
+    ],
+    "c": "{-# LANGUAGE FlexibleInstances #-}\nmodule Main where\n\nclass Describable a where\n  describe :: a -> String\n\ndata Color = Red | Green deriving (Show)\n\ninstance Describable Color where\n  describe Red = \"红色\"\n  describe Green = \"绿色\"\n\ninstance Describable [Char] where\n  describe s = \"字符串(\" ++ show (length s) ++ \" 字符)\"\n\ndescribeAll :: Describable a => [a] -> [String]\ndescribeAll = map describe\n\nmain :: IO ()\nmain = do\n  putStrLn (describe Red)\n  putStrLn (describe \"Haskell\")\n  print (describeAll [Red, Green])",
+    "et": "❌ 常见错误",
+    "ec": "为自定义类型 deriving Show 后又手写 instance Show，会因重复实例而编译失败。派生与手写只能二选一；孤儿实例还会与其他模块的实例冲突。",
+    "q": [
+      {
+        "q": "类型类的约束在签名中如何书写？",
+        "a": "(C a, D a) => ..."
+      },
+      {
+        "q": "为列表类型手写实例通常需要哪个扩展？",
+        "a": "FlexibleInstances"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "抽象与接口设计",
+    "p": [
+      "class 除签名外可提供默认方法，实例只实现必需部分，也可覆盖默认实现",
+      "抽象通过类型类暴露接口、隐藏具体表示；模块导出列表控制外部可见性",
+      "常用抽象：Functor（fmap）、Foldable（foldr）、Traversable（traverse）、Monad（>>=）",
+      "类型类实例应满足定律，如 fmap id == id，否则抽象组合时行为不可预测"
+    ],
+    "c": "module Main where\n\nclass Container f where\n  empty :: f a\n  insert :: a -> f a -> f a\n  toList :: f a -> [a]\n\n  size :: f a -> Int\n  size = length . toList\n\ninstance Container Maybe where\n  empty = Nothing\n  insert x _ = Just x\n  toList Nothing = []\n  toList (Just x) = [x]\n\nmain :: IO ()\nmain = do\n  print (size (Just 3))\n  print (toList (Just 3))\n  print (toList (Nothing :: Maybe Int))\n  print (size (Nothing :: Maybe Int))",
+    "et": "❌ 常见错误",
+    "ec": "写出不满足类型类定律的实例，代码能编译但组合时会出错，例如 fmap 改变结构顺序。实现 Functor/Monad 前应验证恒等律与结合律，并用 QuickCheck 检验。",
+    "q": [
+      {
+        "q": "类型类中带默认实现的方法需要每个实例重写吗？",
+        "a": "不需要，实例可继承默认实现"
+      },
+      {
+        "q": "size 的默认实现依赖哪个方法？",
+        "a": "toList"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "参数化类型与泛型",
+    "p": [
+      "参数化类型含类型变量，如 data Box a = Box a；对 a 一无所知，因此只能重排或丢弃",
+      "Maybe a 与 Either e a 用类型参数表达可选值与带错误信息的结果",
+      "多参数类型构造器可声明 Functor 等实例；类型变量小写、构造器与类名大写",
+      "参数化带来免费定理：多态函数的行为被类型严格约束，很难写出错误实现"
+    ],
+    "c": "module Main where\n\ndata Box a = Box a deriving (Show)\n\ninstance Functor Box where\n  fmap f (Box x) = Box (f x)\n\nsafeHead :: [a] -> Maybe a\nsafeHead [] = Nothing\nsafeHead (x:_) = Just x\n\npair :: a -> b -> (a, b)\npair a b = (a, b)\n\nmain :: IO ()\nmain = do\n  print (fmap (+ 1) (Box 41))\n  print (safeHead [1, 2, 3])\n  print (safeHead ([] :: [Int]))\n  print (pair \"age\" 36)",
+    "et": "❌ 常见错误",
+    "ec": "给函数签名写具体类型如 [Int] -> Int，导致无法复用于其他元素类型。应尽量泛化为 [a] -> Int，只在确实需要运算时加 Num a 等约束。",
+    "q": [
+      {
+        "q": "data Box a = Box a 中 a 是什么？",
+        "a": "类型变量/类型参数"
+      },
+      {
+        "q": "safeHead 返回什么类型？",
+        "a": "Maybe a"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理",
+    "p": [
+      "Maybe a 表示可能失败的计算：Just 值或 Nothing；Either e a 用 Left e 携带错误信息",
+      "用 case 展开、用 >>= 或 do 语法串联，失败即短路，无需异常",
+      "maybe/either 组合子提供默认值与映射；Data.Maybe 的 fromMaybe、mapMaybe 很常用",
+      "异常（IO 异常、error）用于不可恢复情况；纯代码应优先用代数类型表达失败"
+    ],
+    "c": "module Main where\n\nsafeDiv :: Int -> Int -> Maybe Int\nsafeDiv _ 0 = Nothing\nsafeDiv a b = Just (a `div` b)\n\nparsePositive :: String -> Either String Int\nparsePositive s =\n  case reads s :: [(Int, String)] of\n    [(n, \"\")] | n > 0 -> Right n\n    _ -> Left (\"无效正整数: \" ++ s)\n\nmain :: IO ()\nmain = do\n  print (safeDiv 10 2)\n  print (safeDiv 10 0)\n  print (safeDiv 10 2 >>= \\q -> safeDiv q 0)\n  print (parsePositive \"42\")\n  print (parsePositive \"-5\")\n\n  case parsePositive \"7\" of\n    Left err -> putStrLn err\n    Right n -> putStrLn (\"解析成功: \" ++ show n)",
+    "et": "❌ 常见错误",
+    "ec": "用 fromJust 解包 Maybe，遇到 Nothing 时抛异常使程序崩溃。应使用 case、maybe 或 fromMaybe 提供默认值，把失败处理显式化。",
+    "q": [
+      {
+        "q": "Either 中表示错误的分支是哪个构造器？",
+        "a": "Left"
+      },
+      {
+        "q": "为 Maybe 提供默认值的函数？",
+        "a": "fromMaybe"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件与 IO 操作",
+    "p": [
+      "System.IO 提供 readFile/writeFile/appendFile 与 Handle 操作，String 版本按需惰性读入",
+      "withFile 使用 bracket 模式确保异常时句柄关闭；hPutStrLn/hGetLine 按行读写",
+      "大文件用 Data.Text.IO 或 ByteString，避免 String 链表开销；hSetBuffering 控制缓冲",
+      "读写前用 doesFileExist 检查，路径拼接用 System.FilePath 的 </> 保证跨平台"
+    ],
+    "c": "module Main where\n\nimport System.IO\n\nmain :: IO ()\nmain = do\n  let path = \"demo.txt\"\n  writeFile path \"第一行\\n第二行\\n\"\n  content <- readFile path\n  putStr content\n  appendFile path \"追加一行\\n\"\n\n  withFile path AppendMode $ \\h -> do\n    hPutStrLn h \"使用 Handle 写入\"\n    hFlush h\n\n  ls <- lines <$> readFile path\n  print (length ls)\n  print (reverse ls)",
+    "et": "❌ 常见错误",
+    "ec": "用 readFile 读取后未强制求值，惰性 IO 可能在文件已关闭或删除后才真正读取，异常位置难以定位。大文件应改用严格 ByteString/Text 或显式流式处理。",
+    "q": [
+      {
+        "q": "确保文件句柄在异常时也关闭的函数？",
+        "a": "withFile"
+      },
+      {
+        "q": "读取文件全部行的函数？",
+        "a": "readFile 配合 lines"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式",
+    "p": [
+      "正则支持来自 regex-tdfa（POSIX）或 regex-pcre 包，核心操作符是 =~，需按目标类型注解",
+      "结果类型决定行为：Bool 判断匹配、四元组取前后文与捕获组，全部匹配用 getAllTextMatches 收集",
+      "替换与分割在 Text.Regex.TDFA.Text 中提供；复杂解析建议用 parser combinator",
+      "正则字符串中的反斜杠需要转义，复杂时可用准引用 [r|...|] 提升可读性"
+    ],
+    "c": "-- cabal build-depends: base, regex-tdfa\nmodule Main where\n\nimport Text.Regex.TDFA ((=~), AllTextMatches (..), getAllTextMatches)\n\ntext :: String\ntext = \"订单 A123 金额 99 元，订单 B456 金额 250 元\"\n\nmain :: IO ()\nmain = do\n  print (getAllTextMatches (text =~ \"[A-Z][0-9]{3}\") :: [String])\n  print (getAllTextMatches (text =~ \"[0-9]+\") :: [String])\n  print (\"2024-05-01\" =~ \"^([0-9]{4})-([0-9]{2})-([0-9]{2})$\"\n          :: (String, String, String, [String]))\n  print ((\"hello\" =~ \"HELLO\") :: Bool)",
+    "et": "❌ 常见错误",
+    "ec": "使用 =~ 时不给结果类型注解，GHC 会报模糊类型（RegexContext 无法确定目标）。取全部匹配要用 getAllTextMatches 配合 AllTextMatches，直接注解成 [String] 并没有对应实例。",
+    "q": [
+      {
+        "q": "regex-tdfa 中执行匹配的运算符？",
+        "a": "=~"
+      },
+      {
+        "q": "只判断是否匹配应把结果注解为什么类型？",
+        "a": "Bool"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块、包管理与依赖",
+    "p": [
+      "模块用 module Name (exports) where 声明，未导出的定义对外不可见，Main 需导出 main",
+      ".cabal 文件描述包：name/version/build-depends/exposed-modules，cabal build 求解依赖并构建",
+      "Hackage 是中央包仓库，cabal install 安装可执行，库依赖写在 build-depends",
+      "stack 用 resolver 快照锁定整套依赖版本，stack build/stack ghci 提供可复现环境"
+    ],
+    "c": "-- 项目结构：demo.cabal / app/Main.hs / src/Lib.hs / test/Spec.hs\nmodule Main where\n\nimport qualified Data.Map.Strict as Map\nimport Data.List (sortOn)\n\nwordCount :: String -> Map.Map String Int\nwordCount = Map.fromListWith (+) . flip zip (repeat 1) . words\n\nmain :: IO ()\nmain = do\n  let counts = wordCount \"a b a c b a\"\n  print (Map.toList counts)\n  print (take 2 (sortOn (negate . snd) (Map.toList counts)))\n  -- Hackage 是包仓库：cabal install --lib regex-tdfa",
+    "et": "❌ 常见错误",
+    "ec": "build-depends 中漏写实际 import 的包（如 containers、text），本地因全局包可见而能编译，换机器就失败。应只依赖声明过的包，并在干净环境验证构建。",
+    "q": [
+      {
+        "q": "声明库依赖的 .cabal 字段？",
+        "a": "build-depends"
+      },
+      {
+        "q": "Haskell 中央包仓库的名字？",
+        "a": "Hackage"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "包管理 cabal（build/run/repl）或 stack；文档 cabal haddock；发布 cabal sdist/upload",
+      "测试 hspec/HUnit/QuickCheck/tasty；格式化 ormolu 或 fourmolu；静态检查 hlint",
+      "调试 GHCi（:t/:i/:l/:r/:break/:trace）；性能 ghc -O2 配合 +RTS -s/-p",
+      "常用库：Prelude、Data.List、Data.Map/Set、Data.Text、Control.Monad、System.IO"
+    ],
+    "c": "module Main where\n\nimport Data.List (sortBy, group, sort)\nimport Data.Ord (comparing)\nimport Text.Printf (printf)\n\nmain :: IO ()\nmain = do\n  -- 包管理：cabal / stack；构建：cabal build；运行：cabal run\n  -- 测试：cabal test；格式化：ormolu -i .；静态检查：hlint .\n  -- 调试：ghci；文档：cabal haddock\n  print (sort [3, 1, 2])\n  print (group (sort \"hello\"))\n  print (sortBy (comparing length) [\"ccc\", \"a\", \"bb\"])\n  printf \"%.2f\\n\" (pi :: Double)\n  print (read \"42\" :: Int)\n  print (show (Just 1))\n  -- GHCi 常用：:t 表达式  :i 名字  :l 文件  :r 重载",
+    "et": "❌ 常见错误",
+    "ec": "只用 Prelude 而不知道 Data.List 的 foldl'、sortOn、nub，重复造低效轮子。应熟悉 containers/text/bytestring 与常用工具函数，并用 Hoogle 按类型搜索。",
+    "q": [
+      {
+        "q": "按类型搜索 Haskell 函数的网站？",
+        "a": "Hoogle"
+      },
+      {
+        "q": "GHC 的官方构建工具？",
+        "a": "cabal"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与并行",
+    "p": [
+      "GHC 绿色线程由 RTS 调度，forkIO 创建轻量线程，编译需 -threaded 才能利用多核",
+      "MVar 是同步可变变量，takeMVar/putMVar 会阻塞，modifyMVar 保证读改写原子性",
+      "STM 用 TVar 与 atomically 组合事务，自动重试且可组合，适合复杂共享状态",
+      "async 包的 concurrently/mapConcurrently 简化并发；纯计算并行用 par 与 Strategies"
+    ],
+    "c": "module Main where\n\nimport Control.Concurrent\nimport Control.Monad (replicateM_)\n\nmain :: IO ()\nmain = do\n  done <- newEmptyMVar\n  _ <- forkIO $ do\n    threadDelay 100000\n    putMVar done \"子线程完成\"\n  msg <- takeMVar done\n  putStrLn msg\n\n  counter <- newMVar (0 :: Int)\n  finished <- newEmptyMVar\n  let worker = do\n        replicateM_ 1000 $ modifyMVar_ counter (\\n -> pure (n + 1))\n        putMVar finished ()\n  replicateM_ 10 (forkIO worker)\n  replicateM_ 10 (takeMVar finished)\n  readMVar counter >>= print",
+    "et": "❌ 常见错误",
+    "ec": "在 forkIO 线程中抛出的异常默认静默丢失，主线程无从感知。应使用 async 的 wait/await 或 MVar 传递结果与异常，并在主线程显式处理。",
+    "q": [
+      {
+        "q": "线程间同步的可变变量类型？",
+        "a": "MVar"
+      },
+      {
+        "q": "STM 中提交事务的函数？",
+        "a": "atomically"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "惰性求值与性能",
+    "p": [
+      "Haskell 默认惰性求值，表达式在需要时才计算，因而可定义无限列表并按需 take",
+      "惰性会带来空间泄漏：未求值的 thunk 累积占用内存，foldl (+) 0 是典型陷阱",
+      "用 seq、$!、BangPatterns 或 foldl' 强制求值到 WHNF；deepseq 可强制到完全范式",
+      "严格性分析与 -O2 能消除部分 thunk；Data.Text/ByteString 比 String 更省内存"
+    ],
+    "c": "module Main where\n\nimport Data.List (foldl')\n\nnaturals :: [Integer]\nnaturals = [1 ..]\n\nfibs :: [Integer]\nfibs = 0 : 1 : zipWith (+) fibs (tail fibs)\n\nmain :: IO ()\nmain = do\n  print (take 10 naturals)\n  print (take 10 fibs)\n  print (length (takeWhile (< 1000) (map (* 2) naturals)))\n  -- foldl' 严格求值，避免 thunk 堆积\n  print (foldl' (+) 0 [1 .. 1000000])\n  let big = sum [1 .. 10000000] :: Int\n  print (big `seq` \"已强制求值\")",
+    "et": "❌ 常见错误",
+    "ec": "对可能无限的列表调用 length 或 sum，或先遍历再判断是否为空，都会导致不终止。处理可能无限的序列应使用 take/takeWhile，并避免全量聚合。",
+    "q": [
+      {
+        "q": "强制求值到 WHNF 的函数？",
+        "a": "seq"
+      },
+      {
+        "q": "避免 thunk 堆积的严格左折叠？",
+        "a": "Data.List.foldl'"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试与属性检验",
+    "p": [
+      "HUnit 提供 TestCase 与 assertEqual；hspec 用 describe/it 组织，shouldBe/shouldThrow 断言",
+      "QuickCheck 用 property 生成随机输入，==> 添加前置条件，发现反例后自动缩小",
+      "tasty 是统一测试入口，可组合 tasty-hunit、tasty-quickcheck、tasty-hspec",
+      "测试放 test/ 目录，cabal test 运行；纯函数与性质测试是 Haskell 的强项"
+    ],
+    "c": "-- cabal build-depends: base, hspec, QuickCheck\nmodule Main where\n\nimport Test.Hspec\nimport Test.QuickCheck (property, (==>))\n\nsafeDiv :: Int -> Int -> Maybe Int\nsafeDiv _ 0 = Nothing\nsafeDiv a b = Just (a `div` b)\n\nmain :: IO ()\nmain = hspec $ do\n  describe \"safeDiv\" $ do\n    it \"正常相除\" $\n      safeDiv 6 3 `shouldBe` Just 2\n    it \"除零返回 Nothing\" $\n      safeDiv 1 0 `shouldBe` Nothing\n    it \"非零除数满足除法恒等式\" $\n      property $ \\a b ->\n        b /= 0 ==> case safeDiv a b of\n          Just q -> q * b + a `mod` b == a\n          Nothing -> False",
+    "et": "❌ 常见错误",
+    "ec": "QuickCheck 属性写成依赖具体随机值的断言（如 x == 42），几乎必然失败且无法缩小。属性应表达普遍规律，如 reverse (reverse xs) == xs，并用 forAll 控制生成器。",
+    "q": [
+      {
+        "q": "QuickCheck 中声明前置条件的运算符？",
+        "a": "==>"
+      },
+      {
+        "q": "hspec 中断言相等用什么？",
+        "a": "shouldBe"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "GHCi 是最常用的调试器：:l 加载、:r 重载、:t 查类型、:i 查实例与定义位置",
+      ":break 函数名 设断点，:trace 逐步执行，:show bindings 查看局部绑定，:continue 继续",
+      "Debug.Trace 的 trace/traceShow 可在纯代码中临时打印，但会破坏惰性求值顺序",
+      "编译加 -Wall -Wcompat 捕获常见错误；undefined 可作占位，运行到时会明确报错"
+    ],
+    "c": "module Main where\n\nimport Debug.Trace (trace, traceShow)\n\ndebugged :: Int -> Int\ndebugged x =\n  trace (\"debugged 输入: \" ++ show x) $\n    traceShow (x * 2) (x * 2)\n\nmain :: IO ()\nmain = do\n  print (debugged 5)\n  -- GHCi 调试：\n  -- :l Main.hs          加载模块\n  -- :break debugged     设置断点\n  -- :trace debugged 10  逐步执行\n  -- :show bindings      查看局部绑定\n  -- :set -fbreak-on-exception  异常时中断\n  print (trace \"仅用于调试\" (1 + 1))",
+    "et": "❌ 常见错误",
+    "ec": "依赖 trace 的输出顺序推理求值过程：惰性求值下 trace 何时触发不确定，且共享的 thunk 可能只打印一次。应使用 GHCi 断点或 traceId 辅助定位。",
+    "q": [
+      {
+        "q": "GHCi 中设置断点的命令？",
+        "a": ":break 函数名"
+      },
+      {
+        "q": "强制中断异常的 GHCi 设置？",
+        "a": ":set -fbreak-on-exception"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "性能分析与优化",
+    "p": [
+      "编译优化用 ghc -O2，运行加 +RTS -s 查看分配量、GC 次数与最大驻留内存",
+      "时间剖析：-prof -fprof-auto 后加 +RTS -p 生成成本中心报告，-hc/-hy 剖析堆占用",
+      "常见优化：严格 fold、避免 String、使用 ByteString/Text、INLINE 关键函数、减少装箱",
+      "用 criterion 做微基准，注意预热、多次采样与统计显著性，避免过早优化"
+    ],
+    "c": "module Main where\n\nimport Data.List (foldl')\n\nsumLazy, sumStrict :: [Int] -> Int\nsumLazy = foldl (+) 0\nsumStrict = foldl' (+) 0\n\nmain :: IO ()\nmain = do\n  let xs = [1 .. 2000000]\n  print (sumLazy xs)      -- 产生大量 thunk\n  print (sumStrict xs)    -- 常量空间\n  putStrLn \"编译：ghc -O2 -rtsopts Prof.hs\"\n  putStrLn \"统计：./Prof +RTS -s\"\n  putStrLn \"剖析：ghc -prof -fprof-auto，./Prof +RTS -p\"",
+    "et": "❌ 常见错误",
+    "ec": "在未开启 -O2 时比较性能，GHC 的严格性分析与内联未生效，结论完全失真。基准测试必须使用与生产一致的优化选项，并用 criterion 而非手写计时。",
+    "q": [
+      {
+        "q": "查看内存分配与 GC 统计的 RTS 选项？",
+        "a": "+RTS -s"
+      },
+      {
+        "q": "常用的 Haskell 微基准库？",
+        "a": "criterion"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式与函数式架构",
+    "p": [
+      "函数式架构用类型组合表达效果：Reader 传环境、State 传状态、ExceptT 处理错误、Writer 记日志",
+      "monad transformer 通过 lift 把底层 monad 提升到上层，用 runXXX 逐层剥离",
+      "mtl 提供 MonadReader/MonadState 等约束，使函数只声明所需能力，便于替换实现",
+      "领域建模用 ADT 让非法状态不可表示；服务边界可用 Free monad 或 effect system 解耦"
+    ],
+    "c": "-- cabal build-depends: base, mtl\nmodule Main where\n\nimport Control.Monad.State\n\ntype Counter = State Int\n\ntick :: Counter ()\ntick = modify (+ 1)\n\nrunTwice :: Counter Int\nrunTwice = do\n  tick\n  tick\n  get\n\nmain :: IO ()\nmain = do\n  print (runState runTwice 0)\n  print (evalState runTwice 10)\n  print (execState (mapM_ (const tick) [1 .. 5]) 0)",
+    "et": "❌ 常见错误",
+    "ec": "盲目堆叠 monad transformer 导致类型签名臃肿、lift 到处出现。应优先用 ReaderT 加显式参数或 effect 库，保持层数最少，并按需引入约束。",
+    "q": [
+      {
+        "q": "State monad 中读取状态的函数？",
+        "a": "get"
+      },
+      {
+        "q": "逐层剥离 transformer 的函数通常叫什么前缀？",
+        "a": "run（如 runState/runReaderT）"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问",
+    "p": [
+      "postgresql-simple 提供 connect/query/execute，SQL 用 ? 占位符参数化，防止注入",
+      "查询结果映射到记录需实现 FromRow，用 field 组合子按列顺序取值，ToRow 用于写入",
+      "连接信息用 ConnectInfo 记录或连接字符串；生产应使用 resource-pool 管理连接池",
+      "复杂项目可用 persistent/beam 等 ORM，用模板 Haskell 生成类型安全的 schema 与查询"
+    ],
+    "c": "-- cabal build-depends: base, postgresql-simple\n{-# LANGUAGE OverloadedStrings #-}\nmodule Main where\n\nimport Database.PostgreSQL.Simple\nimport Database.PostgreSQL.Simple.FromRow\n\ndata User = User Int String Int deriving (Show)\n\ninstance FromRow User where\n  fromRow = User <$> field <*> field <*> field\n\nmain :: IO ()\nmain = do\n  conn <- connect defaultConnectInfo\n    { connectUser = \"postgres\"\n    , connectPassword = \"secret\"\n    , connectDatabase = \"demo\"\n    }\n  execute conn \"CREATE TABLE IF NOT EXISTS users (id serial primary key, name text, age int)\" ()\n  execute conn \"INSERT INTO users (name, age) VALUES (?, ?)\" (\"Ada\" :: String, 36 :: Int)\n  users <- query_ conn \"SELECT id, name, age FROM users ORDER BY id\" :: IO [User]\n  mapM_ print users\n  close conn",
+    "et": "❌ 常见错误",
+    "ec": "用字符串拼接 SQL 并把用户输入直接插入，既容易注入又易因引号出错。所有变量都应通过 query/execute 的参数列表传递，由驱动完成转义与类型编码。",
+    "q": [
+      {
+        "q": "postgresql-simple 中 SQL 占位符是什么？",
+        "a": "?"
+      },
+      {
+        "q": "把查询行映射为记录需要实现哪个类型类？",
+        "a": "FromRow"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP",
+    "p": [
+      "服务端用 wai 定义 Application，warp 负责监听与 HTTP 解析，二者是 Haskell Web 的基础",
+      "客户端用 http-client 的 Manager 复用连接，httpLbs 发起请求并读取响应体",
+      "响应使用 responseLBS 设置状态码与响应头，ByteString 字面量需 OverloadedStrings",
+      "生产应设置超时、限制请求体大小，并用 middleware 处理日志、CORS 与压缩"
+    ],
+    "c": "{-# LANGUAGE OverloadedStrings #-}\n-- cabal build-depends: base, wai, warp, http-types\nmodule Main where\n\nimport Network.Wai\nimport Network.Wai.Handler.Warp (run)\nimport Network.HTTP.Types (status200)\nimport qualified Data.ByteString.Lazy as BL\n\napp :: Application\napp req respond =\n  respond $ responseLBS\n    status200\n    [(\"Content-Type\", \"text/plain; charset=utf-8\")]\n    (BL.fromStrict (\"路径: \" <> rawPathInfo req))\n\nmain :: IO ()\nmain = do\n  putStrLn \"监听 http://localhost:3000\"\n  run 3000 app",
+    "et": "❌ 常见错误",
+    "ec": "每次请求都 newManager 创建连接池，导致连接无法复用、文件描述符耗尽。应全局复用一个 Manager，并设置 responseTimeout 与连接数上限。",
+    "q": [
+      {
+        "q": "Haskell 的 Web 应用接口类型？",
+        "a": "Application（wai）"
+      },
+      {
+        "q": "启动 warp 服务器的函数？",
+        "a": "Network.Wai.Handler.Warp.run"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "输入校验用 readMaybe/readEither 代替 read，用长度与字符白名单约束，避免部分函数",
+      "输出 HTML 必须转义（blaze-html 默认转义），SQL 必须参数化，禁止拼接用户输入",
+      "密钥从环境变量读取，不写入源码与日志；密码用 bcrypt/scrypt 慢哈希加盐",
+      "加密用 cryptonite 的成熟算法，随机数使用加密安全的 getRandomBytes"
+    ],
+    "c": "module Main where\n\nimport Data.Char (isAlphaNum)\nimport System.Environment (lookupEnv)\nimport Text.Read (readMaybe)\n\nvalidName :: String -> Bool\nvalidName s = not (null s) && length s <= 20 && all isAlphaNum s\n\nparseAge :: String -> Maybe Int\nparseAge s = case readMaybe s of\n  Just n | n >= 0 && n <= 150 -> Just n\n  _ -> Nothing\n\nmain :: IO ()\nmain = do\n  print (validName \"Alice_1\")\n  print (parseAge \"36\")\n  print (parseAge \"-1\")\n  secret <- lookupEnv \"APP_SECRET\"\n  putStrLn (maybe \"未设置 APP_SECRET\" (const \"已加载密钥\") secret)\n  -- 输出到网页前必须做 HTML 转义，可使用 blaze-html",
+    "et": "❌ 常见错误",
+    "ec": "用 read 解析用户输入，非法输入直接抛异常使服务崩溃。应使用 readMaybe 返回 Maybe，或 readEither 返回错误信息，再统一转换为 400 响应。",
+    "q": [
+      {
+        "q": "安全解析数字的函数？",
+        "a": "readMaybe"
+      },
+      {
+        "q": "读取环境变量的函数？",
+        "a": "System.Environment.lookupEnv"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "命令行参数用 System.Environment.getArgs 获取，模式匹配参数个数并给出用法提示",
+      "解析选项可用 optparse-applicative，自动生成帮助、类型安全的选项与子命令",
+      "错误输出到 stderr，用 System.Exit.exitFailure 返回非零码，便于 shell 脚本判断",
+      "处理大文件用 ByteString/Text 或流式读取，避免 String 链表开销"
+    ],
+    "c": "module Main where\n\nimport System.Environment (getArgs)\nimport System.Exit (exitFailure)\nimport qualified Data.Map.Strict as Map\n\ncountWords :: String -> Map.Map String Int\ncountWords = Map.fromListWith (+) . flip zip (repeat 1) . words\n\nmain :: IO ()\nmain = do\n  args <- getArgs\n  case args of\n    [path] -> do\n      content <- readFile path\n      mapM_ (\\(w, n) -> putStrLn (w ++ \"\\t\" ++ show n))\n            (Map.toList (countWords content))\n    _ -> do\n      putStrLn \"用法: wordcount <文件>\"\n      exitFailure",
+    "et": "❌ 常见错误",
+    "ec": "用 getArgs 后直接取 head args，用户不带参数时抛异常且没有用法提示。应先匹配参数列表，错误分支打印用法并 exitFailure，成功分支再处理。",
+    "q": [
+      {
+        "q": "获取命令行参数列表的函数？",
+        "a": "getArgs"
+      },
+      {
+        "q": "返回非零退出码的函数？",
+        "a": "exitFailure"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：Web API",
+    "p": [
+      "Web API 用 warp 启动、wai 定义应用，aeson 负责 JSON 编解码，ToJSON/FromJSON 可派生",
+      "路由可手写 pathInfo 匹配，或用 servant 以类型描述 API，自动生成服务端与客户端",
+      "请求体解析用 strictRequestBody 配合 eitherDecode，解析失败返回 400 与错误信息",
+      "用 Handler monad（ExceptT ServerError IO）统一错误处理，配合 servant-server 更规范"
+    ],
+    "c": "{-# LANGUAGE OverloadedStrings #-}\n{-# LANGUAGE DeriveGeneric #-}\n-- cabal build-depends: base, aeson, wai, warp, http-types\nmodule Main where\n\nimport Data.Aeson (ToJSON, encode)\nimport GHC.Generics (Generic)\nimport Network.HTTP.Types (status200)\nimport Network.Wai\nimport Network.Wai.Handler.Warp (run)\n\ndata User = User { userId :: Int, userName :: String } deriving (Generic)\n\ninstance ToJSON User\n\napp :: Application\napp _ respond =\n  respond $ responseLBS status200 [(\"Content-Type\", \"application/json\")]\n    (encode (User 1 \"Ada\"))\n\nmain :: IO ()\nmain = run 8080 app",
+    "et": "❌ 常见错误",
+    "ec": "用 fromJSON/encode 时忽略解析错误，eitherDecode 返回 Left 被静默丢弃导致空响应。所有 JSON 解析都应显式处理 Left 并返回 400。",
+    "q": [
+      {
+        "q": "aeson 中解码可能失败、返回 Either 的函数？",
+        "a": "eitherDecode"
+      },
+      {
+        "q": "自动派生 JSON 实例通常需要哪个扩展？",
+        "a": "DeriveGeneric"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "cabal build 生成可执行文件，cabal install --installdir 安装，cabal sdist 打包源码",
+      "静态链接用 --enable-executable-static（需静态 libc），或用 Alpine 容器减小体积",
+      "容器采用多阶段构建：builder 阶段安装 GHC 与依赖，运行阶段只复制二进制",
+      "版本与元数据写在 .cabal 文件，维护 CHANGELOG 并按 PVP 版本策略发布"
+    ],
+    "c": "module Main where\n\nimport System.Environment (lookupEnv)\nimport System.Info (os, arch)\n\nmain :: IO ()\nmain = do\n  putStrLn (\"构建目标: \" ++ os ++ \"/\" ++ arch)\n  port <- lookupEnv \"PORT\"\n  putStrLn (\"服务端口: \" ++ maybe \"3000\" id port)\n  putStrLn \"健康检查: GET /health\"\n  -- cabal build -O2\n  -- cabal build --enable-executable-static\n  -- cabal sdist / cabal upload --publish\n  -- docker build -t myapp .（多阶段：builder 用 haskell 镜像）\n  putStrLn \"发布前确认 CHANGELOG 与版本号\"",
+    "et": "❌ 常见错误",
+    "ec": "把开发机编译的二进制直接复制到不同 libc 的目标机，运行时报动态库缺失。应静态链接，或在相同基础镜像中构建，并用 ldd 检查依赖。",
+    "q": [
+      {
+        "q": "打包源码分发的 cabal 命令？",
+        "a": "cabal sdist"
+      },
+      {
+        "q": "检查二进制动态库依赖的工具？",
+        "a": "ldd"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "开启 -Wall -Wcompat -Wincomplete-patterns，把警告当错误；用 hlint 与 ormolu/fourmolu 统一风格",
+      "优先写总函数，用 Maybe/Either 替代 head/fromJust/error 等部分函数",
+      "所有顶层定义写类型签名，函数保持短小，用 where 拆分，命名表达意图",
+      "用 newtype 区分语义相同的类型，用 ADT 建模领域，让非法状态无法构造"
+    ],
+    "c": "{-# LANGUAGE LambdaCase #-}\nmodule Main where\n\nimport Data.List (foldl')\n\naverage :: [Double] -> Maybe Double\naverage [] = Nothing\naverage xs = Just (sum xs / fromIntegral (length xs))\n\nsummarize :: Maybe Double -> String\nsummarize = \\case\n  Nothing -> \"无数据\"\n  Just x\n    | x >= 60 -> \"及格\"\n    | otherwise -> \"不及格\"\n\nmain :: IO ()\nmain = do\n  print (average [90, 80, 70])\n  putStrLn (summarize (average []))\n  putStrLn (summarize (average [50, 60]))\n  print (foldl' (+) 0 [1 .. 100])",
+    "et": "❌ 常见错误",
+    "ec": "为省事在库代码中使用 error/undefined，调用方无法从类型看出失败可能。库 API 应返回 Maybe/Either 或抛出受控异常，并在文档中写明。",
+    "q": [
+      {
+        "q": "避免 head 等部分函数的替代方案？",
+        "a": "模式匹配或返回 Maybe"
+      },
+      {
+        "q": "检查代码风格与冗余表达式的工具？",
+        "a": "hlint"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "学习路线：语法与递归 → ADT 与模式匹配 → 类型类与 Functor/Monad → 实战项目与性能",
+      "推荐资源：Haskell 趣学指南、Real World Haskell、Haskell Programming from First Principles",
+      "进阶方向：monad transformer、lens、STM、servant、GHC 扩展与类型级编程",
+      "坚持用 GHCi 实验、读 Hackage 文档、用 Hoogle 按类型搜索，并参与开源项目"
+    ],
+    "c": "module Main where\n\ntopics :: [(String, [String])]\ntopics =\n  [ (\"基础\", [\"ADT\", \"模式匹配\", \"递归\", \"高阶函数\"])\n  , (\"类型\", [\"typeclass\", \"Functor/Applicative/Monad\", \"Monad Transformer\"])\n  , (\"工程\", [\"cabal\", \"hspec/QuickCheck\", \"hlint/ormolu\"])\n  , (\"进阶\", [\"STM\", \"lens\", \"性能与剖析\"])\n  ]\n\nmain :: IO ()\nmain = do\n  mapM_ (\\(k, vs) -> putStrLn (k ++ \": \" ++ unwords vs)) topics\n  putStrLn \"资源: https://haskell.org 与 https://hackage.haskell.org\"\n  putStrLn \"书籍: 《Haskell 趣学指南》《Real World Haskell》\"\n  print (fmap length (Just \"abc\"))\n  print (length topics)",
+    "et": "❌ 常见错误",
+    "ec": "只看书不写代码，遇到编译错误就放弃。读类型错误应从最内层看起，对照签名逐步定位，并用 GHCi 的 :t 验证每个子表达式的类型假设。",
+    "q": [
+      {
+        "q": "按类型搜索 Haskell 库函数的网站？",
+        "a": "Hoogle"
+      },
+      {
+        "q": "Monad 的核心绑定运算符？",
+        "a": ">>="
+      }
+    ]
+  }
+]

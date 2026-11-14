@@ -1,0 +1,670 @@
+window.TUTORIAL_DATA_go = 
+[
+  {
+    "id": 1,
+    "t": "Go语言简介",
+    "p": [
+      "Go的诞生：由Google的Robert Griesemer、Rob Pike和Ken Thompson于2007年设计，2009年开源，2012年发布1.0版本",
+      "设计目标：解决大型软件工程的开发效率问题，兼顾编译型语言的性能和解释型语言的开发速度",
+      "核心特性：静态类型、编译型语言、原生并发支持、垃圾回收、简洁语法、快速编译",
+      "应用领域：云计算(Docker/Kubernetes)、微服务架构、网络编程、DevOps工具、区块链",
+      "语言哲学：少即是多——通过减少语言特性来降低复杂度，没有继承、没有异常处理机制"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, Go!\")\n    fmt.Println(\"欢迎学习Go语言教程！\")\n    version := \"1.22\"\n    fmt.Printf(\"当前Go版本: %s\\n\", version)\n}",
+    "et": "混淆Go与C++：Go是全新设计的语言，没有类和继承概念",
+    "ec": "误以为Go是脚本语言：Go是编译型语言，但go run命令可简化编译运行过程",
+    "q": [
+      {
+        "q": "Go语言的三位创始人分别是谁？",
+        "a": "Robert Griesemer、Rob Pike、Ken Thompson"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "开发环境配置",
+    "p": [
+      "安装Go：从golang.org/dl下载安装包，推荐安装最新稳定版",
+      "环境变量：GOPATH工作空间、GOROOT安装路径、PATH添加bin目录",
+      "Go模块：1.11版本引入模块系统，1.16版本后默认启用，使用go.mod管理依赖",
+      "IDE推荐：VS Code+Go扩展、GoLand、Vim+vim-go插件"
+    ],
+    "c": "# 检查Go版本\ngo version\n\n# 初始化模块\nmkdir myproject && cd myproject\ngo mod init github.com/yourname/myproject\n\n# 添加依赖\ngo get github.com/gin-gonic/gin\n\n# 运行和编译\ngo run main.go\ngo build -o myapp main.go\n\n# 格式化和检查\ngo fmt ./...\ngo vet ./...",
+    "et": "忘记执行go mod init：没有模块无法管理依赖",
+    "ec": "未设置GOPATH：在模块模式下可以在任意目录开发，不需要GOPATH",
+    "q": [
+      {
+        "q": "初始化Go模块的命令是什么？",
+        "a": "go mod init 模块路径"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "第一个Go程序",
+    "p": [
+      "package声明：每个Go文件必须以package开头，可执行程序的入口包必须是main",
+      "import导入：导入标准库或第三方包，未使用的导入会导致编译错误",
+      "main函数：程序入口函数，无参数无返回值，必须定义在main包中",
+      "语句规则：不需要分号结尾，左大括号不能单独放在一行"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n    name := \"Go语言\"\n    fmt.Printf(\"欢迎学习%s！\\n\", name)\n    a, b := 10, 20\n    fmt.Printf(\"%d + %d = %d\\n\", a, b, a+b)\n}",
+    "et": "左大括号换行：func main()\\n{是错误的写法",
+    "ec": "导入的包未使用：会导致编译失败",
+    "q": [
+      {
+        "q": "编写程序输出你的名字和年龄",
+        "a": "package main import \"fmt\" func main() { name := \"张三\" age := 25 fmt.Printf(\"我叫%s，今年%d岁\\n\", name, age) }"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "包与导入",
+    "p": [
+      "包的概念：Go通过package组织代码，同一目录下的文件必须属于同一个包",
+      "可见性规则：大写字母开头的标识符是导出(public)的，小写字母开头是未导出(private)的",
+      "导入方式：单行导入、多行导入、别名导入、点导入",
+      "常用标准库：fmt、os、strings、net/http等"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"math\"\n    \"strings\"\n    \"time\"\n)\n\nfunc main() {\n    fmt.Println(\"Hello\")\n    fmt.Println(\"圆周率:\", math.Pi)\n    fmt.Println(strings.ToUpper(\"hello go\"))\n    fmt.Println(time.Now().Format(\"2006-01-02 15:04:05\"))\n}",
+    "et": "循环导入：Go不允许包之间存在循环依赖",
+    "ec": "导入了未使用的包：编译错误，可用_空白标识符忽略",
+    "q": [
+      {
+        "q": "Go中如何区分导出和未导出的标识符？",
+        "a": "大写字母开头为导出(public)，小写字母开头为未导出(private)"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "变量声明",
+    "p": [
+      "var声明：var name type = value，类型可以省略，由编译器推断",
+      "短变量声明：name := value，只能在函数内部使用",
+      "零值机制：数值类型为0、字符串为\"\"、布尔为false、引用类型为nil",
+      "多重赋值：a, b := 1, 2，支持交换操作a, b = b, a"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var name string = \"Go\"\n    var age int = 14\n    var city = \"Beijing\"\n    var count int      // 零值: 0\n    var message string // 零值: \"\"\n    var flag bool      // 零值: false\n    lang := \"Go语言\"\n    version := 1.22\n    a, b := 10, 20\n    a, b = b, a\n    fmt.Println(name, age, city, count, flag, lang, version, a, b)\n}",
+    "et": "在函数外部使用:=：必须使用var声明",
+    "ec": "声明变量后未使用：编译错误",
+    "q": [
+      {
+        "q": "使用短变量声明交换两个变量的值",
+        "a": "a, b := 10, 20 a, b = b, a"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "常量与iota",
+    "p": [
+      "const声明：常量在编译时确定，程序运行时不能修改",
+      "iota枚举器：在const块中每新增一行iota值加1，从0开始",
+      "iota技巧：跳过值使用_ = iota、位运算1",
+      "无类型常量：常量可以不指定类型，需要时自动转换"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nconst Pi = 3.14159\n\nconst (\n    Sunday    = iota // 0\n    Monday           // 1\n    Tuesday          // 2\n    Wednesday        // 3\n    Thursday         // 4\n    Friday           // 5\n    Saturday         // 6\n)\n\nconst (\n    ReadPermission   = 1 << iota // 1\n    WritePermission              // 2\n    ExecutePermission            // 4\n)\n\nfunc main() {\n    fmt.Println(\"Pi =\", Pi)\n    fmt.Println(\"Monday =\", Monday)\n    fmt.Println(\"All =\", ReadPermission|WritePermission|ExecutePermission)\n}",
+    "et": "在const块外使用iota：编译错误",
+    "ec": "常量用函数赋值：const t = time.Now()是错误的，因为time.Now()在运行时执行",
+    "q": [
+      {
+        "q": "使用iota定义文件权限常量：读(1)、写(2)、执行(4)",
+        "a": "const ( Read = 1 << iota // 1 Write // 2 Execute // 4 )"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "基本数据类型",
+    "p": [
+      "整数类型：int8~int64、uint8~uint64，int/uint与平台相关",
+      "浮点类型：float32(约6位精度)、float64(约15位精度)",
+      "布尔类型：bool，只有true和false两个值",
+      "字符串类型：string，UTF-8编码，不可变",
+      "byte与rune：byte是uint8的别名，rune是int32的别名"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var i int = 42\n    var f64 float64 = 3.14159265358979\n    var b bool = true\n    s := \"Hello, 世界\"\n    ch := '中'\n    fmt.Printf(\"字符: %c, Unicode: %U\\n\", ch, ch)\n    fmt.Println(i, f64, b, s, len(s))\n}",
+    "et": "整数溢出：int8最大127，超出范围会编译错误或运行时panic",
+    "ec": "字符串长度：len(\"中文\")返回6(字节数)而不是2(字符数)",
+    "q": [
+      {
+        "q": "byte和rune分别是什么类型的别名？",
+        "a": "byte是uint8的别名，rune是int32的别名"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "类型转换",
+    "p": [
+      "显式转换：Go没有隐式类型转换，必须使用T(v)语法",
+      "数值间转换：int(float64)，注意精度丢失问题",
+      "字符串转换：string([]byte)、strconv.Itoa等",
+      "strconv包：提供Atoi、Itoa、FormatFloat等转换函数"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"strconv\"\n)\n\nfunc main() {\n    var i int = 42\n    var f float64 = float64(i)\n    var u uint = uint(f)\n    fmt.Println(i, f, u)\n    s := strconv.Itoa(123)\n    n, _ := strconv.Atoi(\"456\")\n    fmt.Println(s, n)\n    data := []byte(\"Hello\")\n    fmt.Println(string(data))\n}",
+    "et": "隐式转换：var i int = 3.14不允许",
+    "ec": "精度丢失：大数值转换时需要注意",
+    "q": [
+      {
+        "q": "将字符串\"123\"转换为整数并加1输出",
+        "a": "n, _ := strconv.Atoi(\"123\") fmt.Println(n + 1) // 124"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "算术运算符",
+    "p": [
+      "基本运算：+、-、*、/、%",
+      "整数除法：整数相除向下取整，5/2=2",
+      "自增自减：只有i++和i--，是语句不是表达式",
+      "位运算：&与、|或、^异或、>右移"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    a, b := 17, 5\n    fmt.Printf(\"%d / %d = %d\\n\", a, b, a/b)\n    fmt.Printf(\"%d %% %d = %d\\n\", a, b, a%b)\n    x := 10\n    x++\n    fmt.Println(\"x++:\", x)\n    fmt.Println(\"6 << 2 =\", 6<<2)\n}",
+    "et": "j = i++是错误的，i++是语句不能作为表达式",
+    "ec": "整数除以0会导致panic",
+    "q": [
+      {
+        "q": "计算17除以5的商和余数",
+        "a": "商: 17/5=3, 余数: 17%5=2"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "比较与逻辑运算符",
+    "p": [
+      "比较运算符：==、!=、、=",
+      "逻辑运算符：&&与、||或、!非",
+      "短路求值：&&左边为false不执行右边，||左边为true不执行右边",
+      "可比较类型：只有相同类型的值才能比较"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    a, b := 10, 20\n    fmt.Println(\"a < b:\", a < b)\n    x, y := true, false\n    fmt.Println(\"x && y:\", x && y)\n    fmt.Println(\"x || y:\", x || y)\n    val := 0\n    if val != 0 && 100/val > 10 {\n        fmt.Println(\"成立\")\n    } else {\n        fmt.Println(\"短路保护\")\n    }\n}",
+    "et": "比较不同类型的值：编译错误",
+    "ec": "slice和map不能用==比较",
+    "q": [
+      {
+        "q": "Go中逻辑运算符短路求值的含义？",
+        "a": "&&左边为false则右边不执行；||左边为true则右边不执行"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "if语句",
+    "p": [
+      "基本if：条件不需要括号，大括号必须存在",
+      "if-else：else必须与if的}在同一行",
+      "if-else if-else：多条件链式判断",
+      "初始化语句：if stmt; condition {}，变量作用域仅限于if块内"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    score := 85\n    if score >= 90 {\n        fmt.Println(\"优秀\")\n    } else if score >= 80 {\n        fmt.Println(\"良好\")\n    } else {\n        fmt.Println(\"及格\")\n    }\n    if num := 42; num%2 == 0 {\n        fmt.Printf(\"%d是偶数\\n\", num)\n    }\n}",
+    "et": "else换行：必须与}在同一行",
+    "ec": "条件加括号：虽然语法正确但不推荐",
+    "q": [
+      {
+        "q": "使用if初始化语句判断偶数",
+        "a": "if n := 42; n%2 == 0 { fmt.Println(\"偶数\") } else { fmt.Println(\"奇数\") }"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "switch语句",
+    "p": [
+      "自动break：默认每个case执行完自动终止",
+      "fallthrough：继续执行下一个case",
+      "多值匹配：case 1, 2, 3:",
+      "无条件switch：相当于if-else链"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    day := \"Wednesday\"\n    switch day {\n    case \"Monday\":\n        fmt.Println(\"周一\")\n    case \"Wednesday\", \"Thursday\":\n        fmt.Println(\"周中\")\n    default:\n        fmt.Println(\"其他\")\n    }\n    score := 85\n    switch {\n    case score >= 90:\n        fmt.Println(\"优秀\")\n    case score >= 80:\n        fmt.Println(\"良好\")\n    }\n}",
+    "et": "忘记fallthrough：默认不会穿透到下一个case",
+    "ec": "case类型不匹配：编译错误",
+    "q": [
+      {
+        "q": "用switch判断月份所属季节",
+        "a": "switch month { case 3, 4, 5: fmt.Println(\"春季\") case 6, 7, 8: fmt.Println(\"夏季\") case 9, 10, 11: fmt.Println(\"秋季\") case 12, 1, 2: fmt.Println(\"冬季\") }"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "for循环",
+    "p": [
+      "Go唯一循环：只有for循环，没有while和do-while",
+      "经典for：for init; cond; post {}",
+      "条件for：for cond {}相当于while循环",
+      "range迭代：for i, v := range col {}"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 0; i < 5; i++ {\n        fmt.Print(i, \" \")\n    }\n    fmt.Println()\n    n := 1\n    for n < 100 { n *= 2 }\n    fmt.Println(\"n =\", n)\n    nums := []int{10, 20, 30}\n    for i, v := range nums {\n        fmt.Printf(\"%d: %d\\n\", i, v)\n    }\n}",
+    "et": "range返回值是副本：修改v不影响原切片",
+    "ec": "循环变量捕获问题（Go 1.22之前版本）",
+    "q": [
+      {
+        "q": "使用for循环计算1到100的和",
+        "a": "sum := 0 for i := 1; i <= 100; i++ { sum += i } fmt.Println(sum) // 5050"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "break与continue",
+    "p": [
+      "break：终止当前循环",
+      "continue：跳过当前迭代",
+      "标签break：break Label跳出外层循环",
+      "标签continue：continue Label继续外层循环"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    for i := 0; i < 10; i++ {\n        if i == 5 { break }\n        fmt.Print(i, \" \")\n    }\n    fmt.Println()\n    for i := 0; i < 10; i++ {\n        if i%2 == 0 { continue }\n        fmt.Print(i, \" \")\n    }\n    fmt.Println()\nouter:\n    for i := 0; i < 3; i++ {\n        for j := 0; j < 3; j++ {\n            if i == 1 && j == 1 { break outer }\n            fmt.Printf(\"(%d,%d) \", i, j)\n        }\n    }\n}",
+    "et": "使用未定义的标签：编译错误",
+    "ec": "误用goto：不推荐使用",
+    "q": [
+      {
+        "q": "找出第一个能被7整除且大于100的数",
+        "a": "for i := 101; ; i++ { if i%7 == 0 { fmt.Println(i) // 105 break } }"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "数组",
+    "p": [
+      "声明：var arr [5]int，长度是类型的一部分",
+      "初始化：[5]int{1,2,3}、[...]int{1,2,3}",
+      "值类型：赋值和传参时复制整个数组",
+      "长度固定：不可改变，实际开发中更常用切片"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var nums [5]int\n    fmt.Println(nums)\n    colors := [3]string{\"红\", \"绿\", \"蓝\"}\n    scores := [...]int{90, 85, 92, 88}\n    arr := [5]int{1: 10, 3: 30}\n    for i, v := range scores {\n        fmt.Printf(\"%d: %d\\n\", i, v)\n    }\n    fmt.Println(colors, arr)\n}",
+    "et": "长度不同类型不同：[3]int和[5]int是不同类型",
+    "ec": "顺序初始化缺少字段：编译错误",
+    "q": [
+      {
+        "q": "声明5元素字符串数组并使用range遍历",
+        "a": "fruits := [5]string{\"苹果\",\"香蕉\",\"橙子\",\"葡萄\",\"西瓜\"} for i, v := range fruits { fmt.Printf(\"%d: %s\\n\", i, v) }"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "切片基础",
+    "p": [
+      "切片vs数组：切片是动态长度的引用类型，底层指向数组",
+      "创建：make([]T, len, cap)、[]T{}、从数组切片",
+      "三个属性：指针、len(长度)、cap(容量)",
+      "nil切片：使用var声明时初始化为nil"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    var s []int\n    fmt.Println(s, s == nil)\n    s = make([]int, 3, 10)\n    fruits := []string{\"苹果\", \"香蕉\", \"橙子\"}\n    nums := []int{1, 2, 3}\n    nums = append(nums, 4, 5)\n    fmt.Println(nums)\n    a := []int{1, 2, 3}\n    b := a\n    b[0] = 100\n    fmt.Println(a[0]) // 100\n}",
+    "et": "忘记接收append的返回值",
+    "ec": "切片越界访问会导致panic",
+    "q": [
+      {
+        "q": "创建空切片，追加3个元素后输出len和cap",
+        "a": "s := make([]int, 0) s = append(s, 1, 2, 3) fmt.Println(len(s), cap(s))"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "切片高级操作",
+    "p": [
+      "切片表达式：s[low:high:max]控制容量",
+      "copy函数：copy(dst, src)",
+      "删除元素：append(s[:i], s[i+1:]...)",
+      "二维切片：[][]int需要逐行初始化"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    s := []int{1, 2, 3, 4, 5}\n    s = append(s[:2], s[3:]...)\n    fmt.Println(s)\n    src := []int{1, 2, 3}\n    dst := make([]int, len(src))\n    copy(dst, src)\n    fmt.Println(dst)\n    matrix := make([][]int, 3)\n    for i := range matrix {\n        matrix[i] = make([]int, 4)\n    }\n    fmt.Println(matrix)\n}",
+    "et": "共享底层数组：修改可能互相影响",
+    "ec": "append可能触发扩容导致引用失效",
+    "q": [
+      {
+        "q": "删除切片索引1位置的元素",
+        "a": "s := []int{10, 20, 30, 40} s = append(s[:1], s[2:]...) fmt.Println(s) // [10 30 40]"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "map映射",
+    "p": [
+      "创建：make(map[K]V)、map[K]V{}",
+      "操作：存取、delete、检查val, ok := m[key]",
+      "遍历：使用range，遍历顺序不确定",
+      "nil map：写入会panic，需要先make初始化"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    scores := make(map[string]int)\n    scores[\"张三\"] = 95\n    scores[\"李四\"] = 88\n    colors := map[string]string{\"red\": \"红色\", \"green\": \"绿色\"}\n    val, ok := scores[\"赵六\"]\n    fmt.Println(val, ok) // 0 false\n    delete(scores, \"李四\")\n    for name, score := range scores {\n        fmt.Printf(\"%s: %d\\n\", name, score)\n    }\n    fmt.Println(colors)\n}",
+    "et": "向nil map写入会panic",
+    "ec": "map非线程安全，并发需要sync.Mutex或sync.Map",
+    "q": [
+      {
+        "q": "统计字符串中每个字符出现的次数",
+        "a": "s := \"hello\" count := make(map[rune]int) for _, ch := range s { count[ch]++ } fmt.Println(count)"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "字符串操作",
+    "p": [
+      "字符串本质：不可变的字节切片，UTF-8编码",
+      "strings包：Contains、Split、Join、Replace等",
+      "strconv包：Atoi、Itoa等转换函数",
+      "遍历：for _, r := range s按rune遍历"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"strings\"\n)\n\nfunc main() {\n    s := \"Hello, Go语言\"\n    fmt.Println(strings.Contains(s, \"Go\"))\n    fmt.Println(strings.Split(\"a,b,c\", \",\"))\n    fmt.Println(strings.Replace(s, \"Go\", \"Golang\", 1))\n    fmt.Println(strings.ToUpper(\"hello\"))\n    for i, r := range \"Go语言\" {\n        fmt.Printf(\"%d: %c\\n\", i, r)\n    }\n}",
+    "et": "字符串不可变：不能直接修改s[0]='h'",
+    "ec": "len返回字节数而非字符数",
+    "q": [
+      {
+        "q": "反转字符串\"Hello, 世界\"",
+        "a": "runes := []rune(\"Hello, 世界\") for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 { runes[i], runes[j] = runes[j], runes[i] } fmt.Println(string(runes))"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "函数定义",
+    "p": [
+      "函数声明：func name(params) returnType",
+      "参数传递：默认值传递，指针可修改原值",
+      "命名返回值：func f() (q, r int)",
+      "函数是一等公民：可赋值给变量、作参数和返回值"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc add(a, b int) int { return a + b }\nfunc divide(a, b int) (q, r int) {\n    q = a / b; r = a % b; return\n}\nfunc swap(a, b *int) { *a, *b = *b, *a }\n\nfunc main() {\n    fmt.Println(add(3, 5))\n    q, r := divide(17, 5)\n    fmt.Println(q, r)\n    x, y := 1, 2\n    swap(&x, &y)\n    fmt.Println(x, y)\n    double := func(n int) int { return n * 2 }\n    fmt.Println(double(5))\n}",
+    "et": "参数简写：func add(a, b int)两者都是int",
+    "ec": "指针参数需传&x",
+    "q": [
+      {
+        "q": "编写函数用指针交换两个整数",
+        "a": "func swap(a, b *int) { *a, *b = *b, *a }"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "defer语句",
+    "p": [
+      "延迟执行：函数返回前执行，后进先出顺序",
+      "用途：资源释放、文件关闭、锁释放",
+      "参数求值：defer时立即求值，执行时使用",
+      "典型模式：open→defer close→操作"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Start\")\n    defer fmt.Println(\"First\")\n    defer fmt.Println(\"Second\")\n    defer fmt.Println(\"Third\")\n    fmt.Println(\"End\")\n}\n\nfunc example() {\n    f, _ := os.Open(\"file.txt\")\n    defer f.Close()\n}",
+    "et": "defer顺序：后进先出",
+    "ec": "循环中defer可能导致资源泄漏",
+    "q": [
+      {
+        "q": "上述代码输出顺序是什么？",
+        "a": "Start → End → Third → Second → First"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "panic与recover",
+    "p": [
+      "panic：运行时异常，终止程序执行",
+      "recover：捕获panic，恢复程序运行",
+      "使用场景：严重错误处理、测试框架",
+      "最佳实践：不用panic处理预期错误"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc safeDivide(a, b int) (result int, err error) {\n    defer func() {\n        if r := recover(); r != nil {\n            err = fmt.Errorf(\"panic: %v\", r)\n        }\n    }()\n    if b == 0 {\n        panic(\"division by zero\")\n    }\n    return a / b, nil\n}\n\nfunc main() {\n    res, err := safeDivide(10, 0)\n    if err != nil {\n        fmt.Println(\"Error:\", err)\n    } else {\n        fmt.Println(\"Result:\", res)\n    }\n}",
+    "et": "recover必须在defer中调用",
+    "ec": "不要滥用panic处理业务错误",
+    "q": [
+      {
+        "q": "编写安全函数捕获数组越界panic",
+        "a": "func safeGet(arr []int, idx int) (int, error) { defer func() { if r := recover(); r != nil { err = fmt.Errorf(\"%v\", r) } }() return arr[idx], nil }"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "包管理",
+    "p": [
+      "go mod：Go 1.11+的依赖管理工具",
+      "初始化：go mod init module",
+      "go get：下载/升级依赖",
+      "go mod tidy：清理未使用依赖"
+    ],
+    "c": "# 初始化模块\ngo mod init github.com/yourname/myproject\n\n# 下载依赖\ngo get github.com/gin-gonic/gin\n\n# 整理依赖\ngo mod tidy\n\n# 查看依赖树\ngo list -m all",
+    "et": "模块路径必须是有效的URL",
+    "ec": "忘记运行go mod tidy",
+    "q": [
+      {
+        "q": "初始化一个名为myapp的Go模块",
+        "a": "go mod init myapp"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "结构体",
+    "p": [
+      "定义：type Name struct { fields }",
+      "创建：var s StructName或s := StructName{}",
+      "访问：s.Field或s.Field = value",
+      "初始化：命名初始化或顺序初始化"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\ntype Person struct {\n    Name string\n    Age  int\n    City string\n}\n\nfunc main() {\n    p1 := Person{Name: \"Alice\", Age: 30, City: \"Beijing\"}\n    p2 := Person{\"Bob\", 25, \"Shanghai\"}\n    p3 := Person{}\n    p3.Name = \"Charlie\"\n    p3.Age = 35\n    fmt.Println(p1, p2, p3)\n}",
+    "et": "未使用的字段不报错",
+    "ec": "顺序初始化必须按定义顺序",
+    "q": [
+      {
+        "q": "定义一个Car结构体，包含品牌、型号、价格",
+        "a": "type Car struct { Brand string Model string Price float64 }"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "方法",
+    "p": [
+      "方法定义：func (receiver Type) MethodName()",
+      "值接收者：不修改接收者",
+      "指针接收者：可修改接收者",
+      "规则：指针接收者方法可被值调用"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\ntype Rectangle struct {\n    Width, Height float64\n}\n\nfunc (r Rectangle) Area() float64 {\n    return r.Width * r.Height\n}\n\nfunc (r *Rectangle) Scale(factor float64) {\n    r.Width *= factor\n    r.Height *= factor\n}\n\nfunc main() {\n    rect := Rectangle{Width: 10, Height: 5}\n    fmt.Println(\"Area:\", rect.Area())\n    rect.Scale(2)\n    fmt.Println(\"Scaled:\", rect)\n}",
+    "et": "值接收者无法修改原结构体",
+    "ec": "需要修改时用指针接收者",
+    "q": [
+      {
+        "q": "为Person添加Greet方法输出问候语",
+        "a": "func (p Person) Greet() string { return fmt.Sprintf(\"Hello, I'm %s\", p.Name) }"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "接口",
+    "p": [
+      "定义：type InterfaceName interface { methods }",
+      "隐式实现：无需显式声明",
+      "空接口：interface{}可存储任意类型",
+      "类型断言：value, ok := i.(Type)"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\ntype Shape interface {\n    Area() float64\n    Perimeter() float64\n}\n\ntype Circle struct {\n    Radius float64\n}\n\nfunc (c Circle) Area() float64 {\n    return 3.14159 * c.Radius * c.Radius\n}\n\nfunc (c Circle) Perimeter() float64 {\n    return 2 * 3.14159 * c.Radius\n}\n\nfunc PrintShape(s Shape) {\n    fmt.Printf(\"Area: %.2f, Perimeter: %.2f\\n\", s.Area(), s.Perimeter())\n}\n\nfunc main() {\n    c := Circle{Radius: 5}\n    PrintShape(c)\n}",
+    "et": "接口方法必须全部实现",
+    "ec": "nil接口不等于nil实现",
+    "q": [
+      {
+        "q": "为Rectangle实现Shape接口",
+        "a": "func (r Rectangle) Perimeter() float64 { return 2 * (r.Width + r.Height) }"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "并发编程基础",
+    "p": [
+      "Goroutine：go func()启动",
+      "并发vs并行：并发是多任务交替执行",
+      "sync.WaitGroup：等待所有goroutine完成",
+      "Go调度器：M:N调度模型"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nfunc worker(id int, wg *sync.WaitGroup) {\n    defer wg.Done()\n    fmt.Printf(\"Worker %d starting\\n\", id)\n    for i := 0; i < 5; i++ {\n        fmt.Printf(\"Worker %d: %d\\n\", id, i)\n    }\n    fmt.Printf(\"Worker %d done\\n\", id)\n}\n\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 1; i <= 3; i++ {\n        wg.Add(1)\n        go worker(i, &wg)\n    }\n    wg.Wait()\n    fmt.Println(\"All workers completed\")\n}",
+    "et": "主线程退出导致goroutine终止",
+    "ec": "忘记调用wg.Add和wg.Done",
+    "q": [
+      {
+        "q": "用goroutine并行计算1-100的累加和",
+        "a": "func sum(start, end int, wg *sync.WaitGroup, result *int) { defer wg.Done() for i := start; i <= end; i++ { *result += i } }"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "通道(Channel)",
+    "p": [
+      "创建：make(chan Type)或make(chan Type, size)",
+      "发送：ch",
+      "接收：value :=",
+      "关闭：close(ch)，接收时检测"
+    ],
+    "c": "package main\n\nimport \"fmt\"\n\nfunc producer(ch chan<- int) {\n    for i := 0; i < 5; i++ {\n        ch <- i\n        fmt.Println(\"Sent:\", i)\n    }\n    close(ch)\n}\n\nfunc consumer(ch <-chan int) {\n    for num := range ch {\n        fmt.Println(\"Received:\", num)\n    }\n}\n\nfunc main() {\n    ch := make(chan int, 2)\n    go producer(ch)\n    consumer(ch)\n}",
+    "et": "向已关闭通道发送会panic",
+    "ec": "无缓冲通道会阻塞",
+    "q": [
+      {
+        "q": "使用通道实现两个goroutine交替打印",
+        "a": "ch := make(chan bool) go func() { for i := 0; i < 5; i++ { <-ch fmt.Println(\"A:\", i) ch <- true } }() go func() { for i := 0; i < 5; i++ { ch <- true <-ch fmt.Println(\"B:\", i) } }()"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "select语句",
+    "p": [
+      "多路复用：同时等待多个通道操作",
+      "随机选择：多个就绪时随机选一个",
+      "default：无通道就绪时执行",
+      "超时处理：配合time.After"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"time\"\n)\n\nfunc main() {\n    ch1 := make(chan string)\n    ch2 := make(chan string)\n\n    go func() {\n        time.Sleep(1 * time.Second)\n        ch1 <- \"From channel 1\"\n    }()\n\n    go func() {\n        time.Sleep(2 * time.Second)\n        ch2 <- \"From channel 2\"\n    }()\n\n    for i := 0; i < 2; i++ {\n        select {\n        case msg1 := <-ch1:\n            fmt.Println(msg1)\n        case msg2 := <-ch2:\n            fmt.Println(msg2)\n        case <-time.After(3 * time.Second):\n            fmt.Println(\"Timeout!\")\n        }\n    }\n}",
+    "et": "无default的select会阻塞",
+    "ec": "空select会永久阻塞",
+    "q": [
+      {
+        "q": "用select实现超时控制",
+        "a": "select { case result := <-operation(): fmt.Println(result) case <-time.After(5 * time.Second): fmt.Println(\"Operation timed out\") }"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "互斥锁与读写锁",
+    "p": [
+      "sync.Mutex：互斥锁，保护共享资源",
+      "sync.RWMutex：读写锁，多读单写",
+      "Lock/Unlock：成对调用",
+      "RLock/RUnlock：读锁可重入"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"sync\"\n)\n\nvar counter int\nvar mu sync.Mutex\n\nfunc increment(wg *sync.WaitGroup) {\n    defer wg.Done()\n    mu.Lock()\n    counter++\n    mu.Unlock()\n}\n\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 0; i < 1000; i++ {\n        wg.Add(1)\n        go increment(&wg)\n    }\n    wg.Wait()\n    fmt.Println(\"Counter:\", counter)\n}",
+    "et": "忘记Unlock导致死锁",
+    "ec": "锁的范围过大影响性能",
+    "q": [
+      {
+        "q": "使用RWMutex实现并发安全的缓存",
+        "a": "type Cache struct { data map[string]interface{} mu sync.RWMutex } func (c *Cache) Get(key string) interface{} { c.mu.RLock() defer c.mu.RUnlock() return c.data[key] } func (c *Cache) Set(key string, value interface{}) { c.mu.Lock() defer c.mu.Unlock() c.data[key] = value }"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "文件操作",
+    "p": [
+      "os包：Open、Create、Remove",
+      "os.ReadFile：读取整个文件",
+      "bufio包：带缓冲读写",
+      "defer：确保文件关闭"
+    ],
+    "c": "package main\n\nimport (\n    \"bufio\"\n    \"fmt\"\n    \"os\"\n)\n\nfunc main() {\n    f, err := os.Create(\"example.txt\")\n    if err != nil {\n        panic(err)\n    }\n    defer f.Close()\n\n    f.WriteString(\"Hello, Go!\\n\")\n    f.Write([]byte(\"File operations\\n\"))\n\n    content, err := os.ReadFile(\"example.txt\")\n    if err != nil {\n        panic(err)\n    }\n    fmt.Println(string(content))\n\n    scanner := bufio.NewScanner(f)\n    for scanner.Scan() {\n        fmt.Println(scanner.Text())\n    }\n}",
+    "et": "忘记检查错误",
+    "ec": "忘记关闭文件",
+    "q": [
+      {
+        "q": "读取文件并统计行数",
+        "a": "func countLines(filename string) (int, error) { f, err := os.Open(filename) if err != nil { return 0, err } defer f.Close() scanner := bufio.NewScanner(f) count := 0 for scanner.Scan() { count++ } return count, scanner.Err() }"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "JSON处理",
+    "p": [
+      "encoding/json：Marshal和Unmarshal",
+      "结构体标签：json:\"name\"",
+      "interface{}：解析未知结构",
+      "缩进输出：MarshalIndent"
+    ],
+    "c": "package main\n\nimport (\n    \"encoding/json\"\n    \"fmt\"\n)\n\ntype Person struct {\n    Name string `json:\"name\"`\n    Age  int    `json:\"age\"`\n    City string `json:\"city,omitempty\"`\n}\n\nfunc main() {\n    p := Person{Name: \"Alice\", Age: 30}\n    \n    data, _ := json.Marshal(p)\n    fmt.Println(string(data))\n    \n    data, _ = json.MarshalIndent(p, \"\", \"  \")\n    fmt.Println(string(data))\n    \n    jsonStr := `{\"name\":\"Bob\",\"age\":25}`\n    var p2 Person\n    json.Unmarshal([]byte(jsonStr), &p2)\n    fmt.Println(p2.Name, p2.Age)\n}",
+    "et": "字段首字母需大写（导出）",
+    "ec": "Unmarshal需传指针",
+    "q": [
+      {
+        "q": "将JSON数组解析为切片",
+        "a": "jsonStr := `[{\"name\":\"Alice\"},{\"name\":\"Bob\"}]` var people []Person json.Unmarshal([]byte(jsonStr), &people)"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "HTTP客户端",
+    "p": [
+      "net/http：标准库HTTP客户端",
+      "Get/Post：简化请求",
+      "Request：自定义请求",
+      "Client：可配置客户端"
+    ],
+    "c": "package main\n\nimport (\n    \"fmt\"\n    \"io\"\n    \"net/http\"\n)\n\nfunc main() {\n    resp, err := http.Get(\"https://example.com\")\n    if err != nil {\n        panic(err)\n    }\n    defer resp.Body.Close()\n    \n    body, _ := io.ReadAll(resp.Body)\n    fmt.Println(string(body))\n    \n    client := &http.Client{\n        Timeout: 10 * time.Second,\n    }\n    resp, err = client.Get(\"https://example.com\")\n}",
+    "et": "忘记关闭resp.Body",
+    "ec": "不检查HTTP状态码",
+    "q": [
+      {
+        "q": "发送POST请求带JSON数据",
+        "a": "data := []byte(`{\"key\":\"value\"}`) resp, err := http.Post( \"https://api.example.com\", \"application/json\", bytes.NewBuffer(data), )"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "HTTP服务端",
+    "p": [
+      "http.HandleFunc：注册路由",
+      "http.Request：请求信息",
+      "http.ResponseWriter：响应输出",
+      "http.ListenAndServe：启动服务"
+    ],
+    "c": "package main\n\nimport (\n    \"encoding/json\"\n    \"fmt\"\n    \"net/http\"\n)\n\nfunc helloHandler(w http.ResponseWriter, r *http.Request) {\n    fmt.Fprintf(w, \"Hello, World!\")\n}\n\nfunc jsonHandler(w http.ResponseWriter, r *http.Request) {\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    data := map[string]string{\"message\": \"Hello\"}\n    json.NewEncoder(w).Encode(data)\n}\n\nfunc main() {\n    http.HandleFunc(\"/\", helloHandler)\n    http.HandleFunc(\"/api\", jsonHandler)\n    fmt.Println(\"Server starting on :8080\")\n    http.ListenAndServe(\":8080\", nil)\n}",
+    "et": "忘记设置Content-Type",
+    "ec": "处理函数需是HandlerFunc类型",
+    "q": [
+      {
+        "q": "创建一个返回当前时间的API",
+        "a": "func timeHandler(w http.ResponseWriter, r *http.Request) { w.Header().Set(\"Content-Type\", \"application/json\") data := map[string]string{ \"time\": time.Now().Format(time.RFC3339), } json.NewEncoder(w).Encode(data) }"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与实战项目",
+    "p": [
+      "Go核心特性：简洁、并发、编译型、GC",
+      "常用框架：Gin、Echo、GORM",
+      "部署方式：编译成单二进制文件",
+      "学习路径：基础→并发→Web→微服务"
+    ],
+    "c": "// 实战项目：简单的待办事项API\npackage main\n\nimport (\n    \"encoding/json\"\n    \"net/http\"\n    \"sync\"\n)\n\ntype Todo struct {\n    ID    int    `json:\"id\"`\n    Title string `json:\"title\"`\n    Done  bool   `json:\"done\"`\n}\n\nvar todos []Todo\nvar mu sync.Mutex\nvar nextID = 1\n\nfunc getTodos(w http.ResponseWriter, r *http.Request) {\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    json.NewEncoder(w).Encode(todos)\n}\n\nfunc addTodo(w http.ResponseWriter, r *http.Request) {\n    var todo Todo\n    json.NewDecoder(r.Body).Decode(&todo)\n    mu.Lock()\n    todo.ID = nextID\n    nextID++\n    todos = append(todos, todo)\n    mu.Unlock()\n    w.WriteHeader(http.StatusCreated)\n    json.NewEncoder(w).Encode(todo)\n}\n\nfunc main() {\n    http.HandleFunc(\"/todos\", getTodos)\n    http.HandleFunc(\"/todos/add\", addTodo)\n    http.ListenAndServe(\":8080\", nil)\n}",
+    "et": "并发安全问题",
+    "ec": "错误处理不完善",
+    "q": [
+      {
+        "q": "实现删除和更新Todo的API",
+        "a": "func deleteTodo(w http.ResponseWriter, r *http.Request) { id, _ := strconv.Atoi(r.URL.Query().Get(\"id\")) mu.Lock() for i, t := range todos { if t.ID == id { todos = append(todos[:i], todos[i+1:]...) break } } mu.Unlock() w.WriteHeader(http.StatusOK) }"
+      }
+    ]
+  }
+];

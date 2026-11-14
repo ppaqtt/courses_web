@@ -1,0 +1,807 @@
+[
+  {
+    "id": 1,
+    "t": "Scala 简介：JVM 上的函数式与面向对象",
+    "p": [
+      "Scala 由 Martin Odersky 于 2003 年发布，名字来自 scalable language，运行在 JVM 上",
+      "融合面向对象与函数式：一切皆对象，函数是一等值，支持不可变数据与模式匹配",
+      "Scala 2.13 是 2.x 最后一个版本，Scala 3（Dotty）重写编译器并简化语法",
+      "典型应用：大数据 Spark 与 Kafka、分布式系统 Akka/Pekko、高并发后端服务"
+    ],
+    "c": "@main def hello(): Unit =\n  println(\"Hello, Scala 3!\")\n  val version = \"3.3 LTS\"\n  val langs = List(\"Scala\", \"Java\", \"Kotlin\")\n  println(s\"当前版本: $version\")\n  println(langs.map(_.toUpperCase).mkString(\", \"))\n  val jvm = System.getProperty(\"java.version\")\n  println(s\"运行在 JVM $jvm\")",
+    "et": "❌ 常见错误",
+    "ec": "把 Scala 当成“带类型的 Java”：Scala 默认不可变、表达式有值，val 不能重新赋值，应习惯用 map/filter 而不是手写循环。",
+    "q": [
+      {
+        "q": "Scala 这个名字的含义是什么？",
+        "a": "scalable language，可扩展的语言"
+      },
+      {
+        "q": "Scala 3 编译器的代号是什么？",
+        "a": "Dotty"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与工具链：JDK、sbt 与 scala-cli",
+    "p": [
+      "先安装 JDK 17 或 21，Scala 3 要求 JDK 8 以上，生产环境建议使用 LTS 版本",
+      "sbt 是主流构建工具，负责依赖解析、增量编译、测试与打包发布",
+      "scala-cli 适合脚本与教学，可用一条命令编译、运行、测试单个文件",
+      "Coursier 的 cs 命令可快速安装 JVM、sbt、scala-cli 并管理依赖缓存"
+    ],
+    "c": "// hello.scala\n// 运行: scala-cli run hello.scala\n// 测试: scala-cli test .\n@main def hello(): Unit =\n  val nums = List(1, 2, 3, 4)\n  val doubled = nums.map(_ * 2)\n  println(s\"原值: $nums\")\n  println(s\"翻倍: $doubled\")\n  println(s\"求和: ${doubled.sum}\")",
+    "et": "❌ 常见错误",
+    "ec": "直接运行 scala 命令却未安装对应发行版：Oracle JDK 不自带 Scala，需要通过 sbt 或 scala-cli 启动，并确认 JAVA_HOME 指向 JDK 而不是 JRE。",
+    "q": [
+      {
+        "q": "sbt 的主要职责是什么？",
+        "a": "依赖管理、增量编译、测试与打包"
+      },
+      {
+        "q": "只写一个脚本时更轻量的工具是什么？",
+        "a": "scala-cli"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量与常量：val、var 与类型推断",
+    "p": [
+      "val 声明不可变绑定，初始化后不能重新赋值，应作为默认选择",
+      "var 声明可变变量，只在需要原地修改时使用，滥用会破坏函数式风格",
+      "Scala 编译器能根据右值推断类型，也可显式写出 Int、String 等类型",
+      "lazy val 延迟初始化，首次访问时才求值，适合昂贵资源或循环依赖"
+    ],
+    "c": "@main def vars(): Unit =\n  val name: String = \"Scala\"\n  var count = 0\n  count += 1\n  val (x, y) = (1, 2)\n  lazy val expensive =\n    println(\"只初始化一次\")\n    42\n  println(s\"$name $count $x $y\")\n  println(expensive)\n  println(expensive)",
+    "et": "❌ 常见错误",
+    "ec": "把 val 当成“常量”并试图 count += 1：val 只禁止重新绑定引用，集合内容仍可能可变；需要可变计数应使用 var 或可变集合。",
+    "q": [
+      {
+        "q": "val 和 var 的核心区别是什么？",
+        "a": "val 不可重新绑定，var 可以"
+      },
+      {
+        "q": "lazy val 何时求值？",
+        "a": "首次被访问时"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "数据类型：值类型、Any 与 Nothing",
+    "p": [
+      "值类型包括 Byte、Short、Int、Long、Float、Double、Char、Boolean 和 Unit",
+      "Any 是所有类型的根，AnyVal 表示值类型，AnyRef 对应 java.lang.Object",
+      "Nothing 是所有类型的子类型，常用于表示永不正常返回的表达式",
+      "元组用 (A, B) 表示，可容纳不同类型的元素，模式匹配能直接解构"
+    ],
+    "c": "@main def types(): Unit =\n  val i: Int = 42\n  val l: Long = 42L\n  val d: Double = 3.14\n  val b: Boolean = true\n  val c: Char = 'A'\n  val u: Unit = ()\n  val any: Any = \"text\"\n  println(s\"$i $l $d $b $c $u\")\n  println(any match\n    case s: String => s\"String($s)\"\n    case n: Int    => s\"Int($n)\"\n    case _         => \"other\")",
+    "et": "❌ 常见错误",
+    "ec": "以为 Unit 等于 Java 的 void：Unit 是只有一个值 () 的真实类型，函数可以返回 Unit 值，因此能作为表达式参与组合，而 void 不是类型。",
+    "q": [
+      {
+        "q": "Scala 中所有类型的根类型是什么？",
+        "a": "Any"
+      },
+      {
+        "q": "Nothing 有什么特殊之处？",
+        "a": "它是所有类型的子类型，表示无正常返回值"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式：一切皆表达式",
+    "p": [
+      "算术、比较、逻辑运算符与 Java 类似，但 Scala 中运算符本质是方法调用",
+      "== 调用 equals 做内容比较，eq 才比较引用，不要用 == 判断对象同一性",
+      "if、match、try 与代码块都有值，可直接赋给 val 或作为函数返回值",
+      "整数除法会截断，混合类型运算需显式转换，避免精度意外丢失或溢出"
+    ],
+    "c": "@main def ops(): Unit =\n  val a = 7\n  val b = 2\n  println(a / b)\n  println(a.toDouble / b)\n  println(a % b)\n  println(a == 7)\n  println(1 to 5 by 2)\n  println(\"ab\" * 3)\n  val max = if a > b then a else b\n  println(s\"max=$max\")",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较两个 Array：Array 的 equals 继承自 Java，比较的是引用，结果常为 false；应使用 sameElements 或先 toSeq 再比较内容。",
+    "q": [
+      {
+        "q": "Scala 中 == 默认比较什么？",
+        "a": "调用 equals，比较内容"
+      },
+      {
+        "q": "比较对象引用应使用哪个方法？",
+        "a": "eq"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串：插值、三引号与常用操作",
+    "p": [
+      "s 插值器在字符串中嵌入变量与表达式，如 s\"$name\"、s\"${n + 1}\"",
+      "f 插值器支持 printf 风格格式化，如 f\"$pi%.2f\"，适合数值输出",
+      "raw 插值器不处理反斜杠转义，处理正则表达式与文件路径时更直观",
+      "三引号字符串可跨行，stripMargin 配合竖线去掉缩进，适合 SQL 与模板"
+    ],
+    "c": "@main def strings(): Unit =\n  val name = \"Scala\"\n  val pi = 3.14159\n  println(s\"Hello, $name! pi=${f\"$pi%.2f\"}\")\n  println(raw\"a\\nb\")\n  val text =\n    \"\"\"SELECT *\n      |FROM users\n      |WHERE id = 1\"\"\".stripMargin\n  println(text)\n  println(\"abc\".reverse.capitalize)\n  println(\"a,b,c\".split(\",\").toList)",
+    "et": "❌ 常见错误",
+    "ec": "在 s 插值中写 s\"$name.length\" 只会取 name 变量再拼接字面量 .length；要调用方法或做运算必须加花括号，写成 ${name.length}。",
+    "q": [
+      {
+        "q": "如何用 f 插值保留两位小数？",
+        "a": "f\"$pi%.2f\""
+      },
+      {
+        "q": "stripMargin 的作用是什么？",
+        "a": "去掉多行字符串每行竖线左侧的空白"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "集合：List、Vector、Map 与 Set",
+    "p": [
+      "Scala 集合默认不可变，List 适合头插与递归，Vector 适合随机访问",
+      "map、filter、flatMap、foldLeft 等高阶方法替代手写循环",
+      "Map 的 get 返回 Option，getOrElse 提供默认值，避免空指针",
+      "可变集合位于 scala.collection.mutable，需要显式导入并谨慎使用"
+    ],
+    "c": "@main def collections(): Unit =\n  val xs = List(1, 2, 3, 4)\n  val ys = xs.map(_ * 2).filter(_ > 4)\n  val m = Map(\"a\" -> 1, \"b\" -> 2)\n  val set = Set(1, 2, 2, 3)\n  println(ys)\n  println(m.getOrElse(\"c\", 0))\n  println(set)\n  val (evens, odds) = xs.partition(_ % 2 == 0)\n  println(s\"$evens / $odds\")\n  println(xs.foldLeft(0)(_ + _))",
+    "et": "❌ 常见错误",
+    "ec": "对 List 频繁使用 :+ 追加元素：List 是链表，尾部追加需要复制整个列表；大量追加应使用 Vector、ListBuffer 或改为头插后 reverse。",
+    "q": [
+      {
+        "q": "List 和 Vector 各适合什么操作？",
+        "a": "List 适合头插与递归，Vector 适合随机访问"
+      },
+      {
+        "q": "Map 取值如何避免空指针？",
+        "a": "用 get 得到 Option，再 getOrElse"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件分支：if 表达式与 match 初探",
+    "p": [
+      "if/else 是表达式，可把结果赋给 val，Scala 3 可用 then 省略圆括号",
+      "match 比 switch 更强：支持类型、守卫条件、解构与返回值",
+      "match 默认要求穷尽，可用 sealed 类型让编译器检查遗漏分支",
+      "避免深层嵌套 if，用提前返回、match 或提取小函数提升可读性"
+    ],
+    "c": "@main def branch(): Unit =\n  def grade(score: Int): String =\n    if score >= 90 then \"A\"\n    else if score >= 60 then \"B\"\n    else \"C\"\n  println(grade(85))\n  val n = 3\n  val label = n match\n    case 1 | 2 => \"small\"\n    case x if x < 10 => \"medium\"\n    case _ => \"large\"\n  println(label)",
+    "et": "❌ 常见错误",
+    "ec": "match 缺少 default 分支却匹配到未覆盖的值，会运行时抛出 MatchError；对密封类型应覆盖全部子类，对开放类型应补上 case _。",
+    "q": [
+      {
+        "q": "Scala 3 的 if 可以省略什么？",
+        "a": "条件两侧的圆括号，用 then 引导分支"
+      },
+      {
+        "q": "match 缺少覆盖会怎样？",
+        "a": "运行时抛出 MatchError"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "循环与递归：for 推导与尾递归",
+    "p": [
+      "for 推导可遍历集合、加守卫、嵌套多个生成器，并用 yield 生成新集合",
+      "for 不带 yield 时等价于 foreach，适合执行副作用",
+      "尾递归用 @tailrec 标注，编译器会转成循环，避免栈溢出",
+      "优先使用 map/filter/fold，递归用于表达分治与树遍历等结构"
+    ],
+    "c": "import scala.annotation.tailrec\n\n@main def loops(): Unit =\n  for i <- 1 to 3 do println(s\"i=$i\")\n  for\n    i <- 1 to 3\n    j <- 1 to 2\n  do print(s\"$i$j \")\n  println()\n  val xs = List(1, 2, 3)\n  @tailrec\n  def sum(xs: List[Int], acc: Int = 0): Int =\n    xs match\n      case Nil => acc\n      case h :: t => sum(t, acc + h)\n  println(sum(xs))",
+    "et": "❌ 常见错误",
+    "ec": "给非尾递归函数加 @tailrec 会编译失败：递归调用必须位于函数最后一步且不能再做运算；否则应改写为带累加器的尾递归。",
+    "q": [
+      {
+        "q": "@tailrec 的作用是什么？",
+        "a": "编译期确认尾递归并优化为循环"
+      },
+      {
+        "q": "for 推导中 yield 的作用？",
+        "a": "把每次迭代结果收集成新集合"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数基础：def、默认参数与命名参数",
+    "p": [
+      "def 定义方法，参数必须标注类型，返回类型可推断但公开 API 建议写出",
+      "默认参数可以减少方法重载数量，调用时可只传部分参数与调用负担",
+      "命名参数让调用处更清晰，并可跳过中间带默认值的参数不传，提高可读性",
+      "单表达式函数可以省略花括号，用等号直接连接函数体表达式，简洁明了"
+    ],
+    "c": "@main def funcs(): Unit =\n  def greet(name: String, prefix: String = \"Hello\"): String =\n    s\"$prefix, $name\"\n  def add(a: Int)(b: Int): Int = a + b\n  println(greet(\"Scala\"))\n  println(greet(prefix = \"Hi\", name = \"Lua\"))\n  println(add(1)(2))\n  val square: Int => Int = x => x * x\n  println(square(5))",
+    "et": "❌ 常见错误",
+    "ec": "重载方法与默认参数混用时编译器可能报歧义：同名方法若只靠默认参数区分，调用处无法确定选哪个，应改用不同的参数列表。",
+    "q": [
+      {
+        "q": "如何跳过中间带默认值的参数？",
+        "a": "使用命名参数"
+      },
+      {
+        "q": "单表达式函数可以怎样简写？",
+        "a": "省略花括号，用 = 连接表达式"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "函数进阶：高阶函数、柯里化与部分应用",
+    "p": [
+      "函数是一等值，可赋给 val、作为参数传入，也可作为返回值传出",
+      "匿名函数写作 x => x * 2，下划线 _ 可简化单参数占位",
+      "柯里化把多参数函数拆成多个参数列表，便于部分应用并改善类型推断",
+      "Function1、Function2 等是函数类型，compose 与 andThen 可组合函数"
+    ],
+    "c": "@main def hof(): Unit =\n  val nums = List(1, 2, 3, 4, 5)\n  val evenSquares = nums.filter(_ % 2 == 0).map(x => x * x)\n  println(evenSquares)\n  def compute(x: Int, f: Int => Int): Int = f(x)\n  println(compute(6, _ / 2))\n  val add = (a: Int, b: Int) => a + b\n  val inc = add.curried(1)\n  println(inc(10))\n  println(nums.reduce(_ + _))",
+    "et": "❌ 常见错误",
+    "ec": "把方法直接当函数值传递时忘记 eta 展开：在需要函数值的位置写 obj.method 可能报缺少参数，应写 obj.method _ 或显式 lambda。",
+    "q": [
+      {
+        "q": "柯里化的作用是什么？",
+        "a": "拆分参数列表，便于部分应用与类型推断"
+      },
+      {
+        "q": "组合两个函数可用什么方法？",
+        "a": "compose 或 andThen"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "作用域与闭包：捕获与词法作用域",
+    "p": [
+      "花括号形成块作用域，内部 val 会遮蔽同名外部变量，离开块后失效",
+      "闭包捕获外层变量，捕获的是变量本身而不是一次性快照或副本本身",
+      "var 被闭包捕获后可被修改，val 捕获后保持不可变引用本身",
+      "返回闭包时注意其捕获的对象生命周期，避免无意持有大对象导致内存无法释放"
+    ],
+    "c": "@main def closures(): Unit =\n  var counter = 0\n  val next = () =>\n    counter += 1\n    counter\n  println(next())\n  println(next())\n  def makeAdder(n: Int): Int => Int =\n    x => x + n\n  val add10 = makeAdder(10)\n  println(add10(5))\n  val counterInner = 100\n  println(counterInner)",
+    "et": "❌ 常见错误",
+    "ec": "误以为闭包复制了 var 的值：多个闭包共享同一变量，循环结束后都看到最终值；需要独立值应在每次迭代内新建 val 保存当前值。",
+    "q": [
+      {
+        "q": "闭包捕获的是值还是变量？",
+        "a": "变量本身"
+      },
+      {
+        "q": "如何让循环中的闭包捕获各自的值？",
+        "a": "每次迭代新建局部 val"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "类与对象：class、object 与 case class",
+    "p": [
+      "class 定义实例模板，new 创建对象，主构造参数直接写在类名后",
+      "object 是单例，可作为工具类、常量容器或伴生对象来使用",
+      "case class 自动生成 apply、unapply、equals、hashCode、copy 与 toString",
+      "伴生对象与类同名且同文件，可访问私有成员，常用于工厂方法与默认实例"
+    ],
+    "c": "case class User(name: String, age: Int)\n\nobject User:\n  def apply(name: String): User = new User(name, 0)\n\n@main def classes(): Unit =\n  val u1 = User(\"Alice\", 30)\n  val u2 = User(\"Bob\")\n  println(u1)\n  println(u1.copy(age = 31))\n  println(u1 == User(\"Alice\", 30))\n  val User(n, a) = u1\n  println(s\"$n is $a\")",
+    "et": "❌ 常见错误",
+    "ec": "普通 class 用 == 比较时默认比较引用，两个字段相同的实例并不相等；需要值语义应使用 case class 或重写 equals 与 hashCode。",
+    "q": [
+      {
+        "q": "case class 自动生成哪些方法？",
+        "a": "apply、unapply、equals、hashCode、copy、toString"
+      },
+      {
+        "q": "object 与 class 的核心区别？",
+        "a": "object 是单例"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "继承与多态：extends、override 与 sealed",
+    "p": [
+      "类只能单继承，用 extends 指定父类，override 必须显式标注重写",
+      "多态通过父类型引用调用子类实现，运行时动态分派到具体子类实现",
+      "sealed 限制子类必须同文件，配合 match 可获得穷尽性检查",
+      "用 final 禁止继承或重写，保护关键行为不被子类修改行为"
+    ],
+    "c": "sealed trait Shape:\n  def area: Double\n\ncase class Circle(r: Double) extends Shape:\n  def area: Double = math.Pi * r * r\n\ncase class Rect(w: Double, h: Double) extends Shape:\n  def area: Double = w * h\n\n@main def shapes(): Unit =\n  val xs: List[Shape] = List(Circle(1), Rect(2, 3))\n  xs.foreach(s => println(f\"${s.area}%.2f\"))\n  xs.foreach:\n    case Circle(r) => println(s\"circle $r\")\n    case Rect(w, h) => println(s\"rect $w x $h\")",
+    "et": "❌ 常见错误",
+    "ec": "重写父类方法时漏写 override：Scala 要求显式 override，否则编译报错；这能防止意外覆盖，方法名拼错也会立即暴露。",
+    "q": [
+      {
+        "q": "sealed 对模式匹配有什么帮助？",
+        "a": "限制子类范围，使编译器能检查穷尽性"
+      },
+      {
+        "q": "Scala 类支持多重继承吗？",
+        "a": "类不支援，但可混入多个 trait"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "特质与抽象类：trait 与混入组合",
+    "p": [
+      "trait 可包含抽象成员与具体实现，一个类可混入多个 trait",
+      "with 用于混入 trait，线性化规则决定 super 调用链的顺序",
+      "抽象类可有构造参数，trait 不能有构造参数，二者按需选择",
+      "self-type 声明依赖，trait 可要求混入者同时具备另一类型"
+    ],
+    "c": "trait Greeter:\n  def name: String\n  def greet: String = s\"Hello, $name\"\n\ntrait Loud extends Greeter:\n  override def greet: String = super.greet.toUpperCase\n\nclass Person(val name: String) extends Greeter\nclass Shouter(val name: String) extends Person(name) with Loud\n\n@main def traits(): Unit =\n  println(new Person(\"Scala\").greet)\n  println(new Shouter(\"Scala\").greet)",
+    "et": "❌ 常见错误",
+    "ec": "以为 trait 的 super 调用直接指向父类：实际沿线性化链查找，多个 trait 叠加时顺序决定结果，调整 with 顺序会改变最终行为。",
+    "q": [
+      {
+        "q": "一个类能混入几个 trait？",
+        "a": "任意多个"
+      },
+      {
+        "q": "trait 能有构造参数吗？",
+        "a": "不能，抽象类可以"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "泛型与类型参数：型变、上界与上下文界",
+    "p": [
+      "方括号声明类型参数，如 class Box[A]，方法可写 def id[A](x: A): A",
+      "型变标记 +A 协变、-A 逆变，决定泛型容器能否安全地进行子类型替换",
+      "上界 A <: Animal 限制类型范围，下界 A >: Dog 限制父类型",
+      "上下文界 [A: Ordering] 等价于隐式参数，Scala 3 用 using 表达"
+    ],
+    "c": "class Box[+A](val value: A):\n  def map[B](f: A => B): Box[B] = Box(f(value))\n\ndef maxOf[A: Ordering](xs: List[A]): A = xs.max\n\n@main def generics(): Unit =\n  val b = Box(41).map(_ + 1)\n  println(b.value)\n  println(maxOf(List(3, 1, 2)))\n  println(maxOf(List(\"b\", \"a\")))\n  def pair[A, B](a: A, b: B): (A, B) = (a, b)\n  println(pair(1, \"one\"))",
+    "et": "❌ 常见错误",
+    "ec": "把可变容器声明为协变：协变要求类型参数只出现在输出位置，若容器有写入方法会编译失败；应改为不变或提供只读接口。",
+    "q": [
+      {
+        "q": "+A 表示什么型变？",
+        "a": "协变"
+      },
+      {
+        "q": "上下文界 [A: Ordering] 等价于什么？",
+        "a": "一个隐式的 Ordering[A] 参数"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理：Option、Either 与 Try",
+    "p": [
+      "Option[A] 表示可能有值，Some 包裹结果，None 表示缺失，避免 null",
+      "Either[E, A] 用 Left 表示错误、Right 表示成功，适合携带错误详情",
+      "Try[A] 捕获异常并包装为 Success 或 Failure，适合包住可能抛异常的代码",
+      "for 推导可串联 Option 或 Either，任一失败即短路，代码保持线性"
+    ],
+    "c": "import scala.util.Try\n\n@main def errors(): Unit =\n  def parse(s: String): Either[String, Int] =\n    s.toIntOption.toRight(s\"不是整数: $s\")\n\n  val ok = for\n    a <- parse(\"2\")\n    b <- parse(\"3\")\n  yield a + b\n  println(ok)\n\n  println(parse(\"x\").getOrElse(-1))\n  println(Try(\"10\".toInt).map(_ * 2))\n  println(Option(null).getOrElse(\"default\"))",
+    "et": "❌ 常见错误",
+    "ec": "对 Option 直接调用 get：None 时会抛 NoSuchElementException；应使用 getOrElse、map、fold 或模式匹配安全地取值。",
+    "q": [
+      {
+        "q": "Either 的 Left 和 Right 分别表示什么？",
+        "a": "Left 表示错误，Right 表示成功"
+      },
+      {
+        "q": "Try 的两个子类型是什么？",
+        "a": "Success 与 Failure"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件 I/O：Source、Using 与 NIO",
+    "p": [
+      "scala.io.Source 可读文本文件与 URL，getLines 返回按行迭代器",
+      "scala.util.Using 自动关闭资源，即使中途抛异常也能释放",
+      "写文件可用 java.io.PrintWriter，或 NIO 的 Files.writeString",
+      "java.nio.file 提供 Path、Files、目录遍历与文件属性操作"
+    ],
+    "c": "import scala.util.Using\nimport java.io.PrintWriter\nimport scala.io.Source\n\n@main def files(): Unit =\n  Using.resource(PrintWriter(\"out.txt\")) { w =>\n    w.println(\"hello\")\n    w.println(\"scala\")\n  }\n  Using.resource(Source.fromFile(\"out.txt\")) { src =>\n    src.getLines().foreach(println)\n  }\n  val p = java.nio.file.Paths.get(\"out.txt\")\n  println(java.nio.file.Files.exists(p))",
+    "et": "❌ 常见错误",
+    "ec": "读取 Source 后忘记 close：文件句柄会泄漏，Windows 上文件还会被锁定；应使用 Using.resource 或 try/finally 确保关闭。",
+    "q": [
+      {
+        "q": "Using.resource 的好处是什么？",
+        "a": "无论是否异常都会自动关闭资源"
+      },
+      {
+        "q": "NIO 中判断文件是否存在用什么？",
+        "a": "Files.exists(Path)"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式：Regex、提取器与替换",
+    "p": [
+      "字符串后加 .r 得到 Regex，raw 插值可避免反斜杠二次转义",
+      "findAllMatchIn 遍历全部匹配，group(n) 读取捕获组",
+      "正则配 case 提取器可直接解构捕获组，代码简洁且可读性高",
+      "replaceAllIn 支持函数式替换，可按匹配内容动态生成文本"
+    ],
+    "c": "import scala.util.matching.Regex\n\n@main def regex(): Unit =\n  val phone: Regex = raw\"(\\d{3})-(\\d{4})\".r\n  val text = \"电话 010-1234，备用 021-5678\"\n  phone.findAllMatchIn(text).foreach { m =>\n    println(s\"${m.group(1)} => ${m.group(2)}\")\n  }\n  val Phone = \"\"\"(\\d{3})-(\\d{4})\"\"\".r\n  \"010-1234\" match\n    case Phone(a, b) => println(s\"$a/$b\")\n    case _ => println(\"no match\")\n  println(phone.replaceAllIn(text, m => s\"(${m.group(2)})\"))",
+    "et": "❌ 常见错误",
+    "ec": "在普通字符串里写 \"\\d+\" 以为表示数字：普通字符串先处理转义，需要写成 \"\\\\d+\"；推荐用 raw\"\\d+\" 或三引号减少混乱。",
+    "q": [
+      {
+        "q": "findAllMatchIn 返回什么？",
+        "a": "所有匹配的迭代器"
+      },
+      {
+        "q": "正则提取器匹配失败会怎样？",
+        "a": "落入 case _ 分支"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块与包：package、import 与 sbt 多模块",
+    "p": [
+      "package 声明命名空间，目录结构通常与包名保持一致以便工具定位",
+      "import 可导入类与对象成员，并用 as 起别名避免命名冲突",
+      "sbt 多模块在 build.sbt 中用 lazy val 定义子项目与依赖关系",
+      "包对象可放置包级常量与工具方法，Scala 3 用顶层定义替代"
+    ],
+    "c": "// src/main/scala/demo/model/User.scala\n// package demo.model\n// case class User(id: Long, name: String)\n\n// src/main/scala/demo/Main.scala\npackage demo\n\nimport java.time.LocalDate as Date\n\ncase class User(id: Long, name: String)\n\nobject Main:\n  def main(args: Array[String]): Unit =\n    val u = User(1, \"Ada\")\n    println(s\"${u.name} @ ${Date.now}\")",
+    "et": "❌ 常见错误",
+    "ec": "同一文件声明多个不相关 package 导致作用域混乱：包声明会影响后续所有定义，跨包引用需要完整路径或正确的 import。",
+    "q": [
+      {
+        "q": "import 如何给类起别名？",
+        "a": "使用 as，例如 import java.time.LocalDate as Date"
+      },
+      {
+        "q": "sbt 多模块用什么定义子项目？",
+        "a": "lazy val"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "构建工具 sbt：compile、test、run、assembly，支持增量编译与多模块",
+      "测试框架 ScalaTest 与 MUnit，格式化工具 scalafmt，调试用 JVM 远程端口",
+      "scala-cli 可运行单文件、管理依赖并打包，适合脚本与快速验证",
+      "常用库：集合、Future、Using、java.time、java.nio，标准库已覆盖多数场景"
+    ],
+    "c": "# 构建工具 sbt\nsbt compile test run\nsbt \"testOnly demo.UserSuite\"\nsbt assembly                 # 需 sbt-assembly 插件\n\n# 轻量工具 scala-cli\nscala-cli run hello.scala\nscala-cli test .\n\n# 测试框架：ScalaTest / MUnit\nsbt test\n\n# 格式化：scalafmt\nscalafmt --test\nscalafmt All\n\n# 调试：JVM 远程调试端口 5005\nsbt -jvm-debug 5005 run",
+    "et": "❌ 常见错误",
+    "ec": "在 sbt 项目中混用 scala 与 scala-cli 的依赖配置：两者缓存与依赖来源不同，版本冲突时应统一在 build.sbt 或 scala-cli 指令中声明。",
+    "q": [
+      {
+        "q": "sbt 中只运行某个测试套件的命令？",
+        "a": "sbt \"testOnly 包名.套件名\""
+      },
+      {
+        "q": "scalafmt 如何检查格式而不修改？",
+        "a": "scalafmt --test"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与异步：Future、ExecutionContext",
+    "p": [
+      "Future { ... } 在给定 ExecutionContext 上异步执行，返回 Future[A]",
+      "map、flatMap 与 for 推导组合多个 Future，避免回调嵌套",
+      "Await.result 阻塞等待结果，仅适合测试或程序出口",
+      "Promise 可手动完成 Future，用于桥接回调式 API"
+    ],
+    "c": "import scala.concurrent.{Future, Await}\nimport scala.concurrent.duration.*\nimport scala.concurrent.ExecutionContext.Implicits.global\n\n@main def futures(): Unit =\n  val f1 = Future { Thread.sleep(100); 20 }\n  val f2 = Future { 22 }\n  val sum = for\n    a <- f1\n    b <- f2\n  yield a + b\n  println(Await.result(sum, 1.second))\n  val failed = Future { throw new RuntimeException(\"boom\") }\n  failed.recover { case e => s\"recovered: ${e.getMessage}\" }\n    .foreach(println)\n  Await.result(failed.recover { case _ => 0 }, 1.second)",
+    "et": "❌ 常见错误",
+    "ec": "在 Future 中执行阻塞操作却使用全局 ExecutionContext：会耗尽线程池；阻塞任务应放到专用线程池，或用 blocking 包裹提示调度器。",
+    "q": [
+      {
+        "q": "Await.result 适合在生产代码中使用吗？",
+        "a": "不适合，只用于测试或程序出口"
+      },
+      {
+        "q": "组合多个 Future 常用什么语法？",
+        "a": "for 推导配合 flatMap/map"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化：集合选择、装箱与惰性",
+    "p": [
+      "List 头插 O(1)、随机访问 O(n)；Vector 随机访问接近 O(1)，按场景选择",
+      "对 Int 等值类型使用泛型集合会产生装箱，Array[Int] 或专门集合更省内存",
+      "view 生成惰性视图，可把多次遍历合并为一次，但过度使用增加调试难度",
+      "用 JMH 做基准测试，避免用 System.nanoTime 得出不可靠结论"
+    ],
+    "c": "import scala.annotation.tailrec\n\n@main def perf(): Unit =\n  val n = 1_000_000\n  @tailrec\n  def loop(i: Int, acc: Long): Long =\n    if i > n then acc else loop(i + 1, acc + i)\n  println(loop(1, 0L))\n\n  val list = (1 to 100000).toList\n  val vec  = (1 to 100000).toVector\n  println(list.take(3))\n  println(vec(50000))\n\n  val lazyVals = (1 to 5).view.map(x => x * x).filter(_ % 2 == 1).toList\n  println(lazyVals)",
+    "et": "❌ 常见错误",
+    "ec": "用 ++ 在循环中反复拼接 List：每次都会复制左侧集合，复杂度退化为 O(n²)；应使用 prepend 后 reverse 或 ListBuffer 构建。",
+    "q": [
+      {
+        "q": "Vector 相比 List 的优势是什么？",
+        "a": "随机访问接近 O(1)"
+      },
+      {
+        "q": "view 的作用是什么？",
+        "a": "生成惰性视图，合并多次遍历"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试：ScalaTest 与 MUnit",
+    "p": [
+      "MUnit 轻量，FunSuite 中用 test(\"名称\") { assertEquals(...) } 编写用例",
+      "ScalaTest 提供 AnyFunSuite、Matchers、PropertyChecks 等多种风格",
+      "intercept[T] 断言抛出指定异常，也可检查异常消息",
+      "测试放在 src/test/scala，sbt test 会自动发现并运行"
+    ],
+    "c": "// src/test/scala/CalculatorSuite.scala\nimport munit.FunSuite\n\nclass CalculatorSuite extends FunSuite:\n  def add(a: Int, b: Int): Int = a + b\n\n  test(\"add returns sum\") {\n    assertEquals(add(2, 3), 5)\n  }\n\n  test(\"throws on overflow\") {\n    intercept[ArithmeticException] {\n      Math.addExact(Int.MaxValue, 1)\n    }\n  }",
+    "et": "❌ 常见错误",
+    "ec": "测试方法不以 test 开头或没放进 test 代码块：MUnit 与 ScalaTest 不会识别，sbt 显示 0 个测试却让人误以为全部通过。",
+    "q": [
+      {
+        "q": "MUnit 中断言相等用什么？",
+        "a": "assertEquals"
+      },
+      {
+        "q": "如何断言抛出指定异常？",
+        "a": "intercept[异常类型] { ... }"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧：日志、断点与编译选项",
+    "p": [
+      "临时用 println 或 s 插值打印中间值，定位问题后及时删除",
+      "sbt -jvm-debug 5005 run 开启远程调试，IDE 连接后可断点单步",
+      "打开 -Xlint、-deprecation、-feature 让编译器暴露潜在问题",
+      "sbt console 启动 REPL，逐段验证表达式与类型推断"
+    ],
+    "c": "@main def debug(): Unit =\n  val xs = List(1, 2, 3)\n  xs.foreach(x => println(s\"debug x=$x\"))\n  val m = Map(\"a\" -> 1)\n  println(m.getOrElse(\"b\", 0))\n  try\n    \"abc\".toInt\n  catch\n    case e: NumberFormatException =>\n      println(s\"异常: ${e.getMessage}\")\n  // 断点调试: sbt -jvm-debug 5005 run\n  // 编译检查: sbt \"set scalacOptions += \\\"-Xlint\\\"\"",
+    "et": "❌ 常见错误",
+    "ec": "只靠 println 调试并发程序：输出顺序不稳定且可能改变时序；应结合日志级别、线程名与断点观察真实执行顺序。",
+    "q": [
+      {
+        "q": "如何开启 JVM 远程调试端口？",
+        "a": "sbt -jvm-debug 5005 run"
+      },
+      {
+        "q": "sbt console 有什么用？",
+        "a": "启动 REPL 逐段验证代码"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "与 Java 和系统互操作",
+    "p": [
+      "Scala 直接调用 Java 类库，无需包装，Java 集合用 CollectionConverters 转换",
+      "scala.sys.process 可执行外部命令，!! 返回输出，lineStream 流式读取",
+      "@main 或 main 方法编译为 JVM 入口，可与 Java 代码混合编译",
+      "需要高性能或系统调用时可写 JNI，或用 JNA 简化本地库绑定"
+    ],
+    "c": "import scala.jdk.CollectionConverters.*\nimport scala.sys.process.*\n\n@main def interop(): Unit =\n  val javaList = new java.util.ArrayList[String]()\n  javaList.add(\"a\")\n  javaList.add(\"b\")\n  val scalaList = javaList.asScala.toList\n  println(scalaList)\n\n  val out = \"echo hello-from-shell\".!!\n  println(out.trim)\n\n  val lines = Process(\"ls -1\").lineStream.take(2).toList\n  println(lines)",
+    "et": "❌ 常见错误",
+    "ec": "把 Java 集合直接当 Scala 集合使用：java.util.List 没有 map 和 filter，需要先 import scala.jdk.CollectionConverters.* 再调用 asScala。",
+    "q": [
+      {
+        "q": "Java 集合如何转成 Scala 集合？",
+        "a": "asScala"
+      },
+      {
+        "q": "执行外部命令并拿到输出用什么？",
+        "a": "scala.sys.process 的 !!"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式：函数式与类型类",
+    "p": [
+      "工厂方法常用伴生对象 apply，调用处可省略 new 关键字",
+      "策略模式可用函数或 trait 表达，依赖注入通过构造参数传入",
+      "类型类用 trait 加隐式或 using 实现，为已有类型扩展行为",
+      "装饰器用 trait 混入叠加职责，比继承组合更灵活，值得掌握"
+    ],
+    "c": "trait Logger:\n  def log(msg: String): Unit\n\nclass ConsoleLogger extends Logger:\n  def log(msg: String): Unit = println(s\"[console] $msg\")\n\nclass Service(logger: Logger):\n  def run(): Unit = logger.log(\"running\")\n\nobject Service:\n  def apply(logger: Logger = new ConsoleLogger): Service = new Service(logger)\n\ntrait TaxStrategy:\n  def tax(amount: Double): Double\n\nobject FlatTax extends TaxStrategy:\n  def tax(amount: Double): Double = amount * 0.1\n\n@main def patterns(): Unit =\n  Service().run()\n  println(List(100.0, 200.0).map(FlatTax.tax))",
+    "et": "❌ 常见错误",
+    "ec": "在 Scala 中照搬 Java 单例的双检锁：Scala 的 object 已保证线程安全初始化，手写双检锁反而易错且完全没有必要。",
+    "q": [
+      {
+        "q": "Scala 工厂方法通常放在哪里？",
+        "a": "伴生对象的 apply 中"
+      },
+      {
+        "q": "策略模式在 Scala 中可用什么表达？",
+        "a": "函数或 trait"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问：JDBC 与连接管理",
+    "p": [
+      "JDBC 通过 DriverManager 获取 Connection，PreparedStatement 绑定参数",
+      "查询结果用 ResultSet 逐行读取，注意列名与类型对应",
+      "连接、语句、结果集都要关闭，Scala 可用 Using 自动管理",
+      "生产可用 Doobie、Slick 等库获得类型安全与组合能力"
+    ],
+    "c": "import java.sql.DriverManager\n\n@main def jdbc(): Unit =\n  val url = \"jdbc:sqlite:demo.db\"\n  val conn = DriverManager.getConnection(url)\n  try\n    val st = conn.createStatement()\n    st.execute(\"CREATE TABLE IF NOT EXISTS user(id INTEGER PRIMARY KEY, name TEXT)\")\n    val ps = conn.prepareStatement(\"INSERT INTO user(name) VALUES (?)\")\n    ps.setString(1, \"Ada\")\n    ps.executeUpdate()\n    val rs = st.executeQuery(\"SELECT id, name FROM user\")\n    while rs.next() do\n      println(s\"${rs.getInt(\"id\")}: ${rs.getString(\"name\")}\")\n  finally\n    conn.close()",
+    "et": "❌ 常见错误",
+    "ec": "拼接用户输入生成 SQL：会遭受 SQL 注入；必须使用问号占位符与 setString 等绑定方法，绝不把输入直接拼进语句字符串。",
+    "q": [
+      {
+        "q": "PreparedStatement 如何防止 SQL 注入？",
+        "a": "使用占位符绑定参数，输入不参与 SQL 解析"
+      },
+      {
+        "q": "连接为什么必须关闭？",
+        "a": "避免泄漏数据库连接与文件句柄"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP 客户端",
+    "p": [
+      "JDK 11+ 的 java.net.http.HttpClient 支持同步与异步请求",
+      "HttpRequest 用 builder 设置 URI、请求头、超时与请求方法",
+      "BodyHandlers.ofString 把响应体读为字符串，ofFile 可直接落盘",
+      "生产环境可选用 sttp、http4s 客户端获得更高层封装"
+    ],
+    "c": "import java.net.URI\nimport java.net.http.{HttpClient, HttpRequest, HttpResponse}\n\n@main def http(): Unit =\n  val client = HttpClient.newHttpClient()\n  val req = HttpRequest.newBuilder(URI.create(\"https://httpbin.org/get\"))\n    .header(\"Accept\", \"application/json\")\n    .GET()\n    .build()\n  val res = client.send(req, HttpResponse.BodyHandlers.ofString())\n  println(res.statusCode())\n  println(res.body().take(120))",
+    "et": "❌ 常见错误",
+    "ec": "在请求中不设置超时：默认可能无限等待，网络异常时线程被长期占用；应为连接与请求分别设置合理超时时间。",
+    "q": [
+      {
+        "q": "HttpResponse.BodyHandlers.ofString 做什么？",
+        "a": "把响应体读成字符串"
+      },
+      {
+        "q": "HttpClient 支持异步请求吗？",
+        "a": "支持，sendAsync 返回 CompletableFuture"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程：注入、哈希与传输",
+    "p": [
+      "SQL 一律使用参数化查询，禁止把用户输入拼进 SQL 语句",
+      "密码存储使用 bcrypt、scrypt 或 Argon2，并加随机盐，不要用裸 SHA",
+      "敏感配置通过环境变量或密钥管理服务注入，不要提交到代码仓库中",
+      "对外通信启用 TLS 并校验证书，避免明文传输与中间人攻击风险"
+    ],
+    "c": "import java.security.MessageDigest\nimport java.util.Base64\n\n@main def security(): Unit =\n  def sha256(s: String): String =\n    val d = MessageDigest.getInstance(\"SHA-256\")\n    Base64.getEncoder.encodeToString(d.digest(s.getBytes(\"UTF-8\")))\n\n  println(sha256(\"password\"))\n\n  val userInput = \"'; DROP TABLE user; --\"\n  val sql = \"SELECT * FROM user WHERE name = ?\"\n  println(s\"使用占位符: $sql，参数: $userInput\")\n\n  val bad = s\"SELECT * FROM user WHERE name = '$userInput'\"\n  assert(bad.contains(\"DROP\"))",
+    "et": "❌ 常见错误",
+    "ec": "用 MessageDigest 直接对密码做 SHA-256：无盐且计算太快，易被彩虹表和暴力破解；应使用带工作因子的专用密码哈希算法。",
+    "q": [
+      {
+        "q": "为什么不能用裸 SHA-256 存密码？",
+        "a": "无盐且太快，易被彩虹表与暴力破解"
+      },
+      {
+        "q": "SQL 注入的根本防护手段是什么？",
+        "a": "参数化查询"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行文件统计工具",
+    "p": [
+      "@main 定义程序入口，参数用 String* 接收，便于直接运行",
+      "逐个检查文件是否存在，错误信息写 stderr，退出码非零表示失败",
+      "统计行数与字节数，用 Source 读取文本、File.length 获取大小",
+      "参数解析简单时手写即可，复杂选项可用 scopt 或 decline"
+    ],
+    "c": "import scala.io.Source\nimport java.io.File\n\n@main def wc(args: String*): Unit =\n  if args.isEmpty then\n    System.err.println(\"用法: wc FILE...\")\n    sys.exit(1)\n  args.foreach { path =>\n    val f = new File(path)\n    if !f.exists() then\n      System.err.println(s\"文件不存在: $path\")\n    else\n      val lines = Source.fromFile(f).getLines().size\n      val bytes = f.length()\n      println(s\"$lines\\t$bytes\\t$path\")\n  }",
+    "et": "❌ 常见错误",
+    "ec": "用 args(0) 直接取第一个参数：无参数时会抛 ArrayIndexOutOfBoundsException；应先检查 args.isEmpty 并打印用法。",
+    "q": [
+      {
+        "q": "@main 方法如何接收命令行参数？",
+        "a": "最后一个参数写 String* 可变参数"
+      },
+      {
+        "q": "程序失败时应返回什么退出码？",
+        "a": "非零值，例如 sys.exit(1)"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：JDK HttpServer 提供 Web 服务",
+    "p": [
+      "com.sun.net.httpserver.HttpServer 是 JDK 自带轻量服务器，适合原型",
+      "createContext 注册路径处理器，设置状态码、响应头与响应体",
+      "setExecutor 指定线程池，避免所有请求串行处理等待",
+      "生产可迁移到 http4s、Pekko HTTP 或 Play 获得路由与中间件"
+    ],
+    "c": "import com.sun.net.httpserver.HttpServer\nimport java.net.InetSocketAddress\n\n@main def server(): Unit =\n  val server = HttpServer.create(new InetSocketAddress(8080), 0)\n  server.createContext(\"/hello\", exchange =>\n    val body = \"Hello from Scala HTTP server\".getBytes(\"UTF-8\")\n    exchange.getResponseHeaders.add(\"Content-Type\", \"text/plain; charset=utf-8\")\n    exchange.sendResponseHeaders(200, body.length)\n    val out = exchange.getResponseBody\n    out.write(body)\n    out.close()\n  )\n  server.setExecutor(java.util.concurrent.Executors.newFixedThreadPool(4))\n  server.start()\n  println(\"http://localhost:8080/hello\")",
+    "et": "❌ 常见错误",
+    "ec": "发送响应前不设置 Content-Length：客户端可能一直等待响应结束；sendResponseHeaders 必须传入正确的响应体长度。",
+    "q": [
+      {
+        "q": "JDK 自带 HTTP 服务器类是哪个？",
+        "a": "com.sun.net.httpserver.HttpServer"
+      },
+      {
+        "q": "setExecutor 的作用是什么？",
+        "a": "指定处理请求的线程池"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "sbt assembly 借助插件打成 fat jar，java -jar 直接运行",
+      "scala-cli package 可把单文件或项目打包为可执行程序",
+      "容器化使用 JVM 基础镜像，分层复制依赖与业务包加快镜像构建与推送",
+      "GraalVM Native Image 可生成启动更快的原生可执行文件"
+    ],
+    "c": "# 打包：sbt-assembly 生成 fat jar\nsbt clean assembly\njava -jar target/scala-3.3.3/app-assembly-0.1.0.jar\n\n# 或使用 scala-cli 打包\nscala-cli package . -o app --assembly\n\n# Docker 部署\ndocker build -t demo-scala .\ndocker run --rm -p 8080:8080 demo-scala\n\n# 原生镜像（需 GraalVM Native Image）\nsbt nativeImage",
+    "et": "❌ 常见错误",
+    "ec": "打包时把测试依赖一起放进 fat jar：体积膨胀且可能引入冲突；应使用 Test 范围并检查 assembly 的合并策略与去重配置。",
+    "q": [
+      {
+        "q": "fat jar 是什么？",
+        "a": "包含应用与全部依赖的可执行 jar"
+      },
+      {
+        "q": "用什么工具生成原生可执行文件？",
+        "a": "GraalVM Native Image"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "默认使用 val 与不可变集合，把副作用集中在边界层统一处理",
+      "用模式匹配替代类型判断与强制转换，让编译器检查分支的穷尽性范围",
+      "公开 API 写明返回类型，使用 scalafmt 统一格式，开启 -Xlint",
+      "避免过度使用隐式，Scala 3 优先用 given/using 并保持可追踪"
+    ],
+    "c": "case class Order(id: Long, items: List[String], total: BigDecimal)\n\nobject OrderService:\n  def addItem(order: Order, item: String, price: BigDecimal): Order =\n    order.copy(items = order.items :+ item, total = order.total + price)\n\n  def find(orders: List[Order], id: Long): Option[Order] =\n    orders.find(_.id == id)\n\n@main def style(): Unit =\n  val o = Order(1, Nil, BigDecimal(0))\n  val o2 = OrderService.addItem(o, \"book\", BigDecimal(42))\n  println(OrderService.find(List(o2), 1).map(_.total))",
+    "et": "❌ 常见错误",
+    "ec": "为图省事大量使用 asInstanceOf：绕过类型系统，错误会推迟到运行时；应通过模式匹配或类型参数安全转换。",
+    "q": [
+      {
+        "q": "Scala 代码为什么优先 val？",
+        "a": "减少可变状态，便于推理与并发安全"
+      },
+      {
+        "q": "公开方法为什么要写返回类型？",
+        "a": "稳定 API、提升可读性并避免推断意外"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "掌握语法后重点练习集合操作、模式匹配与 Option/Either 组合",
+      "深入函数式：代数数据类型、类型类、cats-effect 或 ZIO",
+      "并发方向学习 Pekko/Akka、Future 组合与背压模型",
+      "工程化补齐 sbt、测试、CI、容器与可观测性，再参与开源项目"
+    ],
+    "c": "@main def roadmap(): Unit =\n  val topics = List(\n    \"语法基础：val/var、模式匹配、集合\",\n    \"函数式：高阶函数、Either、类型类\",\n    \"并发：Future、Pekko、ZIO\",\n    \"工程：sbt、测试、CI、容器化\"\n  )\n  topics.zipWithIndex.foreach { case (t, i) =>\n    println(s\"${i + 1}. $t\")\n  }\n  println(\"下一步：用 Scala 写一个 HTTP 服务并部署\")",
+    "et": "❌ 常见错误",
+    "ec": "只读教程不写项目：Scala 的抽象能力需要实践才能体会；应从小型 CLI 与 HTTP 服务开始，逐步引入测试与构建配置。",
+    "q": [
+      {
+        "q": "学习 Scala 后最适合练手的两个项目？",
+        "a": "命令行工具与 HTTP 服务"
+      },
+      {
+        "q": "函数式深入可学习哪些库？",
+        "a": "cats-effect、ZIO"
+      }
+    ]
+  }
+]

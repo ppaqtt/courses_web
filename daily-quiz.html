@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日 5 题 - 编程语言教程</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="每天 5 道编程语言选择题，复用测验判分与本地进度，记录连续打卡和本机排行">
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-pages.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="site-nav">
+            <a href="programming-languages-tutorial.html">📚 全部教程</a>
+            <a href="tutorial-hub.html">🎯 学习中心</a>
+            <a href="learning-paths.html">🗺️ 学习路线</a>
+            <a href="concepts.html">🧩 概念对照</a>
+            <a href="daily-quiz.html" class="active">📅 每日 5 题</a>
+        </nav>
+
+        <header class="page-header">
+            <h1>📅 每日 5 题</h1>
+            <p>每天从 34 门语言的知识库里抽 5 题，答完记录连续打卡与本机排行。</p>
+        </header>
+
+        <div class="quiz-shell">
+            <div class="quiz-top">
+                <h2 id="quizTitle">今日 5 题</h2>
+                <div class="quiz-top-meta" id="quizMeta"></div>
+            </div>
+            <div class="quiz-progress-track" aria-hidden="true">
+                <i id="quizProgress"></i>
+            </div>
+            <div id="quizBody" aria-live="polite"></div>
+
+            <section class="quiz-leaderboard" id="leaderboard" style="margin-top:22px">
+                <h2>🏅 本机排行</h2>
+                <p>只保存在当前浏览器；按得分降序、用时升序排列。</p>
+                <div id="leaderboardBody"></div>
+            </section>
+        </div>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="language-catalog.js"></script>
+    <script>
+        (function () {
+            const STORAGE_KEY = 'tutorial_daily_quiz_attempts_v1';
+            const catalog = window.LANGUAGE_CATALOG || [];
+            const TOTAL = 5;
+
+            const state = {
+                mode: 'daily',
+                questions: [],
+                index: 0,
+                score: 0,
+                answered: false,
+                startTime: 0,
+                currentTs: 0
+            };
+
+            function escapeHtml(value) {
+                return String(value == null ? '' : value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function todayKey(date) {
+                const d = date || new Date();
+                return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            }
+
+            function hashString(text) {
+                let hash = 2166136261;
+                for (let i = 0; i < text.length; i++) {
+                    hash ^= text.charCodeAt(i);
+                    hash = Math.imul(hash, 16777619);
+                }
+                return hash >>> 0;
+            }
+
+            function mulberry32(seed) {
+                let value = seed >>> 0;
+                return function () {
+                    value += 0x6D2B79F5;
+                    let t = value;
+                    t = Math.imul(t ^ (t >>> 15), t | 1);
+                    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+                    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                };
+            }
+
+            function shuffle(items, rng) {
+                const array = items.slice();
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(rng() * (i + 1));
+                    const tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
+                }
+                return array;
+            }
+
+            function uniqueValues(index) {
+                const values = [];
+                catalog.forEach(lang => {
+                    const value = (lang.concepts || [])[index];
+                    if (value && !values.includes(value)) values.push(value);
+                });
+                return values;
+            }
+
+            function buildOptions(correct, pool, id) {
+                const rng = mulberry32(hashString('options-' + id));
+                const distractors = shuffle(pool.filter(value => value !== correct), rng).slice(0, 3);
+                while (distractors.length < 3) {
+                    distractors.push('以上都不是');
+                }
+                return shuffle([correct].concat(distractors), rng);
+            }
+
+            function buildPool() {
+                const questions = [
+                    {
+                        id: 'manual-rust-ownership',
+                        lang: 'concept',
+                        question: '下列哪门语言通过所有权和借用检查，在编译期保证内存安全？',
+                        options: ['Rust', 'Go', 'Java', 'C'],
+                        answer: 'Rust',
+                        explain: 'Rust 用所有权、借用和生命周期在编译期消除数据竞争与悬垂指针。'
+                    },
+                    {
+                        id: 'manual-go-goroutine',
+                        lang: 'concept',
+                        question: '哪门语言原生提供 goroutine 和 channel？',
+                        options: ['Go', 'Python', 'C#', 'Ruby'],
+                        answer: 'Go',
+                        explain: 'Go 把 goroutine 和 channel 作为语言内置的并发原语。'
+                    },
+                    {
+                        id: 'manual-ts-superset',
+                        lang: 'concept',
+                        question: '哪门语言是 JavaScript 的超集，并增加了静态类型？',
+                        options: ['TypeScript', 'Dart', 'Kotlin', 'Scala'],
+                        answer: 'TypeScript',
+                        explain: 'TypeScript 在 JavaScript 之上增加类型注解，编译后仍是 JavaScript。'
+                    },
+                    {
+                        id: 'manual-swift-arc',
+                        lang: 'concept',
+                        question: '哪门语言主要使用 ARC（自动引用计数）管理内存？',
+                        options: ['Swift', 'Java', 'Go', 'C'],
+                        answer: 'Swift',
+                        explain: 'Swift 和 Objective-C 使用 ARC 在编译期插入引用计数代码。'
+                    },
+                    {
+                        id: 'manual-java-jvm',
+                        lang: 'concept',
+                        question: '哪门语言以「一次编写，到处运行」的 JVM 字节码著称？',
+                        options: ['Java', 'C++', 'Rust', 'Bash'],
+                        answer: 'Java',
+                        explain: 'Java 编译为 JVM 字节码，由不同平台的 JVM 负责执行。'
+                    },
+                    {
+                        id: 'manual-erlang-beam',
+                        lang: 'concept',
+                        question: '哪门语言运行在 BEAM 虚拟机上，以 Actor 进程模型著称？',
+                        options: ['Erlang', 'OCaml', 'Pascal', 'Perl'],
+                        answer: 'Erlang',
+                        explain: 'Erlang 的轻量进程与消息传递是 BEAM 容错并发的核心。'
+                    },
+                    {
+                        id: 'manual-haskell-pure',
+                        lang: 'concept',
+                        question: '哪门语言以纯函数式、惰性求值和强类型系统著称？',
+                        options: ['Haskell', 'F#', 'Scala', 'Clojure'],
+                        answer: 'Haskell',
+                        explain: 'Haskell 默认纯函数式与惰性求值，副作用通过类型系统显式建模。'
+                    },
+                    {
+                        id: 'manual-python-indent',
+                        lang: 'concept',
+                        question: '哪门语言使用 def 定义函数，并强制用缩进表示代码块？',
+                        options: ['Python', 'Lua', 'SQL', 'HTML'],
+                        answer: 'Python',
+                        explain: 'Python 用缩进划分代码块，这是它最鲜明的语法特征之一。'
+                    },
+                    {
+                        id: 'manual-html-structure',
+                        lang: 'concept',
+                        question: '哪门语言负责网页的结构与语义？',
+                        options: ['HTML', 'CSS', 'SQL', 'Bash'],
+                        answer: 'HTML',
+                        explain: 'HTML 描述页面结构；CSS 负责样式；JavaScript 负责交互。'
+                    },
+                    {
+                        id: 'manual-gc-manual',
+                        lang: 'concept',
+                        question: '下列哪门语言主要依赖手动内存管理，而不是运行时垃圾回收？',
+                        options: ['C', 'Java', 'Go', 'Ruby'],
+                        answer: 'C',
+                        explain: 'C 需要显式 malloc/free 管理堆内存，运行时没有 GC。'
+                    }
+                ];
+
+                const typePool = uniqueValues(2);
+                const gcPool = uniqueValues(1);
+                const concurrencyPool = uniqueValues(3);
+
+                catalog.forEach(lang => {
+                    const others = catalog.filter(item => item.key !== lang.key);
+                    const creatorDistractors = shuffle(
+                        others.filter(item => item.creator !== lang.creator).map(item => item.name),
+                        mulberry32(hashString('creator-' + lang.key))
+                    ).slice(0, 3);
+                    const creatorOptions = shuffle([lang.name].concat(creatorDistractors), mulberry32(hashString('creator-options-' + lang.key)));
+                    questions.push({
+                        id: 'creator-' + lang.key,
+                        lang: lang.key,
+                        question: '哪门语言由 ' + lang.creator + ' 创建？',
+                        options: creatorOptions,
+                        answer: lang.name,
+                        explain: lang.creator + ' 于 ' + lang.year + ' 年创造了 ' + lang.name + '。'
+                    });
+
+                    const yearCandidates = shuffle(
+                        [lang.year - 10, lang.year - 5, lang.year + 5, lang.year + 10]
+                            .filter(year => year >= 1900 && year <= 2030 && year !== lang.year),
+                        mulberry32(hashString('year-' + lang.key))
+                    ).slice(0, 3);
+                    const yearOptions = shuffle([lang.year].concat(yearCandidates), mulberry32(hashString('year-options-' + lang.key)))
+                        .map(String);
+                    questions.push({
+                        id: 'year-' + lang.key,
+                        lang: lang.key,
+                        question: lang.name + ' 创建于哪一年？',
+                        options: yearOptions,
+                        answer: String(lang.year),
+                        explain: lang.name + ' 诞生于 ' + lang.year + ' 年，由 ' + lang.creator + ' 主导。'
+                    });
+
+                    const typing = (lang.concepts || [])[2];
+                    if (typing) {
+                        questions.push({
+                            id: 'typing-' + lang.key,
+                            lang: lang.key,
+                            question: lang.name + ' 的类型系统更接近哪一种？',
+                            options: buildOptions(typing, typePool, 'typing-' + lang.key),
+                            answer: typing,
+                            explain: '在概念对照表中，' + lang.name + ' 的类型系统归纳为「' + typing + '」。'
+                        });
+                    }
+
+                    const gc = (lang.concepts || [])[1];
+                    if (gc) {
+                        questions.push({
+                            id: 'gc-' + lang.key,
+                            lang: lang.key,
+                            question: lang.name + ' 的内存管理方式更接近哪一种？',
+                            options: buildOptions(gc, gcPool, 'gc-' + lang.key),
+                            answer: gc,
+                            explain: '在概念对照表中，' + lang.name + ' 的内存管理归纳为「' + gc + '」。'
+                        });
+                    }
+
+                    const concurrency = (lang.concepts || [])[3];
+                    if (concurrency) {
+                        questions.push({
+                            id: 'concurrency-' + lang.key,
+                            lang: lang.key,
+                            question: lang.name + ' 的并发模型主要是？',
+                            options: buildOptions(concurrency, concurrencyPool, 'concurrency-' + lang.key),
+                            answer: concurrency,
+                            explain: '在概念对照表中，' + lang.name + ' 的并发模型归纳为「' + concurrency + '」。'
+                        });
+                    }
+                });
+
+                return { questions };
+            }
+
+            const pool = buildPool();
+
+            function pickQuestions(mode) {
+                const seed = mode === 'daily'
+                    ? hashString('daily-' + todayKey())
+                    : (Date.now() ^ Math.floor(Math.random() * 0xffffffff));
+                const rng = mulberry32(seed);
+                const shuffled = shuffle(pool.questions, rng);
+                const picked = [];
+                const usedLangs = new Set();
+                shuffled.forEach(question => {
+                    if (picked.length >= TOTAL) return;
+                    if (usedLangs.has(question.lang)) return;
+                    usedLangs.add(question.lang);
+                    picked.push(question);
+                });
+                if (picked.length < TOTAL) {
+                    shuffled.forEach(question => {
+                        if (picked.length >= TOTAL) return;
+                        if (!picked.includes(question)) picked.push(question);
+                    });
+                }
+                return picked.slice(0, TOTAL);
+            }
+
+            function getAttempts() {
+                try {
+                    const raw = localStorage.getItem(STORAGE_KEY);
+                    const parsed = raw ? JSON.parse(raw) : [];
+                    return Array.isArray(parsed) ? parsed : [];
+                } catch (e) {
+                    return [];
+                }
+            }
+
+            function saveAttempt(attempt) {
+                try {
+                    const attempts = getAttempts();
+                    attempts.push(attempt);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(attempts.slice(-200)));
+                } catch (e) {
+                    /* 本地存储不可用时忽略 */
+                }
+            }
+
+            function getStreak() {
+                const dates = Array.from(new Set(getAttempts().map(item => item.date))).sort();
+                if (!dates.length) return 0;
+                const today = todayKey();
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayKey = todayKey(yesterday);
+                let cursor = dates.includes(today) ? today : (dates.includes(yesterdayKey) ? yesterdayKey : null);
+                if (!cursor) return 0;
+                let streak = 0;
+                let current = new Date(cursor + 'T00:00:00');
+                while (dates.includes(todayKey(current))) {
+                    streak++;
+                    current.setDate(current.getDate() - 1);
+                }
+                return streak;
+            }
+
+            function getTodayBest() {
+                const today = todayKey();
+                const daily = getAttempts().filter(item => item.date === today && item.mode === 'daily');
+                if (!daily.length) return null;
+                return daily.reduce((best, item) => {
+                    if (!best) return item;
+                    if (item.score > best.score) return item;
+                    if (item.score === best.score && item.seconds < best.seconds) return item;
+                    return best;
+                }, null);
+            }
+
+            function formatSeconds(seconds) {
+                const value = Math.max(0, Math.round(seconds));
+                if (value < 60) return value + ' 秒';
+                return Math.floor(value / 60) + ' 分 ' + (value % 60) + ' 秒';
+            }
+
+            function renderMeta() {
+                const todayBest = getTodayBest();
+                const streak = getStreak();
+                const attempts = getAttempts();
+                document.getElementById('quizMeta').innerHTML = [
+                    `<span class="pill">🔥 连续 ${streak} 天</span>`,
+                    `<span class="pill">🎯 今日最佳 ${todayBest ? todayBest.score + '/' + todayBest.total : '—'}</span>`,
+                    `<span class="pill">🧾 本机 ${attempts.length} 次</span>`
+                ].join('');
+            }
+
+            function setProgress(percent) {
+                document.getElementById('quizProgress').style.width = Math.max(0, Math.min(100, percent)) + '%';
+            }
+
+            function start(mode) {
+                state.mode = mode;
+                state.questions = pickQuestions(mode);
+                state.index = 0;
+                state.score = 0;
+                state.answered = false;
+                state.startTime = Date.now();
+                state.currentTs = 0;
+                document.getElementById('quizTitle').textContent = mode === 'daily' ? '今日 5 题' : '练习 5 题';
+                renderQuestion();
+            }
+
+            function renderQuestion() {
+                const question = state.questions[state.index];
+                if (!question) {
+                    finish();
+                    return;
+                }
+                state.answered = false;
+                setProgress((state.index / state.questions.length) * 100);
+
+                const body = document.getElementById('quizBody');
+                body.innerHTML = `
+                    <div class="quiz-question">
+                        <div class="q-index">第 ${state.index + 1} / ${state.questions.length} 题</div>
+                        <h3>${escapeHtml(question.question)}</h3>
+                        <div class="quiz-options">
+                            ${question.options.map((option, index) => `
+                                <button type="button" class="quiz-option" data-opt="${index}">
+                                    <span class="opt-key">${String.fromCharCode(65 + index)}</span>
+                                    <span>${escapeHtml(option)}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div class="quiz-feedback" id="quizFeedback"></div>
+                        <div class="quiz-actions">
+                            <button type="button" class="btn primary" data-next hidden>${state.index === state.questions.length - 1 ? '查看结果' : '下一题'}</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function answer(optionIndex) {
+                if (state.answered) return;
+                const question = state.questions[state.index];
+                const selected = question.options[optionIndex];
+                if (selected == null) return;
+                state.answered = true;
+
+                let correct = false;
+                if (window.QuizSystem && typeof QuizSystem.evaluate === 'function') {
+                    try {
+                        correct = QuizSystem.evaluate(question.id, selected, question.answer, 'multiple').correct;
+                    } catch (e) {
+                        correct = selected === question.answer;
+                    }
+                } else {
+                    correct = selected === question.answer;
+                }
+                if (correct) state.score++;
+
+                const buttons = document.querySelectorAll('#quizBody .quiz-option');
+                buttons.forEach(button => {
+                    const index = Number(button.getAttribute('data-opt'));
+                    const value = question.options[index];
+                    button.disabled = true;
+                    if (value === question.answer) button.classList.add('correct');
+                    if (index === optionIndex && !correct) button.classList.add('wrong');
+                });
+
+                const feedback = document.getElementById('quizFeedback');
+                feedback.className = 'quiz-feedback show ' + (correct ? 'ok' : 'bad');
+                feedback.innerHTML = `
+                    <strong>${correct ? '✅ 回答正确' : '❌ 回答错误'}</strong>
+                    <div style="margin-top:4px">正确答案：${escapeHtml(question.answer)}</div>
+                    <div style="margin-top:4px;opacity:.9">${escapeHtml(question.explain)}</div>
+                `;
+
+                const nextButton = document.querySelector('#quizBody [data-next]');
+                if (nextButton) nextButton.hidden = false;
+            }
+
+            function next() {
+                if (!state.answered) return;
+                state.index++;
+                if (state.index >= state.questions.length) {
+                    finish();
+                } else {
+                    renderQuestion();
+                }
+            }
+
+            function finish() {
+                setProgress(100);
+                const seconds = Math.round((Date.now() - state.startTime) / 1000);
+                const attempt = {
+                    date: todayKey(),
+                    mode: state.mode,
+                    score: state.score,
+                    total: state.questions.length,
+                    seconds: seconds,
+                    ts: Date.now()
+                };
+                state.currentTs = attempt.ts;
+                saveAttempt(attempt);
+
+                try {
+                    const stats = LearningStats.get();
+                    const daily = stats.dailyQuiz || { attempts: 0, best: 0, lastDate: null };
+                    daily.attempts += 1;
+                    daily.best = Math.max(daily.best || 0, attempt.score);
+                    daily.lastDate = attempt.date;
+                    stats.dailyQuiz = daily;
+                    LearningStats.save(stats);
+                } catch (e) {
+                    /* 统计失败不影响结果 */
+                }
+
+                const percent = attempt.total ? Math.round((attempt.score / attempt.total) * 100) : 0;
+                const message = percent === 100
+                    ? '全对！今天的题都被你拿下了。'
+                    : percent >= 80
+                        ? '很稳，继续保持。'
+                        : percent >= 60
+                            ? '基础不错，错题值得回看。'
+                            : '别急，去概念对照表补一补再来。';
+
+                document.getElementById('quizBody').innerHTML = `
+                    <div class="quiz-result">
+                        <div class="quiz-score-ring" style="--score-angle:${(attempt.score / attempt.total) * 360}deg">
+                            <strong>${attempt.score}/${attempt.total}</strong>
+                            <span>得分</span>
+                        </div>
+                        <h2>${state.mode === 'daily' ? '今日挑战完成' : '练习完成'}</h2>
+                        <p>${message} 用时 ${formatSeconds(seconds)}。</p>
+                        <div class="quiz-result-actions">
+                            <button type="button" class="btn primary" data-restart="daily">再做今日题</button>
+                            <button type="button" class="btn ghost" data-restart="practice">随机练习一组</button>
+                        </div>
+                    </div>
+                `;
+
+                renderMeta();
+                renderLeaderboard();
+            }
+
+            function renderLeaderboard() {
+                const body = document.getElementById('leaderboardBody');
+                const attempts = getAttempts()
+                    .slice()
+                    .sort((a, b) => {
+                        if (b.score !== a.score) return b.score - a.score;
+                        if (a.seconds !== b.seconds) return a.seconds - b.seconds;
+                        return b.ts - a.ts;
+                    })
+                    .slice(0, 10);
+
+                if (!attempts.length) {
+                    body.innerHTML = '<div class="quiz-empty">还没有记录，完成一组题就会出现在这里。</div>';
+                    return;
+                }
+
+                body.innerHTML = `
+                    <table class="quiz-table">
+                        <thead>
+                            <tr>
+                                <th class="rank">#</th>
+                                <th>日期</th>
+                                <th>模式</th>
+                                <th>得分</th>
+                                <th>用时</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${attempts.map((item, index) => `
+                                <tr class="${item.ts === state.currentTs ? 'current' : ''}">
+                                    <td class="rank">${index + 1}</td>
+                                    <td>${escapeHtml(item.date)}</td>
+                                    <td>${item.mode === 'daily' ? '每日' : '练习'}</td>
+                                    <td>${item.score}/${item.total}</td>
+                                    <td>${formatSeconds(item.seconds)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            document.getElementById('quizBody').addEventListener('click', event => {
+                const option = event.target.closest('[data-opt]');
+                if (option) {
+                    answer(Number(option.getAttribute('data-opt')));
+                    return;
+                }
+                const nextButton = event.target.closest('[data-next]');
+                if (nextButton) {
+                    next();
+                    return;
+                }
+                const restart = event.target.closest('[data-restart]');
+                if (restart) {
+                    start(restart.getAttribute('data-restart') === 'practice' ? 'practice' : 'daily');
+                }
+            });
+
+            renderMeta();
+            renderLeaderboard();
+            start('daily');
+        })();
+    </script>
+</body>
+</html>

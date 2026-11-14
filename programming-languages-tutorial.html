@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>流行编程语言教程</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
     <meta name="theme-color" content="#667eea">
-    <meta name="description" content="学习最流行的编程语言，从Python到Swift，包含教程、练习题、代码示例">
+    <meta name="description" content="34 门编程语言教程，包含学习路线、概念对照、每日 5 题与在线运行示例">
     <style>
         * {
             margin: 0;
@@ -83,6 +84,124 @@
         .lang-switcher:hover {
             background: white;
             color: #667eea;
+        }
+
+        .feature-nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .feature-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+            font-size: 0.92rem;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            transition: all 0.25s;
+        }
+
+        .feature-nav a:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .example-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .example-hint {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        .example-run-btn {
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 9px 18px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .example-run-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.35);
+        }
+
+        .example-run-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .code-run-output {
+            margin-top: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            min-height: 54px;
+        }
+
+        .code-run-output.success {
+            border-color: rgba(34, 197, 94, 0.45);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .code-run-output.error {
+            border-color: rgba(239, 68, 68, 0.45);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .code-run-output .runner-output-text {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            line-height: 1.55;
+            color: #1f2937;
+        }
+
+        .code-run-output .runner-output-meta {
+            margin-top: 8px;
+            color: #6b7280;
+            font-size: 0.74rem;
+        }
+
+        .code-run-output .runner-output-notice {
+            margin-top: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: rgba(245, 158, 11, 0.12);
+            color: #92400e;
+            font-size: 0.8rem;
+        }
+
+        .code-run-output .runner-preview-frame {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
         }
 
         .stats-bar {
@@ -400,11 +519,17 @@
 <body>
     <div class="container">
         <header>
-            <button class="lang-switcher" onclick="toggleLanguage()">🌐 中文</button>
+            <button class="lang-switcher" onclick="toggleLanguageUI()">🌐 中文</button>
             <a href="tutorial-hub.html" class="hub-link">🎯 学习中心</a>
             <h1>🚀 流行编程语言教程</h1>
-            <p>探索当今世界最受欢迎的编程语言，找到最适合你的那一个</p>
+            <p>探索 34 门编程语言，找到最适合你的那一个</p>
         </header>
+
+        <nav class="feature-nav" aria-label="学习工具">
+            <a href="learning-paths.html">🗺️ 学习路线 · 34 门</a>
+            <a href="concepts.html">🧩 概念对照</a>
+            <a href="daily-quiz.html">📅 每日 5 题</a>
+        </nav>
 
         <div class="stats-bar">
             <div class="stat-item">
@@ -420,8 +545,8 @@
                 <div class="stat-label">全球开发者</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">Top 10</div>
-                <div class="stat-label">热门语言</div>
+                <div class="stat-number">34 门</div>
+                <div class="stat-label">可运行示例</div>
             </div>
         </div>
 
@@ -437,7 +562,7 @@
         <div class="languages-grid" id="languagesGrid"></div>
 
         <footer>
-            <p>💡 点击任意语言卡片，了解更多详情和学习路径</p>
+            <p>💡 点击任意语言卡片，了解更多详情；代码示例支持在线运行</p>
         </footer>
     </div>
 
@@ -445,6 +570,8 @@
         <div class="popup-content" id="popupContent"></div>
     </div>
 
+    <script src="language-catalog.js"></script>
+    <script src="tutorial-runner.js"></script>
     <script>
         const languages = [
             {
@@ -1169,7 +1296,7 @@ struct Task: Identifiable {
 }
 
 class TaskManager {
-    private var tasks: [Task] = []
+    var tasks: [Task] = []
     
     func addTask(title: String, description: String, priority: Task.Priority = .medium) {
         let task = Task(title: title, description: description, priority: priority)
@@ -1230,10 +1357,92 @@ manager.printSummary()`,
             }
         ];
 
+        // 将目录中的其余语言合并进主列表：前 10 门保留完整教程内容，
+        // 其余语言使用统一目录中的简介、示例与概念信息。
+        const catalogGroupMeta = {
+            script: {
+                color: '#F59E0B',
+                categories: ['web'],
+                path: [
+                    { title: '基础语法', desc: '变量、字符串、流程控制' },
+                    { title: '文件与文本', desc: '读写文件、正则与文本处理' },
+                    { title: '自动化任务', desc: '命令行、批处理与定时任务' },
+                    { title: '小项目', desc: '把重复工作交给脚本' }
+                ]
+            },
+            system: {
+                color: '#0EA5E9',
+                categories: ['system'],
+                path: [
+                    { title: '基础语法', desc: '类型、指针与流程控制' },
+                    { title: '内存与性能', desc: '内存布局、分配与优化' },
+                    { title: '并发与系统调用', desc: '线程、进程与操作系统接口' },
+                    { title: '实战项目', desc: '命令行工具或系统组件' }
+                ]
+            },
+            functional: {
+                color: '#8B5CF6',
+                categories: ['system', 'data'],
+                path: [
+                    { title: '函数与类型', desc: '函数、类型与模式匹配' },
+                    { title: '不可变数据', desc: '集合、递归与高阶函数' },
+                    { title: '并发模型', desc: 'Actor、STM 或轻量进程' },
+                    { title: '实战项目', desc: '数据处理或并发服务' }
+                ]
+            },
+            data: {
+                color: '#10B981',
+                categories: ['data'],
+                path: [
+                    { title: '基础语法', desc: '数据结构与基本操作' },
+                    { title: '数据清洗', desc: '缺失值、类型转换与预处理' },
+                    { title: '查询与聚合', desc: '分组、连接与统计' },
+                    { title: '可视化', desc: '图表与结果解读' }
+                ]
+            },
+            frontend: {
+                color: '#EC4899',
+                categories: ['web', 'mobile'],
+                path: [
+                    { title: '基础语法', desc: '结构、样式或语言基础' },
+                    { title: '布局与交互', desc: '响应式、事件与状态' },
+                    { title: '组件化', desc: '复用、组合与工程化' },
+                    { title: '项目实战', desc: '完整页面或跨端应用' }
+                ]
+            }
+        };
+
+        (window.LANGUAGE_CATALOG || []).forEach(entry => {
+            if (languages.some(lang => lang.id === entry.id)) return;
+            const meta = catalogGroupMeta[entry.group] || catalogGroupMeta.script;
+            const concepts = entry.concepts || ['—', '—', '—', '—'];
+            languages.push({
+                id: entry.id,
+                name: entry.name,
+                icon: entry.icon,
+                rank: entry.id,
+                color: meta.color,
+                category: meta.categories.slice(),
+                year: entry.year,
+                creator: entry.creator,
+                description: entry.blurb,
+                features: [
+                    '典型用途：' + (entry.useCases || []).join('、'),
+                    '类型系统：' + concepts[2],
+                    '内存管理：' + concepts[1],
+                    '并发模型：' + concepts[3]
+                ],
+                codeExample: entry.example,
+                learningPath: meta.path.map(step => ({ title: step.title, desc: step.desc })),
+                useCases: (entry.useCases || []).slice()
+            });
+        });
+
         let grid = document.getElementById('languagesGrid');
         const popupOverlay = document.getElementById('popupOverlay');
         const popupContent = document.getElementById('popupContent');
         const totalLangsEl = document.getElementById('totalLangs');
+        let currentDetailId = null;
 
         function renderLanguages(filter = 'all') {
             const filtered = filter === 'all'
@@ -1280,6 +1489,7 @@ manager.printSummary()`,
             const lang = languages.find(l => l.id === id);
             if (!lang) return;
 
+            currentDetailId = id;
             const highlightedCode = highlightCode(lang.codeExample, lang.name);
 
             popupContent.innerHTML = `
@@ -1306,7 +1516,12 @@ manager.printSummary()`,
 
                 <div class="popup-section">
                     <h3>💻 代码示例</h3>
+                    <div class="example-toolbar">
+                        <span class="example-hint">支持在线运行 · ${lang.name}</span>
+                        <button class="example-run-btn" onclick="runPopupExample()">▶ 运行示例</button>
+                    </div>
                     <pre class="code-block">${highlightedCode}</pre>
+                    <div class="code-run-output" id="popupRunOutput" hidden></div>
                 </div>
 
                 <div class="popup-section">
@@ -1330,10 +1545,55 @@ manager.printSummary()`,
                         ${lang.useCases.map(uc => `<span class="tag">${uc}</span>`).join('')}
                     </div>
                 </div>
+
+                <div class="popup-section" style="text-align:center">
+                    <a href="learning-paths.html#lang-${lang.id}" style="color:#667eea;font-weight:600;text-decoration:none;">
+                        🗺️ 在 34 门语言学习路线中查看 →
+                    </a>
+                </div>
             `;
 
             popupOverlay.classList.add('active');
+            try {
+                history.replaceState(null, '', '#lang-' + id);
+            } catch (e) {
+                /* 某些环境不允许修改历史记录 */
+            }
         }
+
+        async function runPopupExample() {
+            const lang = languages.find(l => l.id === currentDetailId);
+            const output = document.getElementById('popupRunOutput');
+            const button = document.querySelector('.example-run-btn');
+            if (!lang || !output) return;
+
+            if (typeof CodeRunner === 'undefined') {
+                output.hidden = false;
+                output.textContent = '在线运行模块未加载，请刷新页面重试。';
+                return;
+            }
+            if (button) {
+                button.disabled = true;
+                button.textContent = '运行中...';
+            }
+            try {
+                await CodeRunner.runInto(output, lang.name, lang.codeExample);
+            } finally {
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = '▶ 运行示例';
+                }
+            }
+        }
+
+        function openFromHash() {
+            const match = (window.location.hash || '').match(/^#lang-(\d+)$/);
+            if (match) {
+                showDetail(Number(match[1]));
+            }
+        }
+
+        window.addEventListener('hashchange', openFromHash);
 
         function highlightCode(code, langName) {
             let escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -1395,6 +1655,13 @@ manager.printSummary()`,
 
         function closePopup() {
             popupOverlay.classList.remove('active');
+            try {
+                if (/^#lang-\d+$/.test(window.location.hash || '')) {
+                    history.replaceState(null, '', window.location.pathname + window.location.search);
+                }
+            } catch (e) {
+                /* 忽略历史记录错误 */
+            }
         }
 
         popupOverlay.addEventListener('click', (e) => {
@@ -1432,10 +1699,10 @@ manager.printSummary()`,
 
         renderLanguages();
         animateNumber(totalLangsEl, languages.length);
-        updateProgressStats();
+        openFromHash();
 
         // 切换语言
-        function toggleLanguage() {
+        function toggleLanguageUI() {
             const newLang = window.toggleLanguage ? window.toggleLanguage() : 'zh';
             document.querySelector('.lang-switcher').textContent = newLang === 'zh' ? '🌐 中文' : '🌐 English';
         }

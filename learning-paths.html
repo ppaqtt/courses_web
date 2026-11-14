@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习路线 - 编程语言教程</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="favicon.ico">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="按脚本、系统、函数式、数据、前端分组的 34 门语言学习路线，每门语言都可在线运行示例">
+    <link rel="stylesheet" href="tutorial-style.css">
+    <link rel="stylesheet" href="tutorial-pages.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="site-nav">
+            <a href="programming-languages-tutorial.html">📚 全部教程</a>
+            <a href="tutorial-hub.html">🎯 学习中心</a>
+            <a href="learning-paths.html" class="active">🗺️ 学习路线</a>
+            <a href="concepts.html">🧩 概念对照</a>
+            <a href="daily-quiz.html">📅 每日 5 题</a>
+        </nav>
+
+        <header class="page-header">
+            <h1>🗺️ 学习路线</h1>
+            <p>34 门语言按脚本、系统、函数式、数据、前端分组；挑一条路线，按顺序学下去。</p>
+        </header>
+
+        <div class="page-stats" id="pathStats"></div>
+
+        <section aria-labelledby="routesTitle">
+            <div class="group-head">
+                <h2 id="routesTitle">3 条推荐路线</h2>
+                <p>每一步都链到已有教程章节或本页可运行示例</p>
+            </div>
+            <div class="route-grid" id="routeGrid"></div>
+        </section>
+
+        <section aria-labelledby="catalogTitle">
+            <div class="group-head">
+                <h2 id="catalogTitle">34 门语言目录</h2>
+                <p>点击「运行示例」即可在线执行；HTML/CSS 会在浏览器中实时预览</p>
+            </div>
+            <div id="catalogGroups"></div>
+        </section>
+
+        <p class="muted" style="font-size:.8rem;text-align:center;margin-top:26px">
+            在线运行优先使用 Piston；若公共 API 限流，会自动切换到 Judge0 CE。代码会发送到对应服务执行。
+        </p>
+    </div>
+
+    <script src="tutorial-common.js"></script>
+    <script src="language-catalog.js"></script>
+    <script src="tutorial-runner.js"></script>
+    <script>
+        (function () {
+            const catalog = window.LANGUAGE_CATALOG || [];
+            const groups = window.LANGUAGE_GROUPS || [];
+            const paths = window.LEARNING_PATHS || [];
+
+            function escapeHtml(value) {
+                return String(value == null ? '' : value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function languageOf(key) {
+                return typeof window.getCatalogLanguage === 'function'
+                    ? window.getCatalogLanguage(key)
+                    : catalog.find(lang => lang.key === key);
+            }
+
+            function detailHref(lang) {
+                return lang.detail || '#lang-' + lang.id;
+            }
+
+            function progressOf(lang) {
+                let done = 0;
+                try {
+                    const stats = LearningStats.get();
+                    done = ((stats.languagesProgress || {})[lang.key] || []).length;
+                } catch (e) {
+                    done = 0;
+                }
+                const total = lang.chapters || 1;
+                return {
+                    done: Math.min(done, total),
+                    total: total,
+                    percent: Math.min(100, Math.round((done / total) * 100))
+                };
+            }
+
+            function renderStats() {
+                let learned = 0;
+                try {
+                    learned = Object.keys(LearningStats.get().languagesProgress || {}).length;
+                } catch (e) {
+                    learned = 0;
+                }
+                document.getElementById('pathStats').innerHTML = [
+                    { value: catalog.length, label: '收录语言' },
+                    { value: groups.length, label: '能力分组' },
+                    { value: paths.length, label: '推荐路线' },
+                    { value: learned, label: '你已接触' }
+                ].map(item => `
+                    <div class="page-stat">
+                        <strong>${item.value}</strong>
+                        <span>${item.label}</span>
+                    </div>
+                `).join('');
+            }
+
+            function renderRoutes() {
+                const container = document.getElementById('routeGrid');
+                container.innerHTML = paths.map(path => {
+                    const steps = path.steps.map((step, index) => {
+                        const lang = languageOf(step.key);
+                        if (!lang) return '';
+                        const progress = progressOf(lang);
+                        return `
+                            <li>
+                                <a class="route-step" href="${escapeHtml(detailHref(lang))}">
+                                    <span class="step-index">${index + 1}</span>
+                                    <span class="step-main">
+                                        <span class="step-title">${lang.icon} ${escapeHtml(lang.name)} · ${escapeHtml(step.chapter)}</span>
+                                        <span class="step-note">${escapeHtml(step.note)} · ${progress.done}/${progress.total} 章</span>
+                                    </span>
+                                    <span class="step-arrow">→</span>
+                                </a>
+                            </li>
+                        `;
+                    }).join('');
+
+                    const total = path.steps.reduce((sum, step) => {
+                        const lang = languageOf(step.key);
+                        return sum + (lang ? progressOf(lang).percent : 0);
+                    }, 0);
+                    const overall = path.steps.length ? Math.round(total / path.steps.length) : 0;
+
+                    return `
+                        <article class="route-card">
+                            <div class="route-head">
+                                <div class="route-icon">${path.icon}</div>
+                                <div>
+                                    <h2>${escapeHtml(path.title)}</h2>
+                                    <p>${escapeHtml(path.desc)}</p>
+                                </div>
+                            </div>
+                            <div class="route-progress-row">
+                                <span>路线进度</span>
+                                <div class="route-progress"><i style="width:${overall}%"></i></div>
+                                <span>${overall}%</span>
+                            </div>
+                            <ol class="route-steps">${steps}</ol>
+                        </article>
+                    `;
+                }).join('');
+            }
+
+            function renderCatalog() {
+                const container = document.getElementById('catalogGroups');
+                container.innerHTML = groups.map(group => {
+                    const languages = catalog.filter(lang => lang.group === group.id);
+                    const cards = languages.map(lang => `
+                        <article class="lang-tile" id="lang-${lang.id}">
+                            <div class="lang-tile-head">
+                                <div class="lang-tile-icon">${lang.icon}</div>
+                                <div>
+                                    <h3>${escapeHtml(lang.name)}</h3>
+                                    <small>${lang.year} · ${escapeHtml(lang.creator)}</small>
+                                </div>
+                            </div>
+                            <p>${escapeHtml(lang.blurb)}</p>
+                            <div class="lang-tile-tags">
+                                ${(lang.useCases || []).map(item => `<span class="pill">${escapeHtml(item)}</span>`).join('')}
+                            </div>
+                            <div class="lang-tile-actions">
+                                <button type="button" class="btn primary" data-run="${escapeHtml(lang.key)}">▶ 运行示例</button>
+                                ${lang.detail
+                                    ? `<a class="btn ghost" href="${escapeHtml(lang.detail)}" title="查看教程">教程</a>`
+                                    : `<a class="btn ghost icon-only" href="concepts.html" title="在概念对照中查看">🧩</a>`}
+                            </div>
+                        </article>
+                    `).join('');
+
+                    return `
+                        <section class="group-section" aria-labelledby="group-${group.id}">
+                            <div class="group-head">
+                                <h2 id="group-${group.id}">${group.icon} ${escapeHtml(group.name)}</h2>
+                                <p>${escapeHtml(group.desc)} · ${languages.length} 门</p>
+                            </div>
+                            <div class="lang-catalog-grid">${cards}</div>
+                        </section>
+                    `;
+                }).join('');
+            }
+
+            document.addEventListener('click', event => {
+                const button = event.target.closest('[data-run]');
+                if (!button) return;
+                const lang = languageOf(button.getAttribute('data-run'));
+                if (!lang) return;
+                if (!window.CodeRunnerUI) {
+                    alert('在线运行模块未加载，请刷新页面重试。');
+                    return;
+                }
+                window.CodeRunnerUI.open({
+                    language: lang,
+                    code: lang.example,
+                    title: lang.name + ' · ' + lang.exampleTitle
+                });
+            });
+
+            renderStats();
+            renderRoutes();
+            renderCatalog();
+        })();
+    </script>
+</body>
+</html>

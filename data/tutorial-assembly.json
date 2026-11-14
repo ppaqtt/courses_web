@@ -1,0 +1,667 @@
+[
+  {
+    "id": 1,
+    "t": "x86-64 汇编简介与历史",
+    "p": [
+      "x86-64 是 AMD 于 2003 年推出、后被 Intel 采用的 64 位指令集，Linux 用户态程序广泛使用",
+      "汇编语言与机器码基本一一对应，需经 nasm 汇编成 ELF64 目标文件，再由 ld 链接为可执行文件",
+      "NASM 采用 Intel 语法：目标操作数在前、源操作数在后，与 GCC 默认的 AT&T 语法相反",
+      "Linux 程序通过 syscall 指令进入内核，参数依次放入 rdi、rsi、rdx、r10、r8、r9"
+    ],
+    "c": "; hello.asm - 第一个 x86-64 Linux 程序\nsection .data\n    msg db \"Hello, World!\", 10\n    len equ $ - msg\n\nsection .text\n    global _start\n\n_start:\n    mov rax, 1          ; sys_write\n    mov rdi, 1          ; stdout\n    mov rsi, msg        ; 缓冲区地址\n    mov rdx, len        ; 字节数\n    syscall\n\n    mov rax, 60         ; sys_exit\n    xor rdi, rdi        ; 退出码 0\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "初学者常把 NASM 的 Intel 语法与 GCC 的 AT&T 语法混用，例如写成 movq %rax, %rbx；NASM 应写 mov rbx, rax，且目标操作数在前。",
+    "q": [
+      {
+        "q": "x86-64 Linux 中 write 系统调用的编号是多少？",
+        "a": "1（rax=1，rdi=fd，rsi=buf，rdx=count）"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "NASM 与工具链环境搭建",
+    "p": [
+      "Debian/Ubuntu 可执行 sudo apt install nasm binutils gdb make 安装汇编、链接与调试工具",
+      "源文件用 nasm -f elf64 生成 64 位 ELF 目标文件，再用 ld 链接为可执行文件",
+      "objdump -d 反汇编已链接程序，ndisasm -b64 可直接反汇编任意二进制机器码",
+      "gdb 支持 break、info registers、x/ 查看内存与 stepi 单步执行汇编指令"
+    ],
+    "c": "; 安装：sudo apt install nasm binutils gdb make\n; 汇编：nasm -f elf64 hello.asm -o hello.o\n; 链接：ld hello.o -o hello\n; 运行：./hello\n; 反汇编：objdump -d hello\n; 机器码：ndisasm -b64 hello\n\nsection .text\n    global _start\n_start:\n    mov rax, 60         ; sys_exit\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "忘记声明 global _start 会得到 cannot find entry symbol _start 链接错误；入口符号必须导出且拼写准确。",
+    "q": [
+      {
+        "q": "nasm 生成 64 位 Linux 目标文件的命令是什么？",
+        "a": "nasm -f elf64 hello.asm -o hello.o"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量、常量与命名",
+    "p": [
+      "db/dw/dd/dq 分别分配 1/2/4/8 字节并初始化，resb/resw/resd/resq 只保留空间不初始化",
+      "equ 定义汇编期常量，不占内存；%define 是文本宏，二者都在预处理阶段展开",
+      "NASM 标签默认表示地址，访问其内容需加方括号，如 mov rax, [value]",
+      "命名区分大小写，避免与指令、寄存器重名；局部标签以点开头并依附上一个全局标签"
+    ],
+    "c": "section .data\n    name db \"nasm\", 0\n    max_users equ 100\n\nsection .bss\n    counter resq 1\n\nsection .text\n    global _start\n_start:\n    mov qword [counter], 0\n    mov rax, max_users      ; 常量在汇编期展开\n    lea rbx, [name]         ; 取地址\n    inc qword [counter]\n    mov rdi, [counter]      ; 退出码 1\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "mov rax, value 取到的是标签地址而非内存内容；要读取变量必须写 mov rax, [value]，混淆两者会得到错误指针值。",
+    "q": [
+      {
+        "q": "声明一个未初始化的 8 字节变量应使用什么伪指令？",
+        "a": "resq 1，例如 buffer resq 1"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "数据类型与内存布局",
+    "p": [
+      "整数按宽度分为 byte、word、dword、qword，读写时宽度必须与声明一致",
+      "有符号与无符号只是解释方式不同，idiv 做有符号除法、div 做无符号除法",
+      "浮点数存放在 xmm 寄存器，单精度用 movss/addss，双精度用 movsd/addsd",
+      "x86-64 内存按小端序存放，多字节整数的低字节位于低地址"
+    ],
+    "c": "section .data\n    b  db 255\n    w  dw 65535\n    d  dd 4294967295\n    q  dq 0x1122334455667788\n    f  dd 3.14\n    arr db 1, 2, 3, 4\n\nsection .text\n    global _start\n_start:\n    movzx eax, byte [b]     ; 零扩展\n    movzx ebx, word [w]\n    mov rax, [q]            ; 必须按 8 字节读取\n    movss xmm0, [f]         ; 单精度浮点\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "用 mov eax, [q] 读取 8 字节变量只会取低 32 位；应按宽度使用 mov rax, [q]，否则高位丢失并可能读错相邻数据。",
+    "q": [
+      {
+        "q": "读取一个 dq 定义的 64 位整数应使用哪个寄存器？",
+        "a": "rax（或任意 64 位通用寄存器），如 mov rax, [q]"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "add/sub/imul 完成加减乘，div 与 idiv 用 rdx:rax 作被除数，商在 rax、余数在 rdx",
+      "逻辑运算 and/or/xor/not 按位执行，xor reg, reg 是清零的常用高效写法",
+      "移位 shl/shr 用于乘除 2 的幂，sar 保留符号位；移位次数可放在 cl",
+      "cmp 做减法只更新标志位，本身不保存结果，需配合 jcc 或 setcc 使用"
+    ],
+    "c": "section .data\n    a dq 20\n    b dq 6\n\nsection .text\n    global _start\n_start:\n    mov rax, [a]\n    add rax, [b]        ; 26\n    sub rax, 4          ; 22\n    imul rax, 2         ; 44\n    xor rdx, rdx        ; 无符号除法前清零\n    mov rcx, 5\n    div rcx             ; rax=8, rdx=4\n    shl rax, 1          ; 16\n    and rax, 0xff\n    or  rax, 1\n    mov rdi, rax\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "执行 div 前未清零 rdx 会触发除法溢出并被信号终止（SIGFPE）；无符号除法前应先执行 xor rdx, rdx。",
+    "q": [
+      {
+        "q": "无符号除法 div rcx 执行前必须做什么？",
+        "a": "将 rdx 清零（xor rdx, rdx），被除数为 rdx:rax"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串处理",
+    "p": [
+      "汇编没有内置字符串类型，通常用 0 结尾的字节数组或独立的长度变量表示",
+      "len equ $ - msg 可在汇编期计算字符串字节长度，$ 表示当前地址",
+      "逐字节处理时用 rsi 作指针、rcx 作计数，配合 mov/inc 或 lodsb/stosb",
+      "rep movsb 复制、repe cmpsb 比较、scasb 扫描，方向由 DF 标志决定"
+    ],
+    "c": "section .data\n    msg db \"hinasm\", 10\n\nsection .text\n    global _start\n_start:\n    lea rsi, [msg]\n    mov rcx, 7\n.up:\n    and byte [rsi], 0xDF    ; 仅演示字符大写化\n    inc rsi\n    loop .up\n    mov rax, 1\n    mov rdi, 1\n    lea rsi, [msg]\n    mov rdx, 7\n    syscall\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "用 rep movsb 前未设置 rcx 或未清 DF，会导致复制长度错误或地址反向；应先 cld 并正确设置 rcx。",
+    "q": [
+      {
+        "q": "如何用 equ 计算 msg 的字节长度？",
+        "a": "len equ $ - msg"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "数组与内存寻址",
+    "p": [
+      "数组在内存中连续存放，元素地址 = 基址 + 下标 × 元素大小",
+      "比例变址寻址 [base + index*scale + disp] 的 scale 只能是 1、2、4、8",
+      "遍历数组常用 rcx 计数、rsi 指针，或用 cmp 与 jl 控制循环边界",
+      "二维数组按行优先存储，行地址 = 基址 + 行号 × 列数 × 元素大小"
+    ],
+    "c": "section .data\n    nums dq 10, 20, 30, 40, 50\n    count equ 5\n\nsection .text\n    global _start\n_start:\n    lea rsi, [nums]\n    xor rcx, rcx\n    xor rax, rax\n.sum:\n    add rax, [rsi + rcx*8]\n    inc rcx\n    cmp rcx, count\n    jl .sum\n    mov rdi, rax        ; 150\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "对 qword 数组使用 [rsi + rcx*4] 会按 4 字节步长错位访问；元素为 8 字节时必须使用 scale 8。",
+    "q": [
+      {
+        "q": "访问 qword 数组第 3 个元素（下标从 0 开始）的寻址写法？",
+        "a": "mov rax, [rsi + 3*8]"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件分支",
+    "p": [
+      "cmp 做减法只更新标志位，je/jne/jg/jge/jl/jle 依据结果跳转",
+      "无符号比较使用 ja/jae/jb/jbe，有符号比较使用 jg/jge/jl/jle，不可混用",
+      "条件跳转目标通常在同一函数内，使用局部标签可避免符号冲突",
+      "无分支代码可用 cmovg 等条件传送指令，减少分支预测失败开销"
+    ],
+    "c": "section .data\n    a dq 42\n    b dq 77\n\nsection .text\n    global _start\n_start:\n    mov rax, [a]\n    mov rbx, [b]\n    cmp rax, rbx\n    jge .keep\n    mov rax, rbx        ; 取较大者\n.keep:\n    cmp rax, 100\n    jle .done\n    mov rax, 100        ; 上限裁剪\n.done:\n    mov rdi, rax        ; 77\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "对有符号数使用 ja/jb 判断大小，负数会被当成巨大无符号数；有符号比较应使用 jg/jl 系列。",
+    "q": [
+      {
+        "q": "比较两个有符号整数大小应使用哪组跳转指令？",
+        "a": "jg/jge/jl/jle"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "循环与递归",
+    "p": [
+      "loop 指令自动递减 rcx 并在非零时跳转，但现代 CPU 上通常不如 dec/jnz 快",
+      "while 结构用标签、cmp 与条件跳转实现，do-while 先执行循环体再判断",
+      "递归通过 call 自身实现，必须设置基准情形并为每层调用保留栈空间",
+      "阶乘等递归可用循环改写，避免深递归导致栈溢出"
+    ],
+    "c": "section .text\n    global _start\n_start:\n    mov rdi, 5\n    call factorial\n    mov rdi, rax        ; 120\n    mov rax, 60\n    syscall\n\nfactorial:\n    cmp rdi, 1\n    jle .base\n    push rdi\n    dec rdi\n    call factorial\n    pop rdi\n    imul rax, rdi\n    ret\n.base:\n    mov rax, 1\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "递归函数忘记基准情形或未保存 rdi，会在返回后得到错误结果甚至无限递归；每次 call 与 ret 之间的压栈与出栈必须严格配对。",
+    "q": [
+      {
+        "q": "用 NASM 实现 5 的阶乘，递归基准情形应判断什么？",
+        "a": "cmp rdi, 1 后 jle 返回 1"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数基础与调用约定",
+    "p": [
+      "call 将返回地址压栈并跳转，ret 弹出返回地址；两者必须成对出现",
+      "System V AMD64 约定：整型参数依次放 rdi、rsi、rdx、rcx、r8、r9，返回值放 rax",
+      "调用者需保证栈 16 字节对齐，rax、rcx、rdx、rsi、rdi 等属 caller-saved",
+      "rbx、rbp、r12-r15 属 callee-saved，修改前必须保存并在返回前恢复"
+    ],
+    "c": "section .text\n    global _start\n_start:\n    mov rdi, 15\n    mov rsi, 42\n    call max2\n    mov rdi, rax        ; 42\n    mov rax, 60\n    syscall\n\n; 入参 rdi, rsi；返回值 rax\nmax2:\n    mov rax, rdi\n    cmp rsi, rax\n    jle .ret\n    mov rax, rsi\n.ret:\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "函数内修改 rbx 却未 push/pop，返回后会破坏调用者的数据；callee-saved 寄存器必须先保存再使用。",
+    "q": [
+      {
+        "q": "System V AMD64 下前两个整型参数放在哪两个寄存器？",
+        "a": "rdi 和 rsi"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "函数进阶与栈帧",
+    "p": [
+      "标准栈帧用 push rbp; mov rbp, rsp 建立，leave 等价于 mov rsp, rbp; pop rbp",
+      "局部变量通过 sub rsp, N 分配，按 [rbp-8]、[rbp-16] 访问，并保持 16 字节对齐",
+      "超过 6 个整型参数时多余参数由调用者压栈，大结构体返回值通过隐藏指针传递",
+      "调用 printf 等可变参数函数时 al 必须存放向量寄存器个数，通常清零"
+    ],
+    "c": "section .text\n    global _start\n_start:\n    mov rdi, 7\n    call square_plus\n    mov rdi, rax        ; 52\n    mov rax, 60\n    syscall\n\nsquare_plus:\n    push rbp\n    mov rbp, rsp\n    sub rsp, 16         ; 分配局部空间\n    mov [rbp-8], rdi\n    imul rdi, rdi\n    add rdi, 3\n    mov rax, rdi\n    leave               ; mov rsp, rbp; pop rbp\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "调用 printf 前未将 al 置 0，会因向量参数计数错误导致崩溃或输出异常；应执行 xor eax, eax。",
+    "q": [
+      {
+        "q": "建立标准栈帧的两条指令是什么？",
+        "a": "push rbp 与 mov rbp, rsp"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "作用域、局部标签与闭包模拟",
+    "p": [
+      "NASM 局部标签以 . 开头，作用域属于最近一个非局部标签，可重复使用同名 .loop",
+      "标签只在汇编期可见；运行时的作用域由栈帧与寄存器保存规则决定",
+      "栈上局部变量在函数返回后失效，不能返回指向它的指针",
+      "可用 %local 或 %push/%pop 管理宏内上下文，避免宏展开时标签冲突"
+    ],
+    "c": "section .text\n    global _start\n_start:\n    mov rcx, 3\n.loop:\n    dec rcx\n    jnz .loop\n    call helper\n    mov rdi, rax\n    mov rax, 60\n    syscall\n\nhelper:\n    mov rcx, 2\n.loop:                  ; 同名局部标签，作用域属于 helper\n    dec rcx\n    jnz .loop\n    mov rax, 9\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "在函数返回后继续使用其栈上缓冲区地址，会读到已被覆盖的数据；局部内存生命周期止于 ret，应把结果复制到调用者缓冲区。",
+    "q": [
+      {
+        "q": "两个函数都想使用 .loop 标签，会冲突吗？",
+        "a": "不会，.loop 是局部标签，各自依附本函数的全局标签"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "结构体与对象布局",
+    "p": [
+      "struc/endstruc 定义结构布局，字段用 .name resq 形式声明偏移",
+      "istruc/at/iend 按结构定义初始化数据，字段偏移可直接用 Point.x 引用",
+      "结构体本质是固定偏移的内存块，没有方法，行为需通过函数指针或约定实现",
+      "用 equ 或 %define 计算字段大小，便于数组与指针运算"
+    ],
+    "c": "struc Point\n    .x resq 1\n    .y resq 1\nendstruc\n\nsection .data\n    p istruc Point\n        at Point.x, dq 3\n        at Point.y, dq 4\n    iend\n\nsection .text\n    global _start\n_start:\n    mov rax, [p + Point.x]\n    add rax, [p + Point.y]\n    mov rdi, rax        ; 7\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "用 at Point.y 初始化时写成 at y 会找不到符号；字段必须带结构名前缀，如 Point.y。",
+    "q": [
+      {
+        "q": "struc 定义中字段偏移如何引用？",
+        "a": "使用 Point.x 这种“结构名.字段名”形式"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "继承与多态",
+    "p": [
+      "汇编无继承语法，多态通常用函数指针表（vtable）加类型标识模拟",
+      "对象首字段存放 vtable 指针，调用时先取出指针再间接 call",
+      "子类“继承”即复制父类布局并在其后追加字段，保证前缀兼容",
+      "通过相同的调用序列处理不同对象，即动态分派的核心"
+    ],
+    "c": "section .data\n    vtable dq animal_speak, dog_speak, cat_speak\n    kind   dq 2\n\nsection .text\n    global _start\n_start:\n    mov rax, [kind]\n    lea rbx, [vtable]\n    call qword [rbx + rax*8]\n    mov rdi, rax\n    mov rax, 60\n    syscall\n\nanimal_speak:\n    mov rax, 1\n    ret\ndog_speak:\n    mov rax, 2\n    ret\ncat_speak:\n    mov rax, 3\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "间接 call 前未检查函数指针是否为空，会跳转到地址 0 触发段错误；分派前应验证指针，否则会跳到无效地址。",
+    "q": [
+      {
+        "q": "汇编中实现多态分派最常用的数据结构是什么？",
+        "a": "函数指针表（vtable），配合对象中的类型标识或表指针"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "接口与抽象",
+    "p": [
+      "接口可用一组固定顺序的函数指针结构表示，实现者填充各自的函数地址",
+      "抽象基类可提供默认实现，子类表项指向默认函数或覆盖为新函数",
+      "调用方只依赖函数表布局，不关心具体实现，从而降低模块耦合",
+      "用 %macro 生成统一的表项与调用桩，可减少重复代码"
+    ],
+    "c": "section .data\n    circle_name db \"circle\", 0\n    square_name db \"square\", 0\n    shapes:\n        dq circle_area, circle_name\n        dq square_area, square_name\n\nsection .text\n    global _start\n_start:\n    lea rbx, [shapes]\n    mov rdi, 2\n    call qword [rbx + 8]    ; 调用 square_area\n    mov rdi, rax\n    mov rax, 60\n    syscall\n\ncircle_area:\n    mov rax, 3\n    ret\nsquare_area:\n    mov rax, 4\n    ret",
+    "et": "❌ 常见错误",
+    "ec": "函数表顺序在定义与调用处不一致，会调用到错误函数；应集中定义表布局常量并统一引用，且参数与返回值寄存器必须一致。",
+    "q": [
+      {
+        "q": "汇编里接口约定最关键的是什么？",
+        "a": "函数指针表的字段顺序与调用约定必须完全一致"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "宏与泛型编程",
+    "p": [
+      "汇编没有泛型，通常用 %macro 让同一段代码适配不同宽度或不同类型",
+      "%macro 支持默认参数与 %rep 展开，在汇编期生成针对具体类型的指令序列",
+      "用 %ifidn 等条件指令按参数分派，可实现类似类型特化的效果",
+      "宏展开会增加代码体积，需在通用性与指令缓存之间权衡"
+    ],
+    "c": "%macro swap 2\n    mov rax, %1\n    mov rbx, %2\n    mov %1, rbx\n    mov %2, rax\n%endmacro\n\nsection .data\n    a dq 1\n    b dq 2\n\nsection .text\n    global _start\n_start:\n    swap qword [a], qword [b]\n    mov rdi, [a]        ; 2\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "宏参数直接拼接进指令时未加括号，遇到表达式会因优先级出错；展开时应使用括号保护参数，否则展开结果可能不符合预期。",
+    "q": [
+      {
+        "q": "NASM 中实现“泛型”最常用的机制是什么？",
+        "a": "%macro 宏，在汇编期按参数展开生成代码"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理与返回值",
+    "p": [
+      "Linux 系统调用失败时在 rax 返回负的 errno，成功时返回非负结果",
+      "用 test rax, rax 后 js 判断错误，再用 neg rax 取得正的错误码",
+      "函数可约定 rax=0 成功、非 0 为错误码，调用方必须逐层检查",
+      "严重错误可写入 stderr 后调用 exit 退出，避免带错误状态继续执行"
+    ],
+    "c": "section .data\n    path db \"/no/such/file\", 0\n\nsection .text\n    global _start\n_start:\n    mov rax, 2          ; sys_open\n    lea rdi, [path]\n    xor esi, esi        ; O_RDONLY\n    xor edx, edx\n    syscall\n    test rax, rax\n    js .error\n    mov rdi, 0\n    jmp .exit\n.error:\n    neg rax             ; 取 errno\n    mov rdi, rax\n.exit:\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "把系统调用返回值当无符号数比较，负数 errno 会被视为巨大值；判断失败应使用 js 或检查符号位。",
+    "q": [
+      {
+        "q": "系统调用失败时 rax 中是什么？",
+        "a": "负的 errno，例如 -2 表示 ENOENT"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件 I/O 与系统调用",
+    "p": [
+      "open 系统调用号 2，参数为路径、flags、mode，返回文件描述符放在 rax",
+      "read 编号 0、write 编号 1，参数为 fd、缓冲区、字节数，返回实际读写字节数",
+      "close 编号 3；进程退出时内核也会关闭 fd，但显式关闭更清晰",
+      "文件偏移由内核维护，顺序 read/write 自动推进；O_APPEND 可追加写入"
+    ],
+    "c": "section .data\n    path db \"input.txt\", 0\n\nsection .bss\n    buf resb 256\n\nsection .text\n    global _start\n_start:\n    mov rax, 2\n    lea rdi, [path]\n    xor esi, esi        ; O_RDONLY\n    xor edx, edx\n    syscall\n    mov r12, rax        ; fd\n    xor eax, eax        ; read\n    mov rdi, r12\n    lea rsi, [buf]\n    mov rdx, 256\n    syscall\n    mov rdx, rax        ; n\n    mov rax, 1          ; write -> stdout\n    mov rdi, 1\n    lea rsi, [buf]\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "read 返回 0 表示到达文件末尾，返回 -1 才是错误；循环中不区分二者会死循环或误判，应先比较返回值。",
+    "q": [
+      {
+        "q": "read 系统调用返回 0 代表什么？",
+        "a": "已到达文件末尾（EOF）"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式与模式匹配",
+    "p": [
+      "汇编本身不含正则引擎，Linux 下可调用 POSIX 的 regcomp/regexec/regfree",
+      "regex_t 结构由 regcomp 初始化，REG_EXTENDED 启用扩展正则语法",
+      "regexec 返回 0 表示匹配，regmatch_t 数组可获得子表达式位置",
+      "简单模式匹配也可用 cmpsb、scasb 手写，但复杂表达式应复用 libc"
+    ],
+    "c": "; 链接需 libc：\n; ld regex.o -o regex -lc --dynamic-linker /lib64/ld-linux-x86-64.so.2\nextern regcomp, regexec\n\nsection .data\n    pat db \"^[a-z]+@[a-z]+\\.[a-z]+$\", 0\n    txt db \"user@example.com\", 0\n\nsection .bss\n    re resb 64\n\nsection .text\n    global _start\n_start:\n    lea rdi, [re]\n    lea rsi, [pat]\n    mov edx, 1              ; REG_EXTENDED\n    call regcomp            ; 0 表示成功\n    lea rdi, [re]\n    lea rsi, [txt]\n    xor edx, edx            ; 无 eflags\n    xor ecx, ecx            ; 不要子匹配\n    call regexec            ; 0 表示匹配\n    mov rdi, rax\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "调用 regcomp 成功后忘记 regfree，会泄漏正则引擎内部缓冲区；每次成功编译都应与释放配对。",
+    "q": [
+      {
+        "q": "POSIX 正则编译与匹配分别调用哪两个函数？",
+        "a": "regcomp 编译，regexec 执行匹配"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块、依赖与链接",
+    "p": [
+      "多文件程序把公共函数声明为 global，其他文件用 extern 引用并共同链接",
+      "nasm 可分别汇编多个源文件，ld 按目标文件顺序解析未定义符号",
+      "静态库用 ar 打包 .o，动态库用 ld -shared 生成 .so 并在运行时加载",
+      "汇编没有包管理器，依赖通常以源码、系统库或 Makefile 子模块管理"
+    ],
+    "c": "; math.asm 中应定义：global add_two\n; add_two: lea rax, [rdi+rsi] / ret\nextern add_two\n\nsection .text\n    global _start\n_start:\n    mov rdi, 20\n    mov rsi, 22\n    call add_two\n    mov rdi, rax        ; 42\n    mov rax, 60\n    syscall\n\n; 汇编与链接：\n; nasm -f elf64 main.asm -o main.o\n; nasm -f elf64 math.asm -o math.o\n; ld main.o math.o -o app",
+    "et": "❌ 常见错误",
+    "ec": "两个目标文件重复定义同名 global 符号会链接失败；公共符号应只在一个模块中定义，其余模块用 extern。",
+    "q": [
+      {
+        "q": "模块 A 要调用模块 B 中的函数，需要哪些声明？",
+        "a": "B 中 global 导出，A 中 extern 引入，然后一起链接"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "包管理器：汇编无官方包管理器，依赖通过系统包（apt）、源码或 git submodule 管理",
+      "测试框架：无内置测试框架，通常自写断言宏并以进程退出码表示成功或失败",
+      "格式化：无统一格式化器，靠命名约定、对齐注释与编辑器配置保持风格",
+      "调试与构建：gdb 调试，objdump/ndisasm 反汇编，make 组织 nasm 与 ld 命令"
+    ],
+    "c": "; 工具链速查（汇编无内置包管理器与测试框架）\n; 汇编：nasm -f elf64 app.asm -o app.o\n; 链接：ld app.o -o app\n; 调试：gdb ./app\n; 反汇编：objdump -d app\n; 机器码：ndisasm -b64 app\n; 构建：make（Makefile 中固化 nasm 与 ld 步骤）\n; 测试：运行测试程序，退出码 0 表示通过\n\nsection .text\n    global _start\n_start:\n    mov rax, 60\n    mov rdi, 42         ; 模拟失败退出码\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "把汇编当成有 cargo/npm 的语言，期待一条命令拉取依赖并跑测试；实际需手动管理源码、链接参数与测试脚本。",
+    "q": [
+      {
+        "q": "汇编项目通常如何表示测试通过？",
+        "a": "运行测试程序并以退出码 0 表示通过，非 0 表示失败"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发、原子操作与 futex",
+    "p": [
+      "线程由 clone 系统调用创建，共享地址空间但各有寄存器与栈",
+      "lock 前缀保证指令原子性，lock xadd、lock cmpxchg 可实现无锁计数",
+      "futex 提供内核等待/唤醒，用户态自旋与 futex 结合可构建互斥锁",
+      "内存序由 mfence/lfence/sfence 控制，避免重排导致可见性问题"
+    ],
+    "c": "section .data\n    counter dq 0\n\nsection .text\n    global _start\n_start:\n    mov rcx, 4\n.spin:\n    mov rax, 1\n    lock xadd [counter], rax   ; 原子加 1\n    dec rcx\n    jnz .spin\n    mov rax, 60\n    mov rdi, [counter]         ; 4\n    syscall\n\n; 真实线程还需 clone 创建栈并配合 futex 等待",
+    "et": "❌ 常见错误",
+    "ec": "普通 inc 在多核下不是原子操作，两个线程同时执行会丢失更新；共享计数必须用 lock 前缀或原子指令。",
+    "q": [
+      {
+        "q": "多核间安全地给共享变量加 1 应使用什么指令？",
+        "a": "lock xadd [var], rax（或 lock inc）"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化",
+    "p": [
+      "优先减少内存访问与分支，把热点数据放入缓存行并保持 64 字节对齐",
+      "循环展开可降低分支与计数开销，但会增大代码体积，需实测权衡",
+      "用 lea 完成简单乘加，避免 imul；用 xor reg, reg 代替 mov reg, 0",
+      "按顺序访问内存、避免跨缓存行，能显著提升大规模数组处理速度"
+    ],
+    "c": "section .data\n    arr dq 1, 2, 3, 4, 5, 6, 7, 8\n\nsection .text\n    global _start\n_start:\n    lea rsi, [arr]\n    xor rax, rax\n    xor rcx, rcx\n.loop:\n    add rax, [rsi + rcx*8]\n    add rax, [rsi + rcx*8 + 8]   ; 两路展开\n    add rcx, 2\n    cmp rcx, 8\n    jl .loop\n    mov rdi, rax                 ; 36\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "盲目展开循环导致指令缓存溢出，性能反而下降；每次优化都应以 perf 或计时数据为依据，并使用缓存友好的数据布局。",
+    "q": [
+      {
+        "q": "为什么 xor eax, eax 常比 mov eax, 0 更优？",
+        "a": "编码更短，且不产生部分寄存器依赖，现代 CPU 上零延迟"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试与断言",
+    "p": [
+      "汇编无内置测试框架，常用 %macro 定义 assert_eq 等断言并在失败时退出",
+      "测试程序以退出码 0 表示全部通过，非 0 表示失败，便于 make 或 CI 判断",
+      "每个测试用例可写成独立函数，主程序依次调用并统计失败数",
+      "用 gdb 或 strace 定位失败用例，必要时打印寄存器与内存快照"
+    ],
+    "c": "%macro assert_eq 2\n    cmp %1, %2\n    je %%ok\n    mov rdi, 1\n    mov rax, 60\n    syscall\n%%ok:\n%endmacro\n\nsection .text\n    global _start\n_start:\n    mov rax, 2\n    add rax, 2\n    assert_eq rax, 4\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "断言失败后仍继续执行，会让后续用例互相污染；断言失败应立即退出或记录并隔离状态，失败用例应打印编号与期望值。",
+    "q": [
+      {
+        "q": "如何让 make 感知汇编测试失败？",
+        "a": "测试进程以非 0 退出码结束，make 会因此报错停止"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "gdb 常用命令：break、run、nexti/stepi、info registers、x/16xb、bt",
+      "int3 会触发 SIGTRAP，可在代码中埋断点，调试器附加后自动停下",
+      "strace 跟踪系统调用，快速定位 fd、返回值与 errno 问题",
+      "段错误可用 core dump 配合 gdb 查看崩溃地址与寄存器现场"
+    ],
+    "c": "; gdb ./app\n; (gdb) break _start\n; (gdb) run\n; (gdb) info registers\n; (gdb) x/8xb &msg\n; (gdb) stepi / nexti\nsection .data\n    msg db \"debug\", 10\n\nsection .text\n    global _start\n_start:\n    int3                ; 断点陷阱\n    mov rax, 1\n    mov rdi, 1\n    lea rsi, [msg]\n    mov rdx, 6\n    syscall\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "只看源码不检查寄存器，容易误判；应同时用 info registers 与 x/ 查看实际值与内存内容。",
+    "q": [
+      {
+        "q": "gdb 中查看 16 个字节内存的命令？",
+        "a": "x/16xb 地址"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "与 C 库互操作（FFI）",
+    "p": [
+      "汇编可直接调用 libc：用 extern 声明函数，按 System V 约定传参并 call",
+      "链接 libc 需指定动态链接器，如 ld -lc --dynamic-linker /lib64/ld-linux-x86-64.so.2",
+      "调用可变参数函数（printf）时 al 必须为 0，表示不使用向量寄存器",
+      "也可导出汇编函数供 C 调用，此时需遵守同样的调用约定与栈对齐"
+    ],
+    "c": "extern printf, exit\n\nsection .data\n    fmt db \"sum=%ld\", 10, 0\n\nsection .text\n    global _start\n_start:\n    mov rdi, fmt\n    mov rsi, 40\n    mov rdx, 2\n    xor eax, eax        ; 可变参数：al=0\n    call printf\n    mov rdi, 0\n    call exit\n\n; 链接：ld main.o -o app -lc \\\n;   --dynamic-linker /lib64/ld-linux-x86-64.so.2",
+    "et": "❌ 常见错误",
+    "ec": "链接 libc 却仍用纯 syscall 的 _start 入口，可能绕过 libc 初始化；复杂 libc 功能应使用 main 或 __libc_start_main。",
+    "q": [
+      {
+        "q": "调用 printf 前为什么要把 al 置 0？",
+        "a": "表示没有向量寄存器参数，符合可变参数调用约定"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式：状态机与策略",
+    "p": [
+      "状态机模式用状态号索引跳转表，每个状态处理完返回下一状态",
+      "策略模式用函数指针替换具体算法，调用方只依赖统一签名",
+      "单例可用 .data 中的全局实例加访问函数模拟，注意初始化顺序",
+      "观察者模式用回调函数数组实现，注册与通知通过遍历表完成"
+    ],
+    "c": "section .data\n    state dq 1\n\nsection .text\n    global _start\n_start:\n    mov rax, [state]\n    lea rbx, [table]\n    call qword [rbx + rax*8]\n    mov rdi, rax\n    mov rax, 60\n    syscall\n\nstate_idle:\n    mov rax, 1\n    ret\nstate_run:\n    mov rax, 2\n    ret\n\ntable:\n    dq state_idle, state_run",
+    "et": "❌ 常见错误",
+    "ec": "跳转表索引越界会跳到任意地址并崩溃；分派前必须用 cmp 与 jae 检查下标范围，并为每个状态准备默认处理分支。",
+    "q": [
+      {
+        "q": "用跳转表实现状态机时，状态号应先做什么检查？",
+        "a": "检查是否小于表长度，越界则走默认分支"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问（SQLite）",
+    "p": [
+      "汇编不直接实现数据库协议，通常通过 libsqlite3 等 C 库的 API 访问",
+      "sqlite3_open 打开数据库并返回句柄，sqlite3_exec 执行 SQL，sqlite3_close 释放",
+      "查询结果可用 sqlite3_prepare_v2 + sqlite3_step + sqlite3_column_* 逐行读取",
+      "链接时加 -lsqlite3，运行环境需安装对应的共享库"
+    ],
+    "c": "extern sqlite3_open, sqlite3_exec, sqlite3_close\n\nsection .data\n    dbname db \"app.db\", 0\n    sql db \"CREATE TABLE IF NOT EXISTS t(id INTEGER);\", 0\n\n    dbptr resq 1\n\nsection .text\n    global _start\n_start:\n    lea rdi, [dbname]\n    lea rsi, [dbptr]\n    call sqlite3_open\n    test eax, eax\n    jnz .done\n    mov rdi, [dbptr]\n    lea rsi, [sql]\n    xor edx, edx\n    xor ecx, ecx\n    xor r8d, r8d\n    call sqlite3_exec\n    mov rdi, [dbptr]\n    call sqlite3_close\n.done:\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入直接拼进 SQL 字符串会导致注入；应使用 sqlite3_prepare_v2 的占位符绑定参数。",
+    "q": [
+      {
+        "q": "SQLite C API 中执行无结果集 SQL 的便捷函数是什么？",
+        "a": "sqlite3_exec"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP 请求",
+    "p": [
+      "socket 系统调用号 41，参数为 AF_INET、SOCK_STREAM、协议 0，返回 fd",
+      "connect 编号 42，sockaddr_in 需按网络字节序填写端口与 IPv4 地址",
+      "send/recv 或 write/read 收发数据，注意循环处理部分读写",
+      "HTTP 请求就是符合 RFC 的文本，服务端按行解析请求行与首部"
+    ],
+    "c": "section .data\n    req db \"GET / HTTP/1.0\", 13, 10, 13, 10\n    addr dw 2\n         db 0, 0x50          ; 端口 80，大端\n         db 127, 0, 0, 1     ; 127.0.0.1\n         times 8 db 0\n\nsection .text\n    global _start\n_start:\n    mov rax, 41              ; socket\n    mov rdi, 2               ; AF_INET\n    mov rsi, 1               ; SOCK_STREAM\n    xor edx, edx\n    syscall\n    mov r12, rax\n    mov rax, 42              ; connect\n    mov rdi, r12\n    lea rsi, [addr]\n    mov rdx, 16\n    syscall\n    mov rax, 1               ; write = send\n    mov rdi, r12\n    lea rsi, [req]\n    mov rdx, 18\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "sockaddr_in 的端口必须用网络字节序（大端），直接写 80 会变成端口 20480，导致连接失败。",
+    "q": [
+      {
+        "q": "端口 8080 在网络字节序中应写成哪两个字节？",
+        "a": "0x1F 0x90（大端），即 db 0x1F, 0x90"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "所有来自外部的长度与下标都必须做边界检查，防止越界读写",
+      "栈缓冲区溢出可覆盖返回地址；启用 NX、栈保护并避免不安全的字符串函数",
+      "不要执行拼接后的 shell 命令，避免命令注入；参数应逐项传递",
+      "敏感数据避免明文存放，密钥从环境变量或密钥管理服务读取"
+    ],
+    "c": "section .data\n    buf db \"ABCDEFGH\", 0\n    idx dq 3\n\nsection .text\n    global _start\n_start:\n    mov rax, [idx]\n    cmp rax, 8              ; 边界检查\n    jae .oob\n    lea rsi, [buf]\n    movzx edi, byte [rsi + rax]\n    jmp .exit\n.oob:\n    mov rdi, 1\n.exit:\n    mov rax, 60\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "用用户提供的长度直接调用 read 写入固定缓冲区，会造成栈溢出；必须先与缓冲区容量比较，所有外部输入都不可信。",
+    "q": [
+      {
+        "q": "向固定缓冲区读入数据前必须检查什么？",
+        "a": "检查请求长度不超过缓冲区容量"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "Linux 进程启动时栈顶依次是 argc、argv 指针数组与环境变量指针数组",
+      "argv[0] 是程序名，argv[1] 起才是用户参数，取参数前先判断 argc",
+      "命令行工具应支持 --help，并在参数错误时返回非 0 退出码",
+      "正常输出写 stdout，错误与用法信息写 stderr，便于管道与脚本处理"
+    ],
+    "c": "section .text\n    global _start\n_start:\n    mov rcx, [rsp]          ; argc\n    cmp rcx, 2\n    jl .done\n    mov rsi, [rsp+16]       ; argv[1]\n    xor rdx, rdx\n.len:\n    cmp byte [rsi+rdx], 0\n    je .print\n    inc rdx\n    jmp .len\n.print:\n    mov rax, 1              ; write\n    mov rdi, 1\n    syscall\n.done:\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "未检查 argc 就读取 [rsp+16]，参数缺失时会取到环境变量指针并输出乱码或崩溃；应先比较 argc。",
+    "q": [
+      {
+        "q": "x86-64 Linux 启动时 argc 位于哪里？",
+        "a": "位于初始栈顶 [rsp]"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：Web 服务",
+    "p": [
+      "Web 服务流程：socket → bind → listen → accept → read 请求 → write 响应",
+      "bind 需要 sockaddr_in 结构，端口用大端；listen 设置等待队列长度",
+      "accept 返回新的连接 fd，原监听 fd 继续接受后续连接",
+      "HTTP 响应由状态行、首部、空行和正文组成，Content-Length 必须准确"
+    ],
+    "c": "%macro sc 4\n    mov eax, %1\n    mov edi, %2\n    mov esi, %3\n    mov edx, %4\n    syscall\n%endmacro\n\nsection .data\n    resp db \"HTTP/1.1 200 OK\", 13, 10, \"Content-Length: 5\", 13, 10, 13, 10, \"hello\"\n    resplen equ $ - resp\n    addr dw 2\n         db 0x1F, 0x90\n         db 0, 0, 0, 0\n         times 8 db 0\n\nsection .text\n    global _start\n_start:\n    sc 41, 2, 1, 0          ; socket\n    mov r12d, eax\n    sc 49, r12d, addr, 16   ; bind\n    sc 50, r12d, 8, 0       ; listen\n    sc 43, r12d, 0, 0       ; accept\n    mov r13d, eax\n    sc 1, r13d, resp, resplen\n    sc 60, 0, 0, 0",
+    "et": "❌ 常见错误",
+    "ec": "响应头与正文之间漏掉空行（CRLF CRLF），客户端会一直等待正文；首部结束必须发送两个回车换行。",
+    "q": [
+      {
+        "q": "HTTP 响应首部与正文之间的分隔是什么？",
+        "a": "一个空行，即 CRLF CRLF（\\r\\n\\r\\n）"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "发布构建可用 nasm -O2 优化汇编，ld -s 去除符号，strip 进一步减小体积",
+      "静态链接生成独立可执行文件，动态链接体积小但依赖目标机库版本",
+      "用 Makefile 固化 nasm、ld、strip 步骤，确保可重复构建",
+      "部署时注意 glibc 版本与 CPU 指令集兼容性，必要时在旧环境构建"
+    ],
+    "c": "; 发布构建：\n; nasm -f elf64 -O2 app.asm -o app.o\n; ld -s app.o -o app          ; -s 去除符号表\n; strip app\n; file app && ./app\n\nsection .note.GNU-stack noalloc noexec nowrite progbits\n\nsection .text\n    global _start\n_start:\n    mov rax, 60\n    xor rdi, rdi\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "在较新发行版编译的动态链接程序，部署到旧 glibc 机器会报版本不匹配；应在目标环境构建或静态链接。",
+    "q": [
+      {
+        "q": "ld 的哪个选项可去除符号表？",
+        "a": "-s"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "统一缩进与对齐，段、全局符号、局部标签分层书写，注释说明寄存器用途",
+      "函数保持单一职责，明确输入输出寄存器与是否破坏 callee-saved 寄存器",
+      "避免魔法数字，用 equ 或 %define 命名常量与系统调用号",
+      "所有系统调用后检查返回值，错误路径也要正确释放资源"
+    ],
+    "c": "SYS_WRITE equ 1\nSTDOUT    equ 1\nSYS_EXIT  equ 60\n\nsection .data\n    msg db \"ok\", 10\n    len equ $ - msg\n\nsection .text\n    global _start\n_start:\n    mov rax, SYS_WRITE      ; 用常量代替魔法数字\n    mov rdi, STDOUT\n    lea rsi, [msg]\n    mov rdx, len\n    syscall\n    test rax, rax           ; 检查返回值\n    js .fail\n    mov rax, SYS_EXIT\n    xor rdi, rdi\n    syscall\n.fail:\n    mov rax, SYS_EXIT\n    mov rdi, 1\n    syscall",
+    "et": "❌ 常见错误",
+    "ec": "只写代码不写调用约定注释，其他开发者无法安全复用；每个函数都应注明参数、返回值与副作用，并说明是否修改栈或内存。",
+    "q": [
+      {
+        "q": "汇编函数文档至少应说明什么？",
+        "a": "输入/输出寄存器、返回值含义、会破坏哪些寄存器"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "掌握寄存器、寻址、栈帧、系统调用与调用约定，是阅读底层代码的基础",
+      "继续学习 ELF 格式、动态链接、中断与内核接口，理解程序如何被加载",
+      "用 gdb、objdump、strace、perf 建立可观测性，定位性能与正确性问题",
+      "进阶方向包括操作系统、编译器后端、逆向工程、嵌入式与高性能库"
+    ],
+    "c": "section .data\n    ok db \"assembly roadmap\", 10\n    len equ $ - ok\n\nsection .text\n    global _start\n_start:\n    mov rax, 1\n    mov rdi, 1\n    lea rsi, [ok]\n    mov rdx, len\n    syscall\n    mov rax, 60\n    xor rdi, rdi\n    syscall\n\n; 下一步：读 ELF 规范、写 bootloader、用 perf 分析热点",
+    "et": "❌ 常见错误",
+    "ec": "只背指令不写完整程序，遇到链接、段错误与系统调用问题时仍无从下手；应以可运行项目驱动学习，并持续阅读优秀开源汇编代码。",
+    "q": [
+      {
+        "q": "学习 x86-64 汇编后推荐的三个进阶方向？",
+        "a": "操作系统/内核、编译器后端、逆向与性能优化"
+      }
+    ]
+  }
+]
