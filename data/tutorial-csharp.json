@@ -667,5 +667,24 @@
         "a": "使用File类的WriteAllLines/ReadAllLines方法，将学生数据序列化为CSV格式存储，加载时解析CSV并重建对象列表。"
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用命名空间：System、System.Linq、System.Collections.Generic、System.IO、System.Text.Json",
+      "包管理用 NuGet，dotnet add package 添加依赖；项目文件 .csproj 记录版本",
+      "测试用 xUnit 或 NUnit；格式化 dotnet format；调试用 Visual Studio/VS Code 断点",
+      "运行：dotnet run；测试：dotnet test；发布：dotnet publish -c Release"
+    ],
+    "c": "using System;\nusing System.Collections.Generic;\nusing System.Linq;\n\nclass Program {\n    static void Main() {\n        var names = new List<string> { \"Ada\", \"Linus\", \"Grace\" };\n        names.Where(n => n.Length > 3).ToList().ForEach(Console.WriteLine);\n        Console.WriteLine(DateTime.Now.ToString(\"yyyy-MM-dd\"));\n        var freq = new Dictionary<string, int> { [\"csharp\"] = 1 };\n        freq[\"csharp\"]++;\n        Console.WriteLine(string.Join(\", \", freq.Select(kv => $\"{kv.Key}={kv.Value}\")));\n    }\n}\n\n// 工具链（终端执行）\n// 包管理：dotnet add package Newtonsoft.Json\n// 测试：dotnet test          格式化：dotnet format\n// 运行：dotnet run           发布：dotnet publish -c Release\n// 调试：VS Code C# 扩展 + F5，或 dotnet run 加断点\n",
+    "et": "❌ 常见错误",
+    "ec": "用 .NET Framework 与 .NET 8 的 API 混写，导致目标框架不匹配。应在 .csproj 明确 TargetFramework 并用 SDK 风格项目。",
+    "q": [
+      {
+        "q": "C# 中 LINQ 的常用命名空间是什么？",
+        "a": "System.Linq"
+      }
+    ],
+    "id": 36
   }
 ]

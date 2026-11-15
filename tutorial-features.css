@@ -366,6 +366,8 @@
 /* ==================== Toast提示 ==================== */
 .toast {
     position: fixed;
+    top: auto;
+    right: auto;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
@@ -376,6 +378,8 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     z-index: 10000;
     opacity: 0;
+    pointer-events: none;
+    max-width: min(90vw, 640px);
     transition: all 0.3s ease;
 }
 

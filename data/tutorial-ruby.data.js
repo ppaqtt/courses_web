@@ -1,75 +1,49 @@
 window.TUTORIAL_DATA_ruby = [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Ruby 3.x 简介与历史",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ruby 由松本行弘（Matz）于 1993 年开始设计，1995 年首次公开发布，目标是让编程更快乐、更自然",
+      "Ruby 3.x 自 2020 年起陆续发布，重点改进性能（YJIT）、并发（Ractor）与类型标注工具（RBS）",
+      "语言特点：纯面向对象、动态类型、解释执行、支持块与闭包、元编程能力强，一切皆对象",
+      "代表作 Ruby on Rails 推动了 Web 开发效率，GitHub、Shopify、Basecamp 等产品长期使用 Ruby",
+      "常见用途：Web 后端、DevOps 脚本、数据处理、自动化测试与命令行工具开发"
     ],
-    "c": "// Ruby教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nputs \"Hello, Ruby!\"\n\nputs \"版本: #{RUBY_VERSION}\"\nputs \"实现: #{RUBY_ENGINE}\"\nputs \"平台: #{RUBY_PLATFORM}\"\n\nname = \"Ruby\"\nyear = 1995\nputs \"语言: #{name}，诞生于 #{year} 年\"\nputs \"下一年: #{year + 1}\"",
+    "et": "❌ 常见错误",
+    "ec": "初学者常把 Ruby 与 Ruby on Rails 混为一谈：Rails 只是用 Ruby 编写的 Web 框架。另一个常见错误是照搬过时的 Ruby 2.x 教程，在 3.x 中关键字参数与哈希的传递行为已经发生变化。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Ruby 的创始人是谁？",
+        "a": "松本行弘，通常称为 Matz。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Ruby 3.x 的性能改进主要有哪些？",
+        "a": "YJIT 即时编译器、Ractor 并行模型、对象形状优化与更好的内存布局。"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装 Ruby 与工具链",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "推荐用版本管理器安装 Ruby：macOS 与 Linux 用 rbenv 或 rvm，Windows 用 RubyInstaller with DevKit",
+      "安装后执行 ruby -v 确认版本，gem -v 查看包管理器，bundle -v 确认 Bundler 可用",
+      "RubyGems 是官方包仓库，Bundler 根据 Gemfile 解析依赖并把精确版本写入 Gemfile.lock",
+      "irb 是交互式控制台，ruby -c 做语法检查，ruby -w 打开额外警告帮助发现潜在问题",
+      "编辑器推荐 VS Code 搭配 Ruby LSP，或 RubyMine；RuboCop 负责风格检查与自动修复"
     ],
-    "c": "// Ruby教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nputs \"解释器: #{RbConfig.ruby}\"\nputs \"版本: #{RUBY_VERSION}\"\nputs \"Gem 路径: #{Gem.dir}\"\n\n# 命令行速查（在终端执行）\n# ruby -v                    查看版本\n# ruby -c app.rb             语法检查\n# irb                        交互式控制台\n# gem install bundler        安装 Bundler\n# bundle install             按 Gemfile 安装依赖\n# bundle exec rspec          在锁定依赖中运行测试\n\nrequire \"json\"\nputs JSON.generate({ language: \"Ruby\", version: RUBY_VERSION })",
+    "et": "❌ 常见错误",
+    "ec": "用系统自带的 Ruby 直接 sudo gem install 安装，容易污染系统目录并遇到权限问题。应使用 rbenv 或 rvm 管理版本，并用 Bundler 把依赖装进项目，不要依赖全局 gem 状态。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何只检查 Ruby 脚本的语法？",
+        "a": "ruby -c app.rb。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "bundle install 与 gem install 有什么区别？",
+        "a": "bundle install 按 Gemfile 解析并锁定版本；gem install 安装到全局或指定 gem 环境。"
       }
     ]
   },
@@ -77,332 +51,211 @@ window.TUTORIAL_DATA_ruby = [
     "id": 3,
     "t": "变量与常量",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "局部变量以小写字母或下划线开头，只在当前作用域可见；常量以大写字母开头，重新赋值会警告",
+      "实例变量以 @ 开头属于对象，类变量以 @@ 开头被类及子类共享，全局变量以 $ 开头",
+      "Ruby 不需要声明类型，变量可以重新绑定到任意对象；nil 表示空值，false 与 nil 都是假值",
+      "常量适合存放配置，但只有冻结后才真正不可变；可用 freeze 或 frozen_string_literal 冻结字符串"
     ],
-    "c": "// Ruby教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nname = \"Ruby\"          # 局部变量\n$stdout.puts name     # 全局变量以 $ 开头\nCONST = 3.14           # 常量\nputs CONST\nputs \"常量字符串已冻结\" if \"abc\".frozen?\n\nclass Config\n  @@count = 0          # 类变量\n  def initialize\n    @@count += 1\n    @name = \"default\"  # 实例变量\n  end\n  def self.count = @@count\n  def name = @name\nend\n\na = Config.new\nb = Config.new\nputs \"实例数: #{Config.count}\"\nputs a.name",
+    "et": "❌ 常见错误",
+    "ec": "常量命名却写成小写会被当成局部变量，或在类外无法访问。实例变量未初始化时读取返回 nil 而不是报错，容易掩盖拼写错误；Ruby 也不会因为未定义局部变量而报错，只会在方法调用时失败。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Ruby 中哪些值在条件判断中为假？",
+        "a": "只有 false 和 nil 为假，0 与空字符串都是真值。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "实例变量与类变量有什么区别？",
+        "a": "实例变量 @x 每个对象各有一份，类变量 @@x 被类及其子类共享。"
       }
     ]
   },
   {
     "id": 4,
-    "t": "数据类型",
+    "t": "数据类型与对象模型",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ruby 中一切皆对象：整数、浮点数、字符串、符号、数组、哈希、区间、nil 和 true 都是对象",
+      "符号 Symbol 是不可变且唯一的标识符，常用作哈希键，比字符串更省内存",
+      "数值分 Integer 与 Float，整数支持任意精度；字符串默认可变，frozen_string_literal 可冻结字面量",
+      "nil 是 NilClass 的唯一实例，表示没有值；true 与 false 分别是 TrueClass 与 FalseClass 的实例",
+      "可用 class 查看对象类型，用 object_id 查看身份，用 respond_to? 判断对象是否具备某能力"
     ],
-    "c": "// Ruby教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nvalues = [nil, true, 42, 3.14, \"text\", :symbol, [1, 2], { a: 1 }, (1..5)]\nvalues.each { |v| puts \"#{v.inspect} => #{v.class}\" }\n\nputs 10 / 3        # 整数除法\nputs 10.0 / 3      # 浮点除法\nputs 2**10\nputs \"42\".to_i\nputs 42.to_s\nputs :name.to_s\nputs (1..10).to_a.inspect\nputs nil.nil?",
+    "et": "❌ 常见错误",
+    "ec": "符号与字符串混用是高频错误：哈希用 :name 作键，却用 user[\"name\"] 读取会得到 nil。Ruby 中 0 和空字符串都是真值，只有 nil 与 false 为假，从其他语言迁移时容易写错判断。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "符号与字符串的主要区别是什么？",
+        "a": "符号不可变，相同名称的符号全局唯一，适合作为哈希键。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么 10 / 3 的结果是 3？",
+        "a": "两个整数相除执行整数除法，需要浮点结果可使用 10.fdiv(3) 或 10.0 / 3。"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与表达式",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术运算符 + - * / % **，两个整数相除结果仍是整数，需要浮点结果时用 fdiv",
+      "比较运算符 == 比较值，eql? 同时比较类型，equal? 比较对象身份，<=> 返回 -1、0、1",
+      "逻辑运算符 && || ! 支持短路求值，and or not 优先级更低，通常只用于流程控制",
+      "||= 用于惰性初始化，&. 是安全导航，仅在接收者不为 nil 时调用方法",
+      "范围运算符 .. 包含右端，... 排除右端；=~ 用于正则匹配并设置匹配变量"
     ],
-    "c": "// Ruby教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\na, b = 10, 3\nputs a + b\nputs a % b\nputs a**2\nputs a == 10\nputs \"abc\".eql?(\"abc\")\nputs :sym.equal?(:sym)   # 同一符号对象\nputs a <=> b             # 返回 1\n\nname = nil\nputs name&.upcase.inspect\ncount = nil\ncount ||= 0\nputs count\nputs (1..10).cover?(5) ? \"在范围内\" : \"不在\"",
+    "et": "❌ 常见错误",
+    "ec": "== 比较值，equal? 比较对象身份，混用会导致误判；两个内容相同的字符串 == 为真但 equal? 通常为假。整数除法会截断小数，需要浮点结果时应使用 fdiv 或先把操作数转成 Float。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "==、eql?、equal? 有什么区别？",
+        "a": "== 比较值，eql? 比较值与类型，equal? 比较对象身份。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "||= 的作用是什么？",
+        "a": "当变量为 nil 或 false 时才赋值，常用于惰性初始化。"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串处理",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "双引号字符串支持 #{表达式} 插值和转义，单引号只识别 \\\\ 与 \\' 两种转义",
+      "常用方法：length、upcase、downcase、strip、sub、gsub、split、chars、include?",
+      "格式化可用 format 或 % 占位符，例如 format(\"%.2f\", 3.14159) 保留两位小数",
+      "heredoc 用 <<~HEREDOC 声明可自动去除公共缩进的多行文本，适合嵌入 SQL 或模板",
+      "文件顶部加 frozen_string_literal 可冻结字面量，减少内存分配并防止意外修改"
     ],
-    "c": "// Ruby教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nname = \"Ruby\"\nputs \"插值: #{name} #{2 + 3}\"\nputs '单引号不插值: #{name}'\nputs \"长度: #{name.length}\"\nputs \"大写: #{name.upcase}\"\nputs \"截取: #{name[0, 2]}\"\nputs \"替换: #{name.gsub('R', 'L')}\"\nputs \"分割: #{\"a,b,c\".split(',').inspect}\"\nputs format(\"版本 %.1f\", 3.2)\n\ntext = <<~HEREDOC\n  多行文本支持 #{name}\n  第二行自动去除公共缩进\nHEREDOC\nputs text\n\nputs \"  hello  \".strip\nputs \"abc\" * 3",
+    "et": "❌ 常见错误",
+    "ec": "单引号字符串不插值，写 '#{name}' 会原样输出。修改字符串字面量时若启用了 frozen_string_literal 会抛出 FrozenError，应使用 + 或 dup 创建新字符串再修改。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何冻结文件中的所有字符串字面量？",
+        "a": "在文件顶部添加 # frozen_string_literal: true 魔法注释。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "gsub 与 sub 有什么区别？",
+        "a": "gsub 替换所有匹配，sub 只替换第一个匹配。"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "数组、哈希与可枚举对象",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "数组用 [] 创建，支持负索引、切片、push/<<、pop、shift、unshift 和 flatten",
+      "Enumerable 提供 map、select、reject、reduce、each_with_index、group_by 等强大方法",
+      "哈希用 { key: value } 创建符号键，用 user[:name] 读取，fetch 可在键缺失时报错",
+      "哈希保持插入顺序，常用 each、keys、values、merge 和 transform_values 处理",
+      "解构赋值与多重返回值配合，可在一行中取出数组或哈希中的多个值"
     ],
-    "c": "// Ruby教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nnums = [3, 1, 4, 1, 5]\nnums << 9\nnums.unshift(0)\nputs nums.inspect\nputs nums.sort.inspect\nputs nums.uniq.inspect\nputs nums.map { |n| n * 2 }.inspect\nputs nums.select(&:even?).inspect\nputs nums.sum\nputs nums.each_with_index.map { |n, i| \"#{i}:#{n}\" }.join(\",\")\n\nuser = { name: \"Alice\", age: 30 }\nuser[:email] = \"alice@example.com\"\nuser.each { |k, v| puts \"#{k} => #{v}\" }\nputs user.fetch(:name)\nputs user.key?(:age)",
+    "et": "❌ 常见错误",
+    "ec": "数组的 sort 默认按 <=> 比较，混合类型会报错。哈希用 user[:name] 读取不存在的键返回 nil，而 fetch 会抛 KeyError；误把 each 的返回值当作数组也是常见错误，each 返回的是原对象。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何按条件筛选数组？",
+        "a": "使用 select { |x| 条件 }，需要排除时用 reject。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "fetch 与 [] 读取哈希有什么区别？",
+        "a": "[] 在键不存在时返回 nil，fetch 会抛 KeyError，也可提供默认值。"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if/elsif/else 以 end 结束，unless 是 if 的反向写法，适合单分支否定判断",
+      "修饰符形式 puts \"通过\" if score >= 60 让简单条件更紧凑，可读性更好",
+      "case/when 支持多个值、范围和类匹配，使用 === 做比较，比长串 elsif 更清晰",
+      "三元运算符与安全导航适合简单分支，复杂逻辑应提取为方法并尽早返回"
     ],
-    "c": "// Ruby教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nscore = 82\nif score >= 90\n  puts \"优秀\"\nelsif score >= 60\n  puts \"及格\"\nelse\n  puts \"不及格\"\nend\n\nputs \"不是零\" if score\nputs \"低于九十\" unless score >= 90\nputs score >= 60 ? \"通过\" : \"未通过\"\n\ncase score\nwhen 90.. then puts \"A\"\nwhen 60...90 then puts \"B\"\nelse puts \"C\"\nend",
+    "et": "❌ 常见错误",
+    "ec": "if 是表达式但分支必须用 end 结束，漏写 end 会报语法错误。Ruby 中 0 为真，不能用 if score 判断分数是否为零；case 使用 === 比较，范围与类匹配的行为与 == 不同。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "case 使用哪个运算符比较？",
+        "a": "使用 ===，因此支持范围、正则和类匹配。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "unless 与 if 是什么关系？",
+        "a": "unless cond 等价于 if !cond，适合表达否定条件。"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环与迭代器",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "while 与 until 在条件为真或假时循环，for ... in 会调用 each 但循环变量会泄漏到外层",
+      "整数与区间提供 times、upto、downto、step 等迭代方法，比手写计数器更符合 Ruby 风格",
+      "each、each_with_index、each_with_object 是遍历集合的首选，块中用 break、next、redo 控制流程",
+      "loop 与 Enumerator 可构建无限序列，配合 lazy 实现惰性求值，避免生成巨大中间数组"
     ],
-    "c": "// Ruby教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nfor i in 1..5\n  next if i == 2\n  break if i == 5\n  puts \"for: #{i}\"\nend\n\nn = 0\nwhile n < 3\n  puts \"while: #{n}\"\n  n += 1\nend\n\n3.times { |i| puts \"times: #{i}\" }\n[10, 20].each_with_index { |v, i| puts \"#{i} => #{v}\" }\n\nloop do\n  n -= 1\n  break if n.negative?\nend\nputs \"循环结束\"",
+    "et": "❌ 常见错误",
+    "ec": "for 循环会把循环变量泄漏到外层作用域，且不如 each 符合 Ruby 风格。在 each 块中使用 return 会从整个方法返回，而 next 只跳过当前元素，混用会改变流程。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "each 与 for 有什么区别？",
+        "a": "for 会调用 each 且循环变量泄漏到外层作用域；each 使用块，作用域更清晰。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何遍历数组并同时获得索引？",
+        "a": "使用 each_with_index { |value, index| ... }。"
       }
     ]
   },
   {
     "id": 10,
-    "t": "函数基础",
+    "t": "方法基础",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 def ... end 定义方法，最后一个表达式的值自动作为返回值，通常可以省略 return",
+      "参数支持默认值、可变参数 *args、关键字参数 key: value 和块参数 &block",
+      "方法名约定：布尔方法以 ? 结尾，有副作用的方法以 ! 结尾，赋值方法以 = 结尾",
+      "调用方法时括号可以省略，但嵌套调用建议保留括号，以避免解析歧义并提高可读性",
+      "方法属于对象，顶层定义的方法会成为 Object 的私有实例方法"
     ],
-    "c": "// Ruby教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\ndef greet(name, greeting: \"Hello\")\n  \"#{greeting}, #{name}!\"\nend\n\ndef add(a, b = 0)\n  a + b\nend\n\ndef average(*nums)\n  return nil if nums.empty?\n  nums.sum.to_f / nums.size\nend\n\nputs greet(\"Ruby\")\nputs greet(\"Ruby\", greeting: \"Hi\")\nputs add(3, 4)\nputs add(5)\nputs average(80, 90, 100)",
+    "et": "❌ 常见错误",
+    "ec": "方法最后一个表达式自动返回，但提前返回仍需显式写 return。参数个数不匹配会抛 ArgumentError；关键字参数与位置参数混用时，调用方必须写清键名，否则会被当作普通哈希。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何定义带默认值的关键字参数？",
+        "a": "def greet(name, greeting: \"Hello\")。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "布尔方法为什么以 ? 结尾？",
+        "a": "这是 Ruby 的命名约定，表示方法返回真值或假值，提升可读性。"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "方法进阶：块、Proc 与 Lambda",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "块（block）是 Ruby 最常用的函数式工具，yield 执行传入的块，block_given? 判断是否存在",
+      "Proc 与 lambda 都是可调用对象，lambda 严格检查参数个数，并用自身作用域执行 return",
+      "方法对象 Method 支持 to_proc、curry 与组合，可把函数当作一等公民传递",
+      "元编程可通过 define_method、method_missing、send 动态定义或调用方法，但应控制使用范围"
     ],
-    "c": "// Ruby教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\ndef apply_all(*nums, &block)\n  nums.map(&block)\nend\nputs apply_all(1, 2, 3) { |n| n**2 }.inspect\n\nsquare = ->(x) { x * x }\nputs square.call(5)\n\ndef factorial(n)\n  n <= 1 ? 1 : n * factorial(n - 1)\nend\nputs factorial(5)\n\ndef find_user(id, **options)\n  { id: id, role: options.fetch(:role, \"guest\") }\nend\nputs find_user(1, role: \"admin\").inspect\n\ndef with_block\n  return \"没有块\" unless block_given?\n  yield 42\nend\nputs with_block { |n| \"块收到 #{n}\" }",
+    "et": "❌ 常见错误",
+    "ec": "块与 lambda 的 return 行为不同：块中的 return 从外层方法返回，lambda 的 return 只退出 lambda。把块传给方法时忘记 &block 或 yield 的配对，会导致 LocalJumpError。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "lambda 与 proc 的关键区别是什么？",
+        "a": "lambda 严格校验参数个数，return 只从 lambda 自身返回；proc 更宽松。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "&block 与 yield 如何配合？",
+        "a": "参数 &block 把块转为 Proc，block_given? 判断是否存在，yield 调用块。"
       }
     ]
   },
@@ -410,36 +263,22 @@ window.TUTORIAL_DATA_ruby = [
     "id": 12,
     "t": "作用域与闭包",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ruby 使用词法作用域，块会捕获外层局部变量并共享修改，方法定义不会打开外层作用域",
+      "局部变量在赋值处才诞生，块内新变量不会泄漏到块外，但 for 循环变量会泄漏",
+      "闭包由块或 lambda 捕获环境形成，可用于计数器、延迟计算与 DSL",
+      "binding 返回当前作用域对象，可传给 eval 执行动态代码，但应避免用于不可信输入"
     ],
-    "c": "// Ruby教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\ndef counter\n  count = 0\n  -> { count += 1 }\nend\nc = counter\nputs c.call\nputs c.call\ndef multiplier(factor)\n  ->(x) { x * factor }\nend\ndouble = multiplier(2)\nputs double.call(21)\n\nvalue = 10\n[1, 2].each { |i| value += i }\nputs value\n\ndef show_binding\n  local = \"块内变量\"\n  binding\nend\nb = show_binding\nputs b.eval(\"local\")",
+    "et": "❌ 常见错误",
+    "ec": "块内新赋值的变量默认是块局部变量，不会影响外层同名变量；若要修改外层变量，该变量必须在块之前已定义。误用 eval 与 binding 会引入安全风险与难以调试的作用域问题。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "闭包如何捕获局部变量？",
+        "a": "块或 lambda 捕获定义处的作用域，可在之后继续读写这些局部变量。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "binding 有什么用途？",
+        "a": "返回当前作用域对象，可用于查看局部变量或配合 eval 执行动态代码。"
       }
     ]
   },
@@ -447,221 +286,139 @@ window.TUTORIAL_DATA_ruby = [
     "id": 13,
     "t": "类与对象",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 class 定义类，initialize 是构造器，由 Class#new 自动调用并返回实例",
+      "实例变量 @name 属于对象，attr_reader、attr_writer、attr_accessor 生成读写方法",
+      "self 指向当前对象，调用其他实例方法可省略 self，但赋值时必须写 self.x =",
+      "类方法用 def self.name 定义，用于工厂方法或与类相关的工具函数",
+      "to_s 控制字符串表示，inspect 用于调试输出，二者应保持信息一致且可读"
     ],
-    "c": "// Ruby教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nclass Point\n  attr_reader :x, :y\n  def initialize(x, y)\n    @x = x\n    @y = y\n  end\n  def move(dx, dy)\n    @x += dx\n    @y += dy\n    self\n  end\n  def to_s\n    \"(#{@x}, #{@y})\"\n  end\nend\n\npoint = Point.new(1, 2)\nputs point.move(3, 4)\nputs point.x\nputs point.inspect",
+    "et": "❌ 常见错误",
+    "ec": "实例变量拼写错误不会报错，只会得到 nil；访问未定义的方法才会抛 NoMethodError。构造器名必须是 initialize，写成 new 会导致对象未正确初始化，调用时还可能覆盖类方法。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "attr_accessor 生成了哪些方法？",
+        "a": "同时生成读取和写入方法，相当于 attr_reader 加 attr_writer。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "initialize 与 new 是什么关系？",
+        "a": "Class#new 分配对象后自动调用 initialize，不应直接调用 initialize。"
       }
     ]
   },
   {
     "id": 14,
-    "t": "继承与多态",
+    "t": "继承与模块混入",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 class Dog < Animal 实现单继承，子类可覆盖方法并用 super 调用父类版本",
+      "module 通过 include 混入实例方法，extend 混入类方法，prepend 让模块方法优先于类方法",
+      "Comparable 只需实现 <=> 即可获得 <、>、between? 等比较方法；Enumerable 只需实现 each",
+      "Ruby 不支持多继承，多用模块组合与委托解决，避免过深的继承层级"
     ],
-    "c": "// Ruby教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\nmodule Greeting\n  def greet\n    \"你好，#{name}\"\n  end\nend\nclass Animal\n  attr_reader :name\n  def initialize(name)\n    @name = name\n  end\n  def speak\n    \"...\"\n  end\nend\nclass Dog < Animal\n  include Greeting\n  def speak\n    \"汪汪\"\n  end\nend\ndog = Dog.new(\"旺财\")\nputs dog.speak\nputs dog.greet",
+    "et": "❌ 常见错误",
+    "ec": "include 与 extend 混淆会让方法出现在错误的位置：include 给实例，extend 给类。子类覆盖方法后忘记 super 会跳过父类初始化；模块方法查找顺序由祖先链决定，prepend 与 include 顺序相反。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "include 与 extend 有什么区别？",
+        "a": "include 把模块方法作为实例方法混入，extend 把模块方法作为类方法混入。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何调用父类被覆盖的方法？",
+        "a": "在子类方法中使用 super 或 super(args)。"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "接口、抽象与多态",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ruby 用鸭子类型实现多态：只要对象响应所需方法就能协作，不需要显式接口声明",
+      "抽象方法可在基类中 raise NotImplementedError，强制子类提供实现",
+      "模块可作为接口约定，通过 include 提供默认实现，通过 respond_to? 做能力检测",
+      "依赖注入与面向接口编程可降低耦合，测试时用测试替身替换真实协作者"
     ],
-    "c": "// Ruby教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\nmodule Describable\n  def describe\n    raise NotImplementedError, \"#{self.class} 必须实现 describe\"\n  end\nend\nclass Report\n  include Describable\n  def initialize(title)\n    @title = title\n  end\n  def describe\n    \"报告: #{@title}\"\n  end\nend\n\nclass Invoice\n  include Describable\n  def describe\n    \"发票\"\n  end\nend\n\n[Report.new(\"季度总结\"), Invoice.new].each { |d| puts d.describe }",
+    "et": "❌ 常见错误",
+    "ec": "Ruby 没有编译期接口检查，漏实现方法只会在运行时抛 NoMethodError。滥用 respond_to? 做分支会掩盖设计问题；应通过明确的方法契约与测试保证多态协作。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Ruby 如何表达接口约定？",
+        "a": "用模块提供默认实现或抛出 NotImplementedError，并配合测试验证实现。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "什么是鸭子类型？",
+        "a": "不关心对象的具体类，只关心它是否响应所需方法。"
       }
     ]
   },
   {
     "id": 16,
-    "t": "泛型",
+    "t": "类型系统与值对象（无泛型）",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ruby 是动态强类型语言：变量无类型，但对象有类，方法调用在运行时解析并检查",
+      "类型检查可用 is_a?、kind_of?、instance_of? 与 respond_to?，优先使用能力检测",
+      "Struct 快速创建值对象，Data.define（3.2+）创建不可变值对象，适合传输数据",
+      "Ruby 没有泛型，可用 RBS 或 Sorbet 做静态类型标注与检查，提升大型项目可维护性"
     ],
-    "c": "// Ruby教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\nvalue = 42\nputs value.class\nputs value.is_a?(Integer)\nputs value.respond_to?(:to_s)\n\nPoint = Struct.new(:x, :y)\npoint = Point.new(1, 2)\nputs point.x\n\nPerson = Data.define(:name, :age)\nperson = Person.new(name: \"Alice\", age: 30)\nputs person.name\nputs person.with(age: 31).age\n\ndef describe(obj)\n  case obj\n  when String then \"字符串\"\n  when Numeric then \"数字\"\n  when Array then \"数组\"\n  else \"其他\"\n  end\nend\nputs describe(3.14)",
+    "et": "❌ 常见错误",
+    "ec": "is_a? 与 instance_of? 不同，后者不匹配子类。用 class.name 做类型分支会破坏多态；Ruby 3.2 的 Data 是不可变值对象，创建后不能修改字段，应使用 with 生成新对象。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Data.define 创建的对象有什么特点？",
+        "a": "不可变值对象，字段只读，可用 with 生成修改后的新对象。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Ruby 如何做静态类型检查？",
+        "a": "使用 RBS 描述类型签名，配合 Steep，或使用 Sorbet 做类型检查。"
       }
     ]
   },
   {
     "id": 17,
-    "t": "异常处理",
+    "t": "错误处理与异常",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "异常处理用 begin/rescue/else/ensure/end，方法体也可直接 rescue 而省略 begin",
+      "raise 可抛出 RuntimeError 或自定义异常类，自定义异常应继承 StandardError",
+      "rescue 后可 retry 重试，ensure 保证资源释放，else 只在没有异常时执行",
+      "不要捕获 Exception，它会吞掉信号与系统退出；只捕获具体的异常类型",
+      "异常对象携带 message、backtrace 与 cause，便于定位根因"
     ],
-    "c": "// Ruby教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nclass InsufficientFunds < StandardError\n  attr_reader :amount\n  def initialize(amount)\n    @amount = amount\n    super(\"余额不足，缺少 #{amount} 元\")\n  end\nend\n\ndef withdraw(balance, amount)\n  raise InsufficientFunds, amount if amount > balance\n  balance - amount\nend\n\nbegin\n  puts withdraw(100, 30)\n  puts withdraw(100, 200)\nrescue InsufficientFunds => e\n  puts \"错误: #{e.message} (#{e.amount})\"\nensure\n  puts \"交易结束\"\nend",
+    "et": "❌ 常见错误",
+    "ec": "rescue 默认只捕获 StandardError，捕获 Exception 会连信号和退出都吞掉。rescue 子句顺序要从具体到宽泛，否则宽泛异常会先匹配；ensure 中不要写 return，否则会覆盖异常。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "自定义异常应继承哪个类？",
+        "a": "通常继承 StandardError，才能被默认的 rescue 捕获。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "ensure 什么时候执行？",
+        "a": "无论是否发生异常都会执行，适合释放文件、连接等资源。"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件与 IO",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "File.read/write 适合小文件，File.open 配块可自动关闭文件句柄，避免资源泄漏",
+      "File.foreach 逐行读取大文件，避免一次性加载到内存；ARGF 可统一处理文件或标准输入",
+      "Pathname 提供面向对象的路径操作，FileUtils 提供复制、移动、删除目录等工具",
+      "读写时显式指定 encoding: \"UTF-8\" 可避免编码错误，二进制模式用 \"rb\" 与 \"wb\""
     ],
-    "c": "// Ruby教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\npath = \"/tmp/ruby_demo.txt\"\nFile.write(path, \"第一行\\n第二行\\n\", mode: \"w:UTF-8\")\nputs File.read(path, encoding: \"UTF-8\")\nFile.foreach(path).with_index(1) { |line, i| puts \"#{i}: #{line.chomp}\" }\n\nFile.open(path, \"a\") { |f| f.puts \"追加行\" }\nputs File.size(path)\nputs File.exist?(path)\nputs File.basename(path)\nputs File.extname(path)\n\nrequire \"pathname\"\npn = Pathname.new(path)\nputs pn.dirname\npn.delete\nputs \"已删除: #{!pn.exist?}\"",
+    "et": "❌ 常见错误",
+    "ec": "用 File.read 读取大文件会一次性占用大量内存，应改用 File.foreach。忘记指定编码会在非 UTF-8 环境出现乱码；文件句柄未关闭可能耗尽描述符，优先使用带块的 File.open。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何逐行读取大文件？",
+        "a": "使用 File.foreach(path) { |line| ... }，按行流式处理。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "File.open 带块的好处是什么？",
+        "a": "块结束后自动关闭文件句柄，即使发生异常也不会泄漏。"
       }
     ]
   },
@@ -669,221 +426,142 @@ window.TUTORIAL_DATA_ruby = [
     "id": 19,
     "t": "正则表达式",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Regexp 用 /pattern/ 字面量或 Regexp.new 创建，=~ 返回匹配位置，match 返回 MatchData",
+      "常用方法：match?（不产生匹配变量、更快）、scan、gsub、sub、split",
+      "捕获组用 ()，命名捕获用 (?<name>...)，通过 match[:name] 读取",
+      "修饰符 i 忽略大小写，m 让点匹配换行，x 允许空白与注释，\\A \\z 匹配字符串首尾",
+      "字符类 \\d \\w \\s 与量词 * + ? {n,m} 是文本提取的基础，注意贪婪与非贪婪"
     ],
-    "c": "// Ruby教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nlog = \"2026-11-15 10:23:45 ERROR 数据库连接失败\"\nmatch = log.match(/^(?<date>\\d{4}-\\d{2}-\\d{2}).*(?<level>ERROR|INFO|WARN)/)\nputs match[:date]\nputs match[:level]\n\ntext = \"Perl 与 Ruby 都是脚本语言\"\nputs text.gsub(/脚本/, \"动态\")\nputs text.scan(/\\p{Han}+/).inspect\nputs \"abc123\".match?(/\\d+/)\nputs \"price: 99\"[/\\d+/]\n\n\"user@example.com\" =~ /(?<user>\\w+)@(?<domain>\\w+\\.\\w+)/\nputs $~[:user]\nputs Regexp.escape(\"a.b*c\")",
+    "et": "❌ 常见错误",
+    "ec": "=~ 匹配失败返回 nil，直接对结果做运算会报 NoMethodError。gsub 默认替换全部匹配，sub 只替换第一个；正则中的点号未转义会匹配任意字符，贪婪量词可能吞掉过多内容。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "match 与 match? 有什么区别？",
+        "a": "match 返回 MatchData 并设置匹配变量；match? 只返回布尔值且更快。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何读取命名捕获？",
+        "a": "match = str.match(/(?<name>...)/); 然后使用 match[:name]。"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "Gem 与 Bundler 包管理",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "RubyGems 是包管理器，gem install 安装、gem list 查看、gem uninstall 卸载",
+      "Bundler 用 Gemfile 声明依赖，bundle install 生成 Gemfile.lock 锁定精确版本",
+      "用 bundle exec 运行命令可确保使用锁定版本，避免全局 gem 冲突",
+      "发布自己的 gem 需编写 gemspec，gem build 打包，gem push 推送到 RubyGems.org",
+      "版本约束 ~> 3.13 表示允许补丁升级但不跨次版本，适合控制兼容范围"
     ],
-    "c": "// Ruby教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\n# Gemfile\n# source \"https://rubygems.org\"\n# gem \"json\"\n# gem \"sequel\"\n# gem \"sqlite3\"\n# group :development, :test do\n#   gem \"rspec\", \"~> 3.13\"\n#   gem \"rubocop\", require: false\n# end\n\nrequire \"json\"\nputs JSON.generate({ name: \"Ruby\", version: RUBY_VERSION })\n\n# bundle install       安装 Gemfile 依赖\n# bundle add httparty  添加新依赖\n# bundle exec irb      在依赖环境中启动控制台\n# gem list             查看已安装的 gem\n# gem build app.gemspec && gem push app-1.0.0.gem",
+    "et": "❌ 常见错误",
+    "ec": "Gemfile 未锁定版本会导致不同机器安装不同版本，应提交 Gemfile.lock。直接修改全局 gem 而不经过 Bundler，容易出现版本冲突；gem 名称大小写与路径不匹配也会导致 require 失败。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "bundle exec 的作用是什么？",
+        "a": "在 Gemfile.lock 锁定的依赖环境中运行命令，避免加载到错误版本。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "~> 3.13 表示什么版本范围？",
+        "a": "允许升级到 3.x 的更高补丁版本，但不会升级到 4.0。"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "包管理：gem 与 Bundler，bundle install 安装依赖，bundle exec 在锁定环境中运行命令",
+      "测试：Minitest 随 Ruby 内置，RSpec 更常用，bundle exec rspec spec/ 运行测试",
+      "格式化与静态检查：RuboCop，bundle exec rubocop -a 自动修复可修复的问题",
+      "调试：byebug、binding.irb、ruby -d；构建：gem build 或 rake build，发布用 gem push",
+      "标准库常用：json、csv、net/http、fileutils、optparse、logger、securerandom、benchmark"
     ],
-    "c": "// Ruby教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\n# 包管理：gem / Bundler\n#   bundle install && bundle exec ruby app.rb\n# 测试：Minitest 或 RSpec\n#   bundle exec rspec spec/\n# 格式化与静态检查：RuboCop\n#   bundle exec rubocop -a\n# 调试：byebug 或 binding.irb\n#   ruby -d app.rb\n# 语法检查：ruby -c app.rb\n# 构建：gem build app.gemspec / rake build\n\nrequire \"benchmark\"\nputs Benchmark.measure { 100_000.times { |i| i * 2 } }\n\nputs [1, 2, 3].sum\nputs File.join(\"tmp\", \"app.log\")\nputs ENV.fetch(\"HOME\", \"/tmp\")",
+    "et": "❌ 常见错误",
+    "ec": "在项目目录外运行 bundle exec 会找不到 Gemfile，应先进入项目根目录。测试文件命名不符合规范会导致 rake 或 rspec 跳过；忘记在 Gemfile 中声明开发依赖，CI 中会缺包。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何运行 RSpec 测试？",
+        "a": "bundle exec rspec spec/，可加文件名只运行单个测试文件。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "RuboCop 的 -a 选项有什么作用？",
+        "a": "自动修复可以安全修复的风格问题，其余问题仍会报告。"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与异步编程",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Thread 是操作系统级线程，MRI 的 GVL 让同一时刻只执行一个 Ruby 线程，IO 等待时会切换",
+      "Mutex 保护共享状态，Queue 是线程安全队列，适合生产者-消费者模型",
+      "Fiber 是协作式轻量执行单元，需手动 resume/yield；Ractor 提供真正并行的隔离执行",
+      "Async gem 基于 Fiber 实现高并发 IO，适合大量网络请求与长连接场景"
     ],
-    "c": "// Ruby教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nqueue = Queue.new\nthreads = 4.times.map do |i|\n  Thread.new do\n    while (job = queue.pop)\n      puts \"线程 #{i} 处理 #{job}\"\n    end\n  end\nend\n\n3.times { |i| queue << i }\nqueue.close\nthreads.each(&:join)\nputs \"所有线程结束\"\n\nfiber = Fiber.new do\n  Fiber.yield 1\n  Fiber.yield 2\n  :done\nend\nputs fiber.resume\nputs fiber.resume\nputs fiber.resume",
+    "et": "❌ 常见错误",
+    "ec": "MRI 的 GVL 让 CPU 密集任务无法通过多线程加速，应使用多进程或 Ractor。共享可变状态未加 Mutex 会产生竞态；Queue 关闭后继续 push 会抛 ClosedQueueError。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Queue 适合什么场景？",
+        "a": "多线程生产者-消费者模型，Queue 提供线程安全的入队与出队操作。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Fiber 与 Thread 有什么区别？",
+        "a": "Fiber 是协作式调度，需手动切换；Thread 由操作系统调度，可并行等待 IO。"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 Benchmark 测量耗时，用 benchmark-ips 比较每秒迭代次数，用 memory_profiler 查内存",
+      "避免在循环中创建临时对象，优先使用符号、冻结字符串与惰性枚举",
+      "哈希查找是 O(1)，数组 include? 是 O(n)，大数据量时应先建立索引哈希",
+      "Ruby 3.x 的 YJIT 可显著提升执行速度，可用 RUBY_YJIT_ENABLE=1 或 --yjit 开启",
+      "用 stackprof 或 rbspy 采样定位热点，优化前先测量，避免凭直觉改写"
     ],
-    "c": "// Ruby教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"benchmark\"\n\narray = (1..1_000_000).to_a\nhash = array.to_h { |i| [i, true] }\n\nBenchmark.bm(12) do |x|\n  x.report(\"include?\") { array.include?(999_999) }\n  x.report(\"hash key?\") { hash.key?(999_999) }\nend\n\n# frozen_string_literal: true 可减少字符串分配\n# 优先使用符号作为哈希键，避免重复创建字符串\n# Ruby 3.x 可开启 YJIT：RUBY_YJIT_ENABLE=1 ruby app.rb\nresult = array.lazy.map { |i| i * 2 }.select(&:even?).first(5)\nputs result.inspect",
+    "et": "❌ 常见错误",
+    "ec": "用 Time.now 手工计时误差大且受环境影响，应使用 Benchmark。过度依赖元编程与 method_missing 会拖慢方法查找；在热路径创建大量字符串与数组是常见性能杀手。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何开启 YJIT？",
+        "a": "运行 ruby --yjit app.rb，或设置环境变量 RUBY_YJIT_ENABLE=1。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么哈希查找比数组 include? 快？",
+        "a": "哈希平均 O(1)，数组线性查找是 O(n)，数据量越大差距越明显。"
       }
     ]
   },
   {
     "id": 24,
-    "t": "测试",
+    "t": "测试：Minitest 与 RSpec",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Minitest 随 Ruby 内置，用 Minitest::Test 与 assert_equal、assert_raises 编写断言",
+      "RSpec 用 describe/it/expect 组织行为描述，适合 BDD 风格与复杂项目",
+      "测试应遵循 AAA 结构：准备、执行、断言；每个用例只验证一个行为",
+      "用 SimpleCov 统计覆盖率，用 stub/mock 隔离外部依赖，保持测试快速稳定",
+      "测试文件通常放在 spec/ 或 test/，通过 rake 或 bundle exec 统一运行"
     ],
-    "c": "// Ruby教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\nrequire \"minitest/autorun\"\nclass Calculator\n  def add(a, b) = a + b\n  def divide(a, b)\n    raise ArgumentError, \"除数不能为零\" if b.zero?\n    a.fdiv(b)\n  end\nend\n\nclass CalculatorTest < Minitest::Test\n  def setup\n    @calc = Calculator.new\n  end\n  def test_add\n    assert_equal 5, @calc.add(2, 3)\n  end\n  def test_divide\n    assert_in_delta 3.333, @calc.divide(10, 3), 0.001\n  end\n  def test_divide_by_zero\n    assert_raises(ArgumentError) { @calc.divide(1, 0) }\n  end\nend",
+    "et": "❌ 常见错误",
+    "ec": "只测试正常路径，忽略 nil、空集合与异常分支，会遗漏大量缺陷。RSpec 的 let 是惰性求值，跨用例共享可变对象会互相污染；断言异常应使用 raise_error 并匹配具体类。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Minitest 中如何断言会抛出异常？",
+        "a": "assert_raises(ErrorClass) { ... }。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "AAA 结构指什么？",
+        "a": "Arrange 准备数据、Act 执行操作、Assert 验证结果。"
       }
     ]
   },
@@ -891,184 +569,119 @@ window.TUTORIAL_DATA_ruby = [
     "id": 25,
     "t": "调试技巧",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "byebug 提供断点、单步、查看变量与调用栈；在代码中写 byebug 即可暂停执行",
+      "binding.irb 在任意位置打开 irb 会话，可直接检查局部变量与方法",
+      "ruby -w 打开警告，caller 查看调用栈，TracePoint 可跟踪方法调用与异常",
+      "pp 与 awesome_print 美化输出复杂对象，Logger 记录运行日志便于复现问题",
+      "排查异常时先看完整调用栈与 cause，再缩小到最小可复现示例"
     ],
-    "c": "// Ruby教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\ndef parse_age(text)\n  Integer(text)\nrescue ArgumentError => e\n  warn \"解析失败: #{e.message}\"\n  warn caller.first\n  nil\nend\n\nputs parse_age(\"30\").inspect\nputs parse_age(\"abc\").inspect\n\nrequire \"pp\"\ndata = { name: \"Ruby\", versions: [2, 3] }\npp data\n\n# 调试技巧：\n# ruby -w app.rb               打开警告\n# binding.irb                  在任意位置进入交互调试\n# byebug                       设置断点逐步执行\n# RUBYOPT=\"-rbyebug\" ruby app.rb",
+    "et": "❌ 常见错误",
+    "ec": "在生产代码中遗留 binding.irb 或 byebug 会阻塞进程；调试输出应使用 warn 或 Logger 而非 puts。只看异常信息而不看调用栈，容易误判根因，应结合 caller 与 full_message 分析。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何进入交互式调试？",
+        "a": "在代码中写 binding.irb，或 require 'byebug' 后写 byebug。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何查看异常的完整调用栈？",
+        "a": "使用 e.backtrace 或 Ruby 3.x 的 e.full_message。"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "与系统及 C 库互操作",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "system、反引号、Open3 可调用外部命令，Open3.capture3 同时拿到标准输出、错误与状态",
+      "File、Dir、FileUtils 提供文件与目录操作，IO.popen 支持双向管道通信",
+      "Fiddle 可调用 C 函数，ffi gem 提供更友好的 FFI 接口，可加载动态库",
+      "用 ENV 读取环境变量，用 Process.spawn 控制子进程，用 Signal.trap 处理信号",
+      "调用外部命令时优先使用数组参数，避免经过 shell 导致命令注入"
     ],
-    "c": "// Ruby教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"open3\"\n\nstdout, stderr, status = Open3.capture3(\"uname\", \"-s\")\nputs \"系统: #{stdout.strip}, 成功: #{status.success?}\"\nwarn stderr unless stderr.empty?\n\nputs ENV.fetch(\"PATH\").split(\":\").first(3).inspect\nsystem(\"mkdir\", \"-p\", \"/tmp/ruby_ffi_demo\")\n\nfiles = Dir.glob(\"/tmp/ruby_ffi_demo/*\")\nputs \"文件数: #{files.size}\"\n\nrequire \"fiddle\"\nlibc = Fiddle.dlopen(nil)\nstrlen = Fiddle::Function.new(\n  libc[\"strlen\"], [Fiddle::TYPE_VOIDP], Fiddle::TYPE_LONG\n)\nputs \"strlen: #{strlen.call(\"hello\")}\"",
+    "et": "❌ 常见错误",
+    "ec": "用反引号执行用户输入会经过 shell，存在命令注入风险，应使用 Open3 的数组形式。Fiddle 调用 C 函数时类型声明错误会导致段错误；子进程未 wait 会产生僵尸进程。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Open3.capture3 返回什么？",
+        "a": "标准输出、标准错误与进程状态三个值。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何安全执行带参数的外部命令？",
+        "a": "使用 system(\"cmd\", arg1, arg2) 或 Open3 的数组形式，避免 shell 解释。"
       }
     ]
   },
   {
     "id": 27,
-    "t": "设计模式",
+    "t": "设计模式实践",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "策略模式可用块或 lambda 实现，把算法作为参数传入，避免继承带来的类爆炸",
+      "单例模式用 Singleton 模块，工厂模式用类方法封装创建逻辑",
+      "观察者模式可用 Ruby 标准库 Observable，或用发布订阅自定义实现",
+      "装饰器与代理可用 SimpleDelegator 与 Forwardable 实现，比继承更灵活",
+      "设计模式应服务于可读性与可测试性，不要为了套用模式而增加不必要的抽象层"
     ],
-    "c": "// Ruby教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\nclass Cart\n  def initialize(&discount)\n    @items = []\n    @discount = discount || ->(total) { total }\n  end\n  def add(price)\n    @items << price\n    self\n  end\n  def total\n    @discount.call(@items.sum)\n  end\nend\ncart = Cart.new { |total| total * 0.9 }\ncart.add(100).add(200)\nputs format(\"折后: %.2f\", cart.total)\nrequire \"singleton\"\nclass Config\n  include Singleton\n  attr_accessor :env\nend\nConfig.instance.env = \"production\"\nputs Config.instance.env",
+    "et": "❌ 常见错误",
+    "ec": "为了模式而模式会制造无谓抽象；Ruby 中块与 lambda 已能表达大多数策略。单例保存可变状态会让测试相互影响；观察者未注销会造成内存泄漏。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Ruby 中如何实现单例？",
+        "a": "require 'singleton' 后 include Singleton，通过 Config.instance 获取唯一实例。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "策略模式如何用块实现？",
+        "a": "把块保存为 Proc，在需要时 call，替换不同算法而无需定义多个类。"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问：Sequel 与 ActiveRecord",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "sqlite3 gem 提供底层驱动，Sequel 是轻量 ORM，ActiveRecord 是 Rails 默认 ORM",
+      "Sequel 用 DB[:table] 构建数据集，支持链式 where/order/join，自动参数化防注入",
+      "事务用 DB.transaction，异常会回滚；批量插入用 multi_insert 提升性能",
+      "迁移可用 Sequel.migration 或 ActiveRecord::Migration 管理表结构变更",
+      "ActiveRecord 提供模型关联、验证与回调，适合业务复杂的 Rails 应用"
     ],
-    "c": "// Ruby教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"sequel\"\n\nDB = Sequel.sqlite\nDB.create_table(:users) do\n  primary_key :id\n  String :name\n  Integer :age\nend\n\nusers = DB[:users]\nusers.insert(name: \"Alice\", age: 30)\nusers.insert(name: \"Bob\", age: 25)\nusers.where { age > 26 }.each { |row| puts row[:name] }\nputs users.count\nputs users.order(:age).first[:name]\n\nDB.transaction do\n  users.insert(name: \"Carol\", age: 28)\nend\nputs users.max(:age)",
+    "et": "❌ 常见错误",
+    "ec": "字符串拼接 SQL 会导致注入，应使用数据集或占位符。事务中抛出的异常若被 rescue 吞掉，数据库不会回滚；连接未释放会耗尽连接池，应使用连接池或块式管理。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Sequel 如何防止 SQL 注入？",
+        "a": "使用数据集链式 where 哈希或占位符，驱动会自动绑定参数。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何开启事务？",
+        "a": "DB.transaction do ... end，块内抛异常会自动回滚。"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络编程与 HTTP 客户端",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Net::HTTP 是标准库 HTTP 客户端，支持 GET/POST、超时与 SSL 配置",
+      "Faraday 提供统一中间件接口，httparty 语法更简洁，适合快速调用第三方 API",
+      "用 URI 解析与拼接地址，用 JSON.parse 解析响应，捕获网络异常并设置重试",
+      "服务端可用 Sinatra 快速搭建 REST API，或 Rails API 模式构建完整应用",
+      "生产代码应设置 open_timeout 与 read_timeout，避免请求无限期挂起"
     ],
-    "c": "// Ruby教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"net/http\"\nrequire \"json\"\nrequire \"uri\"\n\nuri = URI(\"https://api.github.com/repos/ruby/ruby\")\nresponse = Net::HTTP.get_response(uri)\nif response.is_a?(Net::HTTPSuccess)\n  data = JSON.parse(response.body)\n  puts \"仓库: #{data[\"full_name\"]}\"\n  puts \"星标: #{data[\"stargazers_count\"]}\"\nelse\n  warn \"请求失败: #{response.code}\"\nend\n\nhttp = Net::HTTP.new(uri.host, uri.port)\nhttp.use_ssl = true\nhttp.open_timeout = 5\nputs http.start { |h| h.head(uri.path).code }",
+    "et": "❌ 常见错误",
+    "ec": "未设置 open_timeout 与 read_timeout 会让请求长时间挂起。只判断响应 body 而不检查状态码，会把错误页当成正常数据；HTTPS 请求忘记 use_ssl 会连接失败。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Net::HTTP 如何发起 HTTPS 请求？",
+        "a": "设置 http.use_ssl = true，再调用 request 或 start 块。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何判断响应是否成功？",
+        "a": "检查 response.is_a?(Net::HTTPSuccess) 或状态码是否在 2xx 范围。"
       }
     ]
   },
@@ -1076,221 +689,143 @@ window.TUTORIAL_DATA_ruby = [
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "SQL 必须使用参数化查询，避免字符串拼接导致注入；ORM 的 where 哈希会自动转义",
+      "禁止对用户输入使用 eval、send、constantize 与反序列化，防止远程代码执行",
+      "YAML 用 safe_load 代替 load，JSON 与 Marshal 不要反序列化不可信数据",
+      "输出 HTML 用 ERB::Util.html_escape，密码用 bcrypt 哈希，密钥放环境变量",
+      "限制上传文件类型与大小，校验路径防止目录穿越，生产环境关闭详细错误页"
     ],
-    "c": "// Ruby教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"securerandom\"\nrequire \"yaml\"\nrequire \"sequel\"\nrequire \"erb\"\n\ntoken = ENV.fetch(\"APP_TOKEN\") { SecureRandom.hex(16) }\nputs \"令牌长度: #{token.length}\"\n\nDB = Sequel.sqlite\nDB.create_table(:users) { String :name }\nuser_input = \"alice' OR '1'='1\"\nDB[:users].insert(name: user_input)\nputs DB[:users].where(name: user_input).count\n\nconfig = YAML.safe_load(\"env: production\\n\", permitted_classes: [Symbol])\nputs config[\"env\"]\nputs ERB::Util.html_escape(\"<script>alert(1)</script>\")",
+    "et": "❌ 常见错误",
+    "ec": "对用户输入使用 eval、send 或 constantize 可能导致远程代码执行。YAML.load 可反序列化任意对象，应使用 safe_load；SQL 拼接与未转义 HTML 分别导致注入与 XSS。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "为什么不能用 YAML.load 解析不可信数据？",
+        "a": "它可能实例化任意对象并触发危险方法，应使用 YAML.safe_load。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何防止 HTML 注入？",
+        "a": "输出前使用 ERB::Util.html_escape 或 Rails 的自动转义机制。"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "OptionParser 解析短选项与长选项，支持类型转换、默认值、帮助信息与错误处理",
+      "ARGV 保存位置参数，ARGF 可统一读取文件或标准输入，适合管道式工具",
+      "用 exit 与标准退出码表达成功失败，用 warn 向标准错误输出诊断信息",
+      "CLI 应提供 --help、合理的默认值与清晰的错误提示，便于脚本集成",
+      "把参数解析、业务逻辑与输出分别拆分到独立方法，便于单元测试与代码复用"
     ],
-    "c": "// Ruby教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"optparse\"\n\noptions = { count: 1, verbose: false }\nOptionParser.new do |opts|\n  opts.banner = \"用法: ruby wc.rb [options] [file]\"\n  opts.on(\"-c\", \"--count N\", Integer, \"处理行数\") { |n| options[:count] = n }\n  opts.on(\"-v\", \"--verbose\", \"输出每一行\") { options[:verbose] = true }\n  opts.on(\"-h\", \"--help\", \"显示帮助\") { puts opts; exit }\nend.parse!\n\nfile = ARGV.first\nlines = file ? File.readlines(file) : ARGF.readlines\nlines.first(options[:count]).each_with_index do |line, i|\n  puts \"#{i + 1}: #{line.chomp}\" if options[:verbose]\nend\nputs \"共读取 #{lines.size} 行\"",
+    "et": "❌ 常见错误",
+    "ec": "OptionParser 的 parse! 会修改 ARGV，若之后还要用原始参数需提前复制。选项类型声明错误会把字符串当整数；未处理 --help 与非法参数会让工具难以使用。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "ARGV 与 ARGF 有什么区别？",
+        "a": "ARGV 是位置参数数组；ARGF 统一读取 ARGV 中的文件或标准输入。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何让 CLI 返回失败状态？",
+        "a": "调用 exit(1) 或向 exit 传入非零状态码。"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：CSV 数据处理",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 CSV 标准库解析带表头的文件，用 group_by 与 transform_values 做分组统计",
+      "用 JSON.pretty_generate 输出结构化结果，用 File.write 保存报告文件",
+      "Sinatra 用几行代码即可提供 HTTP 接口，配合 ERB 渲染页面",
+      "数据处理流程应拆分为读取、清洗、聚合、输出四步，便于测试与复用",
+      "大文件用 CSV.foreach 流式处理，避免一次性把全部记录读入内存"
     ],
-    "c": "// Ruby教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nrequire \"csv\"\nrequire \"json\"\n\ncsv = <<~DATA\n  日期,级别,消息\n  2026-11-15,INFO,服务启动\n  2026-11-15,ERROR,连接超时\n  2026-11-15,ERROR,写入失败\nDATA\n\nrows = CSV.parse(csv, headers: true)\nsummary = rows.group_by { |r| r[\"级别\"] }.transform_values(&:size)\nputs JSON.pretty_generate(summary)\n\nerrors = rows.select { |r| r[\"级别\"] == \"ERROR\" }\nputs errors.map { |r| r[\"消息\"] }.join(\"、\")\nputs \"错误率: #{(errors.size * 100.0 / rows.size).round(1)}%\"",
+    "et": "❌ 常见错误",
+    "ec": "CSV 解析未指定 headers 会得到数组而非哈希，列名访问失败。直接加载超大 CSV 会耗尽内存，应使用 CSV.foreach 流式处理；分组统计时忽略空值会导致比例计算错误。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何按列分组统计 CSV 数据？",
+        "a": "rows.group_by { |r| r['级别'] }.transform_values(&:size)。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何流式读取大 CSV？",
+        "a": "使用 CSV.foreach(path, headers: true) 逐行处理。"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 gemspec 描述 gem 的元数据、文件列表、可执行文件与运行时依赖",
+      "gem build 生成 .gem 包，gem push 发布到 RubyGems.org，需要先配置登录凭据",
+      "Rake 管理构建、测试、发布任务，CI 中运行 bundle exec rake 统一入口",
+      "部署可用 Docker 多阶段构建，或 Capistrano、Kamal 发布到服务器",
+      "发布前应更新版本号与变更日志，并确保测试与 RuboCop 全部通过"
     ],
-    "c": "// Ruby教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# app.gemspec\nrequire_relative \"lib/app/version\"\n\nGem::Specification.new do |spec|\n  spec.name = \"app\"\n  spec.version = App::VERSION\n  spec.summary = \"示例命令行工具\"\n  spec.authors = [\"Your Name\"]\n  spec.files = Dir[\"lib/**/*.rb\", \"bin/*\"]\n  spec.executables = [\"app\"]\n  spec.required_ruby_version = \">= 3.0\"\n  spec.add_dependency \"json\", \"~> 2.0\"\nend\n\n# 构建与发布\n# gem build app.gemspec\n# gem push app-0.1.0.gem\n# bundle exec rake test\n# docker build -t app . && docker run --rm app",
+    "et": "❌ 常见错误",
+    "ec": "gemspec 中 files 使用 git ls-files 时，未提交的文件不会被打包。忘记更新版本号会导致 gem push 被拒绝；依赖未声明会在用户环境加载失败。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "如何构建并发布 gem？",
+        "a": "gem build app.gemspec 生成包，再用 gem push app-0.1.0.gem 发布。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "gemspec 中 executables 的作用是什么？",
+        "a": "声明随 gem 安装到 PATH 的可执行文件，通常位于 bin/ 目录。"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码质量",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "启用 frozen_string_literal 减少字符串分配，保持文件顶部魔法注释一致",
+      "方法保持短小并遵循单一职责，命名清晰，避免超过三层的条件嵌套与过长参数列表",
+      "统一使用 RuboCop 与编辑器格式化，提交前运行全部测试",
+      "用 Bundler 锁定依赖并提交 Gemfile.lock，定期升级并处理安全公告",
+      "公共 API 写 YARD 文档，异常与返回值约定明确，避免隐式全局状态"
     ],
-    "c": "// Ruby教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\n# 1. 所有文件启用 frozen_string_literal\n# 2. 方法保持短小，职责单一，避免超过 10 行\n# 3. 用 RuboCop 统一风格：bundle exec rubocop\n# 4. 用有意义的名称，布尔方法以 ? 结尾\n# 5. 只捕获具体的异常类，避免 rescue => e 吞掉所有错误\n# 6. 每个公开方法都有测试，提交前运行 bundle exec rspec\n# 7. 用 Bundler 锁定依赖，提交 Gemfile.lock\n\ndef admin?(user)\n  user[:role] == :admin\nend\n\ndef find_user(users, id)\n  users.find { |user| user[:id] == id } or raise ArgumentError, \"用户不存在: #{id}\"\nend\n\nputs admin?({ role: :admin })\nputs find_user([{ id: 1, name: \"Alice\" }], 1)[:name]",
+    "et": "❌ 常见错误",
+    "ec": "关闭 frozen_string_literal 后随意修改字符串常量，可能影响其他引用。方法过长、嵌套过深会降低可读性；只依赖手工测试而不运行 RuboCop 与 CI，问题会积累到难以修复。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "frozen_string_literal 有什么好处？",
+        "a": "冻结字符串字面量，减少内存分配并防止意外修改共享字符串。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么只应捕获具体异常？",
+        "a": "捕获过宽会吞掉意外错误，掩盖真正的缺陷并让排查变困难。"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Ruby教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "回顾基础：对象模型、变量种类、块与迭代器、模块混入与异常处理",
+      "进阶方向：元编程、并发与 Ractor、性能调优、RBS 与 Sorbet 类型系统",
+      "工程能力：RSpec 测试、RuboCop、CI/CD、Docker 与日志可观测性",
+      "推荐阅读 Ruby 源码与 Rails 代码，参与开源项目积累真实的协作经验",
+      "学习路线：基础语法 → 小型工具 → 测试驱动 → Web 框架 → 生产部署与维护"
     ],
-    "c": "// Ruby教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Ruby教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env ruby\n# frozen_string_literal: true\n\nroadmap = {\n  基础: %w[变量 对象 数组 哈希 块],\n  进阶: %w[模块 异常 元编程 并发],\n  工程: %w[Bundler RSpec RuboCop CI],\n  方向: %w[Rails API 自动化 数据处理]\n}\n\nputs \"Ruby 学习路线\"\nroadmap.each { |stage, topics| puts \"#{stage}: #{topics.join(\"、\")}\" }\nputs \"推荐练习：用 OptionParser 写一个 CSV 统计命令行工具\"\nputs \"进阶阅读：Rails 源码、RBS、Ruby 官方文档\"",
+    "et": "❌ 常见错误",
+    "ec": "学习 Ruby 只停留在语法而不动手做项目，很难真正掌握块与对象模型。应通过测试驱动的方式写一个小工具，再阅读成熟 gem 的源码，理解工程化约定与设计取舍。",
     "q": [
       {
-        "q": "Ruby教程的主要特点是什么？",
-        "a": "优雅的Web开发语言"
+        "q": "Ruby 学习下一步应该做什么？",
+        "a": "完成一个带测试的 CLI 或 Web 项目，再阅读 Rails 与常用 gem 的源码。"
       },
       {
-        "q": "学习Ruby教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Ruby教程的主要应用领域？",
-        "a": "优雅的Web开发语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Ruby 的类型标注工具有哪些？",
+        "a": "RBS 配合 Steep，或使用 Sorbet 做静态类型检查。"
       }
     ]
   }

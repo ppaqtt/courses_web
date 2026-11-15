@@ -1,75 +1,49 @@
 [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Perl 5.36 简介与历史",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 由 Larry Wall 于 1987 年发布，最初用于生成报表与处理文本，融合了 C、awk、sed 和 shell 的特点",
+      "Perl 5 于 1994 年推出，引入引用、模块与面向对象；Perl 6 后来独立为 Raku，Perl 5 仍持续维护",
+      "Perl 5.36 于 2022 年发布，默认启用签名（signatures），并强化了 warnings 与实验特性管理",
+      "Perl 的设计格言是 There is more than one way to do it，强调实用主义与强大的文本处理能力",
+      "典型用途：系统运维脚本、日志分析、生物信息学、Web 后端（CGI、Mojolicious）与 CPAN 生态"
     ],
-    "c": "// Perl教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\n\n# 第一个 Perl 程序\nprint \"Hello, Perl!\\n\";\n\n# 查看当前解释器版本\nprintf \"运行版本: %vd\\n\", $^V;\n\n# 标量变量与字符串插值\nmy $name = \"Perl\";\nmy $year = 1987;\nprint \"语言: $name, 诞生于 $year 年\\n\";\n\n# 简单的数值运算\nmy $next = $year + 1;\nprint \"下一年: $next\\n\";",
+    "et": "❌ 常见错误",
+    "ec": "最常见的错误是缺少 use strict 与 use warnings，拼错的变量名会被静默创建成全局变量。另一个错误是把 Perl 5 与 Raku（原 Perl 6）混为一谈，例如未启用 feature 就使用 say 或新的签名语法。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "Perl 5.36 中查看版本的内置变量是什么？",
+        "a": "$^V，也可以在终端执行 perl -v 查看。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Perl 与 Raku 是什么关系？",
+        "a": "Raku 原名 Perl 6，2019 年更名并成为独立语言；Perl 5 是另一条持续维护的产品线。"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装 Perl 与工具链",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Linux 与 macOS 通常自带 Perl，可用 perl -v 查看版本；建议用 perlbrew 或 plenv 安装并切换 5.36",
+      "Windows 推荐 Strawberry Perl 或 WSL，前者自带编译器和 cpanm，安装需要编译的 CPAN 模块最省事",
+      "cpanm 是轻量的 CPAN 客户端，比传统 cpan 命令更快速，配合 cpanfile 可以声明项目依赖",
+      "代码编辑器可选 VS Code 搭配 Perl 扩展，或 Emacs、Vim，均支持语法高亮与 perltidy 格式化",
+      "运行脚本用 perl script.pl，语法检查用 perl -c，交互试验可用 perl -de 1 或 Reply"
     ],
-    "c": "// Perl教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nsay \"解释器: $^X\";\nsay \"版本: $^V\";\nsay \"平台: $^O\";\nsay \"Perl 库路径:\";\nsay \"  $_\" for @INC;\n\n# 命令行速查（在终端执行，不是 Perl 语句）\n# perl -v                查看版本\n# perl -c app.pl         只做语法检查\n# cpanm --installdeps .  安装 cpanfile 中的依赖\n# perldoc -f open        查阅内置函数文档",
+    "et": "❌ 常见错误",
+    "ec": "在系统自带 Perl 上直接用 sudo cpan 安装模块，容易污染系统目录并因权限失败。应使用 perlbrew 管理独立版本，再用 cpanm --local-lib 或 Carton 把依赖装进项目私有目录。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何只检查 Perl 脚本语法而不运行？",
+        "a": "perl -c script.pl。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "cpanfile 的作用是什么？",
+        "a": "声明项目依赖，配合 cpanm --installdeps . 或 carton install 安装。"
       }
     ]
   },
@@ -77,258 +51,167 @@
     "id": 3,
     "t": "变量与常量",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 有三种主要变量：标量 $scalar 存单值，数组 @array 存有序列表，哈希 %hash 存键值对",
+      "my 声明词法变量，作用域限于当前块；our 声明包变量别名；local 临时修改全局变量的值",
+      "变量名区分大小写，$name 与 $Name 是两个变量；@arr 与 $arr[0] 属于同一命名空间的不同槽位",
+      "常量可用 use constant PI => 3.14159 定义，也可用 Readonly 模块创建只读标量",
+      "未初始化标量的值为 undef，可用 defined 判断，避免在运算中直接使用而产生警告"
     ],
-    "c": "// Perl教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse constant PI => 3.14159;\n\nmy $name   = \"Perl\";\nmy @colors = qw(red green blue);\nmy %score  = (alice => 90, bob => 85);\n\nsay \"名称: $name\";\nsay \"第二个颜色: $colors[1]\";\nsay \"Alice 得分: $score{alice}\";\n\nmy $radius = 2;\nprintf \"圆面积: %.2f\\n\", PI * $radius ** 2;\n\nmy $missing;\nsay defined $missing ? \"有值\" : \"未定义\";",
+    "et": "❌ 常见错误",
+    "ec": "忘记 my 会让变量落到全局包命名空间，strict 会直接报错；关闭 strict 则更难排查。另一个高频错误是混淆 $array 与 @array：my $x = @array 得到的是元素个数，不是数组本身。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "my、our、local 有什么区别？",
+        "a": "my 声明词法变量；our 为包变量提供当前作用域别名；local 临时保存并修改全局变量的值。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何定义一个只读常量？",
+        "a": "use constant PI => 3.14159; 或使用 Readonly 模块。"
       }
     ]
   },
   {
     "id": 4,
-    "t": "数据类型",
+    "t": "数据类型与引用",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 的标量可存数字、字符串、undef 或引用，数字与字符串会根据运算符自动转换",
+      "引用是标量的一种，常见有数组引用 [...], 哈希引用 {...} 和代码引用 sub {...}，用 ref 查看类型",
+      "解引用有明确语法：$arrayref->[0]、$hashref->{key}、$coderef->(@args)，箭头可省略一层",
+      "Perl 区分列表上下文与标量上下文，同一个表达式在不同上下文中返回不同结果",
+      "undef 表示未定义值，defined 判断是否有值，exists 用于判断哈希键是否存在"
     ],
-    "c": "// Perl教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy $int    = 42;\nmy $float  = 3.14;\nmy $str    = \"hello\";\nmy $undef;\nmy $array  = [1, 2, 3];\nmy $hash   = { name => \"Perl\", year => 1987 };\n\nsay defined $undef ? \"有值\" : \"undef\";\nsay ref $array;        # ARRAY\nsay ref $hash;         # HASH\nsay $array->[1];       # 2\nsay $hash->{name};     # Perl\n\nmy @list = (10, 20, 30);\nsay \"标量上下文: \", scalar @list;\nsay \"列表上下文: \", join \"-\", @list;\nsay '数值转换: ', 0 + \"12abc\";",
+    "et": "❌ 常见错误",
+    "ec": "把引用当成普通字符串拼接会得到 HASH(0x...) 之类的地址，应先序列化或解引用。用 $hash{key} 访问哈希引用会直接报错，正确写法是 $hashref->{key}；判断键存在要用 exists 而不是 defined。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何判断一个标量是数组引用？",
+        "a": "ref $x eq 'ARRAY'，或直接检查 ref $x 的返回值。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "scalar @list 返回什么？",
+        "a": "数组的元素个数，即标量上下文下的长度。"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与表达式",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "数值运算符：+ - * / % **，其中 % 取余，** 求幂，int() 可截断小数部分",
+      "字符串运算符：. 拼接，x 重复，eq ne lt gt cmp 做字典序比较，不能与数值运算符混用",
+      "比较运算符 == != < > <=> 按数值比较，<=> 返回 -1、0、1，常用于 sort 排序块",
+      "逻辑运算符 && || ! 优先级高，and or not 优先级很低，后者常用于流程控制",
+      "// 是定义性或运算符，左值为 undef 时返回右值，适合设置默认值；?: 为三目运算符"
     ],
-    "c": "// Perl教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy ($a, $b) = (10, 3);\nsay \"加: \", $a + $b;\nsay \"整除: \", int($a / $b);\nsay \"取余: \", $a % $b;\nsay \"幂: \", $a ** 2;\n\nsay \"数值相等\" if $a == 10;\nsay \"字符串相等\" if \"abc\" eq \"abc\";\nsay \"字典序\" if \"apple\" lt \"banana\";\n\nmy $fallback = undef // \"默认值\";\nsay \"默认值: $fallback\";\nsay \"范围: \", join \",\", (1 .. 5);\nsay $a > $b ? \"a 更大\" : \"b 更大\";\nsay \"两者都真\" if $a && $b;",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较字符串会先转成数字，\"abc\" == \"xyz\" 因两边都是 0 而判定相等，应改用 eq。智能匹配 ~~ 在 5.36 中仍是实验特性且行为复杂，新项目应避免使用。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "比较两个字符串是否相等应使用什么运算符？",
+        "a": "eq；数值相等才使用 ==。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "// 运算符的作用是什么？",
+        "a": "左值为 undef 时返回右值，常用于提供默认值。"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串处理",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "双引号字符串支持变量插值与转义，单引号几乎原样保留内容，只识别 \\\\ 与 \\'",
+      "q{} 与 qq{} 可自定义定界符，避免字符串中包含大量引号时反复转义",
+      "常用函数：length、index、substr、sprintf、uc、lc、ucfirst、reverse、chomp、chop",
+      "split 按正则切分字符串，join 把列表拼接为字符串，两者是文本处理的最常用组合",
+      "heredoc 用 <<\"END\" 声明多行字符串，适合嵌入 SQL、配置或长文本模板"
     ],
-    "c": "// Perl教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy $name = \"Perl\";\nmy $ver  = 5.36;\nsay \"双引号插值: $name $ver\";\nsay '单引号原样: $name';\nsay qq{花括号定界: $name};\n\nmy $text = \"  Hello, World  \\n\";\nchomp $text;\n$text =~ s/^\\s+|\\s+$//g;\nsay \"长度: \", length $text;\nsay \"大写: \", uc $text;\nsay \"截取: \", substr($text, 0, 5);\nsay \"切分: \", join \"|\", split /,\\s*/, $text;\nprintf \"格式化: %s 版本 %.2f\\n\", $name, $ver;\n\nmy $doc = <<\"END\";\n多行 heredoc 支持 $name 插值\nEND\nprint $doc;",
+    "et": "❌ 常见错误",
+    "ec": "双引号字符串中的 @ 会被当作数组插值，\"user@example.com\" 可能被展开成数组内容，应使用单引号或转义 \\@。忘记 chomp 会让行尾换行符参与比较，导致看似相同的字符串判定为不等。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何去除字符串首尾空白？",
+        "a": "$s =~ s/^\\s+|\\s+$//g; 或使用 String::Trim 模块。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "split 与 join 的关系是什么？",
+        "a": "split 把字符串按模式切分成列表，join 把列表用分隔符拼接成字符串。"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "数组、哈希与列表操作",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "数组用 @ 声明，支持 push/pop 在尾部操作、shift/unshift 在头部操作，splice 可任意增删",
+      "grep 按条件筛选列表，map 对每个元素做变换，sort 支持自定义比较块，三者常链式组合",
+      "哈希用 % 声明，keys/values 返回键值列表，exists 判断键，delete 删除键值对",
+      "哈希切片 @hash{@keys} 可一次取多个值，数组切片 @array[1,3] 同理，返回的是列表",
+      "访问不存在的键会返回 undef，开启 warnings 后会提示，必要时用 // 提供默认值"
     ],
-    "c": "// Perl教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy @nums = (3, 1, 4, 1, 5);\npush @nums, 9;\nunshift @nums, 0;\nsay \"长度: \", scalar @nums;\nsay \"弹出: \", pop @nums;\nsay \"排序: \", join \",\", sort { $a <=> $b } @nums;\nsay \"平方: \", join \",\", map { $_ ** 2 } @nums;\nsay \"偶数: \", join \",\", grep { $_ % 2 == 0 } @nums;\n\nmy %user = (name => \"Alice\", age => 30);\n$user{email} = 'alice@example.com';\nsay \"存在 name\" if exists $user{name};\nfor my $key (sort keys %user) {\n    say \"$key => $user{$key}\";\n}\nmy @fields = @user{qw(name age)};\nsay \"切片: \", join \"/\", @fields;\ndelete $user{age};\nsay \"剩余键: \", join \",\", keys %user;",
+    "et": "❌ 常见错误",
+    "ec": "sort 默认按字符串排序，对数字数组会得到 1、10、2 的顺序，必须显式写 sort { $a <=> $b }。用 $hash{key} 访问哈希引用会报错，正确写法是 $hashref->{key}，要分清哈希与哈希引用。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何按数值对数组升序排序？",
+        "a": "sort { $a <=> $b } @nums。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何一次取出哈希的多个键值？",
+        "a": "使用哈希切片 @hash{@keys}，返回对应值的列表。"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支与真值判断",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if/elsif/else 按顺序判断，条件为真时执行对应块，else 处理其余情况",
+      "unless 等价于 if (!条件)，适合表达否定语义，可搭配 else 使用但可读性较差",
+      "语句修饰符 if/unless 可写在语句末尾，让简单判断更紧凑，例如 print if $flag",
+      "Perl 的真值规则：undef、0、\"0\"、空字符串和空列表为假，其余值均为真",
+      "given/when 智能匹配在 5.36 已被标记为实验特性，新代码建议使用 if/elsif 或哈希分派"
     ],
-    "c": "// Perl教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nmy $score = 82;\nif ($score >= 90) {\n    say \"优秀\";\n} elsif ($score >= 60) {\n    say \"及格\";\n} else {\n    say \"不及格\";\n}\nsay \"不是零\" if $score;\nsay \"高于八十\" unless $score <= 80;\nsay $score >= 60 ? \"通过\" : \"未通过\";\nmy $level = $score >= 90 ? \"A\"\n          : $score >= 60 ? \"B\"\n          : \"C\";\nsay \"等级: $level\";\nmy %handler = (\n    A => sub { \"优秀\" },\n    B => sub { \"及格\" },\n    C => sub { \"不及格\" },\n);\nsay \"哈希分派: \", $handler{$level}->();",
+    "et": "❌ 常见错误",
+    "ec": "Perl 没有布尔类型，判断依赖真值规则：0、\"0\"、空字符串和 undef 为假，其余为真。把赋值写成 = 而不是 == 是经典错误，在条件中会意外修改变量并改变流程。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "unless (cond) 等价于什么？",
+        "a": "等价于 if (!cond)。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么空列表在条件中为假？",
+        "a": "Perl 在标量上下文把空列表视为 0 个元素，因此为假。"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环与流程控制",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "while 在条件为真时重复，until 在条件为假时重复，适合次数不确定的场景",
+      "for/foreach 遍历列表，C 风格 for 适合需要计数器的场景，循环变量是列表元素的别名",
+      "next 跳过本次迭代，last 立即退出循环，redo 重新执行本轮而不重新判断条件",
+      "each 可遍历哈希的键值对，循环标签配合 last LABEL 能跳出多层嵌套循环",
+      "遍历数组时优先直接遍历元素，而不是用 $#array 作为下标上界，可避免边界错误"
     ],
-    "c": "// Perl教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nfor my $i (1 .. 5) {\n    next if $i == 2;\n    last if $i == 5;\n    say \"for: $i\";\n}\nmy $n = 0;\nwhile ($n < 3) {\n    say \"while: $n\";\n    $n++;\n}\nmy %stock = (apple => 3, pear => 5);\nwhile (my ($fruit, $count) = each %stock) {\n    say \"$fruit 有 $count 个\";\n}\n\nOUTER: for my $i (1 .. 3) {\n    for my $j (1 .. 3) {\n        next OUTER if $j == 2;\n        say \"$i-$j\";\n    }\n}",
+    "et": "❌ 常见错误",
+    "ec": "遍历数组时用 $#array 作为上界容易漏算或多算元素，推荐直接 foreach my $x (@array)。用 each 遍历哈希时又插入或删除元素，可能导致迭代器行为异常，应避免在遍历中修改哈希。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何跳出多层嵌套循环？",
+        "a": "给外层循环加标签（如 OUTER:），然后使用 last OUTER。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "next、last、redo 有什么区别？",
+        "a": "next 跳过本轮，last 结束循环，redo 重新执行本轮且不重新判断条件。"
       }
     ]
   },
@@ -336,73 +219,47 @@
     "id": 10,
     "t": "函数基础",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 sub 定义子程序，调用时可省略 & 与括号；参数通过特殊数组 @_ 传入",
+      "Perl 5.36 默认启用签名（signatures），可写 sub add ($x, $y) 直接声明参数名",
+      "签名参数可带默认值，如 sub f ($x, $y = 0)，调用时缺少的参数使用默认值",
+      "return 返回结果，可返回标量或列表；省略 return 时返回最后一个表达式的值",
+      "参数是实参的别名，直接修改 @_ 会影响调用者，应先把参数复制到 my 变量"
     ],
-    "c": "// Perl教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse feature 'signatures';\nsub greet ($name) {\n    return \"Hello, $name!\";\n}\n\nsub add ($x, $y = 0) {\n    return $x + $y;\n}\n\nsub average {\n    my @nums = @_;\n    return undef unless @nums;\n    my $sum = 0;\n    $sum += $_ for @nums;\n    return $sum / @nums;\n}\n\nsay greet(\"Ruby\");\nsay add(3, 4);\nsay add(5);\nprintf \"平均分: %.2f\\n\", average(80, 90, 100);",
+    "et": "❌ 常见错误",
+    "ec": "直接修改 @_ 会影响调用者的变量，因为 @_ 的元素是实参的别名，应先把参数复制到 my 变量。使用签名时参数个数不匹配会直接报错，旧式写法则容易因参数顺序错乱而静默出错。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "签名中如何给参数设置默认值？",
+        "a": "sub f ($x, $y = 0) { ... }。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么不应直接修改 @_？",
+        "a": "@_ 中的元素是调用者实参的别名，修改会同步改变调用方的变量。"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "函数进阶与上下文",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "子程序在列表上下文返回列表，在标量上下文返回标量，wantarray 可显式区分三种上下文",
+      "命名参数常用哈希传递，调用处写 format_name(first => \"San\", last => \"Zhang\") 可读性更好",
+      "递归适合树形与分治问题，需确保有终止条件，深度过大时注意栈溢出",
+      "子程序引用（coderef）可作为参数和返回值，实现回调、策略与高阶函数",
+      "原型（prototype）主要影响解析方式而非类型检查，除特定场景外不建议用它模拟类型"
     ],
-    "c": "// Perl教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nsub stats {\n    my @items = @_;\n    return unless @items;\n    return $items[0] unless wantarray;\n    my $sum = 0;\n    $sum += $_ for @items;\n    return ($sum, $sum / @items, scalar @items);\n}\nmy ($total, $avg, $count) = stats(10, 20, 30);\nsay \"合计 $total, 平均 $avg, 数量 $count\";\nsub format_name {\n    my (%opt) = @_;\n    return ($opt{last} // \"\") . \" \" . ($opt{first} // \"\");\n}\nsay format_name(first => \"San\", last => \"Zhang\");\nsub factorial {\n    my ($n) = @_;\n    return 1 if $n <= 1;\n    return $n * factorial($n - 1);\n}\nsay \"5! = \", factorial(5);",
+    "et": "❌ 常见错误",
+    "ec": "在标量上下文调用返回列表的函数只会得到最后一个值，用 wantarray 可区分上下文但容易写出难以维护的接口。命名参数用哈希传递时要检查必需键，否则 undef 会悄悄参与运算并污染结果。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "wantarray 的作用是什么？",
+        "a": "区分调用处是列表、标量还是 void 上下文，从而返回不同结果。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何用哈希传递命名参数？",
+        "a": "sub f { my (%opt) = @_; ... }，调用时写成 f(key => value)。"
       }
     ]
   },
@@ -410,36 +267,23 @@
     "id": 12,
     "t": "作用域与闭包",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "my 创建词法变量，作用域从声明处到当前块结束，子程序默认看不到外部的 my 变量",
+      "our 为包变量声明一个词法别名，可在 strict 下访问 $Package::var 而不必写全名",
+      "local 在运行时临时保存全局变量的旧值，离开作用域后自动恢复，常用于修改特殊变量",
+      "state 变量在子程序多次调用之间保持值，且只在第一次执行时初始化",
+      "闭包是捕获了外部词法变量的匿名子程序，可用于计数器、记忆化和延迟计算"
     ],
-    "c": "// Perl教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature qw(say state);\nmy $counter = sub { my $count = 0;\n    return sub { ++$count };\n};\nmy $next = $counter->(); say $next->();\nsay $next->();\nsub make_multiplier {\n    my ($factor) = @_;\n    return sub { return $_[0] * $factor };\n}\nsay \"翻倍: \", make_multiplier(2)->(21);\nour $global = \"包全局\";\n{\n    local $global = \"局部覆盖\";\n    say $global;\n}\nsay $global;\nsub tick {\n    state $n = 0;\n    return ++$n;\n}\nsay \"state: \", tick(), tick();",
+    "et": "❌ 常见错误",
+    "ec": "在循环中创建闭包捕获循环变量，所有闭包可能共享同一个词法变量，导致结果全部相同，应在循环体内用 my 复制。误用 local 修改全局变量会在动态作用域中产生难以追踪的副作用。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "state 变量与 my 变量有什么区别？",
+        "a": "state 在子程序多次调用之间保持值且只初始化一次，my 每次调用都会重新初始化。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "闭包如何形成？",
+        "a": "匿名子程序捕获定义处的词法变量，即使外层函数返回，这些变量仍然存活。"
       }
     ]
   },
@@ -447,221 +291,143 @@
     "id": 13,
     "t": "类与对象",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 的包（package）是类的基础，用 bless 把引用与包名绑定，使其成为对象",
+      "构造器通常命名为 new，接收类名与参数，返回 bless 后的哈希引用",
+      "方法通过箭头调用 $obj->method，第一个参数是对象本身或类名，需用 shift 取出",
+      "实例数据一般存放在哈希引用中，访问器方法负责读写，避免外部直接操作内部结构",
+      "DESTROY 是析构方法，在对象被回收时调用，可用于关闭文件句柄或释放资源"
     ],
-    "c": "// Perl教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\npackage Point;\nsub new {\n    my ($class, %args) = @_;\n    my $self = { x => $args{x} // 0, y => $args{y} // 0 };\n    return bless $self, $class;\n}\nsub x { my $self = shift; return $self->{x} }\nsub move {\n    my ($self, $dx, $dy) = @_;\n    $self->{x} += $dx;\n    $self->{y} += $dy;\n    return $self;\n}\nsub to_string { my $self = shift; return sprintf(\"(%d, %d)\", $self->{x}, $self->{y}) }\n\npackage main;\nmy $p = Point->new(x => 1, y => 2);\n$p->move(3, 4);\nsay $p->to_string;",
+    "et": "❌ 常见错误",
+    "ec": "调用方法时把箭头写成双冒号，或忘记 bless 导致对象仍是普通哈希，都会让方法调用失败。构造器中应使用 $class 而不是硬编码包名，否则子类继承时会创建错误类型的对象。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "bless 做了什么？",
+        "a": "把引用与包名关联，使方法调用能够定位到该包中的子程序。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "方法为什么需要 shift 第一个参数？",
+        "a": "方法调用会把对象或类名作为第一个参数传入，shift 用于取出它。"
       }
     ]
   },
   {
     "id": 14,
-    "t": "继承与多态",
+    "t": "继承与模块混入",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 parent 声明父类，子类自动继承父类方法，@ISA 数组保存父类列表",
+      "子类重写方法后，可用 SUPER::method 调用父类版本，常用于补充而非完全替换",
+      "多重继承通过 @ISA 列多个父类实现，但方法解析顺序复杂，应谨慎使用",
+      "角色（Role）是更安全的组合方式，Moose 的 with 可把角色能力混入类",
+      "UNIVERSAL 提供 isa、can、VERSION 等方法，任何对象都可以调用"
     ],
-    "c": "// Perl教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\npackage Animal;\nsub new { my ($class, %arg) = @_; return bless { name => $arg{name} }, $class }\nsub speak { return \"...\" }\nsub name { my $self = shift; return $self->{name} }\n\npackage Dog;\nuse parent -norequire, 'Animal';\nsub speak {\n    my $self = shift;\n    return $self->name . \" 说: 汪汪\";\n}\n\npackage main;\nmy $dog = Dog->new(name => \"旺财\");\nsay $dog->speak;\nsay $dog->isa(\"Animal\") ? \"是动物\" : \"不是动物\";\nsay $dog->can(\"speak\") ? \"能叫\" : \"不能叫\";",
+    "et": "❌ 常见错误",
+    "ec": "子类覆盖方法后忘记调用 SUPER::method，父类初始化逻辑不会执行，实例字段缺失。多重继承时方法解析顺序容易冲突，应优先用角色（Role）组合而非继承多个父类。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何调用父类被覆盖的方法？",
+        "a": "$self->SUPER::method(@_) 或 $class->SUPER::method(@_)。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "parent 与 base 有什么区别？",
+        "a": "parent 只处理继承且更严格，base 还会加载模块并处理 @ISA，现已不推荐。"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "接口、抽象与多态",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 没有 interface 关键字，接口通常表现为一组约定方法，由基类或角色定义",
+      "抽象方法可在基类中 die，强制子类实现；调用未实现的方法会得到明确错误",
+      "多态依赖方法解析：只要对象能响应某方法，调用者无需关心具体类",
+      "用 can() 检查对象是否具备某方法，实现鸭子类型与能力检测",
+      "Moose 的 Role 支持 requires 声明必需方法，未满足时在组合阶段就报错"
     ],
-    "c": "// Perl教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\npackage Shape;\nsub new { my ($class, %arg) = @_; return bless {%arg}, $class }\nsub area { die \"子类必须实现 area 方法\" }\n\npackage Circle;\nuse parent -norequire, 'Shape';\nsub area { my $self = shift; return 3.14159 * $self->{r} ** 2 }\n\npackage Square;\nuse parent -norequire, 'Shape';\nsub area { my $self = shift; return $self->{side} ** 2 }\n\npackage main;\nfor my $shape (Circle->new(r => 2), Square->new(side => 3)) {\n    printf \"%s 面积 %.2f\\n\", ref $shape, $shape->area;\n}\n\nmy $base = Shape->new;\neval { $base->area };\nsay \"抽象方法报错: $@\" if $@;",
+    "et": "❌ 常见错误",
+    "ec": "基类用 die 定义的抽象方法如果被子类漏实现，错误只会在运行时暴露。依赖具体类名而非方法能力做判断会破坏多态；应通过 can() 或角色约束检查对象能力。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何检查对象能否响应某个方法？",
+        "a": "$obj->can('method') 返回代码引用或 undef。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Perl 中如何表达接口约定？",
+        "a": "用基类抽象方法或 Moose 角色的 requires 声明必需方法。"
       }
     ]
   },
   {
     "id": 16,
-    "t": "泛型",
+    "t": "类型系统与上下文（Perl 无泛型）",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Perl 是动态类型语言，标量在运行时按运算符需要自动在数字与字符串之间转换",
+      "变量没有静态类型，容器类型由符号决定：$ 标量、@ 数组、% 哈希，引用再用 ref 判断",
+      "上下文是 Perl 类型系统的核心：列表上下文、标量上下文与 void 上下文改变表达式结果",
+      "类型检查可用 ref、Scalar::Util 的 blessed 与 looks_like_number，或 Moose 的类型约束",
+      "Perl 没有泛型；需要类型化集合时，可用 Moose 的类型参数或运行时校验模拟"
     ],
-    "c": "// Perl教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse feature 'signatures';\nuse Scalar::Util qw(looks_like_number blessed);\nsub classify ($value) {\n    return \"未定义\" unless defined $value;\n    return \"对象:\" . blessed($value) if blessed($value);\n    return \"引用:\" . ref $value if ref $value;\n    return \"数字\" if looks_like_number($value);\n    return \"字符串\";\n}\nsay classify(42);\nsay classify(\"abc\");\nsay classify([1, 2]);\nsay classify(undef);\n\nmy @list = (1, 2, 3);\nmy $count = @list;\nmy $last  = $list[-1];\nsay \"数量 $count, 末尾 $last\";\n\n# Moose 类型约束示例（需安装 Moose）\n# has 'age' => (is => 'rw', isa => 'Int');",
+    "et": "❌ 常见错误",
+    "ec": "Perl 没有泛型，试图用原型（prototype）模拟类型约束往往行为怪异，原型只影响解析而非类型检查。把引用当字符串拼接会得到 HASH(0x...) 之类的地址，应先序列化或用 Data::Dumper 查看。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "ref 与 blessed 有什么区别？",
+        "a": "ref 返回内置引用类型或对象所属类名，blessed 只对已 bless 的对象返回类名。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Perl 如何实现类型约束？",
+        "a": "使用 Moose 的 isa 类型约束，或在子程序中用 looks_like_number 等函数手动校验。"
       }
     ]
   },
   {
     "id": 17,
-    "t": "异常处理",
+    "t": "错误处理与异常",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "die 抛出异常并终止程序，eval 块捕获异常，错误信息保存在特殊变量 $@ 中",
+      "$! 保存最近一次系统调用错误，$? 保存子进程退出状态，二者含义不同不可混用",
+      "Try::Tiny 提供 try/catch/finally 结构，避免 eval 的全局变量陷阱，语义更清晰",
+      "Carp 的 carp 与 croak 从调用者视角报告错误，比 warn/die 更适合库代码",
+      "可以 die 一个异常对象，捕获后调用其方法获取结构化错误信息"
     ],
-    "c": "// Perl教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse Try::Tiny;\nsub divide {\n    my ($a, $b) = @_;\n    die \"除数不能为零\\n\" if $b == 0;\n    return $a / $b;\n}\n\nmy $result = eval { divide(10, 2) };\nif ($@) {\n    warn \"捕获错误: $@\";\n} else {\n    say \"结果: $result\";\n}\n\ntry {\n    divide(1, 0);\n} catch {\n    say \"Try::Tiny 捕获: $_\";\n} finally {\n    say \"无论成功失败都会执行\";\n}",
+    "et": "❌ 常见错误",
+    "ec": "eval 块中若误用 eval 字符串形式，会把运行时错误变成编译期问题且性能更差。捕获后未检查 $@ 是否为空就处理错误，会把成功路径当成失败；使用 Try::Tiny 时不要在 try 块内 return。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "eval 失败后错误信息保存在哪里？",
+        "a": "特殊变量 $@，为空字符串表示没有错误。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "库代码为什么推荐 croak 而不是 die？",
+        "a": "croak 从调用者位置报告错误，便于定位真正的问题调用点。"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件输入输出",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "推荐使用三参数 open：open my $fh, '<', $path，把模式与文件名分开，避免注入",
+      "读写时可用编码层 '<:encoding(UTF-8)'，统一字符编码，避免中文乱码",
+      "while (my $line = <$fh>) 逐行读取大文件，不会一次性把整个文件载入内存",
+      "写入用 '>' 覆盖、'>>' 追加，close 后检查返回值可发现磁盘满等延迟错误",
+      "File::Temp 创建安全临时文件，File::Path 创建目录树，Path::Tiny 提供更现代的文件接口"
     ],
-    "c": "// Perl教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse File::Temp qw(tempfile);\n\nmy $file = \"/tmp/perl_demo.txt\";\nopen my $out, '>:encoding(UTF-8)', $file or die \"无法写入 $file: $!\";\nprint $out \"第一行\\n第二行\\n\";\nclose $out;\n\nopen my $in, '<:encoding(UTF-8)', $file or die \"无法读取 $file: $!\";\nwhile (my $line = <$in>) {\n    chomp $line;\n    say \"读到: $line\";\n}\nclose $in;\n\nmy ($fh, $name) = tempfile(SUFFIX => '.tmp');\nprint $fh \"临时数据\\n\";\nclose $fh;\nsay \"临时文件: $name\";\nunlink $file;",
+    "et": "❌ 常见错误",
+    "ec": "用两参数 open 把用户输入拼进文件名，可能被注入管道符号导致命令执行，应使用三参数 open 和显式模式。忘记 close 或未检查 open 返回值，会在磁盘满或权限不足时静默失败。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "三参数 open 有什么好处？",
+        "a": "模式与文件名分离，避免文件名被解释为管道或重定向，提升安全性。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何逐行读取大文件？",
+        "a": "while (my $line = <$fh>) { ... }，逐行处理不会一次性占用大量内存。"
       }
     ]
   },
@@ -669,406 +435,263 @@
     "id": 19,
     "t": "正则表达式",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "匹配用 m// 或 /.../，替换用 s///，转写用 tr///，是 Perl 文本处理的核心能力",
+      "捕获组用括号，替换时用 $1、$2 引用；命名捕获 (?<name>...) 通过 %+ 或 $+{name} 读取",
+      "修饰符：i 忽略大小写、g 全局匹配、m 多行、s 点匹配换行、x 忽略空白并允许注释",
+      "贪婪匹配默认尽可能多地匹配，量词后加 ? 变为非贪婪模式，例如 .*? 用于最小匹配",
+      "前后瞻 (?=...)、(?!...)、(?<=...)、(?<!...) 用于断言而不消耗字符"
     ],
-    "c": "// Perl教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy $log = \"2026-11-15 10:23:45 ERROR 数据库连接失败\";\nif ($log =~ /^(?<date>\\d{4}-\\d{2}-\\d{2}).*?(?<level>ERROR|INFO|WARN)/) {\n    say \"日期: $+{date}, 级别: $+{level}\";\n}\n\nmy $text = \"Perl 是实用的文本处理语言\";\n$text =~ s/实用/强大/g;\nsay $text;\n\nmy @words = ($log =~ /(\\w+)/g);\nsay \"单词数: \", scalar @words;\nsay \"包含 error\" if $log =~ /error/i;\nsay \"非贪婪: $1\" if \"abcabc\" =~ /(abc)+?/;\nsay \"后瞻: $1\" if \"price: 99\" =~ /(?<=price: )(\\d+)/;\n\nmy $clean = $log;\n$clean =~ tr/0-9/#/;\nsay \"转写: $clean\";",
+    "et": "❌ 常见错误",
+    "ec": "正则中未转义元字符会匹配错误内容，例如想匹配点号却写成 . 会匹配任意字符。全局匹配 /g 在列表上下文返回所有捕获，在标量上下文每次只返回一个匹配，混用上下文会得到意外结果。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "命名捕获如何读取？",
+        "a": "使用 %+ 哈希或 $+{name}，例如 $+{date}。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "s/// 与 tr/// 有什么区别？",
+        "a": "s/// 按正则替换，tr/// 按字符映射逐字符转换，不做模式匹配。"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块、包与 CPAN",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "一个 .pm 文件通常对应一个包，包名与路径一致，如 My::Util 对应 lib/My/Util.pm",
+      "模块末尾必须返回真值（通常写 1;），否则 use 会报加载失败",
+      "Exporter 的 @EXPORT_OK 按需导出符号，@EXPORT 自动导出，后者容易污染命名空间",
+      "CPAN 是 Perl 的模块仓库，cpanm 安装、cpanfile 声明依赖、PAUSE 账号用于上传发行版",
+      "用 $VERSION 声明版本，用 use Module 1.23 要求最低版本，便于依赖管理"
     ],
-    "c": "// Perl教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse JSON::PP;\n\npackage My::Util;\nuse Exporter 'import';\nour @EXPORT_OK = qw(summarize);\nour $VERSION = '0.01';\n\nsub summarize {\n    my @nums = @_;\n    my $total = 0;\n    $total += $_ for @nums;\n    return { count => scalar @nums, total => $total };\n}\n\npackage main;\nmy $stats = My::Util::summarize(1, 2, 3);\nsay \"合计: $stats->{total}\";\nmy $json = JSON::PP->new->canonical->encode({ name => \"Perl\", version => 5.36 });\nsay $json;",
+    "et": "❌ 常见错误",
+    "ec": "用 require 加载模块却忘记写完整包名，或在模块中遗漏最后的真值（通常写 1;），会导致加载失败。导出符号过多会污染调用者命名空间，应使用 @EXPORT_OK 并按需导入。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "模块末尾为什么写 1;？",
+        "a": "use 要求模块加载后返回真值，表示加载成功。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "@EXPORT 与 @EXPORT_OK 有什么区别？",
+        "a": "@EXPORT 默认自动导出，@EXPORT_OK 需要调用方显式请求导入。"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "包管理：cpanm 安装单个模块，Carton 依据 cpanfile 锁定并安装项目依赖，cpanm --installdeps . 快速补齐",
+      "测试：prove -lv t/ 运行全部 .t 测试，Test::More 提供 is、ok、is_deeply、done_testing 等断言",
+      "格式化：perltidy -b 原地整理代码；静态检查：perlcritic --severity 3 按严重级别报告问题",
+      "调试：perl -d script.pl 进入内置调试器，Devel::NYTProf 做性能采样，Devel::Cover 统计覆盖率",
+      "构建运行：perl Makefile.PL && make test 构建传统发行版，Dist::Zilla 或 Minilla 管理现代项目"
     ],
-    "c": "// Perl教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\n# 包管理：cpanm JSON::PP；carton install && carton exec perl app.pl\n# 测试：prove -lv t/\n# 格式化：perltidy -b lib/App.pm\n# 调试：perl -d app.pl，常用命令 n、s、b、x、c\n# 构建：perl Makefile.PL && make && make test\n# 静态检查：perlcritic --severity 3 lib/\n\nmy %cheatsheet = (\n    'File::Path'   => '创建和删除目录树',\n    'Getopt::Long' => '解析命令行选项',\n    'JSON::PP'     => 'JSON 编解码',\n    'DBI'          => '数据库统一接口',\n);\nsay \"模块\\t用途\";\nfor my $mod (sort keys %cheatsheet) {\n    say \"$mod\\t$cheatsheet{$mod}\";\n}\nsay \"已加载模块数: \", scalar keys %INC;",
+    "et": "❌ 常见错误",
+    "ec": "在系统 Perl 中混合使用 cpan 与 cpanm 安装，会出现依赖版本冲突。测试文件未以 .t 结尾或用 prove 运行时缺少库路径，应使用 prove -l 或 carton exec 保证加载路径正确。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何运行 t 目录下的所有测试？",
+        "a": "prove -lv t/，-l 自动加入 lib 目录，-v 显示详细结果。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "perlcritic 的作用是什么？",
+        "a": "对 Perl 代码做静态分析，按严重级别报告风格问题和潜在缺陷。"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与异步编程",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "fork 创建子进程，父子进程拥有独立内存，适合 CPU 密集或需要隔离的任务",
+      "waitpid 回收子进程，避免僵尸进程；父进程可通过退出状态判断子任务成败",
+      "threads 模块提供线程，但默认按值复制数据，共享变量需显式声明 is shared",
+      "IO::Async 与 AnyEvent 基于事件循环处理高并发 IO，适合网络服务与大量文件句柄",
+      "信号处理用 %SIG 或 sigtrap，注意在信号处理函数中只做最少的工作"
     ],
-    "c": "// Perl教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy @pids;\nfor my $i (1 .. 3) {\n    my $pid = fork();\n    die \"fork 失败: $!\" unless defined $pid;\n    if ($pid == 0) {\n        sleep 1;\n        say \"子进程 $i (pid $$) 完成\";\n        exit 0;\n    }\n    push @pids, $pid;\n}\nwaitpid($_, 0) for @pids;\nsay \"所有子进程已回收\";\n\n# 线程示例（需要支持 threads 的 Perl）\n# use threads;\n# my $t = threads->create(sub { say \"线程 $$ 运行\" });\n# $t->join;",
+    "et": "❌ 常见错误",
+    "ec": "fork 后父子进程共享文件句柄但各自拥有内存副本，子进程修改的变量不会回传。忘记 waitpid 会产生僵尸进程；在子进程中执行 exit 而不是 POSIX::_exit 可能重复刷新缓冲区。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "fork 后如何区分父子进程？",
+        "a": "根据 fork 返回值：0 表示子进程，正数表示父进程中保存的子进程 pid，undef 表示失败。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何避免僵尸进程？",
+        "a": "父进程调用 waitpid 或 wait 回收已结束的子进程。"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "先用 Devel::NYTProf 采样找出热点，再针对性优化，避免凭直觉重写代码",
+      "哈希查找接近 O(1)，数组线性查找是 O(n)，大数据量时应建立索引哈希",
+      "用 Benchmark 或 Dumbbench 做可重复的微基准测试，注意排除环境噪声",
+      "Schwartzian 变换先缓存排序键，避免排序比较中重复计算，可显著加速复杂排序",
+      "减少列表上下文中的大数组复制，改用迭代器或逐行流式处理，降低内存峰值"
     ],
-    "c": "// Perl教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse Benchmark qw(cmpthese);\n\nmy @data = map { int(rand 1000) } 1 .. 100_000;\nmy %lookup = map { $_ => 1 } @data;\n\ncmpthese(-1, {\n    'hash 查找' => sub {\n        my $n = 0;\n        $n++ for grep { $lookup{$_} } 1 .. 5000;\n    },\n    '数组遍历' => sub {\n        my $n = 0;\n        for my $v (@data) { $n++ if $v == 500 }\n    },\n});\n\nmy @sorted = map  { $_->[0] }\n             sort { $a->[1] <=> $b->[1] }\n             map  { [$_, length $_] } qw(perl ruby python javascript);\nsay \"按长度排序: @sorted\";",
+    "et": "❌ 常见错误",
+    "ec": "过早优化是常见陷阱：未经 Devel::NYTProf 采样就重写代码，往往改错热点。在列表上下文处理大数组会占用大量内存，应改用迭代器或逐行流式处理，避免一次性展开。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何找出 Perl 程序的性能热点？",
+        "a": "使用 Devel::NYTProf 采样，再用 nytprofhtml 生成可视化报告。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Schwartzian 变换解决什么问题？",
+        "a": "先计算并缓存排序键，避免排序比较函数中重复计算昂贵表达式。"
       }
     ]
   },
   {
     "id": 24,
-    "t": "测试",
+    "t": "测试与 Test::More",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Test::More 是核心测试框架，常用断言有 ok、is、isnt、like、unlike、is_deeply、cmp_ok",
+      "测试文件以 .t 结尾放在 t/ 目录，用 prove -lv t/ 运行，done_testing 声明用例数量",
+      "subtest 可组织子测试，失败时能定位到具体分组，适合按功能划分测试",
+      "Test::Exception 或 Test::Fatal 用于断言代码会抛出异常，Test::Deep 比较复杂结构",
+      "Devel::Cover 统计语句、分支与子程序覆盖率，帮助发现未测试的代码路径"
     ],
-    "c": "// Perl教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse Test::More;\n\nsub add {\n    my ($a, $b) = @_;\n    return $a + $b;\n}\n\nis(add(2, 3), 5, \"整数相加\");\nis(add(-1, 1), 0, \"相反数相加为零\");\nis_deeply([sort qw(b a c)], [qw(a b c)], \"数组排序\");\nlike(\"Perl 5.36\", qr/^Perl/, \"版本字符串以前缀开头\");\nok(!defined undef, \"undef 未定义\");\n\nsubtest \"边界情况\" => sub {\n    plan tests => 2;\n    is(add(0, 0), 0, \"零加零\");\n    is(add(1.5, 1.5), 3, \"小数相加\");\n};\n\ndone_testing();",
+    "et": "❌ 常见错误",
+    "ec": "测试只覆盖正常路径，忽略 undef、空列表和边界值，导致线上才暴露问题。用 is 比较复杂数据结构应改用 is_deeply；忘记 done_testing 会让测试计划不完整而失败。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何比较两个嵌套数据结构是否相等？",
+        "a": "使用 is_deeply($got, $expected, '描述')。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "prove 的 -l 选项有什么作用？",
+        "a": "把 lib 目录加入 @INC，便于测试直接加载项目模块。"
       }
     ]
   },
   {
     "id": 25,
-    "t": "调试技巧",
+    "t": "调试技巧与工具",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "perl -d script.pl 启动内置调试器，常用命令 n 单步、s 进入、b 断点、x 查看变量、c 继续",
+      "warn 输出到标准错误并附带文件名行号，比 print 更适合诊断，不会污染正常输出",
+      "Data::Dumper 或 Data::Printer 可打印复杂数据结构，便于检查引用与嵌套内容",
+      "Carp 的 confess 输出完整调用栈，cluck 输出警告加调用栈，适合定位深层调用问题",
+      "use diagnostics 把警告扩展为详细解释，Devel::Trace 可打印每一行执行轨迹"
     ],
-    "c": "// Perl教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse Data::Dumper;\nuse Carp qw(croak);\n\nsub load_config {\n    my ($path) = @_;\n    croak \"load_config 需要文件路径\" unless defined $path && length $path;\n    return { path => $path, debug => 1 };\n}\n\nmy $cfg = eval { load_config(undef) };\nif (my $err = $@) {\n    warn \"调用失败: $err\";\n}\n\nmy $data = { name => \"Perl\", tags => [qw(文本 运维)] };\nsay Dumper($data);\n\n# 调试器常用命令：\n# n 单步，s 进入子程序，b 行号 设断点，x $var 查看变量，c 继续",
+    "et": "❌ 常见错误",
+    "ec": "只靠 print 调试会污染标准输出，干扰管道下游；应使用 warn 输出到标准错误。忘记 use warnings 或未打开 diagnostics，会错过未初始化值和裸词等关键提示。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何把调试信息输出到标准错误？",
+        "a": "使用 warn，或 print STDERR。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "confess 与 croak 有什么区别？",
+        "a": "croak 报告调用者位置，confess 还会输出完整调用栈。"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "与系统及 C 库互操作",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "system 执行外部命令，传列表形式可绕过 shell，避免用户输入导致命令注入",
+      "反引号与 qx// 捕获命令输出，open 的 '-|' 模式可逐行读取子进程标准输出",
+      "POSIX 模块提供系统调用封装，如 getpid、strftime、floor、WIFEXITED",
+      "FFI::Platypus 无需编写 XS 即可调用动态库函数，Inline::C 可在 Perl 中内嵌 C 代码",
+      "环境变量通过 %ENV 读写，文件权限用 chmod，进程控制用 kill 与 waitpid"
     ],
-    "c": "// Perl教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy $out = `uname -s`;\nchomp $out;\nsay \"系统: $out\";\nsay \"PATH 首段: \", (split /:/, $ENV{PATH})[0];\n\nsystem(\"mkdir\", \"-p\", \"/tmp/perl_demo_dir\") == 0\n    or warn \"mkdir 失败: $?\";\n\nopen my $pipe, '-|', 'ls', '/tmp/perl_demo_dir'\n    or die \"无法打开管道: $!\";\nwhile (my $line = <$pipe>) { say \"目录项: $line\" }\nclose $pipe;\n\n# FFI::Platypus 可直接调用 libc 的 strlen\n# use FFI::Platypus;\n# my $ffi = FFI::Platypus->new(api => 1);\n# $ffi->lib(undef);\n# $ffi->attach(strlen => ['string'] => 'size_t');\n# say strlen(\"hello\");",
+    "et": "❌ 常见错误",
+    "ec": "用 system 传单个字符串会经过 shell，用户输入中的分号可能导致命令注入，应传列表形式避免 shell。反引号在列表上下文按行返回，在标量上下文把全部输出作为一个字符串返回，容易误判行数。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何安全执行外部命令并捕获输出？",
+        "a": "使用列表形式 system，或 open my $fh, '-|', @cmd 逐行读取。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "FFI::Platypus 的优势是什么？",
+        "a": "无需编写 XS 或 C 代码即可调用动态库中的 C 函数。"
       }
     ]
   },
   {
     "id": 27,
-    "t": "设计模式",
+    "t": "设计模式实践",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "单例模式确保类只有一个实例，可用闭包或包级变量缓存对象，注意测试隔离",
+      "工厂模式把对象创建过程封装起来，调用方只依赖接口，便于替换具体实现与测试",
+      "策略模式把算法封装为代码引用，运行时注入，避免冗长的 if/elsif 分支",
+      "观察者模式通过回调列表实现发布订阅，事件发生时依次通知订阅者",
+      "迭代器模式封装遍历逻辑，Perl 中可用闭包或 List::Util 的高阶函数实现"
     ],
-    "c": "// Perl教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\npackage Tax::Strategy;\nsub new { my ($class, %arg) = @_; return bless { rate => $arg{rate} }, $class }\nsub calculate { my ($self, $amount) = @_; return $amount * $self->{rate} }\npackage Cart;\nmy $instance;\nsub instance {\n    return $instance //= bless {\n        items    => [],\n        strategy => Tax::Strategy->new(rate => 0.1),\n    }, __PACKAGE__;\n}\nsub add_item { my ($self, $price) = @_; push @{ $self->{items} }, $price; return $self }\nsub total {\n    my $self = shift;\n    my $sum = 0;\n    $sum += $_ for @{ $self->{items} };\n    return $self->{strategy}->calculate($sum);\n}\npackage main; my $cart = Cart->instance;\n$cart->add_item($_) for (100, 200);\nprintf \"含税总价: %.2f\\n\", $cart->total;",
+    "et": "❌ 常见错误",
+    "ec": "为每个小功能都创建类会导致过度设计；Perl 中大量使用 Moose 也会带来启动开销。单例若保存可变全局状态，在测试之间会互相污染，应提供 reset 方法或在测试中重新初始化。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "Perl 中策略模式如何实现？",
+        "a": "把代码引用或策略对象存入属性，运行时调用其方法完成算法替换。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "单例模式在测试中有什么风险？",
+        "a": "共享状态会跨用例残留，应提供 reset 或依赖注入替代全局单例。"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问与 DBI",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "DBI 是 Perl 的统一数据库接口，DBD::SQLite、DBD::mysql、DBD::Pg 提供具体驱动",
+      "connect 时开启 RaiseError 可让错误自动抛出，PrintError 控制是否打印警告",
+      "prepare 与 execute 分离，用 ? 占位符绑定参数，是防止 SQL 注入的标准做法",
+      "fetchrow_array、fetchrow_hashref、selectall_arrayref 提供不同的结果获取方式",
+      "事务通过 AutoCommit => 0 关闭自动提交，再用 commit 或 rollback 控制边界"
     ],
-    "c": "// Perl教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse DBI;\n\nmy $dbh = DBI->connect(\"dbi:SQLite:dbname=:memory:\", \"\", \"\", {\n    RaiseError => 1,\n    AutoCommit => 0,\n    sqlite_unicode => 1,\n});\n\n$dbh->do('CREATE TABLE user (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)');\nmy $sth = $dbh->prepare('INSERT INTO user (name, age) VALUES (?, ?)');\n$sth->execute($_, 20 + $_) for qw(Alice Bob);\nmy ($count) = $dbh->selectrow_array('SELECT COUNT(*) FROM user');\nsay \"插入行数: $count\";\n$dbh->commit;\n\nmy $rows = $dbh->selectall_arrayref(\n    'SELECT name, age FROM user ORDER BY age', { Slice => {} });\nsay \"$_->{name} ($_->{age})\" for @$rows;\n$dbh->disconnect;",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入直接拼进 SQL 会造成注入，必须使用占位符与 execute 绑定参数。开启 AutoCommit 后忘记 commit 或 rollback，会让事务边界不清晰；连接未 disconnect 会逐渐耗尽连接资源。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "DBI 中如何防止 SQL 注入？",
+        "a": "使用 ? 占位符 prepare，再通过 execute 绑定参数，不要拼接字符串。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何开启事务？",
+        "a": "连接时设置 AutoCommit => 0，操作成功后 commit，失败则 rollback。"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络编程与 HTTP 客户端",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "HTTP::Tiny 是核心模块自带的轻量客户端，支持 GET/POST、超时、代理与重定向",
+      "LWP::UserAgent 功能更完整，支持 cookie、认证、代理与自定义请求头",
+      "JSON::PP 负责 JSON 编解码，配合 HTTP 客户端可调用绝大多数 REST API",
+      "URI 模块解析与构造 URL，URI::Escape 处理查询参数编码，避免特殊字符出错",
+      "服务端可用 Mojolicious 或 Plack/PSGI 构建 Web 应用，支持路由、模板与 WebSocket"
     ],
-    "c": "// Perl教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse HTTP::Tiny;\nuse JSON::PP;\n\nmy $ua = HTTP::Tiny->new(timeout => 10);\nmy $res = $ua->get('https://api.github.com/repos/Perl/perl5');\nif ($res->{success}) {\n    my $data = JSON::PP->new->decode($res->{content});\n    say \"仓库: \", $data->{full_name};\n    say \"星标: \", $data->{stargazers_count};\n    say \"语言: \", $data->{language};\n} else {\n    warn \"请求失败: $res->{status} $res->{reason}\";\n}\n\nmy $body = JSON::PP->new->encode({ hello => \"perl\" });\nmy $post = $ua->post('https://httpbin.org/post', {\n    content => $body,\n    headers => { 'Content-Type' => 'application/json' },\n});\nsay \"POST 状态: \", $post->{status};",
+    "et": "❌ 常见错误",
+    "ec": "未设置超时会让网络请求永久挂起；未检查响应状态码就把内容当 JSON 解析，会在 404 页面上报解析错误。生产环境应使用 LWP::UserAgent 或 Mojo::UserAgent 并配置重试与退避。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "HTTP::Tiny 如何判断请求成功？",
+        "a": "检查 $res->{success} 是否为真，或状态码是否在 2xx 范围。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何解析 JSON 响应？",
+        "a": "use JSON::PP; my $data = JSON::PP->new->decode($res->{content});"
       }
     ]
   },
@@ -1076,221 +699,143 @@
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "污点模式（-T）会标记来自用户输入的数据，未清洗就用于文件、命令或数据库时直接终止",
+      "解除污点要用正则做白名单捕获，例如 $safe = $1 if $input =~ /^([\\w.-]+)$/",
+      "SQL 一律使用占位符绑定参数，命令执行使用列表形式 system，避免 shell 解释",
+      "输出 HTML 前用 HTML::Entities 转义特殊字符，防止跨站脚本攻击",
+      "密码与密钥从环境变量或密钥管理服务读取，不要硬编码或提交到版本库"
     ],
-    "c": "// Perl教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse DBI;\n\nmy $user = $ENV{APP_USER} // die \"缺少 APP_USER 环境变量\";\nmy $pass = $ENV{APP_PASS} // die \"缺少 APP_PASS 环境变量\";\nsay \"用户: $user，密码长度: \", length $pass;\n\nmy $input = \"alice'; DROP TABLE user; --\";\nmy $dbh = DBI->connect(\"dbi:SQLite:dbname=:memory:\", \"\", \"\", { RaiseError => 1 });\n$dbh->do('CREATE TABLE user (name TEXT)');\nmy $sth = $dbh->prepare('INSERT INTO user (name) VALUES (?)');\n$sth->execute($input);\nmy ($stored) = $dbh->selectrow_array('SELECT name FROM user');\nsay \"安全写入: $stored\";\n\nsystem(\"ls\", \"/tmp\") == 0 or warn \"命令失败\";\nsay \"表仍存在: \", $dbh->selectrow_array('SELECT COUNT(*) FROM user') ? \"是\" : \"否\";\n\n# 污点模式：在 shebang 加 -T，例如 #!/usr/bin/perl -T\n# 再用 if ($q =~ /^([\\w.-]+)$/) { $safe = $1 } 解除污点",
+    "et": "❌ 常见错误",
+    "ec": "污点模式下未清洗就直接使用用户输入会终止脚本，正确做法是用正则捕获白名单字符解除污点。把密码写进源码或提交到仓库是严重风险，应从环境变量或密钥服务读取，并限制文件权限。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何启用 Perl 的污点模式？",
+        "a": "在 shebang 中加入 -T，例如 #!/usr/bin/perl -T。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何安全地把用户输入用于 SQL？",
+        "a": "使用 DBI 的 ? 占位符并通过 execute 绑定，绝不拼接字符串。"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Getopt::Long 解析命令行选项，支持长短选项、类型约束与默认值，如 'count|c=i'",
+      "ARGV 保存位置参数，<> 会依次读取 ARGV 中的文件，没有文件时读取标准输入",
+      "POD 文档写在脚本内，perldoc script.pl 即可查看用法，便于分发与维护",
+      "脚本应返回明确退出码：0 表示成功，非 0 表示失败，便于 shell 与 CI 判断",
+      "输出诊断信息走标准错误，正常结果走标准输出，保证管道组合与重定向正确"
     ],
-    "c": "// Perl教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nuse Getopt::Long;\n\nmy ($verbose, $count, $file);\nGetOptions(\n    'verbose|v' => \\$verbose,\n    'count|c=i' => \\$count,\n    'file|f=s'  => \\$file,\n) or die \"用法: $0 [-v] [-c N] [-f 文件]\\n\";\n\n$count //= 1;\nsay \"详细模式开启\" if $verbose;\nsay \"指定文件: $file\" if defined $file;\n\nmy $n = 0;\nwhile (my $line = <>) {\n    $n++;\n    say \"第 $n 行: $line\" if $verbose;\n    last if $n >= $count;\n}\nsay \"共处理 $n 行\";\nexit 0;",
+    "et": "❌ 常见错误",
+    "ec": "Getopt::Long 默认会接受缩写选项，可能误解析；忘记检查 GetOptions 返回值会让非法参数被忽略。脚本未设置明确退出码，会让调用它的 shell 或 CI 无法判断成败。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何解析 --count=5 这样的整数选项？",
+        "a": "GetOptions('count|c=i' => \\$count)，=i 表示整数类型。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Perl 中 <> 的作用是什么？",
+        "a": "依次读取 ARGV 中的文件，若没有文件参数则读取标准输入。"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：日志统计与数据聚合",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "日志分析通常分三步：按行读取、用正则提取字段、按维度聚合并排序输出",
+      "正则提取日期、时间、级别和消息时要兼容格式变化，可为可选字段设置默认值",
+      "用哈希累加计数是最简单的聚合方式，输出前对键排序可保证结果稳定可复现",
+      "需要对外提供结果时，可用 JSON::PP 序列化，再通过 Mojolicious::Lite 暴露 HTTP 接口",
+      "大日志应流式处理，避免一次性读入内存；必要时按日期切分文件并行处理"
     ],
-    "c": "// Perl教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\nmy (%level_count, %hour_count);\nwhile (my $line = <DATA>) {\n    next unless $line =~ /^(\\d{4}-\\d{2}-\\d{2}) (\\d{2}):\\d{2}:\\d{2} (ERROR|INFO|WARN)/;\n    my ($date, $hour, $level) = ($1, $2, $3);\n    $level_count{$level}++;\n    $hour_count{$hour}++;\n}\n\nsay \"按级别统计:\";\nsay \"  $_: $level_count{$_}\" for sort keys %level_count;\nsay \"按小时统计:\";\nfor my $hour (sort keys %hour_count) {\n    say \"  $hour 时: $hour_count{$hour} 条\";\n}\nsay \"总计: \", scalar keys %level_count, \" 种级别\";\n\n__DATA__\n2026-11-15 09:01:02 INFO 服务启动\n2026-11-15 09:15:33 ERROR 连接超时\n2026-11-15 10:02:11 WARN 磁盘使用率 80%\n2026-11-15 10:30:45 ERROR 写入失败",
+    "et": "❌ 常见错误",
+    "ec": "日志正则过严会漏掉格式变化的行，过松又会把无关内容计入统计。一次性把大日志读入内存容易 OOM，应按行流式处理，并在输出前对键排序保证结果稳定。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何按行读取大日志而不占满内存？",
+        "a": "使用 while (my $line = <$fh>) 逐行处理，避免 slurp 整个文件。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何让聚合结果顺序稳定？",
+        "a": "输出前对哈希键排序，例如 for my $k (sort keys %count)。"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "cpanfile 声明依赖，carton install 生成 cpanfile.snapshot 锁定精确版本，保证环境一致",
+      "传统发行版用 Makefile.PL 配合 ExtUtils::MakeMaker，执行 perl Makefile.PL 后再 make test",
+      "现代发行版可用 Dist::Zilla 或 Minilla 管理版本、变更日志、文档与打包流程",
+      "部署可用 Docker 多阶段构建，把依赖安装到镜像内，运行时只复制必要文件",
+      "CI 中应依次运行 perl -c、prove、perlcritic，再构建发行包或镜像并推送"
     ],
-    "c": "// Perl教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# cpanfile —— 声明依赖，配合 carton install 锁定版本\nrequires 'perl', '5.036';\nrequires 'Getopt::Long';\nrequires 'JSON::PP';\nrequires 'DBI';\nrequires 'DBD::SQLite';\n\non 'test' => sub {\n    requires 'Test::More';\n    requires 'Test::Exception';\n};\n\n# Makefile.PL —— 传统构建入口\nuse ExtUtils::MakeMaker;\nWriteMakefile(\n    NAME         => 'App::LogStats',\n    VERSION_FROM => 'lib/App/LogStats.pm',\n    EXE_FILES    => ['bin/logstats'],\n    PREREQ_PM    => { 'JSON::PP' => 0 },\n);\n\n# 构建发布: perl Makefile.PL && make test && make dist\n# 容器部署: docker run --rm -v \"$PWD:/app\" -w /app perl:5.36 carton exec perl bin/logstats",
+    "et": "❌ 常见错误",
+    "ec": "只在本地 perl 环境测试就发布，用户机器缺少依赖时会直接失败。应在 cpanfile 中声明最低版本，用 Carton 锁定依赖，并在干净容器中运行完整测试后再打包。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "如何锁定 Perl 项目的依赖版本？",
+        "a": "使用 Carton，carton install 会生成 cpanfile.snapshot 记录精确版本。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "传统 Perl 发行版如何构建？",
+        "a": "编写 Makefile.PL，然后 perl Makefile.PL && make test && make dist。"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码质量",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "每个文件都启用 use strict 与 use warnings，尽早暴露拼写错误和未初始化值",
+      "用 my 声明最小作用域变量，避免全局状态；需要共享时通过参数或显式对象传递",
+      "子程序保持短小、单一职责，参数用签名或命名参数接收，返回值约定清晰",
+      "统一用 perltidy 格式化，用 perlcritic 做静态检查，并把二者接入 CI 与编辑器",
+      "公开子程序写 POD 文档，关键模块配测试，依赖版本写进 cpanfile 并锁定"
     ],
-    "c": "// Perl教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\n# 1. 每个文件都启用 strict 与 warnings\n# 2. 用 my 声明最小作用域变量，避免全局状态\n# 3. 子程序保持短小，参数用签名或列表显式接收\n# 4. 用 perltidy 格式化，用 perlcritic --severity 3 做静态检查\n# 5. 公开子程序写 POD 文档，并用 perldoc 验证\n\nsub parse_pair {\n    my ($text) = @_;\n    return unless defined $text;\n    my ($key, $value) = split /=/, $text, 2;\n    return ($key, $value);\n}\n\nmy ($k, $v) = parse_pair(\"debug=1\");\nsay \"配置: $k => $v\";\nmy @empty = parse_pair(undef);\nsay \"无输入时返回元素个数: \", scalar @empty;",
+    "et": "❌ 常见错误",
+    "ec": "把配置、业务逻辑和输出混在一个脚本里，难以测试和复用。缺少测试与静态检查会让重构风险剧增；应拆分模块、编写 POD，并让 perlcritic 进入 CI 流程。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "perltidy 与 perlcritic 分别做什么？",
+        "a": "perltidy 统一代码格式，perlcritic 做静态检查并报告潜在问题。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么每个文件都要 use strict？",
+        "a": "它禁止未声明的符号，能尽早发现拼写错误并避免意外的全局变量。"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Perl教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "回顾核心：三种变量与上下文、引用与解引用、正则表达式、子程序与闭包",
+      "熟悉面向对象：package、bless、继承、角色组合，以及 Moose 等现代对象系统",
+      "工程能力包括 DBI 数据库访问、HTTP 客户端、测试、静态检查与依赖锁定",
+      "进阶方向：性能分析、并发与事件循环、XS/FFI、Web 框架与 CPAN 模块源码阅读",
+      "学习路线：基础语法 → 文本处理脚本 → 测试驱动 → 模块化项目 → 生产部署与维护"
     ],
-    "c": "// Perl教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Perl教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env perl\nuse strict;\nuse warnings;\nuse feature 'say';\n\nmy @roadmap = (\n    [\"基础\",   \"变量、上下文、正则、引用\"],\n    [\"进阶\",   \"面向对象、异常处理、CPAN 模块\"],\n    [\"工程化\", \"测试、静态检查、CI 与容器\"],\n    [\"方向\",   \"运维自动化、日志平台、Web API\"],\n);\nsay \"Perl 学习路线\";\nfor my $stage (@roadmap) {\n    printf \"%-6s %s\\n\", $stage->[0], $stage->[1];\n}\nsay \"推荐练习：写一个日志统计脚本并用 prove 覆盖测试\";\nsay \"进阶阅读：perldoc perlsub、perlref、perlre\";",
+    "et": "❌ 常见错误",
+    "ec": "学完语法就停止练习，是最常见的学习陷阱。应通过真实项目巩固上下文、引用与正则，再逐步阅读 CPAN 上成熟模块的源码，理解工程化写法与测试组织方式。",
     "q": [
       {
-        "q": "Perl教程的主要特点是什么？",
-        "a": "文本处理与运维"
+        "q": "下一步推荐学习哪些 Perl 主题？",
+        "a": "面向对象与角色、DBI、异步 IO、性能分析，以及阅读 CPAN 模块源码。"
       },
       {
-        "q": "学习Perl教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Perl教程的主要应用领域？",
-        "a": "文本处理与运维"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何巩固 Perl 基础？",
+        "a": "写一个真实日志分析工具，补齐测试、文档与依赖声明，再部署运行。"
       }
     ]
   }

@@ -1,5 +1,5 @@
 /**
- * 34 门语言的统一目录数据
+ * 37 门语言的统一目录数据
  * 用于：学习路线、跨语言概念对照、每日 5 题、在线运行示例
  *
  * 字段说明：
@@ -603,9 +603,67 @@ main :-
 end program hello`,
             concepts: ['有限（内部函数）', '手动管理', '静态强类型', 'OpenMP / MPI'],
             detail: null,
-            chapters: 1
+            chapters: 35
+        },
+        {
+            id: 35, key: 'cobol', name: 'COBOL', icon: '🏦',
+            group: 'data', groups: ['data', 'script'],
+            year: 1959, creator: 'CODASYL 委员会',
+            blurb: '商业数据处理的老牌语言，银行、保险与大型机系统仍在运行。',
+            useCases: ['银行核心系统', '保险与政务', '批处理报表'],
+            exampleTitle: 'Hello COBOL',
+            example: String.raw`       IDENTIFICATION DIVISION.
+       PROGRAM-ID. HELLO.
+       PROCEDURE DIVISION.
+           DISPLAY "Hello, COBOL!".
+           STOP RUN.`,
+            concepts: ['无闭包', '手动管理', '静态强类型（PIC 描述）', '批处理 / CICS 事务'],
+            detail: null,
+            chapters: 35
+        },
+        {
+            id: 36, key: 'julia', name: 'Julia', icon: '🔬',
+            group: 'data', groups: ['data', 'system'],
+            year: 2012, creator: 'Jeff Bezanson 等',
+            blurb: '为科学计算而生的语言，兼具 Python 的易用与 C 的性能。',
+            useCases: ['数值计算', '机器学习', '科研仿真'],
+            exampleTitle: '多重派发与求和',
+            example: String.raw`f(x::Int) = x * 2
+f(x::String) = "hi " * x
+println(f(21))
+println(f("Julia"))
+println(sum(1:10))`,
+            concepts: ['完整闭包', '分代 GC', '动态类型 + 多重派发', '协程 / 分布式'],
+            detail: null,
+            chapters: 35
+        },
+        {
+            id: 37, key: 'zig', name: 'Zig', icon: '⚡',
+            group: 'system', groups: ['system'],
+            year: 2016, creator: 'Andrew Kelley',
+            blurb: '面向系统编程的现代语言，手动内存管理、comptime 与 C 互操作。',
+            useCases: ['系统工具', '游戏引擎', '嵌入式'],
+            exampleTitle: 'Hello Zig',
+            example: String.raw`const std = @import("std");
+
+pub fn main() !void {
+    const stdout = std.io.getStdOut().writer();
+    try stdout.print("Hello, Zig!\n", .{});
+    try stdout.print("1 + 2 = {d}\n", .{1 + 2});
+}`,
+            concepts: ['无闭包（comptime）', '手动管理（分配器）', '静态强类型', 'async / 线程'],
+            detail: null,
+            chapters: 35
         }
     ];
+
+    // 教程页 slug 与目录 key 的映射（目录里 html/css、bash、r 分开计数）
+    const TUTORIAL_SLUGS = {
+        html: 'html-css',
+        css: 'html-css',
+        bash: 'shell',
+        r: 'r-lang'
+    };
 
     const GROUPS = [
         { id: 'script', name: '脚本', icon: '📜', desc: '快速解决实际问题，胶水与自动化' },
@@ -658,10 +716,16 @@ end program hello`,
         }
     ];
 
+    const RICH_CURRICULUM = ['python', 'javascript', 'java', 'cpp', 'csharp', 'go', 'rust', 'php', 'swift', 'typescript'];
     const byKey = Object.create(null);
     const byId = Object.create(null);
     const byName = Object.create(null);
     LANGUAGES.forEach(lang => {
+        lang.chapters = RICH_CURRICULUM.includes(lang.key) ? 36 : 35;
+        if (!lang.detail) {
+            const slug = TUTORIAL_SLUGS[lang.key] || lang.key;
+            lang.tutorialPage = `tutorial-${slug}.html`;
+        }
         byKey[lang.key] = lang;
         byId[lang.id] = lang;
         byName[lang.name.toLowerCase()] = lang;
@@ -670,6 +734,13 @@ end program hello`,
     global.LANGUAGE_CATALOG = LANGUAGES;
     global.LANGUAGE_GROUPS = GROUPS;
     global.LEARNING_PATHS = PATHS;
+    global.getTutorialUrl = function (value) {
+        const lang = global.getCatalogLanguage ? global.getCatalogLanguage(value) : null;
+        if (lang && lang.tutorialPage) return lang.tutorialPage;
+        const key = typeof value === 'string' ? value.toLowerCase() : '';
+        const slug = TUTORIAL_SLUGS[key] || key;
+        return slug ? `tutorial-${slug}.html` : '';
+    };
     global.getCatalogLanguage = function (value) {
         if (value == null) return null;
         if (typeof value === 'object') return value;

@@ -1,5 +1,4 @@
-window.TUTORIAL_DATA_go = 
-[
+window.TUTORIAL_DATA_go = [
   {
     "id": 1,
     "t": "Go语言简介",
@@ -666,5 +665,24 @@ window.TUTORIAL_DATA_go =
         "a": "func deleteTodo(w http.ResponseWriter, r *http.Request) { id, _ := strconv.Atoi(r.URL.Query().Get(\"id\")) mu.Lock() for i, t := range todos { if t.ID == id { todos = append(todos[:i], todos[i+1:]...) break } } mu.Unlock() w.WriteHeader(http.StatusOK) }"
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用包：fmt、strings、strconv、sort、time、encoding/json、net/http、os、io",
+      "模块管理用 go mod，go.mod/go.sum 锁定依赖；go get 添加包",
+      "测试用 go test 与表驱动测试；格式化 gofmt/goimports；检查 go vet；调试 dlv",
+      "运行：go run .；构建：go build -o app .；测试：go test ./..."
+    ],
+    "c": "package main\n\nimport (\n    \"encoding/json\"\n    \"fmt\"\n    \"sort\"\n    \"strings\"\n    \"time\"\n)\n\nfunc main() {\n    nums := []int{3, 1, 4, 1, 5}\n    sort.Ints(nums)\n    fmt.Println(nums, strings.ToUpper(\"go\"))\n    fmt.Println(time.Now().Format(\"2006-01-02\"))\n    freq := map[string]int{\"go\": 1}\n    freq[\"go\"]++\n    data, _ := json.Marshal(freq)\n    fmt.Println(string(data))\n}\n\n// 工具链（终端执行）\n// 模块：go mod init demo && go get github.com/gin-gonic/gin\n// 测试：go test ./...      格式化：gofmt -w .\n// 检查：go vet ./...       调试：dlv debug .\n// 构建：go build -o app . && ./app\n",
+    "et": "❌ 常见错误",
+    "ec": "忘记 go.sum 导致依赖校验失败，或直接修改 go.mod 手写版本。应使用 go get 与 go mod tidy 维护依赖。",
+    "q": [
+      {
+        "q": "Go 中格式化代码的标准命令是什么？",
+        "a": "gofmt -w ."
+      }
+    ],
+    "id": 36
   }
 ];

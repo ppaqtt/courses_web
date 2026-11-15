@@ -1,112 +1,58 @@
 window.TUTORIAL_DATA_dart = [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Dart 简介与历史",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Dart 由 Google 于 2011 年发布，目标是替代 JavaScript 并支持大规模前端开发",
+      "Dart 3 引入健全空安全、记录（Record）、模式匹配与密封类等现代语言特性",
+      "Dart 可 AOT 编译为原生可执行文件，也可编译为 JavaScript 在浏览器中运行",
+      "Flutter 使用 Dart 作为唯一开发语言，服务端与命令行工具同样可以用 Dart 编写"
     ],
-    "c": "// Dart教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// Dart 3 的第一个程序\nvoid main() {\n  print('Hello, Dart!');\n\n  const sdk = 'Dart 3';\n  const year = 2011;\n  print('$sdk 诞生于 $year 年');\n\n  final scenes = ['Flutter', 'Server', 'CLI'];\n  for (final s in scenes) {\n    print('应用场景：$s');\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 null 赋给非空类型变量会编译失败，例如 int n = null；Dart 3 默认健全空安全，可空类型必须写 int? 并处理空值。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 3 的空安全中，允许为 null 的 int 如何声明？",
+        "a": "int?，例如 int? n = null;"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装与工具链环境",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "从 dart.dev 安装 SDK，或随 Flutter 一起安装，用 dart --version 验证版本",
+      "dart create 创建项目，dart pub get 拉取依赖，dart run 运行入口文件",
+      "dart compile exe 将程序 AOT 编译为原生可执行文件，适合部署命令行工具",
+      "VS Code 安装 Dart 插件可获得补全、跳转、格式化和断点调试能力"
     ],
-    "c": "// Dart教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:io';\n\nvoid main() {\n  print('Dart 工具链已就绪');\n  print('Dart 版本：${Platform.version.split(' ').first}');\n  print('平台：${Platform.operatingSystem}');\n  print('CPU 核数：${Platform.numberOfProcessors}');\n  // dart run bin/main.dart\n  // dart pub get / dart pub add http\n  // dart compile exe bin/main.dart -o build/app\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接运行 dart main.dart 时若文件使用 package: 导入会报找不到包；应先在 pubspec.yaml 声明依赖并执行 dart pub get。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "把 Dart 程序编译为原生可执行文件的命令？",
+        "a": "dart compile exe bin/main.dart -o build/app"
       }
     ]
   },
   {
     "id": 3,
-    "t": "变量与常量",
+    "t": "变量、常量与命名",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "var 让编译器推断类型，final 表示只赋值一次，const 表示编译期常量",
+      "Dart 是静态类型语言，类型一旦推断或声明便不能赋其他类型的值",
+      "late 用于延迟初始化非空变量，读取未初始化的 late 变量会抛 LateInitializationError",
+      "命名规范：变量与函数用 lowerCamelCase，类型用 UpperCamelCase，常量也用 lowerCamelCase"
     ],
-    "c": "// Dart教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  var name = 'Dart';\n  final version = 3.0;\n  const pi = 3.14159;\n  late String greeting;\n  greeting = 'Hello, $name';\n\n  print(greeting);\n  print('version=$version pi=$pi');\n\n  final items = <String>[];\n  items.add('a');\n  print('items=${items.length}');\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 const 修饰运行时才能确定的值会编译失败，例如 const now = DateTime.now()；const 要求编译期常量，应改用 final。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "final 与 const 的核心区别是什么？",
+        "a": "final 运行期赋值一次；const 必须是编译期常量"
       }
     ]
   },
@@ -114,221 +60,113 @@ window.TUTORIAL_DATA_dart = [
     "id": 4,
     "t": "数据类型",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Dart 的 int 是 64 位整数，double 是 64 位浮点数，num 是二者共同父类型",
+      "String 使用 UTF-16 编码且不可变，bool 只有 true 与 false 两个值",
+      "集合类型包括 List、Set、Map，分别对应有序列表、去重集合与键值映射",
+      "Object 是所有非空类型的根，dynamic 关闭静态检查，应尽量避免使用"
     ],
-    "c": "// Dart教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  int count = 42;\n  double ratio = 0.75;\n  num value = count;\n  String name = 'Dart';\n  bool ok = true;\n  List<int> nums = [1, 2, 3];\n  Map<String, int> scores = {'math': 95};\n  Set<String> tags = {'a', 'b'};\n  Object obj = 'text';\n  dynamic any = 1;\n\n  print('$count $ratio $value $name $ok');\n  print('$nums $scores $tags $obj $any');\n  print(obj is String);\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 Web 平台 int 实际是 JavaScript 数字，超过 2^53 会丢精度；需要大整数时应使用 BigInt，跨平台逻辑要特别注意。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中所有非空类型的根类型是什么？",
+        "a": "Object"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与表达式",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术运算符中 / 总返回 double，~/ 是整除，% 取余，结果符号与被除数一致",
+      "空值相关运算符：?. 安全访问、?? 提供默认值、??= 为空时赋值",
+      "类型运算符 is 判断、as 转换、! 断言非空，滥用 ! 会抛空值检查异常",
+      "位运算 &、|、^、~、<<、>> 以及三元运算符 ?: 与其他语言类似"
     ],
-    "c": "// Dart教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  int a = 7, b = 2;\n  print(a + b);\n  print(a - b);\n  print(a * b);\n  print(a / b);        // 3.5\n  print(a ~/ b);       // 3\n  print(a % b);        // 1\n  print(a == b);\n  print(a > b && b > 0);\n  int? maybe;\n  print(maybe ?? 0);\n  maybe ??= 5;\n  print(maybe);\n  print(1 << 3);\n}",
+    "et": "❌ 常见错误",
+    "ec": "对可空变量直接使用 ! 断言，运行期若为 null 会抛 Null check operator used on a null value；应先判断或使用 ??。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中 7 / 2 与 7 ~/ 2 的结果分别是什么？",
+        "a": "3.5 与 3"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串处理",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "字符串可用单引号或双引号，$name 插值简单变量，${expr} 插值表达式",
+      "相邻字符串字面量会在编译期自动拼接，三引号可书写保留换行的多行字符串",
+      "r 前缀创建原始字符串，反斜杠不被转义，适合表示文件路径与正则表达式",
+      "常用方法：trim、split、replaceAll、substring、contains、padLeft、join"
     ],
-    "c": "// Dart教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  const name = 'Dart';\n  final greeting = 'Hello, $name!';\n  final raw = r'C:\\temp\\new';\n  final multi = '''\n    多行字符串\n    第二行\n  ''';\n\n  print(greeting.toUpperCase());\n  print(greeting.split(', '));\n  print('  trim  '.trim());\n  print(greeting.replaceAll('Dart', 'World'));\n  print(greeting.contains('Dart'));\n  print(greeting.substring(0, 5));\n  print('${name.length} ${name[0]}');\n  print(raw);\n  print(multi.trim());\n}",
+    "et": "❌ 常见错误",
+    "ec": "在普通字符串中写 Windows 路径 C:\\temp 会因 \\t 被转义成制表符；应使用原始字符串 r'C:\\temp'。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何创建不转义反斜杠的原始字符串？",
+        "a": "加 r 前缀，例如 r'C:\\temp'"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "集合：List、Set 与 Map",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "List 有序可重复，Set 无序去重，Map 以键索引值，三者都支持字面量语法",
+      "集合字面量可加类型参数，如 <int>[]，空字面量必须显式指定类型",
+      "map、where、reduce、fold、any、every 等函数式方法返回新集合或布尔值",
+      "需要可变集合时使用 <int>[] 或 List.of；只读集合应优先使用 const"
     ],
-    "c": "// Dart教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  final list = [3, 1, 2];\n  list.sort();\n  list.add(4);\n  print(list);\n\n  final set = <int>{1, 2, 2, 3};\n  print(set.length);        // 3\n\n  final map = <String, int>{'a': 1};\n  map['b'] = 2;\n  print(map['a']);\n\n  final doubled = list.map((e) => e * 2).toList();\n  final evens = list.where((e) => e.isEven).toList();\n  print('$doubled $evens');\n  print(list.reduce((a, b) => a + b));\n}",
+    "et": "❌ 常见错误",
+    "ec": "对 const 列表调用 add 会在运行期抛 Unsupported operation；const 集合不可变，需要修改时应使用可变列表。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何把 List<int> 中每个元素翻倍并得到新 List？",
+        "a": "list.map((e) => e * 2).toList()"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支与模式匹配",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if/else 条件必须是 bool，Dart 不接受 0、null 等隐式真假值",
+      "switch 支持传统分支、穷尽性检查和 Dart 3 的模式匹配",
+      "switch 表达式可直接产生值，配合 ||、&&、关系模式与解构",
+      "对密封类使用 switch 时若缺少某个子类分支，编译器会提示不穷尽并拒绝编译"
     ],
-    "c": "// Dart教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  int score = 86;\n  if (score >= 90) {\n    print('A');\n  } else if (score >= 80) {\n    print('B');\n  } else {\n    print('C');\n  }\n\n  final label = switch (score ~/ 10) {\n    10 || 9 => '优秀',\n    8 => '良好',\n    _ => '继续加油',\n  };\n  print(label);\n\n  switch (score) {\n    case >= 60:\n      print('及格');\n    default:\n      print('不及格');\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 if 中写 if (list) 会编译失败，因为 List 不是 bool；应写成 if (list.isNotEmpty)。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 3 中 switch 表达式如何表示“其他情况”？",
+        "a": "使用通配符模式 _ => ..."
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环与递归",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "for 支持 C 风格三段式与 for-in 遍历，continue 与 break 行为与其他语言一致",
+      "while 先判断后执行，do-while 至少执行一次，适合菜单与重试逻辑",
+      "递归函数必须有终止条件，Dart 没有尾调用优化，深递归可能栈溢出",
+      "遍历集合时修改其结构会抛 ConcurrentModificationError，应先复制或收集待改项"
     ],
-    "c": "// Dart教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "int factorial(int n) => n <= 1 ? 1 : n * factorial(n - 1);\n\nvoid main() {\n  for (var i = 0; i < 3; i++) {\n    print('for $i');\n  }\n\n  var j = 0;\n  while (j < 3) {\n    print('while $j');\n    j++;\n  }\n\n  do {\n    j--;\n  } while (j > 0);\n\n  final list = [10, 20, 30];\n  for (final v in list) {\n    print(v);\n  }\n  print('5! = ${factorial(5)}');\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 for-in 遍历 List 时调用 add/remove 会抛 ConcurrentModificationError；应改为遍历副本或使用索引倒序删除。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 会做尾调用优化吗？",
+        "a": "不会，深递归仍可能造成栈溢出"
       }
     ]
   },
@@ -336,73 +174,37 @@ window.TUTORIAL_DATA_dart = [
     "id": 10,
     "t": "函数基础",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "函数声明需写参数类型与返回类型，返回类型可省略但不利于可读性",
+      "位置可选参数放在方括号中，命名可选参数放在花括号中并可设默认值",
+      "命名参数调用时使用 name: value，必填命名参数用 required 修饰",
+      "在 Dart 中函数是一等公民，可赋值给变量、作为参数传递，也可从函数返回"
     ],
-    "c": "// Dart教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "int add(int a, int b) {\n  return a + b;\n}\n\nString greet(String name, [String greeting = 'Hello']) {\n  return '$greeting, $name';\n}\n\nvoid log(String msg, {bool upper = false}) {\n  print(upper ? msg.toUpperCase() : msg);\n}\n\nvoid main() {\n  print(add(2, 3));\n  print(greet('Dart'));\n  print(greet('Dart', 'Hi'));\n  log('done', upper: true);\n  final op = add;\n  print(op(10, 20));\n}",
+    "et": "❌ 常见错误",
+    "ec": "命名参数默认是可选的，漏传会得到 null 并可能引发类型错误；需要必填时应加 required 修饰。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中声明必填命名参数的关键字是什么？",
+        "a": "required，例如 {required String name}"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "函数进阶与高阶函数",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "箭头函数 => 用于单表达式函数体，可让 map、where 等回调更简洁",
+      "函数类型写作 int Function(int)，可声明高阶函数参数与返回值",
+      "tear-off 可把具名函数直接当作函数值，如 list.forEach(print)",
+      "匿名函数与闭包可以捕获外层变量，配合柯里化可构造带预设参数的专用函数"
     ],
-    "c": "// Dart教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "int apply(int x, int Function(int) f) => f(x);\nint twice(int x) => x * 2;\n\nList<int> mapAll(List<int> xs, int Function(int) f) =>\n    xs.map(f).toList();\n\nvoid main() {\n  print(apply(5, twice));\n  print(mapAll([1, 2, 3], (x) => x + 1));\n\n  final add = (int a, int b) => a + b;\n  print(add(1, 2));\n\n  Function makeAdder(int n) => (int x) => x + n;\n  final add10 = makeAdder(10);\n  print(add10(5));\n\n  final f = twice;\n  print(f(21));\n}",
+    "et": "❌ 常见错误",
+    "ec": "把带两个参数的函数赋给 Function 变量后直接调用，可能因参数个数不匹配在运行期报错；应写明确的函数类型。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "写出接收 int 并返回 int 的函数类型。",
+        "a": "int Function(int)"
       }
     ]
   },
@@ -410,36 +212,18 @@ window.TUTORIAL_DATA_dart = [
     "id": 12,
     "t": "作用域与闭包",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "闭包是能够访问其词法作用域中变量的函数，即使外层函数已经返回也不会失效",
+      "每次调用外层函数都会创建一套独立的变量环境，因此多个闭包之间互不共享状态",
+      "Dart 的 for 循环变量按迭代捕获，闭包中保存的是当次迭代的值",
+      "闭包常用于计数器、缓存、回调与依赖注入，但长期持有大对象会延迟回收"
     ],
-    "c": "// Dart教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "Function counter() {\n  var count = 0;\n  return () {\n    count++;\n    return count;\n  };\n}\n\nvoid main() {\n  final c1 = counter();\n  final c2 = counter();\n  print(c1()); // 1\n  print(c1()); // 2\n  print(c2()); // 1\n\n  final fns = <Function>[];\n  for (var i = 0; i < 3; i++) {\n    fns.add(() => i);\n  }\n  print(fns.map((f) => f()).toList());\n}",
+    "et": "❌ 常见错误",
+    "ec": "误以为多个闭包共享同一个局部变量，实际每次外层调用都创建独立环境；需要共享时应把状态放到同一对象中。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "连续调用两次 counter() 得到的两个闭包会共享 count 吗？",
+        "a": "不会，各自拥有独立的 count"
       }
     ]
   },
@@ -447,36 +231,18 @@ window.TUTORIAL_DATA_dart = [
     "id": 13,
     "t": "类与对象",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "类用 class 定义，字段与构造函数同属类体，final 字段只能在构造时赋值",
+      "主构造函数可简写为 ClassName(this.field)，命名构造函数用 ClassName.name",
+      "getter/setter 用 get 与 set 定义，可对字段访问做校验或惰性计算",
+      "const 构造函数要求所有字段为 final，可创建编译期常量实例"
     ],
-    "c": "// Dart教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:math' as math;\n\nclass Point {\n  final double x;\n  final double y;\n\n  const Point(this.x, this.y);\n  const Point.origin() : this(0, 0);\n\n  double get distance => math.sqrt(x * x + y * y);\n\n  @override\n  String toString() => 'Point($x, $y)';\n}\n\nvoid main() {\n  const p = Point(3, 4);\n  print(p);\n  print(p.distance);\n  print(const Point.origin());\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 const 构造函数中给字段赋值非常量表达式会编译失败；const 构造的所有字段必须能在编译期确定。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中定义命名构造函数的语法？",
+        "a": "ClassName.name(...)，例如 Point.origin() : this(0, 0);"
       }
     ]
   },
@@ -484,73 +250,37 @@ window.TUTORIAL_DATA_dart = [
     "id": 14,
     "t": "继承与多态",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "子类用 extends 继承父类，可访问非私有成员并复用父类构造逻辑",
+      "子类构造函数通过 super.name(...) 或 super(...) 调用父类构造",
+      "用 @override 标注重写方法，运行时类型由实际对象决定，实现多态",
+      "Dart 只支持单继承，私有成员（下划线开头）不会被子类直接访问"
     ],
-    "c": "// Dart教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class Animal {\n  Animal(this.name);\n  final String name;\n\n  String speak() => '...';\n\n  @override\n  String toString() => '$runtimeType($name)';\n}\n\nclass Dog extends Animal {\n  Dog(super.name);\n\n  @override\n  String speak() => 'Woof';\n}\n\nclass Cat extends Animal {\n  Cat(super.name);\n\n  @override\n  String speak() => 'Meow';\n}\n\nvoid main() {\n  final animals = <Animal>[Dog('Rex'), Cat('Tom')];\n  for (final a in animals) {\n    print('${a.name}: ${a.speak()}');\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "父类没有无参构造函数时，子类构造未显式调用 super 会编译失败；应使用 super(...) 传入必要参数。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 支持多继承吗？",
+        "a": "不支持，只支持单继承，可用 mixin 复用行为"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "抽象类与接口",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "抽象类用 abstract 声明，可包含抽象方法与已实现方法，不能直接实例化",
+      "任何类都可作为接口，用 implements 实现时必须重写全部成员",
+      "mixin 用 mixin 声明，通过 with 混入，可绕开单继承限制复用代码",
+      "abstract interface class 可同时表达接口与抽象基类的意图"
     ],
-    "c": "// Dart教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "abstract class Shape {\n  double area();\n  String describe() => '面积 ${area().toStringAsFixed(2)}';\n}\n\nclass Circle extends Shape {\n  Circle(this.r);\n  final double r;\n\n  @override\n  double area() => 3.14159 * r * r;\n}\n\nclass Rect implements Shape {\n  Rect(this.w, this.h);\n  final double w, h;\n\n  @override\n  double area() => w * h;\n\n  @override\n  String describe() => '矩形 ${area()}';\n}\n\nvoid main() {\n  for (final s in <Shape>[Circle(2), Rect(2, 3)]) {\n    print(s.describe());\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 implements 实现抽象类时不会继承其方法体，describe 等具体方法也必须重写；想复用实现应使用 extends。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "extends 与 implements 的关键区别？",
+        "a": "extends 继承实现并可重写；implements 只继承接口，必须实现全部成员"
       }
     ]
   },
@@ -558,36 +288,18 @@ window.TUTORIAL_DATA_dart = [
     "id": 16,
     "t": "泛型",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "泛型让类与函数在保持类型安全的前提下适配多种类型，如 List<T>",
+      "泛型参数可加约束，T extends num 表示 T 必须是 num 或其子类型",
+      "Dart 泛型是具体化的，运行期可通过 is 检查 List<int> 等类型",
+      "集合字面量与构造函数都可显式指定类型参数，避免推断为 dynamic"
     ],
-    "c": "// Dart教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class Box<T> {\n  Box(this.value);\n  T value;\n\n  @override\n  String toString() => 'Box<$T>($value)';\n}\n\nT firstOr<T>(List<T> items, T fallback) =>\n    items.isEmpty ? fallback : items.first();\n\nvoid main() {\n  final b = Box<int>(42);\n  print(b);\n  print(firstOr(<String>[], 'none'));\n  print(firstOr([1, 2, 3], 0));\n\n  final nums = <num>[1, 2.5];\n  print(nums.reduce((a, b) => a + b));\n  print(b.value.runtimeType);\n}",
+    "et": "❌ 常见错误",
+    "ec": "声明 List<dynamic> 后把元素当 String 使用，编译期不会报错，运行期可能抛类型异常；应尽量使用具体类型参数。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何约束泛型 T 必须是 num 的子类型？",
+        "a": "class Box<T extends num>"
       }
     ]
   },
@@ -595,73 +307,37 @@ window.TUTORIAL_DATA_dart = [
     "id": 17,
     "t": "异常处理",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Dart 的异常都是非受检异常，可抛任意对象，但最佳实践是抛实现 Exception 的类型",
+      "try/on 捕获指定类型，catch 获取对象与堆栈，finally 总会执行",
+      "rethrow 保留原堆栈重新抛出，适合在记录日志后继续向上传递",
+      "异步代码中的异常通过 Future 传递，需 await 或 catchError 才能捕获"
     ],
-    "c": "// Dart教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class InsufficientFunds implements Exception {\n  InsufficientFunds(this.amount);\n  final double amount;\n\n  @override\n  String toString() => '余额不足：$amount';\n}\n\nvoid withdraw(double balance, double amount) {\n  if (amount > balance) throw InsufficientFunds(amount);\n  print('取款成功，余额 ${balance - amount}');\n}\n\nvoid main() {\n  try {\n    withdraw(100, 150);\n  } on InsufficientFunds catch (e) {\n    print('捕获：$e');\n  } catch (e, st) {\n    print('未知错误：$e');\n    print(st);\n  } finally {\n    print('结束');\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "只写 try/catch 而不 await 异步调用，异常会落在未处理的 Future 中；异步错误必须 await 或使用 catchError。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中如何重新抛出当前异常并保留堆栈？",
+        "a": "在 catch 块中调用 rethrow"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件 I/O",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "dart:io 提供 File、Directory、Platform 等类型，仅能在命令行与移动端使用",
+      "readAsString/writeAsString 适合小文件，readAsLines 按行读取",
+      "大文件应使用 openRead 得到 Stream，配合 utf8.decoder 与 LineSplitter 流式处理",
+      "文件操作返回 Future，必须 await 或链式处理错误，并注意关闭资源"
     ],
-    "c": "// Dart教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:convert';\nimport 'dart:io';\n\nFuture<void> main() async {\n  final file = File('notes.txt');\n  await file.writeAsString('第一行\\n第二行\\n');\n  print(await file.readAsString());\n\n  await for (final line in file\n      .openRead()\n      .transform(utf8.decoder)\n      .transform(const LineSplitter())) {\n    print('行：$line');\n  }\n\n  final dir = Directory('.');\n  print(dir.listSync().take(3).map((e) => e.path).toList());\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 Web 平台导入 dart:io 会编译失败，因为浏览器没有文件系统；跨平台代码应把 IO 逻辑隔离到条件导入中。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "流式按行读取文件应使用哪个 API？",
+        "a": "file.openRead().transform(utf8.decoder).transform(const LineSplitter())"
       }
     ]
   },
@@ -669,184 +345,94 @@ window.TUTORIAL_DATA_dart = [
     "id": 19,
     "t": "正则表达式",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "RegExp 构造正则，hasMatch 判断是否存在匹配，firstMatch 返回首个 Match",
+      "allMatches 返回所有匹配，可用 group(0) 或 group(1) 取整体与捕获组",
+      "replaceAll 与 replaceAllMapped 支持字符串或函数替换",
+      "原始字符串 r'' 可避免正则中的反斜杠被 Dart 再次转义"
     ],
-    "c": "// Dart教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  final email = RegExp(r'^[\\w.+-]+@[\\w-]+\\.[\\w.]+$');\n  print(email.hasMatch('user@example.com')); // true\n  print(email.hasMatch('bad@'));\n\n  const text = '订单 A100 金额 99 元，订单 B200 金额 150 元';\n  final ids = RegExp(r'[A-Z]\\d{3}').allMatches(text);\n  print(ids.map((m) => m.group(0)).toList());\n\n  final re = RegExp(r'(\\d+) 元');\n  final m = re.firstMatch(text);\n  print(m?.group(1));\n\n  print(text.replaceAll(RegExp(r'\\d+'), '#'));\n}",
+    "et": "❌ 常见错误",
+    "ec": "在普通字符串中写 \\d 会先被 Dart 解析为转义字符；正则应使用原始字符串 r'\\d+'，否则模式含义会改变。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "获取正则第一个捕获组内容的 API？",
+        "a": "match.group(1)"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块、包管理与依赖",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "pubspec.yaml 声明包名、SDK 约束、依赖与开发依赖，是 Dart 项目的核心清单",
+      "dart pub get 解析并下载依赖，dart pub add 添加依赖并自动写入 pubspec",
+      "依赖版本用 ^1.2.0 表示兼容 1.x，pubspec.lock 锁定实际解析结果",
+      "package: 导入的是依赖包，相对路径导入的是本项目文件，二者不要混用"
     ],
-    "c": "// Dart教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// pubspec.yaml 示例：\n// name: demo\n// environment:\n//   sdk: ^3.0.0\n// dependencies:\n//   http: ^1.2.0\n// dev_dependencies:\n//   test: ^1.25.0\nimport 'package:http/http.dart' as http;\n\nFuture<void> main() async {\n  final res = await http.get(Uri.parse('https://example.com'));\n  print('状态码：${res.statusCode}');\n  print('长度：${res.body.length}');\n}",
+    "et": "❌ 常见错误",
+    "ec": "只修改 pubspec.yaml 而不执行 dart pub get，代码仍会提示找不到包；依赖变更后必须重新解析。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "添加 http 依赖的推荐命令？",
+        "a": "dart pub add http"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "包管理器：dart pub（get/add/upgrade/deps），依赖写在 pubspec.yaml",
+      "测试框架：package:test，使用 dart test 运行并支持分组、异步与覆盖率",
+      "格式化与检查：dart format 统一格式，dart analyze 做静态分析",
+      "运行构建：dart run 运行，dart compile exe 生成原生程序，DevTools 分析性能"
     ],
-    "c": "// Dart教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 包管理：dart pub get / dart pub add http / dart pub deps\n// 测试：dart test（package:test）\n// 格式化：dart format lib test\n// 静态检查：dart analyze\n// 运行：dart run bin/main.dart\n// 构建：dart compile exe bin/main.dart -o build/app\n// 调试：dart run --observe + Dart DevTools\nimport 'dart:async';\nimport 'dart:convert';\n\nvoid main() async {\n  final data = jsonEncode({'ok': true, 'n': 3});\n  print(data);\n  print(jsonDecode(data));\n  await Future<void>.delayed(const Duration(milliseconds: 10));\n  print('done');\n}",
+    "et": "❌ 常见错误",
+    "ec": "提交前只运行程序不做 dart analyze，会漏掉未使用导入与空安全警告；CI 应同时执行格式检查与静态分析。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 官方测试框架的包名与运行命令？",
+        "a": "package:test，命令 dart test"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与异步",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Future 表示未来完成的单值结果，async/await 让异步代码看起来像同步",
+      "Future.wait 并行等待多个 Future，任一失败则整体失败",
+      "Stream 表示异步事件序列，可用 await for 或 listen 消费",
+      "Isolate 拥有独立内存与事件循环，通过 SendPort 通信，适合 CPU 密集任务"
     ],
-    "c": "// Dart教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:async';\nimport 'dart:isolate';\n\nFuture<int> fetchScore(String name) async {\n  await Future<void>.delayed(const Duration(milliseconds: 100));\n  return name.length * 10;\n}\n\nvoid worker(SendPort p) => p.send(42);\n\nFuture<void> main() async {\n  final results = await Future.wait([\n    fetchScore('张三'),\n    fetchScore('李四'),\n  ]);\n  print(results);\n\n  final stream = Stream.periodic(\n      const Duration(milliseconds: 50), (i) => i).take(3);\n  await for (final v in stream) {\n    print('tick $v');\n  }\n\n  final receive = ReceivePort();\n  await Isolate.spawn(worker, receive.sendPort);\n  print('isolate: ${await receive.first}');\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 Isolate 之间传递不可发送的对象（如打开的文件、含闭包状态的对象）会抛异常；只能发送可序列化的消息。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中 CPU 密集计算应使用什么机制避免阻塞 UI？",
+        "a": "Isolate.spawn 或 compute"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "优先使用 const 构造与 final 变量，减少重复分配并让编译器做常量折叠",
+      "避免 dynamic 与不必要的装箱，热路径使用具体类型和 TypedData",
+      "用 Stopwatch 与 DevTools 的 CPU/内存视图定位瓶颈，不要凭感觉优化",
+      "减少中间集合，链式操作可用 lazy Iterable 或一次性循环替代"
     ],
-    "c": "// Dart教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:typed_data';\n\nvoid main() {\n  final stopwatch = Stopwatch()..start();\n  final list = List<int>.filled(1000000, 0);\n  var sum = 0;\n  for (var i = 0; i < list.length; i++) {\n    sum += list[i];\n  }\n  stopwatch.stop();\n  print('sum=$sum 用时 ${stopwatch.elapsedMilliseconds}ms');\n\n  final bytes = Uint8List(4);\n  bytes[0] = 255;\n  print(bytes[0]);\n}",
+    "et": "❌ 常见错误",
+    "ec": "在热循环中反复创建临时 List 或字符串会加重 GC；应复用缓冲区或改用 StringBuffer、Uint8List。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中测量一段代码耗时的内置类？",
+        "a": "Stopwatch，stopwatch.elapsedMilliseconds"
       }
     ]
   },
@@ -854,36 +440,18 @@ window.TUTORIAL_DATA_dart = [
     "id": 24,
     "t": "测试",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "测试文件通常放在 test/ 目录，文件名以 _test.dart 结尾",
+      "test() 定义用例，group() 分组，expect() 断言实际值与匹配器",
+      "异步测试可返回 Future 或使用 expectLater 配合 completes/throwsA",
+      "dart test 支持 --coverage、--name 过滤与并发执行，便于 CI 集成"
     ],
-    "c": "// Dart教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 文件：test/math_test.dart\n// 运行：dart test\nimport 'package:test/test.dart';\n\nint add(int a, int b) => a + b;\n\nvoid main() {\n  group('add', () {\n    test('正整数相加', () {\n      expect(add(1, 2), 3);\n    });\n\n    test('负数相加', () {\n      expect(add(-1, -2), -3);\n    });\n\n    test('解析失败抛异常', () {\n      expect(() => int.parse('x'), throwsFormatException);\n    });\n  });\n}",
+    "et": "❌ 常见错误",
+    "ec": "测试中忘记 await 异步操作，用例会在断言执行前结束并误报通过；异步测试必须 await 或返回 Future。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "断言某个函数会抛出 FormatException 的匹配器？",
+        "a": "throwsFormatException（或 throwsA(isA<FormatException>())）"
       }
     ]
   },
@@ -891,73 +459,37 @@ window.TUTORIAL_DATA_dart = [
     "id": 25,
     "t": "调试技巧",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "dart:developer 的 log 可输出带名称与堆栈的结构化日志，debugger 可插入断点",
+      "VS Code 与 IntelliJ 支持条件断点、表达式求值与调用栈查看",
+      "DevTools 提供 CPU 火焰图、内存快照、网络与日志面板",
+      "调试异步代码时关注 Future 链与错误堆栈，避免只看到异步边界后的帧"
     ],
-    "c": "// Dart教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:developer' as dev;\n\nint divide(int a, int b) {\n  dev.log('divide($a, $b)', name: 'math');\n  if (b == 0) {\n    throw ArgumentError('除数不能为 0');\n  }\n  return a ~/ b;\n}\n\nvoid main() {\n  dev.debugger();\n  try {\n    print(divide(10, 2));\n    print(divide(1, 0));\n  } on ArgumentError catch (e, st) {\n    dev.log('错误', error: e, stackTrace: st, name: 'math');\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "生产代码中保留大量 print 会拖慢性能并可能泄露敏感信息；应使用分级日志并在发布构建中关闭调试输出。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中在代码里插入调试断点的函数？",
+        "a": "dev.debugger()（dart:developer）"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "与系统互操作（FFI）",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "dart:ffi 可调用 C 动态库，需定义 native 与 Dart 两套函数签名 typedef",
+      "DynamicLibrary.open 加载 .so/.dll，lookupFunction 按符号名取函数指针",
+      "package:ffi 提供 malloc/free、Utf8 指针转换等辅助工具",
+      "结构体用 Struct 子类与 @Native 字段描述，调用前必须保证内存布局一致"
     ],
-    "c": "// Dart教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:ffi';\nimport 'package:ffi/ffi.dart';\n\ntypedef StrlenNative = IntPtr Function(Pointer<Uint8>);\ntypedef StrlenDart = int Function(Pointer<Uint8>);\n\nvoid main() {\n  final libc = DynamicLibrary.process();\n  final strlen =\n      libc.lookupFunction<StrlenNative, StrlenDart>('strlen');\n\n  final ptr = malloc.allocate<Uint8>(6);\n  final bytes = ptr.asTypedList(6);\n  bytes.setAll(0, 'hello'.codeUnits);\n  bytes[5] = 0;\n\n  print('长度：${strlen(ptr)}');\n  malloc.free(ptr);\n}",
+    "et": "❌ 常见错误",
+    "ec": "lookupFunction 的 native 与 Dart 签名参数顺序写反，会在调用时崩溃或得到错误结果；两套 typedef 必须严格对应。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "FFI 中把 Dart 字符串转为 C 的 UTF-8 指针用什么扩展？",
+        "a": "'text'.toNativeUtf8()（package:ffi）"
       }
     ]
   },
@@ -965,110 +497,56 @@ window.TUTORIAL_DATA_dart = [
     "id": 27,
     "t": "设计模式",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "策略模式把算法封装为可替换对象，运行时可切换支付、排序等实现",
+      "工厂构造函数可封装对象的创建逻辑，并返回缓存实例、子类或已有对象",
+      "单例可用工厂构造函数配合静态私有实例实现，并注意懒加载与并发安全",
+      "密封类配合 switch 可以实现穷尽检查的状态机或事件建模，避免漏分支"
     ],
-    "c": "// Dart教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "abstract class PaymentStrategy {\n  void pay(int amount);\n}\n\nclass Alipay implements PaymentStrategy {\n  @override\n  void pay(int amount) => print('支付宝支付 $amount 元');\n}\n\nclass WechatPay implements PaymentStrategy {\n  @override\n  void pay(int amount) => print('微信支付 $amount 元');\n}\n\nclass Checkout {\n  Checkout(this.strategy);\n  PaymentStrategy strategy;\n\n  void submit(int amount) => strategy.pay(amount);\n}\n\nvoid main() {\n  Checkout(Alipay()).submit(100);\n  Checkout(WechatPay()).submit(200);\n}",
+    "et": "❌ 常见错误",
+    "ec": "用普通构造函数实现单例会让每次调用都创建新对象；应改用 factory 构造函数并缓存一个静态实例。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 中实现单例常用的构造函数形式？",
+        "a": "factory 构造函数 + 静态私有实例"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Dart 通过 sqlite3、postgres 等包访问数据库，命令行与服务端项目常用",
+      "sqlite3.open 打开本地数据库，execute 执行 DDL/DML，select 返回结果集",
+      "参数化查询用 ? 占位符并通过 execute 传参，避免 SQL 注入",
+      "数据库连接与语句对象应及时 dispose，长事务需显式提交或回滚"
     ],
-    "c": "// Dart教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// pubspec.yaml: sqlite3: ^2.4.0\n// 运行前确保系统安装 libsqlite3\nimport 'package:sqlite3/sqlite3.dart';\n\nvoid main() {\n  final db = sqlite3.open('app.db');\n  db.execute('''\n    CREATE TABLE IF NOT EXISTS users(\n      id INTEGER PRIMARY KEY,\n      name TEXT NOT NULL\n    )\n  ''');\n\n  final stmt = db.prepare('INSERT INTO users(name) VALUES (?)');\n  stmt.execute(['张三']);\n  stmt.dispose();\n\n  for (final row in db.select('SELECT id, name FROM users')) {\n    print('${row['id']}: ${row['name']}');\n  }\n  db.dispose();\n}",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入拼接进 SQL 字符串会导致注入；必须使用 ? 占位符绑定参数，不要用字符串插值构造 SQL。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "sqlite3 包中执行参数化 INSERT 的关键做法？",
+        "a": "SQL 中用 ? 占位，如 db.prepare('INSERT ... VALUES (?)')"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络编程与 HTTP",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "dart:io 的 HttpClient 可发起 HTTP 请求，package:http 提供更简洁的跨平台封装",
+      "HttpServer.bind 监听地址与端口，await for 逐个处理请求",
+      "响应需设置状态码、Content-Type 与正文，并及时 close 释放连接",
+      "生产环境还应处理请求超时、失败重试、连接池复用与进程优雅关闭"
     ],
-    "c": "// Dart教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:convert';\nimport 'dart:io';\n\nFuture<void> main() async {\n  final server =\n      await HttpServer.bind(InternetAddress.loopbackIPv4, 8080);\n  print('监听 http://${server.address.host}:${server.port}');\n\n  await for (final request in server) {\n    if (request.uri.path == '/health') {\n      request.response\n        ..statusCode = HttpStatus.ok\n        ..headers.contentType = ContentType.json\n        ..write(jsonEncode({'status': 'ok'}));\n    } else {\n      request.response.statusCode = HttpStatus.notFound;\n    }\n    await request.response.close();\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "忘记 await response.close() 会让连接迟迟不释放，客户端一直等待；每个响应都必须关闭。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 内置 HTTP 服务端的类型是什么？",
+        "a": "HttpServer（dart:io）"
       }
     ]
   },
@@ -1076,221 +554,113 @@ window.TUTORIAL_DATA_dart = [
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "所有请求参数都要校验类型、长度与字符集，不能直接拼入 SQL、HTML 或命令",
+      "把数据输出到 HTML 页面时必须进行转义，避免反射型与存储型 XSS 攻击",
+      "密码不应明文存储，应使用 bcrypt/Argon2 加盐哈希并做恒定时间比较",
+      "密钥与访问令牌应通过环境变量或密钥管理服务注入，绝不能提交到代码仓库"
     ],
-    "c": "// Dart教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:convert';\nimport 'dart:io';\n\nFuture<void> main() async {\n  final server =\n      await HttpServer.bind(InternetAddress.loopbackIPv4, 8081);\n  await for (final req in server) {\n    final name = req.uri.queryParameters['name'] ?? '';\n    final safe =\n        RegExp(r'^[\\w\\u4e00-\\u9fa5]{1,20}$').hasMatch(name);\n    final body = safe ? 'Hello, $name' : '参数非法';\n    req.response\n      ..headers.contentType = ContentType.text\n      ..write(body);\n    await req.response.close();\n  }\n}",
+    "et": "❌ 常见错误",
+    "ec": "把用户输入直接写入响应会形成反射型 XSS；输出前应转义，或设置正确的 Content-Type 并做白名单校验。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "密码存储应使用哪类算法？",
+        "a": "bcrypt、scrypt 或 Argon2 等加盐慢哈希"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "命令行入口 main(List<String> args) 可直接接收参数，args 不含程序名",
+      "退出码用 exitCode 或 exit(code) 设置，0 成功、非 0 表示不同错误",
+      "stdout 输出正常结果，stderr 输出错误与用法，便于重定向与管道",
+      "参数解析可用 args 包，支持短选项、长选项、默认值与子命令"
     ],
-    "c": "// Dart教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import 'dart:convert';\nimport 'dart:io';\n\nFuture<void> main(List<String> args) async {\n  if (args.isEmpty) {\n    stderr.writeln('用法：dart run bin/grep.dart <关键词> [文件]');\n    exitCode = 64;\n    return;\n  }\n  final keyword = args[0];\n  final path = args.length > 1 ? args[1] : null;\n  final lines = path == null\n      ? await stdin\n          .transform(utf8.decoder)\n          .transform(const LineSplitter())\n          .toList()\n      : await File(path).readAsLines();\n\n  var hits = 0;\n  for (final line in lines) {\n    if (line.contains(keyword)) {\n      hits++;\n      print(line);\n    }\n  }\n  stderr.writeln('命中 $hits 行');\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 main 中直接读取 args[0] 而不检查长度，未传参时会抛 RangeError；应先判断 args.isEmpty 并打印用法。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 命令行程序的参数从哪里获取？",
+        "a": "main(List<String> args) 的参数，或 package:args 解析"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：Web 服务",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "shelf 用 Handler 函数处理 Request 并返回 Response，中间件通过 Pipeline 组合",
+      "shelf_router 提供路由与路径参数，<id> 形式可捕获路径片段",
+      "JSON API 应设置 content-type，并统一错误响应格式",
+      "生产部署可接 dart_frog、serverpod 或反向代理，注意优雅停机"
     ],
-    "c": "// Dart教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// pubspec.yaml 依赖：shelf: ^1.4.0, shelf_router: ^1.1.0\nimport 'dart:convert';\nimport 'package:shelf/shelf.dart';\nimport 'package:shelf/shelf_io.dart' as io;\nimport 'package:shelf_router/shelf_router.dart';\n\nvoid main() async {\n  final router = Router()\n    ..get('/health', (Request req) => Response.ok('ok'))\n    ..get('/users/<id>', (Request req, String id) {\n      return Response.ok(\n        jsonEncode({'id': id, 'name': '用户$id'}),\n        headers: {'content-type': 'application/json'},\n      );\n    });\n\n  final handler = const Pipeline()\n      .addMiddleware(logRequests())\n      .addHandler(router.call);\n  await io.serve(handler, '0.0.0.0', 8080);\n  print('服务已启动：http://localhost:8080');\n}",
+    "et": "❌ 常见错误",
+    "ec": "路由处理函数签名与 Router 期望不一致会编译失败；带路径参数时应写 (Request req, String id) 两个参数。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "shelf 中组合中间件与处理器用什么类型？",
+        "a": "Pipeline，例如 const Pipeline().addMiddleware(...).addHandler(...)"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "发布前执行 dart pub get、dart analyze、dart test 与 dart format 检查",
+      "dart compile exe 生成自包含原生可执行文件，目标平台需与构建平台一致",
+      "容器部署建议使用多阶段构建，运行镜像只保留编译产物与必要的运行时数据",
+      "通过环境变量注入端口、版本与密钥，使用非 root 用户运行"
     ],
-    "c": "// Dart教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 构建流程：\n// dart pub get\n// dart analyze\n// dart test\n// dart format --set-exit-if-changed .\n// dart compile exe bin/server.dart -o build/server\n// 部署：把 build/server 放入运行镜像\nimport 'dart:io';\n\nvoid main() {\n  final version = Platform.environment['APP_VERSION'] ?? 'dev';\n  final port = int.tryParse(Platform.environment['PORT'] ?? '') ?? 8080;\n  print('启动 app $version，端口 $port');\n  print('pid=$pid');\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 macOS 编译的产物无法直接在 Linux 容器运行；AOT 产物与目标操作系统和 CPU 架构绑定，需在对应平台构建。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 服务端程序部署到 Linux 应使用什么构建命令？",
+        "a": "dart compile exe bin/server.dart -o build/server（在 Linux 上执行）"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码风格",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "遵循 Effective Dart：命名、文档注释、导入顺序与 API 设计都有明确建议",
+      "启用 lints 或 flutter_lints，把静态规则固化到 analysis_options.yaml",
+      "公开 API 写 /// 文档注释，避免无意义的 getter/setter 与过深嵌套",
+      "优先使用组合而非继承，优先不可变数据，异常只用于真正的异常情况而非流程控制"
     ],
-    "c": "// Dart教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 遵循 Effective Dart，并在 analysis_options.yaml 启用 lints\nimport 'package:meta/meta.dart';\n\n@immutable\nclass User {\n  const User({required this.id, required this.name});\n\n  final int id;\n  final String name;\n\n  @override\n  bool operator ==(Object other) =>\n      other is User && other.id == id && other.name == name;\n\n  @override\n  int get hashCode => Object.hash(id, name);\n}\n\nvoid main() {\n  const a = User(id: 1, name: 'Ada');\n  print(a == const User(id: 1, name: 'Ada'));\n}",
+    "et": "❌ 常见错误",
+    "ec": "忽略 analysis_options.yaml 的警告，会积累未使用导入、隐式 dynamic 等问题；应把 analyze 作为提交前必过关卡。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 官方推荐的分析规则集合包名？",
+        "a": "lints（Flutter 项目用 flutter_lints）"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Dart教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "夯实语法、空安全、集合与异步编程，是后续学习框架与服务端开发的基础",
+      "进阶学习 Isolate、FFI、Stream 背压与性能分析，理解运行时行为",
+      "工程化方面掌握测试、持续集成、发布与监控，才能独立维护生产环境的项目",
+      "方向选择：Flutter 客户端、Dart 服务端、命令行工具或全栈"
     ],
-    "c": "// Dart教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Dart教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "void main() {\n  final roadmap = <String, List<String>>{\n    '基础': ['语法', '集合', '空安全'],\n    '进阶': ['异步', 'Isolate', 'FFI'],\n    '工程': ['测试', 'CI', '发布'],\n    '框架': ['Flutter', 'shelf', 'Serverpod'],\n  };\n\n  roadmap.forEach((stage, topics) {\n    print('$stage: ${topics.join(' / ')}');\n  });\n\n  const next = '下一步：用 shelf 写 API，再用 Flutter 接入';\n  print(next);\n  // 官方文档：https://dart.dev/language\n}",
+    "et": "❌ 常见错误",
+    "ec": "只看教程不写项目，遇到异步错误与状态管理仍无从下手；应完成一个可部署的 CLI 或 Web 服务作为里程碑。",
     "q": [
       {
-        "q": "Dart教程的主要特点是什么？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "学习Dart教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Dart教程的主要应用领域？",
-        "a": "Flutter跨平台开发"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dart 学习后两个常见发展方向？",
+        "a": "Flutter 跨平台客户端与 Dart 服务端/命令行"
       }
     ]
   }

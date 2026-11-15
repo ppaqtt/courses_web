@@ -1,5 +1,4 @@
-window.TUTORIAL_DATA_rust = 
-[
+window.TUTORIAL_DATA_rust = [
   {
     "id": 1,
     "t": "Rust简介",
@@ -649,5 +648,24 @@ window.TUTORIAL_DATA_rust =
       "创建一个完整的Rust项目",
       "添加依赖到Cargo.toml"
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用模块：std::collections、std::fs、std::io、std::time、std::thread、std::sync",
+      "Cargo 管理依赖与工作区，Cargo.toml 声明 crate，Cargo.lock 锁定版本",
+      "测试用 cargo test；格式化 rustfmt；静态检查 clippy；调试 rust-gdb 或 lldb",
+      "运行：cargo run；构建：cargo build --release；测试：cargo test"
+    ],
+    "c": "use std::collections::HashMap;\nuse std::time::Duration;\n\nfn main() {\n    let mut v = vec![3, 1, 4, 1, 5];\n    v.sort();\n    println!(\"{:?}\", v);\n    println!(\"{}\", \"rust\".to_uppercase());\n    let mut freq = HashMap::new();\n    *freq.entry(\"rust\").or_insert(0) += 1;\n    println!(\"{:?}\", freq);\n    println!(\"{:?}\", Duration::from_secs(3));\n}\n\n// 工具链（终端执行）\n// 项目：cargo new app && cargo add serde\n// 运行：cargo run          构建：cargo build --release\n// 测试：cargo test         格式化：cargo fmt\n// 检查：cargo clippy -- -D warnings    调试：rust-gdb target/debug/app\n",
+    "et": "❌ 常见错误",
+    "ec": "把 Cargo.lock 从应用项目中删除，导致 CI 每次解析出不同依赖版本。二进制项目应提交 Cargo.lock。",
+    "q": [
+      {
+        "q": "Rust 中运行测试的命令是什么？",
+        "a": "cargo test"
+      }
+    ],
+    "id": 36
   }
 ];

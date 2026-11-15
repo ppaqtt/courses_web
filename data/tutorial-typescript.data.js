@@ -1,5 +1,4 @@
-window.TUTORIAL_DATA_typescript = 
-[
+window.TUTORIAL_DATA_typescript = [
   {
     "id": 1,
     "t": "TypeScript 入门",
@@ -836,5 +835,24 @@ window.TUTORIAL_DATA_typescript =
       "使用 Result 类型重写一个异步函数",
       "总结你在项目中应用 TypeScript 的经验"
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "标准库来自 ECMAScript 内置对象与 lib.d.ts 类型声明；Node 场景另装 @types/node",
+      "包管理用 npm/pnpm；tsconfig.json 控制编译目标、模块与严格模式",
+      "测试用 Vitest/Jest；格式化 Prettier；检查 ESLint + tsc --noEmit；调试 node --inspect",
+      "运行：npx tsc && node dist/app.js；开发：tsx watch app.ts"
+    ],
+    "c": "const nums: number[] = [3, 1, 4, 1, 5];\nnums.sort((a, b) => a - b);\nconsole.log(nums);\n\nconst freq = new Map<string, number>();\nfreq.set(\"ts\", (freq.get(\"ts\") ?? 0) + 1);\nconsole.log([...freq.entries()]);\n\nconsole.log(new Date().toISOString());\nconsole.log(JSON.stringify({ ok: true }));\n\n// 工具链（终端执行）\n// 初始化：npm init -y && npm i -D typescript @types/node\n// 构建：npx tsc         开发：npx tsx watch app.ts\n// 测试：npx vitest run  格式化：npx prettier --write .\n// 检查：npx eslint . && npx tsc --noEmit\n",
+    "et": "❌ 常见错误",
+    "ec": "只依赖编辑器类型提示而跳过 tsc --noEmit，CI 中仍可能因类型错误失败。应把类型检查加入构建流水线。",
+    "q": [
+      {
+        "q": "TypeScript 只做类型检查、不输出文件的命令是什么？",
+        "a": "tsc --noEmit"
+      }
+    ],
+    "id": 36
   }
 ];

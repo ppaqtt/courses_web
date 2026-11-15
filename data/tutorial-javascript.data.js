@@ -1,5 +1,4 @@
-window.TUTORIAL_DATA_javascript = 
-[
+window.TUTORIAL_DATA_javascript = [
   {
     "id": 1,
     "t": "JavaScript 简介",
@@ -690,5 +689,24 @@ window.TUTORIAL_DATA_javascript =
       "实现图片懒加载",
       "优化滚动事件处理"
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "内置对象速查：JSON、Date、Math、Map/Set、Object/Array 方法与 Intl 国际化",
+      "包管理用 npm/pnpm/yarn，package.json 管理依赖与脚本；node_modules 不入库",
+      "测试用 node --test 或 Vitest/Jest；格式化 Prettier；静态检查 ESLint；调试 node --inspect",
+      "运行：node app.js；安装依赖：npm install；执行脚本：npm run dev"
+    ],
+    "c": "// 标准库 / 内置 API 速查\nconst now = new Date().toISOString();\nconst data = { ok: true, nums: [1, 2, 3] };\nconsole.log(now);\nconsole.log(JSON.stringify(data));\nconsole.log(Object.entries(data));\nconsole.log(new Map([[\"a\", 1]]).get(\"a\"));\nconsole.log(Array.from({ length: 5 }, (_, i) => i * i));\n\n// 工具链（终端执行）\n// 包管理：npm init -y && npm install express\n// 测试：  node --test          或  npx vitest run\n// 格式化：npx prettier --write .\n// 检查：  npx eslint .\n// 调试：  node --inspect-brk app.js\n",
+    "et": "❌ 常见错误",
+    "ec": "直接提交 node_modules 或在不同 Node 版本间复用依赖，导致本地能跑、CI 失败。应提交 package-lock.json，并在 CI 中固定 Node 版本。",
+    "q": [
+      {
+        "q": "JavaScript 中把对象序列化为 JSON 字符串的方法是什么？",
+        "a": "JSON.stringify()"
+      }
+    ],
+    "id": 36
   }
 ];

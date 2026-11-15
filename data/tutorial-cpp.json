@@ -673,5 +673,24 @@
         "a": ""
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "STL 速查：vector/string/map/unordered_map 容器，algorithm 算法，chrono 时间，memory 智能指针",
+      "依赖管理用 vcpkg 或 Conan；构建用 CMake 生成 Makefile/Ninja 并管理编译选项",
+      "测试用 GoogleTest 或 Catch2；格式化 clang-format；调试 gdb/lldb；静态检查 clang-tidy",
+      "运行：cmake -B build && cmake --build build && ./build/app"
+    ],
+    "c": "#include <algorithm>\n#include <chrono>\n#include <iostream>\n#include <map>\n#include <string>\n#include <vector>\n\nint main() {\n    std::vector<int> v{3, 1, 4, 1, 5};\n    std::sort(v.begin(), v.end());\n    for (int n : v) std::cout << n << ' ';\n    std::cout << '\\n';\n    std::map<std::string, int> freq{{\"cpp\", 1}};\n    freq[\"cpp\"] += 1;\n    std::cout << freq[\"cpp\"] << '\\n';\n    auto now = std::chrono::system_clock::now();\n    std::cout << std::chrono::duration_cast<std::chrono::seconds>(\n        now.time_since_epoch()).count() << '\\n';\n}\n\n// 工具链（终端执行）\n// 依赖：vcpkg install fmt     构建：cmake -B build && cmake --build build\n// 测试：ctest --test-dir build  格式化：clang-format -i *.cpp\n// 调试：gdb ./build/app        静态检查：clang-tidy main.cpp\n",
+    "et": "❌ 常见错误",
+    "ec": "手写编译命令导致不同机器缺少头文件或链接参数。应使用 CMake 描述目标与依赖，让构建可复现。",
+    "q": [
+      {
+        "q": "C++ 中用于排序的算法在哪个标准头文件？",
+        "a": "<algorithm>"
+      }
+    ],
+    "id": 36
   }
 ]

@@ -1,0 +1,807 @@
+window.TUTORIAL_DATA_ocaml = [
+  {
+    "id": 1,
+    "t": "OCaml 简介与历史",
+    "p": [
+      "OCaml 诞生于 1996 年，由 INRIA 的 Caml 语言发展而来，融合函数式、命令式与面向对象",
+      "静态强类型加 Hindley-Milner 推断，代码通常无需写类型标注即可通过编译",
+      "拥有模块系统与函子（functor），可在编译期组合抽象，适合构建大型程序",
+      "广泛用于编译器、金融交易、静态分析与区块链，Jane Street 等公司重度使用"
+    ],
+    "c": "(* hello.ml\n   运行：ocaml hello.ml 或 dune exec ./hello.exe *)\nlet greet name = \"你好, \" ^ name\n\nlet () =\n  print_endline \"Hello, World!\";\n  print_endline (greet \"OCaml\");\n  (* 列表与高阶函数 *)\n  let squares = List.map (fun x -> x * x) [ 1; 2; 3; 4; 5 ] in\n  List.iter (Printf.printf \"%d \") squares;\n  print_newline ();\n  (* 模式匹配 *)\n  let describe n =\n    match n with\n    | 0 -> \"零\"\n    | n when n > 0 -> \"正数\"\n    | _ -> \"负数\"\n  in\n  Printf.printf \"42 是%s\\n\" (describe 42)",
+    "et": "❌ 常见错误",
+    "ec": "把 OCaml 当 Python 写，直接写 x = 1 赋值而不是 let x = 1。OCaml 的绑定必须用 let，顶层用 let () = 执行副作用，= 是比较运算符而不是赋值。",
+    "q": [
+      {
+        "q": "OCaml 文件顶层执行副作用通常怎么写？",
+        "a": "let () = ..."
+      },
+      {
+        "q": "OCaml 中 = 运算符表示什么？",
+        "a": "结构相等比较，不是赋值"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与开发工具链",
+    "p": [
+      "opam 是 OCaml 官方包管理器：opam init 初始化，opam switch create 4.14.1 创建独立编译器环境",
+      "dune 是现代构建系统：dune init proj demo 建项目，dune build 编译，dune exec 运行",
+      "utop 是增强交互环境：支持补全与类型查询，适合探索标准库与快速验证",
+      "ocamlformat 统一代码风格，ocaml-lsp-server 为编辑器提供补全、跳转与类型提示"
+    ],
+    "c": "(* 工具链命令速查\n   opam init\n   opam switch create 4.14.1\n   eval $(opam env)\n   opam install dune utop ocamlformat\n   dune init proj demo\n   cd demo && dune build && dune exec demo\n   dune utop                    进入带项目依赖的 utop\n   ocamlformat -i bin/main.ml   格式化\n   dune build @doc              生成文档\n*)\nlet () =\n  Printf.printf \"OCaml %s\\n\" Sys.ocaml_version;\n  Printf.printf \"运行: dune exec demo\\n\";\n  Printf.printf \"交互: dune utop 或 utop\\n\";\n  Printf.printf \"格式化: ocamlformat -i <file>\\n\";\n  Printf.printf \"文档: dune build @doc\\n\";\n  Printf.printf \"参数个数: %d\\n\" (Array.length Sys.argv)",
+    "et": "❌ 常见错误",
+    "ec": "切换 opam switch 后没有执行 eval $(opam env)，终端仍指向旧编译器，导致 dune 找不到包或版本不符。每次切换后都应重新加载环境，或在 shell 配置中自动加载。",
+    "q": [
+      {
+        "q": "OCaml 的官方包管理器是什么？",
+        "a": "opam"
+      },
+      {
+        "q": "OCaml 现代构建工具叫什么？",
+        "a": "dune"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "值与不可变绑定",
+    "p": [
+      "let x = expr 建立不可变绑定，同一作用域内不能重新赋值，只能通过 let 遮蔽创建新名字",
+      "let ... in ... 定义局部绑定，作用域延伸到表达式结束；顶层 let 则对整个文件可见",
+      "需要可变状态时用 ref：let r = ref 0，读取 !r，赋值 r := 1，作用域应尽量小",
+      "let () = expr 用于顶层执行返回 unit 的副作用，如打印与初始化"
+    ],
+    "c": "let radius = 2.0\nlet area = Float.pi *. radius *. radius\n\nlet () =\n  Printf.printf \"面积: %.2f\\n\" area;\n\n  (* 遮蔽：新绑定覆盖可见性 *)\n  let radius = radius *. 2.0 in\n  Printf.printf \"新半径: %.2f\\n\" radius;\n\n  (* 局部绑定 *)\n  let greeting = \"Hello\" and name = \"OCaml\" in\n  Printf.printf \"%s, %s\\n\" greeting name;\n\n  (* 显式可变引用 *)\n  let counter = ref 0 in\n  incr counter;\n  incr counter;\n  Printf.printf \"计数: %d\\n\" !counter;\n\n  let (x, y) = (3, 4) in\n  Printf.printf \"x=%d y=%d\\n\" x y",
+    "et": "❌ 常见错误",
+    "ec": "在 let 绑定后写 x <- x + 1 期望修改，编译器报“不是可变值”。普通绑定不可变，需要可变计数器时应使用 ref 并用 := 赋值，或直接写新的 let 绑定。",
+    "q": [
+      {
+        "q": "OCaml 中如何创建可变引用？",
+        "a": "let r = ref 0"
+      },
+      {
+        "q": "读取与写入 ref 的运算符？",
+        "a": "读取用 !r，写入用 r := v"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "类型系统与类型推断",
+    "p": [
+      "OCaml 静态强类型，编译器自动推断表达式类型，可用 (expr : type) 显式标注",
+      "基础类型：int、float、bool、char、string、unit；浮点运算必须用 +. 等专用运算符",
+      "函数类型写作 int -> string -> bool，箭头右结合；元组类型写作 int * string",
+      "类型推断偏向最通用类型，出现歧义时用标注消解，如 let f (x : float) = x +. 1.0"
+    ],
+    "c": "(* 推断为 int -> int *)\nlet double x = x * 2\n\n(* 显式标注 *)\nlet half (x : float) : float = x /. 2.0\n\ntype point = { x : float; y : float }\n\nlet distance (a : point) (b : point) =\n  let dx = a.x -. b.x in\n  let dy = a.y -. b.y in\n  sqrt (dx *. dx +. dy *. dy)\n\nlet () =\n  Printf.printf \"%d\\n\" (double 21);\n  Printf.printf \"%.2f\\n\" (half 5.0);\n  let p1 = { x = 0.0; y = 0.0 } in\n  let p2 = { x = 3.0; y = 4.0 } in\n  Printf.printf \"距离: %.1f\\n\" (distance p1 p2);\n  Printf.printf \"字符串长度: %d\\n\" (String.length \"OCaml\")",
+    "et": "❌ 常见错误",
+    "ec": "对 float 使用 + 或对 int 使用 +.，编译器报类型错误。OCaml 没有隐式数值转换与运算符重载：整数用 + - * /，浮点必须用 +. -. *. /.。",
+    "q": [
+      {
+        "q": "OCaml 的浮点加法运算符？",
+        "a": "+."
+      },
+      {
+        "q": "函数类型 int -> string 的含义？",
+        "a": "接收 int 参数，返回 string"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "算术运算符整数用 + - * / mod，浮点用 +. -. *. /.，两者不可混用",
+      "比较运算符 = <> < > 是结构比较，可比较列表、元组与记录；物理相等用 == 慎用",
+      "管道 |> 把左边值作为右边函数的最后一个参数，@@ 表示右结合的函数应用",
+      "布尔运算 && || 短路求值，not 取反；一切表达式都有值，if 与 match 也不例外"
+    ],
+    "c": "let () =\n  Printf.printf \"7 / 2 = %d\\n\" (7 / 2);\n  Printf.printf \"7 mod 2 = %d\\n\" (7 mod 2);\n  Printf.printf \"7.0 /. 2.0 = %.1f\\n\" (7.0 /. 2.0);\n  Printf.printf \"2.0 ** 10.0 = %.1f\\n\" (2.0 ** 10.0);\n\n  Printf.printf \"列表相等: %b\\n\" ([ 1; 2 ] = [ 1; 2 ]);\n  Printf.printf \"字符串比较: %b\\n\" (\"abc\" < \"abd\");\n\n  (* 管道：数据流从左到右 *)\n  let result =\n    [ 1; 2; 3; 4; 5; 6; 7; 8; 9; 10 ]\n    |> List.filter (fun x -> x mod 2 = 0)\n    |> List.map (fun x -> x * x)\n    |> List.fold_left ( + ) 0\n  in\n  Printf.printf \"偶数和平方: %d\\n\" result;\n\n  (* 函数组合 *)\n  let inc x = x + 1 in\n  let double x = x * 2 in\n  Printf.printf \"组合: %d\\n\" (double (inc 5))",
+    "et": "❌ 常见错误",
+    "ec": "用 = 做赋值或写 if x = 1 then x := 2，把比较当赋值。OCaml 的 = 是结构比较，赋值只有 let 绑定与 ref 的 :=；条件里的 = 若类型不匹配会直接编译失败。",
+    "q": [
+      {
+        "q": "OCaml 的管道运算符是什么？",
+        "a": "|>"
+      },
+      {
+        "q": "整数取余用什么运算符？",
+        "a": "mod"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串与字符",
+    "p": [
+      "字符串不可变，类型为 string，拼接用 ^，长度用 String.length，取子串用 String.sub",
+      "字符类型 char 用单引号，如 'a'；字符串用双引号，二者不能混用",
+      "Printf.sprintf 生成格式化字符串，Printf.printf 直接输出，格式符 %s %d %f %b",
+      "大量拼接用 Buffer 模块，避免 ^ 反复分配；必要时用 Bytes 做原地修改再转回 string"
+    ],
+    "c": "let () =\n  let name = \"OCaml\" in\n  Printf.printf \"长度: %d\\n\" (String.length name);\n  Printf.printf \"大写: %s\\n\" (String.uppercase_ascii name);\n  Printf.printf \"子串: %s\\n\" (String.sub name 0 3);\n  Printf.printf \"拼接: %s\\n\" (\"Hello, \" ^ name);\n\n  (* 按分隔符切分 *)\n  let parts = String.split_on_char ',' \"alpha,beta,gamma\" in\n  List.iter (fun s -> Printf.printf \"[%s]\" s) parts;\n  print_newline ();\n\n  (* 格式化 *)\n  let msg = Printf.sprintf \"%s 有 %d 个字符\" name (String.length name) in\n  Printf.printf \"%s\\n\" msg;\n\n  (* Buffer：大量拼接更高效 *)\n  let buf = Buffer.create 64 in\n  List.iter (fun s -> Buffer.add_string buf s; Buffer.add_char buf '-') parts;\n  Printf.printf \"%s\\n\" (Buffer.contents buf);\n\n  (* 字符与字符串 *)\n  Printf.printf \"首字符: %c\\n\" name.[0]",
+    "et": "❌ 常见错误",
+    "ec": "用 + 拼接字符串，或在字符串上做 name.[0] <- 'X' 修改。OCaml 字符串不可变，拼接必须用 ^；需要修改时用 Bytes.of_string 转成字节序列，改完再 Bytes.to_string。",
+    "q": [
+      {
+        "q": "字符串拼接运算符？",
+        "a": "^"
+      },
+      {
+        "q": "大量字符串拼接应使用哪个模块？",
+        "a": "Buffer"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "列表、元组与集合",
+    "p": [
+      "列表是同构单链表，写作 [1; 2; 3]，用 :: 头插，@ 拼接（代价与左表长度成正比）",
+      "列表操作集中在 List 模块：map、filter、fold_left、rev、length、nth、assoc",
+      "元组是固定长度异构组合，如 (1, \"a\")，用 let (a, b) = pair 解构",
+      "标准库提供 Map.Make 与 Set.Make 函子，需要先传入有序类型模块再使用"
+    ],
+    "c": "module IntMap = Map.Make (Int)\nmodule IntSet = Set.Make (Int)\n\nlet () =\n  let nums = [ 1; 2; 3 ] in\n  let more = 0 :: nums in\n  Printf.printf \"列表: %s\\n\" (String.concat \", \" (List.map string_of_int more));\n\n  (* 元组解构 *)\n  let pair = (1, \"one\") in\n  let n, label = pair in\n  Printf.printf \"%d = %s\\n\" n label;\n\n  (* 数组可原地修改 *)\n  let arr = [| 1; 2; 3 |] in\n  arr.(0) <- 10;\n  Printf.printf \"数组: %d\\n\" arr.(0);\n\n  (* Map 与 Set 函子 *)\n  let scores = IntMap.(empty |> add 1 \"Ada\" |> add 2 \"Linus\") in\n  Printf.printf \"查找: %s\\n\" (IntMap.find 1 scores);\n  let unique = IntSet.(empty |> add 3 |> add 1 |> add 2 |> add 1) in\n  Printf.printf \"集合大小: %d\\n\" (IntSet.cardinal unique)",
+    "et": "❌ 常见错误",
+    "ec": "用 list.[i] 访问列表元素，OCaml 不支持列表下标，会报语法或类型错误。应按模式匹配遍历，或改用 Array.get arr i / arr.(i)，随机访问频繁时直接用数组。",
+    "q": [
+      {
+        "q": "列表头部插入元素的运算符？",
+        "a": "::"
+      },
+      {
+        "q": "创建有序映射需要什么函子？",
+        "a": "Map.Make"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件与分支",
+    "p": [
+      "if ... then ... else ... 是表达式，两个分支必须同类型，else 不能省略（除非返回 unit）",
+      "match ... with 支持常量、变量、构造器、记录、列表与守卫 when，分支自上而下匹配",
+      "match 必须覆盖所有构造器，否则编译器给出警告；用 _ 兜底会降低穷尽性检查的价值",
+      "布尔表达式可直接作为条件，OCaml 没有真值概念，条件必须是 bool 类型"
+    ],
+    "c": "let grade score =\n  if score >= 90 then \"优秀\"\n  else if score >= 60 then \"及格\"\n  else \"不及格\"\n\ntype shape =\n  | Circle of float\n  | Rect of float * float\n\nlet area = function\n  | Circle r -> Float.pi *. r *. r\n  | Rect (w, h) -> w *. h\n\nlet describe = function\n  | 0 -> \"零\"\n  | n when n > 0 -> \"正数\"\n  | _ -> \"负数\"\n\nlet () =\n  Printf.printf \"%s\\n\" (grade 95);\n  Printf.printf \"面积: %.2f\\n\" (area (Circle 2.0));\n  Printf.printf \"%s\\n\" (describe (-3));\n  let label = if Sys.time () > 0.0 then \"运行中\" else \"异常\" in\n  Printf.printf \"%s\\n\" label",
+    "et": "❌ 常见错误",
+    "ec": "写 if x > 0 then print_endline \"正\" 而不写 else，在需要值的上下文里编译失败。若只为副作用，可让分支返回 unit；否则必须补全 else，保证 if 表达式有统一类型。",
+    "q": [
+      {
+        "q": "OCaml 的 if 是什么？",
+        "a": "表达式，两个分支必须类型相同"
+      },
+      {
+        "q": "match 分支中的守卫关键字？",
+        "a": "when"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "递归与高阶函数",
+    "p": [
+      "递归函数必须用 let rec 声明，否则函数体内无法引用自身",
+      "尾递归调用是函数最后一步，编译器可优化为循环；累加器模式是标准写法",
+      "List.fold_left 从左侧累积，List.fold_right 从右侧，注意后者不是尾递归",
+      "高阶函数让遍历与业务分离：map 变换、filter 筛选、iter 副作用、fold 聚合"
+    ],
+    "c": "let rec factorial n =\n  if n <= 1 then 1\n  else n * factorial (n - 1)\n(* 尾递归：累加器 *)\nlet factorial_tail n =\n  let rec loop acc k =\n    if k <= 1 then acc\n    else loop (acc * k) (k - 1)\n  in\n  loop 1 n\nlet () =\n  Printf.printf \"5! = %d\\n\" (factorial 5);\n  Printf.printf \"10! = %d\\n\" (factorial_tail 10);\n  let nums = List.init 6 (fun i -> i + 1) in\n  let sum_squares =\n    nums\n    |> List.filter (fun x -> x mod 2 = 0)\n    |> List.map (fun x -> x * x)\n    |> List.fold_left ( + ) 0\n  in\n  Printf.printf \"偶数平方和: %d\\n\" sum_squares;\n  let product = List.fold_left ( * ) 1 nums in\n  Printf.printf \"乘积: %d\\n\" product;\n  List.iter (Printf.printf \"%d \") nums;\n  print_newline ()",
+    "et": "❌ 常见错误",
+    "ec": "写递归时忘记 let rec，编译器提示“未绑定的值”。深层递归还应改为尾递归，否则大输入会栈溢出；OCaml 默认栈较小，处理长列表时优先用 fold_left。",
+    "q": [
+      {
+        "q": "声明递归函数的关键字？",
+        "a": "let rec"
+      },
+      {
+        "q": "哪个折叠函数是尾递归的？",
+        "a": "List.fold_left"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数定义与调用",
+    "p": [
+      "函数用 let f x = ... 定义，应用时参数以空格分隔：f 2 3，不需要括号与逗号",
+      "OCaml 函数默认柯里化，f 2 返回等待下一个参数的函数，便于部分应用",
+      "带标签参数 ~name 与可选参数 ?size 提升可读性，调用时可打乱顺序",
+      "互递归函数用 let rec ... and ...，同一 let 组内的函数可互相调用"
+    ],
+    "c": "let add x y = x + y\n\nlet greet ~greeting ~name = greeting ^ \", \" ^ name\n\nlet make_user ?(age = 0) name = (name, age)\n\nlet rec is_even n =\n  if n = 0 then true else is_odd (n - 1)\nand is_odd n =\n  if n = 0 then false else is_even (n - 1)\n\nlet () =\n  Printf.printf \"%d\\n\" (add 2 3);\n\n  (* 部分应用 *)\n  let add10 = add 10 in\n  Printf.printf \"%d\\n\" (add10 5);\n\n  (* 标签参数可换序 *)\n  Printf.printf \"%s\\n\" (greet ~name:\"Ada\" ~greeting:\"你好\");\n  let name, age = make_user \"Linus\" in\n  Printf.printf \"%s %d\\n\" name age;\n  let name, age = make_user ~age:36 \"Ada\" in\n  Printf.printf \"%s %d\\n\" name age;\n  Printf.printf \"10 是偶数: %b\\n\" (is_even 10)",
+    "et": "❌ 常见错误",
+    "ec": "定义 let add (x, y) = x + y 后又用 add 1 2 调用，类型不匹配。元组参数必须一次传完 add (1, 2)，需要部分应用时应使用柯里化定义 let add x y = x + y。",
+    "q": [
+      {
+        "q": "OCaml 函数调用的写法？",
+        "a": "f x y，空格分隔，不加括号与逗号"
+      },
+      {
+        "q": "互递归函数如何声明？",
+        "a": "let rec f ... and g ..."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "函数进阶：柯里化与管道",
+    "p": [
+      "部分应用：只传部分参数得到新函数，如 let inc = add 1，是配置与复用的基础",
+      "管道 x |> f 等价 f x，多步处理时按数据流顺序书写；@@ 表示 f @@ x 的低优先级应用",
+      "函数组合没有内置运算符，通常写 let compose f g x = f (g x) 或直接用管道",
+      "闭包捕获外层绑定，OCaml 绑定不可变，闭包看到的是捕获时的值"
+    ],
+    "c": "let clamp lo hi value = min hi (max lo value)\nlet parse_int s =\n  match int_of_string_opt s with\n  | Some v -> Some v\n  | None -> None\nlet compose f g x = f (g x)\nlet () =\n  (* 部分应用 *)\n  let clamp_0_100 = clamp 0 100 in\n  Printf.printf \"%d\\n\" (clamp_0_100 150);\n  (* 管道 *)\n  let result =\n    \"42\"\n    |> parse_int\n    |> Option.map (fun v -> v * 2)\n    |> Option.value ~default:0\n  in\n  Printf.printf \"解析结果: %d\\n\" result;\n  (* 组合 *)\n  let normalize = compose (fun x -> x + 1) clamp_0_100 in\n  Printf.printf \"%d\\n\" (normalize 200);\n  (* 闭包 *)\n  let factor = 3 in\n  let scale x = x * factor in\n  Printf.printf \"%d\\n\" (List.fold_left (fun acc x -> acc + scale x) 0 [ 1; 2; 3 ])",
+    "et": "❌ 常见错误",
+    "ec": "把管道写成 f |> x，或在管道中传入额外参数导致类型错误。管道左侧是数据、右侧是只差最后一个参数的函数；需要额外参数时用匿名函数 fun x -> f x extra 包装。",
+    "q": [
+      {
+        "q": "OCaml 的管道运算符？",
+        "a": "|>"
+      },
+      {
+        "q": "部分应用的含义？",
+        "a": "只传部分参数，得到等待剩余参数的新函数"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "模式匹配",
+    "p": [
+      "match e with 支持常量、变量、构造器、记录、元组、列表与 or 模式 p1 | p2",
+      "列表模式 []、x :: rest、[a; b] 可精确描述结构，比手动判断长度更安全",
+      "as 绑定整个匹配值，如 (Circle r as shape) -> ...，守卫 when 进一步限制条件",
+      "function 关键字省略参数直接写分支，等价于 fun x -> match x with"
+    ],
+    "c": "type shape =\n  | Circle of float\n  | Rect of float * float\n\nlet area = function\n  | Circle r -> Float.pi *. r *. r\n  | Rect (w, h) -> w *. h\n\nlet describe_list = function\n  | [] -> \"空\"\n  | [ x ] -> Printf.sprintf \"单个: %d\" x\n  | x :: _ -> Printf.sprintf \"首元素: %d\" x\n\nlet classify_point = function\n  | (0, 0) -> \"原点\"\n  | (x, 0) -> Printf.sprintf \"x 轴上: %d\" x\n  | (0, y) -> Printf.sprintf \"y 轴上: %d\" y\n  | (x, y) when x = y -> \"对角线上\"\n  | _ -> \"其他位置\"\nlet () =\n  Printf.printf \"%.2f\\n\" (area (Circle 2.0));\n  Printf.printf \"%.2f\\n\" (area (Rect (3.0, 4.0)));\n  Printf.printf \"%s\\n\" (describe_list [ 9; 8; 7 ]);\n  Printf.printf \"%s\\n\" (classify_point (0, 5));\n  Printf.printf \"%s\\n\" (classify_point (5, 5))",
+    "et": "❌ 常见错误",
+    "ec": "match 分支没有覆盖所有构造器，编译器给出非穷尽警告，运行时遇到漏掉的值抛 Match_failure。应补全所有构造器，或显式写 _ 分支并说明兜底语义。",
+    "q": [
+      {
+        "q": "省略参数直接写匹配的关键字？",
+        "a": "function"
+      },
+      {
+        "q": "在模式中绑定整个匹配值的语法？",
+        "a": "p as name"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "自定义类型与记录",
+    "p": [
+      "变体类型 type color = Red | Green | RGB of int * int * int 表示多选一，可携带数据",
+      "记录 type user = { name : string; age : int } 是具名字段组合，如 { name = “Ada”; age = 36 }",
+      "记录更新 { user with age = 37 } 返回新记录，原记录保持不变（浅拷贝）",
+      "类型可递归定义，如 type tree = Leaf | Node of tree * int * tree，配合模式匹配遍历"
+    ],
+    "c": "type role = Admin | Member | Guest\n\ntype user =\n  { name : string\n  ; age : int\n  ; role : role }\n\ntype tree =\n  | Leaf\n  | Node of tree * int * tree\nlet rec insert tree value =\n  match tree with\n  | Leaf -> Node (Leaf, value, Leaf)\n  | Node (l, v, r) ->\n    if value < v then Node (insert l value, v, r)\n    else if value > v then Node (l, v, insert r value)\n    else tree\nlet () =\n  let u = { name = \"Ada\"; age = 36; role = Admin } in\n  let older = { u with age = 37 } in\n  Printf.printf \"%s %d %s\\n\" older.name older.age\n    (match older.role with Admin -> \"管理员\" | Member -> \"成员\" | Guest -> \"访客\");\n  match List.fold_left insert Leaf [ 5; 3; 8; 1 ] with\n  | Node (_, root, _) -> Printf.printf \"根节点: %d\\n\" root\n  | Leaf -> print_endline \"空树\"",
+    "et": "❌ 常见错误",
+    "ec": "在记录字段之间用分号后忘记写字段名，或在构造时漏写字段导致编译器报“字段未定义”。记录构造必须写全字段或使用 { old with field = v } 更新语法。",
+    "q": [
+      {
+        "q": "记录更新的语法？",
+        "a": "{ record with field = value }"
+      },
+      {
+        "q": "变体类型用什么分隔构造器？",
+        "a": "竖线 |"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "多态与类型参数",
+    "p": [
+      "类型参数用 'a 表示，如 'a list、('a, 'b) result，函数可自动推断为多态",
+      "let identity x = x 推断为 'a -> 'a，对所有类型都成立，无需显式声明泛型",
+      "类型约束写作 ('a -> 'b) -> 'a list -> 'b list，也可用 :> 表示子类型强制转换",
+      "参数化类型与函子结合可构建通用容器，如 type 'a box = Box of 'a"
+    ],
+    "c": "type 'a box = Box of 'a\n\nlet unbox (Box x) = x\n\nlet identity x = x\n\nlet rec map f = function\n  | [] -> []\n  | x :: xs -> f x :: map f xs\n\nlet pair_up a b = (a, b)\n\nlet apply_twice f x = f (f x)\n\nlet () =\n  let b = Box 42 in\n  Printf.printf \"拆箱: %d\\n\" (unbox b);\n  Printf.printf \"恒等: %s\\n\" (identity \"hi\");\n  Printf.printf \"映射: %s\\n\" (String.concat \",\" (map string_of_int [ 1; 2; 3 ]));\n  Printf.printf \"配对: %d %s\\n\" (fst (pair_up 1 \"one\")) (snd (pair_up 1 \"one\"));\n  Printf.printf \"两次: %d\\n\" (apply_twice (fun x -> x * 2) 5);\n  let nested = Box (Box \"深层\") in\n  match nested with\n  | Box (Box s) -> Printf.printf \"%s\\n\" s",
+    "et": "❌ 常见错误",
+    "ec": "在泛型函数里对 'a 使用 + 或比较，编译器报“类型 'a 与 int 不兼容”。OCaml 没有类型类，多态函数只能使用对所有类型都成立的操作，特定运算需具体类型或函子。",
+    "q": [
+      {
+        "q": "OCaml 类型参数的写法？",
+        "a": "'a（如 'a list）"
+      },
+      {
+        "q": "为什么泛型函数不能直接用 +？",
+        "a": "OCaml 没有类型类，+ 只适用于 int"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "模块与抽象",
+    "p": [
+      "module Name = struct ... end 定义模块，外部用 Name.value 访问，可嵌套组织大型代码",
+      "module type S = sig ... end 定义模块签名，module M : S = struct ... end 隐藏实现细节",
+      "尽量为每个 .ml 文件配套 .mli 接口文件，只暴露稳定 API，内部类型保持抽象",
+      "模块可包含类型、值、子模块与函子，是 OCaml 组织与封装的核心机制"
+    ],
+    "c": "module type COUNTER = sig\n  type t\n  val empty : t\n  val incr : t -> t\n  val value : t -> int\nend\n\nmodule Counter : COUNTER = struct\n  type t = int\n  let empty = 0\n  let incr x = x + 1\n  let value x = x\nend\n\nmodule Util = struct\n  let twice f x = f (f x)\n  let clamp lo hi v = min hi (max lo v)\nend\n\nlet () =\n  let c = Counter.(incr (incr empty)) in\n  Printf.printf \"计数: %d\\n\" (Counter.value c);\n  Printf.printf \"两次: %d\\n\" (Util.twice (fun x -> x + 3) 1);\n  Printf.printf \"裁剪: %d\\n\" (Util.clamp 0 100 150);\n  Printf.printf \"抽象类型无法直接相加，只能通过接口操作\\n\"",
+    "et": "❌ 常见错误",
+    "ec": "在签名中把内部类型写成 type t = int，等于暴露实现，外部代码可随意构造非法值。应只写 type t，让构造与访问都通过模块函数完成，才能保证不变量。",
+    "q": [
+      {
+        "q": "定义模块签名的关键字？",
+        "a": "module type"
+      },
+      {
+        "q": "隐藏模块内部类型的写法？",
+        "a": "在 sig 中只写 type t，不写具体定义"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "接口、函子与一等模块",
+    "p": [
+      "OCaml 没有类型类，抽象接口通过 module type 与函子实现，编译期完成组合",
+      "函子 module Make (X : S) = struct ... end 接收模块参数，返回新模块，可复用实现",
+      "一等模块用 (module M : S) 打包、module unpack = (val m : S) 解包，支持运行时选择实现",
+      "对象与类也可表达接口，但日常更常用模块签名与函数记录，后者更轻量"
+    ],
+    "c": "module type STORAGE = sig\n  type t\n  val empty : t\n  val add : int -> string -> t -> t\n  val find : int -> t -> string option\nend\nmodule Memory : STORAGE = struct\n  type t = (int * string) list\n  let empty = []\n  let add k v t = (k, v) :: t\n  let find k t = List.assoc_opt k t\nend\nmodule Reporter (S : STORAGE) = struct\n  let report keys store =\n    keys\n    |> List.filter_map (fun k ->\n           match S.find k store with\n           | Some v -> Some (Printf.sprintf \"%d=%s\" k v)\n           | None -> None)\n    |> String.concat \", \"\nend\nmodule R = Reporter (Memory)\nlet () =\n  let store = Memory.(empty |> add 1 \"Ada\" |> add 2 \"Linus\") in\n  Printf.printf \"%s\\n\" (R.report [ 1; 2; 3 ] store)",
+    "et": "❌ 常见错误",
+    "ec": "以为可以像 Haskell 那样给类型定义 typeclass 实例，结果找不到语法。OCaml 用模块签名加函子做抽象，需要多态行为时应传入模块参数或函数记录。",
+    "q": [
+      {
+        "q": "OCaml 中接收模块参数并返回模块的结构叫什么？",
+        "a": "函子（functor）"
+      },
+      {
+        "q": "把模块打包成值用什么语法？",
+        "a": "(module M : S)"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理：option、result 与异常",
+    "p": [
+      "option 类型 Some v | None 表示可能缺失的值，用 Option.map/bind/value 组合",
+      "result 类型 Ok v | Error e 表示可能失败的计算，错误类型可自定义为变体",
+      "异常用于真正的意外，定义 exception 并用 try ... with 捕获，也可用 raise 抛出",
+      "可预期失败优先返回 result，让调用方必须处理；异常只留给程序缺陷与外部故障"
+    ],
+    "c": "type parse_error =\n  | Empty\n  | Not_number of string\n  | Out_of_range of int\nlet parse_age text =\n  if String.trim text = \"\" then Error Empty\n  else\n    match int_of_string_opt text with\n    | None -> Error (Not_number text)\n    | Some n when n < 0 || n > 150 -> Error (Out_of_range n)\n    | Some n -> Ok n\nlet describe = function\n  | Ok age -> Printf.sprintf \"年龄 %d\" age\n  | Error Empty -> \"输入为空\"\n  | Error (Not_number s) -> \"不是数字: \" ^ s\n  | Error (Out_of_range n) -> Printf.sprintf \"超出范围: %d\" n\nexception Config_error of string\nlet load_config path =\n  if not (Sys.file_exists path) then raise (Config_error (\"缺少文件: \" ^ path));\n  \"默认配置\"\nlet () =\n  List.iter (fun s -> Printf.printf \"%s\\n\" (describe (parse_age s))) [ \"36\"; \"\"; \"abc\"; \"999\" ];\n  Printf.printf \"%s\\n\" (match parse_age \"21\" with Ok n -> string_of_int (n * 2) | Error _ -> \"解析失败\");\n  (try ignore (load_config \"missing.conf\")\n   with Config_error msg -> Printf.printf \"捕获: %s\\n\" msg)",
+    "et": "❌ 常见错误",
+    "ec": "用异常表达可预期的业务失败，如找不到用户就 raise，调用方容易漏捕获。可预期失败应返回 result 并由调用方分支处理，异常只用于真正的异常情况。",
+    "q": [
+      {
+        "q": "表示可能缺失值的类型？",
+        "a": "option（Some/None）"
+      },
+      {
+        "q": "捕获异常的关键字？",
+        "a": "try ... with"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件与 IO 操作",
+    "p": [
+      "open_in/open_out 打开文本通道，input_line 逐行读取，output_string 写入，close_in/close_out 关闭",
+      "小文件可一次读取：in_channel_length 配合 really_input_string，避免逐行拼接",
+      "Fun.protect ~finally 保证异常时也关闭通道，是 OCaml 5 之前就有的资源管理方式",
+      "路径用 Filename.concat 与 Filename.temp_file 构造，跨平台且避免手写分隔符"
+    ],
+    "c": "let path = Filename.temp_file \"ocaml_demo\" \".txt\"\nlet write_file () =\n  let oc = open_out path in\n  Fun.protect\n    ~finally:(fun () -> close_out oc)\n    (fun () ->\n       output_string oc \"第一行\\n\";\n       output_string oc \"第二行\\n\")\nlet read_lines () =\n  let ic = open_in path in\n  Fun.protect\n    ~finally:(fun () -> close_in ic)\n    (fun () ->\n       let rec loop acc =\n         match input_line ic with\n         | line -> loop (line :: acc)\n         | exception End_of_file -> List.rev acc\n       in\n       loop [])\nlet () =\n  write_file ();\n  let lines = read_lines () in\n  List.iter (Printf.printf \"行: %s\\n\") lines;\n  Printf.printf \"大小: %d 字节\\n\" (Unix.stat path).Unix.st_size;\n  Sys.remove path",
+    "et": "❌ 常见错误",
+    "ec": "打开文件后忘记关闭，或异常路径下没有释放通道，导致文件描述符泄漏。应使用 Fun.protect 包裹读写逻辑，在 ~finally 中关闭通道，保证任何情况下都能释放。",
+    "q": [
+      {
+        "q": "逐行读取的函数？",
+        "a": "input_line"
+      },
+      {
+        "q": "保证资源释放的函数？",
+        "a": "Fun.protect"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式",
+    "p": [
+      "标准库不含正则，Str 模块随编译器提供，需在 dune 中写 (libraries str) 并 open Str",
+      "Str.regexp 编译模式，search_forward 从位置查找，matched_string 取匹配文本",
+      "Str.string_match 要求从字符串开头匹配，做全串校验时用它并检查 match_end = length",
+      "Str.global_replace 全局替换，Str.split 按模式切分；复杂需求可用 Re 库获得更好性能"
+    ],
+    "c": "let email_re =\n  Str.regexp \"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z][A-Za-z]+\"\n\nlet extract_emails text =\n  let rec loop pos acc =\n    try\n      let _ = Str.search_forward email_re text pos in\n      let matched = Str.matched_string text in\n      loop (Str.match_end ()) (matched :: acc)\n    with Not_found -> List.rev acc\n  in\n  loop 0 []\n\nlet normalize text =\n  Str.global_replace (Str.regexp \"[ \\t\\n\\r]+\") \" \" (String.trim text)\n\nlet () =\n  let text = \"联系 ada@example.com 或 bob@test.org 获取帮助\" in\n  List.iter (Printf.printf \"邮箱: %s\\n\") (extract_emails text);\n  Printf.printf \"归一化: %s\\n\" (normalize \"hello   world\\n\\tagain\");\n  let re = Str.regexp \"\\\\([0-9]+\\\\)-\\\\([0-9]+\\\\)\" in\n  if Str.string_match re \"2026-11\" 0 then\n    Printf.printf \"年=%s 月=%s\\n\" (Str.matched_group 1 \"2026-11\")\n      (Str.matched_group 2 \"2026-11\")",
+    "et": "❌ 常见错误",
+    "ec": "用 Str.string_match 在长文本中查找子串，它只从位置 0 开始匹配，找不到就返回 false。需要搜索任意位置时应使用 Str.search_forward，并循环推进匹配结束位置。",
+    "q": [
+      {
+        "q": "Str 模块中在任意位置搜索的函数？",
+        "a": "Str.search_forward"
+      },
+      {
+        "q": "使用 Str 模块需要在 dune 中声明什么？",
+        "a": "(libraries str)"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "项目结构与包管理",
+    "p": [
+      "opam 管理编译器与包：opam install 包名，opam list 查看已装，opam switch 管理多版本环境",
+      "dune-project 声明项目元数据与 dune 版本，src/dune 描述库与可执行文件的构建规则",
+      "dune 的 libraries 字段声明依赖，模块自动按目录组织，无需手写源文件列表",
+      "发布库需 *.opam 文件描述依赖与版本，opam pin add . 可本地安装并测试打包"
+    ],
+    "c": "(* dune-project\n   (lang dune 3.0)\n   (name demo)\n   (generate_opam_files true)\n   bin/dune\n   (executable\n    (name main)\n    (libraries demo str))\n   lib/dune\n   (library\n    (name demo)\n    (libraries str))\n   demo.opam\n   opam-version: \"2.0\"\n   depends: [\n     \"ocaml\" {>= \"4.12\"}\n     \"dune\" {>= \"3.0\"}\n     \"str\"\n   ]\n*)\nlet () =\n  Printf.printf \"构建: dune build\\n\";\n  Printf.printf \"测试: dune test\\n\";\n  Printf.printf \"依赖: opam install . --deps-only\\n\";\n  Printf.printf \"OCaml 版本: %s\\n\" Sys.ocaml_version",
+    "et": "❌ 常见错误",
+    "ec": "在 dune 文件中漏写 libraries 就使用 Str 或 Lwt，编译报 Unbound module。第三方库必须在对应库或可执行文件的 libraries 字段声明，并先用 opam 安装。",
+    "q": [
+      {
+        "q": "OCaml 包管理器是什么？",
+        "a": "opam"
+      },
+      {
+        "q": "dune 中声明依赖的字段？",
+        "a": "libraries"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "包管理 opam（install/list/switch/pin）；构建 dune build；运行 dune exec；测试 dune test",
+      "测试 Alcotest 或 OUnit2；格式化 ocamlformat；文档 odoc（dune build @doc）",
+      "调试 ocamldebug 或 OCAMLRUNPARAM=b 输出回溯；性能用 perf、landmarks 与 Gc.stat",
+      "常用模块：List、Array、String、Bytes、Hashtbl、Map/Set、Printf、Filename、Sys、Unix"
+    ],
+    "c": "module IntMap = Map.Make (Int)\n\nlet () =\n  (* 构建: dune build   运行: dune exec demo   测试: dune test\n     包管理: opam install / opam switch    格式化: ocamlformat -i file.ml\n     文档: dune build @doc                调试: ocamldebug 或 OCAMLRUNPARAM=b *)\n  let nums = [ 3; 1; 4; 1; 5 ] in\n  Printf.printf \"排序: %s\\n\"\n    (String.concat \",\" (List.map string_of_int (List.sort compare nums)));\n  Printf.printf \"去重: %d\\n\" (List.length (List.sort_uniq compare nums));\n  Printf.printf \"最大值: %d\\n\" (List.fold_left max min_int nums);\n\n  let table = List.fold_left (fun m (k, v) -> IntMap.add k v m) IntMap.empty\n      [ (1, \"Ada\"); (2, \"Linus\") ] in\n  Printf.printf \"查找: %s\\n\" (Option.value ~default:\"?\" (IntMap.find_opt 2 table));\n\n  let ht = Hashtbl.create 16 in\n  Hashtbl.add ht \"a\" 1;\n  Printf.printf \"哈希表: %d\\n\" (Hashtbl.find ht \"a\");\n  Printf.printf \"时间: %.3f\\n\" (Sys.time ())",
+    "et": "❌ 常见错误",
+    "ec": "在需要频繁随机访问时仍用 list，导致 O(n) 查找拖慢程序。应根据场景选择：顺序遍历用 list，随机访问用 array，键值索引用 Hashtbl 或 Map，字符串拼接用 Buffer。",
+    "q": [
+      {
+        "q": "OCaml 运行测试的命令？",
+        "a": "dune test"
+      },
+      {
+        "q": "查看 GC 统计的模块？",
+        "a": "Gc（Gc.stat）"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与异步",
+    "p": [
+      "OCaml 4.x 运行时是单线程，Lwt 用协作式调度实现高并发 IO，await 让出执行权",
+      "Lwt_main.run 启动事件循环，Lwt_unix.sleep 模拟异步等待，Lwt.join 等待全部完成",
+      "Lwt_list.map_p 并行执行映射，Lwt.pick 取最快完成的任务，异常用 Lwt.catch 捕获",
+      "OCaml 5 引入多核 Domain 与 effect handler，CPU 密集并行应使用 Domain.spawn"
+    ],
+    "c": "open Lwt.Infix\n\nlet fetch id =\n  Lwt_unix.sleep 0.1 >|= fun () -> id * id\n\nlet () =\n  let results =\n    List.init 5 (fun i -> i + 1)\n    |> Lwt_list.map_p fetch\n    |> Lwt_main.run\n  in\n  Printf.printf \"结果: %s\\n\"\n    (String.concat \", \" (List.map string_of_int results));\n\n  let start = Unix.gettimeofday () in\n  Lwt_main.run\n    (Lwt.join\n       [ Lwt_unix.sleep 0.1; Lwt_unix.sleep 0.1; Lwt_unix.sleep 0.1 ]);\n  Printf.printf \"三个 sleep 并发耗时约 %.2fs\\n\" (Unix.gettimeofday () -. start);\n\n  Lwt_main.run\n    (Lwt.catch\n       (fun () -> Lwt.fail (Failure \"boom\"))\n       (fun ex -> Printf.printf \"捕获: %s\\n\" (Printexc.to_string ex); Lwt.return_unit))",
+    "et": "❌ 常见错误",
+    "ec": "在 Lwt 代码里调用 Unix.sleep 或做长时间同步计算，会阻塞整个事件循环，所有协程都停住。IO 必须用 Lwt_unix 提供的异步版本，CPU 密集任务交给线程池或 OCaml 5 的 Domain。",
+    "q": [
+      {
+        "q": "启动 Lwt 事件循环的函数？",
+        "a": "Lwt_main.run"
+      },
+      {
+        "q": "并行映射列表的 Lwt 函数？",
+        "a": "Lwt_list.map_p"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化",
+    "p": [
+      "优先用数组或 Bytes 处理数值与字节，避免不可变字符串与链表的分配开销",
+      "尾递归避免栈增长，fold_left 优于 fold_right；深层递归也可改写成显式栈",
+      "减少中间列表：用 Seq 惰性处理大数据，或直接一次遍历完成过滤与聚合",
+      "先测量再优化：Sys.time、Gc.stat、perf 或 landmarks 给出数据，flambda 可提升内联效果"
+    ],
+    "c": "let sum_list n =\n  let rec loop acc i =\n    if i > n then acc else loop (acc + i) (i + 1)\n  in\n  loop 0 1\nlet sum_array n =\n  let arr = Array.init n (fun i -> i + 1) in\n  Array.fold_left ( + ) 0 arr\nlet build_buffer n =\n  let buf = Buffer.create (n * 4) in\n  for i = 1 to n do\n    Buffer.add_string buf (string_of_int i);\n    Buffer.add_char buf ','\n  done;\n  Buffer.contents buf\nlet time label f =\n  let t0 = Sys.time () in\n  let result = f () in\n  Printf.printf \"%s: %.4fs, 结果 %d\\n\" label (Sys.time () -. t0) result\nlet () =\n  time \"尾递归\" (fun () -> sum_list 1000000);\n  time \"数组\" (fun () -> sum_array 1000000);\n  let stat = Gc.stat () in\n  Printf.printf \"堆字数: %.0f, 次代回收: %d\\n\" stat.Gc.minor_words stat.Gc.minor_collections;\n  Printf.printf \"Buffer 长度: %d\\n\" (String.length (build_buffer 1000))",
+    "et": "❌ 常见错误",
+    "ec": "在热点循环里用 @ 或 ^ 不断追加，导致每次复制整个结构，复杂度退化为 O(n²)。应改为头插后 List.rev，或使用 Buffer/数组累积，并用计时验证优化是否有效。",
+    "q": [
+      {
+        "q": "查看 GC 统计的函数？",
+        "a": "Gc.stat"
+      },
+      {
+        "q": "大量字符串拼接应使用什么？",
+        "a": "Buffer"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试：Alcotest",
+    "p": [
+      "Alcotest 是轻量测试框架，test_case 定义用例，check 断言并提供失败信息",
+      "测试按组组织：Alcotest.run 接收组名与用例列表，输出彩色结果与统计",
+      "覆盖正常路径、边界与错误分支，result 的 Error 分支尤其要断言具体错误构造器",
+      "QCheck 做基于属性的随机测试，适合验证排序、解析等函数的普遍性质"
+    ],
+    "c": "let add x y = x + y\n\nlet safe_div a b =\n  if b = 0 then Error \"division_by_zero\" else Ok (a / b)\n\nlet test_add () =\n  Alcotest.(check int) \"2 + 3\" 5 (add 2 3);\n  Alcotest.(check int) \"负数相加\" (-5) (add (-2) (-3))\n\nlet test_div () =\n  Alcotest.(check (result int string)) \"正常除法\" (Ok 3) (safe_div 6 2);\n  Alcotest.(check (result int string)) \"除零\" (Error \"division_by_zero\") (safe_div 1 0)\n\nlet () =\n  Alcotest.run \"math\"\n    [ ( \"add\",\n        [ Alcotest.test_case \"加法\" `Quick test_add ] );\n      ( \"div\",\n        [ Alcotest.test_case \"除法\" `Quick test_div ] ) ]",
+    "et": "❌ 常见错误",
+    "ec": "只测试成功路径而忽略错误分支，导致除零、空输入等问题上线才暴露。应为每个 result 的 Error 分支写断言，并覆盖边界值，如 0、负数与超长输入。",
+    "q": [
+      {
+        "q": "Alcotest 中定义单个测试用例的函数？",
+        "a": "Alcotest.test_case"
+      },
+      {
+        "q": "运行 Alcotest 测试套件的函数？",
+        "a": "Alcotest.run"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "OCAMLRUNPARAM=b 让未捕获异常打印回溯，配合 Printexc.record_backtrace true 记录调用栈",
+      "ocamldebug 支持断点、单步与反向执行，需用 -g 编译并在 dune 中开启调试信息",
+      "utop 中 #use \"file.ml\" 加载脚本，#show_val 查看绑定，#trace 跟踪函数调用",
+      "日志与断言结合：assert false 标记不可能路径，failwith 带上下文信息便于定位"
+    ],
+    "c": "let () = Printexc.record_backtrace true\n\nlet divide a b =\n  if b = 0 then failwith \"divide: 除数不能为零\";\n  a / b\n\nlet buggy_sum = function\n  | [] -> failwith \"buggy_sum: 空列表没有首元素\"\n  | x :: xs -> x + List.fold_left ( + ) 0 xs\n\nlet () =\n  Printf.printf \"divide = %d\\n\" (divide 10 2);\n\n  (try ignore (buggy_sum [])\n   with Failure msg ->\n     Printf.printf \"异常: %s\\n\" msg;\n     print_string (Printexc.get_backtrace ()));\n  (* utop 中可执行：\n     #use \"debug_demo.ml\";;\n     #show_val divide;;\n     #trace divide;; *)\n  Printf.printf \"调试提示: OCAMLRUNPARAM=b dune exec demo\\n\";\n  Printf.printf \"断言: 仅在条件成立时继续\\n\";\n  assert (divide 6 3 = 2);\n  Printf.printf \"断言通过\\n\"",
+    "et": "❌ 常见错误",
+    "ec": "异常信息只写 failwith \"error\"，线上完全看不出上下文。应在消息中包含函数名、参数与期望条件，并用 OCAMLRUNPARAM=b 打开回溯，必要时记录结构化日志。",
+    "q": [
+      {
+        "q": "让 OCaml 打印异常回溯的环境变量？",
+        "a": "OCAMLRUNPARAM=b"
+      },
+      {
+        "q": "开启回溯记录的函数？",
+        "a": "Printexc.record_backtrace"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "互操作与系统调用",
+    "p": [
+      "external 声明外部函数：external add : int -> int -> int = \"ocaml_add\"，由 C 代码实现",
+      "dune 用 foreign_stubs 指定 C 源文件与头文件，编译时自动链接进字节码或原生代码",
+      "C 侧用 CAMLparam/CAMLreturn 管理 GC 根，返回值用 Val_int/Int_val 转换",
+      "与 C++/Rust 交互可通过 C 封装层或 ctypes 库；简单系统调用也可直接用 Unix 模块"
+    ],
+    "c": "(* 文件：add_stubs.c\n   #include <caml/mlvalues.h>\n   #include <caml/memory.h>\n   CAMLprim value ocaml_add(value a, value b) {\n     CAMLparam2(a, b);\n     CAMLreturn(Val_int(Int_val(a) + Int_val(b)));\n   }\n\n   dune：\n   (library\n    (name math_stubs)\n    (foreign_stubs (language c) (names add_stubs)))\n*)\nexternal ocaml_add : int -> int -> int = \"ocaml_add\"\n\nlet () =\n  Printf.printf \"C 加法: %d\\n\" (ocaml_add 20 22);\n  Printf.printf \"系统命令: %s\\n\"\n    (match Sys.command \"echo interop\" with 0 -> \"成功\" | n -> string_of_int n);\n  Printf.printf \"环境变量 HOME: %s\\n\"\n    (Option.value ~default:\"未设置\" (Sys.getenv_opt \"HOME\"));\n  Printf.printf \"平台: %s\\n\" Sys.os_type",
+    "et": "❌ 常见错误",
+    "ec": "在 C stub 中直接返回 OCaml 堆指针或用 malloc 内存而不注册 GC 根，导致对象被回收或内存泄漏。必须使用 CAMLparam/CAMLreturn 与 caml_stat_alloc 等托管接口。",
+    "q": [
+      {
+        "q": "声明 C 外部函数的 OCaml 关键字？",
+        "a": "external"
+      },
+      {
+        "q": "dune 中声明 C 源文件的字段？",
+        "a": "foreign_stubs"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "函数式架构与设计模式",
+    "p": [
+      "用变体类型建模领域状态，让非法状态无法构造，模式匹配负责穷尽处理",
+      "管道把业务拆成小步骤，result 串联让错误短路，避免深层嵌套",
+      "函子实现依赖注入：把存储、日志等模块作为参数传入，编译期完成组合",
+      "接口尽量窄，具体实现隐藏在签名后；测试时替换为内存实现即可，无需 mock 框架"
+    ],
+    "c": "type customer = { id : int; email : string; active : bool }\n\ntype error = User_not_found | Inactive | Invalid_email\nlet validate c = if c.active then Ok c else Error Inactive\nlet normalize c = { c with email = String.lowercase_ascii (String.trim c.email) }\nlet save c =\n  if String.contains c.email '@' then Ok c else Error Invalid_email\nlet process load id =\n  match load id with\n  | Error e -> Error e\n  | Ok c -> (\n      match validate c with\n      | Error e -> Error e\n      | Ok c ->\n        let c = normalize c in\n        save c)\nlet () =\n  let store = [ (1, { id = 1; email = \" Ada@Example.COM \"; active = true }) ] in\n  let load id = match List.assoc_opt id store with Some c -> Ok c | None -> Error User_not_found in\n  (match process load 1 with\n   | Ok c -> Printf.printf \"成功: %s\\n\" c.email\n   | Error _ -> print_endline \"失败\");\n  match process load 99 with\n  | Ok _ -> print_endline \"不应发生\"\n  | Error User_not_found -> print_endline \"预期: 未找到\"",
+    "et": "❌ 常见错误",
+    "ec": "为了套用设计模式引入大量类与接口，掩盖了简单的数据流。OCaml 应优先用变体、record 与函数组合表达业务，只有需要运行时替换实现时才引入一等模块。",
+    "q": [
+      {
+        "q": "OCaml 中表达多选一状态的核心类型？",
+        "a": "变体类型（variant）"
+      },
+      {
+        "q": "result 串联时处理 Ok 的常用函数？",
+        "a": "Result.bind"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问",
+    "p": [
+      "OCaml 访问 SQLite 用 sqlite3 包，PostgreSQL 用 postgresql 或 caqti，MySQL 用 mysql8",
+      "Sqlite3.db_open 打开数据库，exec 执行 DDL/DML，prepare/step/column 读取查询结果",
+      "所有外部输入都用参数绑定（bind），不要拼接 SQL 字符串，避免注入与语法错误",
+      "写操作放事务中：BEGIN/COMMIT 提升批量写入性能，失败时 ROLLBACK 保证一致性"
+    ],
+    "c": "let exec db sql =\n  match Sqlite3.exec db sql with\n  | Sqlite3.R_OK -> ()\n  | rc -> failwith (Printf.sprintf \"SQL 失败: %s (%s)\" sql (Sqlite3.errmsg db))\n\nlet query_users db =\n  let stmt = Sqlite3.prepare db \"SELECT id, name FROM users ORDER BY id\" in\n  let rec loop acc =\n    match Sqlite3.step stmt with\n    | Sqlite3.ROW -> loop ((Sqlite3.column_int stmt 0, Sqlite3.column_text stmt 1) :: acc)\n    | _ -> List.rev acc\n  in\n  let rows = loop [] in\n  ignore (Sqlite3.finalize stmt);\n  rows\n\nlet () =\n  let db = Sqlite3.db_open \":memory:\" in\n  exec db \"CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT NOT NULL)\";\n  exec db \"BEGIN\";\n  exec db \"INSERT INTO users (id, name) VALUES (1, 'Ada'), (2, 'Linus')\";\n  exec db \"COMMIT\";\n  List.iter (fun (id, name) -> Printf.printf \"%d: %s\\n\" id name) (query_users db)",
+    "et": "❌ 常见错误",
+    "ec": "用 sprintf 把用户输入拼进 SQL，既可能被注入又会在含引号时语法错误。应使用 Sqlite3.bind 与参数占位符 ?，让驱动负责转义与类型转换。",
+    "q": [
+      {
+        "q": "SQLite 查询中逐行推进的函数？",
+        "a": "Sqlite3.step"
+      },
+      {
+        "q": "防止 SQL 注入的关键做法？",
+        "a": "使用参数绑定而不是拼接字符串"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP",
+    "p": [
+      "Unix 模块提供套接字 API：socket、bind、listen、accept、read、write，需链接 unix 库",
+      "TCP 服务器循环 accept 并为每个连接创建处理函数，可用线程或 Lwt 提高并发",
+      "HTTP 客户端常用 cohttp-lwt-unix 或 httpaf，服务端常用 cohttp 与 Dream 框架",
+      "网络操作必须设置超时并处理连接重置，阻塞调用建议放进 Lwt 异步流程"
+    ],
+    "c": "let read_line_fd fd =\n  let buf = Buffer.create 128 in\n  let chunk = Bytes.create 1 in\n  let rec loop () =\n    match Unix.read fd chunk 0 1 with\n    | 0 -> Buffer.contents buf\n    | _ ->\n      let c = Bytes.get chunk 0 in\n      if c = '\\n' then Buffer.contents buf\n      else (Buffer.add_char buf c; loop ())\n  in\n  loop ()\nlet () =\n  let sock = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in\n  Unix.setsockopt sock Unix.SO_REUSEADDR true;\n  Unix.bind sock (Unix.ADDR_INET (Unix.inet_addr_loopback, 8080));\n  Unix.listen sock 5;\n  Printf.printf \"监听 127.0.0.1:8080\\n%!\";\n  let client, _ = Unix.accept sock in\n  let line = read_line_fd client in\n  Printf.printf \"收到: %s\\n%!\" line;\n  let response = \"echo: \" ^ line ^ \"\\n\" in\n  ignore (Unix.write_substring client response 0 (String.length response));\n  Unix.close client;\n  Unix.close sock",
+    "et": "❌ 常见错误",
+    "ec": "accept 后直接阻塞读取，遇到慢客户端会卡住整个服务，无法处理新连接。应为每个连接启动线程或使用 Lwt 异步，并设置读超时，避免资源被长期占用。",
+    "q": [
+      {
+        "q": "创建套接字的函数？",
+        "a": "Unix.socket"
+      },
+      {
+        "q": "OCaml 常用的 HTTP 客户端库？",
+        "a": "cohttp（cohttp-lwt-unix）"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "密码存储用 PBKDF2/argon2 等慢哈希并加随机盐，绝不使用 MD5 或 SHA1 直接存密码",
+      "Cryptokit 提供 SHA256、AES 与随机数，加密随机数必须用 Cryptokit.Random.secure_rng",
+      "外部输入校验长度、字符集与范围；SQL 用参数绑定，路径做规范化防目录穿越",
+      "敏感配置从环境变量或密钥服务读取，禁止写入源码、日志与版本库"
+    ],
+    "c": "let sha256_hex text =\n  Cryptokit.hash_string (Cryptokit.Hash.sha256 ()) text\n  |> Cryptokit.transform_string (Cryptokit.Hexa.encode ())\n\nlet random_salt () =\n  Cryptokit.Random.string Cryptokit.Random.secure_rng 16\n\nlet valid_username name =\n  let len = String.length name in\n  len >= 3 && len <= 32\n  && String.for_all\n       (fun c ->\n         (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')\n         || (c >= '0' && c <= '9') || c = '_')\n       name\n\nlet () =\n  let salt = random_salt () in\n  let stored = sha256_hex (salt ^ \"s3cret\") in\n  Printf.printf \"盐长度: %d\\n\" (String.length salt);\n  Printf.printf \"哈希: %s\\n\" (String.sub stored 0 16);\n  Printf.printf \"合法用户名: %b %b\\n\" (valid_username \"ada_99\")\n    (valid_username \"a!\");\n  Printf.printf \"建议: 生产用 argon2 或 PBKDF2 并设置迭代次数\\n",
+    "et": "❌ 常见错误",
+    "ec": "用 Random.int 或标准库 Random 生成盐与令牌，它可预测且不适合安全场景。必须使用 Cryptokit.Random.secure_rng 或 Mirage_crypto_rng 这类密码学安全随机源。",
+    "q": [
+      {
+        "q": "生成密码学安全随机数的 Cryptokit 接口？",
+        "a": "Cryptokit.Random.secure_rng"
+      },
+      {
+        "q": "为什么不能用 MD5 存密码？",
+        "a": "速度太快且可碰撞，容易被彩虹表与暴力破解"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "Sys.argv 是参数数组，arg.(0) 为程序名；手写解析时注意越界与未知选项",
+      "Arg 模块声明选项与匿名参数，自动生成 -help，解析错误时调用 usage 并退出",
+      "成功返回 0，参数或 IO 错误返回非 0；错误写 stderr，正常结果写 stdout",
+      "读大文件用通道逐行处理，统计结果用 Hashtbl 聚合，最后排序输出前 N 项"
+    ],
+    "c": "let count_words path =\n  let ic = open_in path in\n  let table = Hashtbl.create 1024 in\n  (try\n     while true do\n       input_line ic |> String.split_on_char ' '\n       |> List.iter (fun w ->\n              let w = String.trim w in\n              if w <> \"\" then\n                Hashtbl.replace table w\n                  (1 + Option.value ~default:0 (Hashtbl.find_opt table w)))\n     done\n   with End_of_file -> close_in ic);\n  Hashtbl.fold (fun k v acc -> (k, v) :: acc) table []\n  |> List.sort (fun (_, a) (_, b) -> compare b a)\n  |> fun xs -> List.filteri (fun i _ -> i < 10) xs\nlet () =\n  match Array.to_list Sys.argv with\n  | [ _; path ] ->\n    (try\n       List.iter (fun (w, n) -> Printf.printf \"%-20s %d\\n\" w n) (count_words path)\n     with Sys_error msg -> Printf.eprintf \"错误: %s\\n\" msg; exit 1)\n  | _ ->\n    Printf.eprintf \"用法: wordcount <文件>\\n\";\n    exit 2",
+    "et": "❌ 常见错误",
+    "ec": "直接访问 Sys.argv.(1) 而不检查长度，用户不传参数时抛 Invalid_argument 并打印堆栈。应先匹配参数列表，分别处理正常、文件不存在与用法错误。",
+    "q": [
+      {
+        "q": "OCaml 命令行参数数组？",
+        "a": "Sys.argv"
+      },
+      {
+        "q": "以指定状态码退出进程的函数？",
+        "a": "exit"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：Web 服务",
+    "p": [
+      "最小 HTTP 服务可用 Unix 套接字实现：读取请求行、解析路径、写回状态行与响应体",
+      "响应必须包含 Content-Length 与 Connection: close，否则客户端会一直等待",
+      "单连接处理完即关闭，避免阻塞；生产项目应使用 cohttp 或 Dream 处理并发与路由",
+      "把路由写成 path -> body 的纯函数，便于单独测试，IO 只在最外层"
+    ],
+    "c": "let route = function\n  | \"/\" -> (200, \"{\\\"message\\\":\\\"hello ocaml\\\"}\")\n  | \"/health\" -> (200, \"{\\\"status\\\":\\\"ok\\\"}\")\n  | _ -> (404, \"{\\\"error\\\":\\\"not found\\\"}\")\n\nlet () =\n  let sock = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in\n  Unix.setsockopt sock Unix.SO_REUSEADDR true;\n  Unix.bind sock (Unix.ADDR_INET (Unix.inet_addr_loopback, 8081));\n  Unix.listen sock 5;\n  Printf.printf \"监听 http://127.0.0.1:8081/\\n%!\";\n  let fd, _ = Unix.accept sock in\n  let request = input_line (Unix.in_channel_of_descr fd) in\n  let path = match String.split_on_char ' ' request with [ _; p; _ ] -> p | _ -> \"/\" in\n  let code, body = route path in\n  let resp =\n    Printf.sprintf\n      \"HTTP/1.1 %d %s\\r\\nContent-Type: application/json\\r\\nContent-Length: %d\\r\\nConnection: close\\r\\n\\r\\n%s\"\n      code (if code = 200 then \"OK\" else \"Not Found\") (String.length body) body\n  in\n  ignore (Unix.write_substring fd resp 0 (String.length resp));\n  Unix.close fd;\n  Unix.close sock",
+    "et": "❌ 常见错误",
+    "ec": "响应缺少 Content-Length 又不关闭连接，浏览器会一直转圈直到超时。每个响应都应带准确长度并显式关闭，或使用 chunked 编码并正确写出结束块。",
+    "q": [
+      {
+        "q": "HTTP 响应中声明 body 长度的头？",
+        "a": "Content-Length"
+      },
+      {
+        "q": "OCaml 生产级 Web 框架举例？",
+        "a": "Dream 或 cohttp"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "dune build --profile release 以优化选项编译，dune build @install 生成安装描述",
+      "opam pin add . 本地安装包，opam publish 发布到 opam 仓库，需先通过 opam lint",
+      "静态链接可用 -ccopt -static 与 musl 工具链，生成无依赖二进制便于容器部署",
+      "容器用多阶段构建：opam 镜像编译，精简运行时镜像只拷贝二进制与数据"
+    ],
+    "c": "(* 发布流程：\n   dune build --profile release\n   dune runtest\n   opam lint\n   opam pin add demo . --yes\n   opam publish\n\n   Dockerfile：\n   FROM ocaml/opam:debian-12-ocaml-4.14 AS build\n   WORKDIR /src\n   COPY --chown=opam . .\n   RUN opam install . --deps-only --yes && dune build --profile release\n   FROM debian:12-slim\n   COPY --from=build /src/_build/default/bin/main.exe /usr/local/bin/demo\n   ENTRYPOINT [\"/usr/local/bin/demo\"]\n*)\nlet () =\n  Printf.printf \"OCaml: %s\\n\" Sys.ocaml_version;\n  Printf.printf \"构建目录: _build/default\\n\";\n  Printf.printf \"可执行: dune exec demo\\n\";\n  Printf.printf \"发布: opam publish（先 opam lint）\\n\";\n  Printf.printf \"静态二进制适合 scratch 或 slim 镜像\\n\"",
+    "et": "❌ 常见错误",
+    "ec": "把 _build 目录或本地 opam switch 一并拷进镜像，导致镜像巨大且不可复现。应多阶段构建，只拷贝编译产物，并用 opam lock 固定依赖版本。",
+    "q": [
+      {
+        "q": "dune 的 release 构建命令？",
+        "a": "dune build --profile release"
+      },
+      {
+        "q": "发布 opam 包前应执行什么检查？",
+        "a": "opam lint"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "每个模块配套 .mli，只暴露必要接口，隐藏内部类型与辅助函数",
+      "默认不可变，状态用 ref 或可变记录并在最小作用域内使用，便于推理与测试",
+      "用 result/option 表达可预期失败，异常只用于意外；所有 match 保持穷尽",
+      "提交前运行 ocamlformat 与 dune build @all，把警告当错误，CI 中执行测试与文档构建"
+    ],
+    "c": "type user = { id : int; email : string }\n\ntype error = Invalid_id | Missing_email\n\nlet validate user =\n  if user.id <= 0 then Error Invalid_id\n  else if String.trim user.email = \"\" then Error Missing_email\n  else Ok user\n\nlet describe = function\n  | Invalid_id -> \"ID 非法\"\n  | Missing_email -> \"缺少邮箱\"\n\nlet () =\n  let ok = { id = 1; email = \"ada@example.com\" } in\n  let bad = { id = 0; email = \"\" } in\n  (match validate ok with\n   | Ok u -> Printf.printf \"通过: %d\\n\" u.id\n   | Error e -> Printf.printf \"失败: %s\\n\" (describe e));\n  match validate bad with\n  | Ok _ -> print_endline \"不应发生\"\n  | Error e -> Printf.printf \"预期失败: %s\\n\" (describe e)",
+    "et": "❌ 常见错误",
+    "ec": "所有模块都不写 .mli，内部函数被外部随意调用，重构时牵连大量代码。应为公共模块定义签名文件，只导出稳定 API，内部实现可自由调整。",
+    "q": [
+      {
+        "q": "OCaml 接口文件的扩展名？",
+        "a": ".mli"
+      },
+      {
+        "q": "统一 OCaml 代码风格的工具？",
+        "a": "ocamlformat"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "路线：let 与表达式 → 变体与模式匹配 → 列表与模块 → 函子与抽象 → 实战与性能",
+      "推荐资源：Real World OCaml、OCaml 官方手册、《OCaml from the Very Beginning》",
+      "进阶方向：Lwt/Async、Dream Web、ppx 元编程、OCaml 5 多核与 effect handler",
+      "坚持用 utop 做小实验，读标准库源码，并为开源项目提交 issue 与补丁"
+    ],
+    "c": "let topics =\n  [ \"基础\", [ \"let 绑定\"; \"模式匹配\"; \"变体\"; \"递归\" ]\n  ; \"数据\", [ \"list/array\"; \"Map/Set\"; \"Hashtbl\"; \"Buffer\" ]\n  ; \"工程\", [ \"dune\"; \"opam\"; \"Alcotest\"; \"ocamlformat\" ]\n  ; \"进阶\", [ \"函子\"; \"Lwt\"; \"ppx\"; \"OCaml 5 Domain\" ] ]\n\nlet () =\n  List.iter\n    (fun (name, items) ->\n      Printf.printf \"%s: %s\\n\" name (String.concat \" / \" items))\n    topics;\n  Printf.printf \"文档: https://ocaml.org/docs\\n\";\n  Printf.printf \"书籍: Real World OCaml\\n\";\n  Printf.printf \"下一步: 用函子实现存储抽象，写 Alcotest 测试并发布 opam 包\\n\";\n  Printf.printf \"当前版本: %s\\n\" Sys.ocaml_version",
+    "et": "❌ 常见错误",
+    "ec": "只读语法不写项目，遇到类型错误就到处加标注。应从变体建模与模式匹配入手，让编译器引导设计，再逐步学习模块、函子与异步，形成可维护的工程习惯。",
+    "q": [
+      {
+        "q": "OCaml 组织大型程序的核心机制？",
+        "a": "模块与函子"
+      },
+      {
+        "q": "推荐的 OCaml 实战书籍？",
+        "a": "Real World OCaml"
+      }
+    ]
+  }
+];

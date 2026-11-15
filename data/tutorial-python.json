@@ -661,5 +661,24 @@
         "a": "import random\nrandom.randint(1, 100)"
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用标准库：json 序列化、re 正则、datetime 日期时间、pathlib 路径、collections 容器、itertools 迭代工具",
+      "包管理使用 venv 创建隔离环境、pip 安装依赖，并用 requirements.txt 固定版本",
+      "测试用 pytest 或 unittest；格式化用 black/isort；静态检查用 ruff/mypy；调试用 pdb",
+      "运行方式：python app.py；安装依赖：pip install -r requirements.txt"
+    ],
+    "c": "# 标准库速查\nimport json, re, datetime, pathlib, collections, itertools\n\nprint(json.dumps({\"ok\": True}, ensure_ascii=False))\nprint(re.findall(r\"\\d+\", \"a1b22c333\"))\nprint(datetime.date.today().isoformat())\nprint(collections.Counter(\"banana\").most_common(2))\nprint(list(itertools.islice(itertools.count(1, 2), 5)))\nprint(pathlib.Path(\".\").resolve())\n\n# 工具链（终端执行）\n# 包管理：python -m venv .venv && source .venv/bin/activate && pip install requests\n# 测试：   pytest -q            或  python -m unittest\n# 格式化：black . && isort .\n# 检查：  ruff check . && mypy .\n# 调试：  python -m pdb app.py\n",
+    "et": "❌ 常见错误",
+    "ec": "把项目依赖装进全局环境，升级后互相冲突；应始终使用 venv。用 pip freeze > requirements.txt 记录版本，而不是手写包名。",
+    "q": [
+      {
+        "q": "Python 中用于序列化和反序列化 JSON 的标准库模块是什么？",
+        "a": "json"
+      }
+    ],
+    "id": 36
   }
 ]

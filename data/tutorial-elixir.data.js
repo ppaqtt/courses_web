@@ -1,667 +1,415 @@
 window.TUTORIAL_DATA_elixir = [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Elixir 简介与历史",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Elixir 由 José Valim 于 2011 年创建、2012 年发布 1.0，语法受 Ruby 影响，运行在 Erlang 虚拟机 BEAM 之上",
+      "函数式语言：数据不可变、函数是一等公民，以模式匹配和管道操作符组织数据流",
+      "复用 Erlang/OTP 生态：轻量进程、监督树、热代码升级，天然适合高并发与容错系统",
+      "动态类型但强类型，编译为 BEAM 字节码，常用于 Web（Phoenix）、实时通信、IoT 与数据管道"
     ],
-    "c": "// Elixir教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# hello.exs 运行：elixir hello.exs\nIO.puts(\"Hello, World!\")\nIO.puts(\"你好，Elixir！\")\n\nname = \"Elixir\"\nIO.puts(\"你好，#{name}\")\n\n# 函数是一等公民，数据不可变\ndouble = fn x -> x * 2 end\nIO.inspect(Enum.map([1, 2, 3], double), label: \"双倍\")\n\n# 管道把上一步结果传给下一步的第一个参数\n1..5\n|> Enum.filter(&(rem(&1, 2) == 1))\n|> Enum.map(&(&1 * &1))\n|> IO.inspect(label: \"奇数的平方\")",
+    "et": "❌ 常见错误",
+    "ec": "把 Elixir 当 Ruby 写：以为变量可以修改、用 each 在外部累加。Elixir 数据不可变，累加必须用 Enum.reduce 返回新值，或用 Agent/进程保存状态。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Elixir 运行在哪个虚拟机上？",
+        "a": "BEAM（Erlang 虚拟机）"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Elixir 的变量可以修改吗？",
+        "a": "不能，只能重新绑定新值，原数据不可变"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装与开发环境",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 asdf 或 mise 管理 Erlang/OTP 与 Elixir 版本，两者需匹配，例如 OTP 27 搭配 Elixir 1.18",
+      "mix 是内置构建工具，负责创建项目、拉取依赖、编译、测试、格式化与打包发布",
+      "iex 是交互式 shell，执行 iex -S mix 可在项目上下文中加载代码并调试",
+      "用 elixir --version 查看版本，用 mix new demo 生成标准目录结构"
     ],
-    "c": "// Elixir教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# 终端安装示例：\n# asdf plugin add erlang && asdf install erlang 27.0\n# asdf plugin add elixir && asdf install elixir 1.18.3-otp-27\n# mix new demo && cd demo && mix test\n\nIO.puts(\"Elixir 版本: #{System.version()}\")\nIO.puts(\"Erlang/OTP: #{:erlang.system_info(:otp_release)}\")\nIO.puts(\"系统架构: #{:erlang.system_info(:system_architecture)}\")\n\n# 项目常用命令\n# mix deps.get   拉取依赖\n# mix compile    编译\n# mix test       运行测试\n# mix format     格式化代码\n# iex -S mix     带项目进入交互环境",
+    "et": "❌ 常见错误",
+    "ec": "混用系统自带 Erlang 与 asdf 安装的 Elixir，导致 OTP 版本不匹配报错。应统一用 asdf 安装 Erlang 和 Elixir，并用 .tool-versions 固定项目版本。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "查看 Elixir 与 OTP 版本的命令？",
+        "a": "elixir --version"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "创建新项目的 mix 命令？",
+        "a": "mix new 项目名"
       }
     ]
   },
   {
     "id": 3,
-    "t": "变量与常量",
+    "t": "值与变量绑定",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "变量本质是绑定，= 是匹配操作符而非赋值，同名变量可以重新绑定到新值",
+      "模式匹配可一次解构元组、列表、映射，如 {a, b} = {1, 2}",
+      "钉住操作符 ^ 让左侧使用已有变量的值参与匹配，而不是重新绑定",
+      "变量名必须小写或下划线开头，大写开头会被当作模块别名或原子，模式匹配时会报错"
     ],
-    "c": "// Elixir教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "x = 10\nx = x + 5          # 重新绑定，不是修改旧值\nIO.puts(\"x = #{x}\")\n\n{a, b} = {1, 2}    # 解构元组\n%{name: name} = %{name: \"Ada\", age: 36}\nIO.puts(\"#{name}: #{a + b}\")\n\n^x = 15            # 钉住匹配：x 必须仍是 15\nIO.puts(\"钉住匹配成功\")\n\n# 匹配失败会抛 MatchError\ncase {1, 2} do\n  {a, b} -> IO.inspect({b, a})\nend",
+    "et": "❌ 常见错误",
+    "ec": "误以为 x = x + 1 修改了原变量：右侧先用旧值计算再绑定新值，旧值仍被闭包引用。另注意 ^x 只能出现在模式中，不能用来引入新变量。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "让模式匹配使用变量 x 的当前值，应怎么写？",
+        "a": "^x = 值"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "{a, b} = {1, 2} 之后 a 的值？",
+        "a": "1"
       }
     ]
   },
   {
     "id": 4,
-    "t": "数据类型",
+    "t": "类型系统与类型规格",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "基本类型：integer（任意精度）、float、atom、binary、list、tuple、map、function、pid、reference",
+      "类型判断用守卫 is_integer/1、is_binary/1、is_list/1、is_map/1，而不是运行时反射",
+      "模块中可用 @spec 声明函数类型，用 @type 定义自定义类型，供 Dialyzer 静态分析",
+      "Elixir 不做运行时类型检查，类型不符通常表现为 FunctionClauseError 或 BadArith"
     ],
-    "c": "// Elixir教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Types do\n  @spec add(number(), number()) :: number()\n  def add(a, b), do: a + b\n\n  @spec describe(term()) :: String.t()\n  def describe(v) when is_integer(v), do: \"整数\"\n  def describe(v) when is_binary(v), do: \"字符串（二进制）\"\n  def describe(v) when is_list(v), do: \"列表\"\n  def describe(v) when is_map(v), do: \"映射\"\n  def describe(_), do: \"其他\"\nend\n\nIO.inspect(Types.add(1, 2.5))\nIO.inspect(Enum.map([1, \"a\", [1], %{}], &Types.describe/1))",
+    "et": "❌ 常见错误",
+    "ec": "把字符串写成单引号 'abc'，得到的是 charlist（整数列表）而不是二进制，传给 String.upcase/1 会报 FunctionClauseError。字符串必须用双引号。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "判断值是否为二进制字符串的守卫函数？",
+        "a": "is_binary/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "@spec 的作用是什么？",
+        "a": "声明函数类型规格，供文档与 Dialyzer 使用"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与表达式",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术中 / 总是返回浮点，整数除法用 div/2，取余用 rem/2，幂运算用 **（返回浮点）",
+      "== 只比较值（1 == 1.0 为 true），=== 同时比较类型；比较运算符可跨类型排序",
+      "and/or/not 要求操作数是布尔值，&&/||/! 接受任意真值，nil 与 false 为假",
+      "列表拼接用 ++ 与 --，字符串拼接用 <>，管道 |> 把左侧结果作为右侧函数第一个参数"
     ],
-    "c": "// Elixir教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "IO.inspect(7 / 2)          # 3.5，/ 总是浮点除法\nIO.inspect(div(7, 2))      # 3\nIO.inspect(rem(7, 2))      # 1\nIO.inspect(2 ** 10)        # 1024.0\nIO.inspect(\"ab\" <> \"cd\")   # 字符串拼接\nIO.inspect([1, 2] ++ [3])  # 列表拼接\nIO.inspect(1 == 1.0)       # true\nIO.inspect(1 === 1.0)      # false，类型不同\n\n[1, 2, 3, 4, 5]\n|> Enum.filter(&(rem(&1, 2) == 0))\n|> Enum.map(&(&1 * &1))\n|> IO.inspect(label: \"偶数的平方\")",
+    "et": "❌ 常见错误",
+    "ec": "用 ++ 在循环中反复向列表尾部追加元素，复杂度是 O(n²)。应改为 [x | acc] 头插后 Enum.reverse/1，或直接用 Enum.map/2。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "1 == 1.0 和 1 === 1.0 的结果？",
+        "a": "true 和 false"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "整数除法与取余的函数？",
+        "a": "div/2 与 rem/2"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串与字符",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "字符串是 UTF-8 编码的二进制，用双引号；单引号是 charlist（整数列表）",
+      "插值 #{expr} 只在双引号字符串与 heredoc 中生效，拼接也可用 <> 运算符",
+      "String 模块按字素处理，String.length/1 与 byte_size/1 的结果可能不同",
+      "多行文本用 heredoc，~s/~r/~w 等 sigil 提供特殊字面量；?A 返回字符码点 65"
     ],
-    "c": "// Elixir教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "s = \"你好, Elixir\"\nIO.puts(String.upcase(s))\nIO.puts(\"字素数: #{String.length(s)}\")\nIO.puts(\"字节数: #{byte_size(s)}\")\n\nIO.inspect(String.split(\"a,b,c\", \",\"))\nIO.inspect(String.replace(\"hello\", \"l\", \"L\"))\nIO.inspect(String.reverse(\"abc\"))\n\n# 二进制模式匹配按字节解构\n<<\"你\", rest::binary>> = \"你好\"\nIO.inspect(rest)\n\nIO.inspect('abc')   # charlist，输出 ~c\"abc\"\nIO.inspect(?A)      # 65",
+    "et": "❌ 常见错误",
+    "ec": "用 String.length/1 当作字节长度：中文每字占 3 字节，长度与 byte_size 不同。截断二进制要用 binary_part/3，随意切片可能拆开多字节字符。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "获取字符串字节数的函数？",
+        "a": "byte_size/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "单引号字符串的类型是什么？",
+        "a": "charlist（整数列表）"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "列表、元组与集合",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "列表是链表，用 [h | t] 解构与头插，随机访问是 O(n)；元组是连续内存，适合固定大小组合",
+      "关键字列表 [key: value] 是二元组列表，常用于可选参数；映射 %{} 适合键值查找",
+      "Enum 提供 map/filter/reduce/sort/group_by；Stream 提供对应的惰性版本",
+      "Map 的键可为任意类型，读取用 map.key（键必须存在）、map[:key] 或 Map.get/3"
     ],
-    "c": "// Elixir教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "list = [3, 1, 2]\nIO.inspect(hd(list))\nIO.inspect(tl(list))\nIO.inspect([0 | list])           # 头插\nIO.inspect(Enum.sort(list))\nIO.inspect(Enum.sum(list))\n\n{status, value} = {:ok, 42}\nIO.inspect({status, value})\n\nmap = %{\"name\" => \"Ada\", :age => 36}\nIO.inspect(map[:age])\nIO.inspect(%{map | :age => 37})  # 更新已有键\nIO.inspect(Map.get(map, :missing, 0))\nIO.inspect([name: \"Ada\", age: 36][:name])",
+    "et": "❌ 常见错误",
+    "ec": "用 map.key 读取不存在的键会抛 KeyError，而 map[:key] 返回 nil 容易把 nil 当成真实值。需要区分缺失时应使用 Map.fetch/2 返回 {:ok, v} 或 :error。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "向列表头部插入元素怎么写？",
+        "a": "[x | list]"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Map 中安全读取并区分缺失的函数？",
+        "a": "Map.fetch/2"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件与分支",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if/unless 是宏，do/else 块本质是关键字列表，整个表达式必须返回值",
+      "cond 从上到下判断条件，必须用 true -> 兜底；case 对值做模式匹配并可加守卫",
+      "with 串联多个 <- 匹配，任一失败即返回该值，可用 else 分支统一处理",
+      "Elixir 没有语句与表达式之分，函数最后一个表达式的值就是返回值"
     ],
-    "c": "// Elixir教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "score = 85\n\nif score >= 60, do: IO.puts(\"及格\"), else: IO.puts(\"不及格\")\nunless score < 60, do: IO.puts(\"确认及格\")\n\ncond do\n  score >= 90 -> IO.puts(\"优秀\")\n  score >= 60 -> IO.puts(\"合格\")\n  true -> IO.puts(\"不及格\")\nend\n\ncase {1, 2} do\n  {1, x} -> IO.puts(\"匹配到 x=#{x}\")\n  _ -> IO.puts(\"其他\")\nend\n\nwith {:ok, a} <- {:ok, 1},\n     {:ok, b} <- {:ok, 2} do\n  IO.puts(\"和=#{a + b}\")\nelse\n  _ -> IO.puts(\"失败\")\nend",
+    "et": "❌ 常见错误",
+    "ec": "在 cond 中漏写 true 兜底分支，所有条件为假时抛 CondClauseError；case 漏写匹配子句则抛 CaseClauseError。应显式处理 _ 或用 with/else 覆盖失败情形。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "cond 中常用的兜底条件？",
+        "a": "true"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "with 中哪个操作符用于可能失败的匹配？",
+        "a": "<-"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "递归与迭代",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Elixir 没有传统 for 循环，遍历集合优先用 Enum.map/filter/reduce，提前终止用 Enum.reduce_while",
+      "递归通过函数多子句实现，必须有基线条件（如空列表）避免无限递归",
+      "尾递归把累加器作为参数，BEAM 做尾调用优化，可迭代百万次而不爆栈",
+      "for 是推导式，支持生成器、过滤器与 into: 收集结果，本质仍是数据转换"
     ],
-    "c": "// Elixir教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Rec do\n  def fact(0), do: 1\n  def fact(n) when n > 0, do: n * fact(n - 1)\n\n  # 尾递归：累加器放在参数中\n  def sum(list), do: sum(list, 0)\n  defp sum([], acc), do: acc\n  defp sum([h | t], acc), do: sum(t, acc + h)\nend\n\nIO.inspect(Rec.fact(5))\nIO.inspect(Rec.sum([1, 2, 3, 4]))\n\nIO.inspect(Enum.reduce(1..5, 1, &*/2))\n\nfor x <- 1..10, rem(x, 2) == 0, do: x * x\n|> IO.inspect(label: \"偶数的平方\")",
+    "et": "❌ 常见错误",
+    "ec": "递归时把运算写在递归调用之后（如 n * fact(n-1)），不是尾递归，大输入会栈溢出。应改写成带累加器参数的尾递归，或直接用 Enum.reduce。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "可提前终止的遍历函数？",
+        "a": "Enum.reduce_while/3"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "尾递归为什么不会爆栈？",
+        "a": "BEAM 做尾调用优化，复用当前栈帧"
       }
     ]
   },
   {
     "id": 10,
-    "t": "函数基础",
+    "t": "函数定义与调用",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 def/defp 定义公开/私有函数，函数由名字和元数唯一标识，add/2 与 add/3 是两个函数",
+      "默认参数 def greet(name \\\\ \"世界\") 会生成多个元数的函数，调用时可省略",
+      "守卫 when 在函数头做模式匹配后的附加条件，守卫中只能调用有限的白名单函数",
+      "函数体最后一个表达式即返回值，无需 return；私有函数 defp 不能被外部调用"
     ],
-    "c": "// Elixir教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Greeter do\n  @moduledoc \"带默认参数、守卫与私有函数的示例\"\n\n  def greet(name \\\\ \"世界\"), do: \"你好，#{name}！\"\n\n  def classify(n) when is_integer(n) and n >= 0, do: :non_negative\n  def classify(n) when is_integer(n), do: :negative\n\n  def public(x), do: helper(x) * 2\n\n  defp helper(x), do: x + 1\nend\n\nIO.puts(Greeter.greet())\nIO.puts(Greeter.greet(\"Ada\"))\nIO.inspect(Greeter.classify(-3))\nIO.inspect(Greeter.public(4))\nIO.inspect(Greeter.__info__(:functions))",
+    "et": "❌ 常见错误",
+    "ec": "在带默认参数的头部子句之后再定义同名的低元数子句，会报 def with defaults 冲突。默认参数应集中在第一个子句，并避免与后续子句的元数重复。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Elixir 中函数的唯一标识是什么？",
+        "a": "函数名与元数（arity）"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "定义私有函数用哪个宏？",
+        "a": "defp"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "高阶函数与管道",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "匿名函数用 fn args -> body end，简写 &(&1 + 1)；&Mod.fun/1 捕获具名函数",
+      "函数是一等值，可作参数、返回值或存入数据结构，Enum 模块整体基于此设计",
+      "Elixir 没有内置柯里化，可用闭包 fn a -> fn b -> ... end end 模拟部分应用",
+      "管道 |> 把左侧结果注入右侧函数第一个参数，适合组织多步数据转换"
     ],
-    "c": "// Elixir教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "double = fn x -> x * 2 end\nadd = &(&1 + &2)\n\nIO.inspect(Enum.map([1, 2, 3], double))\nIO.inspect(add.(2, 3))\nIO.inspect(Enum.map([\"a\", \"b\"], &String.upcase/1))\n\nresult =\n  [1, 2, 3, 4, 5]\n  |> Enum.filter(&(rem(&1, 2) == 1))\n  |> Enum.map(&(&1 * 10))\n  |> Enum.take(2)\n\nIO.inspect(result, label: \"管道结果\")\n\n# 用闭包模拟柯里化\nadder = fn a -> fn b -> a + b end end\nIO.inspect(adder.(10).(5))",
+    "et": "❌ 常见错误",
+    "ec": "误把管道用在非首参数位置：\"a,b\" |> String.split(\",\") 正确，因为字符串是第一个参数；写成 String.split(\",\", \"a,b\") 就反了。必要时用匿名函数显式传参。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "捕获 String.upcase/1 的写法？",
+        "a": "&String.upcase/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "管道把左侧结果放在右侧函数的哪个位置？",
+        "a": "第一个参数"
       }
     ]
   },
   {
     "id": 12,
-    "t": "作用域与闭包",
+    "t": "模式匹配与解构",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "函数多子句按定义顺序匹配，模式可嵌套匹配元组、列表、映射与结构体",
+      "列表模式 [a, b | rest] 同时取出前两个元素与剩余部分，_ 表示忽略的值",
+      "映射模式 %{key: v} 只要求包含指定键，可匹配含更多键的映射；结构体必须写 %User{}",
+      "as 模式（whole = %{key: v}）既保留整体又解构部分，匹配失败抛 MatchError"
     ],
-    "c": "// Elixir教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Match do\n  def area({:circle, r}), do: 3.14159 * r * r\n  def area({:rect, w, h}), do: w * h\n\n  def first_two([a, b | _]), do: {a, b}\n  def first_two(_), do: :too_short\n\n  def login(%{role: :admin, name: n}), do: \"管理员 #{n}\"\n  def login(%{name: n}), do: \"用户 #{n}\"\nend\n\nIO.inspect(Match.area({:rect, 3, 4}))\nIO.inspect(Match.first_two([1, 2, 3]))\nIO.inspect(Match.login(%{name: \"Ada\", role: :admin}))\n\n[head | _tail] = [10, 20, 30]\nIO.inspect(head)",
+    "et": "❌ 常见错误",
+    "ec": "用 %{} 模式匹配结构体时不会校验类型，%{name: n} 也能匹配任意含 name 键的映射。若需限定结构体，必须写 %User{name: n}，否则可能接受错误形状的数据。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "列表模式中同时取头和尾怎么写？",
+        "a": "[h | t] = list"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "匹配失败会抛什么异常？",
+        "a": "MatchError"
       }
     ]
   },
   {
     "id": 13,
-    "t": "类与对象",
+    "t": "结构体与自定义类型",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "defstruct 定义结构体并给字段默认值，@enforce_keys 强制构造时必须提供某些键",
+      "结构体是带 __struct__ 键的 map，用 %User{} 构造，用 %{user | field: v} 更新已有键",
+      "用 @type t :: %__MODULE__{...} 描述结构体类型，配合 @spec 提供文档与 Dialyzer 检查",
+      "Map.from_struct/1 转普通映射，struct/2 从映射构造；结构体不会自动匹配普通 map 模式"
     ],
-    "c": "// Elixir教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule User do\n  @enforce_keys [:name]\n  defstruct name: nil, age: 0, admin: false\n\n  def birthday(%__MODULE__{age: age} = user), do: %{user | age: age + 1}\n  def new(name, age), do: %__MODULE__{name: name, age: age}\nend\n\nu = User.new(\"Ada\", 36)\nIO.inspect(u)\nIO.inspect(u.name)\nIO.inspect(User.birthday(u))\n\n%{name: n} = u\nIO.inspect(n)\nIO.inspect(%{u | admin: true})\nIO.inspect(Map.from_struct(u))",
+    "et": "❌ 常见错误",
+    "ec": "用 %{user | age: 1} 更新不存在的字段会抛 KeyError，新增字段必须用 Map.put。另外结构体不能用 %{} 字面量构造，必须使用 %User{}。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "强制结构体构造时提供字段的属性？",
+        "a": "@enforce_keys"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "结构体的年龄字段加一应返回什么？",
+        "a": "一个新的结构体，原结构体不变"
       }
     ]
   },
   {
     "id": 14,
-    "t": "继承与多态",
+    "t": "协议与运行时多态",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "defprotocol 定义按类型分派的行为，defimpl 为具体类型实现，调用时按第一个参数类型分派",
+      "协议实现可放在任意模块，也能为 Map、List、BitString 等内置类型扩展，无需修改原类型",
+      "协议是运行时多态，与 behaviour 的编译期契约不同，适合开放式扩展",
+      "用 @derive 为结构体自动生成协议实现，如 @derive {Inspect, only: [:name]}"
     ],
-    "c": "// Elixir教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defprotocol Sized do\n  @doc \"返回数据大小\"\n  def size(data)\nend\n\ndefimpl Sized, for: List do\n  def size(list), do: length(list)\nend\n\ndefimpl Sized, for: Map do\n  def size(map), do: map_size(map)\nend\n\ndefimpl Sized, for: BitString do\n  def size(s), do: byte_size(s)\nend\n\nIO.inspect(Sized.size([1, 2, 3]))\nIO.inspect(Sized.size(%{a: 1}))\nIO.inspect(Sized.size(\"hello\"))",
+    "et": "❌ 常见错误",
+    "ec": "协议缺少对应实现时调用会抛 Protocol.UndefinedError；结构体不会自动继承协议实现，必须显式 defimpl 或 @derive。协议按第一个参数分派，参数顺序不能随意调换。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "为结构体自动派生协议实现的属性？",
+        "a": "@derive"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "协议缺失实现时抛什么异常？",
+        "a": "Protocol.UndefinedError"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "Behaviour 与接口抽象",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "behaviour 定义回调契约：@callback 声明函数规格，@macrocallback 声明宏，模块用 @behaviour 声明实现",
+      "@impl true 标注回调实现，帮助编译器检查是否遗漏或拼错回调名",
+      "behaviour 只做编译期检查，不提供默认实现；需要默认行为时用 use 注入 __using__ 宏",
+      "GenServer、Supervisor、Plug 都是 behaviour 的典型应用，理解它才能读懂 OTP"
     ],
-    "c": "// Elixir教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Storage do\n  @callback put(key :: term(), value :: term()) :: :ok\n  @callback get(key :: term()) :: {:ok, term()} | :error\nend\n\ndefmodule MemoryStorage do\n  @behaviour Storage\n\n  @impl true\n  def put(key, value) do\n    Process.put(key, value)\n    :ok\n  end\n\n  @impl true\n  def get(key) do\n    case Process.get(key) do\n      nil -> :error\n      value -> {:ok, value}\n    end\n  end\nend\n\n:ok = MemoryStorage.put(:lang, \"Elixir\")\nIO.inspect(MemoryStorage.get(:lang))",
+    "et": "❌ 常见错误",
+    "ec": "实现 behaviour 时函数名或元数写错，编译器只给 warning，运行到调用处才崩溃。务必加 @impl true，并在 CI 中把 warnings_as_errors 打开，让缺失回调变成编译错误。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "声明回调契约的模块属性？",
+        "a": "@callback"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "标注回调实现的属性？",
+        "a": "@impl true"
       }
     ]
   },
   {
     "id": 16,
-    "t": "泛型",
+    "t": "类型规格与 Dialyzer",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Elixir 没有泛型类型参数，@spec 中的类型由具体类型与并集组合，如 [integer()] 或 {:ok, term()}",
+      "内置类型包括 term/any、atom、binary、list、map、tuple、function、pid、no_return 等",
+      "用 @type 定义公开类型别名，@typep 定义私有类型，@opaque 定义对外不透明类型",
+      "Dialyzer 基于成功类型推断，只报告能证明一定出错的调用，不会强制要求标注"
     ],
-    "c": "// Elixir教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Shapes do\n  @type id :: pos_integer()\n  @type point :: {number(), number()}\n  @type shape :: {:circle, point(), number()} | {:rect, point(), point()}\n\n  @spec area(shape()) :: float()\n  def area({:circle, _center, r}), do: :math.pi() * r * r\n  def area({:rect, {x1, y1}, {x2, y2}}), do: abs(x2 - x1) * abs(y2 - y1)\n\n  @spec find([shape()], id()) :: {:ok, shape()} | :error\n  def find(_shapes, _id), do: :error\nend\n\nIO.inspect(Shapes.area({:rect, {0, 0}, {3, 4}}))\nIO.inspect(Shapes.find([], 1))\n\n# 运行 Dialyzer：mix dialyzer（需 dialyxir 依赖）\n# 类型只在编译期分析，运行时不做检查",
+    "et": "❌ 常见错误",
+    "ec": "把 Dialyzer 当编译器类型检查：它只在能证明一定出错时报告，未标注代码不会报错。spec 与实现不符还会产生误报，应保持签名与实现一致并在 CI 中运行。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "定义公开类型别名的属性？",
+        "a": "@type"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Dialyzer 会在运行时做类型检查吗？",
+        "a": "不会，只做静态分析"
       }
     ]
   },
   {
     "id": 17,
-    "t": "异常处理",
+    "t": "错误处理与容错",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "可预期失败用 {:ok, value}/{:error, reason} 返回，调用方用 case 或 with 处理",
+      "意外错误用 raise/1 抛异常，try/rescue/catch/after 捕获，不要用异常做常规控制流",
+      "with 串联多个可能失败的步骤，else 分支可针对不同错误原因分别处理",
+      "命名约定：安全版本返回元组如 File.read/1，会抛异常的版本加感叹号如 File.read!/1"
     ],
-    "c": "// Elixir教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Errors do\n  def safe_div(_a, 0), do: {:error, :division_by_zero}\n  def safe_div(a, b), do: {:ok, a / b}\n\n  def parse_int(s) do\n    case Integer.parse(s) do\n      {n, \"\"} -> {:ok, n}\n      _ -> {:error, :invalid_integer}\n    end\n  end\n\n  def chain(s) do\n    with {:ok, n} <- parse_int(s), {:ok, r} <- safe_div(100, n), do: {:ok, r}\n  end\nend\n\nIO.inspect(Errors.chain(\"4\"))\nIO.inspect(Errors.chain(\"0\"))\nIO.inspect(Errors.chain(\"abc\"))\n\ntry do\n  raise \"boom\"\nrescue\n  e in RuntimeError -> IO.puts(\"捕获: #{e.message}\")\nend",
+    "et": "❌ 常见错误",
+    "ec": "在 with 中误用 = 而非 <-，模式不匹配时直接抛 MatchError，绕过 else 分支。所有可能失败的步骤都应写成 <-，并让 else 覆盖全部未匹配情况。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "读取文件失败但不抛异常的返回值？",
+        "a": "{:error, reason}"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "串联多个可能失败步骤的语法？",
+        "a": "with ... <- ... do ... end"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件与目录操作",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "File.read/1 返回 {:ok, binary}/{:error, reason}，File.read!/1 失败时直接抛异常",
+      "File.write/2 覆盖写入，File.write/3 配 [:append] 追加；大文件用 File.stream!/1 流式处理",
+      "Path 模块拼接与规范化路径，System.tmp_dir!/0 获取临时目录，避免硬编码分隔符",
+      "File.stat/1 取大小与时间，File.ls/1 列目录，File.cp_r/2 递归复制"
     ],
-    "c": "// Elixir教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "path = Path.join(System.tmp_dir!(), \"elixir_demo.txt\")\n\n:ok = File.write(path, \"第一行\\n第二行\\n\")\nIO.inspect(File.read(path))\nIO.inspect(File.read!(path) |> String.split(\"\\n\", trim: true))\n\nFile.write!(path, \"追加内容\\n\", [:append])\nFile.stream!(path) |> Enum.each(&IO.write(\"读取: \" <> &1))\n\nIO.inspect(File.exists?(path))\nIO.inspect(File.stat!(path).size)\n:ok = File.rm(path)\nIO.inspect(File.exists?(path))",
+    "et": "❌ 常见错误",
+    "ec": "用 File.read!/1 处理用户传入的路径，文件不存在时抛 File.Error 使进程崩溃。面向外部输入应使用 File.read/1 并处理 {:error, :enoent} 等情况。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "以追加模式写文件的选项？",
+        "a": "[:append]"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "流式逐行读取大文件的函数？",
+        "a": "File.stream!/1"
       }
     ]
   },
@@ -669,221 +417,137 @@ window.TUTORIAL_DATA_elixir = [
     "id": 19,
     "t": "正则表达式",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "正则字面量用 ~r/pattern/options，编译期编入 BEAM；运行时构造用 Regex.compile/2",
+      "Regex.run/3 返回首次匹配与捕获组，Regex.scan/3 返回全部匹配，named_captures/2 返回命名捕获映射",
+      "Regex.replace/4 支持函数替换与反向引用，Regex.match?/2 只判断是否匹配，性能更好",
+      "常用选项：i 忽略大小写、m 多行、s 让点匹配换行、u 启用 Unicode 属性如 \\p{Han}"
     ],
-    "c": "// Elixir教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "text = \"订单 A123 金额 99 元，订单 B456 金额 250 元\"\n\nIO.inspect(Regex.run(~r/\\d+/, text))\nIO.inspect(Regex.scan(~r/[A-Z]\\d{3}/, text))\n\nIO.inspect(Regex.named_captures(~r/(?<code>[A-Z]\\d{3})/, text))\nIO.inspect(Regex.replace(~r/\\d+/, \"a1b22\", \"#\"))\nIO.inspect(Regex.match?(~r/^\\d+$/, \"12345\"))\nIO.inspect(Regex.match?(~r/elixir/i, \"ELIXIR\"))\nIO.inspect(Regex.run(~r/\\p{Han}+/u, \"hello世界\"))",
+    "et": "❌ 常见错误",
+    "ec": "在 ~r// 中把反斜杠双写（写成 \\\\d）：sigil 内不经过字符串转义，\\d 才是数字类；只有普通字符串才需要 \"\\\\d\"。另注意不加 u 选项时 \\p{L} 等 Unicode 属性不生效。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "返回所有匹配的函数？",
+        "a": "Regex.scan/3"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "正则 sigil 的写法？",
+        "a": "~r/pattern/options"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块、包管理与依赖",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "模块用 defmodule 定义，命名空间用点号分隔，模块名是原子必须大写开头",
+      "mix new 生成项目骨架，mix.exs 的 defp deps 声明 Hex 依赖，mix deps.get 拉取",
+      "Hex 是包仓库，mix hex.search/info 查询；版本 ~> 1.4 表示允许 1.x 的兼容升级",
+      "mix compile 编译、mix run 运行、mix test 测试；Mix.Project 提供项目元数据"
     ],
-    "c": "// Elixir教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Demo.Math do\n  @moduledoc \"在 mix new demo 生成的项目中定义模块\"\n  @vsn \"1.0.0\"\n\n  @doc \"两数相加\"\n  @spec add(number(), number()) :: number()\n  def add(a, b), do: a + b\nend\n\nIO.inspect(Demo.Math.add(2, 3))\nIO.inspect(Demo.Math.__info__(:functions))\n\n# mix new demo                 创建项目\n# mix deps.get                拉取 Hex 依赖\n# mix compile / mix test      编译与测试\n# mix hex.info jason          查看包信息\n# mix.exs 中声明：{:jason, \"~> 1.4\"}",
+    "et": "❌ 常见错误",
+    "ec": "依赖写进 deps 后忘记运行 mix deps.get，编译时报 module not available。修改 mix.exs 后还需重新编译；umbrella 项目要区分各子应用的依赖。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "拉取依赖的命令？",
+        "a": "mix deps.get"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "依赖版本 ~> 1.4 表示什么？",
+        "a": "允许 1.x 范围内的兼容升级，不含 2.0"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "包管理 mix deps.get；测试 mix test；格式化 mix format；构建 mix compile；发布 mix release",
+      "调试用 iex -S mix 与 IO.inspect(label:)，计时用 :timer.tc，文档用 mix docs（需 ex_doc）",
+      "核心模块：Enum/Stream 处理集合，String 处理文本，Map/Keyword 处理键值，File/Path 处理文件",
+      "IEx 中用 h/1 查文档、i/1 查类型、c/1 重编译、r/1 重载模块"
     ],
-    "c": "// Elixir教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# 工具链速查（终端执行）：\n# 包管理：mix deps.get / mix hex.search\n# 测试：mix test        格式化：mix format\n# 调试：iex -S mix      构建：mix compile / mix release\n# 文档：mix docs（需 ex_doc）\n\nIO.inspect(Enum.map(1..5, &(&1 * &1)))\nIO.inspect(Enum.group_by(1..10, &rem(&1, 2)))\nIO.inspect(String.pad_leading(\"7\", 3, \"0\"))\nIO.inspect(Map.new([{:a, 1}, {:b, 2}]))\nIO.inspect(List.flatten([1, [2, [3]]]))\nIO.inspect(Stream.iterate(1, &(&1 * 2)) |> Enum.take(5))\nIO.inspect(Function.identity(:ok))",
+    "et": "❌ 常见错误",
+    "ec": "在 .exs 脚本中直接调用 Mix.Project.config() 会失败，因为脚本未启动 Mix。需要项目上下文时用 mix run script.exs，或在文件头用 Mix.install/2 安装依赖。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "运行项目测试的命令？",
+        "a": "mix test"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "IEx 中查看值类型的辅助函数？",
+        "a": "i/1"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与并行",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "BEAM 进程由虚拟机调度，创建开销极小；进程间只通过消息通信，不共享内存",
+      "spawn/1 创建进程，send/2 发消息，receive 选择性接收并可加 after 超时",
+      "Task.async/1 与 Task.await/2 处理一次性并发，Task.async_stream/3 控制并发度处理集合",
+      "Agent 封装状态，GenServer 实现带状态的服务器，Supervisor 构建容错监督树"
     ],
-    "c": "// Elixir教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "parent = self()\n\npid = spawn(fn ->\n  send(parent, {:hello, \"来自子进程\"})\nend)\n\nreceive do\n  {:hello, msg} -> IO.puts(msg)\nafter\n  1000 -> IO.puts(\"超时\")\nend\n\n# Task 并发执行并收集结果\ntasks = for i <- 1..5, do: Task.async(fn -> i * i end)\nIO.inspect(Task.await_many(tasks))\n\nIO.inspect(Process.alive?(pid))\nIO.inspect(Process.info(self(), :message_queue_len))",
+    "et": "❌ 常见错误",
+    "ec": "在 receive 中漏写 after 超时，消息永远不来时进程会永久阻塞。另不要跨进程发送巨大数据结构，同节点也会复制消息，应传 pid 或使用 ETS 共享。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "启动一次性并发任务并等待结果的函数？",
+        "a": "Task.async/1 与 Task.await/2"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "接收消息时避免永久阻塞的关键字？",
+        "a": "after"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "不可变数据与性能",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Elixir 严格求值，Stream 提供惰性序列，只在 Enum 消费时计算，适合大文件与无限序列",
+      "数据不可变，更新 map/struct 产生新版本，但底层结构共享，未修改部分不复制",
+      "二进制是引用计数的，大二进制的小切片会持有原二进制；拼接大量文本应使用 iodata",
+      "用 :timer.tc/1 粗测耗时，:erlang.memory/1 观察内存，避免热路径上的 Enum.to_list"
     ],
-    "c": "// Elixir教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "base = %{a: 1, b: 2}\nupdated = %{base | a: 10}\nIO.inspect({base, updated})\n\n# 大量字符串拼接用 iolist，避免反复复制\nparts = for i <- 1..1000, do: \"line #{i}\\n\"\nIO.puts(\"iolist 字节数: #{IO.iodata_length(parts)}\")\n\n{micros, _} =\n  :timer.tc(fn ->\n    Enum.reduce(1..1_000_000, 0, &(&1 + &2))\n  end)\n\nIO.puts(\"耗时 #{micros} 微秒\")\nIO.inspect(:erlang.memory(:total), label: \"BEAM 总内存(字节)\")",
+    "et": "❌ 常见错误",
+    "ec": "用 <> 在循环中拼接大字符串会产生大量中间二进制并反复复制，复杂度 O(n²)。应收集 iolist 后用 IO.iodata_to_binary/1 或 IO.puts/1 一次输出。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "惰性处理大文件用什么配合？",
+        "a": "File.stream!/1 加 Stream/Enum"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "粗略测量函数耗时的内置函数？",
+        "a": ":timer.tc/1"
       }
     ]
   },
   {
     "id": 24,
-    "t": "测试",
+    "t": "ExUnit 测试",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "ExUnit 是内置测试框架，测试放 test/ 目录并以 _test.exs 结尾，test_helper.exs 中调用 ExUnit.start()",
+      "use ExUnit.Case 定义测试模块，test \"描述\" do ... end 定义用例，assert/refute 做断言",
+      "assert_raise/2 断言异常，assert_receive/3 断言收到消息，setup 回调准备测试上下文",
+      "doctest 把 @doc 中的 iex> 示例变成测试，async: true 让测试模块并行运行"
     ],
-    "c": "// Elixir教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "ExUnit.start()\n\ndefmodule Calc do\n  def add(a, b), do: a + b\nend\n\ndefmodule CalcTest do\n  use ExUnit.Case, async: true\n\n  test \"add/2 相加整数\" do\n    assert Calc.add(1, 2) == 3\n  end\n\n  test \"除零抛出 ArithmeticError\" do\n    assert_raise ArithmeticError, fn -> 1 / 0 end\n  end\nend\n\n# 实际项目中保存为 test/calc_test.exs 并运行 mix test",
+    "et": "❌ 常见错误",
+    "ec": "测试之间共享可变状态导致随机失败：每个测试在独立进程运行，但 ETS、Agent 或数据库数据可能共享。应用 setup 隔离数据，或对共享资源的模块加 async: false。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "断言抛出指定异常的函数？",
+        "a": "assert_raise/2"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "让测试模块并行运行的选项？",
+        "a": "async: true"
       }
     ]
   },
@@ -891,184 +555,114 @@ window.TUTORIAL_DATA_elixir = [
     "id": 25,
     "t": "调试技巧",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "IO.inspect/2 支持 label:、limit:、pretty: 选项，可插入管道中间观察数据流",
+      "IEx.pry/0 在代码中打断点，需用 iex -S mix 运行，进入后可查看绑定并继续执行",
+      "用 i/1 查看值的类型与结构，h/1 查文档，:observer.start() 查看进程与内存",
+      "崩溃时阅读 supervisor 报告与 Logger 日志，:sys.get_state/1 可查看 GenServer 内部状态"
     ],
-    "c": "// Elixir教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule DebugDemo do\n  def process(orders) do\n    orders\n    |> IO.inspect(label: \"输入\")\n    |> Enum.filter(&(&1[:amount] > 100))\n    |> IO.inspect(label: \"过滤后\")\n    |> Enum.map(&Map.put(&1, :status, :ok))\n  end\nend\n\nresult = DebugDemo.process([%{id: 1, amount: 50}, %{id: 2, amount: 200}])\nIO.inspect(result, label: \"结果\", limit: :infinity)\n\n# iex -S mix                    带项目进入交互环境\n# require IEx; IEx.pry()        在代码中打断点\n# h Enum.map / i value          查文档 / 查类型\n# :dbg.tracer() 与 :dbg.p(self(), :c)   Erlang 调试工具",
+    "et": "❌ 常见错误",
+    "ec": "在生产代码中留下大量 IO.inspect 会拖慢热路径并泄露敏感数据。调试输出应改用 Logger.debug 并配置编译期日志级别，或使用 :dbg 按需开启。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "IEx 中查看值类型的辅助函数？",
+        "a": "i/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "在代码中设置断点的函数？",
+        "a": "IEx.pry/0"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "性能分析与优化",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "先用 :timer.tc/1 或 Benchee 建立基线，再用 :eprof/:fprof/:cprof 做函数级剖析，避免过早优化",
+      "常见瓶颈：O(n²) 的 ++ 拼接、重复 Enum.to_list、频繁字符串拼接、过大的消息复制",
+      "优化手段：Stream 惰性处理、MapSet 替代列表查找、二进制匹配代替正则、调整并发度",
+      "关注 GC 与内存：:erlang.memory/1、:erlang.process_info(pid, :memory)，空闲进程可 :hibernate"
     ],
-    "c": "// Elixir教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Perf do\n  def slow_sum(n), do: Enum.reduce(1..n, 0, fn x, acc -> acc + x end)\n  def fast_sum(n), do: div(n * (n + 1), 2)\nend\n\n{micros1, _} = :timer.tc(fn -> Perf.slow_sum(5_000_000) end)\n{micros2, _} = :timer.tc(fn -> Perf.fast_sum(5_000_000) end)\n\nIO.puts(\"循环求和: #{micros1} 微秒\")\nIO.puts(\"公式求和: #{micros2} 微秒\")\n\n# :eprof / :fprof / :cprof 做函数级剖析\n# Benchee 做基准测试；:erlang.memory/1 观察内存\nIO.inspect(:erlang.memory(:processes), label: \"进程内存(字节)\")\nIO.inspect(:erlang.process_info(self(), :memory), label: \"当前进程内存\")",
+    "et": "❌ 常见错误",
+    "ec": "只测一次就下结论：BEAM 有 JIT 预热与 GC 抖动，单次耗时的噪声很大。应多次运行取中位数，并在接近生产的并发与数据规模下用 Benchee 对比。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "粗略测量函数耗时的函数？",
+        "a": ":timer.tc/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "用于函数级剖析的 Erlang 工具？",
+        "a": ":eprof / :fprof / :cprof"
       }
     ]
   },
   {
     "id": 27,
-    "t": "设计模式",
+    "t": "OTP 与函数式架构",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "OTP 的核心是行为模式：GenServer 封装状态与消息协议，Supervisor 决定重启策略，Application 组织启动树",
+      "GenServer 回调：init/1、handle_call/3（同步）、handle_cast/2（异步）、handle_info/2（普通消息）",
+      "监督策略 one_for_one/one_for_all/rest_for_one 配合最大重启强度，决定故障隔离范围",
+      "用 Registry 注册进程，DynamicSupervisor 动态创建子进程，Task.Supervisor 管理临时任务"
     ],
-    "c": "// Elixir教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Counter do\n  use GenServer\n\n  def start_link(init), do: GenServer.start_link(__MODULE__, init, name: __MODULE__)\n  def incr, do: GenServer.cast(__MODULE__, :incr)\n  def value, do: GenServer.call(__MODULE__, :value)\n\n  @impl true\n  def init(n), do: {:ok, n}\n\n  @impl true\n  def handle_cast(:incr, n), do: {:noreply, n + 1}\n\n  @impl true\n  def handle_call(:value, _from, n), do: {:reply, n, n}\nend\n\n{:ok, _pid} = Counter.start_link(0)\nCounter.incr()\nCounter.incr()\nIO.inspect(Counter.value(), label: \"计数\")\n\nGenServer.stop(Counter)\n{:ok, _sup} = Supervisor.start_link([{Counter, 10}], strategy: :one_for_one)\nIO.inspect(Counter.value(), label: \"监督树下\")",
+    "et": "❌ 常见错误",
+    "ec": "在 handle_call 中执行长时间阻塞操作，会卡住整个 GenServer 及其调用者。耗时任务应交给 Task 异步执行，或拆成独立进程，保持回调快速返回。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "GenServer 处理同步调用的回调？",
+        "a": "handle_call/3"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "按子进程独立重启的监督策略？",
+        "a": ":one_for_one"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问与 Ecto",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ecto 是数据库封装：Ecto.Schema 定义表结构，Ecto.Changeset 校验与转换输入，Ecto.Repo 执行查询",
+      "查询用 Ecto.Query 的 from 语法，支持 where/select/join/preload，查询编译成参数化 SQL 防注入",
+      "changeset 把 cast/validate 组合成管道，valid?/1 判断整体有效性，errors_on/1 在测试中断言错误",
+      "迁移用 mix ecto.gen.migration 与 mix ecto.migrate，仓库配置放 config 或 runtime.exs"
     ],
-    "c": "// Elixir教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# 在 mix.exs 中添加 {:ecto_sql, \"~> 3.11\"} 与 {:postgrex, \"~> 0.17\"}\ndefmodule Repo do\n  use Ecto.Repo, otp_app: :my_app, adapter: Ecto.Adapters.Postgres\nend\n\ndefmodule User do\n  use Ecto.Schema\n  import Ecto.Changeset\n\n  schema \"users\" do\n    field :name, :string\n    field :age, :integer\n    timestamps()\n  end\n\n  def changeset(user, attrs) do\n    user\n    |> cast(attrs, [:name, :age])\n    |> validate_required([:name])\n    |> validate_number(:age, greater_than: 0)\n  end\nend\n\n# Repo.insert(User.changeset(%User{}, %{name: \"Ada\", age: 36}))\n# Repo.all(from u in User, where: u.age > 18, select: u.name)",
+    "et": "❌ 常见错误",
+    "ec": "用 Repo.insert/2 直接插入未校验的 params，或用字符串拼接 SQL。所有外部输入都应经 changeset 的 cast 与 validate，原生 SQL 必须用参数占位符而非插值。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Ecto 中校验并转换外部输入的模块？",
+        "a": "Ecto.Changeset"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "执行数据库迁移的命令？",
+        "a": "mix ecto.migrate"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络编程与 HTTP",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Plug 定义连接处理规范：Plug.Conn 操作请求响应，Plug.Router 做路由，Plug.Builder 组合中间件",
+      "生产常用 Bandit 或 Cowboy 适配器，Plug.Cowboy.http/3 可直接启动监听",
+      "客户端可用 Req 或 :httpc，Req.get!/1 返回结构体，失败时抛异常",
+      "处理 JSON 用 Jason.encode!/1 与 decode!/1，注意设置 Content-Type 与状态码"
     ],
-    "c": "// Elixir教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# mix.exs 中添加 {:plug_cowboy, \"~> 2.7\"}\ndefmodule Api.Router do\n  use Plug.Router\n\n  plug :match\n  plug :dispatch\n\n  get \"/health\" do\n    send_resp(conn, 200, \"ok\")\n  end\n\n  get \"/hello/:name\" do\n    send_resp(conn, 200, \"你好，#{name}\")\n  end\n\n  match _ do\n    send_resp(conn, 404, \"not found\")\n  end\nend\n\n# 启动：Plug.Cowboy.http(Api.Router, [], port: 4000)\n# 客户端：Req.get!(\"https://example.com\").status",
+    "et": "❌ 常见错误",
+    "ec": "在 Plug 管道中忘记调用 send_resp/3 或 halt/1，请求会挂起直到超时。每个分支都必须返回 conn，匹配失败的分支要显式 send_resp。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Plug 中发送响应的函数？",
+        "a": "send_resp/3"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Plug.Router 中匹配路径参数的写法？",
+        "a": "get \"/users/:id\" do ... end"
       }
     ]
   },
@@ -1076,221 +670,137 @@ window.TUTORIAL_DATA_elixir = [
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "密钥通过 System.fetch_env!/1 从环境变量读取，禁止硬编码或提交到仓库",
+      "所有外部输入都要校验类型、长度、范围与白名单；SQL 用参数化查询，输出 HTML 前转义",
+      "比较令牌用恒定时间比较（Plug.Crypto.secure_compare/2 或 :crypto.hash_equals/2），防止时序攻击",
+      "密码用 bcrypt/argon2 等慢哈希加盐存储，绝不使用 MD5/SHA1；会话令牌需足够随机且可失效"
     ],
-    "c": "// Elixir教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Security do\n  def secret, do: System.fetch_env!(\"APP_SECRET\")\n\n  # 输出 HTML 前转义，避免 XSS\n  def escape(nil), do: \"\"\n  def escape(text) do\n    text\n    |> String.replace(\"&\", \"&amp;\")\n    |> String.replace(\"<\", \"&lt;\")\n    |> String.replace(\">\", \"&gt;\")\n    |> String.replace(\"\\\"\", \"&quot;\")\n  end\n\n  def safe_compare(a, b) when is_binary(a) and is_binary(b) do\n    :crypto.hash_equals(a, b)\n  end\nend\n\nSystem.put_env(\"APP_SECRET\", \"dev-only\")\nIO.inspect(Security.escape(\"<script>alert(1)</script>\"))\nIO.inspect(Security.safe_compare(\"token\", \"token\"))",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较密钥或签名，比较会在首个不同字节提前返回，攻击者可据响应时间逐字节猜测。应使用恒定时间比较函数。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "读取必需环境变量、缺失即报错的函数？",
+        "a": "System.fetch_env!/1"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "用于恒定时间比较的 Erlang 函数？",
+        "a": ":crypto.hash_equals/2"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "命令行参数用 System.argv/0 获取，OptionParser.parse/2 解析开关与位置参数，strict 拒绝未知选项",
+      "错误输出到标准错误用 IO.puts(:stderr, msg)，返回非零码用 System.halt/1 便于脚本判断",
+      "用 escript 打包：mix escript.build 生成可执行文件，main/1 接收参数列表",
+      "处理大文件用 File.stream!/1 逐行读取，避免一次性载入内存"
     ],
-    "c": "// Elixir教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule WordCount do\n  def main(args) do\n    {opts, files, _invalid} = OptionParser.parse(args, strict: [unique: :boolean])\n    Enum.each(files, fn file ->\n      case File.read(file) do\n        {:ok, content} ->\n          words = String.split(content, ~r/\\s+/, trim: true)\n          words = if opts[:unique], do: Enum.uniq(words), else: words\n          IO.puts(\"#{file}: #{length(words)} 词\")\n        {:error, reason} ->\n          IO.puts(:stderr, \"无法读取 #{file}: #{:file.format_error(reason)}\")\n      end\n    end)\n  end\nend\n\n# 运行：elixir word_count.exs --unique README.md\nWordCount.main(System.argv())",
+    "et": "❌ 常见错误",
+    "ec": "直接对 System.argv/0 做模式匹配而不处理空参数，用户不带参数运行时抛 MatchError 且没有用法提示。应先校验参数并打印 usage，再以非零码退出。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "解析命令行选项的模块？",
+        "a": "OptionParser"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "打包 escript 的命令？",
+        "a": "mix escript.build"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：Web API",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Plug.Router 用 get/post 宏声明路由，路径参数如 /users/:id 自动绑定为变量，match _ 做兜底",
+      "用 put_resp_content_type/2 设置 JSON 类型，Jason.encode!/1 序列化，send_resp/3 返回状态码",
+      "中间件按 plug 声明顺序执行，Plug.Parsers 解析 JSON 请求体，Plug.Logger 记录请求",
+      "大型项目用 Phoenix：路由、控制器、JSON 渲染、Context 分层，LiveView 做实时页面"
     ],
-    "c": "// Elixir教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "# mix.exs 依赖：{:plug_cowboy, \"~> 2.7\"}, {:jason, \"~> 1.4\"}\ndefmodule Api.Router do\n  use Plug.Router\n\n  plug :match\n  plug :dispatch\n\n  get \"/api/users/:id\" do\n    users = %{\"1\" => %{id: 1, name: \"Ada\"}, \"2\" => %{id: 2, name: \"Alan\"}}\n    case Map.fetch(users, id) do\n      {:ok, user} ->\n        conn\n        |> put_resp_content_type(\"application/json\")\n        |> send_resp(200, Jason.encode!(user))\n      :error ->\n        conn\n        |> put_resp_content_type(\"application/json\")\n        |> send_resp(404, Jason.encode!(%{error: \"not_found\"}))\n    end\n  end\n  match _ do\n    send_resp(conn, 404, \"not found\")\n  end\nend",
+    "et": "❌ 常见错误",
+    "ec": "路由顺序写错，把兜底 match _ 放在具体路由之前，所有请求都返回 404。Plug.Router 按声明顺序匹配，具体路由必须写在通配路由之前。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Plug 中设置响应内容类型的函数？",
+        "a": "put_resp_content_type/2"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "编码 JSON 的常用库？",
+        "a": "Jason"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "mix release 生成自包含发布包，内含 ERTS 与所有依赖，目标机器无需安装 Erlang/Elixir",
+      "运行时配置放 config/runtime.exs，用 System.get_env/1 读取端口与密钥，构建后仍可调整",
+      "命令：MIX_ENV=prod mix release，启动 bin/my_app start，远程接入 bin/my_app remote",
+      "容器部署用多阶段构建，运行层只保留 release；配置用环境变量注入，健康检查走 HTTP 端点"
     ],
-    "c": "// Elixir教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Release.Info do\n  def runtime_config do\n    %{\n      port: String.to_integer(System.get_env(\"PORT\", \"4000\")),\n      secret: System.fetch_env!(\"SECRET_KEY_BASE\")\n    }\n  end\nend\n\nSystem.put_env(\"SECRET_KEY_BASE\", \"demo\")\nIO.inspect(Release.Info.runtime_config())\n\n# MIX_ENV=prod mix deps.get --only prod\n# MIX_ENV=prod mix release\n# _build/prod/rel/my_app/bin/my_app start\n# config/runtime.exs 在启动时读取环境变量\n# Docker 多阶段：构建层用 hexpm/elixir，运行层只需 ERTS",
+    "et": "❌ 常见错误",
+    "ec": "把密钥写进 config/prod.exs 并编译进 release，泄露后必须重新构建才能轮换。应改用 runtime.exs 加环境变量，由部署平台注入密钥。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "生成发布包的命令？",
+        "a": "mix release"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "运行时配置读取环境变量的推荐函数？",
+        "a": "System.get_env/1 / System.fetch_env!/1"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码风格",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 mix format 统一格式，mix credo 检查风格与复杂度，mix dialyzer 做类型分析",
+      "函数保持短小、单一职责；用管道组织数据流，用 with 处理多步可能失败的流程",
+      "模式匹配优先于条件判断：在函数头匹配不同形状，让非法状态无法表示",
+      "模块加 @moduledoc 与 @doc，公开函数加 @spec；避免深层嵌套 case，用私有函数拆分"
     ],
-    "c": "// Elixir教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Style do\n  @moduledoc \"遵循 mix format 与 Credo 的示例\"\n\n  @spec normalize([String.t()]) :: [String.t()]\n  def normalize(names) do\n    names\n    |> Enum.map(&String.trim/1)\n    |> Enum.reject(&(&1 == \"\"))\n    |> Enum.map(&String.downcase/1)\n    |> Enum.uniq()\n  end\n\n  def fetch_config(key) do\n    case Application.fetch_env(:style, key) do\n      {:ok, value} -> value\n      :error -> :missing\n    end\n  end\nend\n\nIO.inspect(Style.normalize([\" Ada \", \"\", \"ADA\", \"Alan\"]))\nIO.inspect(Style.fetch_config(:timeout))",
+    "et": "❌ 常见错误",
+    "ec": "用异常处理正常业务分支，如用 rescue 捕获解析失败，既慢又掩盖错误。可预期失败应返回 {:ok, _}/{:error, _}，异常只留给真正的意外。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "Elixir 官方代码格式化命令？",
+        "a": "mix format"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "检查代码风格与复杂度的工具？",
+        "a": "Credo（mix credo）"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Elixir教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "学习路线：语法与模式匹配 → Enum/Stream → OTP（GenServer/Supervisor）→ Ecto → Phoenix/LiveView",
+      "官方文档 hexdocs.pm/elixir 与 Elixir School 最可靠，《Elixir in Action》深入 OTP",
+      "实践项目：命令行工具 → 带监督树的并发服务 → Ecto 持久化 API → Phoenix 实时应用",
+      "阅读 GenServer、Plug、Ecto 源码，是理解 OTP 设计与函数式架构的好材料"
     ],
-    "c": "// Elixir教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Elixir教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "defmodule Roadmap do\n  @steps [\n    {:basics, \"语法、模式匹配、Enum/Stream\"},\n    {:otp, \"GenServer、Supervisor、Task\"},\n    {:data, \"Ecto 与 PostgreSQL\"},\n    {:web, \"Plug、Phoenix、LiveView\"},\n    {:quality, \"ExUnit、Credo、Dialyzer\"}\n  ]\n\n  def plan, do: Enum.with_index(@steps, 1)\n\n  def describe({key, desc}, index), do: \"#{index}. #{key}: #{desc}\"\nend\n\nRoadmap.plan()\n|> Enum.map(fn {step, i} -> Roadmap.describe(step, i) end)\n|> Enum.each(&IO.puts/1)\n\n# 资源：https://hexdocs.pm/elixir 与 https://elixirschool.com",
+    "et": "❌ 常见错误",
+    "ec": "只读语法不写项目，遇到进程崩溃与监督树就无从下手。应尽早用 mix new 建项目、写 ExUnit 测试、部署一次 release，在真实故障中理解 OTP。",
     "q": [
       {
-        "q": "Elixir教程的主要特点是什么？",
-        "a": "高并发函数式编程"
+        "q": "深入学习 OTP 的推荐书？",
+        "a": "《Elixir in Action》"
       },
       {
-        "q": "学习Elixir教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Elixir教程的主要应用领域？",
-        "a": "高并发函数式编程"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Elixir 官方文档地址？",
+        "a": "https://hexdocs.pm/elixir"
       }
     ]
   }

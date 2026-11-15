@@ -328,6 +328,8 @@ a:hover {
 .code-header .actions {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .code-btn {
@@ -345,6 +347,71 @@ a:hover {
 .code-btn:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+}
+
+.code-btn.run {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.code-output {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 16px 20px;
+    border-top: 1px solid var(--border);
+    font-family: "JetBrains Mono", "Fira Code", Consolas, Monaco, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.code-output .output-running {
+    color: #fbbf24;
+}
+
+.code-output .runner-output-text {
+    margin: 0;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+}
+
+.code-output .runner-output-meta {
+    margin-top: 10px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.code-output .runner-output-notice {
+    margin-top: 8px;
+    color: #fbbf24;
+    font-size: 12px;
+}
+
+.code-output .runner-preview-frame {
+    width: 100%;
+    min-height: 220px;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.run-fallback {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: rgba(251, 191, 36, 0.12);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    color: #fbbf24;
+    font-size: 12px;
+}
+
+.run-fallback .code-btn {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #1f2937;
 }
 
 .code-body {

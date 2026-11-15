@@ -873,5 +873,24 @@
       "创建控制器",
       "创建模型和迁移"
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用扩展/函数：json_encode、date、preg_* 正则、PDO 数据库、array_* 数组函数",
+      "Composer 管理依赖，composer.json 声明包，composer.lock 锁定版本；vendor/autoload.php 自动加载",
+      "测试用 PHPUnit；格式化 php-cs-fixer/PHP_CodeSniffer；调试 Xdebug",
+      "运行：php -S localhost:8000；安装依赖：composer install；测试：vendor/bin/phpunit"
+    ],
+    "c": "<?php\n$nums = [3, 1, 4, 1, 5];\nsort($nums);\necho implode(\",\", $nums), PHP_EOL;\n\n$freq = [\"php\" => 1];\n$freq[\"php\"]++;\nprint_r($freq);\n\necho date(\"Y-m-d\"), PHP_EOL;\necho json_encode([\"ok\" => true], JSON_UNESCAPED_UNICODE), PHP_EOL;\n\n// 工具链（终端执行）\n// 依赖：composer require guzzlehttp/guzzle\n// 测试：vendor/bin/phpunit     格式化：vendor/bin/php-cs-fixer fix\n// 运行：php -S localhost:8000  调试：Xdebug + IDE 断点\n",
+    "et": "❌ 常见错误",
+    "ec": "直接 require 第三方文件而不使用 Composer 自动加载，导致类找不到。应通过 composer install 生成 vendor/autoload.php。",
+    "q": [
+      {
+        "q": "PHP 中把数组编码为 JSON 的函数是什么？",
+        "a": "json_encode()"
+      }
+    ],
+    "id": 36
   }
 ]

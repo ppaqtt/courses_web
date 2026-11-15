@@ -3,12 +3,13 @@
  * 支持离线访问和缓存管理
  */
 
-const CACHE_NAME = 'tutorial-cache-v3';
+const CACHE_NAME = 'tutorial-cache-v4';
 const STATIC_ASSETS = [
     '/programming-languages-tutorial.html',
     '/tutorial-hub.html',
     '/learning-paths.html',
     '/concepts.html',
+    '/language-comparison.html',
     '/daily-quiz.html',
     '/offline.html',
     '/tutorial-style.css',
@@ -16,10 +17,12 @@ const STATIC_ASSETS = [
     '/tutorial-features.css',
     '/tutorial-extensions.css',
     '/tutorial-advanced.css',
+    '/css/runoob-style.css',
     '/tutorial-common.js',
     '/tutorial-extensions.js',
     '/tutorial-advanced.js',
     '/tutorial-runner.js',
+    '/js/runoob-tutorial.js',
     '/language-catalog.js',
     '/manifest.json',
     '/favicon.ico',

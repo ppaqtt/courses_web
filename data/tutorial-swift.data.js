@@ -687,5 +687,24 @@ window.TUTORIAL_DATA_swift = [
         "a": "struct User: Codable { let id: Int let name: String } func fetchUser(id: Int) async throws -> User { let url = URL(string: \"https://api.example.com/users/\\(id)\")! let (data, _) = try await URLSession.shared.data(from: url) return try JSONDecoder().decode(User.self, from: data) }"
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "标准库速查：Array/Dictionary/Set、String、Date、JSONEncoder/JSONDecoder、Foundation",
+      "Swift Package Manager 管理依赖，Package.swift 声明目标与包",
+      "测试用 XCTest；格式化 swift-format；调试 lldb/Xcode 断点",
+      "运行：swift run；构建：swift build；测试：swift test"
+    ],
+    "c": "import Foundation\n\nvar nums = [3, 1, 4, 1, 5]\nnums.sort()\nprint(nums)\n\nvar freq = [\"swift\": 1]\nfreq[\"swift\", default: 0] += 1\nprint(freq)\n\nprint(ISO8601DateFormatter().string(from: Date()))\nlet data = try! JSONEncoder().encode([\"ok\": true])\nprint(String(data: data, encoding: .utf8)!)\n\n// 工具链（终端执行）\n// 依赖：swift package init --type executable && 编辑 Package.swift\n// 构建：swift build       运行：swift run\n// 测试：swift test        格式化：swift-format format -i -r .\n// 调试：lldb .build/debug/app\n",
+    "et": "❌ 常见错误",
+    "ec": "在 Swift 中用 try! 处理所有可能失败的调用，线上遇到异常直接崩溃。应使用 do/catch 或可选绑定处理错误。",
+    "q": [
+      {
+        "q": "Swift 中解析 JSON 的标准编码器类型是什么？",
+        "a": "JSONDecoder"
+      }
+    ],
+    "id": 36
   }
 ];

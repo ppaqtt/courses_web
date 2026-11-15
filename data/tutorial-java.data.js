@@ -1,5 +1,4 @@
-window.TUTORIAL_DATA_java = 
-[
+window.TUTORIAL_DATA_java = [
   {
     "id": 1,
     "t": "Java简介与历史",
@@ -223,7 +222,12 @@ window.TUTORIAL_DATA_java =
     "c": "public class ForLoop {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 5; i++) {\n            System.out.print(i + \" \");\n        }\n        System.out.println();\n\n        int sum = 0;\n        for (int i = 1; i <= 100; i++) {\n            sum += i;\n        }\n        System.out.println(\"1-100的和: \" + sum);\n\n        int[] nums = {10, 20, 30, 40, 50};\n        for (int n : nums) {\n            System.out.print(n + \" \");\n        }\n    }\n}",
     "et": "循环条件永远为true：",
     "ec": "循环条件永远为true：注意循环终止条件，避免死循环\n增强for中修改集合：抛出ConcurrentModificationException",
-    "q": []
+    "q": [
+      {
+        "q": "请用自己的话说明「for循环」的核心要点。",
+        "a": "基本for：for(初始化; 条件; 更新) { 循环体 }"
+      }
+    ]
   },
   {
     "id": 13,
@@ -256,7 +260,12 @@ window.TUTORIAL_DATA_java =
     "c": "public class BreakContinue {\n    public static void main(String[] args) {\n        for (int i = 1; i <= 100; i++) {\n            if (i % 7 == 0) {\n                System.out.println(\"找到: \" + i);\n                break;\n            }\n        }\n\n        for (int i = 1; i <= 10; i++) {\n            if (i % 2 == 0) continue;\n            System.out.print(i + \" \");\n        }\n        System.out.println();\n\n        outer:\n        for (int i = 0; i < 3; i++) {\n            for (int j = 0; j < 3; j++) {\n                if (i == 1 && j == 1) break outer;\n                System.out.print(\"(\" + i + \",\" + j + \") \");\n            }\n        }\n    }\n}",
     "et": "在普通if中使用break：",
     "ec": "在普通if中使用break：break只能在循环或switch中使用\n混淆break和continue：break终止整个循环，continue只跳过当次",
-    "q": []
+    "q": [
+      {
+        "q": "请用自己的话说明「break与continue」的核心要点。",
+        "a": "break：跳出当前循环，循环立即终止"
+      }
+    ]
   },
   {
     "id": 15,
@@ -270,7 +279,12 @@ window.TUTORIAL_DATA_java =
     "c": "public class ArrayDemo {\n    public static void main(String[] args) {\n        int[] scores = new int[5];\n        scores[0] = 90;\n        scores[1] = 85;\n\n        String[] names = {\"Alice\", \"Bob\", \"Charlie\"};\n\n        for (int i = 0; i < scores.length; i++) {\n            System.out.println(\"成绩\" + i + \": \" + scores[i]);\n        }\n\n        for (String name : names) {\n            System.out.println(\"姓名: \" + name);\n        }\n\n        int[] arr = {5, 2, 8, 1, 9};\n        java.util.Arrays.sort(arr);\n        System.out.println(java.util.Arrays.toString(arr));\n    }\n}",
     "et": "数组越界：",
     "ec": "数组越界：arr[arr.length] 抛出ArrayIndexOutOfBoundsException\n声明后直接使用：数组必须先初始化才能使用",
-    "q": []
+    "q": [
+      {
+        "q": "请用自己的话说明「一维数组」的核心要点。",
+        "a": "声明与初始化：int[] arr = new int[5]; 或 int[] arr = {1,2,3};"
+      }
+    ]
   },
   {
     "id": 16,
@@ -284,7 +298,12 @@ window.TUTORIAL_DATA_java =
     "c": "public class MultiArray {\n    public static void main(String[] args) {\n        int[][] matrix = {\n            {1, 2, 3},\n            {4, 5, 6},\n            {7, 8, 9}\n        };\n\n        for (int i = 0; i < matrix.length; i++) {\n            for (int j = 0; j < matrix[i].length; j++) {\n                System.out.print(matrix[i][j] + \" \");\n            }\n            System.out.println();\n        }\n\n        int[][] jagged = new int[3][];\n        jagged[0] = new int[]{1, 2};\n        jagged[1] = new int[]{3, 4, 5};\n        jagged[2] = new int[]{6};\n    }\n}",
     "et": "列索引越界：",
     "ec": "列索引越界：注意每行的列数\n未初始化行：不规则数组需单独初始化每行",
-    "q": []
+    "q": [
+      {
+        "q": "请用自己的话说明「多维数组」的核心要点。",
+        "a": "声明：int[][] matrix = new int[3][4]; 3行4列"
+      }
+    ]
   },
   {
     "id": 17,
@@ -583,7 +602,12 @@ window.TUTORIAL_DATA_java =
     "c": "import java.util.*;\n\npublic class CollectionDemo {\n    public static void main(String[] args) {\n        List<String> list = new ArrayList<>();\n        list.add(\"Apple\");\n        list.add(\"Banana\");\n        list.add(\"Apple\");\n        System.out.println(\"List: \" + list);\n\n        Set<String> set = new HashSet<>(list);\n        System.out.println(\"Set: \" + set);\n\n        Map<String, Integer> map = new HashMap<>();\n        map.put(\"Alice\", 25);\n        map.put(\"Bob\", 30);\n\n        for (Map.Entry<String, Integer> entry : map.entrySet()) {\n            System.out.println(entry.getKey() + \": \" + entry.getValue());\n        }\n    }\n}",
     "et": "遍历修改：",
     "ec": "遍历修改：遍历时不能直接修改集合\nHashMap线程安全：HashMap不是线程安全的",
-    "q": []
+    "q": [
+      {
+        "q": "请用自己的话说明「集合框架」的核心要点。",
+        "a": "List：有序可重复（ArrayList, LinkedList）"
+      }
+    ]
   },
   {
     "id": 33,
@@ -641,5 +665,24 @@ window.TUTORIAL_DATA_java =
         "a": "requires 模块名;"
       }
     ]
+  },
+  {
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用包：java.util 集合、java.time 日期时间、java.nio.file 文件、java.util.stream 流式处理",
+      "构建工具 Maven 或 Gradle 管理依赖、编译与打包；依赖坐标写入 pom.xml / build.gradle",
+      "测试用 JUnit 5；格式化 google-java-format 或 Spotless；调试用 jdb 或 IDE 断点",
+      "运行：mvn test / mvn package / java -jar target/app.jar"
+    ],
+    "c": "import java.time.LocalDate;\nimport java.nio.file.Files;\nimport java.nio.file.Path;\nimport java.util.*;\n\npublic class Main {\n    public static void main(String[] args) throws Exception {\n        List<String> names = List.of(\"Ada\", \"Linus\", \"Grace\");\n        names.stream().filter(n -> n.length() > 3).forEach(System.out::println);\n        System.out.println(LocalDate.now());\n        System.out.println(Files.exists(Path.of(\"pom.xml\")));\n        Map<String, Integer> freq = new HashMap<>();\n        freq.merge(\"java\", 1, Integer::sum);\n        System.out.println(freq);\n    }\n}\n\n// 工具链（终端执行）\n// 构建：mvn package       或  gradle build\n// 测试：mvn test          或  gradle test\n// 运行：java -jar target/app.jar\n// 格式化：mvn spotless:apply   调试：jdb -classpath target/classes Main\n",
+    "et": "❌ 常见错误",
+    "ec": "只把 jar 包拷来拷去而不用构建工具，依赖缺失时运行期才报 NoClassDefFoundError。用 Maven/Gradle 声明依赖并锁定版本。",
+    "q": [
+      {
+        "q": "Java 中处理日期时间的标准包是什么？",
+        "a": "java.time"
+      }
+    ],
+    "id": 36
   }
 ];

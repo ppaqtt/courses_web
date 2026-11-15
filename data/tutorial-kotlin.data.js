@@ -1,112 +1,58 @@
 window.TUTORIAL_DATA_kotlin = [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Kotlin 简介与历史",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Kotlin 由 JetBrains 于 2011 年发布，2017 年被 Google 宣布为 Android 官方开发语言",
+      "Kotlin 运行在 JVM 上，也可编译为 JavaScript 与原生代码，语法简洁且与 Java 完全互操作",
+      "1.9 版本完善了 K2 编译器预览、数据对象与多项稳定语言特性",
+      "空安全、扩展函数、协程与密封类是 Kotlin 相对 Java 的核心优势"
     ],
-    "c": "// Kotlin教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// Kotlin 1.9 的第一个程序\nfun main() {\n    println(\"Hello, Kotlin!\")\n\n    val version = \"1.9\"\n    val year = 2011\n    println(\"Kotlin $version，诞生于 $year 年\")\n\n    val uses = listOf(\"Android\", \"服务端\", \"多平台\")\n    for (u in uses) {\n        println(\"应用场景：$u\")\n    }\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 Java 的写法直接搬来，例如用 new 创建对象或写 String s = null；Kotlin 用构造函数调用创建对象，可空类型必须写 String?。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 在哪一年成为 Android 官方语言？",
+        "a": "2017 年"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装与工具链环境",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "安装 JDK 17 或更高版本，Kotlin 1.9 推荐使用 JDK 17 运行 Gradle 与编译器",
+      "IntelliJ IDEA 自带 Kotlin 插件，新建项目时选择 Gradle 构建即可",
+      "命令行可用 kotlinc 编译 .kt 文件，再通过 java -jar 运行生成的 jar",
+      "Gradle Wrapper 固定构建版本，团队协作时不依赖本机安装的 Gradle"
     ],
-    "c": "// Kotlin教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 安装 JDK 17+ 与 IntelliJ IDEA / Gradle\n// 命令行：kotlinc Main.kt -include-runtime -d app.jar\n// 运行：java -jar app.jar\n// Gradle：./gradlew build && ./gradlew run\nfun main() {\n    println(\"Kotlin 工具链已就绪\")\n    println(\"JVM 版本：${System.getProperty(\"java.version\")}\")\n    println(\"系统：${System.getProperty(\"os.name\")}\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "只安装 kotlinc 而不配置 JDK，编译时会提示找不到 java 或版本不兼容；应先确认 JAVA_HOME 指向 JDK 17。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "命令行把 Main.kt 编译为可运行 jar 的命令？",
+        "a": "kotlinc Main.kt -include-runtime -d app.jar"
       }
     ]
   },
   {
     "id": 3,
-    "t": "变量与常量",
+    "t": "变量、常量与命名",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "val 声明只读变量，var 声明可变变量，优先使用 val 以减少意外修改",
+      "const val 用于编译期常量，只能修饰顶层或 object 中的基本类型与 String",
+      "Kotlin 支持类型推断，但公开 API 建议显式写出类型以提升可读性",
+      "命名规范：类与接口 UpperCamelCase，函数与属性 lowerCamelCase，常量 UPPER_SNAKE_CASE"
     ],
-    "c": "// Kotlin教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const val MAX_RETRY = 3\n\nfun main() {\n    val name = \"Kotlin\"        // 只读局部变量\n    var count = 0              // 可变变量\n    count += 1\n\n    val inferred = 3.14        // 推断为 Double\n    val explicit: Long = 42L\n    println(\"$name $count $inferred $explicit\")\n\n    val userName = \"Ada\"\n    println(userName)\n    println(MAX_RETRY)\n}",
+    "et": "❌ 常见错误",
+    "ec": "在函数内写 const val 会编译失败，因为 const 只能用于顶层、object 或 companion object 的编译期常量。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中声明只读局部变量用哪个关键字？",
+        "a": "val"
       }
     ]
   },
@@ -114,221 +60,113 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 4,
     "t": "数据类型",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "基本类型包括 Int、Long、Double、Float、Boolean、Char，编译后尽量映射为 JVM 原始类型",
+      "Kotlin 不做隐式数值拓宽，Int 与 Long 相加需要显式转换或依赖运算符重载",
+      "String 不可变，Any 是所有类的根，Unit 表示无返回值，Nothing 表示永不返回",
+      "可空类型用 ? 表示，例如 String?，非空与可空类型在类型系统中严格区分"
     ],
-    "c": "// Kotlin教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val i: Int = 42\n    val l: Long = 42L\n    val d: Double = 3.14\n    val f: Float = 1.5f\n    val b: Boolean = true\n    val c: Char = 'K'\n    val s: String = \"Kotlin\"\n    val any: Any = s\n    val nullable: String? = null\n\n    println(\"$i $l $d $f $b $c $s\")\n    println(\"$any ${nullable ?: \"空\"}\")\n    val sum = i + l          // 运算时提升为 Long\n    println(sum)\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 Int 直接赋给 Long 变量会编译失败，Kotlin 没有隐式拓宽；应写 val l: Long = i.toLong()。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中 Int 转 Long 的方法？",
+        "a": "toLong()，例如 42.toLong()"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与表达式",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术、比较、逻辑运算符与 Java 类似，但相等性分为结构相等 == 与引用相等 ===",
+      "Kotlin 不提供三元运算符，使用 if 表达式替代，可读性更好",
+      "区间运算符 ..、until、downTo、step 常用于循环与范围判断",
+      "Elvis 运算符 ?: 为空值提供默认值，安全调用 ?. 避免空指针异常"
     ],
-    "c": "// Kotlin教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val a = 7\n    val b = 2\n    println(a + b)\n    println(a - b)\n    println(a * b)\n    println(a / b)              // 3，整数除法\n    println(a % b)              // 1\n    println(a.toDouble() / b)   // 3.5\n    println(a > b && b > 0)\n    println(a in 1..10)\n\n    val s: String? = null\n    println(s ?: \"默认值\")\n    println(s?.length)\n\n    val max = if (a > b) a else b\n    println(max)\n    println(1 shl 3)\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较两个对象时调用的是 equals，而非引用比较；需要判断是否为同一实例应使用 ===。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中结构相等与引用相等分别用什么运算符？",
+        "a": "结构相等 ==，引用相等 ==="
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串处理",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "字符串模板用 $name 插入变量，${expression} 插入表达式结果",
+      "三引号字符串保留换行与缩进，配合 trimIndent 或 trimMargin 整理格式",
+      "常用方法：uppercase、lowercase、split、replace、substring、padStart、trim",
+      "字符串不可变，频繁拼接应使用 StringBuilder 避免产生大量临时对象"
     ],
-    "c": "// Kotlin教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val name = \"Kotlin\"\n    val greeting = \"Hello, $name!\"\n    val expr = \"长度：${name.length}\"\n    val raw = \"\"\"\n        第一行\n        第二行 $name\n    \"\"\".trimIndent()\n\n    println(greeting)\n    println(expr)\n    println(raw)\n    println(greeting.uppercase())\n    println(greeting.split(\", \"))\n    println(\"  trim  \".trim())\n    println(greeting.replace(\"Kotlin\", \"World\"))\n    println(greeting.substring(0, 5))\n    println(name[0])\n}",
+    "et": "❌ 常见错误",
+    "ec": "在三引号字符串中直接包含 $ 符号会被当作模板起始；需要字面量美元符号时应写 ${'$'} 或使用转义。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 多行字符串如何去除公共缩进？",
+        "a": "调用 trimIndent()"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "集合：List、Set 与 Map",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "listOf 创建只读列表，mutableListOf 创建可变列表，setOf 与 mapOf 同理",
+      "只读接口 List、Set、Map 不支持增删，但底层可能是可变实现，需注意暴露方式",
+      "map、filter、flatMap、groupBy、associate 等函数式操作返回新集合",
+      "序列 asSequence 可延迟计算，适合长链式操作以减少中间集合"
     ],
-    "c": "// Kotlin教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val list = listOf(3, 1, 2)\n    val mutable = mutableListOf(1, 2)\n    mutable.add(3)\n    val set = setOf(1, 2, 2, 3)\n    val map = mapOf(\"a\" to 1, \"b\" to 2)\n    val scores = mutableMapOf<String, Int>()\n    scores[\"math\"] = 95\n\n    println(list.sorted())\n    println(list.map { it * 2 })\n    println(list.filter { it % 2 == 1 })\n    println(list.sum())\n    println(set.size)\n    println(map[\"a\"])\n    println(scores)\n    println(list.groupBy { it % 2 })\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 mutableListOf 赋给只读 List 后仍可通过原引用修改，只读接口并不保证底层不可变；需要真正不可变应复制。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "创建可变列表的函数？",
+        "a": "mutableListOf(...)"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if 是表达式，可返回值，因此不需要 Java 风格的三元运算符",
+      "when 支持常量、区间、类型判断与任意条件分支，比 switch 更灵活",
+      "when 作为表达式时必须穷尽，密封类或枚举可让编译器检查完整性",
+      "when 无参数形式等价于多分支 if-else，按从上到下的顺序匹配"
     ],
-    "c": "// Kotlin教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun grade(score: Int): String = when {\n    score >= 90 -> \"A\"\n    score >= 80 -> \"B\"\n    score >= 60 -> \"C\"\n    else -> \"D\"\n}\n\nfun main() {\n    println(grade(86))\n\n    val x = 3\n    when (x) {\n        0, 1 -> println(\"小\")\n        in 2..5 -> println(\"中\")\n        else -> println(\"大\")\n    }\n\n    val label = if (x > 0) \"正\" else \"非正\"\n    println(label)\n    println(grade(59))\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 when 当作表达式使用却漏掉 else 分支，会编译失败；作为表达式时必须覆盖所有可能值或提供 else。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中 when 表达式缺少分支时会发生什么？",
+        "a": "编译失败，要求穷尽所有情况或提供 else"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环与递归",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "for 可遍历区间、数组、集合与任何提供 iterator 的对象",
+      "区间写法：0 until n 不含上界，downTo 递减，step 指定步长",
+      "while 与 do-while 行为与 Java 一致，break/continue 可配合标签跳出多层循环",
+      "尾递归函数用 tailrec 修饰，编译器会改写为循环，避免栈溢出"
     ],
-    "c": "// Kotlin教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "tailrec fun factorial(n: Int, acc: Long = 1): Long =\n    if (n <= 1) acc else factorial(n - 1, acc * n)\n\nfun main() {\n    for (i in 0 until 3) {\n        println(\"for $i\")\n    }\n    for (i in 3 downTo 1) {\n        print(\"$i \")\n    }\n    println()\n\n    var j = 0\n    while (j < 3) {\n        println(\"while $j\")\n        j++\n    }\n\n    val items = listOf(\"a\", \"b\")\n    for (item in items) println(item)\n    println(\"5! = ${factorial(5)}\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "写 for (i in 0..list.size) 会越界，因为 .. 包含上界；遍历索引应使用 0 until list.size 或 indices。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中遍历数组索引且不越界的惯用写法？",
+        "a": "for (i in list.indices) 或 0 until list.size"
       }
     ]
   },
@@ -336,36 +174,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 10,
     "t": "函数基础",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "函数用 fun 声明，参数格式为 name: Type，返回类型写在参数列表之后",
+      "默认参数让调用方可以省略部分实参，命名参数则让调用意图更加清晰",
+      "单表达式函数可以省略花括号与返回类型，编译器会根据表达式自动推断",
+      "Unit 返回类型可省略，函数参数默认是 val，不能在函数体内重新赋值"
     ],
-    "c": "// Kotlin教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun add(a: Int, b: Int): Int {\n    return a + b\n}\n\nfun greet(name: String, greeting: String = \"Hello\"): String =\n    \"$greeting, $name\"\n\nfun log(message: String, upper: Boolean = false) {\n    println(if (upper) message.uppercase() else message)\n}\n\nfun main() {\n    println(add(2, 3))\n    println(greet(\"Kotlin\"))\n    println(greet(\"Kotlin\", \"Hi\"))\n    log(\"done\", upper = true)\n\n    val square: (Int) -> Int = { it * it }\n    println(square(4))\n}",
+    "et": "❌ 常见错误",
+    "ec": "给函数参数重新赋值会编译失败，因为函数参数隐式为 val；需要修改时应先复制到局部 var 变量再修改。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 函数参数默认是 val 还是 var？",
+        "a": "val，不可重新赋值"
       }
     ]
   },
@@ -373,36 +193,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 11,
     "t": "函数进阶",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "扩展函数为已有类型添加方法，接收者类型写在函数名前，不修改原类",
+      "高阶函数接收或返回函数类型，lambda 可作为尾随参数写在括号外",
+      "infix 函数允许中缀调用，如 3 plusTimes 2，需是成员或扩展函数且只有一个参数",
+      "内联函数 inline 可减少 lambda 对象分配，但会增大字节码体积"
     ],
-    "c": "// Kotlin教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun apply(x: Int, f: (Int) -> Int): Int = f(x)\nfun twice(x: Int) = x * 2\nfun List<Int>.sumDoubled(): Int = sumOf { it * 2 }\ninfix fun Int.plusTimes(n: Int): Int = (this + n) * n\n\nfun main() {\n    println(apply(5, ::twice))\n    println(apply(5) { it + 1 })\n    println(listOf(1, 2, 3).sumDoubled())\n    println(3 plusTimes 2)\n\n    val add = { a: Int, b: Int -> a + b }\n    println(add(1, 2))\n\n    listOf(1, 2).forEach { println(it) }\n}",
+    "et": "❌ 常见错误",
+    "ec": "扩展函数是静态解析的，若父类与子类都定义同名扩展，变量声明类型决定调用哪个，因此不要依赖扩展实现多态。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中定义扩展函数的语法？",
+        "a": "fun Receiver.name(...) { ... }"
       }
     ]
   },
@@ -410,36 +212,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 12,
     "t": "作用域与闭包",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "lambda 可捕获外层局部变量，Kotlin 允许在闭包中修改捕获的 var",
+      "每次调用返回 lambda 的函数都会创建新的闭包环境，彼此独立",
+      "lambda 中的 return 默认返回外层函数，需用标签 return@label 返回 lambda",
+      "对象表达式 object : Type { } 可创建匿名对象，适合一次性实现接口"
     ],
-    "c": "// Kotlin教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun counter(): () -> Int {\n    var count = 0\n    return {\n        count++\n        count\n    }\n}\n\nfun main() {\n    val c1 = counter()\n    val c2 = counter()\n    println(c1()) // 1\n    println(c1()) // 2\n    println(c2()) // 1\n\n    val fns = (0..2).map { i -> { i } }\n    println(fns.map { it() })\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 lambda 中直接写 return 会从外层函数返回，可能导致后续代码不执行；应使用标签返回或改用局部函数。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin lambda 中如何只从 lambda 返回？",
+        "a": "使用标签，如 return@forEach"
       }
     ]
   },
@@ -447,36 +231,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 13,
     "t": "类与对象",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "主构造函数写在类名后，init 块用于初始化校验，次构造函数用 constructor 声明",
+      "val/var 修饰的主构造参数会自动成为属性，省略修饰则只是构造参数",
+      "data class 自动生成 equals、hashCode、toString、copy 与解构方法",
+      "类默认是 final 的，需要被继承时必须加 open，方法同理"
     ],
-    "c": "// Kotlin教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class Point(val x: Double, val y: Double) {\n    init {\n        require(x.isFinite() && y.isFinite()) { \"坐标必须有限\" }\n    }\n\n    constructor() : this(0.0, 0.0)\n\n    val distance: Double\n        get() = kotlin.math.sqrt(x * x + y * y)\n\n    override fun toString(): String = \"Point($x, $y)\"\n}\n\ndata class User(val id: Int, val name: String)\n\nfun main() {\n    val p = Point(3.0, 4.0)\n    println(p)\n    println(p.distance)\n    println(Point())\n    println(User(1, \"Ada\"))\n}",
+    "et": "❌ 常见错误",
+    "ec": "data class 只应包含 val/var 属性，且不能是抽象类；在主构造外定义的属性不参与 equals 与 toString。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "data class 自动生成哪些常用方法？",
+        "a": "equals、hashCode、toString、copy 与 componentN 解构方法"
       }
     ]
   },
@@ -484,73 +250,37 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 14,
     "t": "继承与多态",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "父类与需要重写的方法必须标记 open，否则默认禁止继承与重写",
+      "子类用 : 调用父类构造，重写成员必须写 override，可用 final override 禁止再次重写",
+      "把子类对象向上转型为父类后，调用重写方法仍会动态分派到实际子类实现",
+      "抽象成员用 abstract 声明，子类必须实现，除非子类本身也是抽象类"
     ],
-    "c": "// Kotlin教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "open class Animal(val name: String) {\n    open fun speak(): String = \"...\"\n    override fun toString(): String = \"Animal($name)\"\n}\n\nclass Dog(name: String) : Animal(name) {\n    override fun speak(): String = \"Woof\"\n}\n\nclass Cat(name: String) : Animal(name) {\n    override fun speak(): String = \"Meow\"\n}\n\nfun main() {\n    val animals = listOf(Dog(\"Rex\"), Cat(\"Tom\"))\n    for (a in animals) {\n        println(\"${a.name}: ${a.speak()}\")\n    }\n}",
+    "et": "❌ 常见错误",
+    "ec": "忘记给父类或方法加 open 就尝试继承或 override，会得到 is final and cannot be inherited 编译错误。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 类默认可以被继承吗？",
+        "a": "不可以，类默认是 final，需要 open 才能继承"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "接口与抽象类",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "接口用 interface 声明，可包含抽象成员与带默认实现的方法",
+      "类可实现多个接口，用逗号分隔，需重写所有未提供默认实现的成员",
+      "抽象类用 abstract class 声明，可有构造参数与状态，但只能单继承",
+      "接口不能保存实例状态，适合定义能力；抽象类可以保存状态并共享部分实现"
     ],
-    "c": "// Kotlin教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "interface Shape {\n    fun area(): Double\n    fun describe(): String = \"面积 ${\"%.2f\".format(area())}\"\n}\n\nabstract class BaseShape : Shape {\n    abstract val name: String\n    override fun describe(): String = \"$name: ${super.describe()}\"\n}\n\nclass Circle(override val name: String, private val r: Double) : BaseShape() {\n    override fun area(): Double = Math.PI * r * r\n}\n\nfun main() {\n    val s: Shape = Circle(\"圆\", 2.0)\n    println(s.describe())\n    println(s.area())\n}",
+    "et": "❌ 常见错误",
+    "ec": "在接口中声明属性但没有提供 getter，实现类必须重写；接口属性不能有幕后字段，不能用它保存状态。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 一个类能实现几个接口？",
+        "a": "任意多个，用逗号分隔"
       }
     ]
   },
@@ -558,36 +288,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 16,
     "t": "泛型",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "泛型类与泛型函数用 <T> 声明，调用时通常可由参数推断类型",
+      "上界约束 T : Comparable<T> 限制类型参数必须是可比较的",
+      "型变用 out（生产者，协变）与 in（消费者，逆变）声明，List<out T> 只读",
+      "星投影 List<*> 表示未知类型，只能读取为 Any?，不能安全写入"
     ],
-    "c": "// Kotlin教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class Box<T>(val value: T) {\n    override fun toString(): String = \"Box($value)\"\n}\n\nfun <T> firstOr(items: List<T>, fallback: T): T =\n    if (items.isEmpty()) fallback else items.first()\n\nfun <T : Comparable<T>> maxValue(a: T, b: T): T = if (a > b) a else b\n\nfun main() {\n    println(Box(42))\n    println(firstOr(emptyList<String>(), \"none\"))\n    println(firstOr(listOf(1, 2, 3), 0))\n    println(maxValue(3, 9))\n\n    val producer: List<Any> = listOf(\"a\", 1)\n    println(producer)\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 MutableList<String> 赋给 MutableList<Any> 会编译失败，因为可变集合不支持协变，应使用 List<Any>。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中协变与逆变的关键字？",
+        "a": "out 协变，in 逆变"
       }
     ]
   },
@@ -595,73 +307,37 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 17,
     "t": "异常处理",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Kotlin 没有受检异常，所有异常都不强制 catch，但应显式处理可恢复错误",
+      "try 是表达式，可返回最后一个表达式的值，finally 总会执行",
+      "throw 抛异常，require/check/error 是常用的前置条件断言函数",
+      "runCatching 把结果封装为 Result，可用 getOrNull、exceptionOrNull 安全取值"
     ],
-    "c": "// Kotlin教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "class InsufficientFunds(val amount: Double) : Exception(\"余额不足：$amount\")\n\nfun withdraw(balance: Double, amount: Double): Double {\n    require(amount > 0) { \"金额必须为正\" }\n    if (amount > balance) throw InsufficientFunds(amount)\n    return balance - amount\n}\n\nfun main() {\n    try {\n        println(withdraw(100.0, 150.0))\n    } catch (e: InsufficientFunds) {\n        println(\"捕获：${e.message}\")\n    } finally {\n        println(\"结束\")\n    }\n\n    val result = runCatching { withdraw(100.0, 30.0) }\n    println(result.getOrNull())\n    println(runCatching { withdraw(1.0, 5.0) }.exceptionOrNull()?.message)\n}",
+    "et": "❌ 常见错误",
+    "ec": "Kotlin 不区分受检异常，直接调用 Java 方法抛出的 IOException 不会强制捕获；仍需根据业务决定是否处理。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "runCatching 返回什么类型？",
+        "a": "Result<T>"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件 I/O",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "java.nio.file.Files 提供简洁的读写 API，Path 表示路径，适合现代 JVM 项目",
+      "readString/writeString 适合小文件，readAllLines 按行读取",
+      "大文件使用 newBufferedReader 或 Files.lines 流式处理，避免一次性载入内存",
+      "使用 use 扩展自动关闭流，等价于 Java 的 try-with-resources"
     ],
-    "c": "// Kotlin教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import java.nio.file.Files\nimport java.nio.file.Path\n\nfun main() {\n    val path = Path.of(\"notes.txt\")\n    Files.writeString(path, \"第一行\\n第二行\\n\")\n    println(Files.readString(path))\n\n    Files.readAllLines(path).forEachIndexed { i, line ->\n        println(\"${i + 1}: $line\")\n    }\n\n    Files.newBufferedReader(path).use { reader ->\n        println(reader.readLine())\n    }\n\n    val dir = Path.of(\".\")\n    Files.list(dir).use { stream ->\n        stream.limit(3).forEach { println(it.fileName) }\n    }\n    Files.deleteIfExists(path)\n}",
+    "et": "❌ 常见错误",
+    "ec": "读取大文件用 readAllLines 会一次性占用大量内存；应改用 Files.lines 或 BufferedReader 逐行处理。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中自动关闭资源的扩展函数？",
+        "a": "use，例如 reader.use { ... }"
       }
     ]
   },
@@ -669,184 +345,94 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 19,
     "t": "正则表达式",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Regex 构造正则，matches 要求整个字符串匹配，containsMatchIn 判断是否包含",
+      "find 返回首个 MatchResult，findAll 返回序列，可通过 groupValues 取捕获组",
+      "replace 支持字符串或 lambda 替换，split 可按正则切分",
+      "Kotlin 三引号原始字符串适合书写正则，可以避免反斜杠被重复转义"
     ],
-    "c": "// Kotlin教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val email = Regex(\"\"\"^[\\w.+-]+@[\\w-]+\\.[\\w.]+$\"\"\")\n    println(email.matches(\"user@example.com\"))\n    println(email.matches(\"bad@\"))\n\n    val text = \"订单 A100 金额 99 元，订单 B200 金额 150 元\"\n    val ids = Regex(\"\"\"[A-Z]\\d{3}\"\"\").findAll(text).map { it.value }.toList()\n    println(ids)\n\n    val m = Regex(\"\"\"(\\d+) 元\"\"\").find(text)\n    println(m?.groupValues?.get(1))\n\n    println(text.replace(Regex(\"\"\"\\d+\"\"\"), \"#\"))\n    println(email.containsMatchIn(\"联系 user@example.com\"))\n}",
+    "et": "❌ 常见错误",
+    "ec": "把 matches 当作“包含匹配”使用会误判，matches 要求整个输入完全匹配；部分匹配应使用 containsMatchIn 或 find。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中判断字符串是否包含某个正则匹配的方法？",
+        "a": "containsMatchIn"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块、包管理与依赖",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Gradle 是 Kotlin 项目的主流构建工具，build.gradle.kts 用 Kotlin DSL 编写",
+      "dependencies 声明实现依赖与测试依赖，仓库通常使用 mavenCentral",
+      "Kotlin JVM 插件提供编译、测试与运行任务，版本需与 Kotlin 语言版本匹配",
+      "Maven 也可构建 Kotlin 项目，但 Gradle 对多平台与协程生态支持更好"
     ],
-    "c": "// Kotlin教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.gradle.kts 示例：\n// plugins { kotlin(\"jvm\") version \"1.9.24\" }\n// repositories { mavenCentral() }\n// dependencies {\n//     implementation(\"io.ktor:ktor-client-core:2.3.9\")\n//     testImplementation(kotlin(\"test\"))\n// }\n// 命令：./gradlew build / ./gradlew test / ./gradlew run\nimport kotlin.math.sqrt\n\nfun main() {\n    val deps = listOf(\"kotlin-stdlib\", \"ktor-client\", \"kotlinx-coroutines\")\n    deps.forEach { println(\"依赖：$it\") }\n    println(\"sqrt(2) = ${sqrt(2.0)}\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "依赖写在 build.gradle.kts 后未同步 Gradle，IDE 仍会报找不到类；应执行 ./gradlew build 或刷新项目。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin JVM 项目的常见构建文件？",
+        "a": "build.gradle.kts（Kotlin DSL）"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "构建工具：Gradle（./gradlew build）或 Maven（mvn package），依赖从 mavenCentral 解析",
+      "测试框架：kotlin.test 配合 JUnit 5，通过 ./gradlew test 运行",
+      "格式化与检查：ktlint 或 ktfmt，可在 Gradle 中绑定 check 任务",
+      "编译运行：kotlinc 生成 jar，调试使用 IntelliJ Debug 或 jdb"
     ],
-    "c": "// Kotlin教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 构建：Gradle（./gradlew build）或 Maven（mvn package）\n// 包管理：Gradle 依赖声明，仓库 mavenCentral()\n// 测试框架：kotlin.test + JUnit 5（./gradlew test）\n// 格式化：ktlint（./gradlew ktlintFormat）或 ktfmt\n// 调试：IntelliJ IDEA Debug / jdb / -agentlib:jdwp\n// 编译运行：kotlinc Main.kt -include-runtime -d app.jar && java -jar app.jar\nfun main() {\n    val text = \"Kotlin 标准库\"\n    println(text.length)\n    println(text.reversed())\n    println(listOf(3, 1, 2).sorted())\n    println(generateSequence(1) { it * 2 }.take(5).toList())\n    println(\"abc\".map { it.uppercaseChar() })\n}",
+    "et": "❌ 常见错误",
+    "ec": "只运行 ./gradlew run 而不执行 test 与 ktlintCheck，会把格式与测试问题留到 CI；提交前应跑完整 check。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 项目运行测试的 Gradle 命令？",
+        "a": "./gradlew test"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与异步",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "协程用 suspend 函数挂起而不阻塞线程，runBlocking 用于桥接阻塞入口",
+      "launch 启动不返回结果的协程，async 返回 Deferred，可用 await 获取结果",
+      "Dispatchers.IO 适合阻塞 IO，Dispatchers.Default 适合 CPU 密集计算",
+      "withTimeout/withTimeoutOrNull 控制超时，Flow 表示冷数据流并支持背压"
     ],
-    "c": "// Kotlin教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import kotlinx.coroutines.*\n\nfun main() = runBlocking {\n    val a = async {\n        delay(100)\n        10\n    }\n    val b = async {\n        delay(200)\n        20\n    }\n    println(\"sum = ${a.await() + b.await()}\")\n\n    launch {\n        repeat(3) { i ->\n            println(\"tick $i\")\n            delay(50)\n        }\n    }\n\n    val result = withTimeoutOrNull(300) {\n        delay(500)\n        \"done\"\n    }\n    println(result)\n}",
+    "et": "❌ 常见错误",
+    "ec": "在 suspend 函数中调用 Thread.sleep 会阻塞线程；应使用 delay 或其他挂起函数，让线程可以执行其他协程。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "协程中启动并获取结果的构建器？",
+        "a": "async，返回 Deferred，调用 await() 取结果"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "优先使用 val、不可变集合与具体类型，减少装箱与运行时类型检查",
+      "长链式集合操作改用 asSequence，避免生成多个中间集合",
+      "内联函数与 reified 泛型可减少 lambda 分配，但不应滥用导致字节码膨胀",
+      "用 JMH 或 kotlinx-benchmark 做基准测试，避免用 System.nanoTime 草率比较"
     ],
-    "c": "// Kotlin教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val n = 1_000_000\n    val list = ArrayList<Int>(n)\n    var sum = 0L\n    val t0 = System.nanoTime()\n\n    for (i in 0 until n) {\n        list.add(i)\n    }\n    for (v in list) {\n        sum += v\n    }\n\n    val ms = (System.nanoTime() - t0) / 1_000_000\n    println(\"sum=$sum, ${ms}ms\")\n\n    val seq = (1..n).asSequence().map { it * 2 }.take(5).toList()\n    println(seq)\n    val twice = { x: Int -> x * 2 }\n    println(twice(21))\n}",
+    "et": "❌ 常见错误",
+    "ec": "在热点循环中使用 Int? 或 List<Int> 会触发大量装箱；应改用 IntArray、LongArray 等原始类型数组。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中避免集合链产生中间集合的常用方式？",
+        "a": "使用 asSequence() 延迟计算"
       }
     ]
   },
@@ -854,36 +440,18 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 24,
     "t": "测试",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "kotlin.test 提供跨平台断言，JVM 项目通常由 JUnit 5 提供运行器",
+      "测试类与方法可以使用反引号命名，让测试报告直接显示自然语言描述",
+      "assertEquals、assertTrue、assertFailsWith 覆盖大多数断言场景",
+      "Gradle test 任务支持过滤、并行与测试报告，CI 中应保留报告产物"
     ],
-    "c": "// Kotlin教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.gradle.kts: testImplementation(kotlin(\"test\"))\n// 运行：./gradlew test\nimport kotlin.test.Test\nimport kotlin.test.assertEquals\nimport kotlin.test.assertFailsWith\n\nclass CalculatorTest {\n    private fun add(a: Int, b: Int) = a + b\n\n    @Test\n    fun `positive numbers`() {\n        assertEquals(3, add(1, 2))\n    }\n\n    @Test\n    fun `invalid input throws`() {\n        assertFailsWith<IllegalArgumentException> {\n            require(add(-1, 0) >= 0)\n        }\n    }\n}",
+    "et": "❌ 常见错误",
+    "ec": "测试方法缺少 @Test 注解时不会被运行，容易误以为全部通过；应确认测试报告中的用例数量与预期一致。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "kotlin.test 中断言抛出异常的函式？",
+        "a": "assertFailsWith<异常类型> { ... }"
       }
     ]
   },
@@ -891,73 +459,37 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 25,
     "t": "调试技巧",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "IntelliJ IDEA 支持行断点、条件断点、求值表达式与协程调试面板",
+      "日志优先使用 SLF4J 或 kotlin-logging，避免在生产代码中散落 println",
+      "异常堆栈要保留 cause，使用日志框架输出完整链路而非只打印 message",
+      "远程调试通过 JVM 参数 -agentlib:jdwp 开启，再用 IDE 附加到端口"
     ],
-    "c": "// Kotlin教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import kotlin.system.measureTimeMillis\n\nfun divide(a: Int, b: Int): Int {\n    println(\"divide($a, $b)\")     // 可在此设置条件断点 b == 0\n    require(b != 0) { \"除数不能为 0\" }\n    return a / b\n}\n\nfun main() {\n    val ms = measureTimeMillis {\n        try {\n            println(divide(10, 2))\n            println(divide(1, 0))\n        } catch (e: IllegalArgumentException) {\n            println(\"错误：${e.message}\")\n        }\n    }\n    println(\"耗时 ${ms}ms\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "捕获异常后只打印 message 而丢失堆栈，会无法定位根因；应记录完整异常对象或使用带 cause 的包装异常。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "JVM 远程调试常用的启动参数？",
+        "a": "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "与系统互操作（JNI/进程）",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Kotlin 与 Java 可互相调用，Java 的 getter/setter 在 Kotlin 中可当属性访问",
+      "JNI 通过 external 声明本地方法并在 init 中 System.loadLibrary 加载 C 库",
+      "JNA 无需编写胶水代码即可调用动态库，适合快速集成系统 API",
+      "与外部进程交互可用 ProcessBuilder，读取 stdout 并等待退出码"
     ],
-    "c": "// Kotlin教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "object NativeLib {\n    init {\n        System.loadLibrary(\"native\")\n    }\n    external fun add(a: Int, b: Int): Int\n}\n\nfun main() {\n    val process = ProcessBuilder(\"ls\", \"-1\")\n        .redirectErrorStream(true)\n        .start()\n    process.inputStream.bufferedReader().useLines { lines ->\n        lines.take(3).forEach { println(it) }\n    }\n    println(\"exit=${process.waitFor()}\")\n\n    // 需配套 C 实现并生成 libnative.so 后才能调用：\n    // println(NativeLib.add(1, 2))\n    val rt = Runtime.getRuntime()\n    println(\"可用内存：${rt.freeMemory() / 1024 / 1024} MB\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "JNI 的 external 方法若未加载对应库就调用，会抛 UnsatisfiedLinkError；库名与 System.loadLibrary 参数必须一致。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中声明 JNI 本地方法的关键字？",
+        "a": "external"
       }
     ]
   },
@@ -965,110 +497,56 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 27,
     "t": "设计模式",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "密封类配合 when 实现代数数据类型，编译器检查分支是否穷尽",
+      "object 声明天然实现单例，初始化线程安全且默认支持懒加载",
+      "委托模式使用 by 关键字，可以把接口实现委托给另一个对象完成",
+      "策略与工厂模式可以借助函数类型和高阶函数简化，显著减少类爆炸"
     ],
-    "c": "// Kotlin教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "sealed class Notification {\n    data class Email(val to: String, val subject: String) : Notification()\n    data class Sms(val phone: String, val text: String) : Notification()\n}\n\nfun render(n: Notification): String = when (n) {\n    is Notification.Email -> \"邮件 -> ${n.to}: ${n.subject}\"\n    is Notification.Sms -> \"短信 -> ${n.phone}: ${n.text}\"\n}\n\nobject SmsSender {\n    fun send(n: Notification.Sms) = \"已发送 ${n.text}\"\n}\n\nfun main() {\n    val list = listOf(\n        Notification.Email(\"a@b.com\", \"Hi\"),\n        Notification.Sms(\"13800000000\", \"验证码 1234\"),\n    )\n    list.forEach { println(render(it)) }\n    println(SmsSender.send(Notification.Sms(\"1\", \"test\")))\n}",
+    "et": "❌ 常见错误",
+    "ec": "密封类的子类必须与密封类位于同一模块同一包内，1.5 之前还要求同一文件；否则无法继承并破坏穷尽检查。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中声明单例的关键字？",
+        "a": "object"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "JVM 项目可通过 JDBC 访问数据库，sqlite-jdbc、PostgreSQL 驱动都属于 JDBC 实现",
+      "DriverManager.getConnection 获取连接，PreparedStatement 使用 ? 占位符防止注入",
+      "Exposed 是 JetBrains 的 Kotlin SQL 框架，提供 DSL 与 DAO 两种风格",
+      "连接与语句必须及时关闭，生产环境还应使用连接池并配置超时参数"
     ],
-    "c": "// Kotlin教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.gradle.kts: implementation(\"org.xerial:sqlite-jdbc:3.45.1.0\")\nimport java.sql.DriverManager\n\nfun main() {\n    DriverManager.getConnection(\"jdbc:sqlite:app.db\").use { conn ->\n        conn.createStatement().use { st ->\n            st.executeUpdate(\n                \"CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, name TEXT NOT NULL)\"\n            )\n            st.executeUpdate(\"INSERT INTO users(name) VALUES ('张三')\")\n            st.executeQuery(\"SELECT id, name FROM users\").use { rs ->\n                while (rs.next()) {\n                    println(\"${rs.getInt(\"id\")}: ${rs.getString(\"name\")}\")\n                }\n            }\n        }\n    }\n}",
+    "et": "❌ 常见错误",
+    "ec": "用字符串拼接 SQL 会把用户输入当代码执行，造成注入；必须使用 PreparedStatement 的 ? 占位符绑定参数。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "JDBC 中防止 SQL 注入的常用方式？",
+        "a": "PreparedStatement + ? 占位符绑定参数"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络编程与 HTTP",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ktor 是 JetBrains 的 Kotlin 原生框架，客户端与服务端共用一套协程模型",
+      "embeddedServer 启动 Netty 等引擎，routing 定义路径与 HTTP 方法",
+      "客户端可用 HttpClient 发起请求，支持 JSON 序列化、超时与重试插件",
+      "生产环境还应配置反向代理、连接超时、失败重试策略与进程优雅停机"
     ],
-    "c": "// Kotlin教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.gradle.kts: implementation(\"io.ktor:ktor-server-netty:2.3.9\")\nimport io.ktor.server.application.*\nimport io.ktor.server.engine.*\nimport io.ktor.server.netty.*\nimport io.ktor.server.response.*\nimport io.ktor.server.routing.*\n\nfun main() {\n    embeddedServer(Netty, port = 8080) {\n        routing {\n            get(\"/health\") {\n                call.respondText(\"ok\")\n            }\n            get(\"/users/{id}\") {\n                val id = call.parameters[\"id\"]\n                call.respondText(\"\"\"{\"id\":\"$id\"}\"\"\")\n            }\n        }\n    }.start(wait = true)\n}",
+    "et": "❌ 常见错误",
+    "ec": "在路由中执行阻塞 IO 会占满 Netty 事件循环线程；应切换到 Dispatchers.IO 或使用挂起客户端。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Ktor 服务端定义路由的 DSL 入口？",
+        "a": "routing { get(\"/path\") { ... } }"
       }
     ]
   },
@@ -1076,221 +554,113 @@ window.TUTORIAL_DATA_kotlin = [
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "所有外部输入都要校验长度、类型与允许字符，避免注入与路径穿越",
+      "SQL 使用参数化查询，命令调用避免 shell 拼接，模板输出进行转义",
+      "密码使用 bcrypt/Argon2 加盐哈希，比较时使用恒定时间算法",
+      "密钥应通过环境变量或密钥管理服务注入，禁止硬编码或提交到代码仓库"
     ],
-    "c": "// Kotlin教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import java.security.MessageDigest\nimport java.util.Base64\n\nfun hashPassword(password: String, salt: String): String {\n    val digest = MessageDigest.getInstance(\"SHA-256\")\n    val bytes = digest.digest((salt + password).toByteArray())\n    return Base64.getEncoder().encodeToString(bytes)\n}\n\nfun main() {\n    val salt = \"随机盐值\"\n    val h1 = hashPassword(\"secret\", salt)\n    println(h1)\n    // 生产环境应使用 bcrypt/Argon2，并做恒定时间比较\n    println(h1 == hashPassword(\"secret\", salt))\n    val dbPassword = System.getenv(\"DB_PASSWORD\") ?: error(\"缺少 DB_PASSWORD\")\n    println(dbPassword.length)\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 SHA-256 直接哈希密码容易被彩虹表与暴力破解；应使用带盐且计算成本可调的 bcrypt 或 Argon2。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么不能直接用 SHA-256 存储密码？",
+        "a": "计算太快且无盐，易被彩虹表和暴力破解；应使用 bcrypt/Argon2"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Kotlin/JVM 命令行程序从 main(args: Array<String>) 获取参数",
+      "退出码用 exitProcess(code) 设置，0 成功、非 0 表示不同错误类型",
+      "标准输出用 println，错误与用法写 System.err，便于脚本重定向",
+      "复杂参数解析可用 kotlinx-cli 或 picocli，支持子命令与帮助信息"
     ],
-    "c": "// Kotlin教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "import java.io.File\nimport kotlin.system.exitProcess\n\nfun main(args: Array<String>) {\n    if (args.isEmpty()) {\n        System.err.println(\"用法：java -jar app.jar <关键词> [文件]\")\n        exitProcess(64)\n    }\n\n    val keyword = args[0]\n    val lines = if (args.size > 1) {\n        File(args[1]).readLines()\n    } else {\n        generateSequence(::readLine).toList()\n    }\n\n    var hits = 0\n    lines.forEachIndexed { i, line ->\n        if (line.contains(keyword)) {\n            hits++\n            println(\"${i + 1}: $line\")\n        }\n    }\n    System.err.println(\"命中 $hits 行\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接读取 args[0] 而不检查 args.size，未传参时会抛 ArrayIndexOutOfBoundsException；应先判断并打印用法。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中终止进程并设置退出码的函数？",
+        "a": "exitProcess(code)（kotlin.system）"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：Web 服务",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Ktor 服务端用 embeddedServer 启动引擎，routing 中按方法与路径注册处理器",
+      "call.parameters 读取路径参数，call.request.queryParameters 读取查询参数",
+      "响应可用 respondText 返回文本，或安装 ContentNegotiation 后返回数据类",
+      "应统一处理 400、404、500 等错误响应，并记录请求日志与处理耗时"
     ],
-    "c": "// Kotlin教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.gradle.kts 依赖：ktor-server-netty、ktor-server-content-negotiation\nimport io.ktor.http.*\nimport io.ktor.server.application.*\nimport io.ktor.server.engine.*\nimport io.ktor.server.netty.*\nimport io.ktor.server.response.*\nimport io.ktor.server.routing.*\n\nfun main() {\n    embeddedServer(Netty, port = 8080) {\n        routing {\n            get(\"/health\") {\n                call.respondText(\"ok\")\n            }\n            get(\"/api/users/{id}\") {\n                val id = call.parameters[\"id\"]?.toIntOrNull()\n                    ?: return@get call.respond(HttpStatusCode.BadRequest)\n                call.respondText(\n                    \"\"\"{\"id\":$id,\"name\":\"用户$id\"}\"\"\",\n                    ContentType.Application.Json,\n                )\n            }\n        }\n    }.start(wait = true)\n}",
+    "et": "❌ 常见错误",
+    "ec": "路径参数可能不是数字，直接 toInt() 会抛 NumberFormatException 并返回 500；应使用 toIntOrNull 并返回 400。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Ktor 中读取路径参数的方式？",
+        "a": "call.parameters[\"id\"]"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Gradle 的 application 插件可生成启动脚本，shadow 插件可打包 fat jar",
+      "构建命令 ./gradlew clean build，产物位于 build/libs",
+      "容器运行使用 JRE 基础镜像，只复制 jar 并以非 root 用户启动",
+      "通过环境变量注入配置，并结合健康检查与优雅停机实现应用的滚动发布"
     ],
-    "c": "// Kotlin教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 构建：./gradlew clean build\n// application { mainClass.set(\"MainKt\") }\n// fat jar：使用 shadow 插件，产物在 build/libs\n// 运行：java -jar build/libs/app.jar\n// Docker：FROM eclipse-temurin:17-jre\n//        COPY app.jar /app.jar\nfun main() {\n    val version = System.getenv(\"APP_VERSION\") ?: \"dev\"\n    val port = System.getenv(\"PORT\")?.toIntOrNull() ?: 8080\n    println(\"启动 $version on $port\")\n    println(\"JVM: ${System.getProperty(\"java.vm.name\")}\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "直接复制 build/libs 下的普通 jar 运行可能缺少依赖，报 NoClassDefFoundError；应使用 fat jar 或正确配置 classpath。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Gradle 中打包可执行 fat jar 常用哪个插件？",
+        "a": "com.github.johnrengelman.shadow（Shadow 插件）"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码风格",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "遵循 Kotlin 官方编码规范：4 空格缩进、行宽 120、导入不使用通配符",
+      "优先 val 与不可变集合，函数保持短小，避免深层嵌套与过长参数列表",
+      "使用 data class 表达值对象，使用密封类表达有限状态",
+      "公开 API 写 KDoc，借助 ktlint 与 detekt 把规则自动化"
     ],
-    "c": "// Kotlin教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 遵循 Kotlin 官方编码规范，并启用 ktlint 检查\ndata class User(val id: Int, val name: String) {\n    init {\n        require(id > 0) { \"id 必须为正\" }\n    }\n}\n\nfun greet(user: User): String = \"Hello, ${user.name}\"\n\nfun main() {\n    val users = listOf(User(1, \"Ada\"), User(2, \"Bob\"))\n    users.filter { it.id > 0 }\n        .map(::greet)\n        .forEach { println(it) }\n\n    val total = users.sumOf { it.id }\n    println(\"total=$total\")\n}",
+    "et": "❌ 常见错误",
+    "ec": "用 !! 强行解包可空值，遇到 null 会抛 NullPointerException 且丢失上下文；应使用 ?.、?: 或 requireNotNull。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 中应尽量用哪个关键字声明不可变变量？",
+        "a": "val"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Kotlin教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "先掌握语法、空安全、集合与函数式操作，再逐步进入协程与泛型的学习",
+      "工程化学习 Gradle、测试、日志与发布，能独立维护 JVM 服务",
+      "深入协程调度、Flow、Ktor 与数据库访问，构建高并发后端服务",
+      "方向选择：Android、服务端、Kotlin Multiplatform 或数据工程"
     ],
-    "c": "// Kotlin教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Kotlin教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "fun main() {\n    val roadmap = linkedMapOf(\n        \"基础\" to listOf(\"语法\", \"集合\", \"空安全\"),\n        \"进阶\" to listOf(\"协程\", \"泛型\", \"函数式\"),\n        \"工程\" to listOf(\"Gradle\", \"测试\", \"CI\"),\n        \"方向\" to listOf(\"Android\", \"Ktor\", \"KMP\"),\n    )\n\n    roadmap.forEach { (stage, topics) ->\n        println(\"$stage: ${topics.joinToString(\" / \")}\")\n    }\n\n    println(\"下一步：用 Ktor 写一个 REST API\")\n    // 官方文档：https://kotlinlang.org/docs/home.html\n}",
+    "et": "❌ 常见错误",
+    "ec": "只看语法不写项目，遇到协程取消、Gradle 依赖冲突仍无法排查；应以完整项目串联知识点并记录每次踩坑。",
     "q": [
       {
-        "q": "Kotlin教程的主要特点是什么？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "学习Kotlin教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Kotlin教程的主要应用领域？",
-        "a": "Android开发首选"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Kotlin 学习后两个主要应用方向？",
+        "a": "Android 开发与 JVM/Ktor 服务端开发"
       }
     ]
   }

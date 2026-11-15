@@ -1,7 +1,7 @@
 {
     "name": "编程语言教程系统",
     "short_name": "编程教程",
-    "description": "34 门编程语言教程、学习路线、概念对照与每日 5 题，示例可在线运行",
+    "description": "37 门编程语言教程、学习路线、概念对照与每日 5 题，示例可在线运行",
     "start_url": "/programming-languages-tutorial.html",
     "display": "standalone",
     "background_color": "#667eea",

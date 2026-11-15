@@ -1,1296 +1,841 @@
 [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Shell 简介与历史：从 Bourne shell 到 Bash 5",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Shell 是命令解释器，把用户输入翻译成系统调用；Bash 是 GNU 对 sh 的兼容增强实现",
+      "1979 年 Bourne shell 奠定 POSIX 脚本语法，1989 年 Bash 发布，现广泛预装于 Linux 与 macOS",
+      "Bash 5 支持关联数组、mapfile、nameref、EPOCHREALTIME 等现代特性",
+      "常见 shell 有 sh、dash、bash、zsh、fish，脚本首行 shebang 决定用哪个解释器",
+      "Shell 擅长胶水任务：文件处理、进程编排、CI 脚本与运维自动化"
     ],
-    "c": "// Shell教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 第一个脚本：打印运行环境\nprintf '你好，%s！\\n' \"${USER:-访客}\"\nprintf '当前时间：%s\\n' \"$(date '+%Y-%m-%d %H:%M:%S')\"\nprintf 'Bash 版本：%s\\n' \"${BASH_VERSION}\"\nprintf '内核：%s\\n' \"$(uname -srm)\"\n\ncat <<'EOF'\n===== 学习目标 =====\n1. 写出可执行脚本\n2. 用 shellcheck 检查\n3. 用 set -euo pipefail 提前暴露错误\nEOF",
+    "et": "❌ 常见错误",
+    "ec": "脚本省略 shebang 却用 sh 执行，里面又用了 [[ ]] 和数组等 bash 扩展，dash 下直接报错。shebang 与实际执行方式必须匹配。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "#!/usr/bin/env bash 与 #!/bin/bash 有何区别？",
+        "a": "env 会从 PATH 中查找 bash，可优先使用用户安装的新版本；/bin/bash 固定绝对路径，环境更可预测。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么说 0 表示成功？",
+        "a": "Unix 约定退出码 0 为成功，非 0 表示某种失败，脚本与 CI 都依据退出码判断结果。"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装与工具链：shellcheck、shfmt 与 bats",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Linux 与 macOS 通常自带 bash，但版本可能偏旧，可用包管理器或源码安装 Bash 5",
+      "shellcheck 做静态分析，能发现引号遗漏、错误比较与不可移植写法",
+      "shfmt 统一缩进、换行与重定向空格，风格可配置，适合接入编辑器保存时格式化",
+      "bats-core 是 Bash 测试框架，用 @test 描述用例，可在 CI 中产出 TAP 报告",
+      "用 command -v 与 --version 确认工具存在，CI 镜像中固定版本避免漂移"
     ],
-    "c": "// Shell教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 安装：Debian/Ubuntu → sudo apt install bash shellcheck shfmt bats\n# 安装：macOS → brew install bash shellcheck shfmt bats-core\n\nfor tool in bash shellcheck shfmt bats; do\n  if command -v \"$tool\" >/dev/null 2>&1; then\n    version=$(\"$tool\" --version 2>&1 | head -n 1)\n    printf '%-11s 已安装：%s\\n' \"$tool\" \"$version\"\n  else\n    printf '%-11s 未安装，请先安装\\n' \"$tool\"\n  fi\ndone\n\nprintf '当前登录 shell：%s\\n' \"${SHELL:-未知}\"\n",
+    "et": "❌ 常见错误",
+    "ec": "只把工具装在个人电脑，CI 镜像里没有 shellcheck，流水线直接失败；或者依赖最新版 shfmt，格式规则变化导致全仓库重排。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "shellcheck 能发现哪类问题？",
+        "a": "未加引号的变量、错误的数值比较、无效的 shebang、不可移植语法以及常见的逻辑陷阱。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "shfmt 与 shellcheck 的职责如何区分？",
+        "a": "shfmt 负责格式，如缩进和换行；shellcheck 负责语义与潜在 bug，两者互补。"
       }
     ]
   },
   {
     "id": 3,
-    "t": "变量与常量",
+    "t": "变量与基础语法：赋值、引号与只读",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "赋值等号两边不能有空格，引用变量写 $name 或 ${name}，复杂拼接必须加花括号",
+      "双引号允许变量展开与命令替换，单引号原样保留，脚本中默认使用双引号",
+      "readonly 定义只读变量，export 把变量放入环境传给子进程",
+      "${VAR:-默认值} 提供缺省值，${VAR:?提示} 在缺失时立即报错退出",
+      "变量名区分大小写，约定环境变量全部大写、函数内局部变量小写以便识别"
     ],
-    "c": "// Shell教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nname=\"运维小组\"\nreadonly project=\"atlas\"\nexport APP_ENV=\"${APP_ENV:-development}\"\n\ngreeting=\"你好，${name}！\"\nprintf '%s\\n' \"$greeting\"\nprintf '项目：%s，环境：%s\\n' \"$project\" \"$APP_ENV\"\n\n# 只读变量再次赋值会被拒绝\nif project=\"hack\" 2>/dev/null; then\n  echo \"不应执行到这里\"\nelse\n  echo \"只读变量保护生效\"\nfi",
+    "et": "❌ 常见错误",
+    "ec": "写成 name = value，bash 会把 name 当成命令执行并报 command not found；引用时不加引号，路径含空格就被拆成多个参数。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "单引号和双引号的关键区别？",
+        "a": "单引号内一切原样保留；双引号内变量、命令替换和部分转义仍会展开。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "${VAR:-x} 与 ${VAR:=x} 的区别？",
+        "a": "前者只在展开时给出默认值，不改变变量；后者在为空时把变量赋值为 x。"
       }
     ]
   },
   {
     "id": 4,
-    "t": "数据类型",
+    "t": "数据类型：字符串、整数与布尔约定",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Bash 变量本质是字符串，declare -i 可声明整数属性，运算用 $(( )) 或 let",
+      "布尔值用 true/false 命令或 0/1 约定，条件判断依赖退出码而不是布尔类型",
+      "浮点运算需借助 awk、bc 或 printf，bash 本身只支持整数算术",
+      "用 declare -p 查看变量属性，typeset -f 查看函数定义，便于调试",
+      "命令替换 $(...) 返回字符串，去掉尾部换行可用 tr -d 或参数展开"
     ],
-    "c": "// Shell教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\ntext='Bash 5.2'\ncount=42\nratio=3.5\nenabled=true\ndeclare -i total=0\n\ntotal+=count\nprintf 'text=%s count=%d ratio=%s enabled=%s total=%d\\n' \"$text\" \"$count\" \"$ratio\" \"$enabled\" \"$total\"\n\n# 命令替换得到字符串，不是数字类型\nfiles=$(find . -maxdepth 1 -type f | wc -l | tr -d ' ')\nprintf '当前目录普通文件数：%s\\n' \"$files\"\n\nprintf '浮点计算：%s\\n' \"$(awk 'BEGIN { printf \"%.2f\", 3.5 * 2 }')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "以为 count=1 之后再 count+=1 会做加法，实际得到字符串 11；必须用 ((count+=1)) 或 declare -i 声明整数。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "Bash 如何做浮点运算？",
+        "a": "Bash 原生只支持整数，浮点需调用 awk、bc 或使用 printf 输出格式化结果。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "declare -i 的作用是什么？",
+        "a": "给变量加上整数属性，赋值或运算时按算术规则处理，非数字会当作 0 或报错。"
       }
     ]
   },
   {
     "id": 5,
-    "t": "运算符",
+    "t": "运算符与条件测试",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术运算用 $(( ))、(( )) 与 let，支持加减乘除、取余、自增与位运算",
+      "字符串比较用 [[ $a == $b ]]，数值比较用 -eq、-lt、-ge 等操作符",
+      "逻辑与 &&、逻辑或 || 按退出码短路执行，叹号 ! 对判断结果取反",
+      "[[ ]] 支持模式匹配与正则 =~，[ ] 是 POSIX 写法但功能受限",
+      "test 与 [ 是同一命令，表达式各元素之间以及括号两侧都必须有空格"
     ],
-    "c": "// Shell教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\na=7\nb=3\nprintf '算术：%d\\n' $((a + b * 2))\nprintf '整数除：%d 取余：%d\\n' $((a / b)) $((a % b))\n\nif [[ $a -gt $b && -n \"${HOME:-}\" ]]; then\n  echo \"a 大于 b 且 HOME 非空\"\nfi\n\nif [[ \"abc123\" =~ ^[a-z]+[0-9]+$ ]]; then\n  echo \"正则匹配成功\"\nfi\n\n(( a > b )) && echo \"算术比较为真\" || echo \"算术比较为假\"\n",
+    "et": "❌ 常见错误",
+    "ec": "在 [ ] 中用 > 比较数字，被 shell 当成重定向并生成奇怪文件；数字比较应使用 -gt，字符串比较才用 > 且需 [[ ]]。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "[[ ]] 与 [ ] 的主要差异？",
+        "a": "[[ ]] 是 bash 关键字，支持 &&、||、=~ 与模式匹配且不做词分割；[ ] 是命令，可移植性更好但限制多。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么 (( )) 中不需要 $ 符号？",
+        "a": "(( )) 内部按算术上下文解析，变量名直接求值，写 $a 也能用但没必要。"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串处理与参数展开",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "${#var} 取长度，${var:offset:length} 截取子串，负偏移需加空格避免歧义",
+      "${var#pattern} 删除最短前缀，${var##pattern} 删除最长前缀，% 对应后缀",
+      "${var/old/new} 替换首个匹配，${var//old/new} 替换全部匹配",
+      "${var^^} 转大写，${var,,} 转小写，${var:?} 做非空校验",
+      "字符串拼接直接相邻书写，printf 比 echo 更可控，避免转义差异"
     ],
-    "c": "// Shell教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\npath=\"/var/log/nginx/access.log\"\nprintf '长度：%d\\n' \"${#path}\"\nprintf '目录：%s\\n' \"${path%/*}\"\nprintf '文件名：%s\\n' \"${path##*/}\"\nprintf '去扩展名：%s\\n' \"${path%.log}\"\nprintf '默认值：%s\\n' \"${MISSING:-未设置}\"\nprintf '转义斜杠：%s\\n' \"${path//\\//\\\\/}\"\n\nprintf '大写：%s\\n' \"${path^^}\"\nprintf '前 8 字符：%s\\n' \"${path:0:8}\"\nprintf '替换 nginx 为 caddy：%s\\n' \"${path/nginx/caddy}\"\n",
+    "et": "❌ 常见错误",
+    "ec": "用 echo 输出用户输入，内容含 -n 或反斜杠时被解释，结果不符合预期；需要稳定输出时用 printf '%s\\n'。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "如何安全地取文件所在目录？",
+        "a": "使用 ${path%/*} 删除最后一个斜杠及其后的内容，文件名则用 ${path##*/}。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "${var//x/y} 会替换几次？",
+        "a": "替换所有匹配的 x；若只写 ${var/x/y} 则只替换第一次。"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "数组与关联数组",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "索引数组用 arr=(a b c) 定义，${arr[@]} 展开全部元素，${#arr[@]} 取长度",
+      "访问元素用 ${arr[0]}，追加用 arr+=(d)，删除用 unset 'arr[1]'",
+      "必须用 \"${arr[@]}\" 加引号展开，否则含空格的元素会被拆分",
+      "关联数组用 declare -A map，键值访问 ${map[key]}，遍历键用 ${!map[@]}",
+      "数组下标从 0 开始，稀疏数组遍历应使用 \"${!arr[@]}\" 取索引"
     ],
-    "c": "// Shell教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nservices=(api worker scheduler)\nservices+=(\"gateway\")\nprintf '共 %d 个服务：\\n' \"${#services[@]}\"\nfor svc in \"${services[@]}\"; do\n  printf ' - %s\\n' \"$svc\"\ndone\n\ndeclare -A ports=([api]=8080 [worker]=8081 [gateway]=9000)\nfor name in \"${!ports[@]}\"; do\n  printf '%s -> %s\\n' \"$name\" \"${ports[$name]}\"\ndone\n\nprintf '排序后的结果：%s\\n' \"$(printf '%s\\n' \"${services[@]}\" | sort | tr '\\n' ' ')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "写 ${arr[@]} 不加引号，元素 \"a b\" 会被拆成两个参数；遍历关联数组时忘记 ${!map[@]}，拿到的会是值而不是键。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "如何遍历关联数组的所有键？",
+        "a": "使用 for k in \"${!map[@]}\"，再用 ${map[$k]} 取值。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么数组展开必须加双引号？",
+        "a": "双引号保证每个元素保持完整，不加引号会触发词分割与通配符展开。"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支：if、elif 与 case",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if 判断的是命令退出码，0 为真，非 0 为假，与多数编程语言相反",
+      "elif 做多分支，case 适合枚举匹配，支持 | 并列与通配符",
+      "[[ ]] 中可用 &&、||、=~，[ ] 中需用 -a、-o 且可移植性更好",
+      "case 分支以 ;; 结束，最后用 *) 兜底并给出明确退出码",
+      "空变量与未设置变量在 set -u 下会直接报错，判断前先给默认值"
     ],
-    "c": "// Shell教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nlevel=\"${1:-info}\"\n\nif [[ ! -t 1 ]]; then\n  echo \"标准输出被重定向\"\nelif [[ $level == \"debug\" ]]; then\n  echo \"开启调试日志\"\nelse\n  echo \"常规日志级别：$level\"\nfi\n\ncase \"$level\" in\n  debug|info) echo \"允许详细输出\" ;;\n  warn|error) echo \"仅输出告警与错误\" ;;\n  *) echo \"未知级别：$level\" >&2; exit 2 ;;\nesac",
+    "et": "❌ 常见错误",
+    "ec": "把 if [ $var = yes ] 用在 set -u 下，var 未定义时脚本直接退出；应先写 ${var:-} 或使用 [[ ${var:-} == yes ]]。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "case 中 * 分支的作用？",
+        "a": "兜底匹配所有未命中情况，通常输出错误并返回非零退出码。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "if 后面可以跟任意命令吗？",
+        "a": "可以。if 判断的是命令退出码，grep、test、自定义函数都可以作为条件。"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环：for、while、until 与逐行读取",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "for 遍历列表或命令结果，while 适合按行读取，until 在条件为假时持续循环",
+      "逐行读文件用 while IFS= read -r line；do ...; done < file，保留行内空白与反斜杠",
+      "break 退出整个循环，continue 跳过本次，break 2 可退出两层",
+      "C 风格 for ((i=0; i<10; i++)) 适合计数，seq 生成序列但依赖外部命令",
+      "遍历文件用 glob 或 find -print0 配 read -d ''，避免文件名含空格出错"
     ],
-    "c": "// Shell教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nfor i in {1..3}; do\n  printf '第 %d 次\\n' \"$i\"\ndone\n\ncount=0\nwhile IFS= read -r line; do\n  [[ -z $line ]] && continue\n  ((count += 1))\ndone < <(printf 'a\\n\\nb\\nc\\n')\nprintf '非空行：%d\\n' \"$count\"\n\nattempt=0\nuntil (( attempt >= 2 )); do\n  ((attempt += 1))\n  printf '尝试 %d\\n' \"$attempt\"\ndone",
+    "et": "❌ 常见错误",
+    "ec": "用 for line in $(cat file) 读文件，会按空格拆词并丢失空行；正确做法是 while IFS= read -r line 配输入重定向。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "read -r 的 -r 有什么作用？",
+        "a": "禁止反斜杠转义，否则文件中的 \\ 会被吞掉，导致内容与原文件不一致。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么 IFS= 要写在 read 前面？",
+        "a": "清空字段分隔符，保留行首行尾的空格与制表符，只按换行切分。"
       }
     ]
   },
   {
     "id": 10,
-    "t": "函数基础",
+    "t": "函数与参数传递",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "定义函数用 name() { ...; }，调用只写函数名，不要加括号",
+      "位置参数 $1、$2 在函数内指向函数参数，$# 是参数个数",
+      "local 声明局部变量避免污染全局，return 只能返回 0 到 255 的退出码",
+      "需要返回字符串时用命令替换 $(func) 捕获标准输出，而不是用 return",
+      "用 ${1:?提示} 校验必填参数，用 ${@:2} 取剩余参数"
     ],
-    "c": "// Shell教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nusage() {\n  printf '用法：%s <目录> [扩展名]\\n' \"${0##*/}\" >&2\n}\n\ncount_files() {\n  local dir=$1\n  local ext=${2:-*}\n  local -i total=0\n  while IFS= read -r -d '' _; do ((total += 1)); done < <(find \"$dir\" -type f -name \"*.$ext\" -print0)\n  printf '%d\\n' \"$total\"\n}\n\ndir=\"${1:-.}\"\nusage\nprintf '%s 下 .%s 文件数：%s\\n' \"$dir\" \"${2:-*}\" \"$(count_files \"$dir\" \"${2:-*}\")\"\n",
+    "et": "❌ 常见错误",
+    "ec": "函数里 return \"$result\" 想返回字符串，实际只接受整数退出码，超过 255 还会取模；返回数据应写到标准输出再由调用方捕获。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "函数如何返回一个字符串？",
+        "a": "把结果写到标准输出，调用方用 result=$(func) 捕获，而不是用 return。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "local 不加会怎样？",
+        "a": "变量默认是全局的，会覆盖调用方同名变量，造成难以发现的副作用。"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "管道、重定向与文件描述符",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "管道把前一命令的标准输出接到后一命令的标准输入，各命令在子 shell 中并行执行",
+      "重定向 > 覆盖、>> 追加、2> 错误、&> 全部，2>&1 把错误并入输出",
+      "Here Document 用 <<EOF 传多行输入，<<'EOF' 禁止变量展开",
+      "tee 可同时写文件与屏幕，配合管道把同一份日志分流到多个目的地",
+      "exec 3>file 打开自定义文件描述符，用 >&3 写入，最后 exec 3>&- 关闭"
     ],
-    "c": "// Shell教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nlog=$(mktemp)\nsummary=\"${log}.summary\"\ntrap 'rm -f \"$log\" \"$summary\"' EXIT\n\nprintf 'INFO start\\nERROR disk full\\nWARN slow\\nERROR timeout\\n' > \"$log\"\n\ngrep -c 'ERROR' \"$log\" | xargs printf '错误行数：%s\\n'\nsed -n 's/^ERROR /致命：/p' \"$log\"\n\n{\n  echo \"===== 按级别汇总 =====\"\n  awk '{print $1}' \"$log\" | sort | uniq -c | sort -rn\n} | tee \"$summary\"\n\nexec 3>&1\nprintf '自定义描述符输出\\n' >&3",
+    "et": "❌ 常见错误",
+    "ec": "写 cmd > log 2>&1 与 cmd 2>&1 > log 顺序不同，后者错误仍输出到屏幕；重定向顺序从左到右生效，&1 复制的是当时的指向。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "2>&1 应该放在什么位置？",
+        "a": "放在目标重定向之后，例如 cmd > log 2>&1，才能让错误跟随标准输出写入文件。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Here Document 加引号有何区别？",
+        "a": "<<'EOF' 禁止变量与命令替换，内容原样输入；不加引号则会展开变量。"
       }
     ]
   },
   {
     "id": 12,
-    "t": "作用域与闭包",
+    "t": "作用域、子 shell 与环境变量",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "子 shell 用 ( ) 启动，拥有独立变量与工作目录，退出后父 shell 不受影响",
+      "花括号 { } 在当前 shell 执行，内部 cd 会影响后续命令",
+      "local 只在函数内有效，export 让变量进入子进程环境",
+      "管道每段默认在子 shell 中执行，循环内修改的变量可能丢失",
+      "source 在当前 shell 执行脚本，常用于加载函数库与配置"
     ],
-    "c": "// Shell教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nglobal=\"visible\"\nexport EXPORTED=\"inherited\"\n\ndemo_scope() {\n  local inner=\"仅函数内\"\n  global=\"被函数修改\"\n  printf '函数内：%s / %s\\n' \"$inner\" \"$global\"\n}\n\ndemo_scope\nprintf '函数外：%s\\n' \"$global\"\n\n( cd /tmp && printf '子 shell 目录：%s\\n' \"$PWD\" )\nprintf '父 shell 目录：%s\\n' \"$PWD\"\n\nbash -c 'printf \"子进程看到：%s\\n\" \"$EXPORTED\"'\nprintf '未 export 的变量：%s\\n' \"$(bash -c 'printf \"%s\" \"${global:-不可见}\"')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "在 cmd | while read 循环里累加计数，循环结束后变量仍是 0，因为 while 在子 shell 中运行；改用输入重定向或进程替换可避免。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "( ) 与 { } 的作用域差异？",
+        "a": "( ) 在子 shell 中执行，变量和目录变化不外泄；{ } 在当前 shell 执行，会影响后续环境。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "export 后的变量谁能看到？",
+        "a": "当前 shell 及其派生的子进程都能看到，但不会反向影响父进程。"
       }
     ]
   },
   {
     "id": 13,
-    "t": "类与对象",
+    "t": "脚本参数解析与 getopts",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "位置参数 $0 是脚本名，$1 起是参数，$# 是数量，$@ 是全部参数",
+      "getopts 解析短选项，OPTARG 取选项值，OPTIND 指向下一个待处理参数",
+      "选项字符串前的冒号开启静默模式，可自定义缺少参数与非法选项的提示",
+      "shift 左移参数，shift $((OPTIND - 1)) 跳过已解析的选项",
+      "长选项可用 getopt 或手工 case 解析，复杂 CLI 建议使用成熟框架"
     ],
-    "c": "// Shell教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nverbose=false\noutput=\"\"\n\nwhile getopts \":vo:h\" opt; do\n  case \"$opt\" in\n    v) verbose=true ;;\n    o) output=$OPTARG ;;\n    h) echo \"用法：$0 [-v] [-o 文件]\"; exit 0 ;;\n    :) echo \"选项 -$OPTARG 需要参数\" >&2; exit 2 ;;\n    \\?) echo \"未知选项 -$OPTARG\" >&2; exit 2 ;;\n  esac\ndone\nshift $((OPTIND - 1))\n\nprintf 'verbose=%s output=%s 剩余参数=%d\\n' \"$verbose\" \"${output:-未指定}\" \"$#\"\nprintf '剩余参数列表：%s\\n' \"$*\"\n",
+    "et": "❌ 常见错误",
+    "ec": "忘记执行 shift $((OPTIND - 1))，选项被重复当作位置参数处理；在函数内使用 getopts 时不声明 local OPTIND，多次调用会互相干扰。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "getopts 中选项后的冒号表示什么？",
+        "a": "该选项需要参数，参数值保存在 OPTARG 中；写在选项串开头则开启静默错误模式。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么 shift 的数值是 OPTIND - 1？",
+        "a": "OPTIND 指向第一个未处理的参数，减 1 才能把已解析的选项全部移出。"
       }
     ]
   },
   {
     "id": 14,
-    "t": "继承与多态",
+    "t": "组合与复用：小函数与重试封装",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "把重复逻辑抽成小函数，用 shift 逐个消费参数，保持单一职责",
+      "日志、重试、校验等横切能力做成高阶函数，把命令及其参数作为入参",
+      "用 \"$@\" 原样传递参数，保证空格与特殊字符不被破坏或合并",
+      "组合优于继承：小函数通过管道、命令替换与函数调用串联成清晰流程",
+      "函数命名使用动词开头，语义清晰，并尽量减少对全局状态的副作用"
     ],
-    "c": "// Shell教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nlog_info() { printf '[%s] INFO  %s\\n' \"$(date +%T)\" \"$*\"; }\nlog_warn() { printf '[%s] WARN  %s\\n' \"$(date +%T)\" \"$*\" >&2; }\n\nretry() {\n  local -i attempts=$1\n  shift\n  local -i i=0\n  until \"$@\"; do\n    ((i += 1))\n    [[ $i -ge $attempts ]] && { log_warn \"重试 $attempts 次仍失败：$*\"; return 1; }\n    sleep 1\n  done\n}\n\nretry 3 test -f /etc/hosts\nlog_info \"组合函数执行完成\"\nlog_info \"当前内核 $(uname -r)\"\n",
+    "et": "❌ 常见错误",
+    "ec": "包装函数里写 $* 转发参数，含空格的参数被合并丢失；必须使用 \"$@\"。另一个错误是在函数中直接 exit，调用方无法处理错误。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么 retry 里用 \"$@\" 而不是 $*？",
+        "a": "\"$@\" 保留每个参数的边界，$* 会合并成一个字符串，命令参数被破坏。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "高阶函数在 shell 中如何实现？",
+        "a": "把命令及其参数作为位置参数传入，函数内部用 \"$@\" 执行，从而包裹重试、计时等逻辑。"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "抽象与模块化：命名空间与统一入口",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用命名前缀模拟命名空间，如 db_、log_、fs_，避免函数名冲突",
+      "每个模块只暴露少量公共函数，内部实现统一用下划线前缀标记为私有",
+      "统一入口 main 函数集中处理参数解析与流程编排，便于测试与复用",
+      "模块文件不直接执行逻辑，被 source 加载时只定义函数与常量",
+      "通过环境变量或配置文件注入依赖，减少硬编码带来的重复修改与漂移"
     ],
-    "c": "// Shell教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 模块前缀 + 单一入口，模拟可复用库\ndb_connect() { printf '连接 %s\\n' \"${1:-default.db}\"; }\ndb_query()   { printf '执行查询：%s\\n' \"$1\"; }\ndb_close()   { printf '关闭连接\\n'; }\n\nmain() {\n  local -r dsn=\"${1:-app.db}\"\n  db_connect \"$dsn\"\n  db_query \"select count(*) from users\"\n  db_close\n}\n\nmain \"$@\"\n",
+    "et": "❌ 常见错误",
+    "ec": "在被 source 的库文件末尾直接写业务调用，导致任何引入它的脚本都执行一遍；库文件应只定义函数，入口判断交给调用方。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么库文件不应直接执行逻辑？",
+        "a": "被 source 时会立即运行，产生副作用；库应只定义函数和常量。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "命名前缀解决了什么问题？",
+        "a": "Shell 没有真正的模块隔离，前缀能降低同名函数互相覆盖的概率。"
       }
     ]
   },
   {
     "id": 16,
-    "t": "泛型",
+    "t": "输入校验与类型约束",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 [[ $x =~ ^[0-9]+$ ]] 校验正整数，用 -z 与 -n 判断空值",
+      "用 ${var:?消息} 在变量为空时立即退出，并输出可读错误",
+      "端口、路径、邮箱等输入要同时限定范围与格式，不能只判断是否非空",
+      "校验函数失败时返回非零并输出到 stderr，让调用方决定如何处理",
+      "对文件参数使用 -f、-r、-d 分别判断类型、可读性与是否为目录"
     ],
-    "c": "// Shell教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\ndie() { printf '错误：%s\\n' \"$*\" >&2; exit 1; }\n\nrequire_int() {\n  [[ $1 =~ ^-?[0-9]+$ ]] || die \"不是整数：$1\"\n}\n\nport=8080\nrequire_int \"$port\"\n(( port >= 1 && port <= 65535 )) || die \"端口越界：$port\"\n\nemail=\"dev@example.com\"\n[[ $email =~ ^[^@]+@[^@]+\\.[a-z]{2,}$ ]] || die \"邮箱格式错误\"\n\nconfig=\"${1:-/etc/app.conf}\"\n[[ -r $config ]] || die \"配置文件不可读：$config\"\n\nprintf '校验通过：端口 %d，邮箱 %s\\n' \"$port\" \"$email\"\n",
+    "et": "❌ 常见错误",
+    "ec": "只判断参数个数不校验内容，用户传入 -1 或 abc 时脚本继续运行并在深处失败；入口处集中校验能更快定位问题。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么校验失败要输出到 stderr？",
+        "a": "stderr 不参与数据管道，能避免错误信息污染命令替换或下游处理结果。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "${var:?消息} 的行为是什么？",
+        "a": "变量为空或未设置时输出消息并以非零状态退出，适合校验必填项。"
       }
     ]
   },
   {
     "id": 17,
-    "t": "异常处理",
+    "t": "错误处理：set -e、trap 与退出码",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "set -e 让命令失败立即退出，set -u 禁止未定义变量，set -o pipefail 捕获管道失败",
+      "trap 'cleanup' EXIT 保证临时文件与锁一定被清理",
+      "trap 'handler' ERR 捕获失败命令，结合 $LINENO 与 $BASH_COMMAND 定位",
+      "自定义退出码区分错误类型：0 成功、1 通用错误、2 用法错误",
+      "关键操作失败时输出上下文与修复建议，而不是只打印一句笼统的失败"
     ],
-    "c": "// Shell教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\non_error() {\n  printf '第 %d 行执行失败，退出码 %d，命令：%s\\n' \"$1\" \"$2\" \"$3\" >&2\n  exit \"$2\"\n}\ntrap 'on_error \"$LINENO\" \"$?\" \"$BASH_COMMAND\"' ERR\ntrap 'printf \"清理临时资源\\n\"' EXIT\n\nwork=$(mktemp -d)\nreadonly work\n\nprintf '工作目录：%s\\n' \"$work\"\nif [[ ! -d /definitely/missing ]]; then\n  echo \"目标不存在，主动退出\"\n  exit 3\nfi",
+    "et": "❌ 常见错误",
+    "ec": "只写 set -e 却忽略管道：cmd1 | cmd2 中 cmd1 失败不会触发退出，因为管道状态取最后一个命令；需要同时开启 pipefail。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "set -o pipefail 解决什么问题？",
+        "a": "让管道整体返回第一个失败命令的状态，而不是只看最后一个命令。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "trap ... EXIT 适合做哪些清理？",
+        "a": "删除临时文件、释放锁、停止子进程、输出最终状态等收尾工作。"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件 I/O 与临时文件",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "读取文件用 while IFS= read -r line，IFS= 保留行首尾空白，-r 禁止反斜杠转义",
+      "写入用 > 覆盖或 >> 追加，敏感临时文件用 mktemp 创建",
+      "测试文件用 -e、-f、-d、-s、-r、-w、-x 判断存在、类型、非空与权限",
+      "大文件处理交给 awk、sed、sort，避免逐行启动外部进程",
+      "用 stat 或 wc -c 获取大小与时间，用 touch 更新时间戳"
     ],
-    "c": "// Shell教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\ntmp=$(mktemp)\ntrap 'rm -f \"$tmp\"' EXIT\n\nprintf 'alice,90\\nbob,75\\n' > \"$tmp\"\n\nwhile IFS=, read -r name score; do\n  printf '%-6s %s\\n' \"$name\" \"$score\"\ndone < \"$tmp\"\n\n[[ -s $tmp ]] && echo \"文件非空，大小：$(wc -c < \"$tmp\") 字节\"\nprintf 'carol,88\\n' >> \"$tmp\"\nprintf '最后一行：%s\\n' \"$(tail -n 1 \"$tmp\")\"\nprintf '文件权限：%s\\n' \"$(stat -c '%a' \"$tmp\" 2>/dev/null || stat -f '%Lp' \"$tmp\")\"\n",
+    "et": "❌ 常见错误",
+    "ec": "用 cat file | while read 读文件，变量在管道子 shell 中修改后丢失，还多一次无谓进程；应使用输入重定向。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "-s 与 -f 分别判断什么？",
+        "a": "-s 判断文件存在且大小大于 0，-f 判断存在且是普通文件。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么临时文件要用 mktemp？",
+        "a": "mktemp 生成难以预测的唯一文件名并原子创建，避免竞态与覆盖风险。"
       }
     ]
   },
   {
     "id": 19,
-    "t": "正则表达式",
+    "t": "正则、通配符与文本匹配",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "通配符 glob 用于文件名匹配：* 任意字符、? 单字符、[abc] 字符集",
+      "[[ $str =~ 正则 ]] 使用 POSIX 扩展正则，匹配结果存入 BASH_REMATCH",
+      "grep -E 支持扩展正则，-o 只输出匹配部分，-c 统计匹配行数",
+      "sed -E 做替换与提取时，注意转义规则与贪婪匹配带来的差异",
+      "正则与 glob 语义不同：路径匹配用 glob，文本内容匹配用正则"
     ],
-    "c": "// Shell教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nfiles=(report-2025-01.csv report-2025-02.csv notes.txt)\n\nprintf '匹配 CSV 的文件：\\n'\nfor f in \"${files[@]}\"; do\n  [[ $f == report-*.csv ]] && printf '  %s\\n' \"$f\"\ndone\n\nif [[ \"v2.14.3\" =~ ^v([0-9]+)\\.([0-9]+)\\.([0-9]+)$ ]]; then\n  printf '主版本=%s 次版本=%s 补丁=%s\\n' \"${BASH_REMATCH[1]}\" \"${BASH_REMATCH[2]}\" \"${BASH_REMATCH[3]}\"\nfi\n\nprintf 'report-2025-01.csv\\nnotes.txt\\n' | grep -E '^report-[0-9]{4}-[0-9]{2}\\.csv$'\nprintf '2025-01-31\\n' | sed -E 's/([0-9]{4})-([0-9]{2})-([0-9]{2})/\\3.\\2.\\1/'\nprintf '含数字的行数：%s\\n' \"$(printf 'a1\\nbb\\nc3\\n' | grep -c '[0-9]')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "在 [[ ]] 中给正则加引号，模式被当作普通字符串，永远只匹配字面量；=~ 右侧不要加引号，可先把模式存入变量再引用。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "BASH_REMATCH 保存什么？",
+        "a": "正则整体匹配及捕获组内容，索引 0 是整体，1 起依次是各捕获组。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "glob 与正则中的 * 有何不同？",
+        "a": "glob 的 * 表示任意长度文件名片段，正则的 * 是前一项重复零次或多次，需搭配 . 使用。"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块与依赖管理：vendor 与 source",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Shell 没有标准包管理器，常用做法是 vendor 目录加 git submodule 固定依赖",
+      "库文件按功能拆分，用 source 加载，路径基于 BASH_SOURCE 计算",
+      "跨项目复用可发布到内部仓库，用版本标签与校验和保证依赖一致性",
+      "避免依赖全局安装的脚本，优先使用容器镜像或固定版本的工具链来运行",
+      "用 shellcheck 的 source 指令声明动态加载路径，消除误报"
     ],
-    "c": "// Shell教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 单文件分发；依赖放在 vendor/ 并用版本锁文件固定\nlib_dir=\"$(mktemp -d)\"\ntrap 'rm -rf \"$lib_dir\"' EXIT\n\ncat > \"$lib_dir/log.sh\" <<'EOF'\nlog() { printf '[%s] %s\\n' \"$(date +%T)\" \"$*\"; }\nEOF\n\n# shellcheck source=/dev/null\nsource \"$lib_dir/log.sh\"\n\nlog \"模块加载成功\"\nprintf '模块路径：%s\\n' \"$lib_dir/log.sh\"\nprintf '依赖清单：%s\\n' \"$(find \"$lib_dir\" -type f -printf '%f\\n')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "库文件路径写死为绝对路径，换一台机器就找不到；应基于 ${BASH_SOURCE[0]} 推导目录，兼容任意安装位置。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "如何让 source 的路径与脚本位置无关？",
+        "a": "先取 script_dir=$(cd -- \"$(dirname -- \"${BASH_SOURCE[0]}\")\" && pwd)，再拼接库文件路径。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么依赖要锁定版本？",
+        "a": "避免上游更新后行为变化，保证本地与 CI 运行结果一致。"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "GNU coreutils 提供 ls、cp、mv、sort、uniq、cut、tr、xargs 等基础工具",
+      "文本三剑客 grep、sed、awk 覆盖绝大多数日志与配置处理场景",
+      "质量工具：shellcheck 静态检查、shfmt 格式化、bats-core 测试",
+      "调试：bash -x 打印执行轨迹，bash -n 只做语法检查，time 测量耗时",
+      "用 make 或 just 封装 lint、test、build、release 等常用命令"
     ],
-    "c": "// Shell教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 包管理器/依赖：apt install bash coreutils gawk | brew install bash gnu-sed\n# 测试框架：bats-core（bats test/），覆盖率可用 kcov\n# 格式化：shfmt -w -i 2 script.sh；静态检查：shellcheck script.sh\n# 调试器：bash -x script.sh，或 bashdb script.sh\n# 构建运行：chmod +x script.sh && ./script.sh，推荐用 make run 封装\n\nprintf 'Bash %s\\n' \"${BASH_VERSION}\"\nprintf 'grep: %s\\n' \"$(grep --version | head -n 1)\"\nprintf 'awk: %s\\n' \"$(awk --version 2>/dev/null | head -n 1 || echo busybox-awk)\"\nprintf 'sed: %s\\n' \"$(sed --version 2>/dev/null | head -n 1 || echo bsd-sed)\"\n\ncommand -v shellcheck >/dev/null && echo \"shellcheck 可用\"\ncommand -v shfmt >/dev/null && echo \"shfmt 可用\"\ncommand -v bats >/dev/null && echo \"bats 可用\"\nprintf '时间测量：%s\\n' \"$( { time true; } 2>&1 | awk '/real/ {print $2}')\"\n",
+    "et": "❌ 常见错误",
+    "ec": "团队混用 GNU 与 BSD 版 sed、awk，参数不兼容导致 CI 失败；应在文档声明目标平台，并用容器固定工具版本。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "bash -n 与 bash -x 的区别？",
+        "a": "-n 只做语法检查不执行；-x 执行并打印每条命令的展开结果。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何查看一段命令的耗时？",
+        "a": "使用 time 命令，或记录 EPOCHREALTIME 起止值后相减。"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与异步：后台任务、wait 与 xargs",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "命令末尾加 & 放入后台，$! 拿到进程号，wait 等待指定或全部任务",
+      "xargs -P 并行处理列表，-n 控制每次调用传入的参数个数",
+      "wait -n 等待任意一个任务结束，适合实现简单的任务池调度",
+      "并发写同一文件会互相覆盖，需加锁或让每个任务写独立文件后再合并",
+      "后台任务失败不会自动传播，需显式执行 wait 并检查各自退出码"
     ],
-    "c": "// Shell教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\ntask() {\n  local -r id=$1\n  sleep 0.2\n  printf '任务 %s 完成\\n' \"$id\"\n}\n\npids=()\nfor i in 1 2 3; do\n  task \"$i\" &\n  pids+=(\"$!\")\ndone\nfor pid in \"${pids[@]}\"; do\n  wait \"$pid\"\ndone\nprintf '并发的 3 个任务全部结束\\n'\n\nprintf '%s\\n' a b c | xargs -n 1 -P 3 printf 'xargs 处理 %s\\n'\nprintf '并行下载列表已提交\\n'",
+    "et": "❌ 常见错误",
+    "ec": "启动后台任务后直接结束脚本，容器退出导致子进程被杀；必须 wait，或用 nohup、setsid 让任务脱离当前会话。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "$! 保存的是什么？",
+        "a": "最近一个后台进程的 PID，可用于 wait 或 kill。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "xargs -P 3 的含义？",
+        "a": "最多同时运行 3 个进程并行处理输入项。"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化：减少子 shell 与外部进程",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "减少子 shell 与外部命令调用，优先使用 bash 内建与参数展开",
+      "读大文件用 mapfile 一次性载入，循环中避免反复执行 sed、awk",
+      "设置 LC_ALL=C 让排序与匹配按字节比较，在英文数据上通常更快",
+      "用 time 与 EPOCHREALTIME 测量热点，先定位再优化",
+      "管道与命令替换都有进程开销，能合并为一次 awk 处理就合并"
     ],
-    "c": "// Shell教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nexport LC_ALL=C\nstart=$EPOCHREALTIME\n\nmapfile -t rows < <(seq 1 200000)\nprintf '载入 %d 行\\n' \"${#rows[@]}\"\n\n# 减少子 shell：一次 awk 完成过滤与求和\ntotal=$(printf '%s\\n' \"${rows[@]}\" | awk '$1 % 2 == 0 { s += $1 } END { print s }')\nprintf '偶数和：%s\\n' \"$total\"\n\nend=$EPOCHREALTIME\nawk -v s=\"$start\" -v e=\"$end\" 'BEGIN { printf \"耗时 %.3f 秒\\n\", e - s }'\nprintf '提示：真实热点先用 time 定位，再决定是否优化\\n'",
+    "et": "❌ 常见错误",
+    "ec": "在循环里反复调用 date、grep、sed，几百次迭代就产生大量进程；应把逻辑合并进一次 awk，或缓存命令结果。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "LC_ALL=C 为什么常常更快？",
+        "a": "按字节比较，避免多字节字符集下的复杂排序与转换开销。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "mapfile 相比逐行 read 的优势？",
+        "a": "一次系统调用批量读入数组，减少循环与 IO 次数，适合中等规模文件。"
       }
     ]
   },
   {
     "id": 24,
-    "t": "测试",
+    "t": "测试：bats 与断言",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "bats-core 提供 setup、teardown 与 @test 语法，断言用 [ ] 与 run",
+      "run 捕获命令的 status、output 与 lines，避免测试脚本被 set -e 打断",
+      "测试应隔离环境，用 mktemp 目录与临时环境变量，结束后清理",
+      "测试要覆盖正常路径、边界值与失败路径，其中失败路径往往更值得关注",
+      "CI 中运行 bats 并收集 TAP 报告，与 shellcheck 一起作为门禁"
     ],
-    "c": "// Shell教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bats\n# 运行：bats tests/math.bats\n\nsetup() {\n  work=\"${BATS_TMPDIR}/math-$$\"\n  mkdir -p \"$work\"\n  add() { echo $(( $1 + $2 )); }\n  divide() { (( $2 == 0 )) && { echo \"除零\" >&2; return 1; }; echo $(( $1 / $2 )); }\n}\n\nteardown() {\n  rm -rf \"$work\"\n}\n\n@test \"add 返回两数之和\" {\n  [ \"$(add 2 3)\" -eq 5 ]\n}\n\n@test \"divide 拒绝除零\" {\n  run divide 8 0\n  [ \"$status\" -ne 0 ]\n  [[ \"$output\" == *\"除零\"* ]]\n}",
+    "et": "❌ 常见错误",
+    "ec": "测试直接调用会修改真实配置或数据库的函数，跑一次就污染环境；所有测试必须在临时目录与假数据上运行，并在结束后清理。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "bats 中 run 的作用？",
+        "a": "执行命令并捕获 status 与 output，不因非零退出而中断测试。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "setup 与 teardown 何时执行？",
+        "a": "每个 @test 前后各执行一次，用于准备与清理隔离环境。"
       }
     ]
   },
   {
     "id": 25,
-    "t": "调试技巧",
+    "t": "调试技巧：bash -x、PS4 与 trap DEBUG",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "bash -n 只检查语法，bash -x 输出执行轨迹，适合定位分支走向",
+      "PS4 可自定义轨迹前缀，加入文件名、行号与当前函数名等信息",
+      "trap DEBUG 在每个简单命令执行前触发，可实现精细化跟踪",
+      "set -x 与 set +x 可只包裹可疑代码段，避免日志过多",
+      "用 shellcheck 与 shfmt 在提交前消除低级错误并统一代码格式"
     ],
-    "c": "// Shell教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nPS4='+ ${BASH_SOURCE##*/}:${LINENO} ${FUNCNAME[0]:-main} > '\ndebug_trap() { printf '即将执行：%s\\n' \"$BASH_COMMAND\" >&2; }\n\ntrace() {\n  trap debug_trap DEBUG\n  local -i n=0\n  for _ in 1 2 3; do ((n += 1)); done\n  trap - DEBUG\n  printf 'n=%d\\n' \"$n\"\n}\n\ntrace\n\n# bash -n script.sh 只做语法检查\n# bash -x script.sh 输出完整执行轨迹",
+    "et": "❌ 常见错误",
+    "ec": "在脚本开头永久 set -x，日志被大量命令淹没且可能泄露密钥；应只在可疑区段开启，并过滤敏感变量。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "PS4 变量控制什么？",
+        "a": "bash -x 轨迹行前缀，可加入时间、行号、函数名等信息便于定位。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何只跟踪某个函数？",
+        "a": "在函数开始处 set -x，结束处 set +x，或使用 trap DEBUG 局部开启。"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "与外部系统互操作：curl、jq、ssh 与 cron",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "curl 处理 HTTP，-fsS 让失败退出、静默但保留错误，-o 输出到文件",
+      "jq 解析 JSON，-r 输出原始字符串，配合命令替换提取字段",
+      "ssh 远程执行命令，rsync 同步文件，scp 传输小文件",
+      "cron 定时任务要注意绝对路径与环境变量，并把输出重定向到日志",
+      "与数据库交互可调用 sqlite3、psql 等 CLI，注意密码不要写在命令行"
     ],
-    "c": "// Shell教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 与 HTTP API 交互，jq 解析 JSON\nreply=$(curl -fsS --max-time 10 https://api.github.com/repos/bash/bash)\nprintf '仓库：%s\\n' \"$(jq -r '.full_name' <<< \"$reply\")\"\nprintf 'Star：%s\\n' \"$(jq -r '.stargazers_count' <<< \"$reply\")\"\n\n# 与数据库 CLI 交互\n# sqlite3 app.db \"select count(*) from users;\"\n# 与远程主机交互\n# ssh deploy@example.com 'systemctl --user restart app'\n# 定时执行（crontab -e）\n# 0 3 * * * /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1\nprintf '互操作示例执行完成\\n'",
+    "et": "❌ 常见错误",
+    "ec": "在 cron 中直接运行脚本，PATH 与交互式 shell 不同导致命令找不到；脚本内应使用绝对路径并显式设置 PATH。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "curl 的 -fsS 组合分别是什么含义？",
+        "a": "-f 让 HTTP 错误返回非零，-s 静默进度，-S 在静默时仍显示错误。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "jq -r 的作用？",
+        "a": "输出原始字符串而不是带引号的 JSON 字面量，便于拼接到变量中。"
       }
     ]
   },
   {
     "id": 27,
-    "t": "设计模式",
+    "t": "脚本架构与设计模式",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "配置与逻辑分离，环境变量优先、默认值兜底，避免在代码中硬编码",
+      "入口函数 main 负责编排，子命令用 case 分发，结构清晰",
+      "幂等设计：重复执行不产生额外副作用，适合部署与初始化等多类脚本",
+      "用锁文件防止同一任务并发执行，并用 trap 保证退出时释放锁",
+      "日志分级并输出到 stderr，标准输出只保留数据，便于管道组合"
     ],
-    "c": "// Shell教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# 配置与逻辑分离：环境变量优先，其次默认值\nconfig_load() {\n  : \"${APP_HOST:=127.0.0.1}\"\n  : \"${APP_PORT:=8080}\"\n  : \"${APP_LOG_LEVEL:=info}\"\n}\n\nmain() {\n  config_load\n  printf 'http://%s:%s 日志级别=%s\\n' \"$APP_HOST\" \"$APP_PORT\" \"$APP_LOG_LEVEL\"\n}\n\n# 仅直接执行时运行，被 source 时只导出函数\nif [[ ${BASH_SOURCE[0]} == \"$0\" ]]; then\n  main \"$@\"\nfi",
+    "et": "❌ 常见错误",
+    "ec": "脚本既输出日志又输出数据到 stdout，调用方用 $(...) 捕获时混入日志；数据走 stdout，日志走 stderr。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "什么是幂等脚本？",
+        "a": "无论执行多少次，结果与状态都一致，不会重复创建或重复写入。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么要判断 BASH_SOURCE 与 $0？",
+        "a": "区分直接执行与被 source，避免加载库时自动运行业务逻辑。"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据访问：sqlite3 CLI 与事务",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用 sqlite3 命令行访问数据库，-header 显示列名，-column 对齐输出",
+      "查询结果用 while IFS='|' read 解析，或使用 -csv 与 -json 输出",
+      "所有写入务必使用事务包裹，避免中途失败留下不完整的数据状态或脏数据",
+      "密码与连接串从环境变量读取，不要写进脚本文件或命令行历史记录",
+      "用 .backup 或 VACUUM INTO 做一致性备份"
     ],
-    "c": "// Shell教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\ndb=$(mktemp --suffix=.db)\ntrap 'rm -f \"$db\"' EXIT\n\nsqlite3 \"$db\" <<'SQL'\nCREATE TABLE orders (id INTEGER PRIMARY KEY, customer TEXT, amount REAL);\nINSERT INTO orders (customer, amount) VALUES ('alice', 99.5), ('bob', 120.0);\nSQL\n\nprintf '总金额：%s\\n' \"$(sqlite3 \"$db\" 'SELECT sum(amount) FROM orders;')\"\nprintf '订单数：%s\\n' \"$(sqlite3 \"$db\" 'SELECT count(*) FROM orders;')\"\nsqlite3 -header -column \"$db\" 'SELECT customer, amount FROM orders ORDER BY amount DESC;'\n\nprintf '备份文件：%s\\n' \"$(sqlite3 \"$db\" \".backup '$db.bak'\" && echo \"$db.bak\")\"\n",
+    "et": "❌ 常见错误",
+    "ec": "直接把用户输入拼进 SQL 字符串，造成注入；CLI 脚本同样要使用参数绑定或严格白名单校验，不要相信任何外部输入。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "如何让 sqlite3 输出带列名的表格？",
+        "a": "使用 -header -column 参数，或交互模式下执行 .headers on 与 .mode column。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么写操作要放在事务里？",
+        "a": "保证多条语句原子执行，任一步失败可整体回滚，避免数据处于中间状态。"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络与 HTTP：下载、重试与超时",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "curl 常用参数：-f 失败返回非零、-s 静默、-S 显示错误、-L 跟随跳转",
+      "用 -w 自定义输出状态码与耗时，便于监控、断言与自动化告警",
+      "重试使用 --retry 与 --retry-all-errors，并设置连接超时",
+      "wget 适合下载文件，-q 静默、-O 指定输出、-c 断点续传",
+      "生产脚本要设置连接超时、限制重试次数，并对响应内容做格式校验"
     ],
-    "c": "// Shell教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nurl=\"https://httpbin.org/status/200\"\ncode=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 8 \"$url\")\nprintf '状态码：%s\\n' \"$code\"\n\ncurl -fsS --retry 3 --retry-delay 1 --retry-all-errors \\\n  -H 'Accept: application/json' \\\n  -o /tmp/headers.json -w '下载完成，%{size_download} 字节\\n' \\\n  https://httpbin.org/json\n\ncontent_type=$(curl -sSI https://httpbin.org/json | awk -F': ' 'tolower($1)==\"content-type\" {print $2}' | tr -d '\\r')\nprintf '内容类型：%s\\n' \"$content_type\"\nprintf '网络检查结束\\n'",
+    "et": "❌ 常见错误",
+    "ec": "只检查 curl 是否执行成功，不检查 HTTP 状态码，404 页面也会被当成成功数据保存；应使用 -f 或显式判断状态码。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "curl -f 的作用？",
+        "a": "HTTP 状态码大于等于 400 时返回非零退出码，便于脚本判断失败。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么要设置超时？",
+        "a": "避免网络异常时脚本无限挂起，阻塞 CI 或定时任务。"
       }
     ]
   },
   {
     "id": 30,
-    "t": "安全编程",
+    "t": "安全编程：引号、临时文件与最小权限",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "所有变量引用都加双引号，避免词分割与通配符展开带来的意外结果",
+      "临时文件用 mktemp 创建，umask 077 限制默认权限",
+      "永远不要 eval 不可信输入，必须执行时先做严格的白名单校验",
+      "密码通过环境变量或密钥文件传入，不要写在命令行参数与运行日志中",
+      "以最小权限运行，避免 sudo 执行整段脚本，只提权必要命令"
     ],
-    "c": "// Shell教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\numask 077\n\ninput=\"${1:?请提供输入文件}\"\n[[ -f $input ]] || { echo \"文件不存在\" >&2; exit 1; }\n\ntmp=$(mktemp)\ntrap 'rm -f \"$tmp\"' EXIT\n\n# 始终引用变量，避免词分割与通配符展开\nwhile IFS= read -r line; do\n  printf '%s\\n' \"$line\" >> \"$tmp\"\ndone < \"$input\"\n\ncase \"$input\" in\n  /var/log/*) echo \"允许处理日志目录\" ;;\n  *) echo \"路径不在白名单\" >&2; exit 2 ;;\nesac\n\nprintf '已安全读取 %d 行\\n' \"$(wc -l < \"$tmp\")\"\n",
+    "et": "❌ 常见错误",
+    "ec": "写 rm -rf $dir/，dir 为空时变成 rm -rf /，造成灾难；变量要加引号并先校验非空，删除前打印确认目标。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么禁止 eval 用户输入？",
+        "a": "eval 会再次解析字符串，攻击者可注入任意命令，导致代码执行。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "umask 077 的效果？",
+        "a": "新建文件权限为 600、目录为 700，只有属主可读写，避免敏感数据泄露。"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战基础：Nginx 访问日志分析",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "日志分析脚本先确认文件可读，再统计总量、独立 IP、Top 路径与状态码",
+      "一次 awk 扫描完成多个维度聚合，比反复调用 grep 更高效",
+      "用 sort | uniq -c | sort -rn 找高频项，数值排序用 -k1nr",
+      "输出区段清晰，用 printf 对齐，便于人工阅读与后续导入",
+      "脚本支持通过参数传入日志路径，缺省值指向常见位置的访问日志文件"
     ],
-    "c": "// Shell教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nlog=\"${1:-access.log}\"\n[[ -r $log ]] || { echo \"无法读取 $log\" >&2; exit 1; }\n\nprintf '总请求数：%s\\n' \"$(wc -l < \"$log\")\"\nprintf '独立 IP：%s\\n' \"$(awk '{print $1}' \"$log\" | sort -u | wc -l)\"\n\nprintf '\\nTop 5 路径：\\n'\nawk '{print $7}' \"$log\" | sort | uniq -c | sort -rn | head -n 5\n\nprintf '\\n状态码分布：\\n'\nawk '{print $9}' \"$log\" | sort | uniq -c | sort -k2n\n\nprintf '\\n4xx/5xx 比例：'\nawk '$9 ~ /^[45]/ {bad++} {all++} END {printf \"%.2f%%\\n\", bad*100/all}' \"$log\"\nprintf '分析完成：%s\\n' \"$log\"\n",
+    "et": "❌ 常见错误",
+    "ec": "直接用 grep 统计访问量，把静态资源与 API 混在一起；分析前应先明确过滤条件，否则指标没有意义。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "awk 中 $7 与 $9 通常对应什么？",
+        "a": "在常见 Nginx combined 格式中，$7 是请求路径，$9 是 HTTP 状态码。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何统计独立 IP 数量？",
+        "a": "提取第一列后 sort -u 去重，再用 wc -l 计数。"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战进阶：带锁与轮转的备份脚本",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "备份脚本使用 flock 防止并发执行，trap 保证退出时输出结果",
+      "归档用 tar -czf 保留目录结构，文件名带时间戳便于识别",
+      "轮转策略按保留天数自动删除过期备份，避免磁盘空间被长期占满或耗尽",
+      "失败时输出明确原因并返回非零退出码，方便监控系统及时发现并告警",
+      "可选地把备份结果推送到对象存储，或通过即时通知渠道告知负责人"
     ],
-    "c": "// Shell教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nsrc=\"${1:?源目录}\"\ndest=\"${2:?目标目录}\"\nstamp=$(date +%Y%m%d-%H%M%S)\narchive=\"$dest/backup-$stamp.tar.gz\"\nlock=\"/tmp/backup.lock\"\n\nexec 9>\"$lock\"\nflock -n 9 || { echo \"已有备份任务在运行\" >&2; exit 1; }\n\ntrap 'echo \"备份结束：$archive\"' EXIT\nmkdir -p \"$dest\"\ntar -C \"$src\" -czf \"$archive\" .\nprintf '大小：%s\\n' \"$(du -h \"$archive\" | cut -f1)\"\nfind \"$dest\" -name 'backup-*.tar.gz' -mtime +7 -delete\nprintf '已清理 7 天前的旧备份\\n'",
+    "et": "❌ 常见错误",
+    "ec": "备份文件与源目录放在同一磁盘，磁盘故障时一起丢失；备份必须落到独立介质或远程存储，并定期验证可恢复性。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "flock -n 的作用？",
+        "a": "尝试非阻塞获取文件锁，拿不到立即失败，防止两个备份任务同时运行。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么用 tar 的 -C 参数？",
+        "a": "切换归档时的基准目录，避免把绝对路径写入包内，恢复时更安全。"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、部署与发布",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "发布产物带语义化版本号，打包后生成校验和，便于验证文件完整性",
+      "部署脚本先构建、再上传、最后切换软链接，从而实现原子发布与快速回滚",
+      "保留最近若干个发布版本，回滚时只需切换软链接并重载对应服务进程",
+      "CI 中使用固定版本的工具链，凭证来自环境变量或密钥管理服务",
+      "发布后立即执行健康检查，探测失败时自动回滚到上一个稳定版本并告警"
     ],
-    "c": "// Shell教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nversion=\"${1:?版本号，例如 1.4.0}\"\ndist=\"dist/app-$version\"\nmkdir -p \"$dist\"\n\ncp -r bin lib config \"$dist/\"\ntar -C dist -czf \"dist/app-$version.tar.gz\" \"app-$version\"\nsha256sum \"dist/app-$version.tar.gz\" > \"dist/app-$version.sha256\"\n\nprintf '产物：%s\\n' \"dist/app-$version.tar.gz\"\nprintf '校验：%s\\n' \"$(cut -d' ' -f1 \"dist/app-$version.sha256\")\"\n# 发布：scp dist/app-$version.tar.gz deploy@host:/srv/releases/\n# 切换：ssh deploy@host 'ln -sfn /srv/releases/app-1.4.0 /srv/current'\n# 回滚：把软链接指向上一个版本并重启服务",
+    "et": "❌ 常见错误",
+    "ec": "直接覆盖线上文件，发布中途失败会留下半新半旧的目录；应先上传新版本到独立目录，再原子切换符号链接，并保留回滚路径。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么发布要生成校验和？",
+        "a": "传输后校验文件完整性，确认产物未被截断或篡改。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "软链接切换如何实现原子发布？",
+        "a": "新版本完整就绪后，用 ln -sfn 原子替换链接指向，服务重载即生效。"
       }
     ]
   },
   {
     "id": 34,
-    "t": "最佳实践",
+    "t": "最佳实践与代码规范",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "脚本开头统一 set -euo pipefail，变量全部加双引号",
+      "通过 shellcheck 零警告与 shfmt 统一格式，纳入提交前检查",
+      "函数保持短小、命名清晰，避免出现超过一屏且难以维护的巨型脚本",
+      "日志写入 stderr，数据写入 stdout，并保持退出码语义明确且稳定",
+      "在脚本头部文档化用法、依赖与示例，降低他人接手与长期维护成本"
     ],
-    "c": "// Shell教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\n# shellcheck disable=SC2034\nreadonly SCRIPT_NAME=\"${0##*/}\"\n\nmain() {\n  local -r pattern=${1:-'*.sh'}\n  local files=()\n  mapfile -d '' files < <(find . -name \"$pattern\" -type f -print0)\n\n  printf '%s 找到 %d 个文件\\n' \"$SCRIPT_NAME\" \"${#files[@]}\"\n  for f in \"${files[@]}\"; do\n    [[ -x $f ]] && printf '可执行：%s\\n' \"$f\"\n  done\n}\n\nmain \"$@\"\n",
+    "et": "❌ 常见错误",
+    "ec": "为了通过检查随手加 shellcheck disable，掩盖真实问题；每一条禁用都应写明原因，并尽量通过重构消除。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "为什么日志要写 stderr？",
+        "a": "stdout 留给数据输出，stderr 承载诊断信息，两者分离后管道与重定向才可靠。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "脚本开头三件套指什么？",
+        "a": "set -e、set -u 与 set -o pipefail，分别处理失败、未定义变量和管道错误。"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Shell教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "已覆盖变量、数组、条件、循环、函数、管道、错误处理与并发控制",
+      "继续深入进程管理、信号处理、终端控制与性能剖析等系统级主题与工具",
+      "掌握 awk 编程与正则表达式，能够处理复杂日志与文本流水线场景",
+      "把脚本纳入 CI：shellcheck、shfmt、bats 三件套",
+      "用真实运维场景练习：日志分析、备份恢复、发布回滚与监控告警闭环"
     ],
-    "c": "// Shell教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Shell教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "#!/usr/bin/env bash\nset -euo pipefail\n\nprintf 'Bash 学习路线\\n'\ncat <<'EOF'\n1. 语法与引号：变量、数组、条件、循环\n2. 文本处理：grep、sed、awk、sort、tr\n3. 工程质量：shellcheck、shfmt、bats、CI\n4. 系统能力：进程、信号、trap、并发\n5. 运维实战：日志、备份、发布、监控\nEOF\n\nprintf '\\n下一步：把任意 3 个手工流程写成幂等脚本。\\n'\nprintf '当前 Bash 版本：%s\\n' \"${BASH_VERSION}\"\n",
+    "et": "❌ 常见错误",
+    "ec": "只写一次性脚本不写测试，改一行就可能破坏生产流程；把关键脚本当代码管理，纳入版本控制与测试，并定期在 CI 中回归。",
     "q": [
       {
-        "q": "Shell教程的主要特点是什么？",
-        "a": "脚本与运维自动化"
+        "q": "下一步最值得练习什么？",
+        "a": "把日常重复操作改写成带参数校验、日志与 trap 清理的幂等脚本。"
       },
       {
-        "q": "学习Shell教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Shell教程的主要应用领域？",
-        "a": "脚本与运维自动化"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何证明脚本质量达标？",
+        "a": "shellcheck 无警告、shfmt 格式一致、bats 覆盖主要路径，并能在 CI 中稳定运行。"
       }
     ]
   }

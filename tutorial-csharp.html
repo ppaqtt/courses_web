@@ -3,19 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="C#基础教程 - 从入门到精通，35章完整教程涵盖C#基础语法、面向对象、LINQ、异步编程等核心知识。">
-    <meta name="keywords" content="C#教程,C#基础教程,C#入门,.NET开发">
+    <meta name="description" content="C#基础教程 - 35+ 章完整教程，涵盖基础语法、数据结构、面向对象、文件操作、标准库与工具链等核心知识，支持在线运行代码。">
+    <meta name="keywords" content="C#教程,C#入门,C#基础,C#在线运行">
     <title>C# 基础教程 | 编程教程</title>
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="css/runoob-style.css">
+    <link rel="stylesheet" href="tutorial-features.css">
+    <link rel="stylesheet" href="tutorial-extensions.css">
+    <link rel="stylesheet" href="tutorial-advanced.css">
 </head>
-<body>
+<body data-language="csharp">
     <script src="data/tutorial-csharp.data.js"></script>
-    <script src="js/runoob-tutorial.js"></script>
+    <script src="tutorial-common.js"></script>
+    <script src="tutorial-extensions.js"></script>
+    <script src="tutorial-advanced.js"></script>
+    <script src="tutorial-runner.js?v=20261115"></script>
+    <script src="js/runoob-tutorial.js?v=20261115"></script>
     <script>
         const tutorial = new RunoobTutorial({
             language: 'csharp',
             title: 'C#教程',
-            subtitle: '.NET平台核心'
+            subtitle: '.NET 平台与面向对象'
         });
     </script>
 </body>

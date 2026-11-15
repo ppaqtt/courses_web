@@ -1,0 +1,807 @@
+[
+  {
+    "id": 1,
+    "t": "Erlang 简介与历史",
+    "p": [
+      "Erlang 由爱立信 1986 年发布，1998 年开源，最初用于电话交换机，强调软实时与容错",
+      "核心特性是不可变数据、单次赋值、模式匹配与轻量进程，进程间只通过消息通信",
+      "BEAM 虚拟机支持抢占式调度与热代码升级，可构建多年不停机的分布式系统",
+      "OTP 提供 gen_server、supervisor、application 等行为与架构模式，是 Erlang 的工程底座"
+    ],
+    "c": "%% hello.erl\n%% 编译运行：erlc hello.erl && erl -noshell -s hello main -s init stop\n-module(hello).\n-export([main/0]).\n\nmain() ->\n    io:format(\"Hello, World!~n\"),\n    %% 变量必须大写开头，= 是模式匹配而不是赋值\n    Name = <<\"Erlang\">>,\n    io:format(\"你好, ~ts~n\", [Name]),\n    %% 启动一个轻量进程，向它发送消息\n    Pid = spawn(fun() ->\n        receive\n            {greet, From, Who} -> From ! {ok, \"你好, \" ++ Who}\n        end\n    end),\n    Pid ! {greet, self(), \"OTP\"},\n    receive\n        {ok, Msg} -> io:format(\"~ts~n\", [Msg])\n    end.",
+    "et": "❌ 常见错误",
+    "ec": "把 = 当成赋值并试图修改变量，如 X = 1, X = 2 会直接 badmatch 崩溃。Erlang 的变量只能绑定一次，需要新值时必须换一个新变量名，这正是无共享状态的基础。",
+    "q": [
+      {
+        "q": "Erlang 的 = 运算符叫什么？",
+        "a": "模式匹配（match）运算符，不是赋值"
+      },
+      {
+        "q": "Erlang 进程之间如何通信？",
+        "a": "通过发送消息（Pid ! Msg）与 receive 接收，不共享内存"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与开发工具链",
+    "p": [
+      "可用 kerl 或 asdf 安装多个 Erlang/OTP 版本，安装后用 erl -version 与 erl 进入交互 shell",
+      "erlc 编译单个模块，erl -noshell -s Mod Fun 运行入口函数，适合脚本化验证",
+      "rebar3 是事实标准构建工具：rebar3 new app、rebar3 compile、rebar3 shell、rebar3 eunit",
+      "开发辅助：erlfmt 格式化、dialyzer 类型分析、observer 观察进程、dbg 跟踪调用"
+    ],
+    "c": "%% 环境检查与工具链速览\n%% 安装（二选一）：\n%%   kerl build 26.2 26.2 && kerl install 26.2 ~/kerl/26.2\n%%   asdf plugin add erlang && asdf install erlang 26.2\n%% 常用命令：\n%%   erl                    进入交互 shell\n%%   erlc hello.erl         编译模块\n%%   erl -noshell -s hello main -s init stop\n%%   rebar3 new app demo && cd demo && rebar3 compile && rebar3 shell\n%%   rebar3 eunit / rebar3 ct / rebar3 dialyzer\n%%   erlfmt -w src/          格式化源码\n-module(tooling).\n-export([main/0]).\n\nmain() ->\n    {ok, Vsn} = application:get_key(kernel, vsn),\n    io:format(\"OTP 版本: ~s~n\", [Vsn]),\n    io:format(\"ERTS: ~s~n\", [erlang:system_info(version)]),\n    io:format(\"调度器: ~p~n\", [erlang:system_info(schedulers)]).",
+    "et": "❌ 常见错误",
+    "ec": "用系统包管理器装了一个旧 OTP，又用 asdf 装了新版本，导致 erl 与 rebar3 使用不同运行时。应统一由一个版本管理器提供 PATH，并用 erl -version 确认实际版本。",
+    "q": [
+      {
+        "q": "Erlang 生态标准构建工具是什么？",
+        "a": "rebar3"
+      },
+      {
+        "q": "查看 OTP 版本用哪个命令？",
+        "a": "erl -version，或在 shell 中执行 erlang:system_info(otp_release)"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "值与不可变绑定",
+    "p": [
+      "变量以大写字母或下划线开头，小写开头的是原子，绑定后不可修改，再次匹配同名值相当于断言",
+      "下划线 _ 是通配模式，_Name 可读性强且不触发未使用告警，适合在匹配中忽略值",
+      "变量作用域是当前函数子句，case/receive 分支内绑定的变量不会泄漏到分支外",
+      "不可变数据让消息传递天然安全，所谓修改其实是构造一份全新数据并返回"
+    ],
+    "c": "-module(binding).\n-export([main/0]).\n\nmain() ->\n    %% 绑定：Radius 之后一直是 2.0\n    Radius = 2.0,\n    Area = math:pi() * Radius * Radius,\n    io:format(\"面积: ~.2f~n\", [Area]),\n\n    %% 再次匹配同一值成功，相当于断言\n    Radius = 2.0,\n\n    %% 模式匹配解构元组\n    {ok, Value} = {ok, 42},\n    io:format(\"Value = ~p~n\", [Value]),\n\n    %% 用新变量表达“修改”\n    Doubled = Radius * 2,\n    _Ignored = unused_value,\n    io:format(\"Doubled = ~p~n\", [Doubled]),\n    %% case 分支内的绑定不泄漏\n    Msg = case Value of\n              42 -> inner_only\n          end,\n    io:format(\"~p~n\", [Msg]).",
+    "et": "❌ 常见错误",
+    "ec": "在 shell 里写 X = 1, X = X + 1，期望自增，结果第二个匹配失败并报 badmatch。Erlang 没有可变变量，要用 X1 = X + 1 这样的新名字，或在进程状态中显式传递新值。",
+    "q": [
+      {
+        "q": "Erlang 变量名必须以什么开头？",
+        "a": "大写字母或下划线"
+      },
+      {
+        "q": "如何表示“版本 2”的同一个值？",
+        "a": "用新变量，如 X1 = X + 1，而不是重新绑定 X"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "动态类型与类型规范",
+    "p": [
+      "Erlang 是动态类型语言，类型在运行时检查，错误通常表现为函数子句不匹配或 badarith",
+      "可用 -spec 与 -type 声明契约，dialyzer 基于成功类型分析发现不可能成立的分支",
+      "守卫 guard 是运行时的类型断言，如 is_integer/1、is_binary/1，先校验再计算",
+      "类型声明不会阻止错误调用，但能为文档、编辑器和 dialyzer 提供可靠信息"
+    ],
+    "c": "-module(typespec).\n-export([main/0, area/1, describe/1]).\n\n-type shape() :: {circle, number()} | {rect, number(), number()}.\n-spec area(shape()) -> number().\narea({circle, R}) -> math:pi() * R * R;\narea({rect, W, H}) -> W * H.\n\n-spec describe(term()) -> binary().\ndescribe(X) when is_integer(X) -> <<\"整数\">>;\ndescribe(X) when is_float(X) -> <<\"浮点数\">>;\ndescribe(X) when is_binary(X) -> <<\"二进制\">>;\ndescribe(X) when is_list(X) -> <<\"列表\">>;\ndescribe(_) -> <<\"其他\">>.\n\nmain() ->\n    io:format(\"~p~n\", [area({rect, 3, 4})]),\n    io:format(\"~p~n\", [describe(3.14)]).",
+    "et": "❌ 常见错误",
+    "ec": "以为写了 -spec 就会在运行时强制类型，于是不做守卫校验，结果 area({circle, x}) 在算术处崩溃且堆栈难读。spec 只服务静态分析，运行时仍需守卫或显式错误处理。",
+    "q": [
+      {
+        "q": "哪个工具基于 -spec 做静态类型分析？",
+        "a": "dialyzer"
+      },
+      {
+        "q": "判断一个值是否为二进制的守卫函数？",
+        "a": "is_binary/1"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "算术运算符 + - * / div rem，/ 总是返回浮点数，整除用 div，取余用 rem",
+      "比较运算符 == /= 会做数值转换，=:= 与 =/= 要求类型也相同，工程上优先用后者",
+      "布尔运算 andalso/orelse 短路求值，and/or 会求值两边，常用于守卫中的组合条件",
+      "位运算 bsl/bsr/band/bor/bxor/bnot 常用于二进制协议与位图处理"
+    ],
+    "c": "-module(operators).\n-export([main/0]).\n\nmain() ->\n    io:format(\"7 / 2 = ~p~n\", [7 / 2]),\n    io:format(\"7 div 2 = ~p~n\", [7 div 2]),\n    io:format(\"7 rem 2 = ~p~n\", [7 rem 2]),\n\n    %% == 宽松比较，=:= 严格比较\n    io:format(\"1 == 1.0 -> ~p~n\", [1 == 1.0]),\n    io:format(\"1 =:= 1.0 -> ~p~n\", [1 =:= 1.0]),\n\n    %% andalso/orelse 短路：右侧不会求值\n    false = false andalso (1 div 0 > 1),\n    true = true orelse (1 div 0 > 1),\n    io:format(\"短路生效~n\"),\n\n    %% 位运算\n    io:format(\"1 bsl 10 = ~p~n\", [1 bsl 10]),\n    io:format(\"255 band 15 = ~p~n\", [255 band 15]).",
+    "et": "❌ 常见错误",
+    "ec": "用 == 比较 1 与 1.0 得到 true，误以为类型相同。涉及整数与浮点混用时应使用 =:=，需要数值相等时再显式转换，否则容易在模式匹配与 map 键上出现意外行为。",
+    "q": [
+      {
+        "q": "整除与取余分别用什么运算符？",
+        "a": "div 与 rem"
+      },
+      {
+        "q": "严格相等比较用哪个运算符？",
+        "a": "=:=（不等为 =/=）"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串与二进制",
+    "p": [
+      "Erlang 的字符串是整数列表，例如 abc 就是 [97,98,99]，因此可以直接用列表函数处理",
+      "二进制 <<\"abc\">> 是字节序列，处理文本与协议更高效，二进制推导式可批量构造",
+      "unicode 模块负责编码转换，unicode:characters_to_binary/1 把字符串转为 UTF-8 二进制",
+      "iolist 允许嵌套列表与二进制混合，io:format 与 gen_tcp:send 都能直接接受"
+    ],
+    "c": "-module(strings).\n-export([main/0]).\n\nmain() ->\n    S = \"Erlang\",\n    %% 字符串就是整数列表\n    io:format(\"长度: ~p~n\", [length(S)]),\n    io:format(\"首字符: ~p~n\", [hd(S)]),\n    io:format(\"反转: ~s~n\", [lists:reverse(S)]),\n\n    %% 二进制与 UTF-8\n    Bin = unicode:characters_to_binary(\"你好，世界\"),\n    io:format(\"字节数: ~p~n\", [byte_size(Bin)]),\n    io:format(\"解码: ~ts~n\", [unicode:characters_to_list(Bin)]),\n\n    %% 二进制模式匹配：拆出头部与剩余\n    <<First, Rest/binary>> = <<\"hello\">>,\n    io:format(\"首字节 ~p 剩余 ~p~n\", [First, Rest]),\n\n    %% iolist 拼接\n    IoList = [\"结果: \", integer_to_list(42), <<\"\\n\">>],\n    io:put_chars(IoList).",
+    "et": "❌ 常见错误",
+    "ec": "用 ++ 反复拼接长字符串，每次都要复制整个列表，复杂度退化为 O(n²)。大量文本应使用二进制与 iolist 累积，最后一次性 iolist_to_binary/1 输出。",
+    "q": [
+      {
+        "q": "Erlang 的字符串本质上是什么？",
+        "a": "整数列表（list of integers）"
+      },
+      {
+        "q": "把字符串转成 UTF-8 二进制用什么函数？",
+        "a": "unicode:characters_to_binary/1"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "列表、元组与映射",
+    "p": [
+      "列表是单链表，支持 [H|T] 模式拆解；追加到头部 O(1)，追加到尾部 ++ 需要复制",
+      "元组用于固定长度结构，元素按位置访问，常用于 {ok, Value} 与 {error, Reason} 约定",
+      "map 是键值结构，#{key => Value}，用 maps:get/2、maps:put/3、maps:update_with/3 操作",
+      "集合类结构还有 ordsets/ordsets 与 gb_sets/gb_trees，选择取决于数据规模与是否需要有序"
+    ],
+    "c": "-module(collections).\n-export([main/0]).\n\nmain() ->\n    %% 列表操作\n    Nums = [1, 2, 3, 4],\n    Doubled = lists:map(fun(X) -> X * 2 end, Nums),\n    Evens = lists:filter(fun(X) -> X rem 2 =:= 0 end, Nums),\n    io:format(\"~p ~p~n\", [Doubled, Evens]),\n\n    %% 元组\n    Point = {3, 4},\n    {X, Y} = Point,\n    io:format(\"X=~p Y=~p~n\", [X, Y]),\n\n    %% 映射\n    User = #{name => <<\"Ada\">>, age => 36},\n    io:format(\"~p~n\", [maps:get(name, User)]),\n    Older = maps:update_with(age, fun(A) -> A + 1 end, User),\n    io:format(\"~p~n\", [Older]),\n\n    %% 有序集合去重并排序\n    io:format(\"~p~n\", [ordsets:from_list([3, 1, 2, 1])]).",
+    "et": "❌ 常见错误",
+    "ec": "用 length(List) =:= 0 判断空列表，或对超长列表频繁使用 ++ 在尾部追加。空列表应直接模式匹配 []，追加应改为头插后 reverse，或改用 queue/array 等结构。",
+    "q": [
+      {
+        "q": "在列表头部插入元素的写法？",
+        "a": "[New | List]"
+      },
+      {
+        "q": "从 map 取值的函数是什么？",
+        "a": "maps:get/2（可带默认值 maps:get/3）"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件与分支",
+    "p": [
+      "case 对表达式结果做模式匹配，必须覆盖所有可能，否则抛 case_clause 异常",
+      "if 的每个分支都是守卫表达式，没有 else 关键字，最后用 true -> 兜底",
+      "函数子句本身就是分支：不同参数模式与守卫决定走哪个子句，可读性优于嵌套 case",
+      "避免深层嵌套：把分支提取成独立函数，或先归一化输入再做模式匹配"
+    ],
+    "c": "-module(branching).\n-export([main/0, grade/1, classify/1]).\n\ngrade(Score) when Score >= 90 -> excellent;\ngrade(Score) when Score >= 60 -> pass;\ngrade(_) -> fail.\n\nclassify(X) ->\n    case X of\n        {error, Reason} -> {failed, Reason};\n        {ok, Value} when is_integer(Value) -> {number, Value};\n        {ok, Value} -> {other, Value}\n    end.\n\nmain() ->\n    io:format(\"~p~n\", [grade(95)]),\n    io:format(\"~p~n\", [classify({ok, 7})]),\n    io:format(\"~p~n\", [classify({error, timeout})]),\n    %% if 必须有 true 兜底\n    X = 42,\n    Level = if\n                X =:= 0 -> zero;\n                true -> nonzero\n            end,\n    io:format(\"~p~n\", [Level]).",
+    "et": "❌ 常见错误",
+    "ec": "case 分支只写了预期情况，遇到意外输入就直接 crash。应显式加入 _ -> 分支返回 {error, unexpected}，或用守卫收窄范围，让错误可控而非进程崩溃。",
+    "q": [
+      {
+        "q": "if 分支的兜底条件通常写什么？",
+        "a": "true"
+      },
+      {
+        "q": "case 未匹配任何分支会抛什么错误？",
+        "a": "case_clause"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "递归与高阶函数",
+    "p": [
+      "Erlang 没有传统循环，迭代通过递归表达；尾递归调用会被 BEAM 优化为常量栈",
+      "累加器模式在参数中携带中间结果，返回时直接给出，是写尾递归的标准套路",
+      "lists 模块提供 map/filter/foldl/foldr/foreach，优先用它们而不是手写递归",
+      "匿名函数 fun(X) -> ... end 可捕获外部变量，形成闭包"
+    ],
+    "c": "-module(recursion).\n-export([main/0, sum/1, sum_tail/1]).\n\n%% 非尾递归：栈随长度增长\nsum([]) -> 0;\nsum([H | T]) -> H + sum(T).\n\n%% 尾递归：累加器 Acc\nsum_tail(List) -> sum_tail(List, 0).\nsum_tail([], Acc) -> Acc;\nsum_tail([H | T], Acc) -> sum_tail(T, Acc + H).\n\nmain() ->\n    Nums = lists:seq(1, 100),\n    io:format(\"sum = ~p~n\", [sum(Nums)]),\n    io:format(\"sum_tail = ~p~n\", [sum_tail(Nums)]),\n\n    %% 高阶函数：foldl 实现求和\n    Total = lists:foldl(fun(X, Acc) -> X + Acc end, 0, Nums),\n    io:format(\"foldl = ~p~n\", [Total]),\n\n    %% 闭包捕获 Factor\n    Factor = 3,\n    Times = fun(X) -> X * Factor end,\n    io:format(\"~p~n\", [lists:map(Times, [1, 2, 3])]).",
+    "et": "❌ 常见错误",
+    "ec": "手写递归时把累加结果放在递归调用之后，如 H + sum(T)，长列表会耗尽栈。应改为尾递归加累加器，让 BEAM 复用栈帧，或在标准库中直接使用 foldl。",
+    "q": [
+      {
+        "q": "BEAM 优化哪种递归？",
+        "a": "尾递归（最后一步是递归调用）"
+      },
+      {
+        "q": "哪个高阶函数从左侧累积结果？",
+        "a": "lists:foldl/3"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "函数定义与子句",
+    "p": [
+      "函数由名字与参数个数唯一标识，foo/1 与 foo/2 是两个不同函数，必须分别导出",
+      "多个子句用分号分隔，最后一个子句用句号结束；匹配自上而下，守卫失败会继续尝试下一子句",
+      "导出列表写在 -export([name/arity, ...])，未导出函数是模块私有，便于重构",
+      "参数模式可直接解构数据结构，把校验写在函数头部比在函数体内写 case 更清晰"
+    ],
+    "c": "-module(functions).\n-export([main/0, fact/1, greet/1, max_of/2]).\n\n%% 阶乘：两个子句，递归到 0\nfact(0) -> 1;\nfact(N) when N > 0 -> N * fact(N - 1).\n\n%% 守卫分流，覆盖所有输入\ngreet(Name) when is_binary(Name) -> <<\"你好, \", Name/binary>>;\ngreet(Name) when is_list(Name) -> \"你好, \" ++ Name;\ngreet(_) -> <<\"你好, 陌生人\">>.\n\n%% 多参数与守卫\nmax_of(A, B) when A >= B -> A;\nmax_of(_, B) -> B.\n\nmain() ->\n    io:format(\"5! = ~p~n\", [fact(5)]),\n    io:format(\"~ts~n\", [greet(<<\"Ada\">>)]),\n    io:format(\"~p~n\", [max_of(3, 9)]).",
+    "et": "❌ 常见错误",
+    "ec": "把同名不同参数的函数当成重载，只导出 foo/1 却调用 foo/2，运行时报 undef。Erlang 按 名称/元数 区分函数，导出列表与调用处必须完全一致。",
+    "q": [
+      {
+        "q": "Erlang 中函数由什么唯一标识？",
+        "a": "函数名与参数个数（Arity），写作 name/arity"
+      },
+      {
+        "q": "多个函数子句之间用什么分隔？",
+        "a": "分号（最后一个子句用句号）"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "匿名函数与高阶函数",
+    "p": [
+      "fun(Args) -> Body end 定义匿名函数，可捕获定义处可见的变量形成闭包",
+      "fun Module:Function/Arity 是外部函数引用，适合回调与 gen_server 初始化等场景",
+      "常用高阶函数：lists:map/2、lists:filter/2、lists:foldl/3、lists:foreach/2、lists:sort/2",
+      "用 lists:filtermap/2、lists:partition/2 可一次遍历完成筛选与转换，减少中间列表"
+    ],
+    "c": "-module(higher_order).\n-export([main/0, compose/2, apply_all/2]).\n\n%% 返回一个组合函数：先 F 后 G\ncompose(F, G) ->\n    fun(X) -> G(F(X)) end.\n\napply_all(Funs, Value) ->\n    lists:map(fun(F) -> F(Value) end, Funs).\n\nmain() ->\n    Inc = fun(X) -> X + 1 end,\n    Double = fun(X) -> X * 2 end,\n    IncThenDouble = compose(Inc, Double),\n    io:format(\"~p~n\", [IncThenDouble(5)]),\n\n    Funs = [Inc, Double, fun(X) -> X * X end],\n    io:format(\"~p~n\", [apply_all(Funs, 4)]),\n\n    %% 闭包捕获 Base\n    Base = 100,\n    AddBase = fun(X) -> X + Base end,\n    io:format(\"~p~n\", [lists:map(AddBase, [1, 2, 3])]),\n    %% 外部函数引用\n    io:format(\"~p~n\", [lists:sort(fun(A, B) -> A >= B end, [3, 1, 2])]).",
+    "et": "❌ 常见错误",
+    "ec": "在循环里用 fun 捕获不断变化的变量，或误以为闭包捕获的是引用。Erlang 变量不可变，闭包捕获的是绑定时快照，因此每次迭代应绑定新变量再构造 fun。",
+    "q": [
+      {
+        "q": "引用已有函数 M:F/A 的写法？",
+        "a": "fun M:F/A"
+      },
+      {
+        "q": "哪个函数同时完成过滤与映射？",
+        "a": "lists:filtermap/2"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "模式匹配进阶",
+    "p": [
+      "模式匹配可嵌套解构元组、列表、map 与二进制，左侧结构决定右侧如何被拆分",
+      "列表模式 [H|T] 取出头与尾，[A, B|Rest] 一次取出前两个元素，[] 匹配空表",
+      "map 模式 #{key := Value} 只匹配存在的键，不要求键集合完全一致，适合处理可选字段",
+      "二进制模式 <<Len:32/big, Payload:Len/binary, Rest/binary>> 是解析协议的核心写法"
+    ],
+    "c": "-module(matching).\n-export([main/0, parse/1, dispatch/1]).\n\n%% 解析常见返回结构\nparse({ok, #{status := Status, body := Body}}) ->\n    {Status, Body};\nparse({error, Reason}) ->\n    {error, Reason};\nparse(_) ->\n    {error, unexpected}.\n\n%% 二进制协议：4 字节长度 + 负载 + 剩余\ndispatch(<<Len:32/big, Payload:Len/binary, Rest/binary>>) ->\n    {Payload, Rest};\ndispatch(_) ->\n    incomplete.\nmain() ->\n    io:format(\"~p~n\", [parse({ok, #{status => 200, body => <<\"hi\">>}})]),\n    io:format(\"~p~n\", [parse({error, timeout})]),\n    Bin = <<0, 0, 0, 3, \"abc\", \"tail\">>,\n    {Payload, Rest} = dispatch(Bin),\n    io:format(\"payload=~p rest=~p~n\", [Payload, Rest]),\n    %% 列表头尾拆分\n    [First, Second | Tail] = [1, 2, 3, 4],\n    io:format(\"~p ~p ~p~n\", [First, Second, Tail]).",
+    "et": "❌ 常见错误",
+    "ec": "用 #{status := S} 匹配时以为 map 必须只有这个键，或者在键不存在时直接崩溃。:= 只要求该键存在，缺失时应提供兜底子句或用 maps:find/2 返回 {ok, V} | error。",
+    "q": [
+      {
+        "q": "map 模式中 := 与 => 的区别？",
+        "a": ":= 用于匹配已有键，=> 用于构造新 map"
+      },
+      {
+        "q": "二进制模式中 Len:32/big 表示什么？",
+        "a": "取 32 位大端整数作为长度"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "记录与自定义结构",
+    "p": [
+      "记录 -record(name, {field = Default}) 是编译期的元组语法糖，字段访问编译后变成元素下标",
+      "用 #user{name = “Ada”} 构造，#user.name 读取，#user{age = 37} 更新并返回新记录",
+      "记录适合固定字段的内部数据，跨模块共享时应把定义放在 -include 头文件中",
+      "对外接口更推荐 map 或带标签的元组，记录字段变化会导致依赖模块重新编译"
+    ],
+    "c": "-module(records).\n-export([main/0, birthday/1, adult/1]).\n\n-record(user, {name = <<\"匿名\">>, age = 0, email = undefined}).\n\nbirthday(#user{age = Age} = U) ->\n    U#user{age = Age + 1}.\n\nadult(#user{age = Age}) when Age >= 18 -> true;\nadult(#user{}) -> false.\n\nmain() ->\n    U0 = #user{name = <<\"Ada\">>, age = 36, email = <<\"ada@example.com\">>},\n    io:format(\"姓名: ~ts, 年龄: ~p~n\", [U0#user.name, U0#user.age]),\n\n    U1 = birthday(U0),\n    io:format(\"生日后: ~p~n\", [U1#user.age]),\n    io:format(\"是否成年: ~p~n\", [adult(U1)]),\n\n    %% 模式匹配记录\n    #user{name = N} = U1,\n    io:format(\"解构姓名: ~ts~n\", [N]).",
+    "et": "❌ 常见错误",
+    "ec": "在不同模块各自写一份 -record(user, ...)，字段顺序或默认值不一致，结果按位置访问时读到错位数据。记录定义应放在共享 hrl 文件并用 -include_lib 引入。",
+    "q": [
+      {
+        "q": "记录的底层表示是什么？",
+        "a": "带记录名标签的元组"
+      },
+      {
+        "q": "如何读取记录字段 name？",
+        "a": "Rec#user.name"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "多态、协议与行为",
+    "p": [
+      "Erlang 没有参数化类型与类型类，多态通过“约定 + 回调模块”实现，如 io 设备与 gen_server 回调",
+      "-behaviour(gen_server) 声明回调模块，编译器会检查是否实现了 init/1、handle_call/3 等必需函数",
+      "行为是一组函数契约，supervisor、application、gen_event 都是标准行为，可自定义 behaviour_info",
+      "运行时分发靠 apply(Mod, Fun, Args) 与模块名参数化，比静态类型类更灵活但少了编译期保证"
+    ],
+    "c": "-module(poly).\n-behaviour(gen_server).\n-export([main/0, start_link/0, fetch/0, store/1]).\n-export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2]).\n\n%% 对外 API：隐藏状态实现\nstart_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).\nfetch() -> gen_server:call(?MODULE, get).\nstore(Value) -> gen_server:call(?MODULE, {put, Value}).\n\n%% 回调实现\ninit([]) -> {ok, undefined}.\nhandle_call(get, _From, State) -> {reply, State, State};\nhandle_call({put, V}, _From, _State) -> {reply, ok, V}.\nhandle_cast(_Msg, State) -> {noreply, State}.\nhandle_info(_Info, State) -> {noreply, State}.\nterminate(_Reason, _State) -> ok.\n\nmain() ->\n    {ok, _} = start_link(),\n    ok = store(42),\n    io:format(\"~p~n\", [fetch()]).",
+    "et": "❌ 常见错误",
+    "ec": "实现 gen_server 时漏写 handle_info/2 或 terminate/2，编译能过但运行中收到普通消息即崩溃。行为回调应完整实现，未用到的回调返回 {noreply, State} 占位。",
+    "q": [
+      {
+        "q": "声明 gen_server 回调模块的编译属性？",
+        "a": "-behaviour(gen_server)."
+      },
+      {
+        "q": "同步调用的回调函数与异步调用的回调函数？",
+        "a": "handle_call/3 与 handle_cast/2"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "模块与抽象边界",
+    "p": [
+      "-module(Name) 必须与文件名一致，模块是代码组织与热更新的基本单位",
+      "-export 只暴露必要 API，私有函数不导出；对外类型可用 -opaque 隐藏内部表示",
+      "用 -include(\"x.hrl\") 引入本地头文件，-include_lib(\"app/include/x.hrl\") 引入依赖包头文件",
+      "edoc 依据注释中的 @doc/@spec 生成文档，保持 API 文档与代码同步"
+    ],
+    "c": "-module(counter).\n-export([main/0, new/0, incr/1, value/1, reset/1]).\n-export_type([counter/0]).\n\n%% opaque 表示外部不应依赖内部结构\n-opaque counter() :: non_neg_integer().\n\n-spec new() -> counter().\nnew() -> 0.\n\n-spec incr(counter()) -> counter().\nincr(C) when is_integer(C), C >= 0 -> C + 1.\n\n-spec value(counter()) -> non_neg_integer().\nvalue(C) -> C.\n\n-spec reset(counter()) -> counter().\nreset(_) -> 0.\n\nmain() ->\n    C0 = new(),\n    C1 = incr(incr(C0)),\n    io:format(\"计数: ~p~n\", [value(C1)]),\n    io:format(\"重置: ~p~n\", [value(reset(C1))]).",
+    "et": "❌ 常见错误",
+    "ec": "把所有函数都导出，调用方直接操作内部数据结构，后续重构即破坏兼容。应只导出 API，用 -opaque 类型与构造/访问函数封装表示，让内部实现可自由替换。",
+    "q": [
+      {
+        "q": "模块名与文件名必须满足什么关系？",
+        "a": "完全一致（同名 .erl）"
+      },
+      {
+        "q": "隐藏类型内部表示用什么属性？",
+        "a": "-opaque"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "行为模式与接口契约",
+    "p": [
+      "behaviour 相当于 Erlang 的接口：定义回调函数集合，模块声明 -behaviour 后编译期校验",
+      "supervisor 行为管理子进程重启策略，one_for_one/one_for_all/rest_for_one 决定故障传播",
+      "application 行为定义应用启动、停止与依赖，由 application:start/1 统一编排",
+      "自定义行为需导出 behaviour_info(callbacks)，并让调用方通过 apply/3 分发"
+    ],
+    "c": "-module(worker_sup).\n-behaviour(supervisor).\n-export([main/0, start_link/0, start_worker/0, init/1]).\n\nstart_link() ->\n    supervisor:start_link({local, ?MODULE}, ?MODULE, []).\n\nstart_worker() ->\n    Pid = spawn_link(fun() -> receive stop -> ok end end),\n    {ok, Pid}.\n\ninit([]) ->\n    Children = [\n        #{id => counter,\n          start => {?MODULE, start_worker, []},\n          restart => permanent,\n          shutdown => 5000,\n          type => worker,\n          modules => [worker_sup]}\n    ],\n    {ok, {#{strategy => one_for_one, intensity => 3, period => 10}, Children}}.\nmain() ->\n    {ok, Sup} = start_link(),\n    io:format(\"监督者: ~p~n\", [Sup]),\n    io:format(\"子进程: ~p~n\", [supervisor:which_children(Sup)]).",
+    "et": "❌ 常见错误",
+    "ec": "把紧密协作的进程放进 one_for_one，一个崩溃后另一个持有脏状态继续运行。共享状态或强依赖的进程应使用 one_for_all 或 rest_for_one，保证故障后整体一致重启。",
+    "q": [
+      {
+        "q": "监督者最常用的重启策略？",
+        "a": "one_for_one（单个子进程失败只重启它）"
+      },
+      {
+        "q": "声明监督者行为的属性？",
+        "a": "-behaviour(supervisor)."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "错误处理：throw、error、exit",
+    "p": [
+      "error 表示编程错误，throw 做非局部返回，exit 表示进程终止，均可被 try/catch 捕获",
+      "完整形式为 try Expr of Pattern -> ... catch Class:Reason -> ... after ... end",
+      "优先返回 {ok, Value} | {error, Reason} 而不是抛异常，让调用方显式处理",
+      "监督者根据退出原因决定是否重启：normal/shutdown 不重启，异常原因按策略处理"
+    ],
+    "c": "-module(errors).\n-export([main/0, safe_div/2, parse_age/1]).\n\nsafe_div(_A, 0) -> {error, division_by_zero};\nsafe_div(A, B) -> {ok, A / B}.\n\nparse_age(Bin) ->\n    try binary_to_integer(Bin) of\n        Age when Age >= 0, Age =< 150 -> {ok, Age};\n        _ -> {error, out_of_range}\n    catch\n        error:badarg -> {error, not_a_number}\n    end.\nmain() ->\n    io:format(\"~p~n\", [safe_div(10, 2)]),\n    io:format(\"~p~n\", [safe_div(10, 0)]),\n    io:format(\"~p~n\", [parse_age(<<\"36\">>)]),\n    io:format(\"~p~n\", [parse_age(<<\"abc\">>)]),\n    io:format(\"~p~n\", [parse_age(<<\"999\">>)]),\n    %% after 保证资源释放\n    try throw(boom) catch\n        throw:Reason -> io:format(\"捕获: ~p~n\", [Reason])\n    after\n        io:format(\"清理完成~n\")\n    end.",
+    "et": "❌ 常见错误",
+    "ec": "用 catch Expr 捕获一切并忽略错误，导致 bug 被静默吞掉。应使用 try ... of ... catch Class:Reason:Stacktrace 精确匹配异常类别，并记录堆栈以便定位。",
+    "q": [
+      {
+        "q": "三种异常类别分别是什么？",
+        "a": "error、throw、exit"
+      },
+      {
+        "q": "无论是否异常都执行的块？",
+        "a": "after"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "文件与 IO 操作",
+    "p": [
+      "file:read_file/1 一次读入二进制，file:write_file/2 覆盖写入，适合中小文件",
+      "大文件用 file:open/2 配合 file:read_line/1 或 file:read/2 分块处理，避免内存峰值",
+      "filelib:is_file/1、filelib:ensure_dir/1 用于路径检查与目录创建，返回布尔或 ok",
+      "标准输出用 io:format/2，错误输出用 io:format(standard_error, ...)，日志优先用 logger"
+    ],
+    "c": "-module(fileio).\n-export([main/0]).\n\nmain() ->\n    Path = \"demo.txt\",\n    %% 写入\n    ok = file:write_file(Path, <<\"第一行\\n第二行\\n\">>),\n    %% 一次读取\n    {ok, Content} = file:read_file(Path),\n    io:format(\"字节数: ~p~n\", [byte_size(Content)]),\n    %% 逐行读取\n    {ok, Fd} = file:open(Path, [read]),\n    Lines = read_lines(Fd, []),\n    file:close(Fd),\n    io:format(\"行: ~p~n\", [Lines]),\n    %% 追加并检查元数据\n    ok = file:write_file(Path, <<\"追加行\\n\">>, [append]),\n    {ok, Info} = file:read_file_info(Path),\n    io:format(\"大小: ~p~n\", [element(2, Info)]),\n    ok = file:delete(Path).\nread_lines(Fd, Acc) ->\n    case file:read_line(Fd) of\n        {ok, Line} -> read_lines(Fd, [string:trim(Line) | Acc]);\n        eof -> lists:reverse(Acc)\n    end.",
+    "et": "❌ 常见错误",
+    "ec": "打开文件后在中途异常退出，句柄没有关闭造成泄漏。应把 file:close/1 放在 try ... after 中，或使用 file:read_file/1 这类自动管理句柄的函数。",
+    "q": [
+      {
+        "q": "一次读取整个文件的函数？",
+        "a": "file:read_file/1"
+      },
+      {
+        "q": "确保目录存在的函数？",
+        "a": "filelib:ensure_dir/1"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "正则表达式",
+    "p": [
+      "re 模块是 PCRE 绑定：re:run/2 匹配、re:replace/4 替换、re:split/2 分割、re:compile/2 预编译",
+      "返回格式默认是 {match, [{Start, Len}]}，加 capture 选项可拿到捕获组，加 global 取全部匹配",
+      "常用选项：caseless 忽略大小写、multiline 多行、unicode 支持 UTF-8、dotall 让点匹配换行",
+      "频繁匹配时应先 re:compile/2 缓存编译结果，避免每次调用重复编译同一模式"
+    ],
+    "c": "-module(regex).\n-export([main/0, extract_emails/1, normalize/1]).\n\nextract_emails(Text) ->\n    {ok, Re} = re:compile(\"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,}\"),\n    case re:run(Text, Re, [global, {capture, first, binary}]) of\n        {match, Matches} -> [M || [M] <- Matches];\n        nomatch -> []\n    end.\n\nnormalize(Text) ->\n    re:replace(Text, \"\\\\s+\", \" \", [global, {return, binary}]).\n\nmain() ->\n    Text = <<\"联系 ada@example.com 或 bob@test.org 获取帮助\">>,\n    io:format(\"~p~n\", [extract_emails(Text)]),\n    io:format(\"~ts~n\", [normalize(<<\"hello   world\\n\\tagain\">>)]),\n\n    %% 捕获组（all_but_first 不包含整体匹配）\n    {match, [Year, Month]} = re:run(\"2026-11-15\", \"(\\\\d{4})-(\\\\d{2})\",\n                                    [{capture, all_but_first, list}]),\n    io:format(\"~s 年 ~s 月~n\", [Year, Month]).",
+    "et": "❌ 常见错误",
+    "ec": "在普通字符串里写 \\d+ 时少写一个反斜杠，结果 Erlang 把 \\d 解析为字母 d，正则永远匹配不到数字。正则中的反斜杠必须写成 \\\\，或改用二进制模式串。",
+    "q": [
+      {
+        "q": "预编译正则用哪个函数？",
+        "a": "re:compile/2"
+      },
+      {
+        "q": "获取所有匹配需要什么选项？",
+        "a": "global"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块、应用与包管理",
+    "p": [
+      "rebar3 项目用 .app.src 描述应用名、模块列表与依赖，src/ 下放源码，test/ 下放测试",
+      "依赖写在 rebar.config 的 {deps, [...]}，发布到 Hex 的包用 {pkg, name}，git 依赖用 {git, Url}",
+      "umbrella 项目可在 apps/ 下放多个应用，共享配置与依赖锁定在顶层 rebar.config",
+      "rebar3 tree 查看依赖树，rebar3 upgrade 升级依赖，rebar.lock 保证可复现构建"
+    ],
+    "c": "%% rebar.config 片段\n%% {erl_opts, [debug_info]}.\n%% {deps, [\n%%     {cowboy, \"2.12.0\"},\n%%     {jsx, {git, \"https://github.com/talentdeficit/jsx.git\", {tag, \"v3.1.0\"}}}\n%% ]}.\n%% {profiles, [{test, [{deps, [{meck, \"0.9.2\"}]}]}]}.\n-module(apps).\n-export([main/0]).\n\nmain() ->\n    %% 应用元数据来自 .app 文件，这里以 kernel 应用为例\n    {ok, Modules} = application:get_key(kernel, modules),\n    {ok, Vsn} = application:get_key(kernel, vsn),\n    io:format(\"kernel 版本 ~s, 模块数 ~p~n\", [Vsn, length(Modules)]),\n\n    %% 常用 rebar3 命令\n    io:format(\"rebar3 compile | shell | eunit | ct | dialyzer~n\"),\n    io:format(\"rebar3 tree | upgrade | release~n\"),\n\n    %% 检查依赖是否已加载\n    io:format(\"cowboy 已加载: ~p~n\", [code:which(cowboy)]).",
+    "et": "❌ 常见错误",
+    "ec": "在 rebar.config 里写依赖却不提交 rebar.lock，不同机器解析到不同小版本导致行为漂移。应用级项目应提交 lock 文件，升级依赖时显式执行 rebar3 upgrade 并复核变更。",
+    "q": [
+      {
+        "q": "rebar3 查看依赖树的命令？",
+        "a": "rebar3 tree"
+      },
+      {
+        "q": "哪个文件锁定依赖版本？",
+        "a": "rebar.lock"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "包管理 rebar3（compile/shell/release）；测试 rebar3 eunit 与 rebar3 ct；覆盖率 rebar3 cover",
+      "格式化 erlfmt -w src/；静态分析 dialyzer（rebar3 dialyzer）；文档 rebar3 edoc",
+      "调试 dbg:c/1 跟踪调用、observer:start/0 观察进程、sys:get_state/1 查看 gen_server 状态",
+      "常用模块：lists、maps、string、binary、file、timer、ets、gen_server、logger、application"
+    ],
+    "c": "-module(stdlib).\n-export([main/0]).\n\nmain() ->\n    %% 包管理：rebar3 compile / rebar3 shell / rebar3 release\n    %% 测试：rebar3 eunit / rebar3 ct；格式化：erlfmt -w src/\n    %% 调试：observer:start(). dbg:c(Mod, Fun, Arity)\n    Nums = [3, 1, 4, 1, 5],\n    io:format(\"排序去重: ~p~n\", [lists:usort(Nums)]),\n    io:format(\"最大值: ~p~n\", [lists:max(Nums)]),\n\n    M = maps:from_list([{a, 1}, {b, 2}]),\n    io:format(\"map: ~p~n\", [maps:to_list(M)]),\n\n    {ok, Tokens, _} = erl_scan:string(\"1 + 2.\"),\n    io:format(\"词法: ~p~n\", [Tokens]),\n\n    %% 进程字典仅作临时缓存的应急手段\n    put(cache, 42),\n    io:format(\"缓存: ~p~n\", [get(cache)]),\n    io:format(\"本地时间: ~p~n\", [calendar:local_time()]).",
+    "et": "❌ 常见错误",
+    "ec": "把进程字典当全局状态在多个函数间传递数据，重构与测试时难以追踪。进程字典只属于当前进程，应优先用参数、map 状态或 ETS，并避免在库代码中隐式读写。",
+    "q": [
+      {
+        "q": "rebar3 运行 EUnit 的命令？",
+        "a": "rebar3 eunit"
+      },
+      {
+        "q": "启动 observer 观察进程的函数？",
+        "a": "observer:start/0"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与进程通信",
+    "p": [
+      "spawn/1 与 spawn_link/1 创建进程，link 让父子进程共享退出信号，配合 trap_exit 可捕获",
+      "消息发送用 Pid ! Msg，接收用 receive ... after Timeout -> ... end，超时避免永久阻塞",
+      "进程邮箱无界，生产者速度超过消费者会耗尽内存，需要背压或限流",
+      "共享状态交给单一进程或 ETS 管理，遵循“不共享内存，只共享消息”的原则"
+    ],
+    "c": "-module(concurrency).\n-export([main/0]).\n\nworker(Parent) ->\n    receive\n        {compute, N} -> Parent ! {result, N * N}, worker(Parent);\n        stop -> Parent ! done\n    after 5000 -> Parent ! timeout\n    end.\n\nmain() ->\n    Parent = self(),\n    Pid = spawn(fun() -> worker(Parent) end),\n    Pid ! {compute, 7},\n    receive {result, R} -> io:format(\"结果: ~p~n\", [R]) end,\n\n    %% 并发跑多个任务并收集全部结果\n    Pids = [spawn(fun() -> Parent ! {done, self(), N * 10} end)\n            || N <- lists:seq(1, 5)],\n    Results = [receive {done, P, V} -> V end || P <- Pids],\n    io:format(\"汇总: ~p~n\", [lists:sum(Results)]),\n\n    Pid ! stop,\n    receive done -> io:format(\"worker 已退出~n\") end.",
+    "et": "❌ 常见错误",
+    "ec": "在 receive 里写了没有 after 的分支，发送方崩溃后接收进程永久挂起。任何等待消息的地方都应设置合理的 after 超时，并返回 {error, timeout} 交由上层决策。",
+    "q": [
+      {
+        "q": "发送消息的运算符？",
+        "a": "!（Pid ! Msg）"
+      },
+      {
+        "q": "receive 中超时分支的关键字？",
+        "a": "after"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能与内存优化",
+    "p": [
+      "优先使用二进制而非字符串列表处理大文本，二进制在堆外连续存储且可切片共享",
+      "构造二进制用 <<A/binary, B/binary>> 或 iolist 累积，避免 ++ 造成的重复复制",
+      "ETS 提供进程间共享的并发读写表，read_concurrency 与 write_concurrency 可按访问模式调优",
+      "用 erlang:system_info/1、process_info/2 与 instrument 模块观测内存，先测量再优化"
+    ],
+    "c": "-module(perf).\n-export([main/0, build_bin/1, build_list/1]).\n\n%% 二进制累积，构造开销低\nbuild_bin(N) ->\n    iolist_to_binary([integer_to_binary(I) || I <- lists:seq(1, N)]).\n\n%% 列表 ++ 在长循环中代价高\nbuild_list(N) ->\n    lists:foldl(fun(I, Acc) -> Acc ++ integer_to_list(I) end, \"\", lists:seq(1, N)).\n\nmain() ->\n    {T1, B} = timer:tc(fun() -> build_bin(5000) end),\n    {T2, L} = timer:tc(fun() -> build_list(5000) end),\n    io:format(\"二进制 ~p 字节, ~p us~n\", [byte_size(B), T1]),\n    io:format(\"列表 ~p 字符, ~p us~n\", [length(L), T2]),\n\n    %% ETS 并发读写\n    Tab = ets:new(cache, [set, public, {read_concurrency, true}]),\n    ets:insert(Tab, {key, value}),\n    io:format(\"ETS: ~p~n\", [ets:lookup(Tab, key)]),\n    io:format(\"进程内存: ~p~n\", [element(2, process_info(self(), memory))]),\n    ets:delete(Tab).",
+    "et": "❌ 常见错误",
+    "ec": "在热点路径里反复调用 lists:append/2 或 Acc ++ [X] 增长列表，导致 O(n²) 复制。应改为头插后 lists:reverse/1，或使用 iolist/二进制构造，并用 timer:tc 验证优化效果。",
+    "q": [
+      {
+        "q": "进程内存占用用什么函数查看？",
+        "a": "process_info(Pid, memory)"
+      },
+      {
+        "q": "ETS 适合什么场景？",
+        "a": "多进程共享的并发键值缓存/索引"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试：EUnit 与 Common Test",
+    "p": [
+      "EUnit 适合单元测试：模块内 _test/0 函数、test_ 前缀函数或 -ifdef(TEST) 包裹的测试代码",
+      "断言宏：?assert/1、?assertEqual/2、?assertMatch/2、?assertError/2，失败时给出清晰信息",
+      "Common Test 面向集成与系统测试：test suites、init_per_suite/1、groups 与 HTML 报告",
+      "rebar3 eunit 与 rebar3 ct 执行测试，rebar3 cover 生成覆盖率报告，CI 中应设阈值"
+    ],
+    "c": "-module(math_utils).\n-export([main/0, add/2, divide/2]).\n-ifdef(TEST).\n-include_lib(\"eunit/include/eunit.hrl\").\n-endif.\n\nadd(A, B) -> A + B.\n\ndivide(_A, 0) -> {error, division_by_zero};\ndivide(A, B) -> {ok, A / B}.\n-ifdef(TEST).\nadd_test() ->\n    ?assertEqual(5, add(2, 3)).\ndivide_test_() ->\n    [?_assertEqual({ok, 2.0}, divide(4, 2)),\n     ?_assertEqual({error, division_by_zero}, divide(1, 0)),\n     ?_assertError(badarith, 1 / 0)].\ngenerator_test_() ->\n    [{integer_to_list(N), fun() -> ?assert(add(N, 0) =:= N) end}\n     || N <- lists:seq(1, 5)].\n-endif.\nmain() ->\n    io:format(\"~p~n\", [add(1, 2)]),\n    %% 运行：rebar3 eunit --module=math_utils\n    io:format(\"~p~n\", [divide(6, 3)]).",
+    "et": "❌ 常见错误",
+    "ec": "把测试写在生产编译路径里，或依赖外部数据库却不做清理，导致测试互相污染。测试代码应放在 -ifdef(TEST) 或 test/ 目录，外部资源用 setup/cleanup 保证隔离。",
+    "q": [
+      {
+        "q": "EUnit 断言两个值相等的宏？",
+        "a": "?assertEqual(Expected, Actual)"
+      },
+      {
+        "q": "运行 Common Test 的 rebar3 命令？",
+        "a": "rebar3 ct"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "dbg 模块可跟踪函数调用与返回值：dbg:c(Mod, Fun, Arity) 或 dbg:tpl/3 做细粒度追踪",
+      "sys:get_state/1、sys:get_status/1 可在不修改代码的情况下查看 gen_server 内部状态",
+      "observer:start/0 提供 GUI，查看进程树、消息队列、内存与 ETS；无 GUI 时用 etop 观察 CPU",
+      "崩溃日志是宝库：crash dump 与 SASL 报告包含调用栈、最后消息与进程状态"
+    ],
+    "c": "-module(debugging).\n-export([main/0, buggy/1]).\n%% 典型缺陷：空列表没有处理\nbuggy([]) -> 0;\nbuggy(List) -> hd(List) + buggy(tl(List)).\ndemo_steps() ->\n    %% 逐步验证假设\n    io:format(\"长度: ~p~n\", [length([1, 2, 3])]),\n    %% 打开调用跟踪\n    dbg:tracer(),\n    dbg:p(all, [call]),\n    dbg:tpl(debugging, buggy, 1, [{'_', [], [{return_trace}]}]),\n    io:format(\"trace 已开启~n\"),\n    dbg:stop_clear().\nmain() ->\n    demo_steps(),\n    %% 捕获崩溃并打印详细原因\n    try buggy([1, 2, 3]) of\n        Result -> io:format(\"结果: ~p~n\", [Result])\n    catch\n        Class:Reason:Stack ->\n            io:format(\"~p:~p~n~p~n\", [Class, Reason, Stack])\n    end,\n    %% 查看当前进程信息\n    io:format(\"队列长度: ~p~n\", [element(2, process_info(self(), message_queue_len))]).",
+    "et": "❌ 常见错误",
+    "ec": "只靠 io:format 到处打印，忘记关闭后污染生产日志与性能。应使用 logger 分级输出，或用 dbg 按需开启并 stop_clear，调试完确保移除所有临时追踪。",
+    "q": [
+      {
+        "q": "跟踪函数调用的模块？",
+        "a": "dbg"
+      },
+      {
+        "q": "查看 gen_server 当前状态的函数？",
+        "a": "sys:get_state/1"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "FFI、Port 与系统互操作",
+    "p": [
+      "os:cmd/1 执行外部命令并返回输出，适合简单脚本，但不便处理流式输出与超时",
+      "open_port/2 启动外部程序并通过 {Port, {data, Bin}} 消息交互，可实现长驻子进程通信",
+      "NIF 用 C 实现性能敏感函数，但会阻塞调度器，长任务应改用 dirty NIF 或 port driver",
+      "需与 Python/Go 等生态协作时，HTTP、JSON 或 Erlang 分布式节点比 NIF 更安全易维护"
+    ],
+    "c": "-module(interop).\n-export([main/0, run_cmd/1, port_demo/0]).\n\nrun_cmd(Cmd) ->\n    try os:cmd(Cmd) of\n        Output -> {ok, string:trim(Output)}\n    catch\n        Class:Reason -> {error, {Class, Reason}}\n    end.\n\nport_demo() ->\n    Port = open_port({spawn, \"cat\"}, [binary, exit_status]),\n    Port ! {self(), {command, <<\"hello port\\n\">>}},\n    receive\n        {Port, {data, Data}} -> io:format(\"收到: ~p~n\", [Data])\n    after 1000 -> io:format(\"超时~n\")\n    end,\n    Port ! {self(), close},\n    0.\n\nmain() ->\n    io:format(\"~p~n\", [run_cmd(\"echo 你好\")]),\n    io:format(\"~p~n\", [run_cmd(\"uname -s\")]),\n    io:format(\"port 演示完成: ~p~n\", [port_demo()]),\n    io:format(\"os 类型: ~p~n\", [os:type()]).",
+    "et": "❌ 常见错误",
+    "ec": "在 NIF 中执行耗时计算或阻塞 IO，会让整个调度器线程停顿，严重时系统失去响应。NIF 应只做微秒级操作，长任务改用 dirty NIF、port 程序或独立进程池。",
+    "q": [
+      {
+        "q": "执行 shell 命令并获取输出的函数？",
+        "a": "os:cmd/1"
+      },
+      {
+        "q": "启动外部程序并通信的函数？",
+        "a": "open_port/2"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "OTP 架构与函数式设计",
+    "p": [
+      "OTP 把系统拆成监督树：application 管顶层 supervisor，supervisor 管子进程，故障在局部重启",
+      "gen_server 封装状态与消息循环，对外只暴露函数 API，调用方不直接发原始消息",
+      "把纯计算与副作用分离：纯函数易测试，进程/文件/网络等副作用集中在边界层",
+      "进程按业务实体划分，用注册名或 via 元组定位，避免全局单点瓶颈"
+    ],
+    "c": "-module(kv_store).\n-behaviour(gen_server).\n-export([main/0, start_link/0, store/2, fetch/1]).\n-export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2]).\n\nstart_link() -> gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).\nstore(K, V) -> gen_server:call(?MODULE, {put, K, V}).\nfetch(K) -> gen_server:call(?MODULE, {get, K}).\n\ninit([]) -> {ok, #{}}.\n\nhandle_call({put, K, V}, _From, State) ->\n    {reply, ok, maps:put(K, V, State)};\nhandle_call({get, K}, _From, State) ->\n    {reply, maps:find(K, State), State}.\n\nhandle_cast(_Msg, State) -> {noreply, State}.\nhandle_info(_Info, State) -> {noreply, State}.\nterminate(_Reason, _State) -> ok.\nmain() ->\n    {ok, _} = start_link(),\n    ok = store(a, 1),\n    ok = store(b, 2),\n    io:format(\"~p~n\", [fetch(a)]),\n    io:format(\"注册进程: ~p~n\", [whereis(?MODULE)]).",
+    "et": "❌ 常见错误",
+    "ec": "让 gen_server 承担所有业务逻辑，handle_call 里做 HTTP 请求或大数据计算，导致调用方全部阻塞。回调应只维护状态，耗时工作交给工作进程或异步任务。",
+    "q": [
+      {
+        "q": "OTP 中负责监督子进程的行为？",
+        "a": "supervisor"
+      },
+      {
+        "q": "gen_server 同步请求走哪个回调？",
+        "a": "handle_call/3"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问",
+    "p": [
+      "mnesia 是 OTP 内置分布式数据库，表可存于 ram_copies/disc_copies，支持事务与脏读写",
+      "关系型数据库用 epgsql（PostgreSQL）或 mysql-otp，通过连接池（如 poolboy）复用连接",
+      "写操作优先走事务 mnesia:transaction/1，只读且可容忍短暂不一致时用 dirty_read/2 提速",
+      "把数据库访问封装在仓储模块中，业务层只依赖接口，便于替换实现与用 meck 做测试替身"
+    ],
+    "c": "-module(db_demo).\n-export([main/0]).\n-record(person, {id, name, age}).\n\nmain() ->\n    ok = mnesia:start(),\n    {atomic, ok} = mnesia:create_table(person,\n        [{attributes, record_info(fields, person)}, {ram_copies, [node()]}]),\n    %% 事务写入\n    {atomic, ok} = mnesia:transaction(fun() ->\n        mnesia:write(#person{id = 1, name = <<\"Ada\">>, age = 36}),\n        mnesia:write(#person{id = 2, name = <<\"Linus\">>, age = 54})\n    end),\n    %% 主键读取\n    {atomic, [P]} = mnesia:transaction(fun() -> mnesia:read(person, 1) end),\n    io:format(\"~p~n\", [P#person.name]),\n    %% 脏读（无事务开销）\n    io:format(\"~p~n\", [mnesia:dirty_read(person, 2)]),\n    %% 按条件查询\n    {atomic, Adults} = mnesia:transaction(fun() ->\n        mnesia:select(person, [{#person{age = '$1', _ = '_'},\n                                [{'>=', '$1', 18}], ['$_']}])\n    end),\n    io:format(\"成年人: ~p~n\", [length(Adults)]),\n    mnesia:stop().",
+    "et": "❌ 常见错误",
+    "ec": "在 mnesia 事务里调用外部 HTTP 或长时间计算，事务持有锁期间阻塞其他写入。事务体应只包含数据库操作，外部副作用放到事务外，失败时再补偿或重试。",
+    "q": [
+      {
+        "q": "mnesia 事务执行的函数？",
+        "a": "mnesia:transaction/1"
+      },
+      {
+        "q": "PostgreSQL 的 Erlang 驱动库？",
+        "a": "epgsql"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP",
+    "p": [
+      "gen_tcp 提供 TCP 服务端与客户端：listen/2、accept/1、send/2、recv/2，配合 {active, once} 接收数据",
+      "inets 应用自带 httpc 客户端，可发起 GET/POST 并处理 JSON；生产环境常用 hackney 或 gun",
+      "构建 HTTP 服务常用 cowboy（轻量、支持 HTTP/2 与 WebSocket），路由与处理器分离",
+      "网络操作必须设置超时与重试上限，并处理连接重置、DNS 失败等异常"
+    ],
+    "c": "-module(netdemo).\n-export([main/0, start_server/1]).\nstart_server(Port) ->\n    {ok, LSock} = gen_tcp:listen(Port, [binary, {packet, line}, {reuseaddr, true}]),\n    {ok, {_Addr, Actual}} = inet:sockname(LSock),\n    spawn(fun() -> accept_loop(LSock) end),\n    {ok, Actual}.\naccept_loop(LSock) ->\n    {ok, Sock} = gen_tcp:accept(LSock),\n    spawn(fun() -> handle(Sock) end),\n    accept_loop(LSock).\nhandle(Sock) ->\n    case gen_tcp:recv(Sock, 0, 5000) of\n        {ok, Line} ->\n            gen_tcp:send(Sock, <<\"echo: \", Line/binary>>),\n            handle(Sock);\n        {error, _} ->\n            gen_tcp:close(Sock)\n    end.\nmain() ->\n    {ok, Port} = start_server(0),\n    {ok, _} = application:ensure_all_started(inets),\n    {ok, {{_, 200, _}, _, _}} =\n        httpc:request(get, {\"https://example.com\", []}, [{timeout, 5000}], []),\n    io:format(\"HTTP 请求成功, 本地端口 ~p~n\", [Port]).",
+    "et": "❌ 常见错误",
+    "ec": "用 {active, true} 让 socket 无限制地把数据推入进程邮箱，客户端狂发时内存暴涨。应使用 {active, once} 并在每次处理后重新设置，形成天然背压。",
+    "q": [
+      {
+        "q": "TCP 服务端监听与接受连接的函数？",
+        "a": "gen_tcp:listen/2 与 gen_tcp:accept/1"
+      },
+      {
+        "q": "Erlang 常用的 HTTP 服务端框架？",
+        "a": "cowboy"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "binary_to_term/1 处理不可信数据时使用 [safe] 选项，避免原子耗尽与恶意 term 构造",
+      "密码存储用 crypto:hash(sha256, ...) 加盐，或使用 bcrypt/argon2 库，绝不明文保存",
+      "Erlang 分布式节点必须设置相同 cookie 并配合 TLS 与防火墙，cookie 等同集群口令",
+      "外部输入先校验长度、类型与范围，SQL 用参数化查询，日志中避免输出敏感字段"
+    ],
+    "c": "-module(security).\n-export([main/0, safe_decode/1, hash_password/2, valid_username/1]).\n\nsafe_decode(Bin) ->\n    try binary_to_term(Bin, [safe]) of\n        Term -> {ok, Term}\n    catch\n        error:badarg -> {error, unsafe_or_invalid}\n    end.\n\nhash_password(Password, Salt) ->\n    crypto:hash(sha256, <<Salt/binary, Password/binary>>).\n\nvalid_username(Name) when is_binary(Name) ->\n    byte_size(Name) >= 3 andalso byte_size(Name) =< 32 andalso\n        re:run(Name, \"^[a-zA-Z0-9_]+$\", [{capture, none}]) =:= match;\nvalid_username(_) -> false.\n\nmain() ->\n    io:format(\"~p~n\", [safe_decode(term_to_binary({ok, 1}))]),\n    io:format(\"~p~n\", [safe_decode(<<\"not a term\">>)]),\n    io:format(\"hash: ~p~n\", [hash_password(<<\"s3cret\">>, <<\"random-salt\">>)]),\n    io:format(\"~p ~p~n\", [valid_username(<<\"ada_99\">>), valid_username(<<\"a!\">>)]).",
+    "et": "❌ 常见错误",
+    "ec": "直接对来自网络的二进制调用 binary_to_term/1，攻击者可构造海量原子或超大结构打爆内存。必须加 [safe] 选项，并对输入长度设上限后再解码。",
+    "q": [
+      {
+        "q": "解码不可信 term 时必须加什么选项？",
+        "a": "[safe]"
+      },
+      {
+        "q": "Erlang 集群认证依赖什么？",
+        "a": "相同的 cookie（并配合网络隔离与 TLS）"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "escript 把 Erlang 源码打包成可直接执行的脚本，首行 shebang 指定 escript，main/1 接收参数列表",
+      "参数解析可手写模式匹配，也可用 getopt；错误时打印用法到 standard_error 并以非零码退出",
+      "halts/1 控制退出码，0 表示成功，非 0 表示失败，便于 shell 管道与 CI 判断",
+      "处理大文件用 file:open + 分块读取，统计结果用 map 聚合，最后排序输出"
+    ],
+    "c": "#!/usr/bin/env escript\n%% wordcount.escript\n%% 运行：chmod +x wordcount.escript && ./wordcount.escript README.md\n-mode(compile).\n\nmain([Path]) ->\n    case file:read_file(Path) of\n        {ok, Bin} ->\n            Text = unicode:characters_to_list(Bin),\n            Counts = lists:foldl(fun(W, Acc) ->\n                         maps:update_with(W, fun(N) -> N + 1 end, 1, Acc)\n                     end, #{}, string:lexemes(Text, \" \\t\\r\\n\")),\n            Sorted = lists:reverse(lists:keysort(2, maps:to_list(Counts))),\n            lists:foreach(fun({W, N}) ->\n                          io:format(\"~-20s ~p~n\", [W, N])\n                      end, lists:sublist(Sorted, 10));\n        {error, Reason} ->\n            io:format(standard_error, \"读取失败: ~p~n\", [Reason]),\n            halt(1)\n    end;\nmain(_) ->\n    io:format(standard_error, \"用法: wordcount.escript <文件>~n\", []),\n    halt(2).",
+    "et": "❌ 常见错误",
+    "ec": "escript 里忘了写 -mode(compile)，复杂逻辑按解释执行慢一个数量级；或在 main/1 中直接 halt 而不返回，导致管道下游拿不到输出。应编译模式运行并先输出再退出。",
+    "q": [
+      {
+        "q": "escript 的入口函数是什么？",
+        "a": "main/1，参数为字符串列表"
+      },
+      {
+        "q": "以指定退出码终止的函数？",
+        "a": "halt/1"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：Web 服务",
+    "p": [
+      "最小 HTTP 服务可用 gen_tcp 实现：读取请求行、按路径返回响应、写回 Connection: close",
+      "响应需包含状态行、Content-Length、Content-Type 与空行，再发送 body，客户端才不会挂起",
+      "生产项目用 cowboy：路由到 handler，init/2 返回 {ok, Req, State}，再用 cowboy_req:reply 响应",
+      "把监听与业务处理拆成独立进程，accept 循环只负责接收，避免慢请求阻塞新连接"
+    ],
+    "c": "-module(webserver).\n-export([start/1]).\n\nstart(Port) ->\n    {ok, LSock} = gen_tcp:listen(Port, [binary, {packet, http_bin},\n                                        {reuseaddr, true}, {active, false}]),\n    spawn(fun() -> loop(LSock) end),\n    {ok, Port}.\nloop(LSock) ->\n    {ok, Sock} = gen_tcp:accept(LSock),\n    spawn(fun() -> handle(Sock) end),\n    loop(LSock).\nhandle(Sock) ->\n    {ok, {http_request, Method, {abs_path, Path}, _}} = gen_tcp:recv(Sock, 0, 5000),\n    Body = case {Method, Path} of\n               {'GET', <<\"/\">>} -> <<\"{\\\"message\\\":\\\"hello erlang\\\"}\">>;\n               {'GET', <<\"/health\">>} -> <<\"{\\\"status\\\":\\\"ok\\\"}\">>;\n               _ -> <<\"{\\\"error\\\":\\\"not found\\\"}\">>\n           end,\n    Code = case Path of <<\"/health\">> -> <<\"200 OK\">>; <<\"/\">> -> <<\"200 OK\">>; _ -> <<\"404 Not Found\">> end,\n    Resp = [<<\"HTTP/1.1 \">>, Code, <<\"\\r\\nContent-Type: application/json\\r\\n\">>,\n            <<\"Content-Length: \">>, integer_to_binary(byte_size(Body)),\n            <<\"\\r\\nConnection: close\\r\\n\\r\\n\">>, Body],\n    gen_tcp:send(Sock, Resp),\n    gen_tcp:close(Sock).",
+    "et": "❌ 常见错误",
+    "ec": "响应里漏写 Content-Length 又保持连接不关闭，浏览器会一直等待直到超时。每个响应都应带准确长度并显式关闭连接，或用 chunked 编码并正确结束。",
+    "q": [
+      {
+        "q": "HTTP 响应头中告知 body 长度的字段？",
+        "a": "Content-Length"
+      },
+      {
+        "q": "cowboy 中发送响应的函数？",
+        "a": "cowboy_req:reply/4"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "rebar3 release 基于 relx 生成自包含发布包，包含 ERTS、依赖与启动脚本，目标机无需装 Erlang",
+      "relx 配置在 rebar.config 的 {relx, [...]}，定义 release 名称、版本、包含的应用与 vm.args",
+      "用 tar 打包发布目录，配合 systemd 管理服务，设置 Restart=on-failure 与优雅停止",
+      "热升级用 relup 与 release_handler，需谨慎演练；多数场景滚动重启更简单可靠"
+    ],
+    "c": "%% rebar.config 发布配置\n%% {relx, [{release, {my_app, \"1.0.0\"}, [my_app, sasl]},\n%%         {dev_mode, false},\n%%         {include_erts, true},\n%%         {extended_start_script, true}]}.\n%% 构建：rebar3 as prod release\n%% 启动：_build/prod/rel/my_app/bin/my_app foreground\n%% systemd: ExecStart=/opt/my_app/bin/my_app foreground\n-module(release_info).\n-export([main/0]).\n\nmain() ->\n    io:format(\"rebar3 as prod release -> _build/prod/rel/my_app~n\"),\n    io:format(\"启动脚本: bin/my_app {foreground|start|stop|restart}~n\"),\n    io:format(\"配置文件: releases/<vsn>/sys.config 与 vm.args~n\"),\n    io:format(\"systemd: Restart=on-failure, KillSignal=SIGTERM~n\"),\n    io:format(\"节点: ~p~n\", [node()]),\n    io:format(\"OTP: ~s~n\", [erlang:system_info(otp_release)]),\n    io:format(\"代码路径数: ~p~n\", [length(code:get_path())]).",
+    "et": "❌ 常见错误",
+    "ec": "发布包里用 {dev_mode, true} 指向源码目录，拷贝到目标机后模块加载失败。生产 release 必须 dev_mode=false 且 include_erts=true，并在干净环境验证启动。",
+    "q": [
+      {
+        "q": "rebar3 生成发布包的命令？",
+        "a": "rebar3 as prod release"
+      },
+      {
+        "q": "哪个工具实现 release 打包？",
+        "a": "relx"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "每个导出函数写 -spec，公共模块写 -type/-opaque，配合 dialyzer 在 CI 中阻断类型回归",
+      "函数保持短小，单函数不超过一屏；用子句与守卫表达分支，避免深层 case 嵌套",
+      "进程必须有监督者，崩溃要能自动恢复；不在 gen_server 回调里做阻塞操作",
+      "命名用 snake_case，模块名体现职责；日志用 logger 结构化字段，禁止在库中 print 调试"
+    ],
+    "c": "-module(best_practice).\n-export([main/0, fetch_user/1]).\n-export_type([user/0]).\n-type user() :: #{id := pos_integer(), name := binary()}.\n-type result(T) :: {ok, T} | {error, atom()}.\n-spec fetch_user(pos_integer()) -> result(user()).\nfetch_user(Id) when is_integer(Id), Id > 0 ->\n    Users = #{1 => #{id => 1, name => <<\"Ada\">>},\n              2 => #{id => 2, name => <<\"Linus\">>}},\n    case maps:find(Id, Users) of\n        {ok, User} -> {ok, User};\n        error -> {error, not_found}\n    end;\nfetch_user(_) ->\n    {error, invalid_id}.\nmain() ->\n    lists:foreach(fun(Id) ->\n                  case fetch_user(Id) of\n                      {ok, #{name := Name}} ->\n                          io:format(\"~p -> ~ts~n\", [Id, Name]);\n                      {error, Reason} ->\n                          logger:warning(\"fetch_user failed\", #{id => Id, reason => Reason})\n                  end\n              end, [1, 2, 99]),\n    io:format(\"dialyzer 检查建议加入 CI~n\").",
+    "et": "❌ 常见错误",
+    "ec": "为了省事跳过 -spec 与 dialyzer，直到线上出现 function_clause 才发现类型假设错误。应在 CI 中执行 rebar3 dialyzer 并维护 PLT，把类型告警当作缺陷处理。",
+    "q": [
+      {
+        "q": "Erlang 函数命名惯例？",
+        "a": "snake_case"
+      },
+      {
+        "q": "CI 中应运行哪个类型检查命令？",
+        "a": "rebar3 dialyzer"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "路线：语法与模式匹配 → 递归与列表 → 进程与消息 → OTP 行为与监督树 → 分布式与发布",
+      "必读：《Erlang 程序设计》《Learn You Some Erlang for Great Good!》与 OTP 官方文档",
+      "进阶方向：分布式一致性、热代码升级、Elixir/Phoenix 生态、NIF 与性能剖析",
+      "坚持用 shell 验证小例子，读 OTP 源码，并为开源项目提交 issue 与补丁"
+    ],
+    "c": "-module(roadmap).\n-export([main/0]).\n\ntopics() ->\n    [{\"基础\", [\"模式匹配\", \"递归\", \"列表与二进制\", \"模块\"]},\n     {\"并发\", [\"spawn\", \"receive\", \"link/monitor\", \"ETS\"]},\n     {\"OTP\", [\"gen_server\", \"supervisor\", \"application\", \"release\"]},\n     {\"进阶\", [\"分布式\", \"热升级\", \"性能剖析\", \"NIF/Port\"]}].\n\nmain() ->\n    lists:foreach(fun({K, Vs}) ->\n                  io:format(\"~ts: ~ts~n\", [K, lists:join(\" / \", Vs)])\n              end, topics()),\n    io:format(\"资源: https://www.erlang.org/doc~n\"),\n    io:format(\"书籍: 《Erlang 程序设计》《Learn You Some Erlang》~n\"),\n    io:format(\"下一步: 用 OTP 写一个带监督树的 KV 服务并发布为 release~n\"),\n    io:format(\"当前节点: ~p, OTP: ~s~n\", [node(), erlang:system_info(otp_release)]).",
+    "et": "❌ 常见错误",
+    "ec": "只学语法不学 OTP，写出大量裸 spawn 与 receive 的临时代码，难以维护与排障。应尽早掌握 gen_server、supervisor 与应用发布，让并发代码具备工程化的容错能力。",
+    "q": [
+      {
+        "q": "Erlang 工程化的核心框架叫什么？",
+        "a": "OTP"
+      },
+      {
+        "q": "学习路线中承上启下的关键一步？",
+        "a": "掌握 gen_server 与 supervisor 组成的监督树"
+      }
+    ]
+  }
+]

@@ -1,75 +1,47 @@
 window.TUTORIAL_DATA_zig = [
   {
     "id": 1,
-    "t": "简介与环境搭建",
+    "t": "Zig 简介与 0.10/0.11 现状",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握简介与环境搭建的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 由 Andrew Kelley 于 2016 年发起，定位是替代 C 的通用系统编程语言，强调可控",
+      "没有隐藏控制流、没有隐式内存分配、没有宏和运算符重载，行为尽量显式",
+      "用 comptime 在编译期完成泛型与代码生成，用 error union 表达可恢复错误",
+      "0.11 起 async/await 关键字被移除，异步改由库与线程实现，语言仍在快速演进"
     ],
-    "c": "// Zig教程 - 简介与环境搭建\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"Hello, Zig!\\n\", .{});\n    try stdout.print(\"欢迎学习 Zig 0.10/0.11\\n\", .{});\n\n    const a: i32 = 6;\n    const b: i32 = 7;\n    try stdout.print(\"{d} * {d} = {d}\\n\", .{ a, b, a * b });\n}",
+    "et": "❌ 把 Zig 当成 C 的语法糖，随意依赖隐式类型转换与宏",
+    "ec": "Zig 没有预处理器、隐式整型提升和自动内存分配。整数不同类型之间必须用 @intCast，字符串与切片要显式转换，内存必须显式申请与释放。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "Zig 用什么机制实现泛型？",
+        "a": "comptime 编译期参数与类型函数，在编译期单态化生成代码。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Zig 的错误如何表示？",
+        "a": "用 error union，例如 !void 或 E!T，错误是值而非异常。"
       }
     ]
   },
   {
     "id": 2,
-    "t": "第一个程序",
+    "t": "安装与工具链",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握第一个程序的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "从 ziglang.org/download 下载对应平台的压缩包，解压后把目录加入 PATH 即可",
+      "zig version 检查版本，zig init-exe 生成 build.zig 与 src/main.zig 骨架",
+      "zig build 构建到 zig-out/bin，zig build run 直接运行，zig build test 跑测试",
+      "编辑器可用 VS Code 的 Zig 扩展或 zls 语言服务器，获得补全与跳转"
     ],
-    "c": "// Zig教程 - 第一个程序\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// 安装：从 ziglang.org/download 下载压缩包并解压\n// export PATH=$PATH:/opt/zig-linux-x86_64-0.11.0\n// zig version\n// zig init-exe              # 生成 build.zig 与 src/main.zig\n// zig build                 # 产物在 zig-out/bin/\n// zig build run\n// zig build test\n// zig fmt src/main.zig\n// zig test src/main.zig\n\nconst std = @import(\"std\");\n\npub fn main() !void {\n    try std.io.getStdOut().writer().print(\"工具链检查通过\\n\", .{});\n}",
+    "et": "❌ 直接运行 zig build 却发现 zig-out/bin 下没有产物",
+    "ec": "若 build.zig 中没有调用 b.installArtifact(exe)，构建只生成缓存而不安装到 zig-out。应检查 build 函数是否注册了安装步骤，或直接运行 zig build-exe 验证源码。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "查看 Zig 版本的命令？",
+        "a": "zig version。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "构建产物默认输出到哪里？",
+        "a": "zig-out/bin/，由 b.installArtifact 安装。"
       }
     ]
   },
@@ -77,36 +49,22 @@ window.TUTORIAL_DATA_zig = [
     "id": 3,
     "t": "变量与常量",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握变量与常量的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "var 声明可变绑定，const 声明不可重新赋值的绑定，两者都必须有确定类型",
+      "类型可显式标注，也可由初始化表达式推断；未初始化的 var 必须写 undefined",
+      "Zig 没有隐式类型转换，整数之间赋值需用 @intCast、@intFromFloat 等内建函数",
+      "const 绑定不可重新赋值，但指向的内存仍可能可变，深层不可变取决于类型本身"
     ],
-    "c": "// Zig教程 - 变量与常量\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    var counter: u32 = 0;\n    const limit: u32 = 3;\n    counter += 1;\n    try stdout.print(\"counter={d}, limit={d}\\n\", .{ counter, limit });\n\n    var inferred = @as(i64, 42);\n    inferred *= 2;\n    try stdout.print(\"inferred={d}\\n\", .{inferred});\n\n    const big: i64 = 300;\n    const small: u8 = @intCast(big);\n    try stdout.print(\"narrowed={d}\\n\", .{small});\n}",
+    "et": "❌ 试图写 counter = counter + 1 之外的 let 语法，或给 const 重新赋值",
+    "ec": "Zig 只有 var 和 const，没有 let。给 const 绑定重新赋值是编译错误；需要可变状态时用 var，并注意整数类型必须一致，必要时用 @intCast 显式转换。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "var 与 const 的核心区别？",
+        "a": "var 可以重新赋值，const 绑定不可变；两者类型都在编译期确定。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "未初始化的 var 应该怎么写？",
+        "a": "var x: u32 = undefined，使用前必须赋值。"
       }
     ]
   },
@@ -114,36 +72,22 @@ window.TUTORIAL_DATA_zig = [
     "id": 4,
     "t": "数据类型",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握数据类型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "整数类型用 i8..i128、u8..u128 与 isize/usize 表示，位宽必须明确写出",
+      "浮点类型是 f16/f32/f64/f80/f128，布尔是 bool，字符与字节都用 u8",
+      "数组 [N]T 的长度属于类型，切片 []T 是运行时的指针加长度组合",
+      "可选类型 ?T 表示可能为 null，用 orelse 或 if 捕获解包后才能使用"
     ],
-    "c": "// Zig教程 - 数据类型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const i: i32 = -7;\n    const u: u8 = 255;\n    const f: f64 = 3.14159;\n    const b: bool = true;\n    const ch: u8 = 'Z';\n    try stdout.print(\"{d} {d} {d:.4} {} {c}\\n\", .{ i, u, f, b, ch });\n\n    try stdout.print(\"i32 位数: {d}\\n\", .{@bitSizeOf(i32)});\n    try stdout.print(\"i32 范围: {d}..{d}\\n\", .{ std.math.minInt(i32), std.math.maxInt(i32) });\n\n    const maybe: ?u32 = null;\n    try stdout.print(\"可选值: {}\\n\", .{maybe orelse 0});\n}",
+    "et": "❌ 把字符串当成字符数组直接修改，或把 u8 与 u32 直接相加",
+    "ec": "Zig 字符串字面量不可变，且元素是 u8；不同类型整数不会自动提升，混算会编译失败。需要可变文本时用 ArrayList(u8)，混算时显式 @intCast 或 @as 统一类型。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "usize 的用途是什么？",
+        "a": "表示内存大小与索引的无符号整数，宽度等于目标平台指针宽度。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "?T 类型的值如何取值？",
+        "a": "用 orelse 给默认值，或用 if (x) |v| 捕获，未解包不能直接用。"
       }
     ]
   },
@@ -151,184 +95,114 @@ window.TUTORIAL_DATA_zig = [
     "id": 5,
     "t": "运算符",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握运算符的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "算术运算符 + - * 在整数溢出时属于未定义行为，安全构建下会触发 panic",
+      "需要检测溢出用 @addWithOverflow、@subWithOverflow、@mulWithOverflow",
+      "整数除法用 @divTrunc、@divFloor、@divExact 明确语义，取余用 @rem 或 @mod",
+      "比较返回 bool，逻辑用 and/or/not，位运算用 & | ^ ~ << >>"
     ],
-    "c": "// Zig教程 - 运算符\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const a: i32 = 7;\n    const b: i32 = 2;\n    try stdout.print(\"{d} {d} {d}\\n\", .{ a + b, a - b, a * b });\n    try stdout.print(\"整除 {d}, 取余 {d}\\n\", .{ @divTrunc(a, b), @rem(a, b) });\n    try stdout.print(\"位运算 {b} {b}\\n\", .{ a & b, a | b });\n    try stdout.print(\"比较 {} {} {}\\n\", .{ a > b, a == b, a != b });\n\n    const overflow = @addWithOverflow(@as(u8, 250), @as(u8, 10));\n    try stdout.print(\"结果={d} 溢出={d}\\n\", .{ overflow[0], overflow[1] });\n}",
+    "et": "❌ 在 ReleaseFast 下依赖整数溢出回绕，结果与调试构建不一致",
+    "ec": "Zig 把整数溢出视为未定义行为，安全构建会 panic，ReleaseFast 可能直接优化掉。需要回绕用 +% 与 *%，需要检测用 @addWithOverflow 并检查溢出位。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "/ 对整数是什么语义？",
+        "a": "普通 / 对整数需要编译期可整除，运行时用 @divTrunc 等内建函数明确语义。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何安全检测加法溢出？",
+        "a": "const r = @addWithOverflow(a, b); r[0] 是结果，r[1] 是溢出标志。"
       }
     ]
   },
   {
     "id": 6,
-    "t": "字符串操作",
+    "t": "字符串",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握字符串操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "字符串字面量类型是 *const [N:0]u8，可传给 []const u8 参数使用",
+      "字符串是 UTF-8 字节序列，.len 是字节数而不是字符数，遍历得到的是 u8",
+      "std.mem 提供 indexOf、startsWith、endsWith、split、tokenize 等字节操作",
+      "拼接与格式化常用 std.fmt.allocPrint 或 ArrayList(u8)，需自行管理内存"
     ],
-    "c": "// Zig教程 - 字符串操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const s = \"Zig 语言\";\n    try stdout.print(\"字节数: {d}\\n\", .{s.len});\n    try stdout.print(\"首字节: {c}\\n\", .{s[0]});\n\n    const upper = try std.ascii.allocUpperString(std.heap.page_allocator, \"hello zig\");\n    defer std.heap.page_allocator.free(upper);\n    try stdout.print(\"大写: {s}\\n\", .{upper});\n\n    try stdout.print(\"包含“语言”: {}\\n\", .{std.mem.indexOf(u8, s, \"语言\") != null});\n    var it = std.mem.split(u8, \"a,b,c\", \",\");\n    while (it.next()) |part| try stdout.print(\"[{s}] \", .{part});\n    try stdout.print(\"\\n\", .{});\n}",
+    "et": "❌ 用 s.len 当作字符数来处理中文，导致截断出乱码",
+    "ec": "UTF-8 中一个汉字通常占 3 字节，.len 返回字节数。按字节切片可能截断多字节字符；需要按字符处理时应使用 std.unicode 的解码迭代器或成熟的字符串库。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何判断字符串中是否包含子串？",
+        "a": "std.mem.indexOf(u8, s, sub) != null。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "split 与 tokenize 的区别？",
+        "a": "tokenize 会跳过空字段，split 保留连续分隔符产生的空项。"
       }
     ]
   },
   {
     "id": 7,
-    "t": "数组/集合",
+    "t": "集合与数组",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握数组/集合的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "数组 [N]T 长度固定，切片 []T 是对数组或堆内存的视图，不拥有数据",
+      "std.ArrayList(T) 是动态数组，需要分配器，使用后调用 deinit 释放",
+      "std.StringHashMap(V) 与 std.AutoHashMap(K,V) 提供哈希表，键需可哈希",
+      "所有容器都显式接收分配器，没有全局 GC，内存归属必须自己追踪"
     ],
-    "c": "// Zig教程 - 数组/集合\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    const allocator = gpa.allocator();\n    const stdout = std.io.getStdOut().writer();\n\n    var arr = [_]i32{ 10, 20, 30 };\n    arr[1] = 25;\n    try stdout.print(\"数组 len={d} arr[1]={d}\\n\", .{ arr.len, arr[1] });\n\n    var list = std.ArrayList(i32).init(allocator);\n    defer list.deinit();\n    try list.append(40);\n    try list.appendSlice(&[_]i32{ 50, 60 });\n    try stdout.print(\"动态数组: {any}\\n\", .{list.items});\n\n    var map = std.StringHashMap(i32).init(allocator);\n    defer map.deinit();\n    try map.put(\"apple\", 3);\n    try stdout.print(\"apple={d}\\n\", .{map.get(\"apple\").?});\n}",
+    "et": "❌ 使用 ArrayList 后忘记 deinit，或用切片保存已释放的动态数组",
+    "ec": "Zig 没有 GC，容器不会自动释放堆内存；忘记 deinit 会造成泄漏。切片只是视图，ArrayList 扩容或释放后旧切片会悬空，必须重新获取 items。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "ArrayList 的 items 字段是什么？",
+        "a": "指向底层缓冲区的切片，可用于遍历与传参。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "StringHashMap 的键需要满足什么？",
+        "a": "可哈希且相等可比较，通常用 []const u8 或整数。"
       }
     ]
   },
   {
     "id": 8,
-    "t": "条件语句",
+    "t": "条件分支",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握条件语句的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "if/else if/else 是表达式，可直接产生值，但各分支类型必须一致",
+      "条件必须是 bool，整数或指针不会隐式转换为真值，需显式比较",
+      "switch 可匹配整数、枚举与带标签联合，必须覆盖所有情况或写 else",
+      "if 后可跟捕获语法 |value|，用于可选类型与错误联合的安全解包"
     ],
-    "c": "// Zig教程 - 条件语句\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn grade(score: u32) []const u8 {\n    if (score >= 90) {\n        return \"A\";\n    } else if (score >= 60) {\n        return \"B\";\n    } else {\n        return \"C\";\n    }\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"{s} {s} {s}\\n\", .{ grade(95), grade(72), grade(30) });\n\n    const x: i32 = -3;\n    try stdout.print(\"{s}\\n\", .{if (x > 0) \"正数\" else \"非正数\"});\n\n    const maybe: ?u32 = 7;\n    if (maybe) |v| try stdout.print(\"解包值 {d}\\n\", .{v});\n}",
+    "et": "❌ 写 if (ptr) 判断指针非空，或 if (x) 判断整数非零",
+    "ec": "Zig 的条件必须是 bool，指针与整数不会隐式转换为真值。指针判空用 ptr != null，可选类型用 if (x) |v| 或 x != null 显式判断。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "switch 必须覆盖所有情况吗？",
+        "a": "是，枚举与带标签联合要求穷尽，否则需要显式 else 分支。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何安全解包 ?T？",
+        "a": "if (x) |v| { ... }，或用 x orelse 默认值。"
       }
     ]
   },
   {
     "id": 9,
-    "t": "循环结构",
+    "t": "循环与递归",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握循环结构的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "for 用于遍历数组、切片、范围与可迭代对象，循环变量默认不可变",
+      "for (0..n) |i| 中的 i 是 usize；需要修改元素时用 |*item| 取得指针",
+      "while 适合条件循环，while (i < n) : (i += 1) 的续写表达式在每轮后执行",
+      "break 跳出循环，continue 进入下一轮；没有 C 风格的三段式 for"
     ],
-    "c": "// Zig教程 - 循环结构\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn factorial(n: u64) u64 {\n    if (n <= 1) return 1;\n    return n * factorial(n - 1);\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    var total: usize = 0;\n    for (1..101) |i| {\n        if (i % 3 == 0) continue;\n        total += i;\n    }\n    try stdout.print(\"total={d}, 5!={d}\\n\", .{ total, factorial(5) });\n\n    var i: usize = 0;\n    while (i < 3) : (i += 1) {\n        try stdout.print(\"i={d} \", .{i});\n    }\n    try stdout.print(\"\\n\", .{});\n}",
+    "et": "❌ 在 for 循环中直接给循环变量赋值，期待修改原数组元素",
+    "ec": "for (arr) |x| 的 x 是元素副本，改动不会写回数组。需要原地修改时用 for (arr) |*x| x.* += 1，或按下标访问 arr[i]。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何按索引遍历数组？",
+        "a": "for (arr, 0..) |x, i| { ... }，i 从 0 开始。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "while 的续写表达式何时执行？",
+        "a": "每轮循环体结束后执行，常用于自增下标。"
       }
     ]
   },
@@ -336,517 +210,321 @@ window.TUTORIAL_DATA_zig = [
     "id": 10,
     "t": "函数基础",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握函数基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "函数用 fn 声明，参数与返回值都必须标注类型，返回 void 可省略",
+      "pub fn 对外可见，普通 fn 仅在当前文件可见，跨文件访问需要 pub",
+      "返回值可以是结构体、切片或错误联合，多值返回通常用匿名结构体",
+      "函数是一等值，可以取地址赋给函数指针，但捕获的环境必须显式作为参数传入"
     ],
-    "c": "// Zig教程 - 函数基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Rect = struct { area: f64, perim: f64 };\n\nfn rect(w: f64, h: f64) Rect {\n    return .{ .area = w * h, .perim = 2 * (w + h) };\n}\n\nfn sumAll(values: []const i32) i32 {\n    var s: i32 = 0;\n    for (values) |v| s += v;\n    return s;\n}\n\npub fn main() !void {\n    const r = rect(3, 4);\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"面积={d:.1} 周长={d:.1}\\n\", .{ r.area, r.perim });\n    try stdout.print(\"和={d}\\n\", .{sumAll(&[_]i32{ 1, 2, 3, 4 })});\n}",
+    "et": "❌ 忘记给参数或返回值写类型，或把返回值写成结构体字面量类型",
+    "ec": "Zig 不做跨函数类型推断，每个参数与返回值都必须有明确类型。返回结构体应定义命名类型或使用匿名结构体类型，再以 .{ .field = ... } 构造。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何定义返回多个值的函数？",
+        "a": "定义结构体或用匿名结构体类型，返回 .{ .a = ..., .b = ... }。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "pub fn 的作用是什么？",
+        "a": "让函数对其他模块可见，非 pub 函数只在当前文件内可用。"
       }
     ]
   },
   {
     "id": 11,
-    "t": "函数进阶",
+    "t": "函数进阶与 comptime",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握函数进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "comptime 参数让函数在编译期求值，用类型参数即可实现泛型",
+      "comptime 代码在编译期执行，可做类型计算、生成结构体、校验常量",
+      "inline for 在编译期展开，适合遍历元组与固定长度数组",
+      "函数指针用 *const fn (T) U 表示，调用约定与参数类型必须完全匹配"
     ],
-    "c": "// Zig教程 - 函数进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn apply(comptime f: fn (i32) i32, x: i32) i32 {\n    return f(x);\n}\n\nfn square(x: i32) i32 {\n    return x * x;\n}\n\nfn addOne(x: i32) i32 {\n    return x + 1;\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"{d} {d}\\n\", .{ apply(square, 5), apply(addOne, 5) });\n\n    var sum: i32 = 0;\n    inline for ([_]i32{ 1, 2, 3 }) |v| sum += v;\n    try stdout.print(\"inline for 和={d}\\n\", .{sum});\n}",
+    "et": "❌ 把普通运行时参数标成 comptime，却传入只在运行时才知道的值",
+    "ec": "comptime 参数要求调用点能在编译期求值，传入运行时变量会编译失败。只有类型、常量与编译期已知的值才能作为 comptime 实参。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "comptime 参数适合什么场景？",
+        "a": "类型参数、编译期常量、需要生成专用代码的泛型函数。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "inline for 与普通 for 的区别？",
+        "a": "inline for 在编译期展开，可遍历元组等编译期已知的集合。"
       }
     ]
   },
   {
     "id": 12,
-    "t": "作用域与闭包",
+    "t": "作用域与资源管理",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握作用域与闭包的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 用花括号划分块作用域，块内声明的变量会在块结束处立即失效",
+      "defer 在离开当前块时执行，多个 defer 按后进先出顺序执行",
+      "Zig 没有捕获环境的闭包，需要状态时把上下文作为参数或放进结构体",
+      "编译期可通过 comptime 参数生成专用函数，模拟部分闭包效果"
     ],
-    "c": "// Zig教程 - 作用域与闭包\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn makeAdder(comptime base: i32) fn (i32) i32 {\n    return struct {\n        fn add(x: i32) i32 {\n            return x + base;\n        }\n    }.add;\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const add10 = makeAdder(10);\n    try stdout.print(\"{d}\\n\", .{add10(5)});\n\n    {\n        var block_scope: i32 = 1;\n        try stdout.print(\"块内 {d}\\n\", .{block_scope});\n        block_scope += 1;\n    }\n    try stdout.print(\"闭包只是 comptime 捕获，无堆分配\\n\", .{});\n}",
+    "et": "❌ 以为可以像 JavaScript 那样在函数内捕获局部变量并返回闭包",
+    "ec": "Zig 的函数值不带环境，局部变量不会随函数返回被捕获。需要携带状态时应定义结构体保存数据，并把方法第一个参数设为 *Self，或把上下文作为显式参数传入。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "defer 的执行顺序？",
+        "a": "后进先出，最后声明的 defer 最先执行。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Zig 如何模拟带状态的函数？",
+        "a": "用结构体保存状态，方法接收 *Self，或把上下文作为参数传入。"
       }
     ]
   },
   {
     "id": 13,
-    "t": "类与对象",
+    "t": "结构体",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握类与对象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "struct 定义字段与类型，字段顺序固定，默认没有方法，函数可写在内部",
+      "结构体方法第一个参数通常写成 self: Point 或 self: *Point",
+      "结构体默认按值传递，较大的结构体应改为传指针，以避免整块拷贝",
+      "字段默认值需在声明时给出，@This() 可在类型内部引用自身类型"
     ],
-    "c": "// Zig教程 - 类与对象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Point = struct {\n    x: f64,\n    y: f64,\n\n    pub fn len(self: Point) f64 {\n        return @sqrt(self.x * self.x + self.y * self.y);\n    }\n\n    pub fn scale(self: Point, k: f64) Point {\n        return .{ .x = self.x * k, .y = self.y * k };\n    }\n};\n\npub fn main() !void {\n    const p = Point{ .x = 3, .y = 4 };\n    const q = p.scale(2);\n    try std.io.getStdOut().writer().print(\"len={d:.0} q=({d},{d})\\n\", .{ p.len(), q.x, q.y });\n}",
+    "et": "❌ 在方法中修改字段却把 self 声明为非指针，修改结果丢失",
+    "ec": "非指针 self 是结构体副本，字段赋值只改副本。需要修改原实例时应写 self: *Point 并传入 &p，同时注意结构体按值传递带来的拷贝成本。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "结构体方法如何修改自身字段？",
+        "a": "第一个参数写成 self: *Point，调用时传 &p。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "@This() 的作用？",
+        "a": "在类型定义内部引用当前类型，便于定义方法返回值。"
       }
     ]
   },
   {
     "id": 14,
-    "t": "继承与多态",
+    "t": "多态与联合类型",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握继承与多态的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 没有继承，多态用带标签联合、函数指针表或 comptime 泛型实现",
+      "union(enum) 把标签与数据放在一起，switch 时可直接捕获负载",
+      "运行时多态可用 vtable：结构体保存函数指针与 *anyopaque 上下文",
+      "编译期多态用 comptime 类型参数，为每种类型生成专用实现，无虚调用开销"
     ],
-    "c": "// Zig教程 - 继承与多态\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Shape = union(enum) {\n    circle: f64,\n    rect: struct { w: f64, h: f64 },\n\n    fn area(self: Shape) f64 {\n        return switch (self) {\n            .circle => |r| std.math.pi * r * r,\n            .rect => |r| r.w * r.h,\n        };\n    }\n};\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const shapes = [_]Shape{ .{ .circle = 1.0 }, .{ .rect = .{ .w = 2, .h = 3 } } };\n    for (shapes) |s| try stdout.print(\"面积={d:.2}\\n\", .{s.area()});\n}",
+    "et": "❌ 访问联合体字段前不检查标签，读取到错误的内存解释",
+    "ec": "Zig 联合体不会自动记录当前活跃字段，错误访问是未定义行为。应使用 union(enum) 并通过 switch 按标签取值，让编译器强制覆盖所有分支。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "union(enum) 相比普通 union 的优势？",
+        "a": "带标签，可安全 switch 并捕获负载，编译期检查覆盖是否完整。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "Zig 如何实现运行时多态？",
+        "a": "用函数指针表加 *anyopaque 上下文，或使用带标签联合。"
       }
     ]
   },
   {
     "id": 15,
-    "t": "接口/抽象",
+    "t": "接口、协议与抽象",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握接口/抽象的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 没有 interface 关键字，接口是约定：一组函数签名加 vtable 结构",
+      "常见做法是定义 ptr 与函数指针字段，再提供构造与转发方法",
+      "标准库大量使用这种模式，例如 std.mem.Allocator 就是分配器接口",
+      "也可以用 comptime duck typing：按所需方法生成代码，调用方无需声明实现"
     ],
-    "c": "// Zig教程 - 接口/抽象\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Animal = struct {\n    ptr: *anyopaque,\n    speakFn: *const fn (*anyopaque) []const u8,\n\n    fn speak(self: Animal) []const u8 {\n        return self.speakFn(self.ptr);\n    }\n};\n\nconst Dog = struct {\n    fn speakImpl(_: *anyopaque) []const u8 {\n        return \"汪\";\n    }\n    fn animal(self: *Dog) Animal {\n        return .{ .ptr = self, .speakFn = speakImpl };\n    }\n};\n\npub fn main() !void {\n    var d = Dog{};\n    try std.io.getStdOut().writer().print(\"{s}\\n\", .{d.animal().speak()});\n}",
+    "et": "❌ 把 *anyopaque 上下文转回具体类型时转换错类型，造成未定义行为",
+    "ec": "vtable 模式把类型信息擦除为 *anyopaque，恢复时必须使用 @ptrCast/@alignCast 转回正确类型。构造与调用应封装在同一模块，避免调用方手动转换出错。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "std.mem.Allocator 为什么是接口？",
+        "a": "它保存 ptr 与 vtable，用同一套方法抽象不同分配器实现。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "编译期多态如何实现？",
+        "a": "用 comptime 类型参数按所需方法生成代码，调用方无需显式声明接口。"
       }
     ]
   },
   {
     "id": 16,
-    "t": "泛型",
+    "t": "泛型与类型参数",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握泛型的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "fn maxOf(comptime T: type, a: T, b: T) T 是最简单的泛型函数写法",
+      "fn Box(comptime T: type) type 返回新类型，实现类型构造器",
+      "泛型在编译期完成单态化，每种类型参数组合都会生成一份专用代码",
+      "anytype 参数在调用点推断类型，适合无需显式写出类型参数的场景"
     ],
-    "c": "// Zig教程 - 泛型\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn maxOf(comptime T: type, a: T, b: T) T {\n    return if (a > b) a else b;\n}\n\nfn Box(comptime T: type) type {\n    return struct {\n        value: T,\n        const Self = @This();\n        fn get(self: Self) T {\n            return self.value;\n        }\n    };\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"{d} {d}\\n\", .{ maxOf(i32, 3, 9), maxOf(f64, 2.5, 1.5) });\n    const IntBox = Box(i32);\n    const b = IntBox{ .value = 42 };\n    try stdout.print(\"box={d}\\n\", .{b.get()});\n}",
+    "et": "❌ 在泛型函数体内对 T 做不支持的操作，直到实例化时才报错",
+    "ec": "泛型体只在具体类型实例化时检查，若对 T 使用了该类型没有的运算符，错误会出现在调用点而非定义处。应为 T 增加 comptime 约束或在使用处显式断言能力。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "Zig 的泛型在何时生成代码？",
+        "a": "编译期按具体类型参数单态化，每种组合生成一份专用代码。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "anytype 参数与 comptime T: type 的区别？",
+        "a": "anytype 在调用点推断具体类型，后者显式传入类型参数。"
       }
     ]
   },
   {
     "id": 17,
-    "t": "异常处理",
+    "t": "错误处理",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握异常处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "错误用 error{...} 错误集表示，函数返回 E!T 表示要么错误要么值",
+      "try 向上传播错误，catch 捕获并处理，catch |err| 可拿到错误值",
+      "errdefer 只在函数因错误返回时执行，适合回滚已分配的资源",
+      "错误是值而不是异常，没有栈展开，调用方必须显式处理或继续向上传播"
     ],
-    "c": "// Zig教程 - 异常处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst ParseError = error{ Empty, NotNumber };\n\nfn parsePositive(s: []const u8) ParseError!u32 {\n    if (s.len == 0) return ParseError.Empty;\n    const n = std.fmt.parseInt(u32, s, 10) catch return ParseError.NotNumber;\n    return n;\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"{d}\\n\", .{try parsePositive(\"12\")});\n    parsePositive(\"\") catch |err| try stdout.print(\"错误: {s}\\n\", .{@errorName(err)});\n    const v = parsePositive(\"x\") catch 0;\n    try stdout.print(\"回退值: {d}\\n\", .{v});\n}",
+    "et": "❌ 用 catch 后忘记处理错误值，或用 try 在返回 void 的函数里传播错误",
+    "ec": "try 要求函数返回类型包含相应错误集，否则编译失败。catch 必须给出替代值或重新返回错误；吞掉错误时应显式记录，避免故障被静默掩盖。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "try 的作用是什么？",
+        "a": "若表达式是错误则立即从当前函数返回该错误，否则取出值。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "errdefer 何时执行？",
+        "a": "仅在函数以错误返回时执行，常用于释放已获取的资源。"
       }
     ]
   },
   {
     "id": 18,
-    "t": "文件操作",
+    "t": "文件 I/O",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握文件操作的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "std.fs.cwd() 返回当前目录句柄，createFile、openFile 打开文件",
+      "读写用 file.writeAll、file.read，defer file.close() 保证关闭",
+      "readFileAlloc 一次读入整个文件，需传入分配器与最大字节数",
+      "目录操作有 makeDir、deleteFile、iterate，路径用 std.fs.path 处理"
     ],
-    "c": "// Zig教程 - 文件操作\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    const allocator = gpa.allocator();\n    const stdout = std.io.getStdOut().writer();\n    const path = \"demo.txt\";\n    {\n        var file = try std.fs.cwd().createFile(path, .{});\n        defer file.close();\n        try file.writeAll(\"第一行\\n第二行\\n\");\n    }\n    const content = try std.fs.cwd().readFileAlloc(allocator, path, 1 << 20);\n    defer allocator.free(content);\n    try stdout.print(\"{s}\", .{content});\n    {\n        var file = try std.fs.cwd().openFile(path, .{});\n        defer file.close();\n        var buf: [64]u8 = undefined;\n        const n = try file.read(&buf);\n        try stdout.print(\"首块 {d} 字节\\n\", .{n});\n    }\n    try std.fs.cwd().deleteFile(path);\n}",
+    "et": "❌ 打开文件后忘记 close，或读取超过缓冲区长度导致截断",
+    "ec": "文件句柄需要显式 close，推荐 defer 保证异常路径也关闭。read 返回实际读取字节数，可能小于缓冲区；需要完整内容时用 readFileAlloc 或循环读取。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何一次读入整个文件？",
+        "a": "std.fs.cwd().readFileAlloc(allocator, path, 最大字节数)。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么文件操作常放在花括号块里？",
+        "a": "让 defer file.close() 在块结束时立即执行，避免句柄长期占用。"
       }
     ]
   },
   {
     "id": 19,
-    "t": "正则表达式",
+    "t": "正则表达式与文本匹配",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握正则表达式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 标准库没有正则引擎，std.mem 与 std.ascii 提供基础的字节匹配",
+      "简单校验可用手写状态机或 std.mem.indexOf、startsWith 组合完成",
+      "复杂正则需引入第三方库，或通过 @cImport 链接 PCRE2、RE2 等 C 库",
+      "解析固定格式时优先手写解析器，避免正则依赖与回溯带来的性能风险"
     ],
-    "c": "// Zig教程 - 正则表达式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn isDigits(s: []const u8) bool {\n    if (s.len == 0) return false;\n    for (s) |ch| {\n        if (!std.ascii.isDigit(ch)) return false;\n    }\n    return true;\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    const samples = [_][]const u8{ \"2024\", \"12a\", \"\" };\n    for (samples) |s| try stdout.print(\"\\\"{s}\\\": {}\\n\", .{ s, isDigits(s) });\n\n    var it = std.mem.tokenizeAny(u8, \"a, b; c\", \",; \");\n    var count: usize = 0;\n    while (it.next()) |_| count += 1;\n    try stdout.print(\"token 数: {d}\\n\", .{count});\n}",
+    "et": "❌ 以为 Zig 标准库自带 regex，直接 import 一个不存在的模块",
+    "ec": "Zig 的 std 没有正则模块，std.mem 只提供字面量查找与切分。需要正则时应显式添加第三方依赖或用 C 库，并在构建脚本中声明链接库。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "Zig 标准库提供正则吗？",
+        "a": "不提供，只有 std.mem 与 std.ascii 等基础字节处理工具。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何校验字符串全是数字？",
+        "a": "遍历字节并用 std.ascii.isDigit 判断，同时先检查非空。"
       }
     ]
   },
   {
     "id": 20,
-    "t": "模块/包管理",
+    "t": "模块与包管理",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握模块/包管理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "每个 .zig 文件是独立模块，用 @import(\"file.zig\") 引入其公开声明",
+      "@import(\"std\") 引入标准库，@import(\"builtin\") 获取编译目标信息",
+      "build.zig 描述构建图，addExecutable 创建目标并注册到 install 步骤",
+      "0.11 引入 build.zig.zon 管理依赖，记录 URL 与内容哈希，无中心仓库"
     ],
-    "c": "// Zig教程 - 模块/包管理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// src/main.zig\nconst std = @import(\"std\");\nconst math = @import(\"math.zig\");\n\npub fn main() !void {\n    try std.io.getStdOut().writer().print(\"{d}\\n\", .{math.add(2, 3)});\n}\n\n// src/math.zig\n// pub fn add(a: i32, b: i32) i32 {\n//     return a + b;\n// }\n\n// build.zig 中注册模块：\n// const exe = b.addExecutable(.{\n//     .name = \"demo\",\n//     .root_source_file = .{ .path = \"src/main.zig\" },\n//     .target = target, .optimize = optimize,\n// });",
+    "et": "❌ 认为 build.zig 可以像 Cargo.toml 那样自动下载依赖",
+    "ec": "Zig 没有中央包仓库，build.zig.zon 只记录依赖 URL 与哈希，源码需由构建系统拉取。新增依赖后要运行 zig build 让构建脚本解析并缓存。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何引入同目录下的另一个 Zig 文件？",
+        "a": "const m = @import(\"m.zig\");，被引入的声明需要 pub。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "build.zig.zon 的作用？",
+        "a": "声明依赖的 URL 与哈希，供构建系统获取与校验依赖源码。"
       }
     ]
   },
   {
     "id": 21,
-    "t": "标准库",
+    "t": "标准库速查与工具链",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握标准库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "构建用 zig build，直接运行 zig build run，测试用 zig build test",
+      "zig test src/main.zig 运行文件内 test 块，zig fmt 统一格式",
+      "发布构建用 -O ReleaseSafe 保留安全检查，ReleaseFast 关闭安全检查",
+      "调试用 lldb 或 gdb 加载 zig-out/bin 下的可执行文件，配合 std.debug.print"
     ],
-    "c": "// Zig教程 - 标准库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// ---- 构建与运行 ----\n// zig build\n// zig build run\n// zig build test\n// zig build -Doptimize=ReleaseSafe\n// zig build -Dtarget=aarch64-linux-gnu\n// ---- 单文件直接编译 ----\n// zig build-exe src/main.zig -O ReleaseSafe -femit-bin=app\n// ---- 测试与格式化 ----\n// zig test src/main.zig\n// zig fmt src/\n// ---- 调试 ----\n// lldb ./zig-out/bin/demo\n// ---- 依赖 ----\n// zig fetch --save https://github.com/zigzap/zap/archive/refs/tags/v0.1.0.tar.gz\nconst std = @import(\"std\");\ntest \"工具链自检\" {\n    try std.testing.expectEqual(@as(i32, 4), @as(i32, 2) * 2);\n}",
+    "et": "❌ 用 zig build 却忘了给 build.zig 注册 run 步骤，运行命令报未知步骤",
+    "ec": "zig build run 依赖 build.zig 中显式的 b.step(\"run\", ...) 定义。标准 zig init-exe 已包含该步骤，自定义构建脚本时需手动添加，否则只能运行 zig-out 中的可执行文件。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "运行项目内测试的两种方式？",
+        "a": "zig build test，或 zig test src/main.zig。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "ReleaseSafe 与 ReleaseFast 的区别？",
+        "a": "前者保留安全检查，后者关闭检查以换取更高性能。"
       }
     ]
   },
   {
     "id": 22,
-    "t": "并发/异步",
+    "t": "并发与线程",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握并发/异步的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "std.Thread.spawn 创建系统线程，join 等待结束，返回值用 error union",
+      "共享计数用 std.atomic.Value(T) 与 fetchAdd、load、store 等原子操作",
+      "互斥锁 std.Thread.Mutex 保护临界区，条件变量用于等待与通知",
+      "0.11 起语言级 async/await 移除，异步 I/O 交给事件循环库或线程池"
     ],
-    "c": "// Zig教程 - 并发/异步\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn worker(id: usize, out: *std.atomic.Value(u64)) void {\n    out.fetchAdd(@intCast(id * 10), .SeqCst);\n}\n\npub fn main() !void {\n    var counter = std.atomic.Value(u64).init(0);\n    var threads: [4]std.Thread = undefined;\n    for (&threads, 0..) |*t, i| {\n        t.* = try std.Thread.spawn(.{}, worker, .{ i + 1, &counter });\n    }\n    for (&threads) |*t| t.join();\n    try std.io.getStdOut().writer().print(\"总和={d}\\n\", .{counter.load(.SeqCst)});\n    // 0.11 起 async/await 关键字被移除，异步由库或线程实现\n}",
+    "et": "❌ 多个线程直接对普通变量做 counter += 1，得到偏小的结果",
+    "ec": "普通变量读写不是原子的，并发自增会丢失更新。应使用 std.atomic.Value(T) 的 fetchAdd，或用 Mutex 保护临界区，并根据场景选择合适的内存序。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何创建一个线程并等待它结束？",
+        "a": "std.Thread.spawn 返回线程句柄，调用 handle.join() 等待。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "原子操作常用哪些方法？",
+        "a": "load、store、fetchAdd、cmpxchg，语义由内存序参数决定。"
       }
     ]
   },
   {
     "id": 23,
-    "t": "错误处理",
+    "t": "性能优化",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握错误处理的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "优化前先测量：用 std.time.Timer 或 nanoTimestamp 记录耗时，避免凭感觉",
+      "选择合适分配器：通用用 GPA，批量短生命周期用 ArenaAllocator",
+      "热路径减少堆分配，优先栈数组与切片，注意缓存局部性与分支预测",
+      "ReleaseSafe 保留边界与溢出检查，确认无问题后再考虑 ReleaseFast"
     ],
-    "c": "// Zig教程 - 错误处理\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn sumSlice(data: []const i32) i64 {\n    var s: i64 = 0;\n    for (data) |v| s += v;\n    return s;\n}\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    const allocator = gpa.allocator();\n\n    const data = try allocator.alloc(i32, 1_000_000);\n    defer allocator.free(data);\n    for (data, 0..) |*v, i| v.* = @intCast(i % 1000);\n\n    const t0 = std.time.nanoTimestamp();\n    const total = sumSlice(data);\n    const t1 = std.time.nanoTimestamp();\n    try std.io.getStdOut().writer().print(\"和={d} 耗时={d}ns\\n\", .{ total, t1 - t0 });\n}",
+    "et": "❌ 在热循环里频繁分配与释放小块内存，性能被分配器开销拖垮",
+    "ec": "每次分配都有元数据与锁开销。应复用缓冲区、使用 ArenaAllocator 批量管理短生命周期对象，或提前一次性分配；优化前后都要用计时器验证收益。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "何时适合使用 ArenaAllocator？",
+        "a": "大量短生命周期对象可统一释放时，一次性 deinit 整个 arena 即可。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何测量一段代码耗时？",
+        "a": "用 std.time.nanoTimestamp 或 std.time.Timer 记录前后时间差。"
       }
     ]
   },
@@ -854,36 +532,22 @@ window.TUTORIAL_DATA_zig = [
     "id": 24,
     "t": "测试",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握测试的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "测试写在 test \"描述\" { ... } 块中，zig test 或 zig build test 执行",
+      "std.testing.expect、expectEqual、expectError 是常用断言函数",
+      "测试返回 !void，失败用 error 返回；testing.allocator 可检测泄漏",
+      "测试应覆盖正常值、边界值与错误路径，并验证每次分配的内存是否被正确释放"
     ],
-    "c": "// Zig教程 - 测试\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn add(a: i32, b: i32) i32 {\n    return a + b;\n}\n\nfn fail() !void {\n    return error.OutOfMemory;\n}\n\ntest \"加法\" {\n    try std.testing.expectEqual(@as(i32, 5), add(2, 3));\n    try std.testing.expect(add(1, 1) == 2);\n}\n\ntest \"错误断言\" {\n    try std.testing.expectError(error.OutOfMemory, fail());\n}\n\ntest \"分配器检测泄漏\" {\n    const allocator = std.testing.allocator;\n    const mem = try allocator.alloc(u8, 8);\n    defer allocator.free(mem);\n    try std.testing.expectEqual(@as(usize, 8), mem.len);\n}",
+    "et": "❌ 测试中分配内存后忘记释放，却以为测试通过就代表没有内存问题",
+    "ec": "std.testing.allocator 会在测试结束时报告泄漏并使测试失败，但前提是使用它而不是 page_allocator。测试中的每条分配都应有对应的 free 或 deinit。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何断言函数返回特定错误？",
+        "a": "std.testing.expectError(错误值, 表达式)。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么测试推荐 std.testing.allocator？",
+        "a": "它能跟踪分配并在结束时报告泄漏。"
       }
     ]
   },
@@ -891,73 +555,45 @@ window.TUTORIAL_DATA_zig = [
     "id": 25,
     "t": "调试技巧",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握调试技巧的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "std.debug.print 输出到 stderr，不依赖分配器，适合临时调试",
+      "std.log 提供 err/warn/info/debug 分级日志，可通过构建选项过滤",
+      "ReleaseSafe 会保留溢出与越界检查，崩溃时打印栈回溯，便于定位",
+      "用 lldb 设置断点、查看变量与调用栈；也可用 @breakpoint 主动中断"
     ],
-    "c": "// Zig教程 - 调试技巧\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn divide(a: f64, b: f64) !f64 {\n    if (b == 0) {\n        std.log.err(\"除数为 0, a={d}\", .{a});\n        return error.DivisionByZero;\n    }\n    return a / b;\n}\n\npub fn main() !void {\n    std.debug.print(\"调试输出: 启动\\n\", .{});\n    const r = divide(10, 0) catch |err| {\n        std.debug.print(\"捕获 {s}\\n\", .{@errorName(err)});\n        return;\n    };\n    std.debug.print(\"r={d}\\n\", .{r});\n}",
+    "et": "❌ 用 std.debug.print 打印大数组每个元素，导致输出淹没真正的问题",
+    "ec": "调试输出应聚焦关键状态并带上下文标签，必要时用条件判断只打印异常分支。大量输出会拖慢程序并掩盖栈回溯，正式代码应改用 std.log 分级控制。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "std.debug.print 输出到哪里？",
+        "a": "stderr，不经过分配器，适合调试。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何查看 Zig 崩溃时的调用栈？",
+        "a": "用 ReleaseSafe 或 Debug 构建运行，崩溃时会打印栈回溯。"
       }
     ]
   },
   {
     "id": 26,
-    "t": "性能优化",
+    "t": "FFI 与系统互操作",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握性能优化的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "@cImport 在编译时解析 C 头文件，生成对应的 Zig 声明与类型",
+      "extern \"c\" fn 直接声明 C 函数，链接时用 -lc 或 build 的 linkLibC",
+      "@cInclude 可包含系统头文件，宏与复杂类型可能需手写封装",
+      "导出给 C 调用的函数用 export fn，并注意调用约定与内存所有权"
     ],
-    "c": "// Zig教程 - 性能优化\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\nconst c = @cImport({\n    @cInclude(\"stdlib.h\");\n    @cInclude(\"string.h\");\n});\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"strlen={d}\\n\", .{c.strlen(\"zig ffi\")});\n\n    const p = c.malloc(16);\n    defer c.free(p);\n    try stdout.print(\"malloc 非空: {}\\n\", .{p != null});\n    try stdout.print(\"指针大小={d}\\n\", .{@sizeOf(usize)});\n}",
+    "et": "❌ 用 @cImport 后忘记链接 libc，编译报找不到符号",
+    "ec": "@cImport 只生成声明，不负责链接。使用 C 标准库或第三方库时，需要在构建中调用 exe.linkLibC() 与 exe.linkSystemLibrary(\"库名\")，或命令行加 -lc。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "@cImport 的作用是什么？",
+        "a": "编译期解析 C 头文件，生成可在 Zig 中调用的声明。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何把 Zig 函数导出给 C 调用？",
+        "a": "使用 export fn，并保证签名符合 C ABI。"
       }
     ]
   },
@@ -965,110 +601,68 @@ window.TUTORIAL_DATA_zig = [
     "id": 27,
     "t": "设计模式",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握设计模式的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "用枚举加 switch 实现策略选择，编译期可检查分支是否覆盖完整",
+      "用结构体配合函数指针表实现运行时多态，效果等价于手写虚函数表",
+      "用 comptime 泛型实现零成本抽象，避免运行时分派开销",
+      "资源管理遵循获取即初始化：构造时分配，defer 或 errdefer 释放"
     ],
-    "c": "// Zig教程 - 设计模式\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Strategy = enum { add, mul };\n\nfn compute(strategy: Strategy, a: i32, b: i32) i32 {\n    return switch (strategy) {\n        .add => a + b,\n        .mul => a * b,\n    };\n}\n\nconst Counter = struct {\n    value: usize = 0,\n    fn next(self: *Counter) usize {\n        self.value += 1;\n        return self.value;\n    }\n};\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"{d} {d}\\n\", .{ compute(.add, 2, 3), compute(.mul, 2, 3) });\n    var c = Counter{};\n    _ = c.next();\n    try stdout.print(\"count={d}\\n\", .{c.next()});\n}",
+    "et": "❌ 为了套用面向对象模式，引入大量函数指针与堆分配，反而更慢更复杂",
+    "ec": "Zig 的枚举加 switch、comptime 泛型通常比虚表更直接且无运行时开销。只有在确实需要运行时替换实现时才用函数指针表，避免为模式而模式。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "Zig 中如何实现策略模式？",
+        "a": "用枚举加 switch，或传入 comptime 函数参数。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "何时才需要函数指针表？",
+        "a": "实现需要在运行时动态切换，且类型已擦除的场景。"
       }
     ]
   },
   {
     "id": 28,
-    "t": "数据库",
+    "t": "数据库访问",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握数据库的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "Zig 没有官方数据库驱动，常用方式是 @cImport 链接 SQLite 等 C 库",
+      "sqlite3_open 打开数据库，sqlite3_exec 执行 SQL，sqlite3_close 关闭",
+      "查询结果用 sqlite3_prepare_v2 与 sqlite3_step 逐行读取，注意错误码",
+      "生产代码应封装连接、语句与错误映射，并始终使用参数绑定防止注入"
     ],
-    "c": "// Zig教程 - 数据库\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\nconst c = @cImport({\n    @cInclude(\"sqlite3.h\");\n});\n\npub fn main() !void {\n    var db: ?*c.sqlite3 = null;\n    if (c.sqlite3_open(\":memory:\", &db) != c.SQLITE_OK) return error.OpenFailed;\n    defer _ = c.sqlite3_close(db);\n\n    const ddl = \"CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);\";\n    if (c.sqlite3_exec(db, ddl, null, null, null) != c.SQLITE_OK) return error.ExecFailed;\n\n    const ins = \"INSERT INTO users(name) VALUES('小明');\";\n    if (c.sqlite3_exec(db, ins, null, null, null) != c.SQLITE_OK) return error.ExecFailed;\n\n    try std.io.getStdOut().writer().print(\"SQLite 建表与插入成功\\n\", .{});\n}",
+    "et": "❌ 把用户输入拼进 SQL 字符串，或忽略 sqlite3_exec 的返回码",
+    "ec": "字符串拼接会导致 SQL 注入，应使用 sqlite3_prepare_v2 加 sqlite3_bind_text 绑定参数。每个 C 调用都要检查返回码，失败时关闭连接并返回明确错误。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "编译这段代码需要哪些链接参数？",
+        "a": "zig build-exe db.zig -lc -lsqlite3。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么生产代码要用 prepare 而不是 exec？",
+        "a": "prepare 支持参数绑定，能防止注入并复用语句。"
       }
     ]
   },
   {
     "id": 29,
-    "t": "网络编程",
+    "t": "网络与 HTTP",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握网络编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "std.http.Client 提供 HTTP 客户端，支持请求头、请求体与响应读取",
+      "open 发起请求，send/finish/wait 完成发送与接收，状态在 response.status",
+      "std.Uri.parse 解析 URL，std.http.Headers 管理请求头",
+      "服务端可用 std.http.Server 或第三方框架，注意手动管理连接与缓冲"
     ],
-    "c": "// Zig教程 - 网络编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    const allocator = gpa.allocator();\n\n    var client = std.http.Client{ .allocator = allocator };\n    defer client.deinit();\n\n    var header_buf: [8 * 1024]u8 = undefined;\n    const uri = try std.Uri.parse(\"http://example.com/\");\n    var req = try client.open(.GET, uri, .{ .server_header_buffer = &header_buf });\n    defer req.deinit();\n\n    try req.send();\n    try req.finish();\n    try req.wait();\n    try std.io.getStdOut().writer().print(\"状态: {d}\\n\", .{@intFromEnum(req.response.status)});\n}",
+    "et": "❌ 在请求完成前读取响应体，或忽略 wait 返回的错误",
+    "ec": "HTTP 请求是分阶段完成的，send/finish 只负责发送，wait 才读取响应头与状态。必须等待 wait 成功后再读响应体，并检查返回错误以处理超时与连接中断。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "HTTP 客户端的基本调用顺序？",
+        "a": "Client.open，然后 send、finish、wait，最后读取响应。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何指定请求方法？",
+        "a": "open 的第一个参数传 .GET、.POST 等枚举值。"
       }
     ]
   },
@@ -1076,147 +670,91 @@ window.TUTORIAL_DATA_zig = [
     "id": 30,
     "t": "安全编程",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握安全编程的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "所有外部输入都必须校验长度、字符集与取值范围，然后再用于路径或命令",
+      "命令行执行用 argv 数组，避免把用户输入拼进 shell 字符串",
+      "密钥从环境变量读取，不写入源码；敏感比较应避免提前返回的时序泄漏",
+      "构建时固定依赖哈希，启用 ReleaseSafe 保留安全检查，减少未定义行为"
     ],
-    "c": "// Zig教程 - 安全编程\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nfn parsePort(s: []const u8) !u16 {\n    if (s.len == 0 or s.len > 5) return error.InvalidPort;\n    for (s) |ch| {\n        if (!std.ascii.isDigit(ch)) return error.InvalidPort;\n    }\n    const p = std.fmt.parseInt(u16, s, 10) catch return error.InvalidPort;\n    if (p == 0) return error.InvalidPort;\n    return p;\n}\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"端口={d}\\n\", .{try parsePort(\"8080\")});\n    if (parsePort(\"80; rm -rf /\")) |_| {} else |err| {\n        try stdout.print(\"拒绝非法输入: {s}\\n\", .{@errorName(err)});\n    }\n\n    const key: []const u8 = std.process.getEnvVarOwned(std.heap.page_allocator, \"APP_KEY\") catch \"\";\n    try stdout.print(\"密钥长度={d}\\n\", .{key.len});\n}",
+    "et": "❌ 把用户提供的路径直接传给 openFile，未限制目录导致路径穿越",
+    "ec": "用户输入可能包含 ../ 或绝对路径，直接使用会读写预期之外的文件。应先规范化路径并确认仍在允许的根目录内，必要时改用白名单标识符拼接路径。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "为什么命令行参数要用 argv 数组传递？",
+        "a": "避免经过 shell 解释，防止命令注入与意外分词。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "密钥应该从哪里读取？",
+        "a": "环境变量或专用密钥管理服务，绝不硬编码在源码中。"
       }
     ]
   },
   {
     "id": 31,
-    "t": "项目实战基础",
+    "t": "项目实战：命令行工具",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握项目实战基础的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "std.process.argsAlloc 读取参数，argsFree 释放，参数含程序名本身",
+      "参数不足时向 stderr 打印用法并以非零码退出，便于脚本判断",
+      "逐文件读取并累计统计，单个文件读取失败时给出提示并继续处理其他文件",
+      "输出用宽度格式化 {d:>6}，让数字列对齐，结果可被管道继续处理"
     ],
-    "c": "// Zig教程 - 项目实战基础\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const allocator = std.heap.page_allocator;\n    const args = try std.process.argsAlloc(allocator);\n    defer std.process.argsFree(allocator, args);\n\n    if (args.len < 2) {\n        try std.io.getStdErr().writer().print(\"用法: {s} <文件...>\\n\", .{args[0]});\n        std.process.exit(1);\n    }\n    var total: usize = 0;\n    for (args[1..]) |path| {\n        const content = std.fs.cwd().readFileAlloc(allocator, path, 8 << 20) catch {\n            try std.io.getStdErr().writer().print(\"无法读取 {s}\\n\", .{path});\n            continue;\n        };\n        defer allocator.free(content);\n        const lines = std.mem.count(u8, content, \"\\n\") + 1;\n        total += lines;\n        try std.io.getStdOut().writer().print(\"{d:>6} {s}\\n\", .{ lines, path });\n    }\n    try std.io.getStdOut().writer().print(\"{d:>6} 总计\\n\", .{total});\n}",
+    "et": "❌ 把 args[0] 当成第一个用户参数，导致程序把自身路径当文件名",
+    "ec": "args[0] 是可执行文件路径，用户参数从 args[1] 开始。遍历时应对 args[1..] 切片，并先检查 args.len，否则空参数时访问越界会 panic。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "argc/argv 在 Zig 中如何获取？",
+        "a": "std.process.argsAlloc 返回字符串切片数组，使用后 argsFree 释放。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "如何让错误信息不污染标准输出？",
+        "a": "写到 std.io.getStdErr().writer()。"
       }
     ]
   },
   {
     "id": 32,
-    "t": "项目实战进阶",
+    "t": "项目实战：数据统计与处理",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握项目实战进阶的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "数据处理第一步是读入并解析，CSV 可按行与分隔符用 std.mem.split 拆分",
+      "解析数字用 std.fmt.parseInt 或 parseFloat，失败返回错误需处理",
+      "分组统计可用 StringHashMap 累加，最后遍历输出排序后的结果",
+      "处理大数据时应使用流式读取与固定缓冲，避免一次性把全部内容载入内存"
     ],
-    "c": "// Zig教程 - 项目实战进阶\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    const allocator = gpa.allocator();\n    const stdout = std.io.getStdOut().writer();\n    const raw = \"小明,研发,18000\\n小红,研发,22000\\n小刚,市场,15000\\n\";\n    var totals = std.StringHashMap(u64).init(allocator);\n    defer totals.deinit();\n    var lines = std.mem.tokenizeAny(u8, raw, \"\\n\");\n    while (lines.next()) |line| {\n        var it = std.mem.split(u8, line, \",\");\n        _ = it.next() orelse continue;\n        const dept = it.next() orelse continue;\n        const salary = std.fmt.parseInt(u64, it.next() orelse continue, 10) catch continue;\n        const entry = try totals.getOrPut(dept);\n        if (!entry.found_existing) entry.value_ptr.* = 0;\n        entry.value_ptr.* += salary;\n    }\n    var iter = totals.iterator();\n    while (iter.next()) |e| {\n        try stdout.print(\"{s} 总薪资={d}\\n\", .{ e.key_ptr.*, e.value_ptr.* });\n    }\n}",
+    "et": "❌ 直接把原始行指针作为 HashMap 的键，行缓冲区复用后键内容被覆盖",
+    "ec": "若键指向临时缓冲区，下一次读取会改写同一内存，导致查表错乱。应使用 map.getOrPut 后 dupe 键，或让键指向生命周期足够长的字符串常量与已分配内存。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何按部门累加薪资？",
+        "a": "用 StringHashMap(u64)，getOrPut 取到条目后把薪资累加到 value_ptr。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "解析失败的行应该怎么处理？",
+        "a": "用 catch continue 跳过并记录，避免一行坏数据中断整个流程。"
       }
     ]
   },
   {
     "id": 33,
-    "t": "部署与发布",
+    "t": "构建、交叉编译与部署",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握部署与发布的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "build.zig 的 addExecutable 指定根文件、目标平台与优化级别",
+      "b.installArtifact(exe) 把产物安装到 zig-out/bin，便于统一分发",
+      "交叉编译只需指定 -Dtarget，例如 aarch64-linux-gnu，无需额外工具链",
+      "发布可打包可执行文件或容器镜像，静态链接时注意 libc 与许可证"
     ],
-    "c": "// Zig教程 - 部署与发布\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "// build.zig\nconst std = @import(\"std\");\n\npub fn build(b: *std.Build) void {\n    const target = b.standardTargetOptions(.{});\n    const optimize = b.standardOptimizeOption(.{});\n\n    const exe = b.addExecutable(.{\n        .name = \"demo\",\n        .root_source_file = .{ .path = \"src/main.zig\" },\n        .target = target,\n        .optimize = optimize,\n    });\n    b.installArtifact(exe);\n\n    const run_cmd = b.addRunArtifact(exe);\n    if (b.args) |args| run_cmd.addArgs(args);\n    b.step(\"run\", \"运行程序\").dependOn(&run_cmd.step);\n}\n// zig build -Doptimize=ReleaseSafe\n// zig build -Dtarget=aarch64-linux-gnu",
+    "et": "❌ 交叉编译时仍然链接宿主机的 libc，导致目标平台运行失败",
+    "ec": "链接 libc 会引入平台相关依赖。需要完全静态可移植时，应避免 linkLibC 或显式选择目标 libc，并用 file 与 readelf 检查产物架构与动态依赖。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "如何交叉编译到 ARM64 Linux？",
+        "a": "zig build -Dtarget=aarch64-linux-gnu。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "发布构建应选哪个优化级别？",
+        "a": "优先 ReleaseSafe，保留安全检查的同时获得较好性能。"
       }
     ]
   },
@@ -1224,73 +762,45 @@ window.TUTORIAL_DATA_zig = [
     "id": 34,
     "t": "最佳实践",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握最佳实践的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "显式优于隐式：类型、分配器、错误与生命周期都应清晰地写在函数签名里",
+      "每个分配都有对应的释放路径，优先 defer，错误路径用 errdefer",
+      "函数保持短小，模块边界清晰，pub 只暴露确实必要的 API 内容",
+      "统一用 zig fmt 格式化，提交前跑 zig build test，并开启 ReleaseSafe 验证"
     ],
-    "c": "// Zig教程 - 最佳实践\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\nconst Buffer = struct {\n    data: []u8,\n    allocator: std.mem.Allocator,\n\n    fn init(allocator: std.mem.Allocator, n: usize) !Buffer {\n        return .{ .data = try allocator.alloc(u8, n), .allocator = allocator };\n    }\n\n    fn deinit(self: *Buffer) void {\n        self.allocator.free(self.data);\n    }\n};\n\npub fn main() !void {\n    var gpa = std.heap.GeneralPurposeAllocator(.{}){};\n    defer _ = gpa.deinit();\n    var buf = try Buffer.init(gpa.allocator(), 16);\n    defer buf.deinit();\n    @memset(buf.data, 0);\n    try std.io.getStdOut().writer().print(\"容量={d}\\n\", .{buf.data.len});\n}",
+    "et": "❌ 在结构体中保存分配器副本却不使用它释放，导致分配与释放不匹配",
+    "ec": "分配器必须成对使用：由哪个分配器分配，就由哪个分配器释放。结构体应保存同一个 allocator 并在 deinit 中使用，测试时配合 testing.allocator 检查泄漏。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "错误路径上如何释放资源？",
+        "a": "使用 errdefer，它只在函数以错误返回时执行。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "为什么 pub 要尽量少用？",
+        "a": "减少对外暴露的 API 面，降低耦合与后续维护成本。"
       }
     ]
   },
   {
     "id": 35,
-    "t": "总结与展望",
+    "t": "总结与学习路线",
     "p": [
-      "理解Zig教程的核心概念和设计理念",
-      "掌握总结与展望的语法和用法",
-      "学会在实际项目中正确应用",
-      "了解常见的陷阱和最佳实践",
-      "能够独立编写相关代码"
+      "学习路线：语法与类型、内存与错误、comptime 与泛型、并发与生态",
+      "重点掌握分配器模型、错误联合、可选类型与 comptime 四大机制",
+      "进阶方向包括网络编程、嵌入式、WASM、图形渲染与自定义分配器",
+      "推荐阅读 Zig 官方文档、语言参考与标准库源码，多读 std 的实现"
     ],
-    "c": "// Zig教程 - 总结与展望\n// 示例代码\n\nfn main() {\n    println!(\"Hello, Zig教程!\");\n    \n    // 变量声明\n    let name = \"World\";\n    let count = 0;\n    \n    // 输出\n    println!(\"Hello, {}\", name);\n    \n    // 条件判断\n    let max = if count > 0 { count } else { 1 };\n    \n    println!(\"Max: {}\", max);\n}",
-    "et": "常见错误",
-    "ec": [
-      "语法错误：括号或分号不匹配",
-      "类型不匹配导致编译/运行错误",
-      "变量未初始化就使用",
-      "忘记引入依赖或库"
-    ],
+    "c": "const std = @import(\"std\");\n\npub fn main() !void {\n    const stdout = std.io.getStdOut().writer();\n    try stdout.print(\"Zig 学习路线\\n\", .{});\n    const topics = [_][]const u8{\n        \"语法与类型\", \"内存与分配器\", \"错误与可选\",\n        \"comptime 泛型\", \"并发\", \"网络与 FFI\",\n    };\n    for (topics, 0..) |t, i| {\n        try stdout.print(\"{d}. {s}\\n\", .{ i + 1, t });\n    }\n    try stdout.print(\"下一步: 用分配器 + 错误联合写一个解析器\\n\", .{});\n}",
+    "et": "❌ 只看语法不写项目，遇到分配器生命周期与错误传播仍然束手无策",
+    "ec": "Zig 的难点在内存与错误的显式管理，必须通过项目形成直觉。建议从命令行工具与解析器入手，逐步加入线程、网络与 C 库调用，并坚持测试与格式化。",
     "q": [
       {
-        "q": "Zig教程的主要特点是什么？",
-        "a": "现代系统编程语言"
+        "q": "Zig 最需要重点掌握哪几个机制？",
+        "a": "分配器模型、错误联合、可选类型与 comptime。"
       },
       {
-        "q": "学习Zig教程需要什么基础？",
-        "a": "编程基础"
-      },
-      {
-        "q": "Zig教程的主要应用领域？",
-        "a": "现代系统编程语言"
-      },
-      {
-        "q": "如何输出Hello World？",
-        "a": "println(\"Hello World\")"
+        "q": "学完后适合做什么练习？",
+        "a": "写一个带文件读写与错误处理的 CLI 工具或小型解析器。"
       }
     ]
   }

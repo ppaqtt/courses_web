@@ -7,7 +7,7 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="favicon.ico">
     <meta name="theme-color" content="#667eea">
-    <meta name="description" content="34 门编程语言教程，包含学习路线、概念对照、每日 5 题与在线运行示例">
+    <meta name="description" content="37 门编程语言教程，包含学习路线、概念对照、每日 5 题与在线运行示例">
     <style>
         * {
             margin: 0;
@@ -418,6 +418,24 @@
             padding: 25px 40px;
         }
 
+        .start-tutorial-btn {
+            display: inline-block;
+            padding: 14px 34px;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.35);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .start-tutorial-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.45);
+        }
+
         .popup-section h3 {
             color: #333;
             margin-bottom: 15px;
@@ -522,12 +540,13 @@
             <button class="lang-switcher" onclick="toggleLanguageUI()">🌐 中文</button>
             <a href="tutorial-hub.html" class="hub-link">🎯 学习中心</a>
             <h1>🚀 流行编程语言教程</h1>
-            <p>探索 34 门编程语言，找到最适合你的那一个</p>
+            <p>探索 37 门编程语言，找到最适合你的那一个</p>
         </header>
 
         <nav class="feature-nav" aria-label="学习工具">
-            <a href="learning-paths.html">🗺️ 学习路线 · 34 门</a>
+            <a href="learning-paths.html">🗺️ 学习路线 · 37 门</a>
             <a href="concepts.html">🧩 概念对照</a>
+            <a href="language-comparison.html">🔀 语言对照</a>
             <a href="daily-quiz.html">📅 每日 5 题</a>
         </nav>
 
@@ -545,7 +564,7 @@
                 <div class="stat-label">全球开发者</div>
             </div>
             <div class="stat-item">
-                <div class="stat-number">34 门</div>
+                <div class="stat-number">37 门</div>
                 <div class="stat-label">可运行示例</div>
             </div>
         </div>
@@ -571,7 +590,7 @@
     </div>
 
     <script src="language-catalog.js"></script>
-    <script src="tutorial-runner.js"></script>
+    <script src="tutorial-runner.js?v=20261115"></script>
     <script>
         const languages = [
             {
@@ -1418,6 +1437,7 @@ manager.printSummary()`,
             const concepts = entry.concepts || ['—', '—', '—', '—'];
             languages.push({
                 id: entry.id,
+                key: entry.key,
                 name: entry.name,
                 icon: entry.icon,
                 rank: entry.id,
@@ -1491,6 +1511,8 @@ manager.printSummary()`,
 
             currentDetailId = id;
             const highlightedCode = highlightCode(lang.codeExample, lang.name);
+            const tutorialUrl = (window.getTutorialUrl && window.getTutorialUrl(lang.key || lang.name)) ||
+                `tutorial-${(lang.key || lang.name.toLowerCase())}.html`;
 
             popupContent.innerHTML = `
                 <button class="popup-close" onclick="closePopup()">&times;</button>
@@ -1524,6 +1546,15 @@ manager.printSummary()`,
                     <div class="code-run-output" id="popupRunOutput" hidden></div>
                 </div>
 
+                <div class="popup-section" style="text-align:center">
+                    <a class="start-tutorial-btn" href="${tutorialUrl}">
+                        📘 开始完整教程 →
+                    </a>
+                    <p style="color:#94a3b8;font-size:0.82rem;margin-top:10px;">
+                        35+ 章正文 · 在线运行 · 标准库与工具链速查
+                    </p>
+                </div>
+
                 <div class="popup-section">
                     <h3>📚 学习路径</h3>
                     <div class="learning-path">
@@ -1548,7 +1579,7 @@ manager.printSummary()`,
 
                 <div class="popup-section" style="text-align:center">
                     <a href="learning-paths.html#lang-${lang.id}" style="color:#667eea;font-weight:600;text-decoration:none;">
-                        🗺️ 在 34 门语言学习路线中查看 →
+                        🗺️ 在 37 门语言学习路线中查看 →
                     </a>
                 </div>
             `;

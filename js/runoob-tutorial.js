@@ -68,15 +68,10 @@ class RunoobTutorial {
                     </a>
                     <div class="nav-menu">
                         <a href="index.html" class="nav-item">首页</a>
-                        <a href="tutorial-python.html" class="nav-item ${this.language === 'python' ? 'active' : ''}">Python</a>
-                        <a href="tutorial-java.html" class="nav-item ${this.language === 'java' ? 'active' : ''}">Java</a>
-                        <a href="tutorial-javascript.html" class="nav-item ${this.language === 'javascript' ? 'active' : ''}">JavaScript</a>
-                        <a href="tutorial-cpp.html" class="nav-item ${this.language === 'cpp' ? 'active' : ''}">C/C++</a>
-                        <a href="tutorial-csharp.html" class="nav-item ${this.language === 'csharp' ? 'active' : ''}">C#</a>
-                        <a href="tutorial-go.html" class="nav-item ${this.language === 'go' ? 'active' : ''}">Go</a>
-                        <a href="tutorial-php.html" class="nav-item ${this.language === 'php' ? 'active' : ''}">PHP</a>
-                        <a href="tutorial-rust.html" class="nav-item ${this.language === 'rust' ? 'active' : ''}">Rust</a>
-                        <a href="tutorial-swift.html" class="nav-item ${this.language === 'swift' ? 'active' : ''}">Swift</a>
+                        <a href="programming-languages-tutorial.html" class="nav-item">全部教程</a>
+                        <a href="language-comparison.html" class="nav-item">语言对照</a>
+                        <a href="concepts.html" class="nav-item">概念对照</a>
+                        <a href="tutorial-hub.html" class="nav-item">学习中心</a>
                     </div>
                     <div class="nav-search">
                         <input type="text" id="searchInput" placeholder="搜索教程..." oninput="tutorial.search()">
@@ -166,14 +161,19 @@ class RunoobTutorial {
                 <h2 class="chapter-title">代码示例</h2>
                 <div class="code-container">
                     <div class="code-header">
-                        <span class="lang">${this.language}</span>
+                        <span class="lang">${this.languageLabel()}</span>
                         <div class="actions">
+                            <button class="code-btn run" onclick="tutorial.runCode(${ch.id})">▶ 在线运行</button>
                             <button class="code-btn" onclick="tutorial.copyCode('code_${ch.id}')">📋 复制代码</button>
+                            ${typeof CodeFormatter !== 'undefined' ? `<button class="code-btn" onclick="tutorial.formatCode(${ch.id})">🧹 格式化</button>` : ''}
+                            ${typeof CodeQualityChecker !== 'undefined' ? `<button class="code-btn" onclick="tutorial.checkQuality(${ch.id})">✅ 质量检查</button>` : ''}
+                            ${typeof SnippetManager !== 'undefined' ? `<button class="code-btn" onclick="tutorial.saveSnippet(${ch.id})">⭐ 收藏</button>` : ''}
                         </div>
                     </div>
                     <div class="code-body">
                         <pre><code id="code_${ch.id}">${this.escapeHtml(ch.c)}</code></pre>
                     </div>
+                    <div class="code-output" id="output_${ch.id}" hidden></div>
                 </div>` : ''}
                 
                 ${ch.et ? `
@@ -288,7 +288,115 @@ class RunoobTutorial {
             this.showToast('代码已复制到剪贴板！');
         });
     }
-    
+
+    languageLabel() {
+        const names = {
+            'html-css': 'HTML/CSS', 'r-lang': 'R', 'objectivec': 'Objective-C',
+            'csharp': 'C#', 'cpp': 'C++', 'fsharp': 'F#', 'typescript': 'TypeScript',
+            'javascript': 'JavaScript', 'assembly': 'Assembly', 'cobol': 'COBOL'
+        };
+        return names[this.language] || (this.title ? this.title.replace(/教程$/, '') : this.language);
+    }
+
+    // 教程 slug 与在线运行语言键的映射
+    runnerLanguage() {
+        const map = {
+            'html-css': 'html',
+            'r-lang': 'r',
+            'shell': 'bash'
+        };
+        return map[this.language] || this.language;
+    }
+
+    // 在线运行：Piston 优先；失败时自动降级为复制代码
+    async runCode(id) {
+        const chapter = this.chapters.find(c => c.id === id);
+        const output = document.getElementById('output_' + id);
+        if (!chapter || !output) return;
+
+        output.hidden = false;
+        output.className = 'code-output';
+        output.innerHTML = '<span class="output-running">正在提交到 Piston 在线运行服务...</span>';
+
+        if (!window.CodeRunner) {
+            this.showRunFallback(output, chapter.c, '在线运行模块未加载');
+            return;
+        }
+
+        let result;
+        try {
+            result = await CodeRunner.runInto(output, this.runnerLanguage(), chapter.c);
+        } catch (error) {
+            result = { ok: false, output: '运行请求失败：' + error.message };
+            this.showRunFallback(output, chapter.c, result.output);
+            return;
+        }
+
+        if (!result || !result.ok) {
+            this.showRunFallback(output, chapter.c, (result && result.output) || '在线执行服务暂不可用');
+        }
+    }
+
+    showRunFallback(container, code, reason) {
+        const existing = container.querySelector('.run-fallback');
+        if (existing) existing.remove();
+
+        const box = document.createElement('div');
+        box.className = 'run-fallback';
+
+        const text = document.createElement('span');
+        text.textContent = '在线执行不可用（' + reason + '），已降级为复制代码，可在本地环境运行。';
+
+        const button = document.createElement('button');
+        button.className = 'code-btn';
+        button.textContent = '📋 复制代码';
+        button.addEventListener('click', () => {
+            navigator.clipboard.writeText(code).then(() => {
+                this.showToast('代码已复制，请粘贴到本地编辑器运行');
+            });
+        });
+
+        box.appendChild(text);
+        box.appendChild(button);
+        container.appendChild(box);
+    }
+
+    // 使用 tutorial-extensions.js 的格式化模块
+    formatCode(id) {
+        const chapter = this.chapters.find(c => c.id === id);
+        const output = document.getElementById('output_' + id);
+        if (!chapter || !output || typeof CodeFormatter === 'undefined') return;
+        const formatted = CodeFormatter.format(chapter.c, this.runnerLanguage());
+        output.hidden = false;
+        output.className = 'code-output';
+        output.innerHTML = '<div class="runner-output-meta">🧹 格式化结果</div>' +
+            '<pre class="runner-output-text">' + this.escapeHtml(formatted) + '</pre>';
+        this.showToast('已格式化，可复制到本地使用');
+    }
+
+    // 使用 tutorial-advanced.js 的代码质量检查模块
+    checkQuality(id) {
+        const chapter = this.chapters.find(c => c.id === id);
+        const output = document.getElementById('output_' + id);
+        if (!chapter || !output || typeof CodeQualityChecker === 'undefined') return;
+        const report = CodeQualityChecker.check(chapter.c, this.language);
+        const issues = (report.issues || []).slice(0, 6);
+        output.hidden = false;
+        output.className = 'code-output';
+        output.innerHTML = '<div class="runner-output-meta">✅ 质量评分：' + report.score + '/100 · ' +
+            report.lines + ' 行 · ' + (report.issues || []).length + ' 条提示</div>' +
+            (issues.length
+                ? '<ul class="runner-output-text">' + issues.map(issue =>
+                    '<li>第 ' + issue.line + ' 行 [' + issue.rule + '] ' + this.escapeHtml(issue.message) + '</li>').join('') + '</ul>'
+                : '<div class="runner-output-text">未发现明显问题</div>');
+    }
+
+    saveSnippet(id) {
+        const chapter = this.chapters.find(c => c.id === id);
+        if (!chapter || typeof SnippetManager === 'undefined') return;
+        SnippetManager.showSaveDialog(chapter.c, this.language);
+    }
+
     checkAnswer(chId, qIdx) {
         const input = document.getElementById('answer_' + chId + '_' + qIdx);
         const result = document.getElementById('result_' + chId + '_' + qIdx);

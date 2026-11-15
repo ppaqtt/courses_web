@@ -1,0 +1,807 @@
+window.TUTORIAL_DATA_prolog = [
+  {
+    "id": 1,
+    "t": "Prolog 语言简介与历史",
+    "p": [
+      "Prolog 诞生于 1972 年，由 Alain Colmerauer 与 Philippe Roussel 在马赛大学设计，用于自然语言处理",
+      "Prolog 是声明式逻辑编程语言，程序由事实和规则组成，求解器通过合一与回溯自动搜索答案",
+      "SWI-Prolog 是最流行的开源实现，提供丰富的标准库、包管理、HTTP、约束编程和图形界面 XPCE",
+      "典型应用：专家系统、自然语言处理、知识图谱、规则引擎、约束求解和程序分析"
+    ],
+    "c": "% hello.pl —— 运行：swipl -q -f hello.pl\n:- initialization(main).\n\nmain :-\n    write('Hello, Prolog!'), nl,\n    write('你好，逻辑编程世界！'), nl,\n    write('Prolog 程序由事实和规则组成。'), nl,\n    write('查询通过合一与回溯自动求解。'), nl,\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "把 Prolog 当命令式语言写，试图用赋值和循环；Prolog 使用合一与回溯，变量一旦绑定不能重新赋值，重复使用同一变量表示要求相等。",
+    "q": [
+      {
+        "q": "Prolog 是哪一年诞生的？",
+        "a": "1972 年"
+      },
+      {
+        "q": "Prolog 程序由哪两部分组成？",
+        "a": "事实和规则"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "t": "安装与工具链环境",
+    "p": [
+      "安装 SWI-Prolog 后可用 swipl 进入交互式顶层，swipl -q -f file.pl 安静加载并运行指定文件",
+      "常用命令：swipl --version 查看版本，swipl -g goal -t halt 执行目标后退出，halt 立即退出",
+      "包管理使用 pack_install/1 安装扩展包，pack_list_installed/1 查看已安装包",
+      "可执行文件可用 qsave_program/2 保存为独立程序，或用 swipl --stand_alone 打包"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    current_prolog_flag(version, Version),\n    format('SWI-Prolog 版本：~w~n', [Version]),\n    current_prolog_flag(dialect, Dialect),\n    format('方言：~w~n', [Dialect]),\n    format('加载本文件：swipl -q -f install.pl~n', []),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "在源文件里直接写查询（如 ?- main.）会导致加载时报语法错误；查询应在交互式顶层输入，或用 initialization/1 指定程序入口。",
+    "q": [
+      {
+        "q": "如何安静地加载并运行一个 Prolog 文件？",
+        "a": "swipl -q -f file.pl"
+      },
+      {
+        "q": "安装 SWI-Prolog 扩展包用哪个谓词？",
+        "a": "pack_install/1"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "t": "变量、常量与命名",
+    "p": [
+      "变量以大写字母或下划线开头，如 Name、X；原子以小写字母开头，如 tom、parent",
+      "下划线 _ 是匿名变量，每次出现都独立；_Name 是具名变量，可绑定但不产生单例警告",
+      "变量一旦通过合一绑定就不可重新赋值，再次使用同一变量表示要求两个值相等",
+      "原子包含空格或特殊字符时用单引号括起，如 'hello world'；双引号表示字符串"
+    ],
+    "c": "parent(tom, bob).\nparent(tom, liz).\nparent(bob, ann).\n\ngrandparent(X, Z) :-\n    parent(X, Y),\n    parent(Y, Z).\n\n:- initialization(main).\n\nmain :-\n    grandparent(tom, Who),\n    format('tom 的孙辈：~w~n', [Who]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "变量首字母小写会被当成原子，查询 grandparent(tom, who) 永远失败；单下划线 _ 每次都是新变量，命名时混淆会破坏约束关系。",
+    "q": [
+      {
+        "q": "Prolog 变量必须以什么开头？",
+        "a": "大写字母或下划线"
+      },
+      {
+        "q": "匿名变量写作什么？",
+        "a": "_"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "t": "数据类型",
+    "p": [
+      "Prolog 的基本数据类型包括原子、数字、字符串、列表和复合项，语言是动态类型的",
+      "原子用于表示常量，数字分整数和浮点数，字符串用双引号，字符码列表也可表示文本",
+      "复合项由函子和参数组成，如 person(alice, 30)，函子为 person，元数为 2",
+      "类型检查谓词：atom/1、number/1、string/1、is_list/1、compound/1、var/1、ground/1"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    Atom = hello,\n    Number = 42,\n    Text = \"字符串\",\n    List = [1, 2, 3],\n    Term = person(alice, 30),\n    ( atom(Atom) -> format('~w 是原子~n', [Atom]) ; true ),\n    ( number(Number) -> format('~w 是数字~n', [Number]) ; true ),\n    ( string(Text) -> format('~w 是字符串~n', [Text]) ; true ),\n    ( is_list(List) -> format('~w 是列表~n', [List]) ; true ),\n    ( compound(Term) -> format('~w 是复合项~n', [Term]) ; true ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "混淆原子与字符串：hello 是原子，\"hello\" 是字符串，二者不相等；用 = 比较时类型不同直接失败，需要 atom_string/2 显式转换。",
+    "q": [
+      {
+        "q": "person(alice, 30) 的函子和元数是什么？",
+        "a": "函子 person，元数 2"
+      },
+      {
+        "q": "哪个谓词判断一个项是否为列表？",
+        "a": "is_list/1"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "t": "运算符与表达式",
+    "p": [
+      "is/2 对右侧算术表达式求值并合一，如 X is 3 + 4；= 只做项合一，不进行计算",
+      "算术运算符：+ - * / // mod **，/ 返回浮点，// 整除，mod 取余，** 幂运算",
+      "比较运算符：=:= 数值相等、=\\= 数值不等、< > =< >=；== 比较项是否完全相同",
+      "逻辑关系用逗号表示且、分号表示或、\\+ 表示否定；比较运算不会自动求值右侧"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    X is 7 / 2,\n    Y is 7 // 2,\n    Z is 7 mod 2,\n    format('7/2=~w 7//2=~w 7 mod 2=~w~n', [X, Y, Z]),\n    ( 3 =:= 3.0 -> write('3 与 3.0 数值相等'), nl ; true ),\n    ( 3 == 3.0 -> write('不会执行') ;\n      write('3 == 3.0 失败，因为类型不同'), nl ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "写 X = 1 + 2 只做合一，X 得到的是项 1+2 而不是 3；必须用 is/2 求值，且 is 右侧的变量必须已经绑定。",
+    "q": [
+      {
+        "q": "哪个谓词用于算术求值？",
+        "a": "is/2"
+      },
+      {
+        "q": "判断两个数数值相等用哪个运算符？",
+        "a": "=:="
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "t": "字符串处理",
+    "p": [
+      "SWI-Prolog 支持 string 类型，用双引号表示；也常用原子表示文本，二者可通过 atom_string/2 转换",
+      "atom_concat/3 拼接原子，atom_length/2 求长度，sub_atom/5 截取子串，upcase_atom/2 转大写",
+      "atomic_list_concat/3 用分隔符连接列表，atomic_list_concat/2 直接连接",
+      "字符串可用 string_concat/3、string_length/2、sub_string/5、split_string/4 处理"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    atom_concat('Free', 'Prolog', A),\n    atom_length(A, Len),\n    upcase_atom(A, Upper),\n    sub_atom(A, 0, 4, _, Head),\n    atomic_list_concat(['a', 'b', 'c'], '-', Joined),\n    format('~w 长度=~w 大写=~w 前4=~w 拼接=~w~n',\n           [A, Len, Upper, Head, Joined]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "试图对原子使用 Length 或 + 运算会报类型错误；Prolog 没有字符串拼接运算符，应使用 atom_concat/3 或 string_concat/3，并注意参数模式。",
+    "q": [
+      {
+        "q": "拼接两个原子用哪个谓词？",
+        "a": "atom_concat/3"
+      },
+      {
+        "q": "求原子长度用哪个谓词？",
+        "a": "atom_length/2"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "t": "列表与复合数据结构",
+    "p": [
+      "列表是 Prolog 的核心数据结构，写作 [1,2,3]，头部与尾部分解模式为 [H|T]",
+      "length/2 求长度或生成列表，nth0/3 和 nth1/3 按索引取元素，索引从 0 或 1 开始",
+      "append/3 连接两个列表，也可反向拆分列表；member/2 检查元素是否属于列表",
+      "msort/2 排序并保留重复，sort/2 排序并去重，reverse/2 反转，sum_list/2 求和"
+    ],
+    "c": ":- use_module(library(lists)).\n:- initialization(main).\n\nmain :-\n    L = [10, 20, 30, 40],\n    length(L, Len),\n    nth0(1, L, Second),\n    append([0], L, L2),\n    msort([3, 1, 2, 1], Sorted),\n    format('长度=~w 第二项=~w 前插=~w 排序=~w~n',\n           [Len, Second, L2, Sorted]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 [H|T] 匹配空列表不加保护会失败；length/2 两个参数都未绑定时会无限枚举列表长度，必须至少绑定一个参数。",
+    "q": [
+      {
+        "q": "列表的头部尾部分解模式怎么写？",
+        "a": "[H|T]"
+      },
+      {
+        "q": "连接两个列表用哪个谓词？",
+        "a": "append/3"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "t": "条件分支",
+    "p": [
+      "Prolog 没有 if 语句，条件通过规则守卫和 (Cond -> Then ; Else) 结构表达",
+      "-> 是 if-then，; 是逻辑或；组合 (Cond -> Then ; Else) 表示条件成立执行 Then，否则执行 Else",
+      "切割 ! 提交当前子句的选择，阻止回溯到该子句前面的选择点，用于表达确定性",
+      "用多个子句按顺序匹配也能表达分支，靠模式匹配和守卫条件区分不同情况"
+    ],
+    "c": "classify(N, negative) :- N < 0, !.\nclassify(0, zero) :- !.\nclassify(N, positive) :- N > 0.\n\n:- initialization(main).\n\nmain :-\n    forall(member(X, [-3, 0, 5]),\n           (classify(X, C), format('~w -> ~w~n', [X, C]))),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "在 (Cond -> Then ; Else) 中把分号误写成逗号，导致 Else 永不执行；切割 ! 放在错误位置会剪掉合法解，使谓词失去多解能力。",
+    "q": [
+      {
+        "q": "if-then-else 结构怎么写在 Prolog 中？",
+        "a": "(Cond -> Then ; Else)"
+      },
+      {
+        "q": "切割运算符是什么？",
+        "a": "!"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "t": "递归与循环",
+    "p": [
+      "Prolog 用递归代替循环，递归谓词必须包含基准情形和递归情形两个子句",
+      "列表递归的典型模式是处理 [H|T]，先递归处理 T，再合并头部结果",
+      "尾递归把中间结果放入累加器参数，SWI 会做尾调用优化，可处理很长的列表",
+      "between/3 可生成整数序列，forall/2 对满足条件的每个解执行副作用，findall/3 收集全部解"
+    ],
+    "c": "my_sum([], 0).\nmy_sum([H|T], Sum) :-\n    my_sum(T, TailSum),\n    Sum is H + TailSum.\n\nsum_acc([], Acc, Acc).\nsum_acc([H|T], Acc, Sum) :-\n    NewAcc is Acc + H,\n    sum_acc(T, NewAcc, Sum).\n\n:- initialization(main).\n\nmain :-\n    my_sum([1, 2, 3, 4], S1),\n    sum_acc([1, 2, 3, 4], 0, S2),\n    format('递归求和=~w 尾递归求和=~w~n', [S1, S2]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "递归谓词缺少基准情形会导致栈溢出；递归调用不是最后一步且没有累加器时无法尾调用优化，大列表应改写为尾递归。",
+    "q": [
+      {
+        "q": "递归谓词必须包含哪两类子句？",
+        "a": "基准情形和递归情形"
+      },
+      {
+        "q": "尾递归通常借助什么参数？",
+        "a": "累加器"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "t": "事实、规则与谓词基础",
+    "p": [
+      "事实是无条件为真的子句，如 likes(mary, wine).，以句号结束",
+      "规则由头部和体组成，写作 Head :- Body.，体中的子目标必须全部成立头部才成立",
+      "谓词由名字和元数唯一确定，likes/2 与 likes/3 是不同的谓词",
+      "多个子句定义同一谓词时按顺序尝试，前一个失败或回溯后尝试下一个，形成非确定性"
+    ],
+    "c": "likes(mary, wine).\nlikes(john, wine).\nlikes(john, beer).\n\nfriend(X, Y) :-\n    likes(X, Z),\n    likes(Y, Z),\n    X \\= Y.\n\n:- initialization(main).\n\nmain :-\n    findall(Pair, friend(mary, Pair), Pairs),\n    format('mary 的共同爱好朋友：~w~n', [Pairs]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "规则忘记以句号结尾或把 :- 写成反向，会导致加载失败；Prolog 用逗号表示并且、分号表示或者，混淆会改变规则逻辑。",
+    "q": [
+      {
+        "q": "Prolog 规则的基本形式是什么？",
+        "a": "Head :- Body."
+      },
+      {
+        "q": "likes/2 中的 2 表示什么？",
+        "a": "谓词的元数（参数个数）"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "t": "谓词进阶：回溯与多解",
+    "p": [
+      "Prolog 谓词可以产生多个解，调用方按分号或 findall 收集，回溯会重新进入选择点",
+      "select/3 从列表中选择一个元素并返回剩余列表，天然产生多个解，适合排列组合",
+      "findall/3 收集所有解到列表，bagof/3 按自由变量分组，setof/3 排序去重",
+      "once/1 只取第一个解并剪掉选择点，forall/2 常用于对所有解执行检查或副作用"
+    ],
+    "c": ":- use_module(library(lists)).\n:- initialization(main).\n\npermute([], []).\npermute(List, [Head|Tail]) :-\n    select(Head, List, Rest),\n    permute(Rest, Tail).\n\nmain :-\n    findall(P, permute([1, 2, 3], P), All),\n    length(All, Count),\n    format('全排列共 ~w 个：~w~n', [Count, All]),\n    ( permute([1, 2, 3], [3|_]) ->\n        write('存在以 3 开头的排列'), nl\n    ;   true ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 findall 收集无限生成的解会耗尽内存；带副作用的谓词在回溯时会重复执行，需要 once/1 或切割限制解的数量。",
+    "q": [
+      {
+        "q": "收集谓词所有解用哪个谓词？",
+        "a": "findall/3"
+      },
+      {
+        "q": "只取第一个解用哪个谓词？",
+        "a": "once/1"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "t": "作用域与模块化",
+    "p": [
+      "模块用 :- module(Name, [Exports]). 声明，导出列表指定外部可见的谓词及其元数",
+      "使用模块时用 :- use_module(library(...)) 或 use_module(File, [Pred/Arity]) 导入",
+      "模块内未导出（未列入导出列表）的谓词是私有的，可避免不同模块之间的命名冲突",
+      "动态数据库用 assertz/asserta 添加事实、retract 删除，修改的是运行时子句库"
+    ],
+    "c": "% math_utils.pl\n:- module(math_utils, [double/2, triple/2]).\n\ndouble(X, Y) :- Y is X * 2.\ntriple(X, Y) :- Y is X * 3.\n\n:- initialization(main).\n\nmain :-\n    double(5, D),\n    triple(5, T),\n    format('double=~w triple=~w~n', [D, T]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "模块文件忘记写 :- module(Name, [..]) 会让所有谓词进入 user 模块；use_module 导入同名谓词冲突时，需要用模块名限定调用。",
+    "q": [
+      {
+        "q": "模块声明使用哪个指令？",
+        "a": ":- module(Name, [Exports])."
+      },
+      {
+        "q": "导入模块用哪个指令？",
+        "a": ":- use_module(...)."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "t": "复合项与自定义类型",
+    "p": [
+      "Prolog 用复合项表示记录，如 person(alice, 30)，无需预先声明类型",
+      "模式匹配是访问字段的主要方式，person(Name, Age) 可直接在头部绑定字段",
+      "functor/3 获取函子和元数，arg/3 按位置取参数，=.. 在项与列表之间转换",
+      "复合项可嵌套，如 order(id(1), items([book, pen]))，用递归规则处理嵌套结构"
+    ],
+    "c": ":- initialization(main).\n\nage_of(person(_, Age), Age).\n\nolder(P1, P2) :-\n    age_of(P1, A1),\n    age_of(P2, A2),\n    A1 > A2.\n\nmain :-\n    A = person(alice, 30),\n    B = person(bob, 25),\n    A = person(Name, Age),\n    functor(A, Functor, Arity),\n    arg(2, A, Age2),\n    format('~w 年龄 ~w，函子 ~w/~w，第二参数 ~w~n',\n           [Name, Age, Functor, Arity, Age2]),\n    ( older(A, B) -> write('alice 更年长'), nl ; true ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 person.Name 这种面向对象语法访问字段，Prolog 不支持；必须通过合一 person(Name, Age) 或 arg/3 提取参数。",
+    "q": [
+      {
+        "q": "获取复合项函子和元数用哪个谓词？",
+        "a": "functor/3"
+      },
+      {
+        "q": "按位置取复合项参数用哪个谓词？",
+        "a": "arg/3"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "t": "文件 I/O",
+    "p": [
+      "open/4 打开文件并返回流句柄，模式有 read、write、append，选项可指定编码",
+      "write/2 向流写项，writeln/2 写项并换行，read/2 从流读取一个以句号结尾的 Prolog 项",
+      "close/1 关闭流；see/1 和 tell/1 可切换当前输入输出流，seen/told 恢复标准流",
+      "读取普通文本行用 read_line_to_string/2，读取整个文件用 read_file_to_string/3"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    open('demo.txt', write, Out),\n    write(Out, 'hello(prolog).'), nl(Out),\n    write(Out, 'score(90).'), nl(Out),\n    close(Out),\n    open('demo.txt', read, In),\n    read(In, T1),\n    read(In, T2),\n    close(In),\n    format('读回：~w 与 ~w~n', [T1, T2]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "忘记 close/1 会导致文件描述符泄漏；read/2 读取的是以句号结尾的 Prolog 项而不是一行文本，读普通文本应使用 read_line_to_string/2。",
+    "q": [
+      {
+        "q": "打开文件用哪个谓词？",
+        "a": "open/4"
+      },
+      {
+        "q": "从流读取一个 Prolog 项用哪个谓词？",
+        "a": "read/2"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "t": "错误处理",
+    "p": [
+      "catch/3 捕获异常：catch(Goal, Catcher, Recovery)，异常项与 Catcher 合一后执行 Recovery",
+      "throw/1 抛出异常，标准错误项格式为 error(Formal, Context)，Context 说明出错位置",
+      "库谓词通常抛出带类型信息的异常，例如 error(type_error(integer, foo), _)",
+      "library(error) 提供 must_be/2、can_be/2 等输入校验谓词，简化防御式编程"
+    ],
+    "c": ":- initialization(main).\n\nsafe_div(A, B, R) :-\n    ( B =:= 0 ->\n        throw(error(division_by_zero, safe_div/3))\n    ;   R is A / B\n    ).\n\nmain :-\n    catch(safe_div(10, 2, R1), E1, (write(E1), nl)),\n    format('10/2=~w~n', [R1]),\n    catch(safe_div(1, 0, _), error(Reason, _),\n          (format('捕获错误：~w~n', [Reason]))),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 catch 包住整个程序却不打印异常，失败原因完全不可见；throw 任意原子而不是 error(Formal, Context) 会破坏标准错误处理约定。",
+    "q": [
+      {
+        "q": "捕获异常使用哪个谓词？",
+        "a": "catch/3"
+      },
+      {
+        "q": "主动抛出异常使用哪个谓词？",
+        "a": "throw/1"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "t": "格式化输入输出",
+    "p": [
+      "format/2 按格式串输出，~w 写任意项，~d 整数，~f 浮点，~s 字符串，~n 换行",
+      "数字格式可加参数，如 ~2f 保留两位小数，~D 千分位整数，~t 与 ~| 控制列对齐",
+      "write_term/2 支持 quoted、ignore_ops、numbervars 等选项，适合输出可读或可解析的项",
+      "read_term/3 可带变量列表和选项读取项，常用于解析用户输入或配置文件"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    format('整数：~d~n', [42]),\n    format('小数：~2f~n', [3.14159]),\n    format('字符串：~s~n', [\"你好\"]),\n    format('原子：~w~n', [hello]),\n    format('对齐：~t~w~10|~n', [abc]),\n    write_term(f(x, [1, 2]), [quoted(true)]), nl,\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "format 中占位符数量与参数列表不一致会抛格式异常；~s 需要字符串或字符列表，传原子会报类型错误，应改用 ~w。",
+    "q": [
+      {
+        "q": "format 中输出任意项用哪个占位符？",
+        "a": "~w"
+      },
+      {
+        "q": "哪个占位符输出换行？",
+        "a": "~n"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "t": "列表与递归",
+    "p": [
+      "列表递归的标准写法是基准子句处理 []，递归子句处理 [H|T] 并递归调用自身",
+      "append/3 是关系而非函数，既可连接列表，也可用于拆分列表或枚举所有前缀后缀",
+      "反转列表可用累加器：每次把头部放入累加器，递归到空表时累加器即为结果",
+      "尾递归谓词的递归调用位于子句最后，SWI 会复用栈帧，避免长列表导致栈溢出"
+    ],
+    "c": ":- initialization(main).\n\nmy_append([], L, L).\nmy_append([H|T], L, [H|R]) :-\n    my_append(T, L, R).\n\nmy_reverse(L, R) :-\n    reverse_acc(L, [], R).\n\nreverse_acc([], Acc, Acc).\nreverse_acc([H|T], Acc, R) :-\n    reverse_acc(T, [H|Acc], R).\n\nmain :-\n    my_append([1, 2], [3, 4], A),\n    my_reverse([1, 2, 3], R),\n    format('append=~w reverse=~w~n', [A, R]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "自己实现 append 时少写一个参数会变成 arity 错误；反转列表时把累加器顺序写反，得到的结果顺序会与原列表相同。",
+    "q": [
+      {
+        "q": "列表递归的基准子句通常处理什么？",
+        "a": "空列表 []"
+      },
+      {
+        "q": "反转列表常用的技巧是什么？",
+        "a": "使用累加器从头到尾构建新列表"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "t": "日期与时间",
+    "p": [
+      "get_time/1 返回自 1970-01-01 UTC 起的秒数，类型为浮点数，精度可达微秒",
+      "stamp_date_time/3 把时间戳转换为 date/9 结构，第三个参数指定时区，如 'UTC'",
+      "date/9 参数依次为年、月、日、时、分、秒、毫秒、时区偏移和夏令时标志",
+      "format_time/4 可按格式输出时间，也可以直接对 date/9 的各字段做 format"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    get_time(Stamp),\n    stamp_date_time(Stamp, DateTime, 'UTC'),\n    DateTime = date(Y, M, D, H, Min, S, _, _, _),\n    format('UTC: ~w-~w-~w ~w:~w:~w~n', [Y, M, D, H, Min, S]),\n    format('时间戳: ~2f~n', [Stamp]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "把 get_time 得到的秒数直接当作本地时间打印；stamp_date_time 的第三个参数是时区，省略或传错会得到错误的日期时间。",
+    "q": [
+      {
+        "q": "get_time/1 返回什么？",
+        "a": "自 1970-01-01 UTC 起的秒数"
+      },
+      {
+        "q": "date/9 的前三个参数是什么？",
+        "a": "年、月、日"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "t": "字符与编码",
+    "p": [
+      "char_code/2 在字符与 Unicode 码点之间转换，char_code('A', X) 得到 65，char_code(C, 97) 得到 a",
+      "atom_codes/2 在原子与码点列表之间转换，atom_chars/2 转换为单字符列表，string_codes/2 处理字符串",
+      "SWI-Prolog 内部使用 Unicode，源文件默认 UTF-8，Length 和 atom_length 返回字符数而非字节数",
+      "code_type/2 可判断字符类别，如 alpha、digit、space、upper，适合做字符级校验"
+    ],
+    "c": ":- initialization(main).\n\nmain :-\n    char_code('A', Code),\n    char_code(Char, 97),\n    atom_codes(hello, Codes),\n    atom_chars(hello, Chars),\n    string_codes(\"hi\", SCodes),\n    format('A 的码=~w，97 的字符=~w~n', [Code, Char]),\n    format('codes=~w chars=~w string_codes=~w~n', [Codes, Chars, SCodes]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 Length 统计中文文本的字节数，SWI 的 Length 返回字符数；要获得 UTF-8 字节需使用 utf8_code/2 或流编码选项，混淆两者会算错长度。",
+    "q": [
+      {
+        "q": "字符 'A' 的 Unicode 码点是多少？",
+        "a": "65"
+      },
+      {
+        "q": "原子转字符列表用哪个谓词？",
+        "a": "atom_chars/2"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "t": "模块、库与包管理",
+    "p": [
+      "SWI 标准库以 library(名字) 引用，如 library(lists)、library(apply)、library(clpfd)",
+      "用 :- use_module(library(lists)). 导入库谓词，也可只导入指定谓词以避免命名冲突",
+      "pack_install/1 从官方包仓库安装扩展，pack_list_installed/1 列出已安装包，pack_remove/1 卸载",
+      "clpfd 提供约束逻辑编程，用 #=、#>、#< 等约束表达关系，再用 label/1 搜索具体解"
+    ],
+    "c": ":- use_module(library(lists)).\n:- use_module(library(clpfd)).\n:- initialization(main).\n\nmain :-\n    lists:last([a, b, c], Last),\n    X #> 3,\n    X #< 6,\n    findall(X, label([X]), Values),\n    format('last=~w 3<X<6 的解=~w~n', [Last, Values]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "忘记 use_module 就直接调用 last/2 会报 unknown procedure；clpfd 的变量要用 #= 等约束，不能用 is/2 赋值，否则约束被破坏。",
+    "q": [
+      {
+        "q": "导入列表库用哪个指令？",
+        "a": ":- use_module(library(lists))."
+      },
+      {
+        "q": "clpfd 中搜索解用哪个谓词？",
+        "a": "label/1"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "t": "标准库速查与工具链",
+    "p": [
+      "常用库：lists 列表、apply 高阶谓词、aggregate 聚合、http/http_client 网络、persistency 持久化",
+      "包管理：pack_install/1 安装、pack_list_installed/1 查看、pack_remove/1 卸载，依赖自动记录",
+      "测试用 PLUnit（begin_tests/end_tests、test/1、run_tests/0），调试用 trace/0、leash/1、spy/1",
+      "运行命令：swipl -q -f app.pl，指定入口用 swipl -g main -t halt，格式化输出可用 portray_clause/1"
+    ],
+    "c": "% 运行：swipl -q -f toolchain.pl\n% 依赖：pack_install(包名). 或 :- use_module(library(...)).\n% 测试：:- begin_tests(...). ... run_tests.\n% 调试：trace. / leash/1 / spy/1\n% 格式化：portray_clause/1 输出规范子句（SWI 无独立格式化器）\n:- initialization(main).\n\nmain :-\n    current_prolog_flag(version, V),\n    format('SWI-Prolog ~w~n', [V]),\n    portray_clause((ancestor(X, Y) :- parent(X, Z), ancestor(Z, Y))),\n    listing(member/2),\n    format('工具：swipl、pack_install/1、PLUnit、trace/leash、XPCE~n', []),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "把 portray_clause/1 当成代码格式化器，它只把子句输出到流，不会修改源文件；SWI 没有内置代码格式化器，需要借助编辑器插件。",
+    "q": [
+      {
+        "q": "SWI 的单元测试框架叫什么？",
+        "a": "PLUnit"
+      },
+      {
+        "q": "进入调试跟踪用哪个谓词？",
+        "a": "trace/0"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "t": "并发与并行",
+    "p": [
+      "thread_create/3 创建线程，第一个参数是要执行的目标，第三个参数是选项列表",
+      "thread_join/2 等待线程结束并获取状态，线程之间通过 thread_send_message/2 与 thread_get_message/1 通信",
+      "共享数据应通过消息传递或 with_mutex/2 保护，避免多个线程同时修改动态数据库",
+      "concurrent/3 可并行执行多个目标并收集结果，适合相互独立的计算任务"
+    ],
+    "c": ":- use_module(library(lists)).\n:- initialization(main).\n\nworker(Name, Result) :-\n    thread_create((\n        sum_list([1, 2, 3, 4, 5], S),\n        thread_send_message(main, done(Name, S))\n    ), Id, []),\n    thread_join(Id, Result).\n\nmain :-\n    worker(a, _),\n    thread_get_message(done(Name, Sum)),\n    format('线程 ~w 计算得到 ~w~n', [Name, Sum]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "多个线程同时 assert/retract 全局谓词而不加锁，会导致逻辑更新视图冲突；共享数据应通过消息传递或 with_mutex/2 保护。",
+    "q": [
+      {
+        "q": "创建线程用哪个谓词？",
+        "a": "thread_create/3"
+      },
+      {
+        "q": "线程间发送消息用哪个谓词？",
+        "a": "thread_send_message/2"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "t": "性能优化",
+    "p": [
+      "尾递归谓词把递归调用放在最后，SWI 会做尾调用优化，长列表也不会耗尽栈",
+      "利用首参数索引：把经常区分子句的参数放在第一个位置，可减少不必要的选择点",
+      "在确定的分支使用切割 ! 或 once/1 消除选择点，避免回溯做无用功",
+      "用 statistics/2 测量运行时间与内存，time/1 可快速查看某个目标的执行耗时"
+    ],
+    "c": ":- use_module(library(lists)).\n:- initialization(main).\n\nsum_naive([], 0).\nsum_naive([H|T], S) :-\n    sum_naive(T, S0),\n    S is H + S0.\n\nsum_acc(L, S) :- sum_acc(L, 0, S).\nsum_acc([], A, A).\nsum_acc([H|T], A, S) :-\n    A1 is A + H,\n    sum_acc(T, A1, S).\n\nmain :-\n    numlist(1, 200000, L),\n    statistics(runtime, [T0|_]),\n    sum_acc(L, S),\n    statistics(runtime, [T1|_]),\n    Time is T1 - T0,\n    format('结果=~w 用时=~w ms~n', [S, Time]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "处理超大列表时使用非尾递归导致栈溢出；用 findall 生成全部中间解再计数会消耗大量内存，应使用 once/1 或聚合谓词。",
+    "q": [
+      {
+        "q": "哪类递归可以被 SWI 优化以避免栈增长？",
+        "a": "尾递归"
+      },
+      {
+        "q": "测量运行时间用哪个谓词？",
+        "a": "statistics/2"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "t": "测试",
+    "p": [
+      "PLUnit 用 begin_tests/1 和 end_tests/1 包围测试块，test/1 定义成功测试，test/2 可带选项",
+      "常用选项 [fail] 表示目标应当失败，[throws(E)] 表示应抛出异常，[setup(G)] 执行准备",
+      "run_tests/0 运行全部测试，run_tests/1 可指定测试块或单个测试名",
+      "测试应覆盖成功、失败、异常和边界情况，例如空列表、0、负数与重复元素"
+    ],
+    "c": ":- use_module(library(plunit)).\n\nadd(X, Y, Z) :- Z is X + Y.\n\n:- begin_tests(math_utils).\n\ntest(add_basic) :-\n    add(2, 3, 5).\n\ntest(add_negative) :-\n    add(-1, 1, 0).\n\ntest(add_fail, [fail]) :-\n    add(1, 1, 3).\n\n:- end_tests(math_utils).\n\n:- initialization(main).\n\nmain :-\n    run_tests,\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "测试文件漏写 use_module(library(plunit))，begin_tests 会报未定义；期望失败的测试不加 [fail] 选项，会被记为失败。",
+    "q": [
+      {
+        "q": "PLUnit 中定义测试块用哪两个指令？",
+        "a": "begin_tests/1 和 end_tests/1"
+      },
+      {
+        "q": "表示测试应当失败的选项是什么？",
+        "a": "[fail]"
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "t": "调试技巧",
+    "p": [
+      "trace/0 进入单步调试，SWI 按 call、exit、redo、fail 四个端口显示执行过程",
+      "leash/1 控制显示哪些端口，例如 leash([call, exit, fail]) 隐藏 redo 端口",
+      "spy/1 给指定谓词设断点，例如 spy(factorial/2)，相关调用会自动进入调试器",
+      "调试结束用 notrace/0 退出跟踪，用 gtrace/0 可打开图形化调试器"
+    ],
+    "c": ":- initialization(main).\n\nfactorial(0, 1) :- !.\nfactorial(N, F) :-\n    N > 0,\n    N1 is N - 1,\n    factorial(N1, F1),\n    F is N * F1.\n\nmain :-\n    % 调试：trace. 进入单步；leash/1 控制显示；spy(factorial/2) 设断点\n    leash([call, exit, fail]),\n    factorial(5, F),\n    format('5! = ~w~n', [F]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "在递归谓词中残留调试用的 write，会造成输出爆炸并改变执行时序；trace 后忘记 notrace，后续所有调用都会进入调试器。",
+    "q": [
+      {
+        "q": "SWI 调试器的四个端口是什么？",
+        "a": "call、exit、redo、fail"
+      },
+      {
+        "q": "给谓词设断点用哪个谓词？",
+        "a": "spy/1"
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "t": "与系统及外部接口互操作",
+    "p": [
+      "process_create/3 启动外部进程，可指定参数、标准输入输出管道、工作目录和环境变量",
+      "process_wait/2 等待子进程结束并获取退出状态，避免留下僵尸进程",
+      "shell/2 通过系统 shell 执行命令并返回状态码，适合简单脚本调用",
+      "SWI 可通过 FFI 调用 C 库，也可使用 library(http) 与外部服务通过 HTTP/JSON 交互"
+    ],
+    "c": ":- use_module(library(process)).\n:- initialization(main).\n\nmain :-\n    process_create(path(echo), ['hello from prolog'],\n                   [stdout(pipe(Out)), process(Pid)]),\n    read_line_to_string(Out, Line),\n    close(Out),\n    process_wait(Pid, _),\n    format('子进程输出：~w~n', [Line]),\n    shell('uname -s', Status),\n    format('shell 状态=~w~n', [Status]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "用 shell/2 拼接用户输入造成命令注入；process_create 后不调用 process_wait/2 会留下僵尸进程，不读取管道还可能让子进程阻塞。",
+    "q": [
+      {
+        "q": "启动外部进程用哪个谓词？",
+        "a": "process_create/3"
+      },
+      {
+        "q": "等待子进程结束用哪个谓词？",
+        "a": "process_wait/2"
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "t": "设计模式与程序组织",
+    "p": [
+      "Prolog 常用文法规则（DCG）组织解析逻辑，--> 定义规则，终结符写在列表中",
+      "DCG 规则可带额外参数构造语法树，phrase/2 或 phrase/3 用规则分析词元列表",
+      "规则按关注点分层：词法、语法、语义分析各自独立，通过参数传递中间结构",
+      "模块化用 module/2 与 use_module/2，把可复用谓词封装成库，避免命名冲突"
+    ],
+    "c": ":- initialization(main).\n\nsentence --> noun_phrase, verb_phrase.\nnoun_phrase --> determiner, noun.\nverb_phrase --> verb, noun_phrase.\ndeterminer --> [the].\ndeterminer --> [a].\nnoun --> [cat].\nnoun --> [dog].\nverb --> [chases].\nverb --> [sees].\n\nmain :-\n    ( phrase(sentence, [the, cat, chases, the, dog]) ->\n        write('句子合法'), nl\n    ;   write('句子不合法'), nl\n    ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "DCG 规则要用 --> 而不是 :-，终结符要写成列表 [the]；忘记用 phrase/2 而直接调用 sentence(L, [])，参数顺序容易颠倒。",
+    "q": [
+      {
+        "q": "DCG 规则使用哪个符号定义？",
+        "a": "-->"
+      },
+      {
+        "q": "用文法规则分析词元列表用哪个谓词？",
+        "a": "phrase/2"
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "t": "数据库访问",
+    "p": [
+      "SWI 的 persistency 库把动态谓词持久化到文件，声明 :- persistent 后自动生成断言与撤回谓词",
+      "db_attach/2 关联数据库文件，选项 sync(close) 表示关闭时同步，db_detach/0 断开连接",
+      "声明 persistent user(name:atom, age:integer). 会自动生成 user/2 与 assert_user/2 等谓词",
+      "也可通过 library(odbc) 连接外部数据库，用 SQL 查询并逐行读取结果"
+    ],
+    "c": ":- use_module(library(persistency)).\n:- persistent\n    user(name:atom, age:integer).\n\n:- initialization(main).\n\nmain :-\n    db_attach('users.db', [sync(close)]),\n    ( user(alice, 30) -> true ; assert_user(alice, 30) ),\n    ( user(bob, 25) -> true ; assert_user(bob, 25) ),\n    findall(N-A, user(N, A), All),\n    format('用户：~w~n', [All]),\n    db_detach,\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "修改持久化谓词后不调用 db_detach 或不同步，数据可能只留在日志中；用 assert/retract 操作普通动态谓词不会自动写入数据库文件。",
+    "q": [
+      {
+        "q": "声明持久化谓词用哪个指令？",
+        "a": ":- persistent"
+      },
+      {
+        "q": "关联数据库文件用哪个谓词？",
+        "a": "db_attach/2"
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "t": "网络编程与 HTTP",
+    "p": [
+      "library(http/http_client) 提供 http_get/3、http_post/4 等谓词，直接获取网页或调用 API",
+      "选项 status_code(Status) 获取响应状态码，timeout(Seconds) 设置超时，to(string) 指定正文类型",
+      "返回的正文通常是字符串，可用 string_length、sub_string 处理，JSON 用 library(http/json) 解析",
+      "服务端可用 library(http/http_server) 搭建，定义 handler 处理路由和请求"
+    ],
+    "c": ":- use_module(library(http/http_client)).\n:- initialization(main).\n\nmain :-\n    catch(\n        http_get('https://example.com', Body,\n                 [status_code(Status), timeout(10)]),\n        Error,\n        (format('请求失败：~w~n', [Error]), halt(1))\n    ),\n    string_length(Body, Len),\n    sub_string(Body, 0, 60, _, Head),\n    format('状态码=~w 长度=~w~n~w...~n', [Status, Len, Head]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "不捕获网络异常会让程序以顶层错误退出；把响应体当原子处理，实际是字符串，需用 string_length/2 或 atom_string/2 转换。",
+    "q": [
+      {
+        "q": "发送 HTTP GET 请求用哪个谓词？",
+        "a": "http_get/3"
+      },
+      {
+        "q": "哪个选项用于获取状态码？",
+        "a": "status_code(Status)"
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "t": "安全编程",
+    "p": [
+      "所有外部输入都要校验类型、范围和格式，可用 must_be/2、integer/1、ground/1 做检查",
+      "不要对未受信任的字符串使用 atom_to_term/2 后再 call/1，攻击者可构造任意谓词调用",
+      "若必须动态调用，应白名单允许的函子，并校验参数类型与取值范围",
+      "数据库查询使用参数化接口，文件路径要规范化并限制在允许目录内，防止注入和目录穿越"
+    ],
+    "c": ":- initialization(main).\n\nvalid_age(Age) :-\n    integer(Age),\n    Age >= 0,\n    Age =< 150.\n\nallowed(valid_age).\n\nrun_goal(Goal) :-\n    ( callable(Goal), Goal =.. [Functor|_], allowed(Functor) ->\n        call(Goal)\n    ;   throw(error(unsafe_goal(Goal), run_goal/1))\n    ).\n\nmain :-\n    ( valid_age(42) -> write('42 合法'), nl ; true ),\n    catch(run_goal(valid_age(-5)), E,\n          format('拒绝：~w~n', [E])),\n    catch(run_goal(shell('rm -rf /')), E2,\n          format('拒绝：~w~n', [E2])),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "直接把外部字符串用 atom_to_term/2 转成目标再 call，攻击者可构造任意谓词调用；必须白名单函子并校验参数。",
+    "q": [
+      {
+        "q": "为什么不能对用户输入直接 call/1？",
+        "a": "用户可构造任意谓词调用，造成注入"
+      },
+      {
+        "q": "动态调用前应做什么检查？",
+        "a": "白名单函子并校验参数类型和范围"
+      }
+    ]
+  },
+  {
+    "id": 31,
+    "t": "项目实战：命令行工具",
+    "p": [
+      "current_prolog_flag(argv, Args) 获取命令行参数列表，swipl 后的 -- 之后才是程序参数",
+      "先校验参数个数与格式，缺参数时把用法写到 user_error 并以非零状态退出",
+      "read_file_to_string/3 读取文件，split_string/4 按空白切分，exclude/3 过滤空串",
+      "文件不存在时捕获异常并给出友好提示，用 halt/1 返回合适的退出码"
+    ],
+    "c": ":- use_module(library(apply)).\n:- initialization(main).\n\nnonempty(S) :- S \\= \"\".\n\nmain :-\n    current_prolog_flag(argv, Args),\n    ( Args = [File] ->\n        read_file_to_string(File, Text, []),\n        split_string(Text, \" \\n\\t\", \" \\n\\t\", Words0),\n        exclude(nonempty, Words0, Words),\n        length(Words, Count),\n        format('单词数：~w~n', [Count])\n    ;   format(user_error, '用法：swipl -q -f wc.pl -- <文件>~n', []),\n        halt(1)\n    ),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "不检查 argv 长度就直接取第一个元素会失败；错误信息写到标准输出且退出码仍为 0，脚本无法判断命令是否成功。",
+    "q": [
+      {
+        "q": "获取命令行参数用哪个标志？",
+        "a": "argv"
+      },
+      {
+        "q": "错误信息应写到哪个流？",
+        "a": "user_error"
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "t": "项目实战：数据处理",
+    "p": [
+      "split_string/4 按分隔符拆分字符串，第三参数是填充字符，第四参数返回子串列表",
+      "number_string/2 在数字与字符串之间转换，atom_string/2 在原子与字符串之间转换",
+      "maplist/3 对列表逐元素应用谓词，findall/3 提取字段，sum_list/2 求和",
+      "处理 CSV 时要过滤空行，字段含引号或逗号时应使用专门的 CSV 解析库"
+    ],
+    "c": ":- use_module(library(lists)).\n:- use_module(library(apply)).\n:- initialization(main).\n\ncsv_row(Line, Name-Score) :-\n    split_string(Line, \",\", \"\", [NameS, ScoreS]),\n    atom_string(Name, NameS),\n    number_string(Score, ScoreS).\n\nmain :-\n    Text = \"Alice,88.5\\nBob,92\\nCara,79.5\\n\",\n    split_string(Text, \"\\n\", \"\\n\", Rows0),\n    delete(Rows0, \"\", Rows),\n    maplist(csv_row, Rows, Pairs),\n    findall(Score, member(_-Score, Pairs), Scores),\n    sum_list(Scores, Total),\n    length(Scores, N),\n    Avg is Total / N,\n    format('记录=~w 平均=~2f~n', [N, Avg]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "split_string 后不处理空串会导致 number_string 失败；CSV 字段含引号或逗号时不能简单按逗号切分，应使用专门的 CSV 解析库。",
+    "q": [
+      {
+        "q": "按分隔符拆分字符串用哪个谓词？",
+        "a": "split_string/4"
+      },
+      {
+        "q": "字符串转数字用哪个谓词？",
+        "a": "number_string/2"
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "t": "构建、部署与发布",
+    "p": [
+      "直接分发 .pl 文件时，用 swipl -q -f app.pl 或 swipl -g main -t halt 启动程序",
+      "qsave_program/2 把已加载的程序保存为可执行状态，stand_alone(true) 生成独立镜像",
+      "依赖扩展包时需在 README 说明 pack_install 的包名与版本，或在启动时检查依赖",
+      "发布前应在干净环境测试，确认路径、编码、外部命令和网络依赖都满足"
+    ],
+    "c": "% 发布说明：swipl -q -f app.pl -- 直接运行\n% 打包：qsave_program('app', [stand_alone(true)])\n% 依赖：pack_install(包名)，并在 README 记录版本\n:- initialization(main).\n\nmain :-\n    current_prolog_flag(version, V),\n    current_prolog_flag(arch, Arch),\n    format('SWI-Prolog ~w on ~w~n', [V, Arch]),\n    format('启动：swipl -q -f app.pl~n', []),\n    format('打包：qsave_program/2 生成独立镜像~n', []),\n    format('分发：附 .pl 文件与依赖说明~n', []),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "直接分发 .pl 却未声明依赖库，目标机器缺少扩展包时加载失败；qsave_program 生成的状态与路径和版本相关，迁移环境后应重新生成。",
+    "q": [
+      {
+        "q": "把程序保存为独立镜像用哪个谓词？",
+        "a": "qsave_program/2"
+      },
+      {
+        "q": "独立镜像的哪个选项表示自包含？",
+        "a": "stand_alone(true)"
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "t": "最佳实践与代码风格",
+    "p": [
+      "谓词尽量写成声明式关系，避免依赖副作用；必要时在注释中标注模式，如 sum(+List, -Sum)",
+      "切割 ! 只在确实需要提交选择点时使用，滥用会破坏谓词的可逆性和多解能力",
+      "优先使用标准库谓词而不是重复实现，如 maplist、append、sum_list、aggregate_all",
+      "命名清晰：谓词用蛇形命名描述关系，变量用大写开头的有意义名字，模块按职责拆分"
+    ],
+    "c": ":- use_module(library(lists)).\n:- use_module(library(apply)).\n:- initialization(main).\n\n% 模式：sum(+List, -Sum)\nsum([], 0).\nsum([H|T], S) :-\n    sum(T, S0),\n    S is H + S0.\n\n% 使用库谓词而不是重复实现\ntotal(List, Total) :-\n    maplist(atom_number, List, Numbers),\n    sum_list(Numbers, Total).\n\nmain :-\n    total(['1', '2', '3'], T),\n    format('合计=~w~n', [T]),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "到处使用切割追求效率，会剪掉合法解，破坏谓词的可逆性与多解能力；谓词命名不体现关系和模式，调用时参数顺序也容易弄反。",
+    "q": [
+      {
+        "q": "Prolog 谓词的常用命名风格是什么？",
+        "a": "小写蛇形命名，如 sum_list"
+      },
+      {
+        "q": "为什么不应滥用切割？",
+        "a": "会剪掉合法解，破坏可逆性和多解能力"
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "t": "总结与学习路线",
+    "p": [
+      "基础阶段掌握事实、规则、合一、回溯、列表递归和常用内置谓词，能写小型规则系统",
+      "进阶阶段学习模块、DCG、findall/bagof/setof、动态数据库和 clpfd 约束编程",
+      "工程阶段掌握 PLUnit 测试、pack 依赖管理、HTTP 客户端与服务端、持久化数据库",
+      "实战方向包括专家系统、自然语言解析、知识图谱查询、规则引擎和程序分析工具"
+    ],
+    "c": ":- initialization(main).\n\nstep(Name, Detail) :-\n    format('• ~w：~w~n', [Name, Detail]).\n\nmain :-\n    writeln('Prolog 学习路线'),\n    step('基础', '事实、规则、合一、回溯'),\n    step('列表', '递归、append、maplist、findall'),\n    step('工程', '模块、PLUnit、pack、HTTP'),\n    step('进阶', 'DCG、CLPFD、约束与元编程'),\n    step('实战', '专家系统、自然语言解析、知识图谱'),\n    halt.",
+    "et": "❌ 常见错误",
+    "ec": "只背语法不写规则，遇到多解和回溯就混乱；应通过小项目练习合一、递归和调试器，逐步理解 Prolog 的声明式求解过程。",
+    "q": [
+      {
+        "q": "Prolog 进阶阶段应重点学习什么？",
+        "a": "模块、DCG、聚合谓词和 clpfd"
+      },
+      {
+        "q": "哪个库用于约束逻辑编程？",
+        "a": "library(clpfd)"
+      }
+    ]
+  }
+];

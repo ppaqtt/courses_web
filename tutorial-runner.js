@@ -43,7 +43,10 @@
         objectivec: { piston: null, judge0: 79, fileName: 'main.m' },
         assembly: { piston: 'nasm', judge0: 45, fileName: 'main.asm' },
         prolog: { piston: 'prolog', judge0: 69, fileName: 'main.pro' },
-        fortran: { piston: 'fortran', judge0: 59, fileName: 'main.f90' }
+        fortran: { piston: 'fortran', judge0: 59, fileName: 'main.f90' },
+        cobol: { piston: 'cobol', judge0: 77, fileName: 'main.cob' },
+        julia: { piston: 'julia', judge0: null, fileName: 'main.jl' },
+        zig: { piston: 'zig', judge0: null, fileName: 'main.zig' }
     };
 
     const ALIASES = {
@@ -80,7 +83,10 @@
         'objective-c': 'objectivec', 'objectivec': 'objectivec', 'objc': 'objectivec',
         'assembly': 'assembly', 'asm': 'assembly', 'nasm': 'assembly',
         'prolog': 'prolog',
-        'fortran': 'fortran', 'f90': 'fortran'
+        'fortran': 'fortran', 'f90': 'fortran',
+        'cobol': 'cobol', 'cob': 'cobol', 'gnucobol': 'cobol',
+        'julia': 'julia', 'jl': 'julia',
+        'zig': 'zig'
     };
 
     const DEFAULT_CONFIG = {
